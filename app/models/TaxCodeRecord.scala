@@ -32,5 +32,8 @@ case class TaxCodeRecord(taxCode: String,
                          primary: Boolean)
 
 object TaxCodeRecord {
-  implicit val format: Format[TaxCodeRecord] = Json.format[TaxCodeRecord]
+	implicit lazy val format: Reads[Seq[TaxCodeRecord]] =
+		(__ \ "data" \ "current").read(Reads.seq[TaxCodeRecord])
+
+	implicit lazy val reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
 }
