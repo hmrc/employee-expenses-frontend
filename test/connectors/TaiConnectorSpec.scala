@@ -18,7 +18,7 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.TaxCodeRecord
+import models.{TaxCodeRecord, TaxYear}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -27,7 +27,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import utils.WireMockHelper
 import play.api.http.Status._
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -46,6 +46,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   private lazy val taiConnector: TaiConnector = app.injector.instanceOf[TaiConnector]
 
   private val nino = "AB123456A"
+  private val taxYear = TaxYear()
 
   private val taxCodeRecord = TaxCodeRecord(
     taxCode = "830L",
@@ -89,6 +90,44 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       )
 
       val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCode(nino)
+
+      whenReady(result.failed) {
+        result =>
+          result mustBe an[Exception]
+      }
+
+    }
+  }
+
+  "taiFREUpdate" must {
+    "return a 200 on success" in {
+      server.stubFor(
+        post(urlEqualTo(s"/tai/$nino/tax-account/$taxYear/expenses/flat-rate-expenses"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+          )
+      )
+
+      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, 100)
+
+      whenReady(result) {
+        result =>
+          result.status mustBe OK
+      }
+
+    }
+
+    "return 500 on failure" in {
+      server.stubFor(
+        post(urlEqualTo(s"/tai/$nino/tax-account/$taxYear/expenses/flat-rate-expenses"))
+          .willReturn(
+            aResponse()
+              .withStatus(INTERNAL_SERVER_ERROR)
+          )
+      )
+
+      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, 100)
 
       whenReady(result.failed) {
         result =>
