@@ -116,4 +116,28 @@ class ConstraintsSpec extends WordSpec with MustMatchers with Constraints {
       result mustEqual Invalid("error.length", 10)
     }
   }
+
+  "inRange" must {
+
+    "return Valid for a number within range" in {
+      val result = inRange(10, 20, "error.inRange").apply(15)
+      result mustEqual Valid
+    }
+
+    "return Valid for a number equal to the ranges max limit" in {
+      val result = inRange(10, 20, "error.inRange").apply(10)
+      result mustEqual Valid
+    }
+
+    "return Valid for a number equal to the ranges min limit" in {
+      val result = inRange(10, 20, "error.inRange").apply(20)
+      result mustEqual Valid
+    }
+
+    "return Invalid for a number outside of range" in {
+      val result = inRange(10, 20, "error.inRange").apply(5)
+      result mustEqual Invalid("error.inRange", 10, 20)
+    }
+  }
+
 }
