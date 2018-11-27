@@ -19,7 +19,6 @@ package connectors
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.TaxCodeRecord
-import org.joda.time.LocalDate
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -53,8 +52,8 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     employerName = "Employer Name",
     operatedTaxCode = true,
     p2Issued = true,
-    startDate = LocalDate.parse("2018-06-27"),
-    endDate = LocalDate.parse("2019-04-05"),
+    startDate = "2018-06-27",
+    endDate = "2019-04-05",
     payrollNumber = Some("1"),
     pensionIndicator = true,
     primary = true
@@ -67,15 +66,15 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           .willReturn(
             aResponse()
               .withStatus(OK)
-              .withBody(Json.toJson(taxCodeRecord).toString())
+              .withBody(validJson.toString)
           )
       )
 
-      val result: Future[TaxCodeRecord] = taiConnector.taiTaxCode(nino)
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCode(nino)
 
       whenReady(result) {
         result =>
-          result mustBe taxCodeRecord
+          result mustBe Seq(taxCodeRecord)
       }
 
     }
@@ -86,11 +85,10 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           .willReturn(
             aResponse()
               .withStatus(INTERNAL_SERVER_ERROR)
-              .withBody(Json.toJson(taxCodeRecord).toString())
           )
       )
 
-      val result: Future[TaxCodeRecord] = taiConnector.taiTaxCode(nino)
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCode(nino)
 
       whenReady(result.failed) {
         result =>
@@ -99,5 +97,33 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
     }
   }
+
+  val validJson = Json.parse("""{
+															 |  "data" : {
+															 |    "current": [{
+															 |      "taxCode": "830L",
+															 |      "employerName": "Employer Name",
+															 |      "operatedTaxCode": true,
+															 |      "p2Issued": true,
+															 |      "startDate": "2018-06-27",
+															 |      "endDate": "2019-04-05",
+															 |      "payrollNumber": "1",
+															 |      "pensionIndicator": true,
+															 |      "primary": true
+															 |    }],
+															 |    "previous": [{
+															 |      "taxCode": "1150L",
+															 |      "employerName": "Employer Name",
+															 |      "operatedTaxCode": true,
+															 |      "p2Issued": true,
+															 |      "startDate": "2018-04-06",
+															 |      "endDate": "2018-06-26",
+															 |      "payrollNumber": "1",
+															 |      "pensionIndicator": true,
+															 |      "primary": true
+															 |    }]
+															 |  },
+															 |  "links" : [ ]
+															 |}""".stripMargin)
 
 }

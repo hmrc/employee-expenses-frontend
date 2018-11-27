@@ -16,21 +16,21 @@
 
 package models
 
-import org.joda.time.LocalDate
-import play.api.libs.json._
-import play.api.libs.json.JodaWrites._
-import play.api.libs.json.JodaReads._
+import play.api.libs.json.{Reads, _}
 
 case class TaxCodeRecord(taxCode: String,
                          employerName: String,
                          operatedTaxCode: Boolean,
                          p2Issued: Boolean,
-                         startDate: LocalDate,
-                         endDate: LocalDate,
+                         startDate: String,
+                         endDate: String,
                          payrollNumber: Option[String],
                          pensionIndicator: Boolean,
                          primary: Boolean)
 
 object TaxCodeRecord {
-  implicit val format: Format[TaxCodeRecord] = Json.format[TaxCodeRecord]
+	implicit lazy val format: Reads[Seq[TaxCodeRecord]] =
+		(__ \ "data" \ "current").read(Reads.seq[TaxCodeRecord])
+
+	implicit lazy val reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
 }
