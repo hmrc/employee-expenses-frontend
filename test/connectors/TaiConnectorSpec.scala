@@ -28,10 +28,14 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import utils.WireMockHelper
 import play.api.http.Status._
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper with GuiceOneAppPerSuite with ScalaFutures with IntegrationPatience {
+
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   override implicit lazy val app: Application =
     new GuiceApplicationBuilder()
@@ -59,7 +63,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   "taiTaxCode" must {
     "return a tax code record on success" in {
       server.stubFor(
-        post(urlEqualTo(s"/tai/$nino/tax-account/tax-code-change"))
+        get(urlEqualTo(s"/tai/$nino/tax-account/tax-code-change"))
           .willReturn(
             aResponse()
               .withStatus(OK)
@@ -78,7 +82,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
     "return 500 on failure" in {
       server.stubFor(
-        post(urlEqualTo(s"/tai/$nino/tax-account/tax-code-change"))
+        get(urlEqualTo(s"/tai/$nino/tax-account/tax-code-change"))
           .willReturn(
             aResponse()
               .withStatus(INTERNAL_SERVER_ERROR)

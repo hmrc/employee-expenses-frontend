@@ -20,20 +20,25 @@ import javax.inject.Singleton
 import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
 import models.TaxCodeRecord
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient) extends TaiConnector {
 
-  override def taiTaxCode(nino: String): Future[TaxCodeRecord] = {
-    ???
+  override def taiTaxCode(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TaxCodeRecord] = {
+
+    val taiUrl = s"${appConfig.taiUrl}/tai/$nino/tax-account/tax-code-change"
+
+    httpClient.GET[TaxCodeRecord](taiUrl)
+
   }
 
 }
 
 @ImplementedBy(classOf[TaiConnectorImpl])
 trait TaiConnector {
-  def taiTaxCode(nino:String): Future[TaxCodeRecord]
+  def taiTaxCode(nino:String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[TaxCodeRecord]
 }
