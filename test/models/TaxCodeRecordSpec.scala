@@ -17,6 +17,7 @@
 package models
 
 	 import base.SpecBase
+	 import org.joda.time.LocalDate
 	 import play.api.libs.json.Json
 
 	 class TaxCodeRecordSpec extends SpecBase {
@@ -30,8 +31,8 @@ package models
 					 employerName = "Employer Name",
 					 operatedTaxCode = true,
 					 p2Issued = true,
-					 startDate = "2018-06-27",
-					 endDate = "2019-04-05",
+					 startDate = LocalDate.parse("2018-06-27"),
+					 endDate = LocalDate.parse("2019-04-05"),
 					 payrollNumber = Some("1"),
 					 pensionIndicator = true,
 					 primary = true

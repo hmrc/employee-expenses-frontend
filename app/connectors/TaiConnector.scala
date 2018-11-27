@@ -19,8 +19,8 @@ package connectors
 import javax.inject.Singleton
 import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
-import models.{IabdEditDataRequest, TaxCodeRecord, TaxYear}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import models.{IabdEditDataRequest, TaxYear}
+import uk.gov.hmrc.http.{HttpResponse}
 import models.TaxCodeRecord
 import play.api.libs.json.Reads
 import uk.gov.hmrc.http.HeaderCarrier

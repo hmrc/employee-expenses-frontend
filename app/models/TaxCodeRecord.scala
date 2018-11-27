@@ -16,14 +16,17 @@
 
 package models
 
-import play.api.libs.json.{Reads, _}
+import org.joda.time.LocalDate
+import play.api.libs.json._
+import play.api.libs.json.JodaWrites._
+import play.api.libs.json.JodaReads._
 
 case class TaxCodeRecord(taxCode: String,
                          employerName: String,
                          operatedTaxCode: Boolean,
                          p2Issued: Boolean,
-                         startDate: String,
-                         endDate: String,
+                         startDate: LocalDate,
+                         endDate: LocalDate,
                          payrollNumber: Option[String],
                          pensionIndicator: Boolean,
                          primary: Boolean)

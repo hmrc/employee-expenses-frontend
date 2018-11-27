@@ -19,6 +19,7 @@ package connectors
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.{TaxCodeRecord, TaxYear}
+import org.joda.time.LocalDate
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -53,8 +54,8 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     employerName = "Employer Name",
     operatedTaxCode = true,
     p2Issued = true,
-    startDate = "2018-06-27",
-    endDate = "2019-04-05",
+    startDate = LocalDate.parse("2018-06-27"),
+    endDate = LocalDate.parse("2019-04-05"),
     payrollNumber = Some("1"),
     pensionIndicator = true,
     primary = true
