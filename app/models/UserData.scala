@@ -18,7 +18,9 @@ package models
 
 import java.time.LocalDateTime
 
-import play.api.libs.json.{JsObject, OWrites, Reads, __}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+
 
 case class UserData(
                      id: String,
@@ -35,8 +37,6 @@ object UserData {
 
   implicit lazy val reads: Reads[UserData] = {
 
-    import play.api.libs.functional.syntax._
-
     (
       (__ \ "_id").read[String] and
       (__ \ "data").read[JsObject] and
@@ -44,9 +44,7 @@ object UserData {
     ) (UserData.apply _)
   }
 
-  implicit lazy val writes: OWrites[UserData] = {
-
-    import play.api.libs.functional.syntax._
+  implicit lazy val writes: Writes[UserData] = {
 
     (
       (__ \ "_id").write[String] and
