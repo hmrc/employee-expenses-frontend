@@ -22,18 +22,18 @@ import play.api.libs.json.JodaWrites._
 import play.api.libs.json.JodaReads._
 
 case class TaxCodeRecord(taxCode: String,
-                         employerName: String,
-                         operatedTaxCode: Boolean,
-                         p2Issued: Boolean,
-                         startDate: LocalDate,
-                         endDate: LocalDate,
-                         payrollNumber: Option[String],
-                         pensionIndicator: Boolean,
-                         primary: Boolean)
+												 employerName: String,
+												 startDate: LocalDate,
+												 endDate: LocalDate,
+												 payrollNumber: Option[String],
+												 pensionIndicator: Boolean,
+												 primary: Boolean)
+
 
 object TaxCodeRecord {
+	implicit lazy val reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
+
 	implicit lazy val format: Reads[Seq[TaxCodeRecord]] =
 		(__ \ "data" \ "current").read(Reads.seq[TaxCodeRecord])
 
-	implicit lazy val reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
 }
