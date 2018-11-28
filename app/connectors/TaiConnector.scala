@@ -30,10 +30,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient) extends TaiConnector {
+  override def taiTaxCode(nino: String)
+                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
 
-  override def taiTaxCode(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
-
-    val taiUrl = s"${appConfig.taiUrl}/tai/$nino/tax-account/tax-code-change"
+    val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/tax-code-change"
 
 		implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.format
 
@@ -43,17 +43,19 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
   override def taiFREUpdate(nino: String, year: TaxYear, version: Int, newAmount: Int)
                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
-    val taiUrl = s"${appConfig.taiUrl}/tai/$nino/tax-account/$year/expenses/flat-rate-expenses"
-    val body = IabdEditDataRequest(version, newAmount)
+    val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/$year/expenses/flat-rate-expenses"
+
+    val body: IabdEditDataRequest = IabdEditDataRequest(version, newAmount)
 
     httpClient.POST[IabdEditDataRequest, HttpResponse](taiUrl, body)
-
   }
-
 }
 
 @ImplementedBy(classOf[TaiConnectorImpl])
 trait TaiConnector {
-  def taiTaxCode(nino:String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]]
-  def taiFREUpdate(nino: String, year: TaxYear, version: Int, newAmount: Int)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
+  def taiTaxCode(nino:String)
+                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]]
+
+  def taiFREUpdate(nino: String, year: TaxYear, version: Int, newAmount: Int)
+                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
 }
