@@ -29,8 +29,6 @@ package models
 				 taxRecord mustBe Seq(TaxCodeRecord(
 					 taxCode = "830L",
 					 employerName = "Employer Name",
-					 operatedTaxCode = true,
-					 p2Issued = true,
 					 startDate = LocalDate.parse("2018-06-27"),
 					 endDate = LocalDate.parse("2019-04-05"),
 					 payrollNumber = Some("1"),
