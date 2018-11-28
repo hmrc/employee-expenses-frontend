@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-    
-@this(
-    main_template: MainTemplate
-)
+package scalate
 
-@()(implicit request: Request[_], messages: Messages)
+import org.fusesource.scalate.TemplateEngine
+import org.fusesource.scalate.mustache.MustacheCodeGenerator
 
-@main_template(
-    title = messages("index.title")
-    ) {
-
-    @components.heading("index.heading")
-
-    <p>@messages("index.guidance")</p>
+class Boot(engine: TemplateEngine) {
+  def run(): Unit = {
+    engine.codeGenerators += "html" -> new MustacheCodeGenerator
+  }
 }

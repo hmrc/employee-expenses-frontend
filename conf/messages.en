@@ -21,8 +21,8 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 
-index.title = employee-expenses-frontend
-index.heading = employee-expenses-frontend
+index.title = Employee Expenses
+index.heading = Employee Expenses
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
 session_expired.title = For your security, this service has been reset
@@ -37,7 +37,7 @@ site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
 site.continue = Continue
-site.service_name = employee-expenses-frontend
+site.service_name = Employee Expenses
 site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
