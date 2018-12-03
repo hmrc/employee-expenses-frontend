@@ -20,7 +20,6 @@
 
 @this(
         appConfig: FrontendAppConfig,
-        govuk_wrapper: GovukWrapper,
         article: Article,
         sidebar: Sidebar,
         scalate: Scalate
@@ -47,13 +46,11 @@
         }
     }
 
-    @scalate.engine.boot()
-
     @scalate.render(
         "/templates/mustache/production/govuk-template.mustache.html",
         Map(
             "pageTitle" -> title,
-            "navTitle" -> title,
+            "navTitle" -> messages("site.service_name"),
             "assetsPath" -> appConfig.assetsPath,
             "sidebar" -> sidebarContent,
             "scriptElems" -> scriptElem,
