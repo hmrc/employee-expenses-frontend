@@ -19,9 +19,8 @@ package connectors
 import javax.inject.Singleton
 import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
-import models.{IabdEditDataRequest, TaxYear}
-import uk.gov.hmrc.http.{HttpResponse}
-import models.TaxCodeRecord
+import models.{IabdEditDataRequest, IabdUpdateData, TaxCodeRecord, TaxYear}
+import uk.gov.hmrc.http.HttpResponse
 import play.api.libs.json.Reads
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -40,12 +39,12 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
     httpClient.GET[Seq[TaxCodeRecord]](taiUrl)
   }
 
-  override def taiFREUpdate(nino: String, year: TaxYear, version: Int, newAmount: Int)
+  override def taiFREUpdate(nino: String, year: TaxYear, version: Int, expensesData: IabdUpdateData)
                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
     val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/$year/expenses/flat-rate-expenses"
 
-    val body: IabdEditDataRequest = IabdEditDataRequest(version, newAmount)
+    val body: IabdEditDataRequest = IabdEditDataRequest(version, expensesData)
 
     httpClient.POST[IabdEditDataRequest, HttpResponse](taiUrl, body)
   }
@@ -56,6 +55,6 @@ trait TaiConnector {
   def taiTaxCode(nino:String)
                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]]
 
-  def taiFREUpdate(nino: String, year: TaxYear, version: Int, newAmount: Int)
+  def taiFREUpdate(nino: String, year: TaxYear, version: Int, data: IabdUpdateData)
                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
 }

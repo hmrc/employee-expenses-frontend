@@ -18,7 +18,7 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.{TaxCodeRecord, TaxYear}
+import models.{IabdUpdateData, TaxCodeRecord, TaxYear}
 import org.joda.time.LocalDate
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
@@ -108,7 +108,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, 100)
+      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, IabdUpdateData(1 ,100))
 
       whenReady(result) {
         result =>
@@ -126,7 +126,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, 100)
+      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1,  IabdUpdateData(1 ,100))
 
       whenReady(result.failed) {
         result =>
