@@ -16,18 +16,31 @@
 
 package base
 
+import com.github.tototoshi.play2.scalate.Scalate
 import config.FrontendAppConfig
 import controllers.actions._
 import models.UserData
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
+import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
+import utils.MockScalate
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite {
+
+  override lazy val app: Application = {
+
+    import play.api.inject._
+
+    new GuiceApplicationBuilder()
+      .overrides(
+        bind[Scalate].to[MockScalate]
+      ).build()
+  }
 
   val userDataId = "id"
 
