@@ -19,7 +19,7 @@ package connectors
 import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
 import javax.inject.Singleton
-import models.Etag
+import models.ETag
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -27,15 +27,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CitizenDetailsConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient) extends CitizenDetailsConnector {
-  override def getEtag(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Etag] = {
+  override def getEtag(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ETag] = {
 
     val citizenDetailsUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/etag"
 
-    httpClient.GET[Etag](citizenDetailsUrl)
+    httpClient.GET[ETag](citizenDetailsUrl)
   }
 }
 
 @ImplementedBy(classOf[CitizenDetailsConnectorImpl])
 trait CitizenDetailsConnector {
-  def getEtag(nino:String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Etag]
+  def getEtag(nino:String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ETag]
 }

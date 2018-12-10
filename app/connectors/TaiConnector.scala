@@ -16,13 +16,12 @@
 
 package connectors
 
-import javax.inject.Singleton
 import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
-import models.{IabdEditDataRequest, IabdUpdateData, TaxCodeRecord, TaxYear}
-import uk.gov.hmrc.http.HttpResponse
-import play.api.libs.json.Reads
-import uk.gov.hmrc.http.HeaderCarrier
+import javax.inject.Singleton
+import models._
+import play.api.libs.json.{Json, Reads}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,13 +29,21 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient) extends TaiConnector {
   override def taiTaxCode(nino: String)
-                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
+                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[PersonalTaxRecord] = {
 
     val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/tax-code-change"
 
-		implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.format
+		implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.listReads
 
-    httpClient.GET[Seq[TaxCodeRecord]](taiUrl)
+    httpClient.GET(taiUrl).map {
+      response =>
+        val eTag = response.header("ETag") match {
+          case Some(_) => eTag
+          case _ => Future.failed(new RuntimeException("[TaiConnector][taiTaxCode] No eTag found in header"))
+        }
+
+        PersonalTaxRecord(ETag(eTag.toString), Json.parse(response.body).as[Seq[TaxCodeRecord]])
+    }
   }
 
   override def taiFREUpdate(nino: String, year: TaxYear, version: Int, expensesData: IabdUpdateData)
@@ -53,7 +60,7 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
 @ImplementedBy(classOf[TaiConnectorImpl])
 trait TaiConnector {
   def taiTaxCode(nino:String)
-                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]]
+                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[PersonalTaxRecord]
 
   def taiFREUpdate(nino: String, year: TaxYear, version: Int, data: IabdUpdateData)
                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]

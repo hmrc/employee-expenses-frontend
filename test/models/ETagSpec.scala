@@ -16,24 +16,34 @@
 
 package models
 
-import org.joda.time.LocalDate
-import play.api.libs.json._
-import play.api.libs.json.JodaWrites._
-import play.api.libs.json.JodaReads._
+import base.SpecBase
+import play.api.libs.json.{JsResultException, Json}
 
-case class TaxCodeRecord(taxCode: String,
-												 employerName: String,
-												 startDate: LocalDate,
-												 endDate: LocalDate,
-												 payrollNumber: Option[String],
-												 pensionIndicator: Boolean,
-												 primary: Boolean)
+class ETagSpec extends SpecBase {
 
+  "Etag" must {
+    "successfully bind when passed valid JSON" in {
+      val validJson = Json.parse(
+        """
+          |{
+          |   "etag":"123"
+          |}
+        """.stripMargin)
 
-object TaxCodeRecord {
-	implicit lazy val reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
+      val etag = validJson.as[ETag]
 
-	implicit lazy val format: Reads[Seq[TaxCodeRecord]] =
-		(__ \ "data" \ "current").read(Reads.seq[TaxCodeRecord])
+      etag mustBe ETag("123")
+    }
+
+    "fail to bind when passed invalid JSON" in {
+      val invalidJson = Json.parse("""{}""")
+
+      val parseError = intercept[JsResultException] {
+        invalidJson.as[ETag]
+      }
+
+      parseError mustBe an[JsResultException]
+    }
+  }
 
 }

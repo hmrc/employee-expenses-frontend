@@ -18,7 +18,7 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, urlEqualTo}
-import models.Etag
+import models.ETag
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -43,7 +43,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
   private lazy val citizenDetailsConnector: CitizenDetailsConnector = app.injector.instanceOf[CitizenDetailsConnector]
 
   private val nino = "AB123456A"
-  private val etag = Etag("123")
+  private val etag = ETag("123")
   private val validJson = Json.parse(
     s"""
        |{
@@ -62,7 +62,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[Etag] = citizenDetailsConnector.getEtag(nino)
+      val result: Future[ETag] = citizenDetailsConnector.getEtag(nino)
 
       whenReady(result) {
         result =>
@@ -79,7 +79,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[Etag] = citizenDetailsConnector.getEtag(nino)
+      val result: Future[ETag] = citizenDetailsConnector.getEtag(nino)
 
       whenReady(result.failed) {
         result =>
@@ -96,7 +96,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[Etag] = citizenDetailsConnector.getEtag(nino)
+      val result: Future[ETag] = citizenDetailsConnector.getEtag(nino)
 
       whenReady(result.failed) {
         result =>

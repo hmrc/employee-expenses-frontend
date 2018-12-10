@@ -18,7 +18,7 @@ package service
 
 import com.google.inject.Inject
 import connectors.TaiConnector
-import models.TaxCodeRecord
+import models.PersonalTaxRecord
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -26,7 +26,7 @@ import scala.concurrent.Future
 
 class TaiService @Inject()(taiConnector: TaiConnector) {
 
-  def taiTaxCodeRecords(nino: String)(implicit hc: HeaderCarrier): Future[Seq[TaxCodeRecord]] = {
+  def taiTaxCodeRecords(nino: String)(implicit hc: HeaderCarrier): Future[PersonalTaxRecord] = {
 
     taiConnector.taiTaxCode(nino)
 

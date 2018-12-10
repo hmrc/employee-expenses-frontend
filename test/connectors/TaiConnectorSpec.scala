@@ -18,7 +18,7 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.{IabdUpdateData, TaxCodeRecord, TaxYear}
+import models._
 import org.joda.time.LocalDate
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
@@ -26,7 +26,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
+import play.api.libs.json.{JsResultException, Json}
 import uk.gov.hmrc.http.HttpResponse
 import utils.WireMockHelper
 
@@ -47,14 +47,17 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   private val nino = "AB123456A"
   private val taxYear = TaxYear()
 
-  private val taxCodeRecord = TaxCodeRecord(
-    taxCode = "830L",
-    employerName = "Employer Name",
-    startDate = LocalDate.parse("2018-06-27"),
-    endDate = LocalDate.parse("2019-04-05"),
-    payrollNumber = Some("1"),
-    pensionIndicator = true,
-    primary = true
+  private val personalTaxRecord = PersonalTaxRecord(
+    etag = ETag("123"),
+    taxCodeRecord = Seq(TaxCodeRecord(
+      taxCode = "830L",
+      employerName = "Employer Name",
+      startDate = LocalDate.parse("2018-06-27"),
+      endDate = LocalDate.parse("2019-04-05"),
+      payrollNumber = Some("1"),
+      pensionIndicator = true,
+      primary = true
+    ))
   )
 
   "taiTaxCode" must {
@@ -65,14 +68,34 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
             aResponse()
               .withStatus(OK)
               .withBody(validJson.toString)
+              .withHeader("ETag","123")
           )
       )
 
-      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCode(nino)
+      val result: Future[PersonalTaxRecord] = taiConnector.taiTaxCode(nino)
 
       whenReady(result) {
         result =>
-          result mustBe Seq(taxCodeRecord)
+          result mustBe personalTaxRecord
+      }
+
+    }
+
+    "return an exception when no ETag in header" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$nino/tax-account/tax-code-change"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withBody(validJson.toString)
+          )
+      )
+
+      val result: Future[PersonalTaxRecord] = taiConnector.taiTaxCode(nino)
+
+      whenReady(result) {
+        result =>
+          result mustBe an[RuntimeException]
       }
 
     }
@@ -86,7 +109,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCode(nino)
+      val result: Future[PersonalTaxRecord] = taiConnector.taiTaxCode(nino)
 
       whenReady(result.failed) {
         result =>

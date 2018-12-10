@@ -16,34 +16,10 @@
 
 package models
 
-import base.SpecBase
-import play.api.libs.json.{JsResultException, Json}
+import play.api.libs.json.{Format, Json}
 
-class EtagSpec extends SpecBase {
+case class ETag(etag: String)
 
-  "Etag" must {
-    "successfully bind when passed valid JSON" in {
-      val validJson = Json.parse(
-        """
-          |{
-          |   "etag":"123"
-          |}
-        """.stripMargin)
-
-      val etag = validJson.as[Etag]
-
-      etag mustBe Etag("123")
-    }
-
-    "fail to bind when passed invalid JSON" in {
-      val invalidJson = Json.parse("""{}""")
-
-      val parseError = intercept[JsResultException] {
-        invalidJson.as[Etag]
-      }
-
-      parseError mustBe an[JsResultException]
-    }
-  }
-
+object ETag {
+  implicit lazy val format: Format[ETag] = Json.format[ETag]
 }
