@@ -28,6 +28,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.MockScalate
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite {
@@ -43,6 +44,8 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite {
   }
 
   val userDataId = "id"
+
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   def emptyUserData = UserData(userDataId, Json.obj())
 
