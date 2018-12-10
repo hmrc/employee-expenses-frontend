@@ -27,11 +27,12 @@ import play.api.Application
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsResultException, Json}
+import scala.concurrent.duration.Duration.Inf
 import uk.gov.hmrc.http.HttpResponse
 import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
 
 class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper with GuiceOneAppPerSuite with ScalaFutures with IntegrationPatience {
 
@@ -91,13 +92,9 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[PersonalTaxRecord] = taiConnector.taiTaxCode(nino)
-
-      whenReady(result) {
-        result =>
-          result mustBe an[RuntimeException]
-      }
-
+			intercept[RuntimeException] {
+				Await.result(taiConnector.taiTaxCode(nino), Inf)
+			}.getMessage mustBe "[TaiConnector][taiTaxCode] No ETag found in header"
     }
 
     "return 500 on failure" in {
