@@ -17,17 +17,25 @@
 package service
 
 import com.google.inject.Inject
-import connectors.TaiConnector
-import models.TaxCodeRecord
-import uk.gov.hmrc.http.HeaderCarrier
+import connectors.{CitizenDetailsConnector, TaiConnector}
+import models.{IabdUpdateData, TaxCodeRecord, TaxYear}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TaiService @Inject()(taiConnector: TaiConnector) {
+class TaiService @Inject()(taiConnector: TaiConnector,
+                           citizenDetailsConnector: CitizenDetailsConnector
+                          )(implicit hc: HeaderCarrier) {
 
-  def taiTaxCodeRecords(nino: String)(implicit hc: HeaderCarrier): Future[Seq[TaxCodeRecord]] = {
-    taiConnector.taiTaxCode(nino)
+  def taxCodeRecords(nino: String): Future[Seq[TaxCodeRecord]] = {
+    taiConnector.taiTaxCodeRecords(nino)
+  }
+
+  def updateFRE(nino: String, year: TaxYear, expensesData: IabdUpdateData): Future[HttpResponse] = {
+    citizenDetailsConnector.getEtag(nino).flatMap {
+      etag => taiConnector.taiFREUpdate(nino, year, etag, expensesData)
+    }
   }
 
 }

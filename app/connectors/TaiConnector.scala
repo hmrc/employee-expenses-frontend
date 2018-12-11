@@ -28,8 +28,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient) extends TaiConnector {
-  override def taiTaxCode(nino: String)
-                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
+  override def taiTaxCodeRecords(nino: String)
+                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
 
     val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/tax-code-change"
 
@@ -51,8 +51,8 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
 
 @ImplementedBy(classOf[TaiConnectorImpl])
 trait TaiConnector {
-  def taiTaxCode(nino:String)
-                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]]
+  def taiTaxCodeRecords(nino:String)
+                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]]
 
   def taiFREUpdate(nino: String, year: TaxYear, version: Int, data: IabdUpdateData)
                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]

@@ -17,12 +17,14 @@
 package service
 
 import base.SpecBase
-import connectors.TaiConnector
-import models.TaxCodeRecord
+import connectors.{CitizenDetailsConnector, TaiConnector}
+import models.{IabdUpdateData, TaxCodeRecord, TaxYear}
 import org.joda.time.LocalDate
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
+import uk.gov.hmrc.http.HttpResponse
+import play.api.http.Status._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -30,9 +32,12 @@ import scala.concurrent.Future
 class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
   private val mockTaiConnector = mock[TaiConnector]
-  val taiService = new TaiService(mockTaiConnector)
+  private val mockCitizenDetailsConnector = mock[CitizenDetailsConnector]
+  private val taiService = new TaiService(mockTaiConnector, mockCitizenDetailsConnector)
 
   private val nino = "AB123456A"
+  private val taxYear = TaxYear()
+  private val etag = 1
   private val taxCodeRecords = Seq(TaxCodeRecord(
       taxCode = "830L",
       employerName = "Employer Name",
@@ -42,13 +47,15 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       pensionIndicator = true,
       primary = true
     ))
+  private val iabdUpdateData = IabdUpdateData(sequenceNumber = 1, grossAmount = 100)
 
-  "service.TaiService" must {
+  "TaiService" must {
     "taiTaxCodeRecords" when {
       "must return a sequence of tax code records" in {
-        when(mockTaiConnector.taiTaxCode(nino)) thenReturn Future.successful(taxCodeRecords)
+        when(mockTaiConnector.taiTaxCodeRecords(nino))
+          .thenReturn(Future.successful(taxCodeRecords))
 
-        val result = taiService.taiTaxCodeRecords(nino)
+        val result = taiService.taxCodeRecords(nino)
 
         whenReady(result) {
           result =>
@@ -57,9 +64,10 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       }
 
       "must exception on future failed" in {
-        when(mockTaiConnector.taiTaxCode(nino)) thenReturn Future.failed(new RuntimeException)
+        when(mockTaiConnector.taiTaxCodeRecords(nino))
+          .thenReturn(Future.failed(new RuntimeException))
 
-        val result = taiService.taiTaxCodeRecords(nino)
+        val result = taiService.taxCodeRecords(nino)
 
         whenReady(result.failed) {
           result =>
@@ -67,6 +75,51 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
         }
       }
     }
+
+    "updateFRE" when {
+      "must return a 204 on successful update" in {
+        when(mockTaiConnector.taiFREUpdate(nino, taxYear, etag, iabdUpdateData))
+          .thenReturn(Future.successful(HttpResponse(NO_CONTENT)))
+        when(mockCitizenDetailsConnector.getEtag(nino))
+          .thenReturn(Future.successful(etag))
+
+        val result = taiService.updateFRE(nino,taxYear,iabdUpdateData)
+
+        whenReady(result) {
+          result =>
+            result.status mustBe NO_CONTENT
+        }
+      }
+
+      "must exception on failed tai FRE update" in {
+        when(mockTaiConnector.taiFREUpdate(nino, taxYear, etag, iabdUpdateData))
+          .thenReturn(Future.failed(new RuntimeException))
+        when(mockCitizenDetailsConnector.getEtag(nino))
+          .thenReturn(Future.successful(etag))
+
+        val result = taiService.updateFRE(nino,taxYear,iabdUpdateData)
+
+        whenReady(result.failed) {
+          result =>
+            result mustBe a[RuntimeException]
+        }
+      }
+
+      "must exception on failed citizen details ETag request" in {
+        when(mockTaiConnector.taiFREUpdate(nino, taxYear, etag, iabdUpdateData))
+          .thenReturn(Future.successful(HttpResponse(NO_CONTENT)))
+        when(mockCitizenDetailsConnector.getEtag(nino))
+          .thenReturn(Future.failed(new RuntimeException))
+
+        val result = taiService.updateFRE(nino,taxYear,iabdUpdateData)
+
+        whenReady(result.failed) {
+          result =>
+            result mustBe a[RuntimeException]
+        }
+      }
+    }
+
   }
 
 }

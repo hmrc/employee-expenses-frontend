@@ -43,11 +43,11 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
   private lazy val citizenDetailsConnector: CitizenDetailsConnector = app.injector.instanceOf[CitizenDetailsConnector]
 
   private val nino = "AB123456A"
-  private val etag = ETag("123")
+  private val etag = 123
   private val validJson = Json.parse(
     s"""
        |{
-       |   "etag":"123"
+       |   "etag":"$etag"
        |}
     """.stripMargin)
 
@@ -62,7 +62,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[ETag] = citizenDetailsConnector.getEtag(nino)
+      val result: Future[Int] = citizenDetailsConnector.getEtag(nino)
 
       whenReady(result) {
         result =>
@@ -79,7 +79,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[ETag] = citizenDetailsConnector.getEtag(nino)
+      val result: Future[Int] = citizenDetailsConnector.getEtag(nino)
 
       whenReady(result.failed) {
         result =>
@@ -96,7 +96,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[ETag] = citizenDetailsConnector.getEtag(nino)
+      val result: Future[Int] = citizenDetailsConnector.getEtag(nino)
 
       whenReady(result.failed) {
         result =>

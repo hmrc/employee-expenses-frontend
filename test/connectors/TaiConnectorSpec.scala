@@ -68,7 +68,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCode(nino)
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(nino)
 
       whenReady(result) {
         result =>
@@ -86,7 +86,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCode(nino)
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(nino)
 
       whenReady(result.failed) {
         result =>
