@@ -18,7 +18,6 @@ package models
 
 import org.joda.time.LocalDate
 import play.api.libs.json._
-import play.api.libs.functional.syntax._
 import play.api.libs.json.JodaWrites._
 import play.api.libs.json.JodaReads._
 
@@ -34,29 +33,6 @@ case class TaxCodeRecord(taxCode: String,
 object TaxCodeRecord {
   implicit val reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
 
-  implicit val listTaiReads: Reads[Seq[TaxCodeRecord]] =
-    (__ \ "data" \ "current").read(Reads.seq[TaxCodeRecord])
-
   implicit val listReads: Reads[Seq[TaxCodeRecord]] =
-    Reads.seq[TaxCodeRecord]
-
-  implicit val writes: Writes[TaxCodeRecord] = (
-    (__ \ "taxCode").write[String] and
-    (__ \ "employerName").write[String] and
-    (__ \ "startDate").write[LocalDate] and
-    (__ \ "endDate").write[LocalDate] and
-    (__ \ "payrollNumber").writeNullable[String] and
-    (__ \ "pensionIndicator").write[Boolean] and
-    (__ \ "primary").write[Boolean]
-  )(unlift(TaxCodeRecord.unapply))
-
-  implicit val writesList: Writes[Seq[TaxCodeRecord]] = Writes.seq[TaxCodeRecord]
-
-  implicit val format: Format[Seq[TaxCodeRecord]] = Format(listReads, writesList)
-}
-
-case class PersonalTaxRecord(etag: ETag, taxCodeRecord: Seq[TaxCodeRecord])
-
-object PersonalTaxRecord {
-	implicit val format: Format[PersonalTaxRecord] = Json.format[PersonalTaxRecord]
+    (__ \ "data" \ "current").read(Reads.seq[TaxCodeRecord])
 }

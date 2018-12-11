@@ -22,25 +22,6 @@ import play.api.libs.json.{JsValue, Json, Reads}
 
 class PersonalTaxRecordSpec extends SpecBase {
 
-  "PersonalTaxRecord" must {
-    "return a personalTaxRecord when passed valid JSON" in {
-      val personalTaxRecord = validPersonalTaxRecordJson.as[PersonalTaxRecord]
-
-      personalTaxRecord mustBe PersonalTaxRecord(
-        ETag("123"),
-        Seq(TaxCodeRecord(
-          taxCode = "830L",
-          employerName = "Employer Name",
-          startDate = LocalDate.parse("2018-06-27"),
-          endDate = LocalDate.parse("2019-04-05"),
-          payrollNumber = Some("1"),
-          pensionIndicator = true,
-          primary = true
-        ))
-      )
-    }
-  }
-
   "TaxCodeRecord" must {
     "return a taxCodeRecord when passed valid JSON" in {
       val taxRecord = validTaxCodeRecordJson.as[TaxCodeRecord]
@@ -57,7 +38,7 @@ class PersonalTaxRecordSpec extends SpecBase {
     }
 
     "return a taxCodeRecord when passed valid TAI JSON" in {
-      implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.listTaiReads
+      implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.listReads
 
       val taxRecord = validTaiTaxCodeRecordJson.as[Seq[TaxCodeRecord]]
 
@@ -73,22 +54,6 @@ class PersonalTaxRecordSpec extends SpecBase {
     }
 
   }
-
-  val validPersonalTaxRecordJson: JsValue = Json.parse(
-    """{
-    |"etag":{"etag": "123"},
-    |"taxCodeRecord": [{
-    |      "taxCode": "830L",
-    |      "employerName": "Employer Name",
-    |      "operatedTaxCode": true,
-    |      "p2Issued": true,
-    |      "startDate": "2018-06-27",
-    |      "endDate": "2019-04-05",
-    |      "payrollNumber": "1",
-    |      "pensionIndicator": true,
-    |      "primary": true
-    |}]
-    |}""".stripMargin)
 
   val validTaxCodeRecordJson: JsValue = Json.parse(
     """{

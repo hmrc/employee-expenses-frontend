@@ -26,13 +26,12 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsResultException, Json}
-import scala.concurrent.duration.Duration.Inf
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
 import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 
 class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper with GuiceOneAppPerSuite with ScalaFutures with IntegrationPatience {
 
@@ -48,18 +47,15 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   private val nino = "AB123456A"
   private val taxYear = TaxYear()
 
-  private val personalTaxRecord = PersonalTaxRecord(
-    etag = ETag("123"),
-    taxCodeRecord = Seq(TaxCodeRecord(
-      taxCode = "830L",
-      employerName = "Employer Name",
-      startDate = LocalDate.parse("2018-06-27"),
-      endDate = LocalDate.parse("2019-04-05"),
-      payrollNumber = Some("1"),
-      pensionIndicator = true,
-      primary = true
-    ))
-  )
+  private val taxCodeRecords = Seq(TaxCodeRecord(
+    taxCode = "830L",
+    employerName = "Employer Name",
+    startDate = LocalDate.parse("2018-06-27"),
+    endDate = LocalDate.parse("2019-04-05"),
+    payrollNumber = Some("1"),
+    pensionIndicator = true,
+    primary = true
+  ))
 
   "taiTaxCode" must {
     "return a tax code record on success" in {
@@ -69,35 +65,16 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
             aResponse()
               .withStatus(OK)
               .withBody(validJson.toString)
-              .withHeader("ETag","123")
           )
       )
 
-      val result: Future[PersonalTaxRecord] = taiConnector.taiTaxCode(nino)
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCode(nino)
 
       whenReady(result) {
         result =>
-          result mustBe personalTaxRecord
+          result mustBe taxCodeRecords
       }
 
-    }
-
-    "return an exception when no ETag in header" in {
-      server.stubFor(
-        get(urlEqualTo(s"/tai/$nino/tax-account/tax-code-change"))
-          .willReturn(
-            aResponse()
-              .withStatus(OK)
-              .withBody(validJson.toString)
-          )
-      )
-
-      val result: Future[PersonalTaxRecord] = taiConnector.taiTaxCode(nino)
-
-      whenReady(result.failed) {
-        result =>
-          result mustBe an[RuntimeException]
-      }
     }
 
     "return 500 on failure" in {
@@ -109,7 +86,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[PersonalTaxRecord] = taiConnector.taiTaxCode(nino)
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCode(nino)
 
       whenReady(result.failed) {
         result =>
@@ -129,7 +106,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, IabdUpdateData(1 ,100))
+      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, IabdUpdateData(1, 100))
 
       whenReady(result) {
         result =>
@@ -147,7 +124,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1,  IabdUpdateData(1 ,100))
+      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, IabdUpdateData(1, 100))
 
       whenReady(result.failed) {
         result =>
@@ -157,32 +134,33 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     }
   }
 
-  val validJson = Json.parse("""{
-															 |  "data" : {
-															 |    "current": [{
-															 |      "taxCode": "830L",
-															 |      "employerName": "Employer Name",
-															 |      "operatedTaxCode": true,
-															 |      "p2Issued": true,
-															 |      "startDate": "2018-06-27",
-															 |      "endDate": "2019-04-05",
-															 |      "payrollNumber": "1",
-															 |      "pensionIndicator": true,
-															 |      "primary": true
-															 |    }],
-															 |    "previous": [{
-															 |      "taxCode": "1150L",
-															 |      "employerName": "Employer Name",
-															 |      "operatedTaxCode": true,
-															 |      "p2Issued": true,
-															 |      "startDate": "2018-04-06",
-															 |      "endDate": "2018-06-26",
-															 |      "payrollNumber": "1",
-															 |      "pensionIndicator": true,
-															 |      "primary": true
-															 |    }]
-															 |  },
-															 |  "links" : [ ]
-															 |}""".stripMargin)
+  val validJson = Json.parse(
+    """{
+      															 |  "data" : {
+      															 |    "current": [{
+      															 |      "taxCode": "830L",
+      															 |      "employerName": "Employer Name",
+      															 |      "operatedTaxCode": true,
+      															 |      "p2Issued": true,
+      															 |      "startDate": "2018-06-27",
+      															 |      "endDate": "2019-04-05",
+      															 |      "payrollNumber": "1",
+      															 |      "pensionIndicator": true,
+      															 |      "primary": true
+      															 |    }],
+      															 |    "previous": [{
+      															 |      "taxCode": "1150L",
+      															 |      "employerName": "Employer Name",
+      															 |      "operatedTaxCode": true,
+      															 |      "p2Issued": true,
+      															 |      "startDate": "2018-04-06",
+      															 |      "endDate": "2018-06-26",
+      															 |      "payrollNumber": "1",
+      															 |      "pensionIndicator": true,
+      															 |      "primary": true
+      															 |    }]
+      															 |  },
+      															 |  "links" : [ ]
+      															 |}""".stripMargin)
 
 }

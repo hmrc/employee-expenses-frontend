@@ -20,7 +20,7 @@ import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
 import javax.inject.Singleton
 import models._
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.Reads
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -29,21 +29,13 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient) extends TaiConnector {
   override def taiTaxCode(nino: String)
-                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[PersonalTaxRecord] = {
+                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
 
     val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/tax-code-change"
 
-		implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.listTaiReads
+		implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.listReads
 
-    httpClient.GET(taiUrl).map {
-      response =>
-        val eTag = response.header("ETag") match {
-          case Some(etag) => etag
-          case _ => throw new RuntimeException("[TaiConnector][taiTaxCode] No ETag found in header")
-        }
-
-        PersonalTaxRecord(ETag("123"), Json.parse(response.body).as[Seq[TaxCodeRecord]])
-    }
+    httpClient.GET[Seq[TaxCodeRecord]](taiUrl)
   }
 
   override def taiFREUpdate(nino: String, year: TaxYear, version: Int, expensesData: IabdUpdateData)
@@ -60,7 +52,7 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
 @ImplementedBy(classOf[TaiConnectorImpl])
 trait TaiConnector {
   def taiTaxCode(nino:String)
-                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[PersonalTaxRecord]
+                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]]
 
   def taiFREUpdate(nino: String, year: TaxYear, version: Int, data: IabdUpdateData)
                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
