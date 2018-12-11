@@ -92,9 +92,12 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-			intercept[RuntimeException] {
-				Await.result(taiConnector.taiTaxCode(nino), Inf)
-			}.getMessage mustBe "[TaiConnector][taiTaxCode] No ETag found in header"
+      val result: Future[PersonalTaxRecord] = taiConnector.taiTaxCode(nino)
+
+      whenReady(result.failed) {
+        result =>
+          result mustBe an[RuntimeException]
+      }
     }
 
     "return 500 on failure" in {

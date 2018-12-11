@@ -41,6 +41,7 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
           case Some(etag) => etag
           case _ => throw new RuntimeException("[TaiConnector][taiTaxCode] No ETag found in header")
         }
+
         PersonalTaxRecord(ETag(eTag.toString), Json.parse(response.body).as[Seq[TaxCodeRecord]])
     }
   }
