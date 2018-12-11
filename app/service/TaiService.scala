@@ -18,17 +18,24 @@ package service
 
 import com.google.inject.Inject
 import connectors.TaiConnector
-import models.PersonalTaxRecord
+import models.{PersonalTaxRecord, UserData}
+import play.api.libs.json.Json
+import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TaiService @Inject()(taiConnector: TaiConnector) {
+class TaiService @Inject()(taiConnector: TaiConnector,
+                           sessionRepository: SessionRepository) {
 
-  def taiTaxCodeRecords(nino: String)(implicit hc: HeaderCarrier): Future[PersonalTaxRecord] = {
+  def taiTaxCodeRecords(nino: String, userData: UserData)(implicit hc: HeaderCarrier): Future[PersonalTaxRecord] = {
 
-    taiConnector.taiTaxCode(nino)
+    taiConnector.taiTaxCode(nino).map {
+      personalTaxRecord =>
+        sessionRepository.set(UserData(userData.id, userData.data + ("personalTaxRecord" -> Json.toJson(personalTaxRecord))))
+        personalTaxRecord
+    }
 
   }
 

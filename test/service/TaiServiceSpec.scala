@@ -18,11 +18,13 @@ package service
 
 import base.SpecBase
 import connectors.TaiConnector
-import models.{ETag, PersonalTaxRecord, TaxCodeRecord}
+import models.{ETag, PersonalTaxRecord, TaxCodeRecord, UserData}
 import org.joda.time.LocalDate
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
+import play.api.libs.json.{JsObject, JsString}
+import repositories.SessionRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -30,7 +32,8 @@ import scala.concurrent.Future
 class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
   private val mockTaiConnector = mock[TaiConnector]
-  val taiService = new TaiService(mockTaiConnector)
+  private val mockSessionRepository = mock[SessionRepository]
+  val taiService = new TaiService(mockTaiConnector, mockSessionRepository)
 
   private val nino = "AB123456A"
   private val personalTaxRecord = PersonalTaxRecord(
@@ -45,13 +48,14 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       primary = true
     ))
   )
+  private val userData = UserData("123", JsObject(Seq("key"-> JsString("value"))))
 
   "service.TaiService" must {
     "taiTaxCodeRecords" when {
       "must return a sequence of tax code records" in {
         when(mockTaiConnector.taiTaxCode(nino)) thenReturn Future.successful(personalTaxRecord)
 
-        val result = taiService.taiTaxCodeRecords(nino)
+        val result = taiService.taiTaxCodeRecords(nino, userData)
 
         whenReady(result) {
           result =>
@@ -62,7 +66,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       "must exception on future failed" in {
         when(mockTaiConnector.taiTaxCode(nino)) thenReturn Future.failed(new RuntimeException)
 
-        val result = taiService.taiTaxCodeRecords(nino)
+        val result = taiService.taiTaxCodeRecords(nino, userData)
 
         whenReady(result.failed) {
           result =>
