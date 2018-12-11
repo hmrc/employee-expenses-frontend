@@ -18,24 +18,22 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.{IabdUpdateData, TaxCodeRecord, TaxYear}
+import models._
 import org.joda.time.LocalDate
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
+import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
+import uk.gov.hmrc.http.HttpResponse
 import utils.WireMockHelper
-import play.api.http.Status._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper with GuiceOneAppPerSuite with ScalaFutures with IntegrationPatience {
-
-  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   override implicit lazy val app: Application =
     new GuiceApplicationBuilder()
@@ -49,7 +47,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   private val nino = "AB123456A"
   private val taxYear = TaxYear()
 
-  private val taxCodeRecord = TaxCodeRecord(
+  private val taxCodeRecords = Seq(TaxCodeRecord(
     taxCode = "830L",
     employerName = "Employer Name",
     startDate = LocalDate.parse("2018-06-27"),
@@ -57,7 +55,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     payrollNumber = Some("1"),
     pensionIndicator = true,
     primary = true
-  )
+  ))
 
   "taiTaxCode" must {
     "return a tax code record on success" in {
@@ -70,11 +68,11 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCode(nino)
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(nino)
 
       whenReady(result) {
         result =>
-          result mustBe Seq(taxCodeRecord)
+          result mustBe taxCodeRecords
       }
 
     }
@@ -88,7 +86,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCode(nino)
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(nino)
 
       whenReady(result.failed) {
         result =>
@@ -108,7 +106,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, IabdUpdateData(1 ,100))
+      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, IabdUpdateData(1, 100))
 
       whenReady(result) {
         result =>
@@ -126,7 +124,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1,  IabdUpdateData(1 ,100))
+      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, IabdUpdateData(1, 100))
 
       whenReady(result.failed) {
         result =>
@@ -136,32 +134,33 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     }
   }
 
-  val validJson = Json.parse("""{
-															 |  "data" : {
-															 |    "current": [{
-															 |      "taxCode": "830L",
-															 |      "employerName": "Employer Name",
-															 |      "operatedTaxCode": true,
-															 |      "p2Issued": true,
-															 |      "startDate": "2018-06-27",
-															 |      "endDate": "2019-04-05",
-															 |      "payrollNumber": "1",
-															 |      "pensionIndicator": true,
-															 |      "primary": true
-															 |    }],
-															 |    "previous": [{
-															 |      "taxCode": "1150L",
-															 |      "employerName": "Employer Name",
-															 |      "operatedTaxCode": true,
-															 |      "p2Issued": true,
-															 |      "startDate": "2018-04-06",
-															 |      "endDate": "2018-06-26",
-															 |      "payrollNumber": "1",
-															 |      "pensionIndicator": true,
-															 |      "primary": true
-															 |    }]
-															 |  },
-															 |  "links" : [ ]
-															 |}""".stripMargin)
+  val validJson = Json.parse(
+    """{
+      															 |  "data" : {
+      															 |    "current": [{
+      															 |      "taxCode": "830L",
+      															 |      "employerName": "Employer Name",
+      															 |      "operatedTaxCode": true,
+      															 |      "p2Issued": true,
+      															 |      "startDate": "2018-06-27",
+      															 |      "endDate": "2019-04-05",
+      															 |      "payrollNumber": "1",
+      															 |      "pensionIndicator": true,
+      															 |      "primary": true
+      															 |    }],
+      															 |    "previous": [{
+      															 |      "taxCode": "1150L",
+      															 |      "employerName": "Employer Name",
+      															 |      "operatedTaxCode": true,
+      															 |      "p2Issued": true,
+      															 |      "startDate": "2018-04-06",
+      															 |      "endDate": "2018-06-26",
+      															 |      "payrollNumber": "1",
+      															 |      "pensionIndicator": true,
+      															 |      "primary": true
+      															 |    }]
+      															 |  },
+      															 |  "links" : [ ]
+      															 |}""".stripMargin)
 
 }

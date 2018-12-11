@@ -14,20 +14,12 @@
  * limitations under the License.
  */
 
-package controllers
+package models
 
-import javax.inject.Inject
-import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.IndexView
+import play.api.libs.json.{Format, Json}
 
-class IndexController @Inject()(
-                                 val controllerComponents: MessagesControllerComponents,
-                                 view: IndexView
-                               ) extends FrontendBaseController with I18nSupport {
+case class ETag(etag: String)
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    Ok(view())
-  }
+object ETag {
+  implicit lazy val format: Format[ETag] = Json.format[ETag]
 }
