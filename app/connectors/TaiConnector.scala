@@ -33,7 +33,7 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
 
     val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/tax-code-change"
 
-		implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.listReads
+		implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.listTaiReads
 
     httpClient.GET(taiUrl).map {
       response =>

@@ -34,8 +34,11 @@ case class TaxCodeRecord(taxCode: String,
 object TaxCodeRecord {
   implicit val reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
 
-  implicit val listReads: Reads[Seq[TaxCodeRecord]] =
+  implicit val listTaiReads: Reads[Seq[TaxCodeRecord]] =
     (__ \ "data" \ "current").read(Reads.seq[TaxCodeRecord])
+
+  implicit val listReads: Reads[Seq[TaxCodeRecord]] =
+    Reads.seq[TaxCodeRecord]
 
   implicit val writes: Writes[TaxCodeRecord] = (
     (__ \ "taxCode").write[String] and

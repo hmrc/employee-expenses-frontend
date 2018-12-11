@@ -18,12 +18,12 @@ package models
 
 import base.SpecBase
 import org.joda.time.LocalDate
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsValue, Json, Reads}
 
 class PersonalTaxRecordSpec extends SpecBase {
 
   "PersonalTaxRecord" must {
-    "" in {
+    "return a personalTaxRecord when passed valid JSON" in {
       val personalTaxRecord = validPersonalTaxRecordJson.as[PersonalTaxRecord]
 
       personalTaxRecord mustBe PersonalTaxRecord(
@@ -41,10 +41,25 @@ class PersonalTaxRecordSpec extends SpecBase {
     }
   }
 
-  "Taxcode Record " must {
-    "return a taxCodeModel when passed valid JSON" in {
+  "TaxCodeRecord" must {
+    "return a taxCodeRecord when passed valid JSON" in {
+      val taxRecord = validTaxCodeRecordJson.as[TaxCodeRecord]
 
-      val taxRecord = validTaxCodeRecordJson.as[Seq[TaxCodeRecord]]
+      taxRecord mustBe TaxCodeRecord(
+        taxCode = "830L",
+        employerName = "Employer Name",
+        startDate = LocalDate.parse("2018-06-27"),
+        endDate = LocalDate.parse("2019-04-05"),
+        payrollNumber = Some("1"),
+        pensionIndicator = true,
+        primary = true
+      )
+    }
+
+    "return a taxCodeRecord when passed valid TAI JSON" in {
+      implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.listTaiReads
+
+      val taxRecord = validTaiTaxCodeRecordJson.as[Seq[TaxCodeRecord]]
 
       taxRecord mustBe Seq(TaxCodeRecord(
         taxCode = "830L",
@@ -56,6 +71,7 @@ class PersonalTaxRecordSpec extends SpecBase {
         primary = true
       ))
     }
+
   }
 
   val validPersonalTaxRecordJson: JsValue = Json.parse(
@@ -74,8 +90,20 @@ class PersonalTaxRecordSpec extends SpecBase {
     |}]
     |}""".stripMargin)
 
-
   val validTaxCodeRecordJson: JsValue = Json.parse(
+    """{
+      |   "taxCode": "830L",
+      |   "employerName": "Employer Name",
+      |   "operatedTaxCode": true,
+      |   "p2Issued": true,
+      |   "startDate": "2018-06-27",
+      |   "endDate": "2019-04-05",
+      |   "payrollNumber": "1",
+      |   "pensionIndicator": true,
+      |   "primary": true
+      |}""".stripMargin)
+
+  val validTaiTaxCodeRecordJson: JsValue = Json.parse(
     """{
     |  "data" : {
     |    "current": [{
