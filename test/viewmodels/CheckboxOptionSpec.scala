@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package forms
+package viewmodels
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import models.Checkbox
-import play.api.data.Form
+import base.SpecBase
 
-class CheckboxFormProvider @Inject() extends Mappings {
-  def apply(): Form[Checkbox] =
-    Form(
-      "value" -> enumerable[Checkbox]("checkbox.error.required")
-    )
+class CheckboxOptionSpec extends SpecBase {
+
+  "Checkbox Option" must {
+
+    "build correctly from a key prefix and option" in {
+
+      val checkboxOption = CheckboxOption("prefix", "option")
+
+      checkboxOption.id mustEqual "prefix.option"
+      checkboxOption.value mustEqual "option"
+      checkboxOption.messageKey mustEqual "prefix.option"
+    }
+  }
 }

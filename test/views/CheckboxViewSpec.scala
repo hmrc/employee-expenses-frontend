@@ -47,7 +47,7 @@ class CheckboxViewSpec extends ViewBehaviours {
 
     "rendered" must {
 
-      "contain radio buttons for the value" in {
+      "contain checkbox buttons for the value" in {
 
         val doc = asDocument(applyView(form))
 
@@ -61,7 +61,7 @@ class CheckboxViewSpec extends ViewBehaviours {
 
       s"rendered with a value of '${option.value}'" must {
 
-        s"have the '${option.value}' radio button selected" in {
+        s"have the '${option.value}' checkbox button selected" in {
 
           val doc = asDocument(applyView(form.bind(Map("value" -> s"${option.value}"))))
 

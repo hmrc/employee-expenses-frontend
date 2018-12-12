@@ -19,7 +19,7 @@ package controllers
 import controllers.actions._
 import forms.CheckboxFormProvider
 import javax.inject.Inject
-import models.{Enumerable, Mode}
+import models.{Enumerable, Mode, UserAnswers}
 import navigation.Navigator
 import pages.CheckboxPage
 import play.api.data.Form
@@ -45,9 +45,9 @@ class CheckboxController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(CheckboxPage) match {
+      val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.internalId)).get(CheckboxPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -55,7 +55,7 @@ class CheckboxController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -63,7 +63,7 @@ class CheckboxController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
-          val updatedAnswers = request.userAnswers.set(CheckboxPage, value)
+          val updatedAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId)).set(CheckboxPage, value)
 
           sessionRepository.set(updatedAnswers.userData).map(
             _ =>
