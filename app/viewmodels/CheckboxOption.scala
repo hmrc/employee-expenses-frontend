@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package generators
+package viewmodels
 
-import org.scalacheck.Arbitrary
-import pages._
+case class CheckboxOption(id: String, value: String, messageKey: String)
 
-trait PageGenerators {
-
-  implicit lazy val arbitraryCheckboxPage: Arbitrary[CheckboxPage.type] =
-    Arbitrary(CheckboxPage)
+object CheckboxOption {
+  def apply(keyPrefix: String, option: String): CheckboxOption = CheckboxOption(
+    s"$keyPrefix.$option",
+    option,
+    s"$keyPrefix.$option"
+  )
 }

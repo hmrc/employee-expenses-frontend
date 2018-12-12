@@ -11,3 +11,13 @@ GET        /this-service-has-been-reset                 controllers.SessionExpir
 GET        /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
+
+GET        /checkbox                        controllers.CheckboxController.onPageLoad(mode: Mode = NormalMode)
+POST       /checkbox                        controllers.CheckboxController.onSubmit(mode: Mode = NormalMode)
+GET        /changeCheckbox                  controllers.CheckboxController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeCheckbox                  controllers.CheckboxController.onSubmit(mode: Mode = CheckMode)
+
+GET        /checkbox                        controllers.CheckboxController.onPageLoad(mode: Mode = NormalMode)
+POST       /checkbox                        controllers.CheckboxController.onSubmit(mode: Mode = NormalMode)
+GET        /changeCheckbox                  controllers.CheckboxController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeCheckbox                  controllers.CheckboxController.onSubmit(mode: Mode = CheckMode)

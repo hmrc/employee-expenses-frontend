@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import org.scalacheck.Arbitrary
-import pages._
+import javax.inject.Inject
 
-trait PageGenerators {
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.Checkbox
 
-  implicit lazy val arbitraryCheckboxPage: Arbitrary[CheckboxPage.type] =
-    Arbitrary(CheckboxPage)
+class CheckboxFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Checkbox] =
+    Form(
+      "value" -> enumerable[Checkbox]("checkbox.error.required")
+    )
 }

@@ -14,16 +14,32 @@
  * limitations under the License.
  */
 
-package utils
+package forms
 
-import controllers.routes
-import models.{CheckMode, UserAnswers}
-import pages._
-import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
+import forms.behaviours.OptionFieldBehaviours
+import models.Checkbox
+import play.api.data.FormError
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+class CheckboxFormProviderSpec extends OptionFieldBehaviours {
 
-  def checkbox: Option[AnswerRow] = userAnswers.get(CheckboxPage) map {
-    x => AnswerRow("checkbox.checkYourAnswersLabel", s"checkbox.$x", true, routes.CheckboxController.onPageLoad(CheckMode).url)
+  val form = new CheckboxFormProvider()()
+
+  ".value" must {
+
+    val fieldName = "value"
+    val requiredKey = "checkbox.error.required"
+
+    behave like optionsField[Checkbox](
+      form,
+      fieldName,
+      validValues  = Checkbox.values,
+      invalidError = FormError(fieldName, "error.invalid")
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
   }
 }

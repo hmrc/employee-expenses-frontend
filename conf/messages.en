@@ -42,3 +42,17 @@ site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+checkbox.title = checkbox
+checkbox.heading = checkbox
+checkbox.1 = 2
+checkbox.3 = 4
+checkbox.checkYourAnswersLabel = checkbox
+checkbox.error.required = Select checkbox
+
+checkbox.title = checkbox
+checkbox.heading = checkbox
+checkbox.option1 = option1
+checkbox.option2 = option2
+checkbox.checkYourAnswersLabel = checkbox
+checkbox.error.required = Select checkbox

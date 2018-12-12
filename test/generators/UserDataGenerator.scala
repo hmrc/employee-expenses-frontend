@@ -26,6 +26,8 @@ trait UserDataGenerator {
   self: Generators =>
 
   val generators: Seq[Gen[(Page, JsValue)]] =
+    arbitrary[(CheckboxPage.type, JsValue)] ::
+    arbitrary[(CheckboxPage.type, JsValue)] ::
     Nil
 
   implicit lazy val arbitraryUserData: Arbitrary[UserData] =

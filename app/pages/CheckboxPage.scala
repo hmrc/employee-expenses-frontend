@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import org.scalacheck.Arbitrary
-import pages._
+import models.Checkbox
 
-trait PageGenerators {
+case object CheckboxPage extends QuestionPage[Checkbox] {
 
-  implicit lazy val arbitraryCheckboxPage: Arbitrary[CheckboxPage.type] =
-    Arbitrary(CheckboxPage)
+  override def toString: String = "checkbox"
 }
