@@ -21,6 +21,8 @@ import viewmodels.CheckboxOption
 
 object Checkbox extends Enumeration {
 
+  type Checkbox = Value
+
   val Option1: Checkbox.Value = Value("option1")
   val Option2: Checkbox.Value = Value("option2")
 
@@ -29,17 +31,22 @@ object Checkbox extends Enumeration {
       CheckboxOption("checkbox", value.toString)
   }
 
-  implicit object CheckboxWrites extends Writes[Checkbox.Value] {
-    def writes(checkbox: Checkbox.Value): JsValue = Json.toJson(checkbox.toString)
+  implicit val format: Format[Checkbox] = new Format[Checkbox] {
+    def reads(json: JsValue) = JsSuccess(Checkbox.withName(json.as[String]))
+    def writes(checkbox: Checkbox) = JsString(Checkbox.toString)
   }
 
-  implicit object CheckboxReads extends Reads[Checkbox.Value] {
-    override def reads(json: JsValue): JsResult[Checkbox.Value] = json match {
-      case Option1 => JsSuccess(Option1)
-      case Option2 => JsSuccess(Option2)
-      case _                          => JsError("Unknown checkbox")
-    }
-  }
-
-  implicit def formats: Format[Checkbox.Value] = Format(CheckboxReads, CheckboxWrites)
+//  implicit object CheckboxWrites extends Writes[Checkbox.Value] {
+//    def writes(checkbox: Checkbox.Value): JsValue = Json.toJson(checkbox.toString)
+//  }
+//
+//  implicit object CheckboxReads extends Reads[Checkbox.Value] {
+//    override def reads(json: JsValue): JsResult[Checkbox.Value] = json match {
+//      case Option1 => JsSuccess(Option1)
+//      case Option2 => JsSuccess(Option2)
+//      case _                          => JsError("Unknown checkbox")
+//    }
+//  }
+//
+//  implicit def formats: Format[Checkbox.Value] = Format(CheckboxReads, CheckboxWrites)
 }

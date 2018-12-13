@@ -17,14 +17,35 @@
 package forms
 
 import forms.mappings.Mappings
-import javax.inject.Inject
-import models.{Checkbox, Enumerable}
-import play.api.data.Form
+import models.Checkbox
 import play.api.data.Forms._
+import play.api.data.format.Formatter
+import play.api.data.validation.{Constraint, Invalid, Valid}
+import play.api.data.{Form, FormError}
 
-class CheckboxFormProvider @Inject() extends Mappings {
-  def apply(implicit ev: Enumerable[Checkbox.Value]): Form[Seq[Checkbox.Value]] =
+class CheckboxFormProvider extends Mappings {
+
+  private def checkboxFormatter: Formatter[Checkbox.Value] = new Formatter[Checkbox.Value] {
+    def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Checkbox.Value] = data.get(key) match {
+      case Some(s) => Right(Checkbox.withName(s))
+      case None => produceError(key, "error.blank")
+      case _ => produceError(key, "error.unknown")
+    }
+
+    def unbind(key: String, value: Checkbox.Value) = Map(key -> value.toString)
+  }
+
+  private def constraint: Constraint[Seq[Checkbox.Value]] = Constraint {
+    case set if set.nonEmpty =>
+      Valid
+    case _ =>
+      Invalid("error.blank")
+  }
+
+  def produceError(key: String, error: String) = Left(Seq(FormError(key, error)))
+
+  def apply(): Form[Seq[Checkbox.Value]] =
     Form(
-      "value" -> seq(enumerable[Checkbox.Value]("", "")(ev))
+      "value" -> seq(of(checkboxFormatter)).verifying(constraint)
     )
 }

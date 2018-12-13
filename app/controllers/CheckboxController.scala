@@ -21,7 +21,7 @@ import forms.CheckboxFormProvider
 import javax.inject.Inject
 import models.{Checkbox, Enumerable, Mode, UserAnswers}
 import navigation.Navigator
-import pages.{CheckboxPage, QuestionPage}
+import pages.CheckboxPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -40,9 +40,9 @@ class CheckboxController @Inject()(override val messagesApi: MessagesApi,
                                    formProvider: CheckboxFormProvider,
                                    val controllerComponents: MessagesControllerComponents,
                                    view: CheckboxView
-                                  )(implicit ec: ExecutionContext, ev: Enumerable[Checkbox.Value]) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  val form = formProvider(ev)
+  val form: Form[Seq[Checkbox.Value]] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) {
     implicit request =>
