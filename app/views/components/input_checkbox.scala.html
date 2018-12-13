@@ -44,19 +44,19 @@
     <div class="checkboxes">
         @for(input <- inputs) {
             <div class="checkboxes__item">
-            <input
-            class="checkboxes__input"
-            id="@{input.id}"
-            type="checkbox"
-            name="@{field.id}"
-            value="@{input.value}"
-                @if(field.value.contains(input.value)){checked="checked"}
-                @if(trackGa){data-journey-click="employee-expenses-frontend:click:@{input.id}"}
-            />
+                <input
+                    class="checkboxes__input"
+                    id="@{input.id}"
+                    type="checkbox"
+                    name="@{field.id}"
+                    value="@{input.value}"
+                    @if(field.value.contains(input.value)){checked="checked"}
+                    @if(trackGa){data-journey-click="employee-expenses-frontend:click:@{input.id}"}
+                />
 
-            <label class="label checkboxes__label" for="@{input.id}">
-                @messages(input.messageKey)
-            </label>
+                <label class="label checkboxes__label" for="@{input.id}">
+                    @messages(input.messageKey)
+                </label>
             </div>
         }
     </div>

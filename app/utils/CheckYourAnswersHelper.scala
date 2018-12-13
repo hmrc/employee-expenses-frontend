@@ -19,11 +19,10 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
-import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
+import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
-
-  def checkbox: Option[AnswerRow] = userAnswers.get(CheckboxPage) map {
+/*  def checkbox: Option[AnswerRow] = userAnswers.get(CheckboxPage) map {
     x => AnswerRow("checkbox.checkYourAnswersLabel", s"checkbox.$x", true, routes.CheckboxController.onPageLoad(CheckMode).url)
-  }
+  }*/
 }

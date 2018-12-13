@@ -19,9 +19,9 @@ package controllers
 import controllers.actions._
 import forms.CheckboxFormProvider
 import javax.inject.Inject
-import models.{Enumerable, Mode, UserAnswers}
+import models.{Checkbox, Enumerable, Mode, UserAnswers}
 import navigation.Navigator
-import pages.CheckboxPage
+import pages.{CheckboxPage, QuestionPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -31,23 +31,22 @@ import views.html.CheckboxView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckboxController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       navigator: Navigator,
-                                       identify: IdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: CheckboxFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: CheckboxView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class CheckboxController @Inject()(override val messagesApi: MessagesApi,
+                                   sessionRepository: SessionRepository,
+                                   navigator: Navigator,
+                                   identify: IdentifierAction,
+                                   getData: DataRetrievalAction,
+                                   requireData: DataRequiredAction,
+                                   formProvider: CheckboxFormProvider,
+                                   val controllerComponents: MessagesControllerComponents,
+                                   view: CheckboxView
+                                  )(implicit ec: ExecutionContext, ev: Enumerable[Checkbox.Value]) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  val form = formProvider()
+  val form = formProvider(ev)
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) {
     implicit request =>
-      val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.internalId)).get(CheckboxPage) match {
+      val preparedForm: Form[Seq[Checkbox.Value]] = request.userAnswers.getOrElse(UserAnswers(request.internalId)).get(CheckboxPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }

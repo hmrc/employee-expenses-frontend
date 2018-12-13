@@ -18,12 +18,13 @@ package forms
 
 import forms.mappings.Mappings
 import javax.inject.Inject
-import models.Checkbox
+import models.{Checkbox, Enumerable}
 import play.api.data.Form
+import play.api.data.Forms._
 
 class CheckboxFormProvider @Inject() extends Mappings {
-  def apply(): Form[Checkbox] =
+  def apply(implicit ev: Enumerable[Checkbox.Value]): Form[Seq[Checkbox.Value]] =
     Form(
-      "value" -> enumerable[Checkbox]("checkbox.error.required")
+      "value" -> seq(enumerable[Checkbox.Value]("", "")(ev))
     )
 }
