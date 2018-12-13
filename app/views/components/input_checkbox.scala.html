@@ -22,7 +22,9 @@
         hint: Option[String] = None,
         trackGa: Boolean = false,
         inputs: Seq[CheckboxOption]
-)(implicit messages: Messages)
+)(implicit
+        messages: Messages
+)
 
 @hintBlock = {
     @hint.map { hint =>
@@ -35,7 +37,7 @@
 @errorBlock = {
     @field.errors.map { error =>
         <span class="error-notification" id="error-message-@field.id-input">
-        @messages(error.message, error.args: _*)
+            @messages(error.message, error.args: _*)
         </span>
     }
 }
@@ -60,7 +62,7 @@
             </div>
         }
     </div>
-
+    <hr>
     <p>@field.value</p>
 }
 

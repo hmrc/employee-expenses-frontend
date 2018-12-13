@@ -31,9 +31,9 @@ object Checkbox extends Enumeration {
       CheckboxOption("checkbox", value.toString)
   }
 
-  implicit val format: Format[Checkbox] = new Format[Checkbox] {
+  implicit val format: Format[Checkbox.Value] = new Format[Checkbox.Value] {
     def reads(json: JsValue) = JsSuccess(Checkbox.withName(json.as[String]))
-    def writes(checkbox: Checkbox) = JsString(Checkbox.toString)
+    def writes(checkbox: Checkbox.Value): JsValue = Json.toJson(checkbox.toString)
   }
 
 //  implicit object CheckboxWrites extends Writes[Checkbox.Value] {
@@ -44,9 +44,9 @@ object Checkbox extends Enumeration {
 //    override def reads(json: JsValue): JsResult[Checkbox.Value] = json match {
 //      case Option1 => JsSuccess(Option1)
 //      case Option2 => JsSuccess(Option2)
-//      case _                          => JsError("Unknown checkbox")
+//      case _       => JsError("Unknown checkbox")
 //    }
 //  }
 //
-//  implicit def formats: Format[Checkbox.Value] = Format(CheckboxReads, CheckboxWrites)
+//  implicit val formats: Format[Checkbox.Value] = Format(CheckboxReads, CheckboxWrites)
 }

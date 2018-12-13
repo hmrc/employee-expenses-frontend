@@ -20,8 +20,8 @@ case class CheckboxOption(id: String, value: String, messageKey: String)
 
 object CheckboxOption {
   def apply(keyPrefix: String, option: String): CheckboxOption = CheckboxOption(
-    s"$keyPrefix.$option",
-    option,
-    s"$keyPrefix.$option"
+    id = s"$keyPrefix-$option",
+    value = option,
+    messageKey = s"$keyPrefix-$option"
   )
 }

@@ -26,20 +26,22 @@ import play.api.data.{Form, FormError}
 class CheckboxFormProvider extends Mappings {
 
   private def checkboxFormatter: Formatter[Checkbox.Value] = new Formatter[Checkbox.Value] {
-    def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Checkbox.Value] = data.get(key) match {
-      case Some(s) => Right(Checkbox.withName(s))
-      case None => produceError(key, "error.blank")
-      case _ => produceError(key, "error.unknown")
-    }
+    def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Checkbox.Value] =
+      data.get(key) match {
+        case Some(s) => Right(Checkbox.withName(s))
+        case None => produceError(key, "formatter.blank")
+        case _ => produceError(key, "error.unknown")
+      }
 
-    def unbind(key: String, value: Checkbox.Value) = Map(key -> value.toString)
+    def unbind(key: String, value: Checkbox.Value): Map[String, String] =
+      Map(key -> value.toString)
   }
 
   private def constraint: Constraint[Seq[Checkbox.Value]] = Constraint {
     case set if set.nonEmpty =>
       Valid
     case _ =>
-      Invalid("error.blank")
+      Invalid("constraint.blank")
   }
 
   def produceError(key: String, error: String) = Left(Seq(FormError(key, error)))

@@ -42,25 +42,26 @@ class CheckboxController @Inject()(override val messagesApi: MessagesApi,
                                    view: CheckboxView
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  val form: Form[Seq[Checkbox.Value]] = formProvider()
+  //  val form: Form[Seq[Checkbox.Value]] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) {
-    implicit request =>
-      val preparedForm: Form[Seq[Checkbox.Value]] = request.userAnswers.getOrElse(UserAnswers(request.internalId)).get(CheckboxPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
+    implicit request => {
+      val preparedForm: Form[Seq[Checkbox.Value]] = request.userAnswers.map {
+        _.get[Seq[Checkbox.Value]](CheckboxPage) match {
+          case value => formProvider().fill(value)
+          case _ => formProvider()
+        }
       }
-
       Ok(view(preparedForm, mode))
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async {
     implicit request =>
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
+      formProvider().bindFromRequest().fold(
+        (formWithErrors: Form[Seq[Checkbox.Value]]) =>
           Future.successful(BadRequest(view(formWithErrors, mode))),
-
         value => {
           val updatedAnswers = request.userAnswers.getOrElse(UserAnswers(request.internalId)).set(CheckboxPage, value)
 
