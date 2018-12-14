@@ -42,35 +42,36 @@
     }
 }
 
-<div class="form-group @if(field.hasErrors){form-field--error}">
+@divClass = @{
+    if(field.hasErrors) "form-group form-field--error" else "form-group"
+}
+
+@lgndClass = @{
+    legendClass match {
+        case Some(str) => s"bold-small $str"
+        case None      => "bold-small"
+    }
+}
+
+<div class="@divClass">
     <fieldset id="@{field.id}">
-        <legend class="bold-small @legendClass">@legend</legend>
+        <legend class="@lgndClass">@legend</legend>
         @hintBlock
         @errorBlock
-        @for((CheckboxOption(id, value, label), index) <- inputs.zipWithIndex) {
-            @defining(
-                inputs.flatMap { j =>
-                    field(s"[$j]").value
-                }
-            ) { answers =>
-                <div class="multiple-choice">
-                    <input
-                        class="checkboxes__input"
-                        id="@id"
-                        type="checkbox"
-                        name="@field(s"[$index]").name"
-                        value="@value"
-                        @if(answers.contains(value)) {checked="checked"}
-                        @if(trackGa) {data-journey-click="employee-expenses-frontend:click:@id"}
-                    />
-
-                    <label class="label checkboxes__label" for="@id">
-                        @messages(label)
-                    </label>
-                </div>
-            }
+        @for(input <- inputs) {
+            <div class="multiple-choice">
+                <input
+                    id="@input.id"
+                    type="checkbox"
+                    name="@field(s"[${input.id}]").name"
+                    value="@input.value"
+                    @if(field.value.contains(input.value)) {checked="checked"}
+                    @if(trackGa) {data-journey-click="employee-expenses-frontend:click:@input.id"}
+                />
+                <label class="label checkboxes__label" for="@input.id">
+                    @messages(input.messageKey)
+                </label>
+            </div>
         }
     </fieldset>
-    <hr>
-    <p>Selected: @inputs</p>
 </div>
