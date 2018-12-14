@@ -66,12 +66,22 @@ class CheckboxViewSpec extends ViewBehaviours {
         s"have the '${option._1}' checkbox button selected" in {
 
           val doc = asDocument(applyView(form.bind(Map(s"value[$index]" -> s"${option._1}"))))
-          println(s"#######################\n\n$doc")
           assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option._1, isChecked = true)
+        }
+      }
+    }
 
-          for (unselectedOption <- Checkbox.options.filterNot(o => o == option)) {
-            assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = unselectedOption._1, isChecked = false)
-          }
+    "rendered with all values" must {
+
+      "have all boxes checked" in {
+        val doc = asDocument(applyView(form.bind(Map(
+          "value[0]" -> Checkbox.Option1.toString,
+          "value[1]" -> Checkbox.Option2.toString,
+          "value[2]" -> Checkbox.Option3.toString)
+        )))
+
+        for ((option, index) <- Checkbox.options.zipWithIndex) {
+          assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option._1, isChecked = true)
         }
       }
     }
