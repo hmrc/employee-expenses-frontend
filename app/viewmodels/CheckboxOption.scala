@@ -16,12 +16,4 @@
 
 package viewmodels
 
-case class CheckboxOption(id: String, value: String, messageKey: String)
-
-object CheckboxOption {
-  def apply(keyPrefix: String, option: String): CheckboxOption = CheckboxOption(
-    id = s"$keyPrefix-$option",
-    value = option,
-    messageKey = s"$keyPrefix-$option"
-  )
-}
+final case class CheckboxOption(value: String, messageKey: String)

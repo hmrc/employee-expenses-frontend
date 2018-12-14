@@ -17,11 +17,13 @@
 package views
 
 import forms.CheckboxFormProvider
-import models.{NormalMode, Checkbox}
+import models.{Checkbox, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
 import views.html.CheckboxView
+
+import scala.collection.immutable.Map
 
 class CheckboxViewSpec extends ViewBehaviours {
 
@@ -33,7 +35,7 @@ class CheckboxViewSpec extends ViewBehaviours {
 
   val view = application.injector.instanceOf[CheckboxView]
 
-  def applyView(form: Form[_]): HtmlFormat.Appendable =
+  def applyView(form: Form[Set[Checkbox]]): HtmlFormat.Appendable =
     view.apply(form, NormalMode)(fakeRequest, messages)
 
   "CheckboxView" must {
@@ -51,24 +53,24 @@ class CheckboxViewSpec extends ViewBehaviours {
 
         val doc = asDocument(applyView(form))
 
-        for (option <- Checkbox.options) {
-          assertContainsRadioButton(doc, option.id, "value", option.value, false)
+        for ((option, index) <- Checkbox.options.zipWithIndex) {
+          assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option._1, isChecked = false)
         }
       }
     }
 
-    for (option <- Checkbox.options) {
+    for ((option, index) <- Checkbox.options.zipWithIndex) {
 
-      s"rendered with a value of '${option.value}'" must {
+      s"rendered with a value of '${option._1}'" must {
 
-        s"have the '${option.value}' checkbox button selected" in {
+        s"have the '${option._1}' checkbox button selected" in {
 
-          val doc = asDocument(applyView(form.bind(Map("value" -> s"${option.value}"))))
-
-          assertContainsRadioButton(doc, option.id, "value", option.value, true)
+          val doc = asDocument(applyView(form.bind(Map(s"value[$index]" -> s"${option._1}"))))
+          println(s"#######################\n\n$doc")
+          assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option._1, isChecked = true)
 
           for (unselectedOption <- Checkbox.options.filterNot(o => o == option)) {
-            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
+            assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = unselectedOption._1, isChecked = false)
           }
         }
       }

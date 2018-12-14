@@ -58,20 +58,26 @@
         <legend class="@lgndClass">@legend</legend>
         @hintBlock
         @errorBlock
-        @for(input <- inputs) {
-            <div class="multiple-choice">
-                <input
-                    id="@input.id"
-                    type="checkbox"
-                    name="@field(s"[${input.id}]").name"
-                    value="@input.value"
-                    @if(field.value.contains(input.value)) {checked="checked"}
-                    @if(trackGa) {data-journey-click="employee-expenses-frontend:click:@input.id"}
-                />
-                <label class="label checkboxes__label" for="@input.id">
-                    @messages(input.messageKey)
-                </label>
-            </div>
+        @for((CheckboxOption(value, messageKey), index) <- inputs.zipWithIndex) {
+            @defining(
+                inputs.toSeq.indices.flatMap { i =>
+                    field(s"[$i]").value
+                }
+            ) { answers =>
+                <div class="multiple-choice">
+                    <input
+                        id="@field(s"[$index]").id"
+                        type="checkbox"
+                        name="@field(s"[$index]").name"
+                        value="@value"
+                        @if(answers.contains(value)) {checked="checked"}
+                        @if(true) {data-journey-click="employee-expenses-frontend:click:@field(s"[$index]").id"}
+                    />
+                    <label for="@field(s"[$index]").id">
+                        @messages(messageKey)
+                    </label>
+                </div>
+            }
         }
     </fieldset>
 </div>

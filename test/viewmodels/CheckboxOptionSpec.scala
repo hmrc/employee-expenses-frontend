@@ -26,7 +26,6 @@ class CheckboxOptionSpec extends SpecBase {
 
       val checkboxOption = CheckboxOption("prefix", "option")
 
-      checkboxOption.id mustEqual "prefix.option"
       checkboxOption.value mustEqual "option"
       checkboxOption.messageKey mustEqual "prefix.option"
     }

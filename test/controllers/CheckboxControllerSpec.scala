@@ -18,7 +18,8 @@ package controllers
 
 import base.SpecBase
 import forms.CheckboxFormProvider
-import models.{NormalMode, Checkbox, UserData}
+import models.Checkbox.Option1
+import models.{Checkbox, NormalMode, UserData}
 import navigation.{FakeNavigator, Navigator}
 import pages.CheckboxPage
 import play.api.inject.bind
@@ -57,7 +58,7 @@ class CheckboxControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userData = UserData(userDataId, Json.obj(CheckboxPage.toString -> JsString(Checkbox.values.head.toString)))
+      val userData = UserData(userDataId, Json.obj(CheckboxPage.toString -> JsString(Checkbox.toString)))
 
       val application = applicationBuilder(userData = Some(userData)).build()
 
@@ -70,7 +71,7 @@ class CheckboxControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(Checkbox.values.head), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(Set(Option1)), NormalMode)(fakeRequest, messages).toString
     }
 
     "redirect to the next page when valid data is submitted" in {
@@ -82,7 +83,7 @@ class CheckboxControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, checkboxRoute)
-          .withFormUrlEncodedBody(("value", Checkbox.options.head.value))
+          .withFormUrlEncodedBody(("value", Checkbox.options.toString()))
 
       val result = route(application, request).value
 
@@ -129,7 +130,7 @@ class CheckboxControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, checkboxRoute)
-          .withFormUrlEncodedBody(("value", Checkbox.values.head.toString))
+          .withFormUrlEncodedBody(("value", Checkbox.options.toString()))
 
       val result = route(application, request).value
 

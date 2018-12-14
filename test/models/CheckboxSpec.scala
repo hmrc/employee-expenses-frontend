@@ -16,6 +16,7 @@
 
 package models
 
+import models.Checkbox.Option1
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks
@@ -28,7 +29,7 @@ class CheckboxSpec extends WordSpec with MustMatchers with PropertyChecks with O
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(Checkbox.values.toSeq)
+      val gen = Gen.oneOf(Checkbox.options.toSeq)
 
       forAll(gen) {
         checkbox =>
@@ -39,7 +40,7 @@ class CheckboxSpec extends WordSpec with MustMatchers with PropertyChecks with O
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!Checkbox.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] suchThat (!Checkbox.options.contains(_))
 
       forAll(gen) {
         invalidValue =>
@@ -50,7 +51,7 @@ class CheckboxSpec extends WordSpec with MustMatchers with PropertyChecks with O
 
     "serialise" in {
 
-      val gen = Gen.oneOf(Checkbox.values.toSeq)
+      val gen = Gen.oneOf(Seq(Option1.toString))
 
       forAll(gen) {
         checkbox =>

@@ -16,14 +16,14 @@
 
 package generators
 
+import models.Checkbox.Option1
 import models._
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
   implicit lazy val arbitraryCheckbox: Arbitrary[Checkbox] =
     Arbitrary {
-      Gen.oneOf(Checkbox.values.toSeq)
+      Gen.oneOf(Seq(Option1))
     }
 }

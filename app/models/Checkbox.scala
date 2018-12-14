@@ -24,15 +24,18 @@ object Checkbox extends Enumerable.Implicits {
 
   case object Option1 extends WithName("value1") with Checkbox
   case object Option2 extends WithName("value2") with Checkbox
+  case object Option3 extends WithName("value3") with Checkbox
 
   val options: Map[String, WithName with Checkbox] = Map(
     "value1" -> Option1,
-    "value2" -> Option2
+    "value2" -> Option2,
+    "value3" -> Option3
   )
 
   val inputs: Set[CheckboxOption] = Set(
-    CheckboxOption("id1", Option1.toString, "message1"),
-    CheckboxOption("id2", Option2.toString, "message2")
+    CheckboxOption(Option1.toString, "message1"),
+    CheckboxOption(Option2.toString, "message2"),
+    CheckboxOption(Option3.toString, "message3")
   )
 
   implicit lazy val enumerable: Enumerable[Checkbox] =

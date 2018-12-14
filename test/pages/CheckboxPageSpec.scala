@@ -23,10 +23,10 @@ class CheckboxSpec extends PageBehaviours {
 
   "CheckboxPage" must {
 
-    beRetrievable[Checkbox](CheckboxPage)
+    beRetrievable[Set[Checkbox]](CheckboxPage)
 
-    beSettable[Checkbox](CheckboxPage)
+    beSettable[Set[Checkbox]](CheckboxPage)
 
-    beRemovable[Checkbox](CheckboxPage)
+    beRemovable[Set[Checkbox]](CheckboxPage)
   }
 }

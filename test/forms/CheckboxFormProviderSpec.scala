@@ -18,11 +18,12 @@ package forms
 
 import forms.behaviours.OptionFieldBehaviours
 import models.Checkbox
-import play.api.data.FormError
+import models.Checkbox.Option1
+import play.api.data.{Form, FormError}
 
 class CheckboxFormProviderSpec extends OptionFieldBehaviours {
 
-  val form = new CheckboxFormProvider()()
+  val form: Form[Set[Checkbox]] = new CheckboxFormProvider()()
 
   ".value" must {
 
@@ -32,7 +33,7 @@ class CheckboxFormProviderSpec extends OptionFieldBehaviours {
     behave like optionsField[Checkbox](
       form,
       fieldName,
-      validValues  = Checkbox.values,
+      validValues  = Set(Option1),
       invalidError = FormError(fieldName, "error.invalid")
     )
 
