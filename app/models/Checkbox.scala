@@ -16,37 +16,25 @@
 
 package models
 
-import play.api.libs.json._
 import viewmodels.CheckboxOption
 
-object Checkbox extends Enumeration {
+sealed trait Checkbox
 
-  type Checkbox = Value
+object Checkbox extends Enumerable.Implicits {
 
-  val Option1: Checkbox.Value = Value("option1")
-  val Option2: Checkbox.Value = Value("option2")
+  case object Option1 extends WithName("value1") with Checkbox
+  case object Option2 extends WithName("value2") with Checkbox
 
-  val options: Set[CheckboxOption] = values.map {
-    value =>
-      CheckboxOption("checkbox", value.toString)
-  }
+  val options: Map[String, WithName with Checkbox] = Map(
+    "value1" -> Option1,
+    "value2" -> Option2
+  )
 
-  implicit val format: Format[Checkbox.Value] = new Format[Checkbox.Value] {
-    def reads(json: JsValue) = JsSuccess(Checkbox.withName(json.as[String]))
-    def writes(checkbox: Checkbox.Value): JsValue = Json.toJson(checkbox.toString)
-  }
+  val inputs: Set[CheckboxOption] = Set(
+    CheckboxOption("id1", Option1.toString, "message1"),
+    CheckboxOption("id2", Option2.toString, "message2")
+  )
 
-//  implicit object CheckboxWrites extends Writes[Checkbox.Value] {
-//    def writes(checkbox: Checkbox.Value): JsValue = Json.toJson(checkbox.toString)
-//  }
-//
-//  implicit object CheckboxReads extends Reads[Checkbox.Value] {
-//    override def reads(json: JsValue): JsResult[Checkbox.Value] = json match {
-//      case Option1 => JsSuccess(Option1)
-//      case Option2 => JsSuccess(Option2)
-//      case _       => JsError("Unknown checkbox")
-//    }
-//  }
-//
-//  implicit val formats: Format[Checkbox.Value] = Format(CheckboxReads, CheckboxWrites)
+  implicit lazy val enumerable: Enumerable[Checkbox] =
+    Enumerable(options.toList: _*)
 }

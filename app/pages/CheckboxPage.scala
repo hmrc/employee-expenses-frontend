@@ -18,7 +18,7 @@ package pages
 
 import models.Checkbox
 
-case object CheckboxPage extends QuestionPage[Seq[Checkbox.Value]] {
+case object CheckboxPage extends QuestionPage[Set[Checkbox]] {
 
   override def toString: String = "checkbox"
 }

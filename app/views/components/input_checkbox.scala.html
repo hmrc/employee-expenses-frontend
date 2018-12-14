@@ -21,7 +21,7 @@
         legendClass: Option[String] = None,
         hint: Option[String] = None,
         trackGa: Boolean = false,
-        inputs: Seq[CheckboxOption]
+        inputs: Set[CheckboxOption]
 )(implicit
         messages: Messages
 )
@@ -42,35 +42,35 @@
     }
 }
 
-@checkboxBlock = {
-    <div class="checkboxes">
-        @for(input <- inputs) {
-            <div class="checkboxes__item">
-                <input
-                    class="checkboxes__input"
-                    id="@{input.id}"
-                    type="checkbox"
-                    name="@{field.id}"
-                    value="@{input.value}"
-                    @if(field.value.contains(input.value)){checked="checked"}
-                    @if(trackGa){data-journey-click="employee-expenses-frontend:click:@{input.id}"}
-                />
-
-                <label class="label checkboxes__label" for="@{input.id}">
-                    @messages(input.messageKey)
-                </label>
-            </div>
-        }
-    </div>
-    <hr>
-    <p>@field.value</p>
-}
-
 <div class="form-group @if(field.hasErrors){form-field--error}">
     <fieldset id="@{field.id}">
         <legend class="bold-small @legendClass">@legend</legend>
         @hintBlock
         @errorBlock
-        @checkboxBlock
+        @for((CheckboxOption(id, value, label), index) <- inputs.zipWithIndex) {
+            @defining(
+                inputs.flatMap { j =>
+                    field(s"[$j]").value
+                }
+            ) { answers =>
+                <div class="multiple-choice">
+                    <input
+                        class="checkboxes__input"
+                        id="@id"
+                        type="checkbox"
+                        name="@field(s"[$index]").name"
+                        value="@value"
+                        @if(answers.contains(value)) {checked="checked"}
+                        @if(trackGa) {data-journey-click="employee-expenses-frontend:click:@id"}
+                    />
+
+                    <label class="label checkboxes__label" for="@id">
+                        @messages(label)
+                    </label>
+                </div>
+            }
+        }
     </fieldset>
+    <hr>
+    <p>Selected: @inputs</p>
 </div>
