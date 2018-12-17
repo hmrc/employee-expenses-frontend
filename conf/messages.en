@@ -45,7 +45,9 @@ unauthorised.heading = You can’t access this service with this account
 
 checkbox.title = checkbox
 checkbox.heading = checkbox
-checkbox.option1 = option1
-checkbox.option2 = option2
+checkbox.option1 = mesoption1
+checkbox.option2 = mesoption2
+checkbox.option3 = mesoption3
+checkbox.option4 = mesoption4
 checkbox.checkYourAnswersLabel = checkbox
 checkbox.error.required = Select checkbox

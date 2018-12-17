@@ -19,10 +19,18 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
+import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
-/*  def checkbox: Option[AnswerRow] = userAnswers.get(CheckboxPage) map {
-    x => AnswerRow("checkbox.checkYourAnswersLabel", s"checkbox.$x", true, routes.CheckboxController.onPageLoad(CheckMode).url)
-  }*/
+class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
+
+  def checkbox: Option[AnswerRow] = userAnswers.get(CheckboxPage) map {
+    x => AnswerRow(
+      "checkbox.checkYourAnswersLabel",
+      x.map(value => s"${messages(s"checkbox.$value")}").mkString(", <br>"),
+      false,
+      routes.CheckboxController.onPageLoad(CheckMode).url
+    )
+  }
+
 }

@@ -39,7 +39,7 @@ class CheckYourAnswersController @Inject()(
 
       val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
 
-      val sections = Seq(AnswerSection(None, Seq()))
+      val sections = Seq(AnswerSection(None, Seq(checkYourAnswersHelper.checkbox).flatten))
 
       Ok(view(sections))
   }

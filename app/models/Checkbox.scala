@@ -22,22 +22,20 @@ sealed trait Checkbox
 
 object Checkbox extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("value1") with Checkbox
-  case object Option2 extends WithName("value2") with Checkbox
-  case object Option3 extends WithName("value3") with Checkbox
+  case object Option1 extends WithName("option1") with Checkbox
+  case object Option2 extends WithName("option2") with Checkbox
+  case object Option3 extends WithName("option3") with Checkbox
+  case object Option4 extends WithName("option4") with Checkbox
 
-  val options: Map[String, WithName with Checkbox] = Map(
-    "value1" -> Option1,
-    "value2" -> Option2,
-    "value3" -> Option3
+  val values: Set[Checkbox] = Set(
+    Option1, Option2, Option3, Option4
   )
 
-  val inputs: Set[CheckboxOption] = Set(
-    CheckboxOption(Option1.toString, "message1"),
-    CheckboxOption(Option2.toString, "message2"),
-    CheckboxOption(Option3.toString, "message3")
-  )
+  val options: Set[CheckboxOption] = values.map {
+    value =>
+      CheckboxOption(value.toString, s"checkbox.$value")
+  }
 
   implicit lazy val enumerable: Enumerable[Checkbox] =
-    Enumerable(options.toList: _*)
+    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 }

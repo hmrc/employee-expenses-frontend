@@ -19,7 +19,7 @@ package pages
 import models.Checkbox
 import pages.behaviours.PageBehaviours
 
-class CheckboxSpec extends PageBehaviours {
+class CheckboxPageSpec extends PageBehaviours {
 
   "CheckboxPage" must {
 
