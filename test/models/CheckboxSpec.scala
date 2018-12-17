@@ -16,12 +16,11 @@
 
 package models
 
-import models.Checkbox.Option1
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{MustMatchers, OptionValues, WordSpec}
-import play.api.libs.json.{JsError, JsString, Json}
+import play.api.libs.json._
+import org.scalacheck.Arbitrary.arbitrary
 
 class CheckboxSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues {
 
@@ -29,7 +28,7 @@ class CheckboxSpec extends WordSpec with MustMatchers with PropertyChecks with O
 
     "deserialise valid values" in {
 
-      val gen = Gen.oneOf(Checkbox.options.toSeq)
+      val gen= Gen.oneOf(Checkbox.values.toSeq)
 
       forAll(gen) {
         checkbox =>
@@ -40,18 +39,18 @@ class CheckboxSpec extends WordSpec with MustMatchers with PropertyChecks with O
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!Checkbox.options.contains(_))
+      val gen = arbitrary[String] suchThat (!Checkbox.values.map(_.toString).contains(_))
 
       forAll(gen) {
         invalidValue =>
 
-          JsString(invalidValue).validate[Checkbox] mustEqual JsError("Unknown checkbox")
+          JsString(invalidValue).validate[Checkbox] mustEqual JsError("error.invalid")
       }
     }
 
     "serialise" in {
 
-      val gen = Gen.oneOf(Seq(Option1.toString))
+      val gen = Gen.oneOf(Checkbox.values.toSeq)
 
       forAll(gen) {
         checkbox =>

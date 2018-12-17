@@ -54,19 +54,19 @@ class CheckboxViewSpec extends ViewBehaviours {
         val doc = asDocument(applyView(form))
 
         for ((option, index) <- Checkbox.options.zipWithIndex) {
-          assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option._1, isChecked = false)
+          assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option.value, isChecked = false)
         }
       }
     }
 
     for ((option, index) <- Checkbox.options.zipWithIndex) {
 
-      s"rendered with a value of '${option._1}'" must {
+      s"rendered with a value of '${option.value}'" must {
 
-        s"have the '${option._1}' checkbox button selected" in {
+        s"have the '${option.value}' checkbox button selected" in {
 
-          val doc = asDocument(applyView(form.bind(Map(s"value[$index]" -> s"${option._1}"))))
-          assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option._1, isChecked = true)
+          val doc = asDocument(applyView(form.bind(Map(s"value[$index]" -> s"${option.value}"))))
+          assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option.value, isChecked = true)
         }
       }
     }
@@ -81,7 +81,7 @@ class CheckboxViewSpec extends ViewBehaviours {
         )))
 
         for ((option, index) <- Checkbox.options.zipWithIndex) {
-          assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option._1, isChecked = true)
+          assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option.value, isChecked = true)
         }
       }
     }
