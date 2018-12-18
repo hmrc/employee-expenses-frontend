@@ -24,6 +24,7 @@ import views.behaviours.ViewBehaviours
 import views.html.CheckboxView
 
 import scala.collection.immutable.Map
+import scala.collection.mutable
 
 class CheckboxViewSpec extends ViewBehaviours {
 
@@ -77,7 +78,8 @@ class CheckboxViewSpec extends ViewBehaviours {
         val doc = asDocument(applyView(form.bind(Map(
           "value[0]" -> Checkbox.Option1.toString,
           "value[1]" -> Checkbox.Option2.toString,
-          "value[2]" -> Checkbox.Option3.toString)
+          "value[2]" -> Checkbox.Option3.toString,
+          "value[3]" -> Checkbox.Option4.toString)
         )))
 
         for ((option, index) <- Checkbox.options.zipWithIndex) {

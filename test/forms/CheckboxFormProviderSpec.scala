@@ -27,20 +27,34 @@ class CheckboxFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName = "value[0]"
     val requiredKey = "checkbox.error.required"
-
-    behave like optionsField[Checkbox](
-      form,
-      fieldName,
-      validValues  = Set(Option1),
-      invalidError = FormError(fieldName, "error.invalid")
-    )
 
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    "bind all valid values" in {
+
+      for (value <- Set(Option1)) {
+
+        val result = form.bind(Map(fieldName -> value.toString)).apply(fieldName)
+        result.value.value shouldEqual value.toString
+      }
+    }
+
+    "not bind invalid values" in {
+
+      val generator = stringsExceptSpecificValues(Checkbox.values.map(_.toString))
+
+      forAll(generator -> "invalidValue") {
+        value =>
+          val result = form.bind(Map(fieldName -> value)).apply(fieldName)
+          result.errors shouldEqual Seq(FormError(fieldName, "error.invalid"))
+      }
+    }
+
   }
 }

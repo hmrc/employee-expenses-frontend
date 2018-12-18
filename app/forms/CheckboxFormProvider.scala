@@ -26,14 +26,16 @@ class CheckboxFormProvider extends Mappings {
 
 
   private def constraint: Constraint[Set[Checkbox]] = Constraint {
-    case set if set.nonEmpty =>
+    case set: Set[_] if set.nonEmpty =>
       Valid
+    case set: Set[_] if set.isEmpty =>
+      Invalid("checkbox.error.required")
     case _ =>
-      Invalid("constraint.blank")
+      Invalid("error.invalid")
   }
 
   def apply(): Form[Set[Checkbox]] =
     Form(
-      "value" -> set(enumerable[Checkbox]()).verifying(constraint)
+      "value" -> set(enumerable[Checkbox]( "checkbox.error.required")).verifying(constraint)
     )
 }
