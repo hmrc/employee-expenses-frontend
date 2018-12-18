@@ -23,7 +23,7 @@ import models.{Checkbox, NormalMode, UserData}
 import navigation.{FakeNavigator, Navigator}
 import pages.CheckboxPage
 import play.api.inject.bind
-import play.api.libs.json.{JsString, Json}
+import play.api.libs.json.{JsArray, JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -58,7 +58,7 @@ class CheckboxControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userData = UserData(userDataId, Json.obj(CheckboxPage.toString -> JsString(Checkbox.toString)))
+      val userData = UserData(userDataId, Json.obj(CheckboxPage.toString -> JsArray(Seq(JsString(Checkbox.Option1.toString)))))
 
       val application = applicationBuilder(userData = Some(userData)).build()
 
@@ -83,7 +83,7 @@ class CheckboxControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, checkboxRoute)
-          .withFormUrlEncodedBody(("value", Checkbox.options.toString()))
+          .withFormUrlEncodedBody(("value[0]", Checkbox.Option1.toString))
 
       val result = route(application, request).value
 
