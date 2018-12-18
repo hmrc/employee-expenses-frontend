@@ -22,12 +22,12 @@ class CheckboxOptionSpec extends SpecBase {
 
   "Checkbox Option" must {
 
-    "build correctly from a key prefix and option" in {
+    "build correctly" in {
 
-      val checkboxOption = CheckboxOption("prefix", "option")
+      val checkboxOption = CheckboxOption("value", "option")
 
-      checkboxOption.value mustEqual "option"
-      checkboxOption.messageKey mustEqual "prefix.option"
+      checkboxOption.value mustEqual "value"
+      checkboxOption.messageKey mustEqual "option"
     }
   }
 }
