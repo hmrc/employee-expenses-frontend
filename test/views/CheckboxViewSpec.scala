@@ -18,25 +18,23 @@ package views
 
 import forms.CheckboxFormProvider
 import models.{Checkbox, NormalMode}
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.ViewBehaviours
+import views.behaviours.{CheckboxViewBehaviours, ViewBehaviours}
 import views.html.CheckboxView
 
-import scala.collection.immutable.Map
-import scala.collection.mutable
-
-class CheckboxViewSpec extends ViewBehaviours {
+class CheckboxViewSpec extends ViewBehaviours with CheckboxViewBehaviours[Checkbox] {
 
 	val messageKeyPrefix = "checkbox"
 
-	val form = new CheckboxFormProvider()()
+	override val form = new CheckboxFormProvider()()
 
-	val application = applicationBuilder(userData = Some(emptyUserData)).build()
+	override val application: Application = applicationBuilder(userData = Some(emptyUserData)).build()
 
-	val view = application.injector.instanceOf[CheckboxView]
+	override val view: CheckboxView = application.injector.instanceOf[CheckboxView]
 
-	def applyView(form: Form[Set[Checkbox]]): HtmlFormat.Appendable =
+	override def applyView(form: Form[Set[Checkbox]]): HtmlFormat.Appendable =
 		view.apply(form, NormalMode)(fakeRequest, messages)
 
 	"CheckboxView" must {
@@ -44,50 +42,11 @@ class CheckboxViewSpec extends ViewBehaviours {
 		behave like normalPage(applyView(form), messageKeyPrefix)
 
 		behave like pageWithBackLink(applyView(form))
-	}
 
-	"CheckboxView" when {
+		behave like aCheckboxViewWithSingleValueNotChecked
 
-		"rendered" must {
+		behave like aCheckboxViewWithSingleValueChecked
 
-			"contain checkbox buttons for the value" in {
-
-				val doc = asDocument(applyView(form))
-
-				for ((option, index) <- Checkbox.options.zipWithIndex) {
-					assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option.value, isChecked = false)
-				}
-			}
-		}
-
-		for ((option, index) <- Checkbox.options.zipWithIndex) {
-
-			s"rendered with a value of '${option.value}'" must {
-
-				s"have the '${option.value}' checkbox button selected" in {
-
-					val doc = asDocument(applyView(form.bind(Map(s"value[$index]" -> s"${option.value}"))))
-					assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option.value, isChecked = true)
-				}
-			}
-		}
-
-		"rendered with all values" must {
-
-			"have all boxes checked" in {
-
-				val data = scala.collection.mutable.Map[String, String]()
-
-				for ((option, index) <- Checkbox.values.zipWithIndex) {
-					data += s"value[$index]" -> option.toString
-				}
-
-				val doc = asDocument(applyView(form.bind(data.toMap)))
-
-				for ((option, index) <- Checkbox.options.zipWithIndex) {
-					assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option.value, isChecked = true)
-				}
-			}
-		}
+		behave like aCheckboxViewWithAllValuesChecked
 	}
 }
