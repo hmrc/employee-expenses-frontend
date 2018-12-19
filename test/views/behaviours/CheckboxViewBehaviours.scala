@@ -16,59 +16,105 @@
 
 package views.behaviours
 
-import forms.CheckboxFormProvider
-import models.{Checkbox, NormalMode}
 import play.api.Application
-import play.api.data.Form
+import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
 import views.ViewSpecBase
-import views.html.CheckboxView
-
-import scala.collection.immutable.Map
 
 trait CheckboxViewBehaviours[A] extends ViewSpecBase {
 
-  val form = new CheckboxFormProvider()()
+  val form: Form[Set[A]]
 
   val application: Application = applicationBuilder(userData = Some(emptyUserData)).build()
 
-  val view: CheckboxView = application.injector.instanceOf[CheckboxView]
+  def values: Set[A]
 
-  def applyView(form: Form[Set[Checkbox]]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode)(fakeRequest, messages)
+  def messageKeyPrefix: String
 
-  def aCheckboxViewWithSingleValueNotChecked() = {
-    "contain checkbox buttons for the value" in {
+  def fieldKey: String
+
+  def errorMessage: String
+
+  lazy val error = FormError(fieldKey, errorMessage)
+
+  def applyView(form: Form[Set[A]]): HtmlFormat.Appendable
+
+  def checkboxPage(legend: Option[String] = None): Unit = {
+    "rendered" must {
+      "contain a legend for the question" in {
+        val doc = asDocument(applyView(form))
+        val legends = doc.getElementsByTag("legend")
+        legends.size mustBe 1
+        legends.first.text mustBe legend.getOrElse(messages(s"$messageKeyPrefix.heading"))
+      }
+
+      "contain an input for the value" in {
+        val doc = asDocument(applyView(form))
+        for { (_, i) <- values.zipWithIndex } yield {
+          assertRenderedById(doc, form(fieldKey)(s"[$i]").id)
+        }
+      }
+
+      "contain a label for each input" in {
+        val doc = asDocument(applyView(form))
+        for { (_, i) <- values.zipWithIndex } yield {
+          val id = form(fieldKey)(s"[$i]").id
+          doc.select(s"label[for=$id]").text mustEqual s"mesoption${i + 1}" // TODO
+        }
+      }
+
+      "have no values checked when rendered with no form" in {
+        val doc = asDocument(applyView(form))
+        for { (_, i) <- values.zipWithIndex } yield {
+          assert(!doc.getElementById(form(fieldKey)(s"[$i]").id).hasAttr("checked"))
+        }
+      }
+    }
+
+//    values.zipWithIndex.foreach {
+//      case (v, i) =>
+//        s"has correct value checked when value `$v` is given" in {
+//          val data: Map[String, String] = Map(
+//            s"$fieldKey[$i]" -> Enumerable[A].apply _
+//          )
+//
+//          val doc = asDocument(applyView(form.bind(data)))
+//          val field = form(fieldKey)(s"[$i]")
+//
+//          assert(doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is not checked")
+//
+//          values.zipWithIndex.foreach {
+//            case (value, j) =>
+//              if (value != v) {
+//                val field = form(fieldKey)(s"[$j]")
+//                assert(!doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is checked")
+//              }
+//          }
+//        }
+//    }
+
+    "not render an error summary" in {
       val doc = asDocument(applyView(form))
+      assertNotRenderedById(doc, "error-summary-heading")
+    }
 
-      for ((option, index) <- Checkbox.options.zipWithIndex) {
-        assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option.value, isChecked = false)
-      }
+
+    "show error in the title" in {
+      val doc = asDocument(applyView(form.withError(error)))
+      doc.title.contains("Error: ") mustBe true
     }
   }
 
-  def aCheckboxViewWithSingleValueChecked(): Unit = {
-    for ((option, index) <- Checkbox.options.zipWithIndex) {
-
-      s"have the '${option.value}' checkbox button selected" in {
-
-        val doc = asDocument(applyView(form.bind(Map(s"value[$index]" -> s"${option.value}"))))
-        assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option.value, isChecked = true)
-      }
+  "rendered with an error" must {
+    "show an error summary" in {
+      val doc = asDocument(applyView(form.withError(error)))
+      assertRenderedById(doc, "error-summary-heading")
     }
-  }
 
-  def aCheckboxViewWithAllValuesChecked: Set[Unit] = {
-    for {
-      (option, index) <- Checkbox.values.zipWithIndex
-    } yield "have all boxes checked" in {
-      val data = Map(s"value[$index]" -> option.toString)
-
-      val doc = asDocument(applyView(form.bind(data)))
-
-      for ((option, index) <- Checkbox.options.zipWithIndex) {
-        assertContainsCheckBox(doc = doc, id = s"value_$index", name = s"value[$index]", value = option.value, isChecked = true)
-      }
+    "show an error in the value field's label" in {
+      val doc = asDocument(applyView(form.withError(error)))
+      val errorSpan = doc.getElementsByClass("error-notification").first
+      errorSpan.text mustBe messages(errorMessage)
     }
   }
 }

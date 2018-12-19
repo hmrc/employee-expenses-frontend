@@ -28,25 +28,24 @@ class CheckboxViewSpec extends ViewBehaviours with CheckboxViewBehaviours[Checkb
 
 	val messageKeyPrefix = "checkbox"
 
+  override val fieldKey = "value"
+
+  val values: Set[Checkbox] = Checkbox.values
+
+  val errorMessage = "error.invalid"
+
 	override val form = new CheckboxFormProvider()()
 
 	override val application: Application = applicationBuilder(userData = Some(emptyUserData)).build()
 
-	override val view: CheckboxView = application.injector.instanceOf[CheckboxView]
-
-	override def applyView(form: Form[Set[Checkbox]]): HtmlFormat.Appendable =
-		view.apply(form, NormalMode)(fakeRequest, messages)
+	def applyView(form: Form[Set[Checkbox]]): HtmlFormat.Appendable =
+		application.injector.instanceOf[CheckboxView].apply(form, NormalMode)(fakeRequest, messages)
 
 	"CheckboxView" must {
-
 		behave like normalPage(applyView(form), messageKeyPrefix)
 
 		behave like pageWithBackLink(applyView(form))
 
-		behave like aCheckboxViewWithSingleValueNotChecked
-
-		behave like aCheckboxViewWithSingleValueChecked
-
-		behave like aCheckboxViewWithAllValuesChecked
+		behave like checkboxPage()
 	}
 }

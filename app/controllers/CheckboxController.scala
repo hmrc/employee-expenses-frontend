@@ -19,7 +19,7 @@ package controllers
 import controllers.actions._
 import forms.CheckboxFormProvider
 import javax.inject.Inject
-import models.{Checkbox, Enumerable, Mode, UserAnswers}
+import models.{Checkbox, Enumerable, Mode}
 import navigation.Navigator
 import pages.CheckboxPage
 import play.api.data.Form
