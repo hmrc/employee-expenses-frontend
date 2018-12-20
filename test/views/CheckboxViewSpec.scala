@@ -21,6 +21,7 @@ import models.{Checkbox, NormalMode}
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import viewmodels.CheckboxOption
 import views.behaviours.{CheckboxViewBehaviours, ViewBehaviours}
 import views.html.CheckboxView
 
@@ -30,9 +31,9 @@ class CheckboxViewSpec extends ViewBehaviours with CheckboxViewBehaviours[Checkb
 
   override val fieldKey = "value"
 
-  val values: Set[Checkbox] = Checkbox.values
+	val errorMessage = "error.invalid"
 
-  val errorMessage = "error.invalid"
+  val options: Set[CheckboxOption] = Checkbox.options
 
 	override val form = new CheckboxFormProvider()()
 

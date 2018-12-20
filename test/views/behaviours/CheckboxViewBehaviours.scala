@@ -19,6 +19,7 @@ package views.behaviours
 import play.api.Application
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
+import viewmodels.CheckboxOption
 import views.ViewSpecBase
 
 trait CheckboxViewBehaviours[A] extends ViewSpecBase {
@@ -27,7 +28,7 @@ trait CheckboxViewBehaviours[A] extends ViewSpecBase {
 
   val application: Application = applicationBuilder(userData = Some(emptyUserData)).build()
 
-  def values: Set[A]
+  def options: Set[CheckboxOption]
 
   def messageKeyPrefix: String
 
@@ -50,48 +51,53 @@ trait CheckboxViewBehaviours[A] extends ViewSpecBase {
 
       "contain an input for the value" in {
         val doc = asDocument(applyView(form))
-        for { (_, i) <- values.zipWithIndex } yield {
+        for {
+          (_, i) <- options.zipWithIndex
+        } yield {
           assertRenderedById(doc, form(fieldKey)(s"[$i]").id)
         }
       }
 
       "contain a label for each input" in {
         val doc = asDocument(applyView(form))
-        for { (_, i) <- values.zipWithIndex } yield {
+        for {
+          (option, i) <- options.zipWithIndex
+        } yield {
           val id = form(fieldKey)(s"[$i]").id
-          doc.select(s"label[for=$id]").text mustEqual s"mesoption${i + 1}" // TODO
+          doc.select(s"label[for=$id]").text mustEqual messages(option.messageKey)
         }
       }
 
       "have no values checked when rendered with no form" in {
         val doc = asDocument(applyView(form))
-        for { (_, i) <- values.zipWithIndex } yield {
+        for {
+          (_, i) <- options.zipWithIndex
+        } yield {
           assert(!doc.getElementById(form(fieldKey)(s"[$i]").id).hasAttr("checked"))
         }
       }
     }
 
-//    values.zipWithIndex.foreach {
-//      case (v, i) =>
-//        s"has correct value checked when value `$v` is given" in {
-//          val data: Map[String, String] = Map(
-//            s"$fieldKey[$i]" -> Enumerable[A].apply _
-//          )
-//
-//          val doc = asDocument(applyView(form.bind(data)))
-//          val field = form(fieldKey)(s"[$i]")
-//
-//          assert(doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is not checked")
-//
-//          values.zipWithIndex.foreach {
-//            case (value, j) =>
-//              if (value != v) {
-//                val field = form(fieldKey)(s"[$j]")
-//                assert(!doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is checked")
-//              }
-//          }
-//        }
-//    }
+    options.zipWithIndex.foreach {
+      case (checkboxOption, i) =>
+        s"has correct value checked when value `${checkboxOption.value}` is given" in {
+          val data: Map[String, String] =
+            Map(s"$fieldKey[$i]" -> checkboxOption.value)
+
+          val doc = asDocument(applyView(form.bind(data)))
+          val field = form(fieldKey)(s"[$i]")
+
+          assert(doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is not checked")
+
+          options.zipWithIndex.foreach {
+            case (option, j) =>
+              if (option != checkboxOption) {
+                val field = form(fieldKey)(s"[$j]")
+                assert(!doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is checked")
+              }
+          }
+        }
+    }
 
     "not render an error summary" in {
       val doc = asDocument(applyView(form))
