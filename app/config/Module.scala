@@ -17,9 +17,7 @@
 package config
 
 import com.google.inject.AbstractModule
-import controllers.CheckboxController
 import controllers.actions._
-import models.{Checkbox, Enumerable}
 import repositories.{DefaultSessionRepository, SessionRepository}
 import scalate.ScalateEngineBoot
 
