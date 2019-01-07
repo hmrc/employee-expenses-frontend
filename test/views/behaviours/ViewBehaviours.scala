@@ -57,7 +57,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "switchToWelsh")
+          assertRenderedById(doc, "cymraeg-switch")
         }
       }
     }

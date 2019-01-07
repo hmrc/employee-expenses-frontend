@@ -16,38 +16,23 @@
 
 package base
 
-import com.github.tototoshi.play2.scalate.Scalate
 import config.FrontendAppConfig
 import controllers.actions._
-import models.UserData
+import models.UserAnswers
+import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
-import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.MockScalate
 
-trait SpecBase extends PlaySpec with GuiceOneAppPerSuite {
+trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
-  override lazy val app: Application = {
+  val userAnswersId = "id"
 
-    import play.api.inject._
-
-    new GuiceApplicationBuilder()
-      .overrides(
-        bind[Scalate].to[MockScalate]
-      ).build()
-  }
-
-  val userDataId = "id"
-
-  implicit val hc: HeaderCarrier = HeaderCarrier()
-
-  def emptyUserData = UserData(userDataId, Json.obj())
+  def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
   def injector: Injector = app.injector
 
@@ -59,11 +44,11 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite {
 
   def messages: Messages = messagesApi.preferred(fakeRequest)
 
-  protected def applicationBuilder(userData: Option[UserData] = None): GuiceApplicationBuilder =
+  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to[FakeIdentifierAction],
-        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userData))
+        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
 }

@@ -23,13 +23,11 @@ import play.api.i18n.Lang
 import play.api.mvc.Call
 
 @Singleton
-class FrontendAppConfig @Inject()(configuration: Configuration) {
+class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   private val contactHost = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = "play26frontend"
 
-  val assetsPath: String = configuration.get[String]("assets.url") + configuration.get[String]("assets.version") + "/"
-  val govukTemplatePath: String = "/templates/mustache/production/"
   val analyticsToken: String = configuration.get[String](s"google-analytics.token")
   val analyticsHost: String = configuration.get[String](s"google-analytics.host")
   val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
@@ -37,10 +35,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   val betaFeedbackUrl = s"$contactHost/contact/beta-feedback"
   val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated"
 
-  lazy val taiUrl: String = configuration.get[Service]("microservice.services.tai").baseUrl
-  lazy val citizenDetailsUrl: String = configuration.get[Service]("microservice.services.citizenDetails").baseUrl
-
-  lazy val authUrl: String = configuration.get[Service]("microservice.services.auth").baseUrl
+  lazy val authUrl: String = configuration.get[Service]("auth").baseUrl
   lazy val loginUrl: String = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
 

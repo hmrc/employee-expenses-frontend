@@ -41,7 +41,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to log in " in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -59,7 +59,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to log in " in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -77,7 +77,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to the unauthorised page" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -95,7 +95,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to the unauthorised page" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -113,7 +113,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to the unauthorised page" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -131,7 +131,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to the unauthorised page" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -149,7 +149,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to the unauthorised page" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
