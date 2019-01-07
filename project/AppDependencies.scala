@@ -12,7 +12,8 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-ui"                        % "7.25.0-play-26",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"  % "0.2.0",
     "uk.gov.hmrc"       %% "bootstrap-play-26"              % "0.27.0",
-    "uk.gov.hmrc"       %% "play-whitelist-filter"          % "2.0.0"
+    "uk.gov.hmrc"       %% "play-whitelist-filter"          % "2.0.0",
+    "com.typesafe.play" %% "play-json-joda"                 % "2.6.10"
   )
 
   val test = Seq(
@@ -23,7 +24,8 @@ object AppDependencies {
     "org.jsoup"                   %  "jsoup"              % "1.10.3",
     "com.typesafe.play"           %% "play-test"          % PlayVersion.current,
     "org.mockito"                 %  "mockito-all"        % "1.10.19",
-    "org.scalacheck"              %% "scalacheck"         % "1.13.4"
+    "org.scalacheck"              %% "scalacheck"         % "1.13.4",
+    "com.github.tomakehurst"      %  "wiremock-standalone"% "2.19.0"
   ).map(_ % Test)
 
   def apply(): Seq[ModuleID] = compile ++ test

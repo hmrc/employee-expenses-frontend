@@ -19,6 +19,7 @@ package base
 import config.FrontendAppConfig
 import controllers.actions._
 import models.UserAnswers
+import uk.gov.hmrc.http.HeaderCarrier
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
@@ -31,6 +32,8 @@ import play.api.test.FakeRequest
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   val userAnswersId = "id"
+
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
