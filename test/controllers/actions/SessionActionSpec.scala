@@ -17,10 +17,17 @@
 package controllers.actions
 
 import base.SpecBase
-import play.api.mvc.{BodyParsers, Results}
+import com.google.inject.Inject
+import controllers.routes
+import config.FrontendAppConfig
+import models.requests.IdentifierRequest
+import play.api.mvc.Results.Redirect
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.SessionKeys
+import play.api.mvc.{BodyParsers, Request, Result, Results}
+import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
+import uk.gov.hmrc.play.HeaderCarrierConverter
 
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class SessionActionSpec extends SpecBase {
@@ -30,6 +37,7 @@ class SessionActionSpec extends SpecBase {
   }
 
   "Session Action" when {
+    val nino = "AB123456A"
 
     "there's no active session" must {
 
@@ -39,7 +47,7 @@ class SessionActionSpec extends SpecBase {
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers)
+        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers, nino)
 
         val controller = new Harness(sessionAction)
 
@@ -58,7 +66,7 @@ class SessionActionSpec extends SpecBase {
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers)
+        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers, nino)
 
         val controller = new Harness(sessionAction)
 
@@ -68,6 +76,26 @@ class SessionActionSpec extends SpecBase {
 
         status(result) mustBe OK
       }
+    }
+  }
+}
+
+class SessionIdentifierAction @Inject()(
+                                         config: FrontendAppConfig,
+                                         val parser: BodyParsers.Default,
+                                         nino: String
+                                       )
+                                       (implicit val executionContext: ExecutionContext) extends IdentifierAction {
+
+  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
+
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+
+    hc.sessionId match {
+      case Some(session) =>
+        block(IdentifierRequest(request, session.value, nino))
+      case None =>
+        Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
   }
 }

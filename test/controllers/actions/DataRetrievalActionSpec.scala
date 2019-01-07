@@ -35,6 +35,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
   }
 
   "Data Retrieval Action" when {
+    val nino = "AB123456A"
 
     "there is no data in the cache" must {
 
@@ -44,7 +45,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
         when(sessionRepository.get("id")) thenReturn Future(None)
         val action = new Harness(sessionRepository)
 
-        val futureResult = action.callTransform(new IdentifierRequest(fakeRequest, "id"))
+        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, "id", nino))
 
         whenReady(futureResult) { result =>
           result.userAnswers.isEmpty mustBe true
@@ -60,7 +61,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
         when(sessionRepository.get("id")) thenReturn Future(Some(new UserAnswers("id")))
         val action = new Harness(sessionRepository)
 
-        val futureResult = action.callTransform(new IdentifierRequest(fakeRequest, "id"))
+        val futureResult = action.callTransform(new IdentifierRequest(fakeRequest, "id", nino))
 
         whenReady(futureResult) { result =>
           result.userAnswers.isDefined mustBe true
