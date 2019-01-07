@@ -13,7 +13,9 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"  % "0.2.0",
     "uk.gov.hmrc"       %% "bootstrap-play-26"              % "0.27.0",
     "uk.gov.hmrc"       %% "play-whitelist-filter"          % "2.0.0",
-    "com.typesafe.play" %% "play-json-joda"                 % "2.6.10"
+    "com.typesafe.play" %% "play-json-joda"                 % "2.6.10",
+    "org.scalatra.scalate"    %% "play-scalate"             % "0.4.0",
+    "org.scalatra.scalate"    %% "scalate-core"             % "1.8.0"
   )
 
   val test = Seq(
