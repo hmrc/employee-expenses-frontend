@@ -21,6 +21,6 @@ import pages._
 
 trait PageGenerators {
 
-  implicit lazy val arbitraryexpensesEmployerPaidPage: Arbitrary[expensesEmployerPaidPage.type] =
-    Arbitrary(expensesEmployerPaidPage)
+  implicit lazy val arbitraryExpensesEmployerPaidPage: Arbitrary[ExpensesEmployerPaidPage.type] =
+    Arbitrary(ExpensesEmployerPaidPage)
 }

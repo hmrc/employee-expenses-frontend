@@ -17,18 +17,18 @@
 package views
 
 import controllers.routes
-import forms.expensesEmployerPaidFormProvider
+import forms.ExpensesEmployerPaidFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.IntViewBehaviours
 import views.html.expensesEmployerPaidView
 
-class expensesEmployerPaidViewSpec extends IntViewBehaviours {
+class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
 
   val messageKeyPrefix = "expensesEmployerPaid"
 
-  val form = new expensesEmployerPaidFormProvider()()
+  val form = new ExpensesEmployerPaidFormProvider()()
 
   "expensesEmployerPaidView view" must {
 

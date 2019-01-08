@@ -17,11 +17,11 @@
 package controllers
 
 import controllers.actions._
-import forms.expensesEmployerPaidFormProvider
+import forms.ExpensesEmployerPaidFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.expensesEmployerPaidPage
+import pages.ExpensesEmployerPaidPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -31,16 +31,16 @@ import views.html.expensesEmployerPaidView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class expensesEmployerPaidController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        sessionRepository: SessionRepository,
-                                        navigator: Navigator,
-                                        identify: UnauthenticatedIdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: expensesEmployerPaidFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: expensesEmployerPaidView
+class ExpensesEmployerPaidController @Inject()(
+                                                override val messagesApi: MessagesApi,
+                                                sessionRepository: SessionRepository,
+                                                navigator: Navigator,
+                                                identify: UnauthenticatedIdentifierAction,
+                                                getData: DataRetrievalAction,
+                                                requireData: DataRequiredAction,
+                                                formProvider: ExpensesEmployerPaidFormProvider,
+                                                val controllerComponents: MessagesControllerComponents,
+                                                view: expensesEmployerPaidView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
@@ -48,7 +48,7 @@ class expensesEmployerPaidController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(expensesEmployerPaidPage) match {
+      val preparedForm = request.userAnswers.get(ExpensesEmployerPaidPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,9 +65,9 @@ class expensesEmployerPaidController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(expensesEmployerPaidPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ExpensesEmployerPaidPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(expensesEmployerPaidPage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(ExpensesEmployerPaidPage, mode)(updatedAnswers))
         }
       )
   }

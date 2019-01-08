@@ -19,9 +19,9 @@ package forms
 import forms.behaviours.IntFieldBehaviours
 import play.api.data.FormError
 
-class expensesEmployerPaidFormProviderSpec extends IntFieldBehaviours {
+class ExpensesEmployerPaidFormProviderSpec extends IntFieldBehaviours {
 
-  val form = new expensesEmployerPaidFormProvider()()
+  val form = new ExpensesEmployerPaidFormProvider()()
 
   ".value" must {
 

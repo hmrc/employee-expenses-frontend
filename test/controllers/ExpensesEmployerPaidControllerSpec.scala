@@ -17,10 +17,10 @@
 package controllers
 
 import base.SpecBase
-import forms.expensesEmployerPaidFormProvider
+import forms.ExpensesEmployerPaidFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.expensesEmployerPaidPage
+import pages.ExpensesEmployerPaidPage
 import play.api.inject.bind
 import play.api.libs.json.{JsNumber, Json}
 import play.api.mvc.Call
@@ -28,9 +28,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.expensesEmployerPaidView
 
-class expensesEmployerPaidControllerSpec extends SpecBase {
+class ExpensesEmployerPaidControllerSpec extends SpecBase {
 
-  val formProvider = new expensesEmployerPaidFormProvider()
+  val formProvider = new ExpensesEmployerPaidFormProvider()
   val form = formProvider()
 
   def onwardRoute = Call("GET", "/foo")
@@ -59,7 +59,7 @@ class expensesEmployerPaidControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(expensesEmployerPaidPage, validAnswer).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(ExpensesEmployerPaidPage, validAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
