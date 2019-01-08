@@ -41,7 +41,7 @@ class UnauthenticatedIdentifierAction @Inject()(
 
     hc.sessionId match {
       case Some(id) =>
-        block(IdentifierRequest(request, id.toString))
+        block(IdentifierRequest(request, id.value))
       case None =>
         Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
