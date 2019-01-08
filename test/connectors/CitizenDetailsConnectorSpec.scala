@@ -42,7 +42,6 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
   private lazy val citizenDetailsConnector: CitizenDetailsConnector = app.injector.instanceOf[CitizenDetailsConnector]
 
-  private val nino = "AB123456A"
   private val etag = 123
   private val validJson = Json.parse(
     s"""
@@ -54,7 +53,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
   "getEtag" must {
     "return an etag on success" in {
       server.stubFor(
-        get(urlEqualTo(s"/citizen-details/$nino/etag"))
+        get(urlEqualTo(s"/citizen-details/$fakeNino/etag"))
           .willReturn(
             aResponse()
               .withStatus(OK)
@@ -62,7 +61,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[Int] = citizenDetailsConnector.getEtag(nino)
+      val result: Future[Int] = citizenDetailsConnector.getEtag(fakeNino)
 
       whenReady(result) {
         result =>
@@ -72,14 +71,14 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
     "return 500 on failure" in {
       server.stubFor(
-        get(urlEqualTo(s"/citizen-details/$nino/etag"))
+        get(urlEqualTo(s"/citizen-details/$fakeNino/etag"))
           .willReturn(
             aResponse()
               .withStatus(INTERNAL_SERVER_ERROR)
           )
       )
 
-      val result: Future[Int] = citizenDetailsConnector.getEtag(nino)
+      val result: Future[Int] = citizenDetailsConnector.getEtag(fakeNino)
 
       whenReady(result.failed) {
         result =>
@@ -89,14 +88,14 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
     "return 404 when record not found" in {
       server.stubFor(
-        get(urlEqualTo(s"/citizen-details/$nino/etag"))
+        get(urlEqualTo(s"/citizen-details/$fakeNino/etag"))
           .willReturn(
             aResponse()
               .withStatus(NOT_FOUND)
           )
       )
 
-      val result: Future[Int] = citizenDetailsConnector.getEtag(nino)
+      val result: Future[Int] = citizenDetailsConnector.getEtag(fakeNino)
 
       whenReady(result.failed) {
         result =>

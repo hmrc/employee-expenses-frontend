@@ -44,7 +44,6 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
   private lazy val taiConnector: TaiConnector = app.injector.instanceOf[TaiConnector]
 
-  private val nino = "AB123456A"
   private val taxYear = TaxYear()
 
   private val taxCodeRecords = Seq(TaxCodeRecord(
@@ -60,7 +59,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   "taiTaxCode" must {
     "return a tax code record on success" in {
       server.stubFor(
-        get(urlEqualTo(s"/tai/$nino/tax-account/tax-code-change"))
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/tax-code-change"))
           .willReturn(
             aResponse()
               .withStatus(OK)
@@ -68,7 +67,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(nino)
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino)
 
       whenReady(result) {
         result =>
@@ -79,14 +78,14 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
     "return 500 on failure" in {
       server.stubFor(
-        get(urlEqualTo(s"/tai/$nino/tax-account/tax-code-change"))
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/tax-code-change"))
           .willReturn(
             aResponse()
               .withStatus(INTERNAL_SERVER_ERROR)
           )
       )
 
-      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(nino)
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino)
 
       whenReady(result.failed) {
         result =>
@@ -99,14 +98,14 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   "taiFREUpdate" must {
     "return a 200 on success" in {
       server.stubFor(
-        post(urlEqualTo(s"/tai/$nino/tax-account/$taxYear/expenses/flat-rate-expenses"))
+        post(urlEqualTo(s"/tai/$fakeNino/tax-account/$taxYear/expenses/flat-rate-expenses"))
           .willReturn(
             aResponse()
               .withStatus(OK)
           )
       )
 
-      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, IabdUpdateData(1, 100))
+      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(fakeNino, taxYear, 1, IabdUpdateData(1, 100))
 
       whenReady(result) {
         result =>
@@ -117,14 +116,14 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
     "return 500 on failure" in {
       server.stubFor(
-        post(urlEqualTo(s"/tai/$nino/tax-account/$taxYear/expenses/flat-rate-expenses"))
+        post(urlEqualTo(s"/tai/$fakeNino/tax-account/$taxYear/expenses/flat-rate-expenses"))
           .willReturn(
             aResponse()
               .withStatus(INTERNAL_SERVER_ERROR)
           )
       )
 
-      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(nino, taxYear, 1, IabdUpdateData(1, 100))
+      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(fakeNino, taxYear, 1, IabdUpdateData(1, 100))
 
       whenReady(result.failed) {
         result =>

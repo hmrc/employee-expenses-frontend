@@ -37,7 +37,6 @@ class SessionActionSpec extends SpecBase {
   }
 
   "Session Action" when {
-    val nino = "AB123456A"
 
     "there's no active session" must {
 
@@ -47,7 +46,7 @@ class SessionActionSpec extends SpecBase {
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers, nino)
+        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers, fakeNino)
 
         val controller = new Harness(sessionAction)
 
@@ -66,7 +65,7 @@ class SessionActionSpec extends SpecBase {
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers, nino)
+        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers, fakeNino)
 
         val controller = new Harness(sessionAction)
 

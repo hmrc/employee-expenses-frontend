@@ -28,12 +28,28 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
+import utils.MockScalate
+import com.github.tototoshi.play2.scalate.Scalate
+import play.api.Application
+
+
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
+
+  override lazy val app: Application = {
+
+    import play.api.inject._
+
+    new GuiceApplicationBuilder()
+      .overrides(
+        bind[Scalate].to[MockScalate]
+      ).build()
+  }
 
   val userAnswersId = "id"
 
   val fakeNino = "AB123456A"
+  val fakeId = "id"
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
