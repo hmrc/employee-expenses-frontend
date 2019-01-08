@@ -16,3 +16,5 @@ GET        /expenses-employer-paid                      controllers.ExpensesEmpl
 POST       /expenses-employer-paid                      controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = NormalMode)
 GET        /change-expenses-employer-paid               controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-expenses-employer-paid               controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = CheckMode)
+
+GET        /cannot-claim                                controllers.CannotClaimController.onPageLoad()
