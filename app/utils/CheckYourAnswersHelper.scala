@@ -24,6 +24,6 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def expensesEmployerPaid: Option[AnswerRow] = userAnswers.get(ExpensesEmployerPaidPage) map {
-    x => AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"$x", false, routes.expensesEmployerPaidController.onPageLoad(CheckMode).url)
+    x => AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"$x", false, routes.ExpensesEmployerPaidController.onPageLoad(CheckMode).url)
   }
 }
