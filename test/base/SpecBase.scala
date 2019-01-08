@@ -49,7 +49,6 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
   val userAnswersId = "id"
 
   val fakeNino = "AB123456A"
-  val fakeId = "id"
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
