@@ -46,6 +46,10 @@
         }
     }
 
+    @articleContent = @{
+        article(mainContent)
+    }
+
     @scalate.render(
         "/templates/mustache/production/govuk-template.mustache.html",
         Map(
@@ -55,7 +59,7 @@
             "sidebar" -> sidebarContent,
             "scriptElems" -> scriptElem,
             "mainClass" -> mainClass,
-            "article" -> mainContent,
+            "article" -> articleContent,
             "isWelsh" -> {
                 messages.lang.code == "cy"
             },
