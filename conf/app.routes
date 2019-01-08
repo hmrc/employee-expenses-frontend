@@ -12,7 +12,7 @@ GET        /check-your-answers                          controllers.CheckYourAns
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
-GET        /expensesEmployerPaid                        controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)
-POST       /expensesEmployerPaid                        controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = NormalMode)
-GET        /changeexpensesEmployerPaid                  controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeexpensesEmployerPaid                  controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = CheckMode)
+GET        /expenses-employer-paid                      controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)
+POST       /expenses-employer-paid                      controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = NormalMode)
+GET        /change-expenses-employer-paid               controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-expenses-employer-paid               controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = CheckMode)
