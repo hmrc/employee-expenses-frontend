@@ -22,7 +22,7 @@ import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.IntViewBehaviours
-import views.html.expensesEmployerPaidView
+import views.html.ExpensesEmployerPaidView
 
 class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
 
@@ -30,11 +30,11 @@ class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
 
   val form = new ExpensesEmployerPaidFormProvider()()
 
-  "expensesEmployerPaidView view" must {
+  "ExpensesEmployerPaidView view" must {
 
     val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-    val view = application.injector.instanceOf[expensesEmployerPaidView]
+    val view = application.injector.instanceOf[ExpensesEmployerPaidView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -43,6 +43,6 @@ class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like intPage(form, applyView, messageKeyPrefix, routes.expensesEmployerPaidController.onSubmit(NormalMode).url)
+    behave like intPage(form, applyView, messageKeyPrefix, routes.ExpensesEmployerPaidController.onSubmit(NormalMode).url)
   }
 }

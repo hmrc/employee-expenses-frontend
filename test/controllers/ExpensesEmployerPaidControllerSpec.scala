@@ -26,7 +26,7 @@ import play.api.libs.json.{JsNumber, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.expensesEmployerPaidView
+import views.html.ExpensesEmployerPaidView
 
 class ExpensesEmployerPaidControllerSpec extends SpecBase {
 
@@ -37,7 +37,7 @@ class ExpensesEmployerPaidControllerSpec extends SpecBase {
 
   val validAnswer = 0
 
-  lazy val expensesEmployerPaidRoute = routes.expensesEmployerPaidController.onPageLoad(NormalMode).url
+  lazy val expensesEmployerPaidRoute = routes.ExpensesEmployerPaidController.onPageLoad(NormalMode).url
 
   "expensesEmployerPaid Controller" must {
 
@@ -49,7 +49,7 @@ class ExpensesEmployerPaidControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[expensesEmployerPaidView]
+      val view = application.injector.instanceOf[ExpensesEmployerPaidView]
 
       status(result) mustEqual OK
 
@@ -65,7 +65,7 @@ class ExpensesEmployerPaidControllerSpec extends SpecBase {
 
       val request = FakeRequest(GET, expensesEmployerPaidRoute)
 
-      val view = application.injector.instanceOf[expensesEmployerPaidView]
+      val view = application.injector.instanceOf[ExpensesEmployerPaidView]
 
       val result = route(application, request).value
 
@@ -103,7 +103,7 @@ class ExpensesEmployerPaidControllerSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[expensesEmployerPaidView]
+      val view = application.injector.instanceOf[ExpensesEmployerPaidView]
 
       val result = route(application, request).value
 

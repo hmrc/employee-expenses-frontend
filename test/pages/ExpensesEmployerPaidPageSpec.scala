@@ -20,7 +20,7 @@ import pages.behaviours.PageBehaviours
 
 class ExpensesEmployerPaidPageSpec extends PageBehaviours {
 
-  "expensesEmployerPaidPage" must {
+  "ExpensesEmployerPaidPage" must {
 
     beRetrievable[Int](ExpensesEmployerPaidPage)
 
