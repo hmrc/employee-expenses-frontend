@@ -16,29 +16,35 @@
 
 package controllers.actions
 
-import javax.inject.Inject
+import com.google.inject.Inject
+import config.FrontendAppConfig
 import controllers.routes
-import models.requests.{DataRequest, OptionalDataRequest}
+import javax.inject.Singleton
+import models.requests.IdentifierRequest
 import play.api.mvc.Results.Redirect
-import play.api.mvc.{ActionRefiner, Result}
+import play.api.mvc._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRequiredActionImpl @Inject()(implicit val executionContext: ExecutionContext) extends DataRequiredAction {
+@Singleton
+class UnauthenticatedIdentifierAction @Inject()(
+                                               config: FrontendAppConfig,
+                                               val parser: BodyParsers.Default
+                                             )
+                                             (implicit val executionContext: ExecutionContext) extends IdentifierAction {
 
-  override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
+  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    request.userAnswers match {
+    hc.sessionId match {
+      case Some(id) =>
+        block(IdentifierRequest(request, id.toString))
       case None =>
-        Future.successful(Left(Redirect(routes.SessionExpiredController.onPageLoad())))
-      case Some(data) =>
-        Future.successful(Right(DataRequest(request.request, request.internalId, request.nino, data)))
+        Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
+
   }
 }
-
-trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

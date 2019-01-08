@@ -92,7 +92,7 @@ class SessionIdentifierAction @Inject()(
 
     hc.sessionId match {
       case Some(session) =>
-        block(IdentifierRequest(request, session.value, nino))
+        block(IdentifierRequest(request, session.value, Some(nino)))
       case None =>
         Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
