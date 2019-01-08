@@ -24,7 +24,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,7 +41,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to log in " in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -55,11 +55,29 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
+    "the user fails auth" must {
+
+      "redirect the user to log in " in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+
+        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new UnauthorizedException("unAuth")), frontendAppConfig, bodyParsers)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(fakeRequest)
+
+        status(result) mustBe SEE_OTHER
+
+        redirectLocation(result).get must startWith(frontendAppConfig.loginUrl)
+      }
+    }
+
     "the user's session has expired" must {
 
       "redirect the user to log in " in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -77,7 +95,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to the unauthorised page" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -95,7 +113,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to the unauthorised page" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -113,7 +131,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to the unauthorised page" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -131,7 +149,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to the unauthorised page" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
@@ -149,7 +167,7 @@ class AuthActionSpec extends SpecBase {
 
       "redirect the user to the unauthorised page" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 

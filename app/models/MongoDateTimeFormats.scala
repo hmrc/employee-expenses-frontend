@@ -16,18 +16,23 @@
 
 package models
 
-import base.SpecBase
+import java.time.{Instant, LocalDateTime, ZoneOffset}
 
-class ModeSpec extends SpecBase {
+import play.api.libs.json._
 
-  "Mode" must {
-    "return string value of normal mode" in {
-      Mode.jsLiteral.to(NormalMode) mustBe "NormalMode"
+trait MongoDateTimeFormats {
+
+  implicit val localDateTimeRead: Reads[LocalDateTime] =
+    (__ \ "$date").read[Long].map {
+      millis =>
+        LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC)
     }
 
-    "return string value of check mode" in {
-      Mode.jsLiteral.to(CheckMode) mustBe "CheckMode"
-    }
+  implicit val localDateTimeWrite: Writes[LocalDateTime] = new Writes[LocalDateTime] {
+    def writes(dateTime: LocalDateTime): JsValue = Json.obj(
+      "$date" -> dateTime.atZone(ZoneOffset.UTC).toInstant.toEpochMilli
+    )
   }
-
 }
+
+object MongoDateTimeFormats extends MongoDateTimeFormats

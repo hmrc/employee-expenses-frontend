@@ -23,7 +23,7 @@ import models.requests.IdentifierRequest
 import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.{Retrieval, Retrievals}
+import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
@@ -45,10 +45,16 @@ class AuthenticatedIdentifierAction @Inject()(
         val internalId = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
         val nino = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
 
-        block(IdentifierRequest(request, internalId, nino))
+        block(IdentifierRequest(request, internalId, Some(nino)))
     } recover {
+      case _: UnauthorizedException =>
+        Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
       case _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
+      case _: UnsupportedAffinityGroup =>
+        Redirect(routes.UnauthorisedController.onPageLoad())
+      case _: InsufficientConfidenceLevel =>
+        Redirect(routes.UnauthorisedController.onPageLoad())
       case _ =>
         Redirect(routes.UnauthorisedController.onPageLoad())
 
