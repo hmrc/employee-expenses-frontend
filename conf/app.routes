@@ -16,3 +16,10 @@ GET        /employerContribution                        controllers.EmployerCont
 POST       /employerContribution                        controllers.EmployerContributionController.onSubmit(mode: Mode = NormalMode)
 GET        /changeEmployerContribution                  controllers.EmployerContributionController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeEmployerContribution                  controllers.EmployerContributionController.onSubmit(mode: Mode = CheckMode)
+
+GET        /expenses-employer-paid                      controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)
+POST       /expenses-employer-paid                      controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = NormalMode)
+GET        /change-expenses-employer-paid               controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-expenses-employer-paid               controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = CheckMode)
+
+GET        /cannot-claim                                controllers.CannotClaimController.onPageLoad()

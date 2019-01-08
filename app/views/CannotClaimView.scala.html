@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package generators
+@this(
+    main_template: MainTemplate
+)
 
-import org.scalacheck.Arbitrary
-import pages._
+@()(implicit request: Request[_], messages: Messages)
 
-trait PageGenerators {
+@main_template(
+    title = messages("cannotClaim.title")
+    ) {
 
-  implicit lazy val arbitraryEmployerContributionPage: Arbitrary[EmployerContributionPage.type] =
-    Arbitrary(EmployerContributionPage)
+    @components.back_link()
 
-  implicit lazy val arbitraryExpensesEmployerPaidPage: Arbitrary[ExpensesEmployerPaidPage.type] =
-    Arbitrary(ExpensesEmployerPaidPage)
+    @components.heading("cannotClaim.heading")
+
+    <p>@messages("cannotClaim.para1")</p>
+
+    <p><a id="link" href="https://www.gov.uk/tax-relief-for-employees">@messages("cannotClaim.link")</a></p>
 }
