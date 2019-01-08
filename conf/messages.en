@@ -42,3 +42,11 @@ site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+expensesEmployerPaid.title = How much of your expenses has your employer paid back?
+expensesEmployerPaid.heading = How much of your expenses has your employer paid back?
+expensesEmployerPaid.checkYourAnswersLabel = How much of your expenses your employer paid back
+expensesEmployerPaid.error.nonNumeric = Enter your amount using numbers
+expensesEmployerPaid.error.required = Enter how much of your expenses your employer has paid back
+expensesEmployerPaid.error.wholeNumber = Enter your amount using whole numbers
+expensesEmployerPaid.error.outOfRange = Amount must be between {0} and {1}

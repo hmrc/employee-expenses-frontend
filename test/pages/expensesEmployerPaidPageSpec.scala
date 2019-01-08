@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import models._
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.arbitrary
-import pages._
-import play.api.libs.json.{JsValue, Json}
+import pages.behaviours.PageBehaviours
 
-trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+class expensesEmployerPaidPageSpec extends PageBehaviours {
 
-  implicit lazy val arbitraryexpensesEmployerPaidUserAnswersEntry: Arbitrary[(expensesEmployerPaidPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[expensesEmployerPaidPage.type]
-        value <- arbitrary[Int].map(Json.toJson(_))
-      } yield (page, value)
-    }
+  "expensesEmployerPaidPage" must {
+
+    beRetrievable[Int](expensesEmployerPaidPage)
+
+    beSettable[Int](expensesEmployerPaidPage)
+
+    beRemovable[Int](expensesEmployerPaidPage)
+  }
 }
