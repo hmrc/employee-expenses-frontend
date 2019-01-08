@@ -50,3 +50,8 @@ expensesEmployerPaid.error.nonNumeric = Enter a whole number using characters 0 
 expensesEmployerPaid.error.required = Enter how much of your expenses your employer paid back
 expensesEmployerPaid.error.wholeNumber = Enter a whole number
 expensesEmployerPaid.error.outOfRange = Enter an amount between {0} and {1}
+
+cannotClaim.title = You cannot claim tax relief for these expenses
+cannotClaim.heading = You cannot claim tax relief for these expenses
+cannotClaim.para1 = This is because your employer has paid back all of your expenses.
+cannotClaim.link = Read claim tax relief for your job expenses
