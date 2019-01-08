@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
-package utils
+package models
 
-import controllers.routes
-import models.{CheckMode, UserAnswers}
-import pages._
-import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
+import play.api.libs.json._
+import viewmodels.RadioOption
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+sealed trait EmployerContribution
 
-  def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
-    x => AnswerRow("employerContribution.checkYourAnswersLabel", s"employerContribution.$x", true, routes.EmployerContributionController.onPageLoad(CheckMode).url)
+object EmployerContribution extends Enumerable.Implicits {
+
+  case object All extends WithName("all") with EmployerContribution
+  case object Some extends WithName("some") with EmployerContribution
+
+  val values: Set[EmployerContribution] = Set(
+    All, Some
+  )
+
+  val options: Set[RadioOption] = values.map {
+    value =>
+      RadioOption("employerContribution", value.toString)
   }
+
+  implicit val enumerable: Enumerable[EmployerContribution] =
+    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 }

@@ -42,3 +42,10 @@ site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+employerContribution.title = How much of your expenses has your employer paid back?
+employerContribution.heading = How much of your expenses has your employer paid back?
+employerContribution.all = All
+employerContribution.some = Some
+employerContribution.checkYourAnswersLabel = How much of your expenses has your employer paid back?
+employerContribution.error.required = Select employerContribution
