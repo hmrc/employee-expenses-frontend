@@ -74,4 +74,6 @@ class EmployerContributionViewSpec extends ViewBehaviours {
       }
     }
   }
+
+  application.stop()
 }
