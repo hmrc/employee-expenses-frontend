@@ -55,3 +55,6 @@ cannotClaim.title = You cannot claim tax relief for these expenses
 cannotClaim.heading = You cannot claim tax relief for these expenses
 cannotClaim.para1 = This is because your employer has paid back all of your expenses.
 cannotClaim.link = Read claim tax relief for your job expenses
+
+claimByAlternative.title = You can claim tax relief for these expenses by post or using an online form
+claimByAlternative.heading = You can claim tax relief for these expenses by post or using an online form
