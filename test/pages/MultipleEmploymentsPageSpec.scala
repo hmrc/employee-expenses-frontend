@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import org.scalacheck.Arbitrary
-import pages._
+import pages.behaviours.PageBehaviours
 
-trait PageGenerators {
+class MultipleEmploymentsPageSpec extends PageBehaviours {
 
-  implicit lazy val arbitraryMultipleEmploymentsPage: Arbitrary[MultipleEmploymentsPage.type] =
-    Arbitrary(MultipleEmploymentsPage)
+  "MultipleEmploymentsPage" must {
 
-  implicit lazy val arbitraryExpensesEmployerPaidPage: Arbitrary[ExpensesEmployerPaidPage.type] =
-    Arbitrary(ExpensesEmployerPaidPage)
+    beRetrievable[Boolean](MultipleEmploymentsPage)
+
+    beSettable[Boolean](MultipleEmploymentsPage)
+
+    beRemovable[Boolean](MultipleEmploymentsPage)
+  }
 }

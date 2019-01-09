@@ -1,20 +1,25 @@
 # microservice specific routes
 
-GET        /                                            controllers.IndexController.onPageLoad
+GET        /                                                        controllers.IndexController.onPageLoad
 
-GET        /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
+GET        /assets/*file                                            controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /language/:lang                              controllers.LanguageSwitchController.switchToLanguage(lang: String)
+GET        /language/:lang                                          controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
-GET        /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad
+GET        /this-service-has-been-reset                             controllers.SessionExpiredController.onPageLoad
 
-GET        /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad
+GET        /check-your-answers                                      controllers.CheckYourAnswersController.onPageLoad
 
-GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
+GET        /unauthorised                                            controllers.UnauthorisedController.onPageLoad
 
-GET        /expenses-employer-paid                      controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)
-POST       /expenses-employer-paid                      controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = NormalMode)
-GET        /change-expenses-employer-paid               controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-expenses-employer-paid               controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = CheckMode)
+GET        /expenses-employer-paid                                  controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)
+POST       /expenses-employer-paid                                  controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = NormalMode)
+GET        /change-expenses-employer-paid                           controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-expenses-employer-paid                           controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = CheckMode)
 
-GET        /cannot-claim                                controllers.CannotClaimController.onPageLoad()
+GET        /cannot-claim                                            controllers.CannotClaimController.onPageLoad()
+
+GET        /claiming-for-more-than-one-job                          controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = NormalMode)
+POST       /claiming-for-more-than-one-job                          controllers.MultipleEmploymentsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-claiming-for-more-than-one-job                   controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-claiming-for-more-than-one-job                   controllers.MultipleEmploymentsController.onSubmit(mode: Mode = CheckMode)
