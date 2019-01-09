@@ -24,6 +24,9 @@ POST       /employer-contribution                       controllers.EmployerCont
 GET        /change-employer-contribution                controllers.EmployerContributionController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-employer-contribution                controllers.EmployerContributionController.onSubmit(mode: Mode = CheckMode)
 
+GET        /claim-by-alternative                                    controllers.ClaimByAlternativeController.onPageLoad()
+POST       /claim-by-alternative                                    controllers.ClaimByAlternativeController.onSubmit()
+
 GET        /claiming-for-more-than-one-job                          controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = NormalMode)
 POST       /claiming-for-more-than-one-job                          controllers.MultipleEmploymentsController.onSubmit(mode: Mode = NormalMode)
 GET        /change-claiming-for-more-than-one-job                   controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = CheckMode)
