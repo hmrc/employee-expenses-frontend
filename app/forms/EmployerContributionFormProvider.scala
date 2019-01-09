@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import models._
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.{Arbitrary, Gen}
+import javax.inject.Inject
 
-trait ModelGenerators {
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.EmployerContribution
 
-  implicit lazy val arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
-    Arbitrary {
-      Gen.oneOf(EmployerContribution.values.toSeq)
-    }
+class EmployerContributionFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[EmployerContribution] =
+    Form(
+      "value" -> enumerable[EmployerContribution]("employerContribution.error.required")
+    )
 }

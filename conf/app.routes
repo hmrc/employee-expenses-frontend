@@ -19,6 +19,11 @@ POST       /change-expenses-employer-paid                           controllers.
 
 GET        /cannot-claim                                            controllers.CannotClaimController.onPageLoad()
 
+GET        /employer-contribution                       controllers.EmployerContributionController.onPageLoad(mode: Mode = NormalMode)
+POST       /employer-contribution                       controllers.EmployerContributionController.onSubmit(mode: Mode = NormalMode)
+GET        /change-employer-contribution                controllers.EmployerContributionController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-employer-contribution                controllers.EmployerContributionController.onSubmit(mode: Mode = CheckMode)
+
 GET        /claim-by-alternative                                    controllers.ClaimByAlternativeController.onPageLoad()
 POST       /claim-by-alternative                                    controllers.ClaimByAlternativeController.onSubmit()
 

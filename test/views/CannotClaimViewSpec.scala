@@ -39,6 +39,7 @@ class CannotClaimViewSpec extends ViewBehaviours {
       doc.getElementById("link").attr("href") mustBe "https://www.gov.uk/tax-relief-for-employees"
 
       application.stop()
+
     }
 
   }

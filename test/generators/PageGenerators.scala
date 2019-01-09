@@ -21,6 +21,9 @@ import pages._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryEmployerContributionPage: Arbitrary[EmployerContributionPage.type] =
+    Arbitrary(EmployerContributionPage)
+
   implicit lazy val arbitraryMultipleEmploymentsPage: Arbitrary[MultipleEmploymentsPage.type] =
     Arbitrary(MultipleEmploymentsPage)
 
