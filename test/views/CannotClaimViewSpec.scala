@@ -37,6 +37,8 @@ class CannotClaimViewSpec extends ViewBehaviours {
       val doc = asDocument(applyView)
       assertContainsMessages(doc, "cannotClaim.para1", "cannotClaim.link")
       doc.getElementById("link").attr("href") mustBe "https://www.gov.uk/tax-relief-for-employees"
+
+      application.stop()
     }
 
   }
