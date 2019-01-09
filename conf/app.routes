@@ -19,6 +19,9 @@ POST       /change-expenses-employer-paid                           controllers.
 
 GET        /cannot-claim                                            controllers.CannotClaimController.onPageLoad()
 
+GET        /claim-by-alternative                                    controllers.ClaimByAlternativeController.onPageLoad()
+POST       /claim-by-alternative                                    controllers.ClaimByAlternativeController.onSubmit()
+
 GET        /claiming-for-more-than-one-job                          controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = NormalMode)
 POST       /claiming-for-more-than-one-job                          controllers.MultipleEmploymentsController.onSubmit(mode: Mode = NormalMode)
 GET        /change-claiming-for-more-than-one-job                   controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = CheckMode)
