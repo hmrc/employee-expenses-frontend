@@ -63,3 +63,8 @@ employerContribution.some = Some
 employerContribution.none = None
 employerContribution.checkYourAnswersLabel = How much of your expenses has your employer paid back?
 employerContribution.error.required = Select how much of your expenses your employer has paid back
+
+multipleEmployments.title = Are you claiming for more than one job?
+multipleEmployments.heading = Are you claiming for more than one job?
+multipleEmployments.checkYourAnswersLabel = Are you claiming for more than one job?
+multipleEmployments.error.required = Select yes if you are claiming for more than one job

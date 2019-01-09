@@ -27,6 +27,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     x => AnswerRow("employerContribution.checkYourAnswersLabel", s"employerContribution.$x", true, routes.EmployerContributionController.onPageLoad(CheckMode).url)
   }
 
+  def multipleEmployments: Option[AnswerRow] = userAnswers.get(MultipleEmploymentsPage) map {
+    x => AnswerRow("multipleEmployments.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.MultipleEmploymentsController.onPageLoad(CheckMode).url)
+  }
+
   def expensesEmployerPaid: Option[AnswerRow] = userAnswers.get(ExpensesEmployerPaidPage) map {
     x => AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"$x", false, routes.ExpensesEmployerPaidController.onPageLoad(CheckMode).url)
   }
