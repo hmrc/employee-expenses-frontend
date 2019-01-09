@@ -19,7 +19,7 @@ POST       /change-expenses-employer-paid               controllers.ExpensesEmpl
 
 GET        /cannot-claim                                controllers.CannotClaimController.onPageLoad()
 
-GET        /employerContribution                        controllers.EmployerContributionController.onPageLoad(mode: Mode = NormalMode)
-POST       /employerContribution                        controllers.EmployerContributionController.onSubmit(mode: Mode = NormalMode)
-GET        /changeEmployerContribution                  controllers.EmployerContributionController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeEmployerContribution                  controllers.EmployerContributionController.onSubmit(mode: Mode = CheckMode)
+GET        /employer-contribution                       controllers.EmployerContributionController.onPageLoad(mode: Mode = NormalMode)
+POST       /employer-contribution                       controllers.EmployerContributionController.onSubmit(mode: Mode = NormalMode)
+GET        /change-employer-contribution                controllers.EmployerContributionController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-employer-contribution                controllers.EmployerContributionController.onSubmit(mode: Mode = CheckMode)

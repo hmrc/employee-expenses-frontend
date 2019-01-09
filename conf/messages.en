@@ -60,5 +60,6 @@ employerContribution.title = How much of your expenses has your employer paid ba
 employerContribution.heading = How much of your expenses has your employer paid back?
 employerContribution.all = All
 employerContribution.some = Some
+employerContribution.none = None
 employerContribution.checkYourAnswersLabel = How much of your expenses has your employer paid back?
-employerContribution.error.required = Select employerContribution
+employerContribution.error.required = Select how much of your expenses your employer has paid back
