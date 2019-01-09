@@ -58,4 +58,6 @@ class $className$ViewSpec extends ViewBehaviours {
       }
     }
   }
+
+  application.stop()
 }

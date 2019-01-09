@@ -14,9 +14,9 @@ class $className$ViewSpec extends IntViewBehaviours {
 
   val form = new $className$FormProvider()()
 
-  "$className$View view" must {
+  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  "$className$View view" must {
 
     val view = application.injector.instanceOf[$className$View]
 
@@ -29,4 +29,6 @@ class $className$ViewSpec extends IntViewBehaviours {
 
     behave like intPage(form, applyView, messageKeyPrefix, routes.$className$Controller.onSubmit(NormalMode).url)
   }
+
+  application.stop()
 }

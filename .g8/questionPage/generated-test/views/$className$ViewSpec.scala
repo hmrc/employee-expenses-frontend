@@ -14,9 +14,9 @@ class $className$ViewSpec extends QuestionViewBehaviours[$className$] {
 
   override val form = new $className$FormProvider()()
 
-  "$className$View" must {
+  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  "$className$View" must {
 
     val view = application.injector.instanceOf[$className$View]
 
@@ -36,4 +36,6 @@ class $className$ViewSpec extends QuestionViewBehaviours[$className$] {
       "field1", "field2"
     )
   }
+
+  application.stop()
 }
