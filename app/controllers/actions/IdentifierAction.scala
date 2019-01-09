@@ -47,17 +47,18 @@ class AuthenticatedIdentifierAction @Inject()(
 
         block(IdentifierRequest(request, internalId, Some(nino)))
     } recover {
-      case _: UnauthorizedException =>
-        Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
+      case _: UnauthorizedException | _: InsufficientConfidenceLevel =>
+        Redirect(s"${config.ivUpliftUrl}?origin=EE&" +
+          s"confidenceLevel=200&" +
+          s"completionURL=${config.authorisedCallback}&" +
+          s"failureURL=${config.unauthorisedCallback}"
+        )
       case _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
       case _: UnsupportedAffinityGroup =>
         Redirect(routes.UnauthorisedController.onPageLoad())
-      case _: InsufficientConfidenceLevel =>
-        Redirect(routes.UnauthorisedController.onPageLoad())
       case _ =>
         Redirect(routes.UnauthorisedController.onPageLoad())
-
     }
   }
 }
