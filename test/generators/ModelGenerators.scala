@@ -21,4 +21,9 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+
+  implicit lazy val arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
+    Arbitrary {
+      Gen.oneOf(EmployerContribution.values.toSeq)
+    }
 }

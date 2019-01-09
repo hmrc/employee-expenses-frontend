@@ -55,3 +55,10 @@ cannotClaim.title = You cannot claim tax relief for these expenses
 cannotClaim.heading = You cannot claim tax relief for these expenses
 cannotClaim.para1 = This is because your employer has paid back all of your expenses.
 cannotClaim.link = Read claim tax relief for your job expenses
+
+employerContribution.title = How much of your expenses has your employer paid back?
+employerContribution.heading = How much of your expenses has your employer paid back?
+employerContribution.all = All
+employerContribution.some = Some
+employerContribution.checkYourAnswersLabel = How much of your expenses has your employer paid back?
+employerContribution.error.required = Select employerContribution

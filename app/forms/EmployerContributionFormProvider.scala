@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import org.scalacheck.Arbitrary
-import pages._
+import javax.inject.Inject
 
-trait PageGenerators {
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.EmployerContribution
 
-  implicit lazy val arbitraryEmployerContributionPage: Arbitrary[EmployerContributionPage.type] =
-    Arbitrary(EmployerContributionPage)
+class EmployerContributionFormProvider @Inject() extends Mappings {
 
-  implicit lazy val arbitraryExpensesEmployerPaidPage: Arbitrary[ExpensesEmployerPaidPage.type] =
-    Arbitrary(ExpensesEmployerPaidPage)
+  def apply(): Form[EmployerContribution] =
+    Form(
+      "value" -> enumerable[EmployerContribution]("employerContribution.error.required")
+    )
 }
