@@ -23,6 +23,9 @@ import javax.inject.Singleton
 import models.requests.IdentifierRequest
 import play.api.mvc.Results.Redirect
 import play.api.mvc._
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.retrieve.Retrievals
+import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
@@ -30,21 +33,26 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class UnauthenticatedIdentifierAction @Inject()(
-                                               config: FrontendAppConfig,
-                                               val parser: BodyParsers.Default
-                                             )
-                                             (implicit val executionContext: ExecutionContext) extends IdentifierAction {
+                                                 override val authConnector: AuthConnector,
+                                                 config: FrontendAppConfig,
+                                                 val parser: BodyParsers.Default
+                                               )
+                                               (implicit val executionContext: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    hc.sessionId match {
-      case Some(id) =>
-        block(IdentifierRequest(request, id.value))
-      case None =>
-        Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+    authorised().retrieve(Retrievals.internalId and Retrievals.nino) {
+      case Some(internalId) ~ Some(nino) =>
+        block(IdentifierRequest(request, internalId, Some(nino)))
+    } recoverWith {
+      case _ => hc.sessionId match {
+        case Some(id) =>
+          block(IdentifierRequest(request, id.value))
+        case _ =>
+          Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+      }
     }
-
   }
 }
