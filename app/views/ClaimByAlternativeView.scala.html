@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,25 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package generators
+@this(
+        main_template: MainTemplate,
+        formHelper: FormWithCSRF
+)
 
-import models._
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.{Arbitrary, Gen}
+@()(implicit request: Request[_], messages: Messages)
 
-trait ModelGenerators {
+@main_template(
+    title = messages("claimByAlternative.title")
+    ) {
 
-  implicit lazy val arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
-    Arbitrary {
-      Gen.oneOf(EmployerContribution.values.toSeq)
+    @formHelper(action = ClaimByAlternativeController.onSubmit(), 'autoComplete -> "off") {
+
+        @components.back_link()
+
+        @components.heading("claimByAlternative.heading")
+
+        @components.submit_button()
     }
 }

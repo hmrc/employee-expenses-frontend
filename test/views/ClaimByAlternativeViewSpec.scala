@@ -14,16 +14,24 @@
  * limitations under the License.
  */
 
-package generators
+package views
 
-import models._
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.{Arbitrary, Gen}
+import views.behaviours.ViewBehaviours
+import views.html.ClaimByAlternativeView
 
-trait ModelGenerators {
+class ClaimByAlternativeViewSpec extends ViewBehaviours {
 
-  implicit lazy val arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
-    Arbitrary {
-      Gen.oneOf(EmployerContribution.values.toSeq)
-    }
+  "ClaimByAlternative view" must {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+    val view = application.injector.instanceOf[ClaimByAlternativeView]
+
+    val applyView = view.apply()(fakeRequest, messages)
+
+    behave like normalPage(applyView, "claimByAlternative")
+
+    behave like pageWithBackLink(applyView)
+
+  }
 }

@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import models._
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.{Arbitrary, Gen}
+import models.EmployerContribution
+import pages.behaviours.PageBehaviours
 
-trait ModelGenerators {
+class EmployerContributionSpec extends PageBehaviours {
 
-  implicit lazy val arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
-    Arbitrary {
-      Gen.oneOf(EmployerContribution.values.toSeq)
-    }
+  "EmployerContributionPage" must {
+
+    beRetrievable[EmployerContribution](EmployerContributionPage)
+
+    beSettable[EmployerContribution](EmployerContributionPage)
+
+    beRemovable[EmployerContribution](EmployerContributionPage)
+  }
 }
