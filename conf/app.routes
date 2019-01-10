@@ -12,7 +12,7 @@ GET        /check-your-answers                                      controllers.
 
 GET        /unauthorised                                            controllers.UnauthorisedController.onPageLoad
 
-GET        /session-key/:key                                        controllers.RedirectMongoKeyController.onPageLoad(key: String)
+GET        /session-key                                        controllers.RedirectMongoKeyController.onPageLoad(key: String, journeyId: Option[String])
 
 GET        /expenses-employer-paid                                  controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)
 POST       /expenses-employer-paid                                  controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = NormalMode)
