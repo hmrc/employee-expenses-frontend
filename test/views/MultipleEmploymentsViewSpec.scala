@@ -30,9 +30,9 @@ class MultipleEmploymentsViewSpec extends YesNoViewBehaviours {
 
   val form = new MultipleEmploymentsFormProvider()()
 
-  "MultipleEmployments view" must {
+  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  "MultipleEmployments view" must {
 
     val view = application.injector.instanceOf[MultipleEmploymentsView]
 
@@ -45,4 +45,6 @@ class MultipleEmploymentsViewSpec extends YesNoViewBehaviours {
 
     behave like yesNoPage(form, applyView, messageKeyPrefix, routes.MultipleEmploymentsController.onSubmit(NormalMode).url)
   }
+
+  application.stop()
 }

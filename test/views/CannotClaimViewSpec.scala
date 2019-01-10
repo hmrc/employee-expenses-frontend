@@ -41,5 +41,6 @@ class CannotClaimViewSpec extends ViewBehaviours {
       application.stop()
 
     }
+
   }
 }

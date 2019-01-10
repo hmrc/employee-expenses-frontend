@@ -54,6 +54,8 @@ class SessionActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith(controllers.routes.SessionExpiredController.onPageLoad().url)
+
+        application.stop()
       }
     }
 
@@ -74,6 +76,8 @@ class SessionActionSpec extends SpecBase {
         val result = controller.onPageLoad()(request)
 
         status(result) mustBe OK
+
+        application.stop()
       }
     }
   }
