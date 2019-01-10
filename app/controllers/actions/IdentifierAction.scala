@@ -45,11 +45,10 @@ class AuthenticatedIdentifierAction @Inject()(
         val internalId = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
         val nino = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
 
-        val mongoId: Option[String] = request.session.data.get("mongoKey")
-
-        val blah = if(mongoId.isDefined){mongoId.get} else internalId
-
-        block(IdentifierRequest(request, blah, Some(nino)))
+        request.session.data.get("mongoKey") match {
+          case Some(key) => block(IdentifierRequest(request, key, Some(nino)))
+          case _ => block(IdentifierRequest(request, internalId, Some(nino)))
+        }
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + hc.sessionId.get.value}")))
