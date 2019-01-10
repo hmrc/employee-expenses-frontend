@@ -131,7 +131,13 @@ class AuthActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
+        redirectLocation(result) mustBe Some(
+          "http://localhost:9948/mdtp/uplift?" +
+          "origin=EE&" +
+          "confidenceLevel=200&" +
+          "completionURL=http://localhost:9334/employee-expenses&" +
+          "failureURL=http://localhost:9334/employee-expenses/unauthorised"
+        )
 
         application.stop()
       }

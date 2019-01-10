@@ -29,7 +29,7 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuthenticatedIdentifierAction @Inject()(
+class MongoKeyAction @Inject()(
                                                override val authConnector: AuthConnector,
                                                config: FrontendAppConfig,
                                                val parser: BodyParsers.Default
@@ -40,16 +40,11 @@ class AuthenticatedIdentifierAction @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.internalId and Retrievals.nino) {
-      x =>
-        val internalId = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
-        val nino = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
+    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual) {
 
-        val mongoId: Option[String] = request.session.data.get("mongoKey")
+      Future.successful(Redirect(routes.CheckYourAnswersController.onPageLoad())
+        .withSession(request.session + ("mongoKey"-> request.uri.split("/").last)))
 
-        val blah = if(mongoId.isDefined){mongoId.get} else internalId
-
-        block(IdentifierRequest(request, blah, Some(nino)))
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + hc.sessionId.get.value}")))
@@ -66,5 +61,3 @@ class AuthenticatedIdentifierAction @Inject()(
     }
   }
 }
-
-trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]

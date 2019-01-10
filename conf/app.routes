@@ -12,6 +12,8 @@ GET        /check-your-answers                                      controllers.
 
 GET        /unauthorised                                            controllers.UnauthorisedController.onPageLoad
 
+GET        /session-key/:key                                        controllers.RedirectMongoKeyController.onPageLoad(key: String)
+
 GET        /expenses-employer-paid                                  controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)
 POST       /expenses-employer-paid                                  controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = NormalMode)
 GET        /change-expenses-employer-paid                           controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = CheckMode)
