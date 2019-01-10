@@ -36,7 +36,7 @@ class IndexController @Inject()(
   def onPageLoad: Action[AnyContent] = (identify andThen getData) {
     implicit request => {
       if (request.userAnswers.isEmpty) {
-        sessionRepository.set(UserAnswers(request.internalId))
+        sessionRepository.set(UserAnswers(request.session.data("sessionId")))
       }
     }
     Ok(view())

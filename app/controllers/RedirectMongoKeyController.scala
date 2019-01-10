@@ -17,7 +17,7 @@
 package controllers
 
 import com.google.inject.{Inject, Singleton}
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, MongoKeyAction}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
@@ -25,14 +25,18 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class RedirectMongoKeyController @Inject()(
-                                            identify: MongoKeyAction,
-                                            getData: DataRetrievalAction,
-                                            requireData: DataRequiredAction,
+                                            identify: IdentifierAction,
                                             val controllerComponents: MessagesControllerComponents
                                           )(implicit ec: ExecutionContext) extends FrontendBaseController {
 
-  def onPageLoad(key: String): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify {
     implicit request =>
+      println(s"\n\n\n\n\nBEFORE: ${request.session.data}\n\n\n\n\n")
+      println(s"\n\n\n\n\nKEY: $key\n\n\n\n\n")
+      println(s"\n\n\n\n\nURI: ${request.uri}\n\n\n\n\n")
+
       Redirect(routes.CheckYourAnswersController.onPageLoad())
+        .withSession(request.session + ("mongoKey"-> key))
+
   }
 }
