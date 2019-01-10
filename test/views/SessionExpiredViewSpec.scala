@@ -21,9 +21,9 @@ import views.html.SessionExpiredView
 
 class SessionExpiredViewSpec extends ViewBehaviours {
 
-  "Session Expired view" must {
+  val application = applicationBuilder().build()
 
-    val application = applicationBuilder().build()
+  "Session Expired view" must {
 
     val view = application.injector.instanceOf[SessionExpiredView]
 
@@ -31,4 +31,6 @@ class SessionExpiredViewSpec extends ViewBehaviours {
 
     behave like normalPage(applyView, "session_expired", "guidance")
   }
+
+  application.stop()
 }

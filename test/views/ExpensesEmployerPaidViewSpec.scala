@@ -30,14 +30,16 @@ class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
 
   val form = new ExpensesEmployerPaidFormProvider()()
 
-  "ExpensesEmployerPaidView view" must {
+  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  "ExpensesEmployerPaidView view" must {
 
     val view = application.injector.instanceOf[ExpensesEmployerPaidView]
 
+
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest, messages)
+    view.apply(form, NormalMode)(fakeRequest, messages)
+
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
@@ -45,4 +47,6 @@ class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
 
     behave like intPage(form, applyView, messageKeyPrefix, routes.ExpensesEmployerPaidController.onSubmit(NormalMode).url)
   }
+
+  application.stop()
 }

@@ -21,9 +21,9 @@ import views.html.IndexView
 
 class IndexViewSpec extends ViewBehaviours {
 
-  "Index view" must {
+  val application = applicationBuilder().build()
 
-    val application = applicationBuilder().build()
+  "Index view" must {
 
     val view = application.injector.instanceOf[IndexView]
 
@@ -31,4 +31,6 @@ class IndexViewSpec extends ViewBehaviours {
 
     behave like normalPage(applyView, "index", "guidance")
   }
+
+  application.stop()
 }

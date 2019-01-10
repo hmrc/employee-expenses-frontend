@@ -21,9 +21,9 @@ import views.html.ClaimByAlternativeView
 
 class ClaimByAlternativeViewSpec extends ViewBehaviours {
 
-  "ClaimByAlternative view" must {
+  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  "ClaimByAlternative view" must {
 
     val view = application.injector.instanceOf[ClaimByAlternativeView]
 
@@ -32,6 +32,7 @@ class ClaimByAlternativeViewSpec extends ViewBehaviours {
     behave like normalPage(applyView, "claimByAlternative")
 
     behave like pageWithBackLink(applyView)
-
   }
+
+  application.stop()
 }

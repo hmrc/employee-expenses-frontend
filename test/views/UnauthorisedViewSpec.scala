@@ -21,9 +21,9 @@ import views.html.UnauthorisedView
 
 class UnauthorisedViewSpec extends ViewBehaviours {
 
-  "Unauthorised view" must {
+  val application = applicationBuilder().build()
 
-    val application = applicationBuilder().build()
+  "Unauthorised view" must {
 
     val view = application.injector.instanceOf[UnauthorisedView]
 
@@ -31,4 +31,6 @@ class UnauthorisedViewSpec extends ViewBehaviours {
 
     behave like normalPage(applyView, "unauthorised")
   }
+
+  application.stop()
 }
