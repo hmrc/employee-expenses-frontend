@@ -17,26 +17,30 @@
 package controllers
 
 import com.google.inject.{Inject, Singleton}
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import config.FrontendAppConfig
+import controllers.actions.{IdentifierAction, UnauthenticatedIdentifierAction}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
 class RedirectMongoKeyController @Inject()(
+                                            config: FrontendAppConfig,
                                             identify: IdentifierAction,
                                             val controllerComponents: MessagesControllerComponents
                                           )(implicit ec: ExecutionContext) extends FrontendBaseController {
 
   def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify {
     implicit request =>
-      println(s"\n\n\n\n\nBEFORE: ${request.session.data}\n\n\n\n\n")
-      println(s"\n\n\n\n\nKEY: $key\n\n\n\n\n")
-      println(s"\n\n\n\n\nURI: ${request.uri}\n\n\n\n\n")
-
-      Redirect(routes.CheckYourAnswersController.onPageLoad())
-        .withSession(request.session + ("mongoKey"-> key))
-
+      if (journeyId.isDefined) {
+        Redirect(routes.CheckYourAnswersController.onPageLoad())
+      } else {
+        Redirect(s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200&" +
+          s"completionURL=${config.authorisedCallback + key}&" +
+          s"failureURL=${config.unauthorisedCallback}"
+        )
+      }
   }
 }

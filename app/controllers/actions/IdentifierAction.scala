@@ -56,14 +56,6 @@ class AuthenticatedIdentifierAction @Inject()(
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + sessionId}")))
-      case _: InsufficientConfidenceLevel =>
-        Redirect(s"${config.ivUpliftUrl}?origin=EE&" +
-          s"confidenceLevel=200&" +
-          s"completionURL=${config.authorisedCallback + hc.sessionId.get.value}&" +
-          s"failureURL=${config.unauthorisedCallback}"
-        )
-      case _: UnsupportedAffinityGroup =>
-        Redirect(routes.UnauthorisedController.onPageLoad())
       case _ =>
         Redirect(routes.UnauthorisedController.onPageLoad())
     }

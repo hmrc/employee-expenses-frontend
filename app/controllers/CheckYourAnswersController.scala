@@ -36,7 +36,7 @@ class CheckYourAnswersController @Inject()(
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      println(s"\n\n\n\n\nAFTER: ${request.session.data}\n\n\n\n\n")
+      println(s"\n\n\n\n\nAFTER: ${request.session.data.get("newKey")}\n\n\n\n\n")
 
       val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
 
