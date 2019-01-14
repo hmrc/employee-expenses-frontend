@@ -18,9 +18,8 @@ package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
-import controllers.actions.{IdentifierAction, UnauthenticatedIdentifierAction}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import uk.gov.hmrc.http.HeaderCarrier
+import controllers.actions.IdentifierAction
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.ExecutionContext
@@ -34,13 +33,7 @@ class RedirectMongoKeyController @Inject()(
 
   def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify {
     implicit request =>
-      if (journeyId.isDefined) {
         Redirect(routes.CheckYourAnswersController.onPageLoad())
-      } else {
-        Redirect(s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200&" +
-          s"completionURL=${config.authorisedCallback + key}&" +
-          s"failureURL=${config.unauthorisedCallback}"
-        )
-      }
+          .withSession(request.session + ("mongoKey" -> key))
   }
 }

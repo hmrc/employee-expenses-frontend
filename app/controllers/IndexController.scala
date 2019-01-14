@@ -39,6 +39,6 @@ class IndexController @Inject()(
         sessionRepository.set(UserAnswers(request.session.data("sessionId")))
       }
     }
-    Ok(view())
+    Ok(view()).withSession(request.session + ("mongoKey" -> request.session.data("sessionId")))
   }
 }

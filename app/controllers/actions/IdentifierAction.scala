@@ -22,6 +22,7 @@ import controllers.routes
 import models.requests.IdentifierRequest
 import play.api.mvc.Results._
 import play.api.mvc._
+import uk.gov.hmrc.auth.core
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
@@ -40,9 +41,8 @@ class AuthenticatedIdentifierAction @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    val sessionId: String = hc.sessionId.get.value
-    println(s"\n\n\n\n\n IDENTIFY: $sessionId \n\n\n\n")
-    println(s"\n\n\n\n\n SESSION: ${request.session.data.get("mongoKey")} \n\n\n\n")
+    println(s"\n\n\n\n\n mongoKey: ${request.session.data.get("mongoKey")} \n\n\n\n")
+    println(s"\n\n\n\n\n session: ${request.session.data.get("sessionId")} \n\n\n\n")
 
     authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.internalId and Retrievals.nino) {
       x =>
@@ -55,7 +55,13 @@ class AuthenticatedIdentifierAction @Inject()(
         }
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
-        Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + sessionId}")))
+        Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + request.session.data.getOrElse("mongoKey", Redirect(routes.SessionExpiredController.onPageLoad()))}")))
+      case _: InsufficientConfidenceLevel =>
+        println(s"\n\n\n\n\n request URI: ${request.uri} \n\n\n\n\n")
+        Redirect(s"${config.ivUpliftUrl}?origin=EE&" +
+          s"confidenceLevel=200&" +
+          s"completionURL=${config.authorisedCallback + request.uri.split("key=").last}&" +
+          s"failureURL=${config.unauthorisedCallback}")
       case _ =>
         Redirect(routes.UnauthorisedController.onPageLoad())
     }

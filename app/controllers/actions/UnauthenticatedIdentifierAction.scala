@@ -45,7 +45,7 @@ class UnauthenticatedIdentifierAction @Inject()(
 
     authorised().retrieve(Retrievals.internalId and Retrievals.nino) {
       case Some(internalId) ~ Some(nino) =>
-        block(IdentifierRequest(request, internalId, Some(nino)))
+        block(IdentifierRequest(request, request.session.data("sessionId"), Some(nino)))
     } recoverWith {
       case _ => hc.sessionId match {
         case Some(id) =>

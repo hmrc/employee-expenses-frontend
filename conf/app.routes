@@ -33,3 +33,8 @@ GET        /claiming-for-more-than-one-job                          controllers.
 POST       /claiming-for-more-than-one-job                          controllers.MultipleEmploymentsController.onSubmit(mode: Mode = NormalMode)
 GET        /change-claiming-for-more-than-one-job                   controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-claiming-for-more-than-one-job                   controllers.MultipleEmploymentsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /myNewPage                        controllers.MyNewPageController.onPageLoad(mode: Mode = NormalMode)
+POST       /myNewPage                        controllers.MyNewPageController.onSubmit(mode: Mode = NormalMode)
+GET        /changeMyNewPage                  controllers.MyNewPageController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeMyNewPage                  controllers.MyNewPageController.onSubmit(mode: Mode = CheckMode)

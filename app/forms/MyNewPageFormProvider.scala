@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import org.scalacheck.Arbitrary
-import pages._
+import javax.inject.Inject
 
-trait PageGenerators {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  implicit lazy val arbitraryMyNewPagePage: Arbitrary[MyNewPagePage.type] =
-    Arbitrary(MyNewPagePage)
+class MyNewPageFormProvider @Inject() extends Mappings {
 
-  implicit lazy val arbitraryEmployerContributionPage: Arbitrary[EmployerContributionPage.type] =
-    Arbitrary(EmployerContributionPage)
-
-  implicit lazy val arbitraryMultipleEmploymentsPage: Arbitrary[MultipleEmploymentsPage.type] =
-    Arbitrary(MultipleEmploymentsPage)
-
-  implicit lazy val arbitraryExpensesEmployerPaidPage: Arbitrary[ExpensesEmployerPaidPage.type] =
-    Arbitrary(ExpensesEmployerPaidPage)
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("myNewPage.error.required")
+    )
 }
