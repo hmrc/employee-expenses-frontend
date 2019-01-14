@@ -25,7 +25,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
 class UnauthenticatedIdentifierAction @Inject()(
@@ -45,9 +45,7 @@ class UnauthenticatedIdentifierAction @Inject()(
           .orElse(hc.sessionId.map(_.value))
           .getOrElse(throw new Exception())
 
-        val f = block(IdentifierRequest(request, mongoKey, None))
-
-        f.map {
+        block(IdentifierRequest(request, mongoKey)).map {
           result =>
             if (existingMongoKey.isEmpty) {
               result.addingToSession("mongoKey" -> mongoKey)(request)

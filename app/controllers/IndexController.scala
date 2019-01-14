@@ -35,8 +35,8 @@ class IndexController @Inject()(
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData) {
     implicit request => {
-      if (request.userAnswers.isEmpty && request.session.data.get("mongoKey").isDefined) {
-        sessionRepository.set(UserAnswers(request.session.data("sessionId")))
+      if (request.userAnswers.isEmpty) {
+        sessionRepository.set(UserAnswers(request.mongoKey))
       }
     }
     Ok(view())

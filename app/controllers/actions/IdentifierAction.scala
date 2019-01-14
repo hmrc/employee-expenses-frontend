@@ -22,7 +22,6 @@ import controllers.routes
 import models.requests.IdentifierRequest
 import play.api.mvc.Results._
 import play.api.mvc._
-import uk.gov.hmrc.auth.core
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
@@ -41,14 +40,13 @@ class AuthenticatedIdentifierAction @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.internalId and Retrievals.nino) {
+    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.nino) {
       x =>
-        val internalId = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
-        val nino = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
+        val nino = x.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
 
         request.session.data.get("mongoKey") match {
           case Some(key) => block(IdentifierRequest(request, key, Some(nino)))
-          case _ => block(IdentifierRequest(request, internalId, Some(nino)))
+          case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
         }
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
