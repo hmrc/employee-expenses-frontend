@@ -41,9 +41,6 @@ class AuthenticatedIdentifierAction @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    println(s"\n\n\n\n\n mongoKey: ${request.session.data.get("mongoKey")} \n\n\n\n")
-    println(s"\n\n\n\n\n session: ${request.session.data.get("sessionId")} \n\n\n\n")
-
     authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.internalId and Retrievals.nino) {
       x =>
         val internalId = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
@@ -55,9 +52,11 @@ class AuthenticatedIdentifierAction @Inject()(
         }
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
-        Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + request.session.data.getOrElse("mongoKey", Redirect(routes.SessionExpiredController.onPageLoad()))}")))
+        Redirect(config.loginUrl, Map("continue" ->
+          Seq(s"${config.loginContinueUrl +
+            request.session.data.getOrElse("mongoKey", Redirect(routes.SessionExpiredController.onPageLoad()))}")
+        ))
       case _: InsufficientConfidenceLevel =>
-        println(s"\n\n\n\n\n request URI: ${request.uri} \n\n\n\n\n")
         Redirect(s"${config.ivUpliftUrl}?origin=EE&" +
           s"confidenceLevel=200&" +
           s"completionURL=${config.authorisedCallback + request.uri.split("key=").last}&" +

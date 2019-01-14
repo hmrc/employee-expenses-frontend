@@ -36,8 +36,6 @@ class CheckYourAnswersController @Inject()(
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      println(s"\n\n\n\n\nAFTER: ${request.session.data.get("mongoKey")}\n\n\n\n\n")
-
       val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
 
       val sections = Seq(AnswerSection(None, Seq()))

@@ -18,14 +18,10 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import controllers.routes
 import javax.inject.Singleton
 import models.requests.IdentifierRequest
-import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals
-import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
@@ -43,16 +39,21 @@ class UnauthenticatedIdentifierAction @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    authorised().retrieve(Retrievals.internalId and Retrievals.nino) {
-      case Some(internalId) ~ Some(nino) =>
-        block(IdentifierRequest(request, request.session.data("sessionId"), Some(nino)))
-    } recoverWith {
-      case _ => hc.sessionId match {
-        case Some(id) =>
-          block(IdentifierRequest(request, id.value))
-        case _ =>
-          Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
-      }
-    }
+        val existingMongoKey = request.session.get("mongoKey")
+
+        val mongoKey = existingMongoKey
+          .orElse(hc.sessionId.map(_.value))
+          .getOrElse(throw new Exception())
+
+        val f = block(IdentifierRequest(request, mongoKey, None))
+
+        f.map {
+          result =>
+            if (existingMongoKey.isEmpty) {
+              result.addingToSession("mongoKey" -> mongoKey)(request)
+            } else {
+              result
+            }
+        }
   }
 }
