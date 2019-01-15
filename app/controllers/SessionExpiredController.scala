@@ -28,7 +28,6 @@ class SessionExpiredController @Inject()(
                                         ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    println(s"\n\n\n\n\nSESSION EXPIRED: ${request.session.data} \n\n\n\n\n")
     Ok(view())
   }
 }

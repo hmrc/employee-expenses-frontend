@@ -44,7 +44,7 @@ class AuthenticatedIdentifierAction @Inject()(
       x =>
         val nino = x.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
 
-        request.session.data.get("mongoKey") match {
+        request.session.get("mongoKey") match {
           case Some(key) => block(IdentifierRequest(request, key, Some(nino)))
           case _ =>
             if (request.uri.contains("/employee-expenses/session-key")) {
@@ -55,21 +55,34 @@ class AuthenticatedIdentifierAction @Inject()(
         }
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
-        Redirect(config.loginUrl, Map("continue" ->
-          Seq(s"${
-            config.loginContinueUrl +
-              request.session.data.getOrElse("mongoKey", Redirect(routes.SessionExpiredController.onPageLoad()))
-          }")
-        ))
+        unauthorised(request.session.get("mongoKey"))
       case _: InsufficientConfidenceLevel =>
-        Redirect(s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200" +
-          s"&completionURL=${config.authorisedCallback +
-            request.getQueryString("key").getOrElse(Redirect(routes.SessionExpiredController.onPageLoad()))}" +
-          s"&failureURL=${config.unauthorisedCallback}")
+        insufficientConfidence(request.getQueryString("key"))
       case _ =>
         Redirect(routes.UnauthorisedController.onPageLoad())
     }
   }
+
+  def unauthorised(mongoKey: Option[String]): Result = {
+    mongoKey match {
+      case Some(key) =>
+        Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + key}")))
+      case _ =>
+        Redirect(routes.SessionExpiredController.onPageLoad())
+    }
+  }
+
+  def insufficientConfidence(queryString: Option[String]): Result = {
+    queryString match {
+      case Some(key) =>
+        Redirect(s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200" +
+          s"&completionURL=${config.authorisedCallback + key}" +
+          s"&failureURL=${config.unauthorisedCallback}")
+      case _ =>
+        Redirect(routes.SessionExpiredController.onPageLoad())
+    }
+  }
+
 }
 
 trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]

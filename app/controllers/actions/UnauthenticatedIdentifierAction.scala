@@ -41,7 +41,7 @@ class UnauthenticatedIdentifierAction @Inject()(
 
     val mongoKey: String = existingMongoKey
       .orElse(hc.sessionId.map(_.value))
-      .getOrElse(throw new Exception())
+      .getOrElse(throw new Exception("[UnauthenticatedIdentifierAction] No mongoKey created"))
 
     block(IdentifierRequest(request, mongoKey)).map {
       result =>

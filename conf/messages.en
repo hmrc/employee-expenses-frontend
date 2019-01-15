@@ -71,8 +71,3 @@ multipleEmployments.title = Are you claiming for more than one job?
 multipleEmployments.heading = Are you claiming for more than one job?
 multipleEmployments.checkYourAnswersLabel = Are you claiming for more than one job?
 multipleEmployments.error.required = Select yes if you are claiming for more than one job
-
-myNewPage.title = myNewPage
-myNewPage.heading = myNewPage
-myNewPage.checkYourAnswersLabel = myNewPage
-myNewPage.error.required = Select yes if myNewPage
