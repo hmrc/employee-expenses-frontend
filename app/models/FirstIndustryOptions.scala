@@ -16,20 +16,21 @@
 
 package models
 
+import play.api.libs.json._
 import viewmodels.RadioOption
 
-sealed trait FirstIndustryOptionsPage
+sealed trait FirstIndustryOptions
 
-object FirstIndustryOptionsPage extends Enumerable.Implicits {
+object FirstIndustryOptions extends Enumerable.Implicits {
 
-  case object Healthcare extends WithName("healthcare") with FirstIndustryOptionsPage
-  case object FoodAndCatering extends WithName("foodAndCatering") with FirstIndustryOptionsPage
-  case object Retail extends WithName("retail") with FirstIndustryOptionsPage
-  case object Engineering extends WithName("engineering") with FirstIndustryOptionsPage
-  case object TransportAndDistribution extends WithName("transportAndDistribution") with FirstIndustryOptionsPage
-  case object NoneOfTheAbove extends WithName("noneOfTheAbove") with FirstIndustryOptionsPage
+  case object Healthcare extends WithName("healthcare") with FirstIndustryOptions
+  case object FoodAndCatering extends WithName("foodAndCatering") with FirstIndustryOptions
+  case object Retail extends WithName("retail") with FirstIndustryOptions
+  case object Engineering extends WithName("engineering") with FirstIndustryOptions
+  case object TransportAndDistribution extends WithName("transportAndDistribution") with FirstIndustryOptions
+  case object NoneOfTheAbove extends WithName("noneOfTheAbove") with FirstIndustryOptions
 
-  val values:Set[FirstIndustryOptionsPage] = Set(
+  val values:Set[FirstIndustryOptions] = Set(
     Healthcare,
     FoodAndCatering,
     Retail,
@@ -40,9 +41,9 @@ object FirstIndustryOptionsPage extends Enumerable.Implicits {
 
   val options:Set[RadioOption] = values.map{
     value =>
-      RadioOption("firstIndustryOptionsPage", value.toString)
+      RadioOption("firstIndustryOptions", value.toString)
   }
 
-  implicit val enumerable:Enumerable[FirstIndustryOptionsPage] =
+  implicit val enumerable:Enumerable[FirstIndustryOptions] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 }

@@ -22,32 +22,32 @@ import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json.{JsError, JsString, Json}
 import org.scalacheck.Arbitrary.arbitrary
 
-class FirstIndustryOptionsPageSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues {
+class FirstIndustryOptionsSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues {
 
   "FirstIndustryOptionsPage" must {
 
     "Deserialise valid values" in {
 
-      val gen = Gen.oneOf(FirstIndustryOptionsPage.values.toSeq)
+      val gen = Gen.oneOf(FirstIndustryOptions.values.toSeq)
       forAll(gen) {
         firstIndustryOptionsPage =>
-          JsString(firstIndustryOptionsPage.toString).validate[FirstIndustryOptionsPage].asOpt.value mustEqual firstIndustryOptionsPage
+          JsString(firstIndustryOptionsPage.toString).validate[FirstIndustryOptions].asOpt.value mustEqual firstIndustryOptionsPage
       }
     }
 
     "Fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!FirstIndustryOptionsPage.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] suchThat (!FirstIndustryOptions.values.map(_.toString).contains(_))
       forAll(gen) {
         invalidValue =>
-          JsString(invalidValue).validate[FirstIndustryOptionsPage] mustEqual JsError("error.invalid")
+          JsString(invalidValue).validate[FirstIndustryOptions] mustEqual JsError("error.invalid")
       }
 
     }
 
     "Serialise" in {
 
-      val gen = Gen.oneOf(FirstIndustryOptionsPage.values.toSeq)
+      val gen = Gen.oneOf(FirstIndustryOptions.values.toSeq)
       forAll(gen) {
         firstIndustryOptionsPage =>
           Json.toJson(firstIndustryOptionsPage) mustEqual JsString(firstIndustryOptionsPage.toString)

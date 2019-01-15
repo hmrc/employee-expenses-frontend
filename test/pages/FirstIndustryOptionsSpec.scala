@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import forms.mappings.Mappings
-import models.FirstIndustryOptionsPage
-import play.api.data.Form
+import models.FirstIndustryOptions
+import pages.behaviours.PageBehaviours
 
-class FirstIndustryOptionsPageFormProvider extends Mappings {
+class FirstIndustryOptionsSpec extends PageBehaviours {
 
-  def apply():Form[FirstIndustryOptionsPage] = Form(
-    "value" -> enumerable[FirstIndustryOptionsPage](requiredKey = "firstIndustryOptionsPage.error.required" )
-  )
+  "FirstIndustryOptions" must {
+
+    beRetrievable[FirstIndustryOptions](FirstIndustryOptionsPage)
+    beSettable[FirstIndustryOptions](FirstIndustryOptionsPage)
+    beRemovable[FirstIndustryOptions](FirstIndustryOptionsPage)
+  }
+
 }

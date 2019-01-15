@@ -17,22 +17,22 @@
 package forms
 
 import forms.behaviours.OptionFieldBehaviours
-import models.FirstIndustryOptionsPage
+import models.FirstIndustryOptions
 import play.api.data.FormError
 
-class FirstIndustryOptionsPageFormProviderSpec extends OptionFieldBehaviours {
+class FirstIndustryOptionsFormProviderSpec extends OptionFieldBehaviours {
 
-  val form = new FirstIndustryOptionsPageFormProvider()()
+  val form = new FirstIndustryOptionsFormProvider()()
 
   ".value" must {
 
     val fieldName = "value"
     val requiredKey = "firstIndustryOptionsPage.error.required"
 
-    behave like optionsField[FirstIndustryOptionsPage](
+    behave like optionsField[FirstIndustryOptions](
       form = form,
       fieldName = fieldName,
-      validValues = FirstIndustryOptionsPage.values,
+      validValues = FirstIndustryOptions.values,
       invalidError = FormError(fieldName,"error.invalid")
     )
 
