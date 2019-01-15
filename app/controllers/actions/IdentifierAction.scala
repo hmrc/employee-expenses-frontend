@@ -62,9 +62,10 @@ class AuthenticatedIdentifierAction @Inject()(
           }")
         ))
       case _: InsufficientConfidenceLevel =>
-        Redirect(s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200&" +
-          s"completionURL=${config.authorisedCallback + request.uri.split("key=").last}&" +
-          s"failureURL=${config.unauthorisedCallback}")
+        Redirect(s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200" +
+          s"&completionURL=${config.authorisedCallback +
+            request.getQueryString("key").getOrElse(Redirect(routes.SessionExpiredController.onPageLoad()))}" +
+          s"&failureURL=${config.unauthorisedCallback}")
       case _ =>
         Redirect(routes.UnauthorisedController.onPageLoad())
     }
