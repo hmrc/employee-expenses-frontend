@@ -19,9 +19,9 @@ package pages
 import models.FirstIndustryOptions
 import pages.behaviours.PageBehaviours
 
-class FirstIndustryOptionsSpec extends PageBehaviours {
+class FirstIndustryOptionsPageSpec extends PageBehaviours {
 
-  "FirstIndustryOptions" must {
+  "FirstIndustryOptionsPage" must {
 
     beRetrievable[FirstIndustryOptions](FirstIndustryOptionsPage)
     beSettable[FirstIndustryOptions](FirstIndustryOptionsPage)

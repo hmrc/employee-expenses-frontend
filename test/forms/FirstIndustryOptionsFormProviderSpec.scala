@@ -27,7 +27,7 @@ class FirstIndustryOptionsFormProviderSpec extends OptionFieldBehaviours {
   ".value" must {
 
     val fieldName = "value"
-    val requiredKey = "firstIndustryOptionsPage.error.required"
+    val requiredKey = "firstIndustryOptions.error.required"
 
     behave like optionsField[FirstIndustryOptions](
       form = form,
