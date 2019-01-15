@@ -46,17 +46,23 @@ class AuthenticatedIdentifierAction @Inject()(
 
         request.session.data.get("mongoKey") match {
           case Some(key) => block(IdentifierRequest(request, key, Some(nino)))
-          case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+          case _ =>
+            if (request.uri.contains("/employee-expenses/session-key")) {
+              block(IdentifierRequest(request, ""))
+            } else {
+              Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+            }
         }
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" ->
-          Seq(s"${config.loginContinueUrl +
-            request.session.data.getOrElse("mongoKey", Redirect(routes.SessionExpiredController.onPageLoad()))}")
+          Seq(s"${
+            config.loginContinueUrl +
+              request.session.data.getOrElse("mongoKey", Redirect(routes.SessionExpiredController.onPageLoad()))
+          }")
         ))
       case _: InsufficientConfidenceLevel =>
-        Redirect(s"${config.ivUpliftUrl}?origin=EE&" +
-          s"confidenceLevel=200&" +
+        Redirect(s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200&" +
           s"completionURL=${config.authorisedCallback + request.uri.split("key=").last}&" +
           s"failureURL=${config.unauthorisedCallback}")
       case _ =>

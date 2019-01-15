@@ -39,6 +39,6 @@ class IndexController @Inject()(
         sessionRepository.set(UserAnswers(request.mongoKey))
       }
     }
-    Ok(view())
+      Ok(view())
   }
 }

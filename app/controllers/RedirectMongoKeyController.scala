@@ -33,7 +33,7 @@ class RedirectMongoKeyController @Inject()(
 
   def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify {
     implicit request =>
-        Redirect(routes.CheckYourAnswersController.onPageLoad())
-          .withSession(request.session + ("mongoKey" -> key))
+      Redirect(routes.CheckYourAnswersController.onPageLoad())
+        .addingToSession("mongoKey" -> key)(request)
   }
 }
