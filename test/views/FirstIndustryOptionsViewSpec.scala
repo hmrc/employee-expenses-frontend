@@ -36,7 +36,7 @@ class FirstIndustryOptionsViewSpec extends ViewBehaviours {
 
   "FirstIndustryOptionsView" must {
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like normalPage(applyView(form), messageKeyPrefix, None)
     behave like pageWithBackLink(applyView(form))
   }
 
