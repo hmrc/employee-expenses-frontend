@@ -36,7 +36,6 @@ class CheckYourAnswersController @Inject()(
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-
       val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
 
       val sections = Seq(AnswerSection(None, Seq()))

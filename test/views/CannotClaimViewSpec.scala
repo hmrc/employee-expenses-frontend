@@ -21,9 +21,9 @@ import views.html.CannotClaimView
 
 class CannotClaimViewSpec extends ViewBehaviours {
 
-  "CannotClaim view" must {
+  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  "CannotClaim view" must {
 
     val view = application.injector.instanceOf[CannotClaimView]
 
@@ -38,9 +38,9 @@ class CannotClaimViewSpec extends ViewBehaviours {
       assertContainsMessages(doc, "cannotClaim.para1", "cannotClaim.link")
       doc.getElementById("link").attr("href") mustBe "https://www.gov.uk/tax-relief-for-employees"
 
-      application.stop()
-
     }
 
   }
+
+  application.stop()
 }

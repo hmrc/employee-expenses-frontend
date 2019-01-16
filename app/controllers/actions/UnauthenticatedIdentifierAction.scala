@@ -18,10 +18,8 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import controllers.routes
 import javax.inject.Singleton
 import models.requests.IdentifierRequest
-import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
@@ -30,21 +28,28 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class UnauthenticatedIdentifierAction @Inject()(
-                                               config: FrontendAppConfig,
-                                               val parser: BodyParsers.Default
-                                             )
-                                             (implicit val executionContext: ExecutionContext) extends IdentifierAction {
+                                                 config: FrontendAppConfig,
+                                                 val parser: BodyParsers.Default
+                                               )
+                                               (implicit val executionContext: ExecutionContext) extends IdentifierAction {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    hc.sessionId match {
-      case Some(id) =>
-        block(IdentifierRequest(request, id.value))
-      case None =>
-        Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
-    }
+    val existingMongoKey = request.session.get("mongoKey")
 
+    val mongoKey: String = existingMongoKey
+      .orElse(hc.sessionId.map(_.value))
+      .getOrElse(throw new Exception("[UnauthenticatedIdentifierAction] No mongoKey created"))
+
+    block(IdentifierRequest(request, mongoKey)).map {
+      result =>
+        if (existingMongoKey.isEmpty) {
+          result.addingToSession("mongoKey" -> mongoKey)(request)
+        } else {
+          result
+        }
+    }
   }
 }
