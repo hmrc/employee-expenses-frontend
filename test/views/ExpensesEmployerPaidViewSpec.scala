@@ -41,7 +41,7 @@ class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
     view.apply(form, NormalMode)(fakeRequest, messages)
 
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave like normalPage(applyView(form), messageKeyPrefix, None)
 
     behave like pageWithBackLink(applyView(form))
 

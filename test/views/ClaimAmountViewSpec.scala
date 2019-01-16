@@ -16,6 +16,10 @@
 
 package views
 
+import models.UserAnswers
+import pages.ClaimAmount
+import play.api.libs.json.Json
+import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.ClaimAmountView
 
@@ -25,13 +29,38 @@ class ClaimAmountViewSpec extends ViewBehaviours {
 
   "ClaimAmount view" must {
 
+    val claimAmount = 180
+
+    def userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> 180))
+
+    val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
     val view = application.injector.instanceOf[ClaimAmountView]
 
-    val applyView = view.apply()(fakeRequest, messages)
+    val applyView = view.apply(claimAmount, Some("20"), Some("30"))(fakeRequest, messages)
 
-    behave like normalPage(applyView, "claimAmount")
+    behave like normalPage(applyView, "claimAmount", None, claimAmount)
 
     behave like pageWithBackLink(applyView)
+
+    "display relevant data" must {
+      "claim amount from userAnswers" in {
+        val doc = asDocument(applyView)
+        assertContainsMessages(doc, "claimAmount.description")
+      }
+
+      "band 1 shows the correct amount of 20 when passed 20" in {
+        val doc = asDocument(applyView)
+        doc.getElementById("band-1").text mustBe "Band 1 : £20"
+      }
+
+      "band 2 shows the correct amount of 30 when passed 30" in {
+        val doc = asDocument(applyView)
+        doc.getElementById("band-2").text mustBe "Band 2 : £30"
+      }
+
+
+    }
   }
 
   application.stop()

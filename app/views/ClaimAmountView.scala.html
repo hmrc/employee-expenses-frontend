@@ -18,13 +18,29 @@
     main_template: MainTemplate
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(
+    claimAmount: Int,
+    band1: Option[String] = None,
+    band2: Option[String] = None
+)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("claimAmount.title")
+    title = messages("claimAmount.title", claimAmount)
     ) {
 
     @components.back_link()
 
-    @components.heading("claimAmount.heading")
+    @components.heading(messages("claimAmount.heading", claimAmount))
+
+    <p>@messages("claimAmount.description")</p>
+
+    @if(band1.isDefined){
+        <p id="band-1">Band 1 : £@band1</p>
+    }
+
+    @if(band2.isDefined){
+        <p id="band-2">Band 2 : £@band2</p>
+    }
+
+    @components.submit_button()
 }

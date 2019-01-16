@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package views
+package pages
 
-import views.behaviours.ViewBehaviours
-import views.html.IndexView
+import play.api.libs.json.JsPath
 
-class IndexViewSpec extends ViewBehaviours {
+case object ClaimAmount extends QuestionPage[Int] {
 
-  val application = applicationBuilder().build()
+  override def path: JsPath = JsPath \ toString
 
-  "Index view" must {
-
-    val view = application.injector.instanceOf[IndexView]
-
-    val applyView = view.apply()(fakeRequest, messages)
-
-    behave like normalPage(applyView, "index", Some("guidance"))
-  }
-
-  application.stop()
+  override def toString: String = "claimAmount"
 }

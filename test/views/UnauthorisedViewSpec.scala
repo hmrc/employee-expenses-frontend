@@ -29,7 +29,7 @@ class UnauthorisedViewSpec extends ViewBehaviours {
 
     val applyView = view.apply()(fakeRequest, messages)
 
-    behave like normalPage(applyView, "unauthorised")
+    behave like normalPage(applyView, "unauthorised", None)
   }
 
   application.stop()

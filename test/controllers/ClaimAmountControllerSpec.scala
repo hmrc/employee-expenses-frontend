@@ -17,11 +17,14 @@
 package controllers
 
 import base.SpecBase
+import models.NormalMode
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.ClaimAmountView
 
 class ClaimAmountControllerSpec extends SpecBase {
+
+  val claimAmount = 180
 
   "ClaimAmount Controller" must {
 
@@ -29,7 +32,7 @@ class ClaimAmountControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
+      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
 
       val result = route(application, request).value
 
@@ -38,7 +41,7 @@ class ClaimAmountControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view()(fakeRequest, messages).toString
+        view(claimAmount)(fakeRequest, messages).toString
 
       application.stop()
     }

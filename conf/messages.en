@@ -72,5 +72,7 @@ multipleEmployments.heading = Are you claiming for more than one job?
 multipleEmployments.checkYourAnswersLabel = Are you claiming for more than one job?
 multipleEmployments.error.required = Select yes if you are claiming for more than one job
 
-claimAmount.title = claimAmount
-claimAmount.heading = claimAmount
+claimAmount.title = You can claim tax relief on £{0}
+claimAmount.heading = You can claim tax relief on £{0}
+claimAmount.description = The amount of tax relief you can claim depends on the rate of tax you pay.
+claimAmount.checkYourAnswersLabel = employerContributionClaimValue
