@@ -58,8 +58,6 @@ class ClaimAmountViewSpec extends ViewBehaviours {
         val doc = asDocument(applyView)
         doc.getElementById("band-2").text mustBe "Band 2 : £30"
       }
-
-
     }
   }
 

@@ -17,20 +17,30 @@
 package controllers
 
 import base.SpecBase
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import pages.{ClaimAmount, ExpensesEmployerPaidPage}
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.twirl.api.Html
 import views.html.ClaimAmountView
 
 class ClaimAmountControllerSpec extends SpecBase {
 
-  val claimAmount = 180
+
+  def asDocument(html: Html): Document = Jsoup.parse(html.toString())
+
 
   "ClaimAmount Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK and the correct view for a GET when data is found" in {
+      val claimAmount = 180
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> 180))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
 
@@ -41,9 +51,66 @@ class ClaimAmountControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(claimAmount)(fakeRequest, messages).toString
+        view(claimAmount, Some("36.00"), Some("72.00"))(fakeRequest, messages).toString
 
       application.stop()
     }
+
+    "redirect to Session Expired for a GET if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ClaimAmountView]
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "display correct figures of 20 and 40 when claimAmount = 100 when no employer contribution" in {
+      val claimAmount = 100
+
+      val userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> claimAmount))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ClaimAmountView]
+
+      contentAsString(result) mustEqual
+        view(claimAmount, Some("20.00"), Some("40.00"))(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
+    "display correct figures of 19 and 38 when claimAmount = 100 when employer contribution is 5" in {
+      val claimAmount = 100
+
+      val employerContribution = 5
+
+      val userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> claimAmount, ExpensesEmployerPaidPage.toString -> employerContribution))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ClaimAmountView]
+
+      contentAsString(result) mustEqual
+        view(claimAmount, Some("19.00"), Some("38.00"))(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
   }
 }
