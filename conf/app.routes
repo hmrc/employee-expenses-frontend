@@ -31,3 +31,5 @@ GET        /claiming-for-more-than-one-job                          controllers.
 POST       /claiming-for-more-than-one-job                          controllers.MultipleEmploymentsController.onSubmit(mode: Mode = NormalMode)
 GET        /change-claiming-for-more-than-one-job                   controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-claiming-for-more-than-one-job                   controllers.MultipleEmploymentsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /claimAmount                       controllers.ClaimAmountController.onPageLoad()
