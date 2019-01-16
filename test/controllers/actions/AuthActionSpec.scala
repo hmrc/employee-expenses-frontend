@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -223,6 +223,56 @@ class AuthActionSpec extends SpecBase {
         application.stop()
       }
     }
+
+    "the user has logged in" must {
+
+      "redirect to session expired when there is no mongoKey and not on RedirectMongoKey" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+
+        val authAction = new AuthenticatedIdentifierAction(new FakePassingAuthConnector(Future.successful(Some("nino"))), frontendAppConfig, bodyParsers)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(fakeRequest)
+
+        status(result) mustBe SEE_OTHER
+
+        redirectLocation(result).get mustBe routes.SessionExpiredController.onPageLoad().url
+
+        application.stop()
+      }
+
+      "return 200 when there is no mongoKey and on RedirectMongoKey" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+
+        val authAction = new AuthenticatedIdentifierAction(new FakePassingAuthConnector(Future.successful(Some("nino"))), frontendAppConfig, bodyParsers)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest("", "/employee-expenses/session-key"))
+
+        status(result) mustBe OK
+
+        application.stop()
+      }
+
+      "return 200 when there is a mongoKey" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+
+        val authAction = new AuthenticatedIdentifierAction(new FakePassingAuthConnector(Future.successful(Some("nino"))), frontendAppConfig, bodyParsers)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(fakeRequest.withSession("mongoKey" -> "key"))
+
+        status(result) mustBe OK
+
+        application.stop()
+      }
+    }
   }
 }
 
@@ -231,4 +281,12 @@ class FakeFailingAuthConnector @Inject()(exceptionToReturn: Throwable) extends A
 
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
     Future.failed(exceptionToReturn)
+}
+
+
+class FakePassingAuthConnector @Inject()(stubbedRetrievalResult: Future[_]) extends AuthConnector {
+  val serviceUrl: String = ""
+
+  override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
+    stubbedRetrievalResult.map(_.asInstanceOf[A])
 }
