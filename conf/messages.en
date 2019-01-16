@@ -81,4 +81,4 @@ firstIndustryOptions.engineering = Engineering
 firstIndustryOptions.transportAndDistribution = Transport and distribution
 firstIndustryOptions.noneOfTheAbove = None of the above
 firstIndustryOptions.checkYourAnswersLabel = What industry do you work in?
-firstIndustryOptions.error.required = Select firstIndustryOptionsPage
+firstIndustryOptions.error.required = Select the industry you work in
