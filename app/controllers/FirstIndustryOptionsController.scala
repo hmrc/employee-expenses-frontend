@@ -17,11 +17,11 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
 import forms.FirstIndustryOptionsFormProvider
 import models.{Enumerable, Mode, UserAnswers}
 import navigation.Navigator
-import pages.{ExpensesEmployerPaidPage, FirstIndustryOptionsPage}
+import pages.FirstIndustryOptionsPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class FirstIndustryOptionsController @Inject()(
                                                 override val messagesApi: MessagesApi,
-                                                identify: IdentifierAction,
+                                                identify: UnauthenticatedIdentifierAction,
                                                 getData: DataRetrievalAction,
                                                 requireData: DataRequiredAction,
                                                 formProvider: FirstIndustryOptionsFormProvider,
@@ -45,11 +45,8 @@ class FirstIndustryOptionsController @Inject()(
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-
     implicit request =>
-
       val preparedForm = request.userAnswers.get(FirstIndustryOptionsPage) match {
-
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -57,24 +54,16 @@ class FirstIndustryOptionsController @Inject()(
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-
     implicit request =>
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, mode))),
-
         value => {
           for {
             updatedAnswers: UserAnswers <- Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value))
             _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(FirstIndustryOptionsPage, mode)(updatedAnswers))
-
-
         }
-
       )
-
   }
-
 }
