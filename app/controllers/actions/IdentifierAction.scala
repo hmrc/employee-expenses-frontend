@@ -40,26 +40,49 @@ class AuthenticatedIdentifierAction @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.internalId and Retrievals.nino) {
+    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.nino) {
       x =>
-        val internalId = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
-        val nino = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
+        val nino = x.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
 
-        block(IdentifierRequest(request, internalId, Some(nino)))
+        request.session.get("mongoKey") match {
+          case Some(key) => block(IdentifierRequest(request, key, Some(nino)))
+          case _ =>
+            if (request.uri.contains("/employee-expenses/session-key")) {
+              block(IdentifierRequest(request, ""))
+            } else {
+              Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+            }
+        }
     } recover {
-      case _: UnauthorizedException =>
-        Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
-      case _: NoActiveSession =>
-        Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
-      case _: UnsupportedAffinityGroup =>
-        Redirect(routes.UnauthorisedController.onPageLoad())
+      case _: UnauthorizedException | _: NoActiveSession =>
+        unauthorised(request.session.get("mongoKey"))
       case _: InsufficientConfidenceLevel =>
-        Redirect(routes.UnauthorisedController.onPageLoad())
+        insufficientConfidence(request.getQueryString("key"))
       case _ =>
         Redirect(routes.UnauthorisedController.onPageLoad())
-
     }
   }
+
+  def unauthorised(mongoKey: Option[String]): Result = {
+    mongoKey match {
+      case Some(key) =>
+        Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + key}")))
+      case _ =>
+        Redirect(routes.SessionExpiredController.onPageLoad())
+    }
+  }
+
+  def insufficientConfidence(queryString: Option[String]): Result = {
+    queryString match {
+      case Some(key) =>
+        Redirect(s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200" +
+          s"&completionURL=${config.authorisedCallback + key}" +
+          s"&failureURL=${config.unauthorisedCallback}")
+      case _ =>
+        Redirect(routes.SessionExpiredController.onPageLoad())
+    }
+  }
+
 }
 
 trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]

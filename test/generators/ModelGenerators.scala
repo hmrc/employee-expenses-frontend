@@ -26,4 +26,9 @@ trait ModelGenerators {
     Arbitrary {
       Gen.oneOf(EmployerContribution.values.toSeq)
     }
+
+  implicit lazy val arbitraryFirstIndustryOptions: Arbitrary[FirstIndustryOptions] =
+    Arbitrary {
+      Gen.oneOf(FirstIndustryOptions.values.toSeq)
+    }
 }

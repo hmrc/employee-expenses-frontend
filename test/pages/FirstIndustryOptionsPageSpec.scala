@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package models.requests
+package pages
 
-import models.UserAnswers
-import play.api.mvc.{Request, WrappedRequest}
+import models.FirstIndustryOptions
+import pages.behaviours.PageBehaviours
 
-case class OptionalDataRequest[A](request: Request[A], mongoKey: String, nino: Option[String] = None, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
+class FirstIndustryOptionsPageSpec extends PageBehaviours {
 
-case class DataRequest[A](request: Request[A], mongoKey: String, nino: Option[String] = None, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+  "FirstIndustryOptionsPage" must {
+
+    beRetrievable[FirstIndustryOptions](FirstIndustryOptionsPage)
+    beSettable[FirstIndustryOptions](FirstIndustryOptionsPage)
+    beRemovable[FirstIndustryOptions](FirstIndustryOptionsPage)
+  }
+
+}

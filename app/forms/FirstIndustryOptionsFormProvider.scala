@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package models.requests
+package forms
 
-import models.UserAnswers
-import play.api.mvc.{Request, WrappedRequest}
+import forms.mappings.Mappings
+import models.FirstIndustryOptions
+import play.api.data.Form
 
-case class OptionalDataRequest[A](request: Request[A], mongoKey: String, nino: Option[String] = None, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
+class FirstIndustryOptionsFormProvider extends Mappings {
 
-case class DataRequest[A](request: Request[A], mongoKey: String, nino: Option[String] = None, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+  def apply():Form[FirstIndustryOptions] = Form(
+    "value" -> enumerable[FirstIndustryOptions](requiredKey = "firstIndustryOptions.error.required" )
+  )
+}
