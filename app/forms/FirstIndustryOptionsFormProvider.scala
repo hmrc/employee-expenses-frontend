@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import models._
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.{Arbitrary, Gen}
+import forms.mappings.Mappings
+import models.FirstIndustryOptions
+import play.api.data.Form
 
-trait ModelGenerators {
+class FirstIndustryOptionsFormProvider extends Mappings {
 
-  implicit lazy val arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
-    Arbitrary {
-      Gen.oneOf(EmployerContribution.values.toSeq)
-    }
-
-  implicit lazy val arbitraryFirstIndustryOptions: Arbitrary[FirstIndustryOptions] =
-    Arbitrary {
-      Gen.oneOf(FirstIndustryOptions.values.toSeq)
-    }
+  def apply():Form[FirstIndustryOptions] = Form(
+    "value" -> enumerable[FirstIndustryOptions](requiredKey = "firstIndustryOptions.error.required" )
+  )
 }

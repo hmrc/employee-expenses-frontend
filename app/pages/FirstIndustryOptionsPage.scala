@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import models._
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.{Arbitrary, Gen}
+import models.FirstIndustryOptions
+import play.api.libs.json.JsPath
 
-trait ModelGenerators {
+case object FirstIndustryOptionsPage extends QuestionPage[FirstIndustryOptions] {
 
-  implicit lazy val arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
-    Arbitrary {
-      Gen.oneOf(EmployerContribution.values.toSeq)
-    }
+  override def path:JsPath = JsPath \ toString
+  override def toString:String = "firstIndustryOptions"
 
-  implicit lazy val arbitraryFirstIndustryOptions: Arbitrary[FirstIndustryOptions] =
-    Arbitrary {
-      Gen.oneOf(FirstIndustryOptions.values.toSeq)
-    }
 }

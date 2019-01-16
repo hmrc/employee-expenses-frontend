@@ -29,4 +29,7 @@ trait PageGenerators {
 
   implicit lazy val arbitraryExpensesEmployerPaidPage: Arbitrary[ExpensesEmployerPaidPage.type] =
     Arbitrary(ExpensesEmployerPaidPage)
+
+  implicit lazy val arbitraryFirstIndustryOptionsPage: Arbitrary[FirstIndustryOptionsPage.type] =
+    Arbitrary(FirstIndustryOptionsPage)
 }
