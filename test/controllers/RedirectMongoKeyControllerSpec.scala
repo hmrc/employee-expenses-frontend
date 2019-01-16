@@ -25,7 +25,7 @@ class RedirectMongoKeyControllerSpec extends SpecBase with ScalaFutures {
 
   "RedirectMongoKey Controller" must {
 
-    "return OK and redirect to CheckYourAnswers" in {
+    "redirect to CheckYourAnswers" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
