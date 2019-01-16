@@ -19,7 +19,6 @@ package views
 import models.UserAnswers
 import pages.ClaimAmount
 import play.api.libs.json.Json
-import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.ClaimAmountView
 
@@ -38,8 +37,6 @@ class ClaimAmountViewSpec extends ViewBehaviours {
     val view = application.injector.instanceOf[ClaimAmountView]
 
     val applyView = view.apply(claimAmount, Some("20"), Some("30"))(fakeRequest, messages)
-
-    //behave like normalPage(applyView, "claimAmount")
 
     "behave like a page with dynamic title" when {
       val doc = asDocument(applyView)
