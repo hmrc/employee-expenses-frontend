@@ -39,7 +39,34 @@ class ClaimAmountViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(claimAmount, Some("20"), Some("30"))(fakeRequest, messages)
 
-    behave like normalPage(applyView, "claimAmount")
+    //behave like normalPage(applyView, "claimAmount")
+
+    "behave like a page with dynamic title" when {
+      val doc = asDocument(applyView)
+      "rendered" must {
+
+        "have the correct banner title" in {
+
+          val nav = doc.getElementById("proposition-menu")
+          val span = nav.children.first
+        }
+
+        "display the correct browser title" in {
+
+          assertEqualsMessage(doc, "title", messages("claimAmount.title", claimAmount))
+        }
+
+        "display the correct page title" in {
+
+          assertPageTitleEqualsMessage(doc, messages("claimAmount.heading", claimAmount))
+        }
+
+        "display language toggles" in {
+
+          assertRenderedById(doc, "switchToWelsh")
+        }
+      }
+    }
 
     behave like pageWithBackLink(applyView)
 
