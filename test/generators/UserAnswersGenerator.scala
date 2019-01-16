@@ -30,6 +30,7 @@ trait UserAnswersGenerator extends TryValues {
     arbitrary[(EmployerContributionPage.type, JsValue)] ::
     arbitrary[(MultipleEmploymentsPage.type, JsValue)] ::
     arbitrary[(ExpensesEmployerPaidPage.type, JsValue)] ::
+    arbitrary[(FirstIndustryOptionsPage.type, JsValue)] ::
     Nil
 
   implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {

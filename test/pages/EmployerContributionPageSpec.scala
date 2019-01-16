@@ -19,7 +19,7 @@ package pages
 import models.EmployerContribution
 import pages.behaviours.PageBehaviours
 
-class EmployerContributionSpec extends PageBehaviours {
+class EmployerContributionPageSpec extends PageBehaviours {
 
   "EmployerContributionPage" must {
 

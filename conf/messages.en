@@ -71,3 +71,14 @@ multipleEmployments.title = Are you claiming for more than one job?
 multipleEmployments.heading = Are you claiming for more than one job?
 multipleEmployments.checkYourAnswersLabel = Are you claiming for more than one job?
 multipleEmployments.error.required = Select yes if you are claiming for more than one job
+
+firstIndustryOptions.title = What industry do you work in?
+firstIndustryOptions.heading = What industry do you work in?
+firstIndustryOptions.healthcare = Healthcare
+firstIndustryOptions.foodAndCatering = Food and catering
+firstIndustryOptions.retail = Retail
+firstIndustryOptions.engineering = Engineering
+firstIndustryOptions.transportAndDistribution = Transport and distribution
+firstIndustryOptions.noneOfTheAbove = None of the above
+firstIndustryOptions.checkYourAnswersLabel = What industry do you work in?
+firstIndustryOptions.error.required = Select the industry you work in
