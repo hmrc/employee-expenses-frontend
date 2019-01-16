@@ -18,13 +18,8 @@ package controllers
 
 import base.SpecBase
 import org.scalatest.concurrent.ScalaFutures
-import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration._
 
 class RedirectMongoKeyControllerSpec extends SpecBase with ScalaFutures {
 
@@ -41,11 +36,6 @@ class RedirectMongoKeyControllerSpec extends SpecBase with ScalaFutures {
       status(result) mustEqual 303
 
       redirectLocation(result).get mustBe routes.CheckYourAnswersController.onPageLoad().url
-
-      result.map(
-        x =>
-          x.session(request).get("mongoKey") mustBe "sadfg"
-      )
 
       application.stop()
     }
