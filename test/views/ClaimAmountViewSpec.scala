@@ -39,7 +39,7 @@ class ClaimAmountViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(claimAmount, Some("20"), Some("30"))(fakeRequest, messages)
 
-    behave like normalPage(applyView, "claimAmount", None, claimAmount)
+    behave like normalPage(applyView, "claimAmount")
 
     behave like pageWithBackLink(applyView)
 

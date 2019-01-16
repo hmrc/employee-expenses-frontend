@@ -29,7 +29,7 @@ class ClaimByAlternativeViewSpec extends ViewBehaviours {
 
     val applyView = view.apply()(fakeRequest, messages)
 
-    behave like normalPage(applyView, "claimByAlternative", None)
+    behave like normalPage(applyView, "claimByAlternative")
 
     behave like pageWithBackLink(applyView)
   }

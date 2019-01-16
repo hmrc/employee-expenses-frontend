@@ -29,7 +29,7 @@ class CannotClaimViewSpec extends ViewBehaviours {
 
     val applyView = view.apply()(fakeRequest, messages)
 
-    behave like normalPage(applyView, "cannotClaim", None)
+    behave like normalPage(applyView, "cannotClaim")
 
     behave like pageWithBackLink(applyView)
 

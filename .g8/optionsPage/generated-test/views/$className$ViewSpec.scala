@@ -22,7 +22,7 @@ class $className$ViewSpec extends ViewBehaviours {
 
   "$className$View" must {
 
-    behave like normalPage(applyView(form), messageKeyPrefix, None)
+    behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
   }

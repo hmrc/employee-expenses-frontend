@@ -38,7 +38,7 @@ class EmployerContributionViewSpec extends ViewBehaviours {
 
   "EmployerContributionView" must {
 
-    behave like normalPage(applyView(form), messageKeyPrefix, None)
+    behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
   }
