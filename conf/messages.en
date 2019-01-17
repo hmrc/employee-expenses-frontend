@@ -91,3 +91,9 @@ typeOfEngineering.factoryOrWorkshopEngineering = Factory or workshop engineering
 typeOfEngineering.noneOfTheAbove = None of the above
 typeOfEngineering.checkYourAnswersLabel = What type of engineering do you work in?
 typeOfEngineering.error.required = Select what type of engineering you work in
+
+
+ambulanceStaff.title = Are you ambulance staff on active service?
+ambulanceStaff.heading = Are you ambulance staff on active service?
+ambulanceStaff.checkYourAnswersLabel = ambulanceStaff
+ambulanceStaff.error.required = Select yes if you are ambulance staff on active service
