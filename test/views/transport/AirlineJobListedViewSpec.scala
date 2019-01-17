@@ -17,7 +17,7 @@
 package views
 
 import controllers.routes
-import forms.AirlineJobListedFormProvider
+import forms.transport.AirlineJobListedFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

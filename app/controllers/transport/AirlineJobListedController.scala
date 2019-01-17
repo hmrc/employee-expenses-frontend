@@ -17,11 +17,11 @@
 package controllers
 
 import controllers.actions._
-import forms.AirlineJobListedFormProvider
+import forms.transport.AirlineJobListedFormProvider
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.AirlineJobListedPage
+import pages.transport.AirlineJobListedPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

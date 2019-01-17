@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.transport.AirlineJobListedFormProvider
 import play.api.data.FormError
 
 class AirlineJobListedFormProviderSpec extends BooleanFieldBehaviours {

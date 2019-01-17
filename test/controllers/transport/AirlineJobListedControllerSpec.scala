@@ -17,10 +17,10 @@
 package controllers
 
 import base.SpecBase
-import forms.AirlineJobListedFormProvider
+import forms.transport.AirlineJobListedFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.AirlineJobListedPage
+import pages.transport.AirlineJobListedPage
 import play.api.inject.bind
 import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
