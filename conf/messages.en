@@ -82,3 +82,8 @@ firstIndustryOptions.transportAndDistribution = Transport and distribution
 firstIndustryOptions.noneOfTheAbove = None of the above
 firstIndustryOptions.checkYourAnswersLabel = What industry do you work in?
 firstIndustryOptions.error.required = Select the industry you work in
+
+ambulanceStaff.title = Are you ambulance staff on active service?
+ambulanceStaff.heading = Are you ambulance staff on active service?
+ambulanceStaff.checkYourAnswersLabel = ambulanceStaff
+ambulanceStaff.error.required = Select yes if you are ambulance staff on active service

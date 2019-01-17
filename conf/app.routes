@@ -38,3 +38,8 @@ GET        /first-industry-type                                     controllers.
 POST       /first-industry-type                                     controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
 GET        /change-first-industry-type                              controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-first-industry-type                              controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /ambulance-staff                        controllers.AmbulanceStaffController.onPageLoad(mode: Mode = NormalMode)
+POST       /ambulance-staff                        controllers.AmbulanceStaffController.onSubmit(mode: Mode = NormalMode)
+GET        /change-ambulance-staff                  controllers.AmbulanceStaffController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-ambulance-staff                  controllers.AmbulanceStaffController.onSubmit(mode: Mode = CheckMode)
