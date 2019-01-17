@@ -34,6 +34,13 @@ POST        /claiming-for-more-than-one-job               controllers.MultipleEm
 GET         /change-claiming-for-more-than-one-job        controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-claiming-for-more-than-one-job        controllers.MultipleEmploymentsController.onSubmit(mode: Mode = CheckMode)
 
+GET        /claim-amount                                            controllers.ClaimAmountController.onPageLoad(mode: Mode = NormalMode)
+GET        /check-claim-amount                                      controllers.ClaimAmountController.onPageLoad(mode: Mode = CheckMode)
+
+GET        /first-industry-type                                     controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST       /first-industry-type                                     controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-first-industry-type                              controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-first-industry-type                              controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 GET        /first-industry-type                           controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
 POST       /first-industry-type                           controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
 GET        /change-first-industry-type                    controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
