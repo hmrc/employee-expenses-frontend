@@ -44,6 +44,19 @@ class ConstructionalEngineeringList1ViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(form, applyView, messageKeyPrefix, routes.ConstructionalEngineeringList1Controller.onSubmit(NormalMode).url)
+
+    behave like pageWithList(applyView(form), messageKeyPrefix,
+      Seq(
+        "occupation1",
+        "occupation2",
+        "occupation3",
+        "occupation4",
+        "occupation5",
+        "occupation6",
+        "occupation7",
+        "occupation8"
+      )
+    )
   }
 
   application.stop()

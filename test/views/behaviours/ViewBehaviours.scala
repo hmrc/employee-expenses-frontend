@@ -74,4 +74,26 @@ trait ViewBehaviours extends ViewSpecBase {
       }
     }
   }
+
+  def pageWithList(view: HtmlFormat.Appendable,
+                   pageKey: String,
+                   bulletList: Seq[String]): Unit = {
+
+    "behave like a page with a list" must {
+      "have a list" in {
+        val doc = asDocument(view)
+        bulletList.foreach {
+          x => assertRenderedById(doc, s"bullet-$x")
+        }
+      }
+
+      "have correct values" in {
+        val doc = asDocument(view)
+        bulletList.foreach{
+          x => assertContainsMessages(doc, s"$pageKey.$x")
+        }
+      }
+    }
+  }
+
 }
