@@ -35,7 +35,7 @@ class TypeOfEngineeringController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: SessionRepository,
                                        navigator: Navigator,
-                                       identify: IdentifierAction,
+                                       identify: UnauthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
                                        formProvider: TypeOfEngineeringFormProvider,

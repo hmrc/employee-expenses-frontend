@@ -16,18 +16,19 @@
 
 package models
 
-import play.api.libs.json._
 import viewmodels.RadioOption
 
 sealed trait TypeOfEngineering
 
 object TypeOfEngineering extends Enumerable.Implicits {
 
-  case object Constructionalengineering extends WithName("constructionalEngineering") with TypeOfEngineering
-  case object Tradesrelatingtoengineering extends WithName("tradesRelatingToEngineering") with TypeOfEngineering
+  case object ConstructionalEngineering extends WithName("constructionalEngineering") with TypeOfEngineering
+  case object TradesRelatingToEngineering extends WithName("tradesRelatingToEngineering") with TypeOfEngineering
+  case object FactoryOrWorkshopEngineering extends WithName("factoryOrWorkshopEngineering") with TypeOfEngineering
+  case object NoneOfTheAbove extends WithName("noneOfTheAbove") with TypeOfEngineering
 
   val values: Set[TypeOfEngineering] = Set(
-    Constructionalengineering, Tradesrelatingtoengineering
+    ConstructionalEngineering, TradesRelatingToEngineering, FactoryOrWorkshopEngineering, NoneOfTheAbove
   )
 
   val options: Set[RadioOption] = values.map {
