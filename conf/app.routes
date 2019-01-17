@@ -43,3 +43,8 @@ GET        /type-of-engineering                           controllers.TypeOfEngi
 POST       /type-of-engineering                           controllers.TypeOfEngineeringController.onSubmit(mode: Mode = NormalMode)
 GET        /change-type-of-engineering                    controllers.TypeOfEngineeringController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-type-of-engineering                    controllers.TypeOfEngineeringController.onSubmit(mode: Mode = CheckMode)
+
+GET        /constructionalEngineeringList1                        controllers.ConstructionalEngineeringList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /constructionalEngineeringList1                        controllers.ConstructionalEngineeringList1Controller.onSubmit(mode: Mode = NormalMode)
+GET        /changeConstructionalEngineeringList1                  controllers.ConstructionalEngineeringList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /changeConstructionalEngineeringList1                  controllers.ConstructionalEngineeringList1Controller.onSubmit(mode: Mode = CheckMode)

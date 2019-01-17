@@ -91,3 +91,8 @@ typeOfEngineering.factoryOrWorkshopEngineering = Factory or workshop engineering
 typeOfEngineering.noneOfTheAbove = None of the above
 typeOfEngineering.checkYourAnswersLabel = What type of engineering do you work in?
 typeOfEngineering.error.required = Select what type of engineering you work in
+
+constructionalEngineeringList1.title = constructionalEngineeringList1
+constructionalEngineeringList1.heading = constructionalEngineeringList1
+constructionalEngineeringList1.checkYourAnswersLabel = constructionalEngineeringList1
+constructionalEngineeringList1.error.required = Select yes if constructionalEngineeringList1
