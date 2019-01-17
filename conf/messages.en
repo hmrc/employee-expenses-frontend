@@ -117,5 +117,12 @@ ambulanceStaff.error.required = Select yes if you are ambulance staff on active 
 
 healthcareList1.title = Is your job title listed?
 healthcareList1.heading = Is your job title listed?
+healthcareList1.secondaryHeading = Healthcare occupation list 1
 healthcareList1.checkYourAnswersLabel = healthcareList1
 healthcareList1.error.required = Select yes if your job title is listed
+healthcareList1.occupation1 = Nurse or dental nurse
+healthcareList1.occupation2 = Midwife
+healthcareList1.occupation3 = Chiropodist
+healthcareList1.occupation4 = Occupational, speech, physio or other therapists
+healthcareList1.occupation5 = Healthcare assistant
+healthcareList1.occupation6 = Phlebotomist or radiographer

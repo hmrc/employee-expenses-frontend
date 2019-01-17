@@ -58,7 +58,7 @@ class ConstructionalEngineeringList1ViewSpec extends YesNoViewBehaviours {
       )
     )
 
-    behave like pageWithSecondaryHeader(applyView(form), "")
+    behave like pageWithSecondaryHeader(applyView(form), messages("constructionalEngineeringList1.secondaryHeading"))
   }
 
 
