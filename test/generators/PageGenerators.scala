@@ -21,6 +21,9 @@ import pages._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryHealthcareList1Page: Arbitrary[HealthcareList1Page.type] =
+    Arbitrary(HealthcareList1Page)
+
   implicit lazy val arbitraryTypeOfEngineeringPage: Arbitrary[TypeOfEngineeringPage.type] =
     Arbitrary(TypeOfEngineeringPage)
 

@@ -48,3 +48,8 @@ GET        /ambulance-staff                        controllers.AmbulanceStaffCon
 POST       /ambulance-staff                        controllers.AmbulanceStaffController.onSubmit(mode: Mode = NormalMode)
 GET        /change-ambulance-staff                  controllers.AmbulanceStaffController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-ambulance-staff                  controllers.AmbulanceStaffController.onSubmit(mode: Mode = CheckMode)
+
+GET        /healthcare-list-1                        controllers.HealthcareList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /healthcare-list-1                        controllers.HealthcareList1Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-healthcare-list-1                  controllers.HealthcareList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-healthcare-list-1                  controllers.HealthcareList1Controller.onSubmit(mode: Mode = CheckMode)
