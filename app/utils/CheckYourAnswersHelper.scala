@@ -27,6 +27,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     x => AnswerRow("healthcareList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.HealthcareList1Controller.onPageLoad(CheckMode).url)
   }
 
+  def constructionalEngineeringList1: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList1Page) map {
+    x => AnswerRow("constructionalEngineeringList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.ConstructionalEngineeringList1Controller.onPageLoad(CheckMode).url)
+  }
+
   def typeOfEngineering: Option[AnswerRow] = userAnswers.get(TypeOfEngineeringPage) map {
     x => AnswerRow("typeOfEngineering.checkYourAnswersLabel", s"typeOfEngineering.$x", true, routes.TypeOfEngineeringController.onPageLoad(CheckMode).url)
   }

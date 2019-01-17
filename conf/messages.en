@@ -82,6 +82,10 @@ firstIndustryOptions.transportAndDistribution = Transport and distribution
 firstIndustryOptions.noneOfTheAbove = None of the above
 firstIndustryOptions.checkYourAnswersLabel = What industry do you work in?
 firstIndustryOptions.error.required = Select the industry you work in
+claimAmount.title = You can claim tax relief on £{0}
+claimAmount.heading = You can claim tax relief on £{0}
+claimAmount.description = The amount of tax relief you can claim depends on the rate of tax you pay.
+claimAmount.checkYourAnswersLabel = employerContributionClaimValue
 
 typeOfEngineering.title = What type of engineering do you work in?
 typeOfEngineering.heading = What type of engineering do you work in?
@@ -92,6 +96,19 @@ typeOfEngineering.noneOfTheAbove = None of the above
 typeOfEngineering.checkYourAnswersLabel = What type of engineering do you work in?
 typeOfEngineering.error.required = Select what type of engineering you work in
 
+constructionalEngineeringList1.title = Is your job title listed?
+constructionalEngineeringList1.heading = Is your job title listed?
+constructionalEngineeringList1.secondaryHeading = Constructional engineering occupations list 1
+constructionalEngineeringList1.checkYourAnswersLabel = Is your job title listed?
+constructionalEngineeringList1.error.required = Select yes if your job title is listed
+constructionalEngineeringList1.occupation1 = Blacksmith or their striker
+constructionalEngineeringList1.occupation2 = Burner
+constructionalEngineeringList1.occupation3 = Caulker
+constructionalEngineeringList1.occupation4 = Chipper
+constructionalEngineeringList1.occupation5 = Driller
+constructionalEngineeringList1.occupation6 = Erector
+constructionalEngineeringList1.occupation7 = Fitter
+constructionalEngineeringList1.occupation8 = Holder up
 
 ambulanceStaff.title = Are you ambulance staff on active service?
 ambulanceStaff.heading = Are you ambulance staff on active service?
