@@ -35,7 +35,7 @@
             field = form("value"),
             legend = messages("firstIndustryOptions.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = FirstIndustryOptions.options.toSeq
+            inputs = FirstIndustryOptions.options
         )
         @components.submit_button()
     }

@@ -56,7 +56,7 @@ POST       /ambulance-staff                        controllers.AmbulanceStaffCon
 GET        /change-ambulance-staff                  controllers.AmbulanceStaffController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-ambulance-staff                  controllers.AmbulanceStaffController.onSubmit(mode: Mode = CheckMode)
 
-GET        /typeOfTransport                        controllers.TypeOfTransportController.onPageLoad(mode: Mode = NormalMode)
-POST       /typeOfTransport                        controllers.TypeOfTransportController.onSubmit(mode: Mode = NormalMode)
-GET        /changeTypeOfTransport                  controllers.TypeOfTransportController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeTypeOfTransport                  controllers.TypeOfTransportController.onSubmit(mode: Mode = CheckMode)
+GET        /type-of-transport                            controllers.TypeOfTransportController.onPageLoad(mode: Mode = NormalMode)
+POST       /type-of-transport                            controllers.TypeOfTransportController.onSubmit(mode: Mode = NormalMode)
+GET        /change-type-of-transport                     controllers.TypeOfTransportController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-type-of-transport                     controllers.TypeOfTransportController.onSubmit(mode: Mode = CheckMode)

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.transport
 
 import base.SpecBase
-import forms.TypeOfTransportFormProvider
+import controllers.routes
+import forms.transport.TypeOfTransportFormProvider
 import models.{NormalMode, TypeOfTransport, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.TypeOfTransportPage
+import pages.transport.TypeOfTransportPage
 import play.api.inject.bind
-import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.TypeOfTransportView
+import views.html.transport.TypeOfTransportView
 
 class TypeOfTransportControllerSpec extends SpecBase {
 

@@ -14,19 +14,32 @@
  * limitations under the License.
  */
 
-package pages
+package forms.transport
 
+import forms.behaviours.OptionFieldBehaviours
 import models.TypeOfTransport
-import pages.behaviours.PageBehaviours
+import play.api.data.FormError
 
-class TypeOfTransportSpec extends PageBehaviours {
+class TypeOfTransportFormProviderSpec extends OptionFieldBehaviours {
 
-  "TypeOfTransportPage" must {
+  val form = new TypeOfTransportFormProvider()()
 
-    beRetrievable[TypeOfTransport](TypeOfTransportPage)
+  ".value" must {
 
-    beSettable[TypeOfTransport](TypeOfTransportPage)
+    val fieldName = "value"
+    val requiredKey = "typeOfTransport.error.required"
 
-    beRemovable[TypeOfTransport](TypeOfTransportPage)
+    behave like optionsField[TypeOfTransport](
+      form,
+      fieldName,
+      validValues  = TypeOfTransport.values,
+      invalidError = FormError(fieldName, "error.invalid")
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
   }
 }

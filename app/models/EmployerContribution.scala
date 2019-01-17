@@ -28,11 +28,11 @@ object EmployerContribution extends Enumerable.Implicits {
   case object None extends WithName("none") with EmployerContribution
 
 
-  val values: Set[EmployerContribution] = Set(
+  val values: Seq[EmployerContribution] = Seq(
     All, Some, None
   )
 
-  val options: Set[RadioOption] = values.map {
+  val options: Seq[RadioOption] = values.map {
     value =>
       RadioOption("employerContribution", value.toString)
   }

@@ -40,7 +40,7 @@
             field = form("value"),
             legend = messages("typeOfTransport.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = TypeOfTransport.options.toSeq
+            inputs = TypeOfTransport.options
         )
 
         @components.submit_button()

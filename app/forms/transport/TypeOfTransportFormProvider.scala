@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms.transport
 
+import forms.mappings.Mappings
+import javax.inject.Inject
 import models.TypeOfTransport
-import play.api.libs.json.JsPath
+import play.api.data.Form
 
-case object TypeOfTransportPage extends QuestionPage[TypeOfTransport] {
+class TypeOfTransportFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "typeOfTransport"
+  def apply(): Form[TypeOfTransport] =
+    Form(
+      "value" -> enumerable[TypeOfTransport]("typeOfTransport.error.required")
+    )
 }

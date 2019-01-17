@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package views
+package views.transport
 
-import forms.TypeOfTransportFormProvider
+import forms.transport.TypeOfTransportFormProvider
 import models.{NormalMode, TypeOfTransport}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
-import views.html.TypeOfTransportView
+import views.html.transport.TypeOfTransportView
 
 class TypeOfTransportViewSpec extends ViewBehaviours {
 

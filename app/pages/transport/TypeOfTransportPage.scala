@@ -14,32 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package pages.transport
 
-import forms.behaviours.OptionFieldBehaviours
 import models.TypeOfTransport
-import play.api.data.FormError
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class TypeOfTransportFormProviderSpec extends OptionFieldBehaviours {
+case object TypeOfTransportPage extends QuestionPage[TypeOfTransport] {
 
-  val form = new TypeOfTransportFormProvider()()
+  override def path: JsPath = JsPath \ toString
 
-  ".value" must {
-
-    val fieldName = "value"
-    val requiredKey = "typeOfTransport.error.required"
-
-    behave like optionsField[TypeOfTransport](
-      form,
-      fieldName,
-      validValues  = TypeOfTransport.values,
-      invalidError = FormError(fieldName, "error.invalid")
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
+  override def toString: String = "typeOfTransport"
 }
