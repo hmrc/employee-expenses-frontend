@@ -34,10 +34,15 @@ POST        /claiming-for-more-than-one-job               controllers.MultipleEm
 GET         /change-claiming-for-more-than-one-job        controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-claiming-for-more-than-one-job        controllers.MultipleEmploymentsController.onSubmit(mode: Mode = CheckMode)
 
-GET        /first-industry-type                                     controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
-POST       /first-industry-type                                     controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
-GET        /change-first-industry-type                              controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-first-industry-type                              controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+GET        /first-industry-type                           controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST       /first-industry-type                           controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-first-industry-type                    controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-first-industry-type                    controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /type-of-engineering                           controllers.TypeOfEngineeringController.onPageLoad(mode: Mode = NormalMode)
+POST       /type-of-engineering                           controllers.TypeOfEngineeringController.onSubmit(mode: Mode = NormalMode)
+GET        /change-type-of-engineering                    controllers.TypeOfEngineeringController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-type-of-engineering                    controllers.TypeOfEngineeringController.onSubmit(mode: Mode = CheckMode)
 
 GET        /ambulance-staff                        controllers.AmbulanceStaffController.onPageLoad(mode: Mode = NormalMode)
 POST       /ambulance-staff                        controllers.AmbulanceStaffController.onSubmit(mode: Mode = NormalMode)
