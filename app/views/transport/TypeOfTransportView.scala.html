@@ -15,7 +15,7 @@
  *@
 
 @import controllers.routes._
-@import models.{Mode, EmployerContribution}
+@import models.{Mode, TypeOfTransport}
 
 @this(
     main_template: MainTemplate,
@@ -25,22 +25,22 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("employerContribution.title")}"
+    title = s"${errorPrefix(form)} ${messages("typeOfTransport.title")}"
     ) {
 
-    @formHelper(action = EmployerContributionController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = TypeOfTransportController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading("employerContribution.heading")
+        @components.heading("typeOfTransport.heading")
 
         @components.input_radio(
             field = form("value"),
-            legend = messages("employerContribution.heading"),
+            legend = messages("typeOfTransport.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = EmployerContribution.options
+            inputs = TypeOfTransport.options
         )
 
         @components.submit_button()
