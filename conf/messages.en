@@ -85,9 +85,9 @@ firstIndustryOptions.error.required = Select the industry you work in
 
 typeOfEngineering.title = What type of engineering do you work in?
 typeOfEngineering.heading = What type of engineering do you work in?
-typeOfEngineering.constructionalEngineering = Constructional engineering (includes building, shipyards, bridges and roads)
+typeOfEngineering.constructionalEngineering = Constructional engineering (includes buildings, shipyards, bridges and roads)
 typeOfEngineering.tradesRelatingToEngineering = Trades relating to engineering
 typeOfEngineering.factoryOrWorkshopEngineering = Factory or workshop engineering
 typeOfEngineering.noneOfTheAbove = None of the above
 typeOfEngineering.checkYourAnswersLabel = What type of engineering do you work in?
-typeOfEngineering.error.required = Select the type of engineering you work in
+typeOfEngineering.error.required = Select what type of engineering you work in
