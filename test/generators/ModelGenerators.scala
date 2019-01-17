@@ -22,6 +22,11 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryTypeOfTransport: Arbitrary[TypeOfTransport] =
+    Arbitrary {
+      Gen.oneOf(TypeOfTransport.values.toSeq)
+    }
+
   implicit lazy val arbitraryTypeOfEngineering: Arbitrary[TypeOfEngineering] =
     Arbitrary {
       Gen.oneOf(TypeOfEngineering.values.toSeq)
