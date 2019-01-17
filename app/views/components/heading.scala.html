@@ -14,6 +14,17 @@
  * limitations under the License.
  *@
 
-@(headingKey: String, headingSize: String = "heading-large")(implicit messages: Messages)
+@(
+        headingKey: String,
+        headingSize: String = "heading-xlarge",
+        secondaryHeaderKey: Option[String] = None
+)(implicit messages: Messages)
 
-<h1 class="@headingSize">@messages(headingKey)</h1>
+<header>
+ <h1 class=@headingSize>@messages(headingKey)</h1>
+ @if(secondaryHeaderKey.isDefined) {
+   <p class="heading-secondary">
+     <span class="visuallyhidden">This section is: </span> @messages(secondaryHeaderKey.get)
+   </p>
+ }
+</header>

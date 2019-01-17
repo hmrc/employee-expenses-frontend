@@ -57,7 +57,10 @@ class ConstructionalEngineeringList1ViewSpec extends YesNoViewBehaviours {
         "occupation8"
       )
     )
+
+    behave like pageWithSecondaryHeader(applyView(form), "")
   }
+
 
   application.stop()
 }
