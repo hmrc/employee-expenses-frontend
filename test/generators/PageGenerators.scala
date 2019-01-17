@@ -22,6 +22,9 @@ import pages.transport.TypeOfTransportPage
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryAirlineJobListedPage: Arbitrary[AirlineJobListedPage.type] =
+    Arbitrary(AirlineJobListedPage)
+
   implicit lazy val arbitraryTypeOfTransportPage: Arbitrary[TypeOfTransportPage.type] =
     Arbitrary(TypeOfTransportPage)
 

@@ -61,3 +61,8 @@ GET        /type-of-transport                            controllers.TypeOfTrans
 POST       /type-of-transport                            controllers.TypeOfTransportController.onSubmit(mode: Mode = NormalMode)
 GET        /change-type-of-transport                     controllers.TypeOfTransportController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-type-of-transport                     controllers.TypeOfTransportController.onSubmit(mode: Mode = CheckMode)
+
+GET        /airlineJobListed                        controllers.AirlineJobListedController.onPageLoad(mode: Mode = NormalMode)
+POST       /airlineJobListed                        controllers.AirlineJobListedController.onSubmit(mode: Mode = NormalMode)
+GET        /changeAirlineJobListed                  controllers.AirlineJobListedController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeAirlineJobListed                  controllers.AirlineJobListedController.onSubmit(mode: Mode = CheckMode)
