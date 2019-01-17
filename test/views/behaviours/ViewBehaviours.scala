@@ -16,6 +16,7 @@
 
 package views.behaviours
 
+import org.jsoup.Jsoup
 import play.twirl.api.HtmlFormat
 import views.ViewSpecBase
 
@@ -74,4 +75,34 @@ trait ViewBehaviours extends ViewSpecBase {
       }
     }
   }
+
+  def pageWithList(view: HtmlFormat.Appendable,
+                   pageKey: String,
+                   bulletList: Seq[String]): Unit = {
+
+    "behave like a page with a list" must {
+      "have a list" in {
+        val doc = asDocument(view)
+        bulletList.foreach {
+          x => assertRenderedById(doc, s"bullet-$x")
+        }
+      }
+
+      "have correct values" in {
+        val doc = asDocument(view)
+        bulletList.foreach{
+          x => assertContainsMessages(doc, s"$pageKey.$x")
+        }
+      }
+    }
+  }
+
+  def pageWithSecondaryHeader(view: HtmlFormat.Appendable,
+                              heading: String): Unit = {
+
+    "behave like a page with a secondary header" in {
+      Jsoup.parse(view.toString()).getElementsByClass("heading-secondary").text() must include(heading)
+    }
+  }
+
 }

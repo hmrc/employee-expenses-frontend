@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(
-        headingKey: String,
-        headingSize: String = "heading-xlarge",
-        secondaryHeaderKey: Option[String] = None
-)(implicit messages: Messages)
+package pages
 
-<header>
- <h1 class=@headingSize>@messages(headingKey)</h1>
- @if(secondaryHeaderKey.isDefined) {
-   <p class="heading-secondary">
-     <span class="visuallyhidden">This section is: </span> @messages(secondaryHeaderKey.get)
-   </p>
- }
-</header>
+import pages.behaviours.PageBehaviours
+
+class ConstructionalEngineeringList1PageSpec extends PageBehaviours {
+
+  "ConstructionalEngineeringList1Page" must {
+
+    beRetrievable[Boolean](ConstructionalEngineeringList1Page)
+
+    beSettable[Boolean](ConstructionalEngineeringList1Page)
+
+    beRemovable[Boolean](ConstructionalEngineeringList1Page)
+  }
+}
