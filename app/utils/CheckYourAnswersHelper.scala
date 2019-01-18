@@ -19,13 +19,18 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
+import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
 import pages.transport.TypeOfTransportPage
-import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
+import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def healthcareList2: Option[AnswerRow] = userAnswers.get(HealthcareList2Page) map {
+    x => AnswerRow("healthcareList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, controllers.healthcare.routes.HealthcareList2Controller.onPageLoad(CheckMode).url)
+  }
+
   def healthcareList1: Option[AnswerRow] = userAnswers.get(HealthcareList1Page) map {
-    x => AnswerRow("healthcareList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.HealthcareList1Controller.onPageLoad(CheckMode).url)
+    x => AnswerRow("healthcareList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, controllers.healthcare.routes.HealthcareList1Controller.onPageLoad(CheckMode).url)
   }
 
   def typeOfTransport: Option[AnswerRow] = userAnswers.get(TypeOfTransportPage) map {
@@ -41,7 +46,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def ambulanceStaff: Option[AnswerRow] = userAnswers.get(AmbulanceStaffPage) map {
-    x => AnswerRow("ambulanceStaff.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.AmbulanceStaffController.onPageLoad(CheckMode).url)
+    x => AnswerRow("ambulanceStaff.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(CheckMode).url)
   }
 
   def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
@@ -54,5 +59,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def expensesEmployerPaid: Option[AnswerRow] = userAnswers.get(ExpensesEmployerPaidPage) map {
     x => AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"$x", false, routes.ExpensesEmployerPaidController.onPageLoad(CheckMode).url)
+  }
+  def firstIndustryOptions: Option[AnswerRow] = userAnswers.get(FirstIndustryOptionsPage) map {
+    x => AnswerRow("firstIndustryOptions.checkYourAnswersLabel", s"$x", false, controllers.routes.FirstIndustryOptionsController.onPageLoad(CheckMode).url)
   }
 }

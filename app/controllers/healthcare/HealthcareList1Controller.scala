@@ -14,33 +14,33 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.healthcare
 
 import controllers.actions._
-import forms.AmbulanceStaffFormProvider
+import forms.healthcare.HealthcareList1FormProvider
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.AmbulanceStaffPage
+import pages.healthcare.HealthcareList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.AmbulanceStaffView
+import views.html.healthcare.HealthcareList1View
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AmbulanceStaffController @Inject()(
+class HealthcareList1Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
-                                         formProvider: AmbulanceStaffFormProvider,
+                                         formProvider: HealthcareList1FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: AmbulanceStaffView
+                                         view: HealthcareList1View
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -48,7 +48,7 @@ class AmbulanceStaffController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(AmbulanceStaffPage) match {
+      val preparedForm = request.userAnswers.get(HealthcareList1Page) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,9 +65,9 @@ class AmbulanceStaffController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList1Page, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AmbulanceStaffPage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(HealthcareList1Page, mode)(updatedAnswers))
         }
       )
   }

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.healthcare
 
-import controllers.routes
-import forms.AmbulanceStaffFormProvider
+import controllers.healthcare.routes
+import forms.healthcare.AmbulanceStaffFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.AmbulanceStaffView
+import views.html.healthcare.AmbulanceStaffView
 
 class AmbulanceStaffViewSpec extends YesNoViewBehaviours {
 

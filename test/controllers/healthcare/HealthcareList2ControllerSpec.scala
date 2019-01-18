@@ -14,40 +14,39 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.healthcare
 
 import base.SpecBase
-import forms.HealthcareList1FormProvider
+import forms.HealthcareList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.HealthcareList1Page
+import pages.healthcare.HealthcareList2Page
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.HealthcareList1View
+import views.html.healthcare.HealthcareList2View
 
-class HealthcareList1ControllerSpec extends SpecBase {
+class HealthcareList2ControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new HealthcareList1FormProvider()
+  val formProvider = new HealthcareList2FormProvider()
   val form = formProvider()
 
-  lazy val healthcareList1Route = routes.HealthcareList1Controller.onPageLoad(NormalMode).url
+  lazy val healthcareList2Route = routes.HealthcareList2Controller.onPageLoad(NormalMode).url
 
-  "HealthcareList1 Controller" must {
+  "HealthcareList2 Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, healthcareList1Route)
+      val request = FakeRequest(GET, healthcareList2Route)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[HealthcareList1View]
+      val view = application.injector.instanceOf[HealthcareList2View]
 
       status(result) mustEqual OK
 
@@ -59,13 +58,13 @@ class HealthcareList1ControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(HealthcareList1Page, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(HealthcareList2Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, healthcareList1Route)
+      val request = FakeRequest(GET, healthcareList2Route)
 
-      val view = application.injector.instanceOf[HealthcareList1View]
+      val view = application.injector.instanceOf[HealthcareList2View]
 
       val result = route(application, request).value
 
@@ -85,7 +84,7 @@ class HealthcareList1ControllerSpec extends SpecBase {
           .build()
 
       val request =
-        FakeRequest(POST, healthcareList1Route)
+        FakeRequest(POST, healthcareList2Route)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -102,12 +101,12 @@ class HealthcareList1ControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, healthcareList1Route)
+        FakeRequest(POST, healthcareList2Route)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[HealthcareList1View]
+      val view = application.injector.instanceOf[HealthcareList2View]
 
       val result = route(application, request).value
 
@@ -123,13 +122,13 @@ class HealthcareList1ControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, healthcareList1Route)
+      val request = FakeRequest(GET, healthcareList2Route)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -139,14 +138,14 @@ class HealthcareList1ControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, healthcareList1Route)
+        FakeRequest(POST, healthcareList2Route)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
