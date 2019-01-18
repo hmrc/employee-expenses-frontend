@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package views
+package views.engineering
 
-import forms.AncillaryEngineeringWhichTradeFormProvider
-import models.{NormalMode, AncillaryEngineeringWhichTrade}
+import forms.engineering.AncillaryEngineeringWhichTradeFormProvider
+import models.{AncillaryEngineeringWhichTrade, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
-import views.html.AncillaryEngineeringWhichTradeView
+import views.html.engineering.AncillaryEngineeringWhichTradeView
 
 class AncillaryEngineeringWhichTradeViewSpec extends ViewBehaviours {
 

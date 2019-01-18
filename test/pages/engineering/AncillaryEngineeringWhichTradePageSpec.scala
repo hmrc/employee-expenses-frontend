@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages
+package pages.engineering
 
 import models.AncillaryEngineeringWhichTrade
 import pages.behaviours.PageBehaviours

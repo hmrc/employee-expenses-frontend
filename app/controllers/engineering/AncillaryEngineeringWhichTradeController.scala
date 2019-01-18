@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import controllers.actions._
-import forms.AncillaryEngineeringWhichTradeFormProvider
+import forms.engineering.AncillaryEngineeringWhichTradeFormProvider
 import javax.inject.Inject
 import models.{Enumerable, Mode}
 import navigation.Navigator
-import pages.AncillaryEngineeringWhichTradePage
+import pages.engineering.AncillaryEngineeringWhichTradePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.AncillaryEngineeringWhichTradeView
+import views.html.engineering.AncillaryEngineeringWhichTradeView
 
 import scala.concurrent.{ExecutionContext, Future}
 

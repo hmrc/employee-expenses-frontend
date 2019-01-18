@@ -6,11 +6,11 @@ echo "Applying migration AncillaryEngineeringWhichTrade"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /ancillaryEngineeringWhichTrade                        controllers.AncillaryEngineeringWhichTradeController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /ancillaryEngineeringWhichTrade                        controllers.AncillaryEngineeringWhichTradeController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /ancillaryEngineeringWhichTrade                        controllers.engineering.AncillaryEngineeringWhichTradeController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /ancillaryEngineeringWhichTrade                        controllers.engineering.AncillaryEngineeringWhichTradeController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeAncillaryEngineeringWhichTrade                  controllers.AncillaryEngineeringWhichTradeController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeAncillaryEngineeringWhichTrade                  controllers.AncillaryEngineeringWhichTradeController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeAncillaryEngineeringWhichTrade                  controllers.engineering.AncillaryEngineeringWhichTradeController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeAncillaryEngineeringWhichTrade                  controllers.engineering.AncillaryEngineeringWhichTradeController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

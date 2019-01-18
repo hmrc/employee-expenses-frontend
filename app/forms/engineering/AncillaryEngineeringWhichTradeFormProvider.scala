@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms.engineering
 
+import forms.mappings.Mappings
+import javax.inject.Inject
 import models.AncillaryEngineeringWhichTrade
-import play.api.libs.json.JsPath
+import play.api.data.Form
 
-case object AncillaryEngineeringWhichTradePage extends QuestionPage[AncillaryEngineeringWhichTrade] {
+class AncillaryEngineeringWhichTradeFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "ancillaryEngineeringWhichTrade"
+  def apply(): Form[AncillaryEngineeringWhichTrade] =
+    Form(
+      "value" -> enumerable[AncillaryEngineeringWhichTrade]("ancillaryEngineeringWhichTrade.error.required")
+    )
 }
