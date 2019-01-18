@@ -20,7 +20,7 @@
         secondaryHeaderKey: Option[String] = None
 )(implicit messages: Messages)
 
-<header>
+<header class="page-header">
  <h1 class=@headingSize>@messages(headingKey)</h1>
  @if(secondaryHeaderKey.isDefined) {
    <p class="heading-secondary">
