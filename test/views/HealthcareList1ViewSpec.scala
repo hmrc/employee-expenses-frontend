@@ -17,24 +17,24 @@
 package views
 
 import controllers.routes
-import forms.ConstructionalEngineeringList1FormProvider
+import forms.HealthcareList1FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.ConstructionalEngineeringList1View
+import views.html.HealthcareList1View
 
-class ConstructionalEngineeringList1ViewSpec extends YesNoViewBehaviours {
+class HealthcareList1ViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "constructionalEngineeringList1"
+  val messageKeyPrefix = "healthcareList1"
 
-  val form = new ConstructionalEngineeringList1FormProvider()()
+  val form = new HealthcareList1FormProvider()()
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "ConstructionalEngineeringList1 view" must {
+  "HealthcareList1 view" must {
 
-    val view = application.injector.instanceOf[ConstructionalEngineeringList1View]
+    val view = application.injector.instanceOf[HealthcareList1View]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -43,7 +43,7 @@ class ConstructionalEngineeringList1ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.ConstructionalEngineeringList1Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.HealthcareList1Controller.onSubmit(NormalMode).url)
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
@@ -52,15 +52,13 @@ class ConstructionalEngineeringList1ViewSpec extends YesNoViewBehaviours {
         "occupation3",
         "occupation4",
         "occupation5",
-        "occupation6",
-        "occupation7",
-        "occupation8"
+        "occupation6"
+
       )
     )
 
-    behave like pageWithSecondaryHeader(applyView(form), messages("constructionalEngineeringList1.secondaryHeading"))
+    behave like pageWithSecondaryHeader(applyView(form), messages("healthcareList1.secondaryHeading"))
   }
-
 
   application.stop()
 }
