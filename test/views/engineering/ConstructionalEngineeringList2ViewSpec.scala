@@ -45,6 +45,22 @@ class ConstructionalEngineeringList2ViewSpec extends YesNoViewBehaviours {
 
     behave like yesNoPage(form, applyView, messageKeyPrefix,
       controllers.engineering.routes.ConstructionalEngineeringList2Controller.onSubmit(NormalMode).url)
+
+    behave like pageWithList(applyView(form), messageKeyPrefix,
+      Seq(
+        "occupation1",
+        "occupation2",
+        "occupation3",
+        "occupation4",
+        "occupation5",
+        "occupation6",
+        "occupation7",
+        "occupation8",
+        "occupation9"
+      )
+    )
+
+    behave like pageWithSecondaryHeader(applyView(form), messages("constructionalEngineeringList2.secondaryHeading"))
   }
 
   application.stop()
