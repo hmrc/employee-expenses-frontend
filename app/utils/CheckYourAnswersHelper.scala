@@ -19,16 +19,17 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
+import pages.engineering.{ConstructionalEngineeringList1Page, ConstructionalEngineeringList2Page}
 import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def constructionalEngineeringList2: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList2Page) map {
-    x => AnswerRow("constructionalEngineeringList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.ConstructionalEngineeringList2Controller.onPageLoad(CheckMode).url)
+    x => AnswerRow("constructionalEngineeringList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, controllers.engineering.routes.ConstructionalEngineeringList2Controller.onPageLoad(CheckMode).url)
   }
 
   def constructionalEngineeringList1: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList1Page) map {
-    x => AnswerRow("constructionalEngineeringList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.ConstructionalEngineeringList1Controller.onPageLoad(CheckMode).url)
+    x => AnswerRow("constructionalEngineeringList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, controllers.engineering.routes.ConstructionalEngineeringList1Controller.onPageLoad(CheckMode).url)
   }
 
   def typeOfEngineering: Option[AnswerRow] = userAnswers.get(TypeOfEngineeringPage) map {

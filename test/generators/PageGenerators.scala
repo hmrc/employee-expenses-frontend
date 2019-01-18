@@ -18,6 +18,7 @@ package generators
 
 import org.scalacheck.Arbitrary
 import pages._
+import pages.engineering.{ConstructionalEngineeringList1Page, ConstructionalEngineeringList2Page}
 
 trait PageGenerators {
 

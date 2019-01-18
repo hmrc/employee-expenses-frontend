@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import base.SpecBase
-import forms.ConstructionalEngineeringList1FormProvider
+import forms.engineering.ConstructionalEngineeringList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.ConstructionalEngineeringList1Page
+import pages.engineering.ConstructionalEngineeringList1Page
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.ConstructionalEngineeringList1View
+import views.html.engineering.ConstructionalEngineeringList1View
 
 class ConstructionalEngineeringList1ControllerSpec extends SpecBase {
 
@@ -35,7 +34,7 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase {
   val formProvider = new ConstructionalEngineeringList1FormProvider()
   val form = formProvider()
 
-  lazy val constructionalEngineeringList1Route = routes.ConstructionalEngineeringList1Controller.onPageLoad(NormalMode).url
+  lazy val constructionalEngineeringList1Route: String = routes.ConstructionalEngineeringList1Controller.onPageLoad(NormalMode).url
 
   "ConstructionalEngineeringList1 Controller" must {
 
@@ -129,7 +128,7 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

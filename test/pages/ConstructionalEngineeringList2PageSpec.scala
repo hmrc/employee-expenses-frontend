@@ -17,6 +17,7 @@
 package pages
 
 import pages.behaviours.PageBehaviours
+import pages.engineering.ConstructionalEngineeringList2Page
 
 class ConstructionalEngineeringList2PageSpec extends PageBehaviours {
 

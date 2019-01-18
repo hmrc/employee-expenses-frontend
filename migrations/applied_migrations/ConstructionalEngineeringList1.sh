@@ -6,11 +6,11 @@ echo "Applying migration ConstructionalEngineeringList1"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /constructionalEngineeringList1                        controllers.ConstructionalEngineeringList1Controller.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /constructionalEngineeringList1                        controllers.ConstructionalEngineeringList1Controller.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /constructionalEngineeringList1                        controllers.engineering.ConstructionalEngineeringList1Controller.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /constructionalEngineeringList1                        controllers.engineering.ConstructionalEngineeringList1Controller.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeConstructionalEngineeringList1                  controllers.ConstructionalEngineeringList1Controller.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeConstructionalEngineeringList1                  controllers.ConstructionalEngineeringList1Controller.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeConstructionalEngineeringList1                  controllers.engineering.ConstructionalEngineeringList1Controller.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeConstructionalEngineeringList1                  controllers.engineering.ConstructionalEngineeringList1Controller.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

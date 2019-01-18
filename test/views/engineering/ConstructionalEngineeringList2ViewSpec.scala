@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.engineering
 
-import controllers.routes
-import forms.ConstructionalEngineeringList2FormProvider
+import forms.engineering.ConstructionalEngineeringList2FormProvider
 import models.NormalMode
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.ConstructionalEngineeringList2View
+import views.html.engineering.ConstructionalEngineeringList2View
 
 class ConstructionalEngineeringList2ViewSpec extends YesNoViewBehaviours {
 
@@ -30,7 +30,7 @@ class ConstructionalEngineeringList2ViewSpec extends YesNoViewBehaviours {
 
   val form = new ConstructionalEngineeringList2FormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "ConstructionalEngineeringList2 view" must {
 
@@ -43,7 +43,8 @@ class ConstructionalEngineeringList2ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.ConstructionalEngineeringList2Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix,
+      controllers.engineering.routes.ConstructionalEngineeringList2Controller.onSubmit(NormalMode).url)
   }
 
   application.stop()
