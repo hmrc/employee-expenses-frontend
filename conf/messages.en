@@ -113,7 +113,7 @@ constructionalEngineeringList1.occupation8 = Holder up
 
 ambulanceStaff.title = Are you ambulance staff on active service?
 ambulanceStaff.heading = Are you ambulance staff on active service?
-ambulanceStaff.checkYourAnswersLabel = ambulanceStaff
+ambulanceStaff.checkYourAnswersLabel = Are you ambulance staff on active service?
 ambulanceStaff.error.required = Select yes if you are ambulance staff on active service
 
 constructionalEngineeringList2.title = Is your job title listed?
@@ -134,7 +134,7 @@ constructionalEngineeringList2.occupation9 = Turner or welder
 healthcareList1.title = Is your job title listed?
 healthcareList1.heading = Is your job title listed?
 healthcareList1.secondaryHeading = Healthcare occupation list 1
-healthcareList1.checkYourAnswersLabel = healthcareList1
+healthcareList1.checkYourAnswersLabel = Is your job title listed?
 healthcareList1.error.required = Select yes if your job title is listed
 healthcareList1.occupation1 = Nurse or dental nurse
 healthcareList1.occupation2 = Midwife
@@ -156,7 +156,7 @@ typeOfTransport.error.required = Select what type of transport and distribution 
 healthcareList2.title = Is your job title listed?
 healthcareList2.heading = Is your job title listed?
 healthcareList2.secondaryHeading = Healthcare occupation list 2
-healthcareList2.checkYourAnswersLabel = healthcareList2
+healthcareList2.checkYourAnswersLabel = Is your job title listed?
 healthcareList2.error.required = Select yes if your job title is listed
 healthcareList2.occupation1 = Plaster room orderly
 healthcareList2.occupation2 = Hospital porter
