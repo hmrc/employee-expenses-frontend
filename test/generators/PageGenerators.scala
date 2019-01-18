@@ -23,6 +23,9 @@ import pages.transport.TypeOfTransportPage
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryAncillaryEngineeringWhichTradePage: Arbitrary[AncillaryEngineeringWhichTradePage.type] =
+    Arbitrary(AncillaryEngineeringWhichTradePage)
+
   implicit lazy val arbitraryConstructionalEngineeringApprenticePage: Arbitrary[ConstructionalEngineeringApprenticePage.type] =
     Arbitrary(ConstructionalEngineeringApprenticePage)
 

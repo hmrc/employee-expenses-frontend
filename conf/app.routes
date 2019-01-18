@@ -76,3 +76,8 @@ GET         /constructional-engineering-apprentice          controllers.engineer
 POST        /constructional-engineering-apprentice          controllers.engineering.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = NormalMode)
 GET         /change-constructional-engineering-apprentice   controllers.engineering.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-constructional-engineering-apprentice   controllers.engineering.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = CheckMode)
+
+GET        /ancillary-engineering-which-trade               controllers.AncillaryEngineeringWhichTradeController.onPageLoad(mode: Mode = NormalMode)
+POST       /ancillary-engineering-which-trade               controllers.AncillaryEngineeringWhichTradeController.onSubmit(mode: Mode = NormalMode)
+GET        /change-ancillary-engineering-which-trade        controllers.AncillaryEngineeringWhichTradeController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-ancillary-engineering-which-trade        controllers.AncillaryEngineeringWhichTradeController.onSubmit(mode: Mode = CheckMode)
