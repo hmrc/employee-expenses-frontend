@@ -61,3 +61,8 @@ GET        /healthcare-list-1                        controllers.HealthcareList1
 POST       /healthcare-list-1                        controllers.HealthcareList1Controller.onSubmit(mode: Mode = NormalMode)
 GET        /change-healthcare-list-1                  controllers.HealthcareList1Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-healthcare-list-1                  controllers.HealthcareList1Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /type-of-transport                            controllers.TypeOfTransportController.onPageLoad(mode: Mode = NormalMode)
+POST       /type-of-transport                            controllers.TypeOfTransportController.onSubmit(mode: Mode = NormalMode)
+GET        /change-type-of-transport                     controllers.TypeOfTransportController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-type-of-transport                     controllers.TypeOfTransportController.onSubmit(mode: Mode = CheckMode)

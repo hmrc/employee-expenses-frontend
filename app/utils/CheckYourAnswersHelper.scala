@@ -19,12 +19,17 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
+import pages.transport.TypeOfTransportPage
 import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def healthcareList1: Option[AnswerRow] = userAnswers.get(HealthcareList1Page) map {
     x => AnswerRow("healthcareList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.HealthcareList1Controller.onPageLoad(CheckMode).url)
+  }
+
+  def typeOfTransport: Option[AnswerRow] = userAnswers.get(TypeOfTransportPage) map {
+    x => AnswerRow("typeOfTransport.checkYourAnswersLabel", s"typeOfTransport.$x", true, routes.TypeOfTransportController.onPageLoad(CheckMode).url)
   }
 
   def constructionalEngineeringList1: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList1Page) map {

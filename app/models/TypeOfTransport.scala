@@ -19,24 +19,25 @@ package models
 import play.api.libs.json._
 import viewmodels.RadioOption
 
-sealed trait EmployerContribution
+sealed trait TypeOfTransport
 
-object EmployerContribution extends Enumerable.Implicits {
+object TypeOfTransport extends Enumerable.Implicits {
 
-  case object All extends WithName("all") with EmployerContribution
-  case object Some extends WithName("some") with EmployerContribution
-  case object None extends WithName("none") with EmployerContribution
+  case object Airlines extends WithName("airlines") with TypeOfTransport
+  case object PublicTransport extends WithName("publicTransport") with TypeOfTransport
+  case object Railways extends WithName("railways") with TypeOfTransport
+  case object SeamanCarpenter extends WithName("seamanCarpenter") with TypeOfTransport
+  case object Vehicles extends WithName("vehicles") with TypeOfTransport
 
-
-  val values: Seq[EmployerContribution] = Seq(
-    All, Some, None
+  val values: Seq[TypeOfTransport] = Seq(
+    Airlines, PublicTransport, Railways, SeamanCarpenter, Vehicles
   )
 
   val options: Seq[RadioOption] = values.map {
     value =>
-      RadioOption("employerContribution", value.toString)
+      RadioOption("typeOfTransport", value.toString)
   }
 
-  implicit val enumerable: Enumerable[EmployerContribution] =
+  implicit val enumerable: Enumerable[TypeOfTransport] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 }
