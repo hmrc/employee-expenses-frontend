@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-case object AmbulanceStaffPage extends QuestionPage[Boolean] {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def path: JsPath = JsPath \ toString
+class HealthcareList2FormProvider @Inject() extends Mappings {
 
-  override def toString: String = "ambulanceStaff"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("healthcareList2.error.required")
+    )
 }

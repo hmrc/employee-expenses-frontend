@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package views
+package views.healthcare
 
-import controllers.routes
-import forms.HealthcareList1FormProvider
+import forms.healthcare.HealthcareList1FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.HealthcareList1View
+import views.html.healthcare.HealthcareList1View
 
 class HealthcareList1ViewSpec extends YesNoViewBehaviours {
 
@@ -43,7 +42,7 @@ class HealthcareList1ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.HealthcareList1Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, controllers.healthcare.routes.HealthcareList1Controller.onSubmit(NormalMode).url)
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(

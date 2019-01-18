@@ -6,11 +6,11 @@ echo "Applying migration HealthcareList1"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /healthcareList1                        controllers.HealthcareList1Controller.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /healthcareList1                        controllers.HealthcareList1Controller.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /healthcareList1                        controllers.healthcare.HealthcareList1Controller.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /healthcareList1                        controllers.healthcare.HealthcareList1Controller.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeHealthcareList1                  controllers.HealthcareList1Controller.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeHealthcareList1                  controllers.HealthcareList1Controller.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeHealthcareList1                  controllers.healthcare.HealthcareList1Controller.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeHealthcareList1                  controllers.healthcare.HealthcareList1Controller.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

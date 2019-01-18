@@ -14,32 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package pages.healthcare
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class HealthcareList1FormProviderSpec extends BooleanFieldBehaviours {
+case object HealthcareList1Page extends QuestionPage[Boolean] {
 
-  val requiredKey = "healthcareList1.error.required"
-  val invalidKey = "error.boolean"
+  override def path: JsPath = JsPath \ toString
 
-  val form = new HealthcareList1FormProvider()()
-
-  ".value" must {
-
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
+  override def toString: String = "healthcareList1"
 }

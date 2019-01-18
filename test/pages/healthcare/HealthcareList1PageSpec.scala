@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package pages
+package pages.healthcare
 
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-case object HealthcareList1Page extends QuestionPage[Boolean] {
+class HealthcareList1PageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ toString
+  "HealthcareList1Page" must {
 
-  override def toString: String = "healthcareList1"
+    beRetrievable[Boolean](HealthcareList1Page)
+
+    beSettable[Boolean](HealthcareList1Page)
+
+    beRemovable[Boolean](HealthcareList1Page)
+  }
 }

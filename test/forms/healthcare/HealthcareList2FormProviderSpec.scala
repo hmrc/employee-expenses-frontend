@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.healthcare
 
+import forms.HealthcareList2FormProvider
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class AmbulanceStaffFormProviderSpec extends BooleanFieldBehaviours {
+class HealthcareList2FormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "ambulanceStaff.error.required"
+  val requiredKey = "healthcareList2.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new AmbulanceStaffFormProvider()()
+  val form = new HealthcareList2FormProvider()()
 
   ".value" must {
 

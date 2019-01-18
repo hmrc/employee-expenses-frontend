@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.healthcare
 
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
 
-class HealthcareList1FormProvider @Inject() extends Mappings {
+class AmbulanceStaffFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("healthcareList1.error.required")
+      "value" -> boolean("ambulanceStaff.error.required")
     )
 }
