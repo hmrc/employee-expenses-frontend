@@ -168,3 +168,12 @@ constructionalEngineeringApprentice.title = Are you an apprentice or storekeeper
 constructionalEngineeringApprentice.heading = Are you an apprentice or storekeeper?
 constructionalEngineeringApprentice.checkYourAnswersLabel = Are you an apprentice or storekeeper?
 constructionalEngineeringApprentice.error.required = Select yes if you are an apprentice or storekeeper
+
+ancillaryEngineeringWhichTrade.title = Which trade do you work in?
+ancillaryEngineeringWhichTrade.heading = Which trade do you work in?
+ancillaryEngineeringWhichTrade.patternMaker = Pattern maker
+ancillaryEngineeringWhichTrade.labourerSupervisorOrUnskilledWorker = Labourer, supervisor or unskilled worker
+ancillaryEngineeringWhichTrade.apprenticeOrStorekeeper = Apprentice or storekeeper
+ancillaryEngineeringWhichTrade.noneOfTheAbove = None of the above
+ancillaryEngineeringWhichTrade.checkYourAnswersLabel = Which trade do you work in?
+ancillaryEngineeringWhichTrade.error.required = Select which trade you work in

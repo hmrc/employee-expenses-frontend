@@ -19,12 +19,17 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
+import pages.engineering.{AncillaryEngineeringWhichTradePage, ConstructionalEngineeringApprenticePage, ConstructionalEngineeringList1Page, ConstructionalEngineeringList2Page}
 import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
 import pages.engineering.{ConstructionalEngineeringApprenticePage, ConstructionalEngineeringList1Page, ConstructionalEngineeringList2Page}
 import pages.transport.TypeOfTransportPage
 import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+
+  def ancillaryEngineeringWhichTrade: Option[AnswerRow] = userAnswers.get(AncillaryEngineeringWhichTradePage) map {
+    x => AnswerRow("ancillaryEngineeringWhichTrade.checkYourAnswersLabel", s"ancillaryEngineeringWhichTrade.$x", true, controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(CheckMode).url)
+  }
 
   def healthcareList2: Option[AnswerRow] = userAnswers.get(HealthcareList2Page) map {
     x => AnswerRow("healthcareList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, controllers.healthcare.routes.HealthcareList2Controller.onPageLoad(CheckMode).url)
