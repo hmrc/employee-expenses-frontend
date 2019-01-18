@@ -24,6 +24,9 @@ import pages.transport.TypeOfTransportPage
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryFactoryEngineeringList2Page: Arbitrary[FactoryEngineeringList2Page.type] =
+    Arbitrary(FactoryEngineeringList2Page)
+
   implicit lazy val arbitraryHealthcareList2Page: Arbitrary[HealthcareList2Page.type] =
     Arbitrary(HealthcareList2Page)
 
