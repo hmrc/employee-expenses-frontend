@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.engineering
 
-import javax.inject.Inject
+import pages.behaviours.PageBehaviours
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class ConstructionalEngineeringList2PageSpec extends PageBehaviours {
 
-class ConstructionalEngineeringList1FormProvider @Inject() extends Mappings {
+  "ConstructionalEngineeringList2Page" must {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("constructionalEngineeringList1.error.required")
-    )
+    beRetrievable[Boolean](ConstructionalEngineeringList2Page)
+
+    beSettable[Boolean](ConstructionalEngineeringList2Page)
+
+    beRemovable[Boolean](ConstructionalEngineeringList2Page)
+  }
 }

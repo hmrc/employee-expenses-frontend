@@ -14,33 +14,33 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import controllers.actions._
-import forms.ConstructionalEngineeringList1FormProvider
+import forms.engineering.ConstructionalEngineeringApprenticeFormProvider
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.ConstructionalEngineeringList1Page
+import pages.engineering.ConstructionalEngineeringApprenticePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.ConstructionalEngineeringList1View
+import views.html.engineering.ConstructionalEngineeringApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConstructionalEngineeringList1Controller @Inject()(
+class ConstructionalEngineeringApprenticeController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
-                                         formProvider: ConstructionalEngineeringList1FormProvider,
+                                         formProvider: ConstructionalEngineeringApprenticeFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: ConstructionalEngineeringList1View
+                                         view: ConstructionalEngineeringApprenticeView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -48,7 +48,7 @@ class ConstructionalEngineeringList1Controller @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(ConstructionalEngineeringList1Page) match {
+      val preparedForm = request.userAnswers.get(ConstructionalEngineeringApprenticePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -56,7 +56,7 @@ class ConstructionalEngineeringList1Controller @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -65,9 +65,9 @@ class ConstructionalEngineeringList1Controller @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionalEngineeringList1Page, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionalEngineeringApprenticePage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ConstructionalEngineeringList1Page, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(ConstructionalEngineeringApprenticePage, mode)(updatedAnswers))
         }
       )
   }

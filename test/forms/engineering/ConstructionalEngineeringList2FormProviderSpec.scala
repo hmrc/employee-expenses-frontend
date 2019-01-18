@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package forms.engineering
 
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class ConstructionalEngineeringList1FormProviderSpec extends BooleanFieldBehaviours {
+class ConstructionalEngineeringList2FormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "constructionalEngineeringList1.error.required"
+  val requiredKey = "constructionalEngineeringList2.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new ConstructionalEngineeringList1FormProvider()()
+  val form = new ConstructionalEngineeringList2FormProvider()()
 
   ".value" must {
 
