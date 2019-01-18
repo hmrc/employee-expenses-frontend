@@ -61,3 +61,13 @@ GET         /constructional-engineering-list-2            controllers.engineerin
 POST        /constructional-engineering-list-2            controllers.engineering.ConstructionalEngineeringList2Controller.onSubmit(mode: Mode = NormalMode)
 GET         /change-constructional-engineering-list-2     controllers.engineering.ConstructionalEngineeringList2Controller.onPageLoad(mode: Mode = CheckMode)
 POST        /change-constructional-engineering-list-2     controllers.engineering.ConstructionalEngineeringList2Controller.onSubmit(mode: Mode = CheckMode)
+
+GET         /healthcare-list-1                        controllers.HealthcareList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST        /healthcare-list-1                        controllers.HealthcareList1Controller.onSubmit(mode: Mode = NormalMode)
+GET         /change-healthcare-list-1                  controllers.HealthcareList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST        /change-healthcare-list-1                  controllers.HealthcareList1Controller.onSubmit(mode: Mode = CheckMode)
+
+GET         /type-of-transport                            controllers.TypeOfTransportController.onPageLoad(mode: Mode = NormalMode)
+POST        /type-of-transport                            controllers.TypeOfTransportController.onSubmit(mode: Mode = NormalMode)
+GET         /change-type-of-transport                     controllers.TypeOfTransportController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-type-of-transport                     controllers.TypeOfTransportController.onSubmit(mode: Mode = CheckMode)
