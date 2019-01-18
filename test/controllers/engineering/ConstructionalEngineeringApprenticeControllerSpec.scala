@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import base.SpecBase
-import forms.ConstructionalEngineeringApprenticeFormProvider
+import forms.engineering.ConstructionalEngineeringApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.ConstructionalEngineeringApprenticePage
+import pages.engineering.ConstructionalEngineeringApprenticePage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.ConstructionalEngineeringApprenticeView
+import views.html.engineering.ConstructionalEngineeringApprenticeView
 
 class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase {
 
@@ -35,7 +34,7 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase {
   val formProvider = new ConstructionalEngineeringApprenticeFormProvider()
   val form = formProvider()
 
-  lazy val constructionalEngineeringApprenticeRoute = routes.ConstructionalEngineeringApprenticeController.onPageLoad(NormalMode).url
+  lazy val constructionalEngineeringApprenticeRoute: String = routes.ConstructionalEngineeringApprenticeController.onPageLoad(NormalMode).url
 
   "ConstructionalEngineeringApprentice Controller" must {
 
@@ -129,7 +128,7 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

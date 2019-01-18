@@ -6,11 +6,11 @@ echo "Applying migration ConstructionalEngineeringApprentice"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /constructionalEngineeringApprentice                        controllers.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /constructionalEngineeringApprentice                        controllers.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /constructionalEngineeringApprentice                        controllers.engineering.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /constructionalEngineeringApprentice                        controllers.engineering.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeConstructionalEngineeringApprentice                  controllers.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeConstructionalEngineeringApprentice                  controllers.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeConstructionalEngineeringApprentice                  controllers.engineering.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeConstructionalEngineeringApprentice                  controllers.engineering.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

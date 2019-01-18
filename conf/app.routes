@@ -72,7 +72,7 @@ POST        /type-of-transport                              controllers.TypeOfTr
 GET         /change-type-of-transport                       controllers.TypeOfTransportController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-type-of-transport                       controllers.TypeOfTransportController.onSubmit(mode: Mode = CheckMode)
 
-GET         /constructional-engineering-apprentice          controllers.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = NormalMode)
-POST        /constructional-engineering-apprentice          controllers.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = NormalMode)
-GET         /change-constructional-engineering-apprentice   controllers.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-constructional-engineering-apprentice   controllers.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = CheckMode)
+GET         /constructional-engineering-apprentice          controllers.engineering.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = NormalMode)
+POST        /constructional-engineering-apprentice          controllers.engineering.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = NormalMode)
+GET         /change-constructional-engineering-apprentice   controllers.engineering.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-constructional-engineering-apprentice   controllers.engineering.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = CheckMode)

@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package pages
+package pages.engineering
 
 import pages.behaviours.PageBehaviours
-import pages.engineering.ConstructionalEngineeringList1Page
 
-class ConstructionalEngineeringList1PageSpec extends PageBehaviours {
+class ConstructionalEngineeringApprenticePageSpec extends PageBehaviours {
 
-  "ConstructionalEngineeringList1Page" must {
+  "ConstructionalEngineeringApprenticePage" must {
 
-    beRetrievable[Boolean](ConstructionalEngineeringList1Page)
+    beRetrievable[Boolean](ConstructionalEngineeringApprenticePage)
 
-    beSettable[Boolean](ConstructionalEngineeringList1Page)
+    beSettable[Boolean](ConstructionalEngineeringApprenticePage)
 
-    beRemovable[Boolean](ConstructionalEngineeringList1Page)
+    beRemovable[Boolean](ConstructionalEngineeringApprenticePage)
   }
 }

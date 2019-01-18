@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import controllers.actions._
-import forms.ConstructionalEngineeringApprenticeFormProvider
+import forms.engineering.ConstructionalEngineeringApprenticeFormProvider
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.ConstructionalEngineeringApprenticePage
+import pages.engineering.ConstructionalEngineeringApprenticePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.ConstructionalEngineeringApprenticeView
+import views.html.engineering.ConstructionalEngineeringApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +35,7 @@ class ConstructionalEngineeringApprenticeController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          navigator: Navigator,
-                                         identify: AuthenticatedIdentifierAction,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: ConstructionalEngineeringApprenticeFormProvider,

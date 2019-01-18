@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.engineering
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-case object ConstructionalEngineeringApprenticePage extends QuestionPage[Boolean] {
+class ConstructionalEngineeringApprenticeFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "constructionalEngineeringApprentice"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("constructionalEngineeringApprentice.error.required")
+    )
 }
