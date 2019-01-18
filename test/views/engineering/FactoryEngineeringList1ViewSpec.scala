@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package views
+package views.engineering
 
-import controllers.routes
-import forms.FactoryEngineeringList1FormProvider
+import controllers.engineering.routes
+import forms.engineering.FactoryEngineeringList1FormProvider
 import models.NormalMode
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.FactoryEngineeringList1View
+import views.html.engineering.FactoryEngineeringList1View
 
 class FactoryEngineeringList1ViewSpec extends YesNoViewBehaviours {
 
@@ -30,7 +31,7 @@ class FactoryEngineeringList1ViewSpec extends YesNoViewBehaviours {
 
   val form = new FactoryEngineeringList1FormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "FactoryEngineeringList1 view" must {
 
