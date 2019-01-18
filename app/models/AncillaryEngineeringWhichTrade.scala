@@ -16,18 +16,19 @@
 
 package models
 
-import play.api.libs.json._
 import viewmodels.RadioOption
 
 sealed trait AncillaryEngineeringWhichTrade
 
 object AncillaryEngineeringWhichTrade extends Enumerable.Implicits {
 
-  case object Patternmaker extends WithName("patternMaker") with AncillaryEngineeringWhichTrade
-  case object Labourersupervisororunskilledworker extends WithName("labourerSupervisorOrUnskilledWorker") with AncillaryEngineeringWhichTrade
+  case object PatternMaker extends WithName("patternMaker") with AncillaryEngineeringWhichTrade
+  case object LabourerSupervisorOrUnskilledWorker extends WithName("labourerSupervisorOrUnskilledWorker") with AncillaryEngineeringWhichTrade
+  case object ApprenticeOrStorekeeper extends WithName("apprenticeOrStorekeeper") with AncillaryEngineeringWhichTrade
+  case object NoneOfTheAbove extends WithName("noneOfTheAbove") with AncillaryEngineeringWhichTrade
 
   val values: Seq[AncillaryEngineeringWhichTrade] = Seq(
-    Patternmaker, Labourersupervisororunskilledworker
+    PatternMaker, LabourerSupervisorOrUnskilledWorker, ApprenticeOrStorekeeper, NoneOfTheAbove
   )
 
   val options: Seq[RadioOption] = values.map {
@@ -36,5 +37,5 @@ object AncillaryEngineeringWhichTrade extends Enumerable.Implicits {
   }
 
   implicit val enumerable: Enumerable[AncillaryEngineeringWhichTrade] =
-    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+    Enumerable(values.map(v => v.toString -> v): _*)
 }
