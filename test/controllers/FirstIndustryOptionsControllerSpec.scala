@@ -22,18 +22,18 @@ import models.{FirstIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.FirstIndustryOptionsPage
 import play.api.Application
+import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.FirstIndustryOptionsView
-import play.api.inject.bind
 
 
 class FirstIndustryOptionsControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/FOO")
 
-  lazy val firstIndustryOptionsRoute = routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url
+  lazy val firstIndustryOptionsRoute = controllers.routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url
   val formProvider = new FirstIndustryOptionsFormProvider()
   val form = formProvider()
 
@@ -115,7 +115,7 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
 
@@ -130,7 +130,7 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
 

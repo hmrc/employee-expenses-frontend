@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.healthcare
 
 import base.SpecBase
-import forms.AmbulanceStaffFormProvider
+import forms.healthcare.AmbulanceStaffFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.AmbulanceStaffPage
+import pages.healthcare.AmbulanceStaffPage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.AmbulanceStaffView
+import views.html.healthcare.AmbulanceStaffView
 
 class AmbulanceStaffControllerSpec extends SpecBase {
 
@@ -35,7 +34,7 @@ class AmbulanceStaffControllerSpec extends SpecBase {
   val formProvider = new AmbulanceStaffFormProvider()
   val form = formProvider()
 
-  lazy val ambulanceStaffRoute = routes.AmbulanceStaffController.onPageLoad(NormalMode).url
+  lazy val ambulanceStaffRoute = controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode).url
 
   "AmbulanceStaff Controller" must {
 
@@ -129,7 +128,7 @@ class AmbulanceStaffControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class AmbulanceStaffControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

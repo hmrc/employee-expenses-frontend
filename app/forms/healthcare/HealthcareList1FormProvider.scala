@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(
-        headingKey: String,
-        headingSize: String = "heading-xlarge",
-        secondaryHeaderKey: Option[String] = None
-)(implicit messages: Messages)
+package forms.healthcare
 
-<header class="page-header">
- <h1 class=@headingSize>@messages(headingKey)</h1>
- @if(secondaryHeaderKey.isDefined) {
-   <p class="heading-secondary">
-     <span class="visuallyhidden">This section is: </span> @messages(secondaryHeaderKey.get)
-   </p>
- }
-</header>
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
+
+class HealthcareList1FormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("healthcareList1.error.required")
+    )
+}

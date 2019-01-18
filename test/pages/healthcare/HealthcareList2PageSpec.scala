@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package pages
+package pages.healthcare
 
 import pages.behaviours.PageBehaviours
 
-class HealthcareList1PageSpec extends PageBehaviours {
+class HealthcareList2PageSpec extends PageBehaviours {
 
-  "HealthcareList1Page" must {
+  "HealthcareList2Page" must {
 
-    beRetrievable[Boolean](HealthcareList1Page)
+    beRetrievable[Boolean](HealthcareList2Page)
 
-    beSettable[Boolean](HealthcareList1Page)
+    beSettable[Boolean](HealthcareList2Page)
 
-    beRemovable[Boolean](HealthcareList1Page)
+    beRemovable[Boolean](HealthcareList2Page)
   }
 }
