@@ -152,3 +152,8 @@ typeOfTransport.seamanCarpenter = Seaman carpenter
 typeOfTransport.vehicles = Vehicles
 typeOfTransport.checkYourAnswersLabel = What type of transport and distribution do you work in?
 typeOfTransport.error.required = Select what type of transport and distribution do you work in
+
+constructionalEngineeringApprentice.title = Are you an apprentice or storekeeper?
+constructionalEngineeringApprentice.heading = Are you an apprentice or storekeeper?
+constructionalEngineeringApprentice.checkYourAnswersLabel = Are you an apprentice or storekeeper?
+constructionalEngineeringApprentice.error.required = Select yes if you are an apprentice or storekeeper

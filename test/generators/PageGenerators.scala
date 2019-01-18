@@ -18,10 +18,13 @@ package generators
 
 import org.scalacheck.Arbitrary
 import pages._
-import pages.engineering.{ConstructionalEngineeringList1Page, ConstructionalEngineeringList2Page}
+import pages.engineering.{ConstructionalEngineeringApprenticePage, ConstructionalEngineeringList1Page, ConstructionalEngineeringList2Page}
 import pages.transport.TypeOfTransportPage
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryConstructionalEngineeringApprenticePage: Arbitrary[ConstructionalEngineeringApprenticePage.type] =
+    Arbitrary(ConstructionalEngineeringApprenticePage)
 
   implicit lazy val arbitraryConstructionalEngineeringList2Page: Arbitrary[ConstructionalEngineeringList2Page.type] =
     Arbitrary(ConstructionalEngineeringList2Page)

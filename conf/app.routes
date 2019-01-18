@@ -1,73 +1,78 @@
 # microservice specific routes
 
-GET         /                                             controllers.IndexController.onPageLoad
+GET         /                                               controllers.IndexController.onPageLoad
 
-GET         /assets/*file                                 controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                                   controllers.Assets.versioned(path="/public", file: Asset)
 
-GET         /language/:lang                               controllers.LanguageSwitchController.switchToLanguage(lang: String)
+GET         /language/:lang                                 controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
-GET         /this-service-has-been-reset                  controllers.SessionExpiredController.onPageLoad
+GET         /this-service-has-been-reset                    controllers.SessionExpiredController.onPageLoad
 
-GET         /check-your-answers                           controllers.CheckYourAnswersController.onPageLoad
+GET         /check-your-answers                             controllers.CheckYourAnswersController.onPageLoad
 
-GET         /unauthorised                                 controllers.UnauthorisedController.onPageLoad
+GET         /unauthorised                                   controllers.UnauthorisedController.onPageLoad
 
-GET         /session-key                                  controllers.RedirectMongoKeyController.onPageLoad(key: String, journeyId: Option[String])
+GET         /session-key                                    controllers.RedirectMongoKeyController.onPageLoad(key: String, journeyId: Option[String])
 
-GET         /expenses-employer-paid                       controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)
-POST        /expenses-employer-paid                       controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = NormalMode)
-GET         /change-expenses-employer-paid                controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-expenses-employer-paid                controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = CheckMode)
+GET         /expenses-employer-paid                         controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)
+POST        /expenses-employer-paid                         controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = NormalMode)
+GET         /change-expenses-employer-paid                  controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-expenses-employer-paid                  controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = CheckMode)
 
-GET         /cannot-claim                                 controllers.CannotClaimController.onPageLoad()
+GET         /cannot-claim                                   controllers.CannotClaimController.onPageLoad()
 
-GET         /employer-contribution                        controllers.EmployerContributionController.onPageLoad(mode: Mode = NormalMode)
-POST        /employer-contribution                        controllers.EmployerContributionController.onSubmit(mode: Mode = NormalMode)
-GET         /change-employer-contribution                 controllers.EmployerContributionController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-employer-contribution                 controllers.EmployerContributionController.onSubmit(mode: Mode = CheckMode)
+GET         /employer-contribution                          controllers.EmployerContributionController.onPageLoad(mode: Mode = NormalMode)
+POST        /employer-contribution                          controllers.EmployerContributionController.onSubmit(mode: Mode = NormalMode)
+GET         /change-employer-contribution                   controllers.EmployerContributionController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-employer-contribution                   controllers.EmployerContributionController.onSubmit(mode: Mode = CheckMode)
 
-GET         /claim-by-alternative                         controllers.ClaimByAlternativeController.onPageLoad()
-POST        /claim-by-alternative                         controllers.ClaimByAlternativeController.onSubmit()
+GET         /claim-by-alternative                           controllers.ClaimByAlternativeController.onPageLoad()
+POST        /claim-by-alternative                           controllers.ClaimByAlternativeController.onSubmit()
 
-GET         /claiming-for-more-than-one-job               controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = NormalMode)
-POST        /claiming-for-more-than-one-job               controllers.MultipleEmploymentsController.onSubmit(mode: Mode = NormalMode)
-GET         /change-claiming-for-more-than-one-job        controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-claiming-for-more-than-one-job        controllers.MultipleEmploymentsController.onSubmit(mode: Mode = CheckMode)
+GET         /claiming-for-more-than-one-job                 controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = NormalMode)
+POST        /claiming-for-more-than-one-job                 controllers.MultipleEmploymentsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-claiming-for-more-than-one-job          controllers.MultipleEmploymentsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-claiming-for-more-than-one-job          controllers.MultipleEmploymentsController.onSubmit(mode: Mode = CheckMode)
 
-GET         /claim-amount                                 controllers.ClaimAmountController.onPageLoad(mode: Mode = NormalMode)
-GET         /check-claim-amount                           controllers.ClaimAmountController.onPageLoad(mode: Mode = CheckMode)
+GET         /claim-amount                                   controllers.ClaimAmountController.onPageLoad(mode: Mode = NormalMode)
+GET         /check-claim-amount                             controllers.ClaimAmountController.onPageLoad(mode: Mode = CheckMode)
 
-GET         /first-industry-type                          controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
-POST        /first-industry-type                          controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
-GET         /change-first-industry-type                   controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-first-industry-type                   controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+GET         /first-industry-type                            controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST        /first-industry-type                            controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-first-industry-type                     controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-first-industry-type                     controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
-GET         /type-of-engineering                          controllers.TypeOfEngineeringController.onPageLoad(mode: Mode = NormalMode)
-POST        /type-of-engineering                          controllers.TypeOfEngineeringController.onSubmit(mode: Mode = NormalMode)
-GET         /change-type-of-engineering                   controllers.TypeOfEngineeringController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-type-of-engineering                   controllers.TypeOfEngineeringController.onSubmit(mode: Mode = CheckMode)
+GET         /type-of-engineering                            controllers.TypeOfEngineeringController.onPageLoad(mode: Mode = NormalMode)
+POST        /type-of-engineering                            controllers.TypeOfEngineeringController.onSubmit(mode: Mode = NormalMode)
+GET         /change-type-of-engineering                     controllers.TypeOfEngineeringController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-type-of-engineering                     controllers.TypeOfEngineeringController.onSubmit(mode: Mode = CheckMode)
 
-GET         /constructional-engineering-list-1            controllers.engineering.ConstructionalEngineeringList1Controller.onPageLoad(mode: Mode = NormalMode)
-POST        /constructional-engineering-list-1            controllers.engineering.ConstructionalEngineeringList1Controller.onSubmit(mode: Mode = NormalMode)
-GET         /change-constructional-engineering-list-1     controllers.engineering.ConstructionalEngineeringList1Controller.onPageLoad(mode: Mode = CheckMode)
-POST        /change-constructional-engineering-list-1     controllers.engineering.ConstructionalEngineeringList1Controller.onSubmit(mode: Mode = CheckMode)
+GET         /constructional-engineering-list-1              controllers.engineering.ConstructionalEngineeringList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST        /constructional-engineering-list-1              controllers.engineering.ConstructionalEngineeringList1Controller.onSubmit(mode: Mode = NormalMode)
+GET         /change-constructional-engineering-list-1       controllers.engineering.ConstructionalEngineeringList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST        /change-constructional-engineering-list-1       controllers.engineering.ConstructionalEngineeringList1Controller.onSubmit(mode: Mode = CheckMode)
 
-GET         /ambulance-staff                              controllers.AmbulanceStaffController.onPageLoad(mode: Mode = NormalMode)
-POST        /ambulance-staff                              controllers.AmbulanceStaffController.onSubmit(mode: Mode = NormalMode)
-GET         /change-ambulance-staff                       controllers.AmbulanceStaffController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-ambulance-staff                       controllers.AmbulanceStaffController.onSubmit(mode: Mode = CheckMode)
+GET         /ambulance-staff                                controllers.AmbulanceStaffController.onPageLoad(mode: Mode = NormalMode)
+POST        /ambulance-staff                                controllers.AmbulanceStaffController.onSubmit(mode: Mode = NormalMode)
+GET         /change-ambulance-staff                         controllers.AmbulanceStaffController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-ambulance-staff                         controllers.AmbulanceStaffController.onSubmit(mode: Mode = CheckMode)
 
-GET         /constructional-engineering-list-2            controllers.engineering.ConstructionalEngineeringList2Controller.onPageLoad(mode: Mode = NormalMode)
-POST        /constructional-engineering-list-2            controllers.engineering.ConstructionalEngineeringList2Controller.onSubmit(mode: Mode = NormalMode)
-GET         /change-constructional-engineering-list-2     controllers.engineering.ConstructionalEngineeringList2Controller.onPageLoad(mode: Mode = CheckMode)
-POST        /change-constructional-engineering-list-2     controllers.engineering.ConstructionalEngineeringList2Controller.onSubmit(mode: Mode = CheckMode)
+GET         /constructional-engineering-list-2              controllers.engineering.ConstructionalEngineeringList2Controller.onPageLoad(mode: Mode = NormalMode)
+POST        /constructional-engineering-list-2              controllers.engineering.ConstructionalEngineeringList2Controller.onSubmit(mode: Mode = NormalMode)
+GET         /change-constructional-engineering-list-2       controllers.engineering.ConstructionalEngineeringList2Controller.onPageLoad(mode: Mode = CheckMode)
+POST        /change-constructional-engineering-list-2       controllers.engineering.ConstructionalEngineeringList2Controller.onSubmit(mode: Mode = CheckMode)
 
-GET         /healthcare-list-1                        controllers.HealthcareList1Controller.onPageLoad(mode: Mode = NormalMode)
-POST        /healthcare-list-1                        controllers.HealthcareList1Controller.onSubmit(mode: Mode = NormalMode)
-GET         /change-healthcare-list-1                  controllers.HealthcareList1Controller.onPageLoad(mode: Mode = CheckMode)
-POST        /change-healthcare-list-1                  controllers.HealthcareList1Controller.onSubmit(mode: Mode = CheckMode)
+GET         /healthcare-list-1                              controllers.HealthcareList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST        /healthcare-list-1                              controllers.HealthcareList1Controller.onSubmit(mode: Mode = NormalMode)
+GET         /change-healthcare-list-1                       controllers.HealthcareList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST        /change-healthcare-list-1                       controllers.HealthcareList1Controller.onSubmit(mode: Mode = CheckMode)
 
-GET         /type-of-transport                            controllers.TypeOfTransportController.onPageLoad(mode: Mode = NormalMode)
-POST        /type-of-transport                            controllers.TypeOfTransportController.onSubmit(mode: Mode = NormalMode)
-GET         /change-type-of-transport                     controllers.TypeOfTransportController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-type-of-transport                     controllers.TypeOfTransportController.onSubmit(mode: Mode = CheckMode)
+GET         /type-of-transport                              controllers.TypeOfTransportController.onPageLoad(mode: Mode = NormalMode)
+POST        /type-of-transport                              controllers.TypeOfTransportController.onSubmit(mode: Mode = NormalMode)
+GET         /change-type-of-transport                       controllers.TypeOfTransportController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-type-of-transport                       controllers.TypeOfTransportController.onSubmit(mode: Mode = CheckMode)
+
+GET         /constructional-engineering-apprentice          controllers.engineering.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = NormalMode)
+POST        /constructional-engineering-apprentice          controllers.engineering.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = NormalMode)
+GET         /change-constructional-engineering-apprentice   controllers.engineering.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-constructional-engineering-apprentice   controllers.engineering.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = CheckMode)
