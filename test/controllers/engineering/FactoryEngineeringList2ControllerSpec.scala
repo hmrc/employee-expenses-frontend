@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import base.SpecBase
-import forms.FactoryEngineeringList2FormProvider
+import forms.engineering.FactoryEngineeringList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.FactoryEngineeringList2Page
+import pages.engineering.FactoryEngineeringList2Page
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.FactoryEngineeringList2View
+import views.html.engineering.FactoryEngineeringList2View
 
 class FactoryEngineeringList2ControllerSpec extends SpecBase {
 
@@ -35,7 +34,7 @@ class FactoryEngineeringList2ControllerSpec extends SpecBase {
   val formProvider = new FactoryEngineeringList2FormProvider()
   val form = formProvider()
 
-  lazy val factoryEngineeringList2Route = routes.FactoryEngineeringList2Controller.onPageLoad(NormalMode).url
+  lazy val factoryEngineeringList2Route: String = routes.FactoryEngineeringList2Controller.onPageLoad(NormalMode).url
 
   "FactoryEngineeringList2 Controller" must {
 
@@ -129,7 +128,7 @@ class FactoryEngineeringList2ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class FactoryEngineeringList2ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

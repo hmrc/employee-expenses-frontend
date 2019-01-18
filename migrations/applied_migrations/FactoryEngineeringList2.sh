@@ -6,11 +6,11 @@ echo "Applying migration FactoryEngineeringList2"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /factoryEngineeringList2                        controllers.FactoryEngineeringList2Controller.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /factoryEngineeringList2                        controllers.FactoryEngineeringList2Controller.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /factoryEngineeringList2                        controllers.engineering.FactoryEngineeringList2Controller.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /factoryEngineeringList2                        controllers.engineering.FactoryEngineeringList2Controller.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeFactoryEngineeringList2                  controllers.FactoryEngineeringList2Controller.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeFactoryEngineeringList2                  controllers.FactoryEngineeringList2Controller.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeFactoryEngineeringList2                  controllers.engineering.FactoryEngineeringList2Controller.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeFactoryEngineeringList2                  controllers.engineering.FactoryEngineeringList2Controller.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
