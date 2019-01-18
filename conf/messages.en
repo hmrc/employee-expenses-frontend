@@ -82,6 +82,7 @@ firstIndustryOptions.transportAndDistribution = Transport and distribution
 firstIndustryOptions.noneOfTheAbove = None of the above
 firstIndustryOptions.checkYourAnswersLabel = What industry do you work in?
 firstIndustryOptions.error.required = Select the industry you work in
+
 claimAmount.title = You can claim tax relief on £{0}
 claimAmount.heading = You can claim tax relief on £{0}
 claimAmount.description = The amount of tax relief you can claim depends on the rate of tax you pay.
@@ -114,6 +115,21 @@ ambulanceStaff.title = Are you ambulance staff on active service?
 ambulanceStaff.heading = Are you ambulance staff on active service?
 ambulanceStaff.checkYourAnswersLabel = ambulanceStaff
 ambulanceStaff.error.required = Select yes if you are ambulance staff on active service
+
+constructionalEngineeringList2.title = Is your job title listed?
+constructionalEngineeringList2.heading = Is your job title listed?
+constructionalEngineeringList2.secondaryHeading = Constructional engineering occupations list 2
+constructionalEngineeringList2.checkYourAnswersLabel = Is your job title listed?
+constructionalEngineeringList2.error.required = Select yes if your job title is listed
+constructionalEngineeringList2.occupation1 = Marker off
+constructionalEngineeringList2.occupation2 = Plater
+constructionalEngineeringList2.occupation3 = Rigger
+constructionalEngineeringList2.occupation4 = Riveter
+constructionalEngineeringList2.occupation5 = Rivet heater
+constructionalEngineeringList2.occupation6 = Scaffolder
+constructionalEngineeringList2.occupation7 = Sheeter
+constructionalEngineeringList2.occupation8 = Template worker
+constructionalEngineeringList2.occupation9 = Turner or welder
 
 healthcareList1.title = Is your job title listed?
 healthcareList1.heading = Is your job title listed?
