@@ -31,25 +31,28 @@ import views.html.CheckboxView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckboxController @Inject()(override val messagesApi: MessagesApi,
-                                   sessionRepository: SessionRepository,
-                                   navigator: Navigator,
-                                   identify: UnauthenticatedIdentifierAction,
-                                   getData: DataRetrievalAction,
-                                   requireData: DataRequiredAction,
-                                   formProvider: CheckboxFormProvider,
-                                   val controllerComponents: MessagesControllerComponents,
-                                   view: CheckboxView
+class CheckboxController @Inject()(
+                                    override val messagesApi: MessagesApi,
+                                    sessionRepository: SessionRepository,
+                                    navigator: Navigator,
+                                    identify: UnauthenticatedIdentifierAction,
+                                    getData: DataRetrievalAction,
+                                    requireData: DataRequiredAction,
+                                    formProvider: CheckboxFormProvider,
+                                    val controllerComponents: MessagesControllerComponents,
+                                    view: CheckboxView
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request => {
-      val preparedForm: Form[Set[Checkbox]] = request.userAnswers.get[Set[Checkbox]](CheckboxPage) match {
+
+      val preparedForm = request.userAnswers.get[Set[Checkbox]](CheckboxPage) match {
         case Some(value) =>
           formProvider().fill(value)
         case _ =>
           formProvider()
       }
+
       Ok(view(preparedForm, mode))
     }
   }
@@ -60,10 +63,11 @@ class CheckboxController @Inject()(override val messagesApi: MessagesApi,
       formProvider().bindFromRequest().fold(
         (formWithErrors: Form[Set[Checkbox]]) =>
           Future.successful(BadRequest(view(formWithErrors, mode))),
+
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set[Set[Checkbox]](CheckboxPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CheckboxPage, mode)(updatedAnswers))
         }
       )

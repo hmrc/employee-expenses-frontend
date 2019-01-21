@@ -17,21 +17,15 @@
 package forms
 
 import forms.mappings.Mappings
+import javax.inject.Inject
 import models.Checkbox
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.data.validation.{Constraint, Invalid, Valid}
 
-class CheckboxFormProvider extends Mappings {
-  private def constraint: Constraint[Set[Checkbox]] = Constraint {
-    case set: Set[_] =>
-      if (set.nonEmpty) Valid else Invalid("checkbox.error.required")
-    case _ =>
-      Invalid("error.invalid")
-  }
+class CheckboxFormProvider @Inject extends Mappings {
 
   def apply(): Form[Set[Checkbox]] =
     Form(
-      "value" -> set(enumerable[Checkbox]("checkbox.error.required")).verifying(constraint)
+      "value" -> set(enumerable[Checkbox]()).verifying(nonEmptySet("checkbox.error.required"))
     )
 }
