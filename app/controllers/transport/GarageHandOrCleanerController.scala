@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.transport
 
 import controllers.actions._
-import forms.GarageHandOrCleanerFormProvider
+import forms.transport.GarageHandOrCleanerFormProvider
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.GarageHandOrCleanerPage
+import pages.transport.GarageHandOrCleanerPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.GarageHandOrCleanerView
+import views.html.transport.GarageHandOrCleanerView
 
 import scala.concurrent.{ExecutionContext, Future}
 

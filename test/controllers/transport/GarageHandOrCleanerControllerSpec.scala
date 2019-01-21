@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.transport
 
 import base.SpecBase
-import forms.GarageHandOrCleanerFormProvider
+import forms.transport.GarageHandOrCleanerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.GarageHandOrCleanerPage
+import pages.transport.GarageHandOrCleanerPage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.GarageHandOrCleanerView
+import views.html.transport.GarageHandOrCleanerView
 
 class GarageHandOrCleanerControllerSpec extends SpecBase {
 
@@ -129,7 +128,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

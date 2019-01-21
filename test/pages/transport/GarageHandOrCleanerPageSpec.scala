@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package pages
+package pages.transport
 
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-case object GarageHandOrCleanerPage extends QuestionPage[Boolean] {
+class GarageHandOrCleanerPageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ toString
+  "GarageHandOrCleanerPage" must {
 
-  override def toString: String = "garageHandOrCleaner"
+    beRetrievable[Boolean](GarageHandOrCleanerPage)
+
+    beSettable[Boolean](GarageHandOrCleanerPage)
+
+    beRemovable[Boolean](GarageHandOrCleanerPage)
+  }
 }

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.transport
 
 import controllers.routes
-import forms.GarageHandOrCleanerFormProvider
+import forms.transport.GarageHandOrCleanerFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.GarageHandOrCleanerView
+import views.html.transport.GarageHandOrCleanerView
 
 class GarageHandOrCleanerViewSpec extends YesNoViewBehaviours {
 
@@ -43,7 +43,7 @@ class GarageHandOrCleanerViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.GarageHandOrCleanerController.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, controllers.transport.routes.GarageHandOrCleanerController.onSubmit(NormalMode).url)
   }
 
   application.stop()

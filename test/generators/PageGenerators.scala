@@ -20,7 +20,7 @@ import org.scalacheck.Arbitrary
 import pages._
 import pages.engineering._
 import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
-import pages.transport.{AirlineJobListPage, TypeOfTransportPage}
+import pages.transport.{AirlineJobListPage, GarageHandOrCleanerPage, TypeOfTransportPage}
 
 trait PageGenerators {
 

@@ -6,11 +6,11 @@ echo "Applying migration GarageHandOrCleaner"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /garageHandOrCleaner                        controllers.GarageHandOrCleanerController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /garageHandOrCleaner                        controllers.GarageHandOrCleanerController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /garageHandOrCleaner                        controllers.transport.GarageHandOrCleanerController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /garageHandOrCleaner                        controllers.transport.GarageHandOrCleanerController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeGarageHandOrCleaner                  controllers.GarageHandOrCleanerController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeGarageHandOrCleaner                  controllers.GarageHandOrCleanerController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeGarageHandOrCleaner                  controllers.transport.GarageHandOrCleanerController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeGarageHandOrCleaner                  controllers.transport.GarageHandOrCleanerController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

@@ -14,32 +14,16 @@
  * limitations under the License.
  */
 
-package forms
+package forms.transport
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class GarageHandOrCleanerFormProviderSpec extends BooleanFieldBehaviours {
+class GarageHandOrCleanerFormProvider @Inject() extends Mappings {
 
-  val requiredKey = "garageHandOrCleaner.error.required"
-  val invalidKey = "error.boolean"
-
-  val form = new GarageHandOrCleanerFormProvider()()
-
-  ".value" must {
-
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("garageHandOrCleaner.error.required")
     )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
 }

@@ -22,13 +22,14 @@ import pages._
 import pages.engineering._
 import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
 import viewmodels.AnswerRow
-import pages.transport.{AirlineJobListPage, TypeOfTransportPage}
+import pages.transport.{AirlineJobListPage, GarageHandOrCleanerPage, TypeOfTransportPage}
 import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def garageHandOrCleaner: Option[AnswerRow] = userAnswers.get(GarageHandOrCleanerPage) map {
-    x => AnswerRow("garageHandOrCleaner.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.GarageHandOrCleanerController.onPageLoad(CheckMode).url)
+    x => AnswerRow("garageHandOrCleaner.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.transport.routes.GarageHandOrCleanerController.onPageLoad(CheckMode).url)
   }
 
   def airlineJobListed: Option[AnswerRow] = userAnswers.get(AirlineJobListPage) map {
