@@ -16,11 +16,11 @@
 
 package models
 
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json._
-import org.scalacheck.Arbitrary.arbitrary
 
 class CheckboxSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues {
 
@@ -28,7 +28,7 @@ class CheckboxSpec extends WordSpec with MustMatchers with PropertyChecks with O
 
     "deserialise valid values" in {
 
-      val gen= Gen.oneOf(Checkbox.values.toSeq)
+      val gen = Gen.oneOf(Checkbox.values.toSeq)
 
       forAll(gen) {
         checkbox =>

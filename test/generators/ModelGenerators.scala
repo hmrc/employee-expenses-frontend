@@ -16,9 +16,7 @@
 
 package generators
 
-import models.Checkbox.Option1
 import models._
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
@@ -50,6 +48,6 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryCheckbox: Arbitrary[Checkbox] =
     Arbitrary {
-      Gen.oneOf(Seq(Option1))
+      Gen.oneOf(Checkbox.values.toSeq)
     }
 }
