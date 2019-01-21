@@ -18,6 +18,8 @@ echo "checkbox.title = checkbox" >> ../conf/messages.en
 echo "checkbox.heading = checkbox" >> ../conf/messages.en
 echo "checkbox.option1 = option1" >> ../conf/messages.en
 echo "checkbox.option2 = option2" >> ../conf/messages.en
+echo "checkbox.option3 = option3" >> ../conf/messages.en
+echo "checkbox.option4 = option4" >> ../conf/messages.en
 echo "checkbox.checkYourAnswersLabel = checkbox" >> ../conf/messages.en
 echo "checkbox.error.required = Select checkbox" >> ../conf/messages.en
 
@@ -63,7 +65,13 @@ awk '/class/ {\
      print;\
      print "";\
      print "  def checkbox: Option[AnswerRow] = userAnswers.get(CheckboxPage) map {";\
-     print "    x => AnswerRow(\"checkbox.checkYourAnswersLabel\", s\"checkbox.$x\", true, routes.CheckboxController.onPageLoad(CheckMode).url)";\
+     print "    x => AnswerRow(";\
+     print "        \"checkbox.checkYourAnswersLabel\",";\
+     print "        s\"checkbox.$x\",";\
+     print "        x.map(value => s\"${messages(s\"checkbox.$value\")}\").mkString(\", <br>\"),";\
+     print "        true,";\
+     print "        routes.CheckboxController.onPageLoad(CheckMode).url";\
+     print "    )";\
      print "  }";\
      next }1' ../app/utils/CheckYourAnswersHelper.scala > tmp && mv tmp ../app/utils/CheckYourAnswersHelper.scala
 
