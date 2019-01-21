@@ -86,3 +86,8 @@ GET         /ancillary-engineering-which-trade              controllers.engineer
 POST        /ancillary-engineering-which-trade              controllers.engineering.AncillaryEngineeringWhichTradeController.onSubmit(mode: Mode = NormalMode)
 GET         /change-ancillary-engineering-which-trade       controllers.engineering.AncillaryEngineeringWhichTradeController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-ancillary-engineering-which-trade       controllers.engineering.AncillaryEngineeringWhichTradeController.onSubmit(mode: Mode = CheckMode)
+
+GET         /factory-engineering-list-1                     controllers.engineering.FactoryEngineeringList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST        /factory-engineering-list-1                      controllers.engineering.FactoryEngineeringList1Controller.onSubmit(mode: Mode = NormalMode)
+GET         /change-factory-engineering-list-1              controllers.engineering.FactoryEngineeringList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST        /change-factory-engineering-list-1              controllers.engineering.FactoryEngineeringList1Controller.onSubmit(mode: Mode = CheckMode)
