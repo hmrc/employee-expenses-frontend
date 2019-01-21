@@ -6,11 +6,11 @@ echo "Applying migration TypeOfTransport"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /typeOfTransport                        controllers.TypeOfTransportController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /typeOfTransport                        controllers.TypeOfTransportController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /typeOfTransport                        controllers.transport.TypeOfTransportController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /typeOfTransport                        controllers.transport.TypeOfTransportController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeTypeOfTransport                  controllers.TypeOfTransportController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeTypeOfTransport                  controllers.TypeOfTransportController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeTypeOfTransport                  controllers.transport.TypeOfTransportController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeTypeOfTransport                  controllers.transport.TypeOfTransportController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

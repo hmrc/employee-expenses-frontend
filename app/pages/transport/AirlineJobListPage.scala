@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.transport
 
-import pages.behaviours.PageBehaviours
-import pages.transport.AirlineJobListedPage
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class AirlineJobListedPageSpec extends PageBehaviours {
+case object AirlineJobListPage extends QuestionPage[Boolean] {
 
-  "AirlineJobListedPage" must {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[Boolean](AirlineJobListedPage)
-
-    beSettable[Boolean](AirlineJobListedPage)
-
-    beRemovable[Boolean](AirlineJobListedPage)
-  }
+  override def toString: String = "airlineJobList"
 }

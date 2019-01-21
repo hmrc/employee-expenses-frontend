@@ -125,7 +125,11 @@ typeOfTransport.vehicles = Vehicles
 typeOfTransport.checkYourAnswersLabel = What type of transport and distribution do you work in?
 typeOfTransport.error.required = Select what type of transport and distribution do you work in
 
-airlineJobListed.title = airlineJobListed
-airlineJobListed.heading = airlineJobListed
-airlineJobListed.checkYourAnswersLabel = airlineJobListed
-airlineJobListed.error.required = Select yes if airlineJobListed
+airlineJobList.title = Is your job title listed?
+airlineJobList.heading = Is your job title listed?
+airlineJobList.occupation1 = Pilot
+airlineJobList.occupation2 = Co-pilot
+airlineJobList.occupation3 = Uniformed flight deck crew
+airlineJobList.checkYourAnswersLabel = Is your job title listed?
+airlineJobList.error.required = Select yes if your job title listed?
+

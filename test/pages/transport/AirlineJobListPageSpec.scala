@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.transport
 
-import javax.inject.Inject
+import pages.behaviours.PageBehaviours
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class AirlineJobListPageSpec extends PageBehaviours {
 
-class AirlineJobListedFormProvider @Inject() extends Mappings {
+  "AirlineJobListPage" must {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("airlineJobListed.error.required")
-    )
+    beRetrievable[Boolean](AirlineJobListPage)
+
+    beSettable[Boolean](AirlineJobListPage)
+
+    beRemovable[Boolean](AirlineJobListPage)
+  }
 }

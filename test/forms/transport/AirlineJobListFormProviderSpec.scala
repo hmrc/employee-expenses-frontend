@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package forms.transport
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.transport.AirlineJobListedFormProvider
 import play.api.data.FormError
 
-class AirlineJobListedFormProviderSpec extends BooleanFieldBehaviours {
+class AirlineJobListFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "airlineJobListed.error.required"
+  val requiredKey = "airlineJobList.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new AirlineJobListedFormProvider()()
+  val form = new AirlineJobListFormProvider()()
 
   ".value" must {
 

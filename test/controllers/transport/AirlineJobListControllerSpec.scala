@@ -14,30 +14,30 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.transport
 
 import base.SpecBase
-import forms.transport.AirlineJobListedFormProvider
+import controllers.routes
+import forms.transport.AirlineJobListFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.transport.AirlineJobListedPage
+import pages.transport.AirlineJobListPage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.AirlineJobListedView
+import views.html.transport.AirlineJobListView
 
-class AirlineJobListedControllerSpec extends SpecBase {
+class AirlineJobListControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AirlineJobListedFormProvider()
+  val formProvider = new AirlineJobListFormProvider()
   val form = formProvider()
 
-  lazy val airlineJobListedRoute = routes.AirlineJobListedController.onPageLoad(NormalMode).url
+  lazy val airlineJobListedRoute = routes.AirlineJobListController.onPageLoad(NormalMode).url
 
-  "AirlineJobListed Controller" must {
+  "AirlineJobList Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -47,7 +47,7 @@ class AirlineJobListedControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[AirlineJobListedView]
+      val view = application.injector.instanceOf[AirlineJobListView]
 
       status(result) mustEqual OK
 
@@ -59,13 +59,13 @@ class AirlineJobListedControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(AirlineJobListedPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(AirlineJobListPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, airlineJobListedRoute)
 
-      val view = application.injector.instanceOf[AirlineJobListedView]
+      val view = application.injector.instanceOf[AirlineJobListView]
 
       val result = route(application, request).value
 
@@ -107,7 +107,7 @@ class AirlineJobListedControllerSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[AirlineJobListedView]
+      val view = application.injector.instanceOf[AirlineJobListView]
 
       val result = route(application, request).value
 

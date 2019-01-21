@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package views
+package views.transport
 
 import controllers.routes
-import forms.transport.AirlineJobListedFormProvider
+import forms.transport.AirlineJobListFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.AirlineJobListedView
+import views.html.transport.AirlineJobListView
 
-class AirlineJobListedViewSpec extends YesNoViewBehaviours {
+class AirlineJobListViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "airlineJobListed"
+  val messageKeyPrefix = "airlineJobList"
 
-  val form = new AirlineJobListedFormProvider()()
+  val form = new AirlineJobListFormProvider()()
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "AirlineJobListed view" must {
+  "AirlineJobList view" must {
 
-    val view = application.injector.instanceOf[AirlineJobListedView]
+    val view = application.injector.instanceOf[AirlineJobListView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -43,7 +43,15 @@ class AirlineJobListedViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.AirlineJobListedController.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.AirlineJobListController.onSubmit(NormalMode).url)
+
+    behave like pageWithList(applyView(form), messageKeyPrefix,
+      Seq(
+        "occupation1",
+        "occupation2",
+        "occupation3"
+      )
+    )
   }
 
   application.stop()
