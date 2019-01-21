@@ -46,6 +46,14 @@
         }
     }
 
+    @articleContent = @{
+        article(mainContent)
+    }
+
+    @linkElem = @{
+        Map("url" -> controllers.routes.Assets.versioned("stylesheets/employeeexpensesfrontend-app.css"))
+    }
+
     @scalate.render(
         "/templates/mustache/production/govuk-template.mustache.html",
         Map(
@@ -54,8 +62,9 @@
             "assetsPath" -> appConfig.assetsPath,
             "sidebar" -> sidebarContent,
             "scriptElems" -> scriptElem,
+            "linkElems" -> linkElem,
             "mainClass" -> mainClass,
-            "article" -> mainContent,
+            "article" -> articleContent,
             "isWelsh" -> {
                 messages.lang.code == "cy"
             },

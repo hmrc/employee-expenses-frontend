@@ -18,9 +18,35 @@ package generators
 
 import models.Checkbox.Option1
 import models._
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+
+  implicit lazy val arbitraryAncillaryEngineeringWhichTrade: Arbitrary[AncillaryEngineeringWhichTrade] =
+    Arbitrary {
+      Gen.oneOf(AncillaryEngineeringWhichTrade.values.toSeq)
+    }
+
+  implicit lazy val arbitraryTypeOfTransport: Arbitrary[TypeOfTransport] =
+    Arbitrary {
+      Gen.oneOf(TypeOfTransport.values.toSeq)
+    }
+
+  implicit lazy val arbitraryTypeOfEngineering: Arbitrary[TypeOfEngineering] =
+    Arbitrary {
+      Gen.oneOf(TypeOfEngineering.values.toSeq)
+    }
+
+  implicit lazy val arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
+    Arbitrary {
+      Gen.oneOf(EmployerContribution.values.toSeq)
+    }
+
+  implicit lazy val arbitraryFirstIndustryOptions: Arbitrary[FirstIndustryOptions] =
+    Arbitrary {
+      Gen.oneOf(FirstIndustryOptions.values.toSeq)
+    }
 
   implicit lazy val arbitraryCheckbox: Arbitrary[Checkbox] =
     Arbitrary {

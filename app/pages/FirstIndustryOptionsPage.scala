@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import base.SpecBase
+import models.FirstIndustryOptions
+import play.api.libs.json.JsPath
 
-class ModeSpec extends SpecBase {
+case object FirstIndustryOptionsPage extends QuestionPage[FirstIndustryOptions] {
 
-  "Mode" must {
-    "return string value of normal mode" in {
-      Mode.jsLiteral.to(NormalMode) mustBe "NormalMode"
-    }
-
-    "return string value of check mode" in {
-      Mode.jsLiteral.to(CheckMode) mustBe "CheckMode"
-    }
-  }
+  override def path:JsPath = JsPath \ toString
+  override def toString:String = "firstIndustryOptions"
 
 }

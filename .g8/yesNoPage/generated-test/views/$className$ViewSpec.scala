@@ -14,9 +14,9 @@ class $className$ViewSpec extends YesNoViewBehaviours {
 
   val form = new $className$FormProvider()()
 
-  "$className$ view" must {
+  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-    val application = applicationBuilder(userData = Some(emptyUserData)).build()
+  "$className$ view" must {
 
     val view = application.injector.instanceOf[$className$View]
 
@@ -29,4 +29,6 @@ class $className$ViewSpec extends YesNoViewBehaviours {
 
     behave like yesNoPage(form, applyView, messageKeyPrefix, routes.$className$Controller.onSubmit(NormalMode).url)
   }
+
+  application.stop()
 }

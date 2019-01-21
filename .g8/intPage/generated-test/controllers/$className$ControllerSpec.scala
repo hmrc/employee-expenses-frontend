@@ -2,7 +2,7 @@ package controllers
 
 import base.SpecBase
 import forms.$className$FormProvider
-import models.{NormalMode, UserData}
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.$className$Page
 import play.api.inject.bind
@@ -27,7 +27,7 @@ class $className$ControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userData = Some(emptyUserData)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
 
@@ -39,13 +39,15 @@ class $className$ControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view(form, NormalMode)(fakeRequest, messages).toString
+
+      application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userData = UserData(userDataId, Json.obj($className$Page.toString -> JsNumber(validAnswer)))
+      val userAnswers = UserAnswers(userAnswersId).set($className$Page, validAnswer).success.value
 
-      val application = applicationBuilder(userData = Some(userData)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
 
@@ -57,12 +59,14 @@ class $className$ControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view(form.fill(validAnswer), NormalMode)(fakeRequest, messages).toString
+
+      application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userData = Some(emptyUserData))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[Navigator].toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -75,11 +79,13 @@ class $className$ControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userData = Some(emptyUserData)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, $className;format="decap"$Route)
@@ -95,11 +101,13 @@ class $className$ControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view(boundForm, NormalMode)(fakeRequest, messages).toString
+
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userData = None).build()
+      val application = applicationBuilder(userAnswers = None).build()
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
 
@@ -107,11 +115,13 @@ class $className$ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
 
-      val application = applicationBuilder(userData = None).build()
+      val application = applicationBuilder(userAnswers = None).build()
 
       val request =
         FakeRequest(POST, $className;format="decap"$Route)
@@ -122,6 +132,8 @@ class $className$ControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
     }
   }
 }

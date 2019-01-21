@@ -17,7 +17,6 @@
 package controllers.actions
 
 import javax.inject.Inject
-import models.UserAnswers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import play.api.mvc.ActionTransformer
 import repositories.SessionRepository
@@ -36,8 +35,8 @@ class DataRetrievalActionImpl @Inject()(
     sessionRepository.get(request.identifier).map {
       case None =>
         OptionalDataRequest(request.request, request.identifier, request.nino, None)
-      case Some(data) =>
-        OptionalDataRequest(request.request, request.identifier, request.nino, Some(UserAnswers(data)))
+      case Some(userAnswers) =>
+        OptionalDataRequest(request.request, request.identifier, request.nino, Some(userAnswers))
     }
   }
 }

@@ -16,18 +16,29 @@
 
 package controllers
 
+import controllers.actions.{DataRetrievalAction, UnauthenticatedIdentifierAction}
 import javax.inject.Inject
+import models.UserAnswers
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.IndexView
 
 class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
-                                 view: IndexView
+                                 view: IndexView,
+                                 identify: UnauthenticatedIdentifierAction,
+                                 getData: DataRetrievalAction,
+                                 sessionRepository: SessionRepository
                                ) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    Ok(view())
+  def onPageLoad: Action[AnyContent] = (identify andThen getData) {
+    implicit request => {
+      if (request.userAnswers.isEmpty) {
+        sessionRepository.set(UserAnswers(request.mongoKey))
+      }
+    }
+      Ok(view())
   }
 }

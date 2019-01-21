@@ -21,7 +21,7 @@ import Gen._
 import Arbitrary._
 import play.api.libs.json.{JsBoolean, JsNumber, JsString}
 
-trait Generators extends UserDataGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators {
+trait Generators extends UserAnswersGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators {
 
   implicit val dontShrink: Shrink[String] = Shrink.shrinkAny
 
@@ -95,7 +95,7 @@ trait Generators extends UserDataGenerator with PageGenerators with ModelGenerat
     chars     <- listOfN(length, arbitrary[Char])
   } yield chars.mkString
 
-  def stringsExceptSpecificValues(excluded: Set[String]): Gen[String] =
+  def stringsExceptSpecificValues(excluded: Seq[String]): Gen[String] =
     nonEmptyString suchThat (!excluded.contains(_))
 
   def oneOf[T](xs: Seq[Gen[T]]): Gen[T] =

@@ -5,9 +5,9 @@ import views.html.$className$View
 
 class $className$ViewSpec extends ViewBehaviours {
 
-  "$className$ view" must {
+  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-    val application = applicationBuilder(userData = Some(emptyUserData)).build()
+  "$className$ view" must {
 
     val view = application.injector.instanceOf[$className$View]
 
@@ -17,4 +17,6 @@ class $className$ViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyView)
   }
+
+  application.stop()
 }

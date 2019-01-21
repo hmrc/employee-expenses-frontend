@@ -18,17 +18,17 @@ package controllers.actions
 
 import base.SpecBase
 import com.google.inject.Inject
-import config.FrontendAppConfig
 import controllers.routes
+import config.FrontendAppConfig
 import models.requests.IdentifierRequest
 import play.api.mvc.Results.Redirect
-import play.api.mvc.{BodyParsers, Request, Result, Results}
 import play.api.test.Helpers._
+import play.api.mvc.{BodyParsers, Request, Result, Results}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class SessionActionSpec extends SpecBase {
 
@@ -42,11 +42,11 @@ class SessionActionSpec extends SpecBase {
 
       "redirect to the session expired page" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers, "AB123456A")
+        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers, fakeNino)
 
         val controller = new Harness(sessionAction)
 
@@ -54,6 +54,8 @@ class SessionActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith(controllers.routes.SessionExpiredController.onPageLoad().url)
+
+        application.stop()
       }
     }
 
@@ -61,11 +63,11 @@ class SessionActionSpec extends SpecBase {
 
       "perform the action" in {
 
-        val application = applicationBuilder(userData = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers, "AB123456A")
+        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers, fakeNino)
 
         val controller = new Harness(sessionAction)
 
@@ -74,6 +76,8 @@ class SessionActionSpec extends SpecBase {
         val result = controller.onPageLoad()(request)
 
         status(result) mustBe OK
+
+        application.stop()
       }
     }
   }
@@ -92,7 +96,7 @@ class SessionIdentifierAction @Inject()(
 
     hc.sessionId match {
       case Some(session) =>
-        block(IdentifierRequest(request, session.value, nino))
+        block(IdentifierRequest(request, session.value, Some(nino)))
       case None =>
         Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
     }

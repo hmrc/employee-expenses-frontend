@@ -35,7 +35,6 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
   private val mockCitizenDetailsConnector = mock[CitizenDetailsConnector]
   private val taiService = new TaiService(mockTaiConnector, mockCitizenDetailsConnector)
 
-  private val nino = "AB123456A"
   private val taxYear = TaxYear()
   private val etag = 1
   private val taxCodeRecords = Seq(TaxCodeRecord(
@@ -52,10 +51,10 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
   "TaiService" must {
     "taiTaxCodeRecords" when {
       "must return a sequence of tax code records" in {
-        when(mockTaiConnector.taiTaxCodeRecords(nino))
+        when(mockTaiConnector.taiTaxCodeRecords(fakeNino))
           .thenReturn(Future.successful(taxCodeRecords))
 
-        val result = taiService.taxCodeRecords(nino)
+        val result = taiService.taxCodeRecords(fakeNino)
 
         whenReady(result) {
           result =>
@@ -64,10 +63,10 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       }
 
       "must exception on future failed" in {
-        when(mockTaiConnector.taiTaxCodeRecords(nino))
+        when(mockTaiConnector.taiTaxCodeRecords(fakeNino))
           .thenReturn(Future.failed(new RuntimeException))
 
-        val result = taiService.taxCodeRecords(nino)
+        val result = taiService.taxCodeRecords(fakeNino)
 
         whenReady(result.failed) {
           result =>
@@ -78,12 +77,12 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
     "updateFRE" when {
       "must return a 204 on successful update" in {
-        when(mockTaiConnector.taiFREUpdate(nino, taxYear, etag, iabdUpdateData))
+        when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, iabdUpdateData))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT)))
-        when(mockCitizenDetailsConnector.getEtag(nino))
+        when(mockCitizenDetailsConnector.getEtag(fakeNino))
           .thenReturn(Future.successful(etag))
 
-        val result = taiService.updateFRE(nino,taxYear,iabdUpdateData)
+        val result = taiService.updateFRE(fakeNino,taxYear,iabdUpdateData)
 
         whenReady(result) {
           result =>
@@ -92,12 +91,12 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       }
 
       "must exception on failed tai FRE update" in {
-        when(mockTaiConnector.taiFREUpdate(nino, taxYear, etag, iabdUpdateData))
+        when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, iabdUpdateData))
           .thenReturn(Future.failed(new RuntimeException))
-        when(mockCitizenDetailsConnector.getEtag(nino))
+        when(mockCitizenDetailsConnector.getEtag(fakeNino))
           .thenReturn(Future.successful(etag))
 
-        val result = taiService.updateFRE(nino,taxYear,iabdUpdateData)
+        val result = taiService.updateFRE(fakeNino,taxYear,iabdUpdateData)
 
         whenReady(result.failed) {
           result =>
@@ -106,12 +105,12 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       }
 
       "must exception on failed citizen details ETag request" in {
-        when(mockTaiConnector.taiFREUpdate(nino, taxYear, etag, iabdUpdateData))
+        when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, iabdUpdateData))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT)))
-        when(mockCitizenDetailsConnector.getEtag(nino))
+        when(mockCitizenDetailsConnector.getEtag(fakeNino))
           .thenReturn(Future.failed(new RuntimeException))
 
-        val result = taiService.updateFRE(nino,taxYear,iabdUpdateData)
+        val result = taiService.updateFRE(fakeNino,taxYear,iabdUpdateData)
 
         whenReady(result.failed) {
           result =>

@@ -19,8 +19,11 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
-import play.api.i18n.Messages
+import pages.engineering._
+import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
+import pages.transport.TypeOfTransportPage
 import viewmodels.AnswerRow
+import play.api.i18n.Messages
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
@@ -33,4 +36,76 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     )
   }
 
+  def typeOfTransport: Option[AnswerRow] = userAnswers.get(TypeOfTransportPage) map {
+    x => AnswerRow("typeOfTransport.checkYourAnswersLabel", s"typeOfTransport.$x", true,
+      routes.TypeOfTransportController.onPageLoad(CheckMode).url)
+  }
+
+  def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
+    x => AnswerRow("employerContribution.checkYourAnswersLabel", s"employerContribution.$x", true,
+      routes.EmployerContributionController.onPageLoad(CheckMode).url)
+  }
+
+  def multipleEmployments: Option[AnswerRow] = userAnswers.get(MultipleEmploymentsPage) map {
+    x => AnswerRow("multipleEmployments.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      routes.MultipleEmploymentsController.onPageLoad(CheckMode).url)
+  }
+
+  def expensesEmployerPaid: Option[AnswerRow] = userAnswers.get(ExpensesEmployerPaidPage) map {
+    x => AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"$x", false,
+      routes.ExpensesEmployerPaidController.onPageLoad(CheckMode).url)
+  }
+  def firstIndustryOptions: Option[AnswerRow] = userAnswers.get(FirstIndustryOptionsPage) map {
+    x => AnswerRow("firstIndustryOptions.checkYourAnswersLabel", s"$x", false,
+      controllers.routes.FirstIndustryOptionsController.onPageLoad(CheckMode).url)
+  }
+
+  //Engineering
+
+  def typeOfEngineering: Option[AnswerRow] = userAnswers.get(TypeOfEngineeringPage) map {
+    x => AnswerRow("typeOfEngineering.checkYourAnswersLabel", s"typeOfEngineering.$x", true,
+      routes.TypeOfEngineeringController.onPageLoad(CheckMode).url)
+  }
+
+  def factoryEngineeringList1: Option[AnswerRow] = userAnswers.get(FactoryEngineeringList1Page) map {
+    x => AnswerRow("factoryEngineeringList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(CheckMode).url)
+  }
+
+  def ancillaryEngineeringWhichTrade: Option[AnswerRow] = userAnswers.get(AncillaryEngineeringWhichTradePage) map {
+    x => AnswerRow("ancillaryEngineeringWhichTrade.checkYourAnswersLabel", s"ancillaryEngineeringWhichTrade.$x", true,
+      controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(CheckMode).url)
+  }
+
+  def constructionalEngineeringList1: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList1Page) map {
+    x => AnswerRow("constructionalEngineeringList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.engineering.routes.ConstructionalEngineeringList1Controller.onPageLoad(CheckMode).url)
+  }
+
+  def constructionalEngineeringList2: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList2Page) map {
+    x => AnswerRow("constructionalEngineeringList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.engineering.routes.ConstructionalEngineeringList2Controller.onPageLoad(CheckMode).url)
+  }
+
+  def constructionalEngineeringApprentice: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringApprenticePage) map {
+    x => AnswerRow("constructionalEngineeringApprentice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.engineering.routes.ConstructionalEngineeringApprenticeController.onPageLoad(CheckMode).url)
+  }
+
+  //Healthcare
+
+  def healthcareList2: Option[AnswerRow] = userAnswers.get(HealthcareList2Page) map {
+    x => AnswerRow("healthcareList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.healthcare.routes.HealthcareList2Controller.onPageLoad(CheckMode).url)
+  }
+
+  def healthcareList1: Option[AnswerRow] = userAnswers.get(HealthcareList1Page) map {
+    x => AnswerRow("healthcareList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.healthcare.routes.HealthcareList1Controller.onPageLoad(CheckMode).url)
+  }
+
+  def ambulanceStaff: Option[AnswerRow] = userAnswers.get(AmbulanceStaffPage) map {
+    x => AnswerRow("ambulanceStaff.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(CheckMode).url)
+  }
 }
