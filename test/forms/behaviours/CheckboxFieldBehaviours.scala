@@ -50,5 +50,12 @@ trait CheckboxFieldBehaviours[A] extends FormSpec {
       val data = Map.empty[String, String]
       form.bind(data).errors should contain(FormError("value", required, args))
     }
+
+    "fail to bind when blank answer provided" in {
+      val data = Map(
+        "value[0]" -> ""
+      )
+      form.bind(data).errors should contain(FormError("value[0]", required, args))
+    }
   }
 }

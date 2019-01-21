@@ -26,6 +26,6 @@ class CheckboxFormProvider @Inject extends Mappings {
 
   def apply(): Form[Set[Checkbox]] =
     Form(
-      "value" -> set(enumerable[Checkbox]()).verifying(nonEmptySet("checkbox.error.required"))
+      "value" -> set(enumerable[Checkbox]("checkbox.error.required")).verifying(nonEmptySet("checkbox.error.required"))
     )
 }
