@@ -19,6 +19,7 @@ package controllers
 import com.google.inject.Inject
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
 import forms.FirstIndustryOptionsFormProvider
+import javax.inject.Named
 import models.{Enumerable, Mode, UserAnswers}
 import navigation.Navigator
 import pages.FirstIndustryOptionsPage
@@ -40,7 +41,7 @@ class FirstIndustryOptionsController @Inject()(
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: FirstIndustryOptionsView,
                                                 sessionRepository: SessionRepository,
-                                                navigator: Navigator
+                                                @Named("Generic") navigator: Navigator
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
   val form = formProvider()
 

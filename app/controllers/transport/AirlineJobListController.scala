@@ -18,7 +18,7 @@ package controllers.transport
 
 import controllers.actions._
 import forms.transport.AirlineJobListFormProvider
-import javax.inject.Inject
+import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.transport.AirlineJobListPage
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AirlineJobListController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         navigator: Navigator,
+                                         @Named("Transport") navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,

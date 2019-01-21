@@ -21,10 +21,10 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
-import pages.transport.{AirlineJobListPage, GarageHandOrCleanerPage, TypeOfTransportPage}
 import pages.engineering._
-import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
-import play.api.libs.json.{JsPath, JsValue, Json}
+import pages.healthcare._
+import pages.transport._
+import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends TryValues {
   self: Generators =>

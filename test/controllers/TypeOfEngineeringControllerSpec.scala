@@ -22,7 +22,6 @@ import models.{NormalMode, TypeOfEngineering, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.TypeOfEngineeringPage
 import play.api.inject.bind
-import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -32,7 +31,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val typeOfEngineeringRoute = routes.TypeOfEngineeringController.onPageLoad(NormalMode).url
+  lazy val typeOfEngineeringRoute = controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode).url
 
   val formProvider = new TypeOfEngineeringFormProvider()
   val form = formProvider()
@@ -81,7 +80,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

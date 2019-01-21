@@ -18,9 +18,9 @@ package generators
 
 import org.scalacheck.Arbitrary
 import pages._
+import pages.healthcare._
 import pages.engineering._
-import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
-import pages.transport.{AirlineJobListPage, GarageHandOrCleanerPage, TypeOfTransportPage}
+import pages.transport._
 
 trait PageGenerators {
 

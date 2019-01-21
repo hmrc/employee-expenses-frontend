@@ -18,7 +18,7 @@ package controllers.transport
 
 import controllers.actions._
 import forms.transport.TypeOfTransportFormProvider
-import javax.inject.Inject
+import javax.inject.{Inject, Named}
 import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.transport.TypeOfTransportPage
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TypeOfTransportController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: SessionRepository,
-                                       navigator: Navigator,
+                                       @Named("Transport") navigator: Navigator,
                                        identify: UnauthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
