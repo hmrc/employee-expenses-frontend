@@ -186,3 +186,14 @@ factoryEngineeringList1.error.required = Select yes if your job title is listed
 factoryEngineeringList1.occupation1 = Pattern maker
 factoryEngineeringList1.occupation2 = Letterpress section-electrical engineers (rotary presses)
 factoryEngineeringList1.occupation3 = Maintenance engineers (rotary presses) and stereotypers
+
+whatTypeOfIndustryList2.title = What type of industry do you work in?
+whatTypeOfIndustryList2.heading = What type of industry do you work in?
+whatTypeOfIndustryList2.manufacturing = Manufacturing and warehousing (including wood, furniture and metals)
+whatTypeOfIndustryList2.council = Council
+whatTypeOfIndustryList2.police = Police
+whatTypeOfIndustryList2.clothing = Clothing and textiles (including leather)
+whatTypeOfIndustryList2.construction = Construction (including building and building materials)
+whatTypeOfIndustryList2.none = None of the above
+whatTypeOfIndustryList2.checkYourAnswersLabel = What type of industry do you work in?
+whatTypeOfIndustryList2.error.required = Select which industry you work in

@@ -26,6 +26,10 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def whatTypeOfIndustryList2: Option[AnswerRow] = userAnswers.get(WhatTypeOfIndustryList2Page) map {
+    x => AnswerRow("whatTypeOfIndustryList2.checkYourAnswersLabel", s"whatTypeOfIndustryList2.$x", true, routes.WhatTypeOfIndustryList2Controller.onPageLoad(CheckMode).url)
+  }
+
   def typeOfTransport: Option[AnswerRow] = userAnswers.get(TypeOfTransportPage) map {
     x => AnswerRow("typeOfTransport.checkYourAnswersLabel", s"typeOfTransport.$x", true,
       routes.TypeOfTransportController.onPageLoad(CheckMode).url)
