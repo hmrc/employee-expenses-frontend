@@ -16,7 +16,7 @@
 
 package views.transport
 
-import controllers.routes
+import controllers.transport.routes
 import forms.transport.AirlineJobListFormProvider
 import models.NormalMode
 import play.api.data.Form

@@ -21,7 +21,6 @@ import models.{CheckMode, UserAnswers}
 import pages._
 import pages.engineering._
 import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
-import pages.transport.TypeOfTransportPage
 import viewmodels.AnswerRow
 import pages.transport.{AirlineJobListPage, TypeOfTransportPage}
 import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
@@ -29,12 +28,14 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def airlineJobListed: Option[AnswerRow] = userAnswers.get(AirlineJobListPage) map {
-    x => AnswerRow("airlineJobListed.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.AirlineJobListController.onPageLoad(CheckMode).url)
+    x => AnswerRow("airlineJobListed.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.transport.routes.AirlineJobListController.onPageLoad(CheckMode).url
+    )
   }
 
   def typeOfTransport: Option[AnswerRow] = userAnswers.get(TypeOfTransportPage) map {
     x => AnswerRow("typeOfTransport.checkYourAnswersLabel", s"typeOfTransport.$x", true,
-      routes.TypeOfTransportController.onPageLoad(CheckMode).url)
+      controllers.transport.routes.TypeOfTransportController.onPageLoad(CheckMode).url)
   }
 
   def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
