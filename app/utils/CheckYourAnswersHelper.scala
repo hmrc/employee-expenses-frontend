@@ -22,7 +22,7 @@ import pages._
 import pages.engineering._
 import pages.healthcare._
 import pages.transport._
-import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
+import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
