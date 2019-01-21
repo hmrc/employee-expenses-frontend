@@ -82,6 +82,7 @@ firstIndustryOptions.transportAndDistribution = Transport and distribution
 firstIndustryOptions.noneOfTheAbove = None of the above
 firstIndustryOptions.checkYourAnswersLabel = What industry do you work in?
 firstIndustryOptions.error.required = Select the industry you work in
+
 claimAmount.title = You can claim tax relief on £{0}
 claimAmount.heading = You can claim tax relief on £{0}
 claimAmount.description = The amount of tax relief you can claim depends on the rate of tax you pay.
@@ -112,8 +113,35 @@ constructionalEngineeringList1.occupation8 = Holder up
 
 ambulanceStaff.title = Are you ambulance staff on active service?
 ambulanceStaff.heading = Are you ambulance staff on active service?
-ambulanceStaff.checkYourAnswersLabel = ambulanceStaff
+ambulanceStaff.checkYourAnswersLabel = Are you ambulance staff on active service?
 ambulanceStaff.error.required = Select yes if you are ambulance staff on active service
+
+constructionalEngineeringList2.title = Is your job title listed?
+constructionalEngineeringList2.heading = Is your job title listed?
+constructionalEngineeringList2.secondaryHeading = Constructional engineering occupations list 2
+constructionalEngineeringList2.checkYourAnswersLabel = Is your job title listed?
+constructionalEngineeringList2.error.required = Select yes if your job title is listed
+constructionalEngineeringList2.occupation1 = Marker off
+constructionalEngineeringList2.occupation2 = Plater
+constructionalEngineeringList2.occupation3 = Rigger
+constructionalEngineeringList2.occupation4 = Riveter
+constructionalEngineeringList2.occupation5 = Rivet heater
+constructionalEngineeringList2.occupation6 = Scaffolder
+constructionalEngineeringList2.occupation7 = Sheeter
+constructionalEngineeringList2.occupation8 = Template worker
+constructionalEngineeringList2.occupation9 = Turner or welder
+
+healthcareList1.title = Is your job title listed?
+healthcareList1.heading = Is your job title listed?
+healthcareList1.secondaryHeading = Healthcare occupation list 1
+healthcareList1.checkYourAnswersLabel = Is your job title listed?
+healthcareList1.error.required = Select yes if your job title is listed
+healthcareList1.occupation1 = Nurse or dental nurse
+healthcareList1.occupation2 = Midwife
+healthcareList1.occupation3 = Chiropodist
+healthcareList1.occupation4 = Occupational, speech, physio or other therapists
+healthcareList1.occupation5 = Healthcare assistant
+healthcareList1.occupation6 = Phlebotomist or radiographer
 
 typeOfTransport.title = What type of transport and distribution do you work in?
 typeOfTransport.heading = What type of transport and distribution do you work in?
@@ -124,6 +152,40 @@ typeOfTransport.seamanCarpenter = Seaman carpenter
 typeOfTransport.vehicles = Vehicles
 typeOfTransport.checkYourAnswersLabel = What type of transport and distribution do you work in?
 typeOfTransport.error.required = Select what type of transport and distribution do you work in
+
+healthcareList2.title = Is your job title listed?
+healthcareList2.heading = Is your job title listed?
+healthcareList2.secondaryHeading = Healthcare occupation list 2
+healthcareList2.checkYourAnswersLabel = Is your job title listed?
+healthcareList2.error.required = Select yes if your job title is listed
+healthcareList2.occupation1 = Plaster room orderly
+healthcareList2.occupation2 = Hospital porter
+healthcareList2.occupation3 = Ward clerk
+healthcareList2.occupation4 = Sterile supply worker
+healthcareList2.occupation5 = Hospital domestic or catering staff
+
+constructionalEngineeringApprentice.title = Are you an apprentice or storekeeper?
+constructionalEngineeringApprentice.heading = Are you an apprentice or storekeeper?
+constructionalEngineeringApprentice.checkYourAnswersLabel = Are you an apprentice or storekeeper?
+constructionalEngineeringApprentice.error.required = Select yes if you are an apprentice or storekeeper
+
+ancillaryEngineeringWhichTrade.title = Which trade do you work in?
+ancillaryEngineeringWhichTrade.heading = Which trade do you work in?
+ancillaryEngineeringWhichTrade.patternMaker = Pattern maker
+ancillaryEngineeringWhichTrade.labourerSupervisorOrUnskilledWorker = Labourer, supervisor or unskilled worker
+ancillaryEngineeringWhichTrade.apprenticeOrStorekeeper = Apprentice or storekeeper
+ancillaryEngineeringWhichTrade.noneOfTheAbove = None of the above
+ancillaryEngineeringWhichTrade.checkYourAnswersLabel = Which trade do you work in?
+ancillaryEngineeringWhichTrade.error.required = Select which trade you work in
+
+factoryEngineeringList1.title = Is your job title listed?
+factoryEngineeringList1.heading = Is your job title listed?
+factoryEngineeringList1.secondaryHeading = Factory or workshop engineers list 1
+factoryEngineeringList1.checkYourAnswersLabel = Is your job title listed?
+factoryEngineeringList1.error.required = Select yes if your job title is listed
+factoryEngineeringList1.occupation1 = Pattern maker
+factoryEngineeringList1.occupation2 = Letterpress section-electrical engineers (rotary presses)
+factoryEngineeringList1.occupation3 = Maintenance engineers (rotary presses) and stereotypers
 
 airlineJobList.title = Is your job title listed?
 airlineJobList.heading = Is your job title listed?

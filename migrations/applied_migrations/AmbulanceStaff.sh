@@ -6,11 +6,11 @@ echo "Applying migration AmbulanceStaff"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /ambulanceStaff                        controllers.AmbulanceStaffController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /ambulanceStaff                        controllers.AmbulanceStaffController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /ambulanceStaff                        controllers.healthcare.AmbulanceStaffController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /ambulanceStaff                        controllers.healthcare.AmbulanceStaffController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeAmbulanceStaff                  controllers.AmbulanceStaffController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeAmbulanceStaff                  controllers.AmbulanceStaffController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeAmbulanceStaff                  controllers.healthcare.AmbulanceStaffController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeAmbulanceStaff                  controllers.healthcare.AmbulanceStaffController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
