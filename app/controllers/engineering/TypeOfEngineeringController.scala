@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import controllers.actions._
 import forms.TypeOfEngineeringFormProvider
-import javax.inject.Inject
+import javax.inject.{Inject, Named}
 import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.TypeOfEngineeringPage
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TypeOfEngineeringController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: SessionRepository,
-                                       navigator: Navigator,
+                                       @Named("Engineering") navigator: Navigator,
                                        identify: UnauthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,

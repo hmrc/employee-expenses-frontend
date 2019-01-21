@@ -18,7 +18,7 @@ package controllers.healthcare
 
 import controllers.actions._
 import forms.HealthcareList2FormProvider
-import javax.inject.Inject
+import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.healthcare.HealthcareList2Page
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class HealthcareList2Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         navigator: Navigator,
+                                         @Named("Healthcare") navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,

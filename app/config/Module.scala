@@ -17,7 +17,9 @@
 package config
 
 import com.google.inject.AbstractModule
+import com.google.inject.name.Names
 import controllers.actions._
+import navigation._
 import repositories.{DefaultSessionRepository, SessionRepository}
 import scalate.ScalateEngineBoot
 
@@ -33,5 +35,9 @@ class Module extends AbstractModule {
 
     bind(classOf[SessionRepository]).to(classOf[DefaultSessionRepository]).asEagerSingleton()
     bind(classOf[ScalateEngineBoot]).asEagerSingleton()
+
+    bind(classOf[Navigator]).annotatedWith(Names.named("Healthcare")).to(classOf[HealthcareNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named("Engineering")).to(classOf[EngineeringNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named("Generic")).to(classOf[EeNavigator])
   }
 }

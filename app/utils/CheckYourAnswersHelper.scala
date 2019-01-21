@@ -56,7 +56,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def typeOfEngineering: Option[AnswerRow] = userAnswers.get(TypeOfEngineeringPage) map {
-    x => AnswerRow("typeOfEngineering.checkYourAnswersLabel", s"typeOfEngineering.$x", true, routes.TypeOfEngineeringController.onPageLoad(CheckMode).url)
+    x => AnswerRow("typeOfEngineering.checkYourAnswersLabel", s"typeOfEngineering.$x", true, controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(CheckMode).url)
   }
 
   def ambulanceStaff: Option[AnswerRow] = userAnswers.get(AmbulanceStaffPage) map {
