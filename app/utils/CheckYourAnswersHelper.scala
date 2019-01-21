@@ -20,15 +20,14 @@ import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.engineering._
-import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
-import pages.transport.TypeOfTransportPage
+import pages.healthcare._
+import pages.transport._
 import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def typeOfTransport: Option[AnswerRow] = userAnswers.get(TypeOfTransportPage) map {
-    x => AnswerRow("typeOfTransport.checkYourAnswersLabel", s"typeOfTransport.$x", true,
-      routes.TypeOfTransportController.onPageLoad(CheckMode).url)
+    x => AnswerRow("typeOfTransport.checkYourAnswersLabel", s"typeOfTransport.$x", true, routes.TypeOfTransportController.onPageLoad(CheckMode).url)
   }
 
   def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
@@ -54,7 +53,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def typeOfEngineering: Option[AnswerRow] = userAnswers.get(TypeOfEngineeringPage) map {
     x => AnswerRow("typeOfEngineering.checkYourAnswersLabel", s"typeOfEngineering.$x", true,
-      routes.TypeOfEngineeringController.onPageLoad(CheckMode).url)
+      controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(CheckMode).url)
   }
 
   def factoryEngineeringList1: Option[AnswerRow] = userAnswers.get(FactoryEngineeringList1Page) map {
@@ -68,8 +67,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def constructionalEngineeringList1: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList1Page) map {
-    x => AnswerRow("constructionalEngineeringList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      controllers.engineering.routes.ConstructionalEngineeringList1Controller.onPageLoad(CheckMode).url)
+    x => AnswerRow("constructionalEngineeringList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, controllers.engineering.routes.ConstructionalEngineeringList1Controller.onPageLoad(CheckMode).url)
   }
 
   def constructionalEngineeringList2: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList2Page) map {
