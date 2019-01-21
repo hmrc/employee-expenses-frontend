@@ -26,6 +26,12 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def whichRailwayTrade: Option[AnswerRow] = userAnswers.get(WhichRailwayTradePage) map {
+    x => AnswerRow("whichRailwayTrade.checkYourAnswersLabel", s"whichRailwayTrade.$x", true,
+      controllers.transport.routes.WhichRailwayTradeController.onPageLoad(CheckMode).url
+    )
+  }
+
   def airlineJobListed: Option[AnswerRow] = userAnswers.get(AirlineJobListPage) map {
     x => AnswerRow("airlineJobListed.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.transport.routes.AirlineJobListController.onPageLoad(CheckMode).url

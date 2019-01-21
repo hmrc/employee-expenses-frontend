@@ -22,10 +22,18 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages._
 import pages.engineering._
 import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
-import pages.transport.{AirlineJobListPage, TypeOfTransportPage}
+import pages.transport.{AirlineJobListPage, TypeOfTransportPage, WhichRailwayTradePage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryWhichRailwayTradeUserAnswersEntry: Arbitrary[(WhichRailwayTradePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[WhichRailwayTradePage.type]
+        value <- arbitrary[WhichRailwayTrade].map(Json.toJson(_))
+      } yield (page, value)
+    }
 
   implicit lazy val arbitraryFactoryEngineeringList1UserAnswersEntry: Arbitrary[(FactoryEngineeringList1Page.type, JsValue)] =
     Arbitrary {

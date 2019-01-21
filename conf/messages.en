@@ -195,3 +195,10 @@ airlineJobList.occupation3 = Uniformed flight deck crew
 airlineJobList.checkYourAnswersLabel = Is your job title listed?
 airlineJobList.error.required = Select yes if your job title listed?
 
+
+whichRailwayTrade.title = Which railway trade do you work in?
+whichRailwayTrade.heading = Which railway trade do you work in?
+whichRailwayTrade.option1 = Railway vehicle repairers or railway wagon lifters
+whichRailwayTrade.option2 = Railway vehicle painters
+whichRailwayTrade.checkYourAnswersLabel = Which railway trade do you work in?
+whichRailwayTrade.error.required = Select whichRailwayTrade
