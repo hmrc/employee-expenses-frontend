@@ -14,14 +14,14 @@
  * limitations under the License.
  *@
 
-@import viewmodels.CheckboxOption
+@import viewmodels.RadioCheckboxOption
 @(
         field: Field,
         legend: String,
         legendClass: Option[String] = None,
         hint: Option[String] = None,
         trackGa: Boolean = false,
-        inputs: Set[CheckboxOption]
+        inputs: Set[RadioCheckboxOption]
 )(implicit
         messages: Messages
 )
@@ -58,7 +58,7 @@
         <legend class="@lgndClass">@legend</legend>
         @hintBlock
         @errorBlock
-        @for((CheckboxOption(value, messageKey), index) <- inputs.zipWithIndex) {
+        @for((RadioCheckboxOption(id, value, messageKey), index) <- inputs.zipWithIndex) {
             @defining(
                 inputs.toSeq.indices.flatMap { i =>
                     field(s"[$i]").value

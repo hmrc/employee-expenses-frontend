@@ -19,7 +19,7 @@ package views.behaviours
 import play.api.Application
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
-import viewmodels.CheckboxOption
+import viewmodels.RadioCheckboxOption
 import views.ViewSpecBase
 
 trait CheckboxViewBehaviours[A] extends ViewSpecBase {
@@ -28,7 +28,7 @@ trait CheckboxViewBehaviours[A] extends ViewSpecBase {
 
   val application: Application = applicationBuilder(userData = Some(emptyUserData)).build()
 
-  def options: Set[CheckboxOption]
+  def options: Set[RadioCheckboxOption]
 
   def messageKeyPrefix: String
 
@@ -79,10 +79,10 @@ trait CheckboxViewBehaviours[A] extends ViewSpecBase {
     }
 
     options.zipWithIndex.foreach {
-      case (checkboxOption, i) =>
-        s"has correct value checked when value `${checkboxOption.value}` is given" in {
+      case (RadioCheckboxOption, i) =>
+        s"has correct value checked when value `${RadioCheckboxOption.value}` is given" in {
           val data: Map[String, String] =
-            Map(s"$fieldKey[$i]" -> checkboxOption.value)
+            Map(s"$fieldKey[$i]" -> RadioCheckboxOption.value)
 
           val doc = asDocument(applyView(form.bind(data)))
           val field = form(fieldKey)(s"[$i]")
@@ -91,7 +91,7 @@ trait CheckboxViewBehaviours[A] extends ViewSpecBase {
 
           options.zipWithIndex.foreach {
             case (option, j) =>
-              if (option != checkboxOption) {
+              if (option != RadioCheckboxOption) {
                 val field = form(fieldKey)(s"[$j]")
                 assert(!doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is checked")
               }

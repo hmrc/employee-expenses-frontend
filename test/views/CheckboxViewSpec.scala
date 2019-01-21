@@ -21,7 +21,7 @@ import models.{Checkbox, NormalMode}
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import viewmodels.CheckboxOption
+import viewmodels.RadioCheckboxOption
 import views.behaviours.{CheckboxViewBehaviours, ViewBehaviours}
 import views.html.CheckboxView
 
@@ -33,7 +33,7 @@ class CheckboxViewSpec extends ViewBehaviours with CheckboxViewBehaviours[Checkb
 
 	val errorMessage = "error.invalid"
 
-  val options: Set[CheckboxOption] = Checkbox.options
+  val options: Set[RadioCheckboxOption] = Checkbox.options
 
 	override val form = new CheckboxFormProvider()()
 

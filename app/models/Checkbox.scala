@@ -16,7 +16,7 @@
 
 package models
 
-import viewmodels.CheckboxOption
+import viewmodels.RadioCheckboxOption
 
 sealed trait Checkbox
 
@@ -31,9 +31,9 @@ object Checkbox extends Enumerable.Implicits {
     Option1, Option2, Option3, Option4
   )
 
-  val options: Set[CheckboxOption] = values.map {
+  val options: Set[RadioCheckboxOption] = values.map {
     value =>
-      CheckboxOption(value.toString, s"checkbox.$value")
+      RadioCheckboxOption("checkbox", s"$value")
   }
 
   implicit lazy val enumerable: Enumerable[Checkbox] =
