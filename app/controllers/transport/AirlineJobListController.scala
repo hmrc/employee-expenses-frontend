@@ -14,41 +14,41 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.transport
 
 import controllers.actions._
-import forms.transport.TypeOfTransportFormProvider
+import forms.transport.AirlineJobListFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, Mode}
+import models.Mode
 import navigation.Navigator
-import pages.transport.TypeOfTransportPage
+import pages.transport.AirlineJobListPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.transport.TypeOfTransportView
+import views.html.transport.AirlineJobListView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TypeOfTransportController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       @Named("Generic") navigator: Navigator,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: TypeOfTransportFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: TypeOfTransportView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class AirlineJobListController @Inject()(
+                                         override val messagesApi: MessagesApi,
+                                         sessionRepository: SessionRepository,
+                                         @Named("Transport") navigator: Navigator,
+                                         identify: UnauthenticatedIdentifierAction,
+                                         getData: DataRetrievalAction,
+                                         requireData: DataRequiredAction,
+                                         formProvider: AirlineJobListFormProvider,
+                                         val controllerComponents: MessagesControllerComponents,
+                                         view: AirlineJobListView
+                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(TypeOfTransportPage) match {
+      val preparedForm = request.userAnswers.get(AirlineJobListPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -56,7 +56,7 @@ class TypeOfTransportController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -65,9 +65,9 @@ class TypeOfTransportController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfTransportPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AirlineJobListPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TypeOfTransportPage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AirlineJobListPage, mode)(updatedAnswers))
         }
       )
   }

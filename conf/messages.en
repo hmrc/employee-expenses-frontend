@@ -186,3 +186,12 @@ factoryEngineeringList1.error.required = Select yes if your job title is listed
 factoryEngineeringList1.occupation1 = Pattern maker
 factoryEngineeringList1.occupation2 = Letterpress section-electrical engineers (rotary presses)
 factoryEngineeringList1.occupation3 = Maintenance engineers (rotary presses) and stereotypers
+
+airlineJobList.title = Is your job title listed?
+airlineJobList.heading = Is your job title listed?
+airlineJobList.occupation1 = Pilot
+airlineJobList.occupation2 = Co-pilot
+airlineJobList.occupation3 = Uniformed flight deck crew
+airlineJobList.checkYourAnswersLabel = Is your job title listed?
+airlineJobList.error.required = Select yes if your job title listed?
+

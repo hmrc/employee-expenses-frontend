@@ -17,36 +17,36 @@
 package controllers.transport
 
 import base.SpecBase
-import forms.transport.TypeOfTransportFormProvider
-import models.{NormalMode, TypeOfTransport, UserAnswers}
+import forms.transport.AirlineJobListFormProvider
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.transport.TypeOfTransportPage
+import pages.transport.AirlineJobListPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.transport.TypeOfTransportView
+import views.html.transport.AirlineJobListView
 
-class TypeOfTransportControllerSpec extends SpecBase {
+class AirlineJobListControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val typeOfTransportRoute = routes.TypeOfTransportController.onPageLoad(NormalMode).url
-
-  val formProvider = new TypeOfTransportFormProvider()
+  val formProvider = new AirlineJobListFormProvider()
   val form = formProvider()
 
-  "TypeOfTransport Controller" must {
+  lazy val airlineJobListedRoute = routes.AirlineJobListController.onPageLoad(NormalMode).url
+
+  "AirlineJobList Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, typeOfTransportRoute)
+      val request = FakeRequest(GET, airlineJobListedRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TypeOfTransportView]
+      val view = application.injector.instanceOf[AirlineJobListView]
 
       status(result) mustEqual OK
 
@@ -58,20 +58,20 @@ class TypeOfTransportControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TypeOfTransportPage, TypeOfTransport.values.head).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(AirlineJobListPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, typeOfTransportRoute)
+      val request = FakeRequest(GET, airlineJobListedRoute)
 
-      val view = application.injector.instanceOf[TypeOfTransportView]
+      val view = application.injector.instanceOf[AirlineJobListView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(TypeOfTransport.values.head), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -84,8 +84,8 @@ class TypeOfTransportControllerSpec extends SpecBase {
           .build()
 
       val request =
-        FakeRequest(POST, typeOfTransportRoute)
-          .withFormUrlEncodedBody(("value", TypeOfTransport.options.head.value))
+        FakeRequest(POST, airlineJobListedRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -101,12 +101,12 @@ class TypeOfTransportControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, typeOfTransportRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
+        FakeRequest(POST, airlineJobListedRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[TypeOfTransportView]
+      val view = application.injector.instanceOf[AirlineJobListView]
 
       val result = route(application, request).value
 
@@ -122,11 +122,12 @@ class TypeOfTransportControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, typeOfTransportRoute)
+      val request = FakeRequest(GET, airlineJobListedRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
@@ -137,8 +138,8 @@ class TypeOfTransportControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, typeOfTransportRoute)
-          .withFormUrlEncodedBody(("value", TypeOfTransport.values.head.toString))
+        FakeRequest(POST, airlineJobListedRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 

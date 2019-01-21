@@ -26,8 +26,15 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def airlineJobListed: Option[AnswerRow] = userAnswers.get(AirlineJobListPage) map {
+    x => AnswerRow("airlineJobListed.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.transport.routes.AirlineJobListController.onPageLoad(CheckMode).url
+    )
+  }
+
   def typeOfTransport: Option[AnswerRow] = userAnswers.get(TypeOfTransportPage) map {
-    x => AnswerRow("typeOfTransport.checkYourAnswersLabel", s"typeOfTransport.$x", true, routes.TypeOfTransportController.onPageLoad(CheckMode).url)
+    x => AnswerRow("typeOfTransport.checkYourAnswersLabel", s"typeOfTransport.$x", true,
+      controllers.transport.routes.TypeOfTransportController.onPageLoad(CheckMode).url)
   }
 
   def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
@@ -67,7 +74,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   }
 
   def constructionalEngineeringList1: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList1Page) map {
-    x => AnswerRow("constructionalEngineeringList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, controllers.engineering.routes.ConstructionalEngineeringList1Controller.onPageLoad(CheckMode).url)
+    x => AnswerRow("constructionalEngineeringList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.engineering.routes.ConstructionalEngineeringList1Controller.onPageLoad(CheckMode).url)
   }
 
   def constructionalEngineeringList2: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList2Page) map {

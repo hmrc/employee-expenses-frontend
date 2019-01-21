@@ -15,7 +15,7 @@
  *@
 
 @import controllers.transport.routes._
-@import models.{Mode, TypeOfTransport}
+@import models.Mode
 
 @this(
     main_template: MainTemplate,
@@ -25,22 +25,30 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("typeOfTransport.title")}"
+    title = s"${errorPrefix(form)} ${messages("airlineJobList.title")}"
     ) {
 
-    @formHelper(action = TypeOfTransportController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = AirlineJobListController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading("typeOfTransport.heading")
+        @components.heading("airlineJobList.heading")
 
-        @components.input_radio(
+        @components.list(
+            pageKey = Some("airlineJobList"),
+            bulletList = Seq(
+                "occupation1",
+                "occupation2",
+                "occupation3"
+            )
+        )
+
+        @components.input_yes_no(
             field = form("value"),
-            legend = messages("typeOfTransport.heading"),
-            legendClass = Some("visually-hidden"),
-            inputs = TypeOfTransport.options
+            label = messages("airlineJobList.heading"),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button()
