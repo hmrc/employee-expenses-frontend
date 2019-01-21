@@ -23,11 +23,11 @@ import models.{Mode, NormalMode, UserAnswers}
 
 class FakeNavigator(desiredRoute: Call, mode: Mode = NormalMode) extends Navigator {
   override protected def routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => Call("GET", "/[foo]")
+    case _ => _ => desiredRoute
   }
 
   override protected def checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => Call("GET", "/[foo]")
+    case _ => _ => desiredRoute
   }
 
   override def nextPage(page: Page, mode: Mode): UserAnswers => Call = _ => desiredRoute

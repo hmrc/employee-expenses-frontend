@@ -18,20 +18,17 @@ package navigation
 
 import controllers.routes
 import javax.inject.Inject
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import models.UserAnswers
 import pages.Page
-import pages.engineering._
 import play.api.mvc.Call
-import controllers.engineering.routes._
 
 class EngineeringNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => ua => routes.SessionExpiredController.onPageLoad()
+    case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => ua => routes.SessionExpiredController.onPageLoad()
+    case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
-
 }

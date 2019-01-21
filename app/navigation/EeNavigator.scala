@@ -23,31 +23,21 @@ import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.{FirstIndustryOptionsPage, Page}
 import play.api.mvc.Call
 
-class EeNavigator  @Inject()() extends Navigator {
+class EeNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case FirstIndustryOptionsPage => ua => firstIndustryOptions(NormalMode)(ua)
-    case _ => ua => routes.SessionExpiredController.onPageLoad()
+    case _ => _ => routes.IndexController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case FirstIndustryOptionsPage => ua => firstIndustryOptions(CheckMode)(ua)
-    case _ => ua => routes.SessionExpiredController.onPageLoad()
+    case _ => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
   private def firstIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(FirstIndustryOptionsPage) match {
       case Some(Healthcare) =>
         controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode)
-      case Some(FoodAndCatering) =>
-        routes.SessionExpiredController.onPageLoad()
-      case Some(Retail) =>
-        routes.SessionExpiredController.onPageLoad()
-      case Some(Engineering) =>
-        controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode)
-      case Some(TransportAndDistribution) =>
-        routes.SessionExpiredController.onPageLoad()
-      case Some(NoneOfTheAbove) =>
-        routes.SessionExpiredController.onPageLoad()
       case _ =>
         routes.SessionExpiredController.onPageLoad()
     }
