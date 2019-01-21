@@ -74,7 +74,7 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
     "redirect to next page when valid data is submitted" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].toInstance(new FakeNavigator(onwardRoute)))
+        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
         .build()
       val request = FakeRequest(POST, firstIndustryOptionsRoute)
         .withFormUrlEncodedBody(("value", FirstIndustryOptions.options.head.value))

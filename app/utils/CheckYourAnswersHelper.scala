@@ -20,9 +20,8 @@ import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.engineering._
-import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
-import viewmodels.AnswerRow
-import pages.transport.{AirlineJobListPage, TypeOfTransportPage}
+import pages.healthcare._
+import pages.transport._
 import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
@@ -61,7 +60,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def typeOfEngineering: Option[AnswerRow] = userAnswers.get(TypeOfEngineeringPage) map {
     x => AnswerRow("typeOfEngineering.checkYourAnswersLabel", s"typeOfEngineering.$x", true,
-      routes.TypeOfEngineeringController.onPageLoad(CheckMode).url)
+      controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(CheckMode).url)
   }
 
   def factoryEngineeringList1: Option[AnswerRow] = userAnswers.get(FactoryEngineeringList1Page) map {

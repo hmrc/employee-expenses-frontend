@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions._
 import forms.EmployerContributionFormProvider
-import javax.inject.Inject
+import javax.inject.{Inject, Named}
 import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.EmployerContributionPage
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class EmployerContributionController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: SessionRepository,
-                                       navigator: Navigator,
+                                       @Named("Generic") navigator: Navigator,
                                        identify: UnauthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,

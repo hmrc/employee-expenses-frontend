@@ -17,18 +17,18 @@
 package navigation
 
 import controllers.routes
+import javax.inject.Inject
+import models.UserAnswers
+import pages.Page
 import play.api.mvc.Call
-import pages._
-import models.{Mode, NormalMode, UserAnswers}
 
-class FakeNavigator(desiredRoute: Call, mode: Mode = NormalMode) extends Navigator {
-  override protected def routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => desiredRoute
+class TransportNavigator @Inject()() extends Navigator {
+
+  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
+    case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
 
-  override protected def checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => desiredRoute
+  protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
-
-  override def nextPage(page: Page, mode: Mode): UserAnswers => Call = _ => desiredRoute
 }
