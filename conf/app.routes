@@ -96,3 +96,8 @@ GET        /airline-job-listed                              controllers.transpor
 POST       /airline-job-listed                              controllers.transport.AirlineJobListController.onSubmit(mode: Mode = NormalMode)
 GET        /change-airline-job-listed                       controllers.transport.AirlineJobListController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-airline-job-listed                       controllers.transport.AirlineJobListController.onSubmit(mode: Mode = CheckMode)
+
+GET        /garageHandOrCleaner                        controllers.GarageHandOrCleanerController.onPageLoad(mode: Mode = NormalMode)
+POST       /garageHandOrCleaner                        controllers.GarageHandOrCleanerController.onSubmit(mode: Mode = NormalMode)
+GET        /changeGarageHandOrCleaner                  controllers.GarageHandOrCleanerController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeGarageHandOrCleaner                  controllers.GarageHandOrCleanerController.onSubmit(mode: Mode = CheckMode)
