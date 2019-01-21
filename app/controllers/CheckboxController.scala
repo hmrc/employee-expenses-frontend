@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CheckboxController @Inject()(override val messagesApi: MessagesApi,
                                    sessionRepository: SessionRepository,
                                    navigator: Navigator,
-                                   identify: IdentifierAction,
+                                   identify: UnauthenticatedIdentifierAction,
                                    getData: DataRetrievalAction,
                                    requireData: DataRequiredAction,
                                    formProvider: CheckboxFormProvider,
@@ -61,12 +61,10 @@ class CheckboxController @Inject()(override val messagesApi: MessagesApi,
         (formWithErrors: Form[Set[Checkbox]]) =>
           Future.successful(BadRequest(view(formWithErrors, mode))),
         value => {
-          val updatedAnswers = request.userAnswers.set[Set[Checkbox]](CheckboxPage, value)
-
-          sessionRepository.set(updatedAnswers.userData).map(
-            _ =>
-              Redirect(navigator.nextPage(CheckboxPage, mode)(updatedAnswers))
-          )
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set[Set[Checkbox]](CheckboxPage, value))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(CheckboxPage, mode)(updatedAnswers))
         }
       )
   }

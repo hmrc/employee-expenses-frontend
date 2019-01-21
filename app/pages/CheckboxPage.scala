@@ -17,8 +17,11 @@
 package pages
 
 import models.Checkbox
+import play.api.libs.json.JsPath
 
 case object CheckboxPage extends QuestionPage[Set[Checkbox]] {
+
+  override def path: JsPath = JsPath \ toString
 
   override def toString: String = "checkbox"
 }
