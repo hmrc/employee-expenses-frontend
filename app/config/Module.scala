@@ -36,8 +36,8 @@ class Module extends AbstractModule {
     bind(classOf[SessionRepository]).to(classOf[DefaultSessionRepository]).asEagerSingleton()
     bind(classOf[ScalateEngineBoot]).asEagerSingleton()
 
-    bind(classOf[Navigator]).annotatedWith(Names.named("Healthcare")).to(classOf[HealthcareNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named("Generic")).to(classOf[GenericNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named("Engineering")).to(classOf[EngineeringNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Generic")).to(classOf[EeNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named("Healthcare")).to(classOf[HealthcareNavigator])
   }
 }

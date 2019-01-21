@@ -23,7 +23,7 @@ import models._
 
 class NavigatorSpec extends SpecBase {
 
-  val navigator = new EeNavigator
+  val navigator = new GenericNavigator
 
   "Navigator" when {
 

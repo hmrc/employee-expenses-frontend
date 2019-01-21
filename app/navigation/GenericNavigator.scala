@@ -23,7 +23,7 @@ import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.{FirstIndustryOptionsPage, Page}
 import play.api.mvc.Call
 
-class EeNavigator @Inject()() extends Navigator {
+class GenericNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case FirstIndustryOptionsPage => ua => firstIndustryOptions(NormalMode)(ua)
     case _ => _ => routes.IndexController.onPageLoad()
