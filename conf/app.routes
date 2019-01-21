@@ -97,7 +97,7 @@ POST       /airline-job-listed                              controllers.transpor
 GET        /change-airline-job-listed                       controllers.transport.AirlineJobListController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-airline-job-listed                       controllers.transport.AirlineJobListController.onSubmit(mode: Mode = CheckMode)
 
-GET        /whichRailwayTrade                        controllers.transport.WhichRailwayTradeController.onPageLoad(mode: Mode = NormalMode)
-POST       /whichRailwayTrade                        controllers.transport.WhichRailwayTradeController.onSubmit(mode: Mode = NormalMode)
-GET        /changeWhichRailwayTrade                  controllers.transport.WhichRailwayTradeController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeWhichRailwayTrade                  controllers.transport.WhichRailwayTradeController.onSubmit(mode: Mode = CheckMode)
+GET        /which-railway-trade                             controllers.transport.WhichRailwayTradeController.onPageLoad(mode: Mode = NormalMode)
+POST       /which-railway-trade                             controllers.transport.WhichRailwayTradeController.onSubmit(mode: Mode = NormalMode)
+GET        /change-which-railway-trade                      controllers.transport.WhichRailwayTradeController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-which-railway-trade                      controllers.transport.WhichRailwayTradeController.onSubmit(mode: Mode = CheckMode)
