@@ -26,7 +26,7 @@ trait CheckboxViewBehaviours[A] extends ViewSpecBase {
 
   val form: Form[Set[A]]
 
-  val application: Application = applicationBuilder(userData = Some(emptyUserData)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   def options: Set[RadioCheckboxOption]
 
@@ -79,10 +79,10 @@ trait CheckboxViewBehaviours[A] extends ViewSpecBase {
     }
 
     options.zipWithIndex.foreach {
-      case (RadioCheckboxOption, i) =>
-        s"has correct value checked when value `${RadioCheckboxOption.value}` is given" in {
+      case (checkboxOption, i) =>
+        s"has correct value checked when value `${checkboxOption.value}` is given" in {
           val data: Map[String, String] =
-            Map(s"$fieldKey[$i]" -> RadioCheckboxOption.value)
+            Map(s"$fieldKey[$i]" -> checkboxOption.value)
 
           val doc = asDocument(applyView(form.bind(data)))
           val field = form(fieldKey)(s"[$i]")
@@ -91,7 +91,7 @@ trait CheckboxViewBehaviours[A] extends ViewSpecBase {
 
           options.zipWithIndex.foreach {
             case (option, j) =>
-              if (option != RadioCheckboxOption) {
+              if (option != checkboxOption) {
                 val field = form(fieldKey)(s"[$j]")
                 assert(!doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is checked")
               }

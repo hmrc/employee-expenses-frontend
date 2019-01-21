@@ -37,7 +37,7 @@ class CheckboxViewSpec extends ViewBehaviours with CheckboxViewBehaviours[Checkb
 
 	override val form = new CheckboxFormProvider()()
 
-	override val application: Application = applicationBuilder(userData = Some(emptyUserData)).build()
+	override val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
 	def applyView(form: Form[Set[Checkbox]]): HtmlFormat.Appendable =
 		application.injector.instanceOf[CheckboxView].apply(form, NormalMode)(fakeRequest, messages)

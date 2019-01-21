@@ -16,8 +16,7 @@
 
 package generators
 
-import models.UserData
-import org.scalacheck.Arbitrary.arbitrary
+import models.UserAnswers
 import org.scalacheck.{Arbitrary, Gen}
 import pages._
 import play.api.libs.json.{JsValue, Json}
@@ -26,11 +25,9 @@ trait UserDataGenerator {
   self: Generators =>
 
   val generators: Seq[Gen[(Page, JsValue)]] =
-    arbitrary[(CheckboxPage.type, JsValue)] ::
-    arbitrary[(CheckboxPage.type, JsValue)] ::
     Nil
 
-  implicit lazy val arbitraryUserData: Arbitrary[UserData] =
+  implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] =
     Arbitrary {
       for {
         cacheId <- nonEmptyString
@@ -38,7 +35,7 @@ trait UserDataGenerator {
           case Nil => Gen.const(Map[Page, JsValue]())
           case _   => Gen.mapOf(oneOf(generators))
         }
-      } yield UserData(
+      } yield UserAnswers(
         cacheId,
         data.map {
           case (k, v) => Json.obj(k.toString -> v)
