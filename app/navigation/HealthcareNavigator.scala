@@ -29,13 +29,13 @@ class HealthcareNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case AmbulanceStaffPage  => ambulanceStaff(NormalMode)
     case HealthcareList1Page => healthcareList1(NormalMode)
-    case HealthcareList2Page => ua => routes.ClaimAmountController.onPageLoad(NormalMode)
+    case HealthcareList2Page => _ => routes.ClaimAmountController.onPageLoad(NormalMode)
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case AmbulanceStaffPage  => ambulanceStaff(CheckMode)
     case HealthcareList1Page => healthcareList1(CheckMode)
-    case HealthcareList2Page => ua => routes.ClaimAmountController.onPageLoad(CheckMode)
+    case HealthcareList2Page => _ => routes.ClaimAmountController.onPageLoad(CheckMode)
   }
 
   def ambulanceStaff(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(AmbulanceStaffPage) match {
