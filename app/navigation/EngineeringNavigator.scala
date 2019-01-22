@@ -18,9 +18,10 @@ package navigation
 
 import controllers.routes
 import javax.inject.Inject
+import models.AncillaryEngineeringWhichTrade.{ApprenticeOrStorekeeper, LabourerSupervisorOrUnskilledWorker, PatternMaker}
 import models.TypeOfEngineering._
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
-import pages.engineering.{ConstructionalEngineeringApprenticePage, ConstructionalEngineeringList1Page, ConstructionalEngineeringList2Page}
+import models.{AncillaryEngineeringWhichTrade, CheckMode, Mode, NormalMode, UserAnswers}
+import pages.engineering._
 import pages.{Page, TypeOfEngineeringPage}
 import play.api.mvc.Call
 
@@ -31,6 +32,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     case ConstructionalEngineeringList1Page => userAnswers => constructionalEngineeringList1(NormalMode)(userAnswers)
     case ConstructionalEngineeringList2Page => userAnswers => constructionalEngineeringList2(NormalMode)(userAnswers)
     case ConstructionalEngineeringApprenticePage => userAnswers => constructionalEngineeringApprentice(NormalMode)(userAnswers)
+    case AncillaryEngineeringWhichTradePage => userAnswers => ancillaryEngineeringWhichTrade(NormalMode)(userAnswers)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
 
@@ -79,6 +81,16 @@ class EngineeringNavigator @Inject()() extends Navigator {
   private def constructionalEngineeringApprentice(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(ConstructionalEngineeringApprenticePage) match {
       case Some(true) | Some(false) =>
+        controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case _ =>
+        controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  private def ancillaryEngineeringWhichTrade(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(AncillaryEngineeringWhichTradePage) match {
+      case Some(PatternMaker) | Some(LabourerSupervisorOrUnskilledWorker) |
+           Some(ApprenticeOrStorekeeper) | Some(AncillaryEngineeringWhichTrade.NoneOfTheAbove) =>
         controllers.routes.EmployerContributionController.onPageLoad(mode)
       case _ =>
         controllers.routes.SessionExpiredController.onPageLoad()
