@@ -16,11 +16,13 @@
 
 package controllers.healthcare
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.healthcare.AmbulanceStaffFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.healthcare.AmbulanceStaffPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class AmbulanceStaffController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: AmbulanceStaffFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: AmbulanceStaffView
+                                         view: AmbulanceStaffView,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -56,7 +59,7 @@ class AmbulanceStaffController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -64,10 +67,18 @@ class AmbulanceStaffController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AmbulanceStaffPage, mode)(updatedAnswers))
+          if (value) {
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value))
+              _              <- Future.fromTry(request.userAnswers.set(ClaimAmount, claimAmounts.Healthcare.ambulanceStaff))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(AmbulanceStaffPage, mode)(updatedAnswers))
+          } else {
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(AmbulanceStaffPage, mode)(updatedAnswers))
+          }
         }
       )
   }

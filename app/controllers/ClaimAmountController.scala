@@ -18,9 +18,9 @@ package controllers
 
 import controllers.actions._
 import javax.inject.{Inject, Named}
-import models.{EmployerContribution, Mode}
+import models.Mode
 import navigation.Navigator
-import pages.{ClaimAmount, EmployerContributionPage, ExpensesEmployerPaidPage}
+import pages.{ClaimAmount, ExpensesEmployerPaidPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -41,10 +41,12 @@ class ClaimAmountController @Inject()(
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
 
-  def calculatePercentage (amount: Double, deduction: Option[Double] = None, percentage: Double): String =  {
+  def calculatePercentage(amount: Double, deduction: Option[Double] = None, percentage: Double): String =  {
     val calc = deduction match {
-      case Some(deduction) => ((amount - deduction) / 100) * percentage
-      case _ => (amount / 100) * percentage
+      case Some(deduction) =>
+        ((amount - deduction) / 100) * percentage
+      case _ =>
+        (amount / 100) * percentage
     }
     BigDecimal(calc).setScale(2).toString
   }
@@ -52,30 +54,21 @@ class ClaimAmountController @Inject()(
   def onPageLoad(mode : Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
       request.userAnswers.get(ClaimAmount) match {
-        case Some(amount) => {
-          request.userAnswers.get(EmployerContributionPage) match {
-            case Some(EmployerContribution.Some) => {
-              request.userAnswers.get(ExpensesEmployerPaidPage) match {
-                case Some(deduction) => {
-                  val band1 = calculatePercentage(amount, Some(deduction), percentage = 20)
-                  val band2 = calculatePercentage(amount, Some(deduction), percentage = 40)
+        case Some(claimAmount) =>
+          request.userAnswers.get(ExpensesEmployerPaidPage) match {
+            case Some(expensesEmployerPaid) =>
+              val band1 = calculatePercentage(claimAmount, Some(expensesEmployerPaid), percentage = 20)
+              val band2 = calculatePercentage(claimAmount, Some(expensesEmployerPaid), percentage = 40)
 
-                  Ok(view(amount, Some(band1), Some(band2)))
-                }
-                case _ =>
-                  Redirect(routes.SessionExpiredController.onPageLoad())
-              }
-            }
-            case Some(EmployerContribution.None) => {
-              val band1 = calculatePercentage(amount, percentage = 20)
-              val band2 = calculatePercentage(amount, percentage = 40)
+              Ok(view(claimAmount, Some(band1), Some(band2)))
+            case None =>
+              val band1 = calculatePercentage(claimAmount, percentage = 20)
+              val band2 = calculatePercentage(claimAmount, percentage = 40)
 
-              Ok(view(amount, Some(band1), Some(band2)))
-            }
+              Ok(view(claimAmount, Some(band1), Some(band2)))
             case _ =>
               Redirect(routes.SessionExpiredController.onPageLoad())
           }
-        }
         case _ =>
           Redirect(routes.SessionExpiredController.onPageLoad())
       }

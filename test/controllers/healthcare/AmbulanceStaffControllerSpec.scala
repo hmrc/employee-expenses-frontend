@@ -21,6 +21,7 @@ import forms.healthcare.AmbulanceStaffFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.healthcare.AmbulanceStaffPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -32,9 +33,9 @@ class AmbulanceStaffControllerSpec extends SpecBase {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new AmbulanceStaffFormProvider()
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
-  lazy val ambulanceStaffRoute = controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode).url
+  lazy val ambulanceStaffRoute: String = controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode).url
 
   "AmbulanceStaff Controller" must {
 

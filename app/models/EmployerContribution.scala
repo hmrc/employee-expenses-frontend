@@ -16,7 +16,6 @@
 
 package models
 
-import play.api.libs.json._
 import viewmodels.RadioOption
 
 sealed trait EmployerContribution
@@ -38,5 +37,5 @@ object EmployerContribution extends Enumerable.Implicits {
   }
 
   implicit val enumerable: Enumerable[EmployerContribution] =
-    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+    Enumerable(values.map(v => v.toString -> v): _*)
 }

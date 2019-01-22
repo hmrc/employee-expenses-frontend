@@ -67,19 +67,6 @@ class ClaimAmountControllerSpec extends SpecBase {
 
         application.stop()
       }
-
-      "claim amount found but no employer contribution" in {
-        val claimAmount = 180
-        val userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> claimAmount))
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-        val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
-
-        application.stop()
-      }
     }
 
     "display correct figures of 20 and 40 when claimAmount = 100 when no employer contribution" in {
