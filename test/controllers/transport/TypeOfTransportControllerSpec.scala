@@ -17,7 +17,6 @@
 package controllers.transport
 
 import base.SpecBase
-import controllers.routes
 import forms.transport.TypeOfTransportFormProvider
 import models.{NormalMode, TypeOfTransport, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -81,7 +80,7 @@ class TypeOfTransportControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -128,7 +127,7 @@ class TypeOfTransportControllerSpec extends SpecBase {
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -145,7 +144,7 @@ class TypeOfTransportControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

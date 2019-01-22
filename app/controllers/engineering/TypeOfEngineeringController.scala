@@ -14,33 +14,33 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import controllers.actions._
-import forms.transport.TypeOfTransportFormProvider
-import javax.inject.Inject
+import forms.TypeOfEngineeringFormProvider
+import javax.inject.{Inject, Named}
 import models.{Enumerable, Mode}
 import navigation.Navigator
-import pages.transport.TypeOfTransportPage
+import pages.TypeOfEngineeringPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.transport.TypeOfTransportView
+import views.html.TypeOfEngineeringView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TypeOfTransportController @Inject()(
+class TypeOfEngineeringController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: SessionRepository,
-                                       navigator: Navigator,
+                                       @Named("Engineering") navigator: Navigator,
                                        identify: UnauthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
-                                       formProvider: TypeOfTransportFormProvider,
+                                       formProvider: TypeOfEngineeringFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: TypeOfTransportView
+                                       view: TypeOfEngineeringView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -48,7 +48,7 @@ class TypeOfTransportController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(TypeOfTransportPage) match {
+      val preparedForm = request.userAnswers.get(TypeOfEngineeringPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,9 +65,9 @@ class TypeOfTransportController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfTransportPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfEngineeringPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TypeOfTransportPage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(TypeOfEngineeringPage, mode)(updatedAnswers))
         }
       )
   }

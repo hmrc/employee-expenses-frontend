@@ -6,11 +6,11 @@ echo "Applying migration TypeOfEngineering"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /typeOfEngineering                        controllers.TypeOfEngineeringController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /typeOfEngineering                        controllers.TypeOfEngineeringController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /typeOfEngineering                        controllers.engineering.TypeOfEngineeringController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /typeOfEngineering                        controllers.engineering.TypeOfEngineeringController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeTypeOfEngineering                  controllers.TypeOfEngineeringController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeTypeOfEngineering                  controllers.TypeOfEngineeringController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeTypeOfEngineering                  controllers.engineering.TypeOfEngineeringController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeTypeOfEngineering                  controllers.engineering.TypeOfEngineeringController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

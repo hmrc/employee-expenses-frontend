@@ -14,41 +14,41 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import controllers.actions._
-import forms.TypeOfEngineeringFormProvider
-import javax.inject.Inject
-import models.{Enumerable, Mode}
+import forms.engineering.FactoryEngineeringList1FormProvider
+import javax.inject.{Inject, Named}
+import models.Mode
 import navigation.Navigator
-import pages.TypeOfEngineeringPage
+import pages.engineering.FactoryEngineeringList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.TypeOfEngineeringView
+import views.html.engineering.FactoryEngineeringList1View
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TypeOfEngineeringController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       navigator: Navigator,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: TypeOfEngineeringFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: TypeOfEngineeringView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class FactoryEngineeringList1Controller @Inject()(
+                                         override val messagesApi: MessagesApi,
+                                         sessionRepository: SessionRepository,
+                                         @Named("Engineering") navigator: Navigator,
+                                         identify: UnauthenticatedIdentifierAction,
+                                         getData: DataRetrievalAction,
+                                         requireData: DataRequiredAction,
+                                         formProvider: FactoryEngineeringList1FormProvider,
+                                         val controllerComponents: MessagesControllerComponents,
+                                         view: FactoryEngineeringList1View
+                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(TypeOfEngineeringPage) match {
+      val preparedForm = request.userAnswers.get(FactoryEngineeringList1Page) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,9 +65,9 @@ class TypeOfEngineeringController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfEngineeringPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(FactoryEngineeringList1Page, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TypeOfEngineeringPage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(FactoryEngineeringList1Page, mode)(updatedAnswers))
         }
       )
   }

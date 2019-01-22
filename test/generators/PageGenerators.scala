@@ -18,11 +18,17 @@ package generators
 
 import org.scalacheck.Arbitrary
 import pages._
-import pages.healthcare.{AmbulanceStaffPage, HealthcareList1Page, HealthcareList2Page}
+import pages.healthcare._
 import pages.engineering._
-import pages.transport.TypeOfTransportPage
+import pages.transport._
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryGarageHandOrCleanerPage: Arbitrary[GarageHandOrCleanerPage.type] =
+    Arbitrary(GarageHandOrCleanerPage)
+
+  implicit lazy val arbitraryFactoryEngineeringList1Page: Arbitrary[FactoryEngineeringList1Page.type] =
+    Arbitrary(FactoryEngineeringList1Page)
 
   implicit lazy val arbitraryFactoryEngineeringList2Page: Arbitrary[FactoryEngineeringList2Page.type] =
     Arbitrary(FactoryEngineeringList2Page)
@@ -41,6 +47,9 @@ trait PageGenerators {
 
   implicit lazy val arbitraryHealthcareList1Page: Arbitrary[HealthcareList1Page.type] =
     Arbitrary(HealthcareList1Page)
+
+  implicit lazy val arbitraryAirlineJobListPage: Arbitrary[AirlineJobListPage.type] =
+    Arbitrary(AirlineJobListPage)
 
   implicit lazy val arbitraryTypeOfTransportPage: Arbitrary[TypeOfTransportPage.type] =
     Arbitrary(TypeOfTransportPage)

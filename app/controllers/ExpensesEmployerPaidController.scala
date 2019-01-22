@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions._
 import forms.ExpensesEmployerPaidFormProvider
-import javax.inject.Inject
+import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.ExpensesEmployerPaidPage
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ExpensesEmployerPaidController @Inject()(
                                                 override val messagesApi: MessagesApi,
                                                 sessionRepository: SessionRepository,
-                                                navigator: Navigator,
+                                                @Named("Generic") navigator: Navigator,
                                                 identify: UnauthenticatedIdentifierAction,
                                                 getData: DataRetrievalAction,
                                                 requireData: DataRequiredAction,
