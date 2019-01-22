@@ -83,6 +83,17 @@ firstIndustryOptions.noneOfTheAbove = None of the above
 firstIndustryOptions.checkYourAnswersLabel = What industry do you work in?
 firstIndustryOptions.error.required = Select the industry you work in
 
+secondIndustryOptions.title = What type of industry do you work in?
+secondIndustryOptions.heading = What type of industry do you work in?
+secondIndustryOptions.manufacturingWarehousing = Manufacturing and warehousing (including wood, furniture and metals)
+secondIndustryOptions.council = Council
+secondIndustryOptions.police = Police
+secondIndustryOptions.clothingTextiles = Clothing and textiles (including leather)
+secondIndustryOptions.construction = Construction (including building and building materials)
+secondIndustryOptions.none = None of the above
+secondIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
+secondIndustryOptions.error.required = Select the industry you work in
+
 claimAmount.title = You can claim tax relief on £{0}
 claimAmount.heading = You can claim tax relief on £{0}
 claimAmount.description = The amount of tax relief you can claim depends on the rate of tax you pay.
