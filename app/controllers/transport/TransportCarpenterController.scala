@@ -35,7 +35,7 @@ class TransportCarpenterController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          @Named("Transport") navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: TransportCarpenterFormProvider,

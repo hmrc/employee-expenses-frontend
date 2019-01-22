@@ -232,7 +232,7 @@ whichRailwayTrade.noneOfTheAbove = None of the above
 whichRailwayTrade.checkYourAnswersLabel = Which railway trade do you work in?
 whichRailwayTrade.error.required = Select whichRailwayTrade
 
-transportCarpenter.title = transportCarpenter
-transportCarpenter.heading = transportCarpenter
-transportCarpenter.checkYourAnswersLabel = transportCarpenter
-transportCarpenter.error.required = Select yes if transportCarpenter
+transportCarpenter.title = Are you a carpenter on a passenger liner?
+transportCarpenter.heading = Are you a carpenter on a passenger liner?
+transportCarpenter.checkYourAnswersLabel = Are you a carpenter on a passenger liner?
+transportCarpenter.error.required = Select yes if you are a carpenter on a passenger liner?
