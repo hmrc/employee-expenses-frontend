@@ -20,7 +20,7 @@ import controllers.routes
 import javax.inject.Inject
 import models.TypeOfEngineering._
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
-import pages.engineering.ConstructionalEngineeringList1Page
+import pages.engineering.{ConstructionalEngineeringList1Page, ConstructionalEngineeringList2Page}
 import pages.{Page, TypeOfEngineeringPage}
 import play.api.mvc.Call
 
@@ -29,6 +29,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case TypeOfEngineeringPage => userAnswers => typeOfEngineeringOptions(NormalMode)(userAnswers)
     case ConstructionalEngineeringList1Page => userAnswers => constructionalEngineeringList1(NormalMode)(userAnswers)
+    case ConstructionalEngineeringList2Page => userAnswers => constructionalEngineeringList2(NormalMode)(userAnswers)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
 
@@ -58,6 +59,17 @@ class EngineeringNavigator @Inject()() extends Navigator {
         controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) =>
         controllers.engineering.routes.ConstructionalEngineeringList2Controller.onPageLoad(mode)
+      case _ =>
+        controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  private def constructionalEngineeringList2(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(ConstructionalEngineeringList2Page) match {
+      case Some(true) =>
+        controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(false) =>
+        controllers.engineering.routes.ConstructionalEngineeringApprenticeController.onPageLoad(mode)
       case _ =>
         controllers.routes.SessionExpiredController.onPageLoad()
     }
