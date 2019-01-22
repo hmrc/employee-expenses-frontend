@@ -195,3 +195,7 @@ airlineJobList.occupation3 = Uniformed flight deck crew
 airlineJobList.checkYourAnswersLabel = Is your job title listed?
 airlineJobList.error.required = Select yes if your job title listed?
 
+garageHandOrCleaner.title = Are you a garage hand or cleaner?
+garageHandOrCleaner.heading = Are you a garage hand or cleaner?
+garageHandOrCleaner.checkYourAnswersLabel = garageHandOrCleaner
+garageHandOrCleaner.error.required = Select yes if you are a garage hand or cleaner?
