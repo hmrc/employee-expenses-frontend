@@ -18,17 +18,35 @@ package navigation
 
 import controllers.routes
 import javax.inject.Inject
-import models.UserAnswers
-import pages.Page
+import models.TypeOfEngineering._
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import pages.{Page, TypeOfEngineeringPage}
 import play.api.mvc.Call
 
 class EngineeringNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
+    case TypeOfEngineeringPage => userAnswers => typeOfEngineeringOptions(NormalMode)(userAnswers)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case TypeOfEngineeringPage => userAnswers => typeOfEngineeringOptions(CheckMode)(userAnswers)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
+  }
+
+  private def typeOfEngineeringOptions(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(TypeOfEngineeringPage) match {
+      case Some(ConstructionalEngineering) =>
+        controllers.engineering.routes.ConstructionalEngineeringList1Controller.onPageLoad(mode)
+      case Some(TradesRelatingToEngineering) =>
+        controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(mode)
+      case Some(FactoryOrWorkshopEngineering) =>
+        controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(mode)
+      case Some(NoneOfTheAbove) =>
+        controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case _ =>
+        controllers.routes.SessionExpiredController.onPageLoad()
+    }
   }
 }

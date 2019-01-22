@@ -21,15 +21,14 @@ import models.TypeOfEngineering._
 import models._
 import org.scalatest.prop.PropertyChecks
 import pages._
+import pages.engineering.ConstructionalEngineeringList1Page
 
 class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
 
-  val navigator = new GenericNavigator
+  val navigator = new EngineeringNavigator
 
-  "Navigator" when {
-
+  "Engineering Navigator" when {
     "in Normal mode" must {
-
       "from TypeOfEngineering" must {
 
         "go to ConstructionalEngineeringList1 when ConstructionalEngineering is selected" in {
@@ -53,7 +52,7 @@ class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
             controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(NormalMode)
         }
 
-        "go to EmployerContribution when  is selected " in {
+        "go to EmployerContribution when NoneOfTheAbove is selected " in {
           val answers = emptyUserAnswers.set(TypeOfEngineeringPage, NoneOfTheAbove).success.value
 
           navigator.nextPage(TypeOfEngineeringPage, NormalMode)(answers) mustBe
@@ -61,9 +60,27 @@ class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
         }
       }
 
+      "from ConstructionalEngineeringList1" must {
+
+        "go to EmployerContribution when Yes is selected" in {
+          val answers = emptyUserAnswers.set(ConstructionalEngineeringList1Page, true).success.value
+
+          navigator.nextPage(ConstructionalEngineeringList1Page, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to ConstructionalEngineeringList2 when No is selected" in {
+          val answers = emptyUserAnswers.set(ConstructionalEngineeringList1Page, false).success.value
+
+          navigator.nextPage(ConstructionalEngineeringList1Page, NormalMode)(answers) mustBe
+            controllers.engineering.routes.ConstructionalEngineeringList2Controller.onPageLoad(NormalMode)
+        }
+      }
+
       "in Check mode" must {
 
       }
+
     }
   }
 
