@@ -77,7 +77,7 @@ class AmbulanceStaffControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to the next page when true is submitted" in {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -87,6 +87,26 @@ class AmbulanceStaffControllerSpec extends SpecBase {
       val request =
         FakeRequest(POST, ambulanceStaffRoute)
           .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
+
+    "redirect to the next page when false is submitted" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Healthcare").toInstance(new FakeNavigator(onwardRoute)))
+          .build()
+
+      val request =
+        FakeRequest(POST, ambulanceStaffRoute)
+          .withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
 

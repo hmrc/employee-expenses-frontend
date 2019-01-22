@@ -24,8 +24,8 @@ import play.api.Configuration
 class ClaimAmountsConfig @Inject() (configuration: Configuration) {
   object Healthcare {
     lazy val ambulanceStaff: Int = configuration.get[Int]("claim-amounts.healthcare.ambulance-staff")
-    lazy val List1: Int = configuration.get[Int]("claim-amounts.healthcare.list-1")
-    lazy val List2: Int = configuration.get[Int]("claim-amounts.healthcare.list-2")
-    lazy val AllOther: Int = configuration.get[Int]("claim-amounts.healthcare.all-other")
+    lazy val list1: Int = configuration.get[Int]("claim-amounts.healthcare.list-1")
+    lazy val list2: Int = configuration.get[Int]("claim-amounts.healthcare.list-2")
+    lazy val allOther: Int = configuration.get[Int]("claim-amounts.healthcare.all-other")
   }
 }

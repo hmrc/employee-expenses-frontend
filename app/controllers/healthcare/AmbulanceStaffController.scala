@@ -69,8 +69,8 @@ class AmbulanceStaffController @Inject()(
         value => {
           if (value) {
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value))
-              _              <- Future.fromTry(request.userAnswers.set(ClaimAmount, claimAmounts.Healthcare.ambulanceStaff))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(ClaimAmount, claimAmounts.Healthcare.ambulanceStaff))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(AmbulanceStaffPage, value))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(AmbulanceStaffPage, mode)(updatedAnswers))
           } else {

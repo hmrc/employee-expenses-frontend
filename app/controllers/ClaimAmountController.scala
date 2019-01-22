@@ -28,6 +28,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.ClaimAmountView
 
 import scala.concurrent.ExecutionContext
+import scala.math.BigDecimal.RoundingMode
 
 class ClaimAmountController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -41,14 +42,14 @@ class ClaimAmountController @Inject()(
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
 
-  def calculatePercentage(amount: Double, deduction: Option[Double] = None, percentage: Double): String =  {
-    val calc = deduction match {
+  def calculatePercentage(amount:Double, deduction: Option[Double] = None, percentage:Double): String =  {
+    val calc: Double = deduction match {
       case Some(deduction) =>
         ((amount - deduction) / 100) * percentage
       case _ =>
         (amount / 100) * percentage
     }
-    BigDecimal(calc).setScale(2).toString
+    BigDecimal(calc).setScale(2, RoundingMode.DOWN).toString
   }
 
   def onPageLoad(mode : Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {

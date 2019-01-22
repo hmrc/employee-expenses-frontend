@@ -40,8 +40,7 @@ class ClaimAmountControllerSpec extends SpecBase {
       val userAnswers = UserAnswers(
         userAnswersId,
         Json.obj(
-          ClaimAmount.toString -> claimAmount,
-          EmployerContributionPage.toString -> EmployerContribution.None.toString
+          ClaimAmount.toString -> claimAmount
         )
       )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
