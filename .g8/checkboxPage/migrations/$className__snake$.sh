@@ -66,8 +66,7 @@ awk '/class/ {\
     print "  def $className;format="decap"$: Option[AnswerRow] = userAnswers.get($className$Page) map {";\
     print "    x => AnswerRow(";\
     print "        \"$className;format="decap"$.checkYourAnswersLabel\",";\
-    print "        s\"$className;format="decap"$.$x\",";\
-    print "        x.map(value => messages(s\"$className;format="decap"$.$value\")).mkString(\", <br>\"),";\
+    print "        x.map(value => messages(s\"$className;format="decap"$.\$value\")).mkString(\", <br>\"),";\
     print "        true,";\
     print "        routes.$className$Controller.onPageLoad(CheckMode).url";\
     print "    )";\
