@@ -112,3 +112,8 @@ GET        /garage-hand-cleaner                             controllers.transpor
 POST       /garage-hand-cleaner                             controllers.transport.GarageHandOrCleanerController.onSubmit(mode: Mode = NormalMode)
 GET        /change-garage-hand-cleaner                      controllers.transport.GarageHandOrCleanerController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-garage-hand-cleaner                      controllers.transport.GarageHandOrCleanerController.onSubmit(mode: Mode = CheckMode)
+
+GET        /transport-carpenter                             controllers.transport.TransportCarpenterController.onPageLoad(mode: Mode = NormalMode)
+POST       /transport-carpenter                             controllers.transport.TransportCarpenterController.onSubmit(mode: Mode = NormalMode)
+GET        /change-transport-carpenter                      controllers.transport.TransportCarpenterController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-transport-carpenter                      controllers.transport.TransportCarpenterController.onSubmit(mode: Mode = CheckMode)

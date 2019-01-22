@@ -19,7 +19,6 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
-import pages.transport.TypeOfTransportPage
 import pages.engineering._
 import pages.healthcare._
 import pages.transport._
@@ -27,8 +26,14 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def transportCarpenter: Option[AnswerRow] = userAnswers.get(TransportCarpenterPage) map {
+    x => AnswerRow("transportCarpenter.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.transport.routes.TransportCarpenterController.onPageLoad(CheckMode).url)
+  }
+
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
-    x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true, routes.SecondIndustryOptionsController.onPageLoad(CheckMode).url)
+    x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
+      routes.SecondIndustryOptionsController.onPageLoad(CheckMode).url)
   }
 
   def garageHandOrCleaner: Option[AnswerRow] = userAnswers.get(GarageHandOrCleanerPage) map {
