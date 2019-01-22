@@ -1,17 +1,17 @@
 package controllers
 
 import controllers.actions._
-import forms.CheckboxFormProvider
+import forms.$className$FormProvider
 import javax.inject.Inject
-import models.{Checkbox, Enumerable, Mode}
+import models.{$className$, Enumerable, Mode}
 import navigation.Navigator
-import pages.CheckboxPage
+import pages.$className$Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.CheckboxView
+import views.html.$className$View
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,7 +44,7 @@ class $className$Controller @Inject()(
     implicit request =>
 
       form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
+        (formWithErrors: Form[Set[$className$]]) =>
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
