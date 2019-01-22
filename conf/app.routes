@@ -42,6 +42,11 @@ POST        /first-industry-type                            controllers.FirstInd
 GET         /change-first-industry-type                     controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-first-industry-type                     controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
+GET         /second-industry-type                           controllers.SecondIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST        /second-industry-type                           controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-second-industry-type                    controllers.SecondIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-second-industry-type                    controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+
 GET         /type-of-engineering                            controllers.engineering.TypeOfEngineeringController.onPageLoad(mode: Mode = NormalMode)
 POST        /type-of-engineering                            controllers.engineering.TypeOfEngineeringController.onSubmit(mode: Mode = NormalMode)
 GET         /change-type-of-engineering                     controllers.engineering.TypeOfEngineeringController.onPageLoad(mode: Mode = CheckMode)
@@ -52,10 +57,10 @@ POST        /constructional-engineering-list-1              controllers.engineer
 GET         /change-constructional-engineering-list-1       controllers.engineering.ConstructionalEngineeringList1Controller.onPageLoad(mode: Mode = CheckMode)
 POST        /change-constructional-engineering-list-1       controllers.engineering.ConstructionalEngineeringList1Controller.onSubmit(mode: Mode = CheckMode)
 
-GET         /ambulance-staff                                controllers.healthcare.AmbulanceStaffController.onPageLoad(mode: Mode = NormalMode)
-POST        /ambulance-staff                                controllers.healthcare.AmbulanceStaffController.onSubmit(mode: Mode = NormalMode)
-GET         /change-ambulance-staff                         controllers.healthcare.AmbulanceStaffController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-ambulance-staff                         controllers.healthcare.AmbulanceStaffController.onSubmit(mode: Mode = CheckMode)
+GET         /ambulance-staff                              controllers.healthcare.AmbulanceStaffController.onPageLoad(mode: Mode = NormalMode)
+POST        /ambulance-staff                               controllers.healthcare.AmbulanceStaffController.onSubmit(mode: Mode = NormalMode)
+GET         /change-ambulance-staff                      controllers.healthcare.AmbulanceStaffController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-ambulance-staff                      controllers.healthcare.AmbulanceStaffController.onSubmit(mode: Mode = CheckMode)
 
 GET         /constructional-engineering-list-2              controllers.engineering.ConstructionalEngineeringList2Controller.onPageLoad(mode: Mode = NormalMode)
 POST        /constructional-engineering-list-2              controllers.engineering.ConstructionalEngineeringList2Controller.onSubmit(mode: Mode = NormalMode)
@@ -72,10 +77,10 @@ POST        /type-of-transport                              controllers.transpor
 GET         /change-type-of-transport                       controllers.transport.TypeOfTransportController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-type-of-transport                       controllers.transport.TypeOfTransportController.onSubmit(mode: Mode = CheckMode)
 
-GET         /healthcare-list-2                              controllers.healthcare.HealthcareList2Controller.onPageLoad(mode: Mode = NormalMode)
-POST        /healthcare-list-2                              controllers.healthcare.HealthcareList2Controller.onSubmit(mode: Mode = NormalMode)
-GET         /change-healthcare-list-2                       controllers.healthcare.HealthcareList2Controller.onPageLoad(mode: Mode = CheckMode)
-POST        /change-healthcare-list-2                       controllers.healthcare.HealthcareList2Controller.onSubmit(mode: Mode = CheckMode)
+GET         /healthcare-list-2                               controllers.healthcare.HealthcareList2Controller.onPageLoad(mode: Mode = NormalMode)
+POST        /healthcare-list-2                               controllers.healthcare.HealthcareList2Controller.onSubmit(mode: Mode = NormalMode)
+GET         /change-healthcare-list-2                        controllers.healthcare.HealthcareList2Controller.onPageLoad(mode: Mode = CheckMode)
+POST        /change-healthcare-list-2                        controllers.healthcare.HealthcareList2Controller.onSubmit(mode: Mode = CheckMode)
 
 GET         /constructional-engineering-apprentice          controllers.engineering.ConstructionalEngineeringApprenticeController.onPageLoad(mode: Mode = NormalMode)
 POST        /constructional-engineering-apprentice          controllers.engineering.ConstructionalEngineeringApprenticeController.onSubmit(mode: Mode = NormalMode)
@@ -87,6 +92,12 @@ POST        /ancillary-engineering-which-trade              controllers.engineer
 GET         /change-ancillary-engineering-which-trade       controllers.engineering.AncillaryEngineeringWhichTradeController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-ancillary-engineering-which-trade       controllers.engineering.AncillaryEngineeringWhichTradeController.onSubmit(mode: Mode = CheckMode)
 
+GET         /factory-engineering-list-2                     controllers.engineering.FactoryEngineeringList2Controller.onPageLoad(mode: Mode = NormalMode)
+POST        /factory-engineering-list-2                     controllers.engineering.FactoryEngineeringList2Controller.onSubmit(mode: Mode = NormalMode)
+GET         /change-factory-engineering-list-2              controllers.engineering.FactoryEngineeringList2Controller.onPageLoad(mode: Mode = CheckMode)
+POST        /change-factory-engineering-list-2              controllers.engineering.FactoryEngineeringList2Controller.onSubmit(mode: Mode = CheckMode)
+
+
 GET         /factory-engineering-list-1                     controllers.engineering.FactoryEngineeringList1Controller.onPageLoad(mode: Mode = NormalMode)
 POST        /factory-engineering-list-1                      controllers.engineering.FactoryEngineeringList1Controller.onSubmit(mode: Mode = NormalMode)
 GET         /change-factory-engineering-list-1              controllers.engineering.FactoryEngineeringList1Controller.onPageLoad(mode: Mode = CheckMode)
@@ -96,6 +107,11 @@ GET        /airline-job-listed                              controllers.transpor
 POST       /airline-job-listed                              controllers.transport.AirlineJobListController.onSubmit(mode: Mode = NormalMode)
 GET        /change-airline-job-listed                       controllers.transport.AirlineJobListController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-airline-job-listed                       controllers.transport.AirlineJobListController.onSubmit(mode: Mode = CheckMode)
+
+GET        /garage-hand-cleaner                             controllers.transport.GarageHandOrCleanerController.onPageLoad(mode: Mode = NormalMode)
+POST       /garage-hand-cleaner                             controllers.transport.GarageHandOrCleanerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-garage-hand-cleaner                      controllers.transport.GarageHandOrCleanerController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-garage-hand-cleaner                      controllers.transport.GarageHandOrCleanerController.onSubmit(mode: Mode = CheckMode)
 
 GET        /which-railway-trade                             controllers.transport.WhichRailwayTradeController.onPageLoad(mode: Mode = NormalMode)
 POST       /which-railway-trade                             controllers.transport.WhichRailwayTradeController.onSubmit(mode: Mode = NormalMode)
