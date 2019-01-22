@@ -19,6 +19,7 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
+import pages.transport.TypeOfTransportPage
 import pages.engineering._
 import pages.healthcare._
 import pages.transport._
@@ -75,6 +76,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def factoryEngineeringList1: Option[AnswerRow] = userAnswers.get(FactoryEngineeringList1Page) map {
     x => AnswerRow("factoryEngineeringList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(CheckMode).url)
+  }
+
+  def factoryEngineeringList2: Option[AnswerRow] = userAnswers.get(FactoryEngineeringList2Page) map {
+    x => AnswerRow("factoryEngineeringList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.engineering.routes.FactoryEngineeringList2Controller.onPageLoad(CheckMode).url)
   }
 
   def ancillaryEngineeringWhichTrade: Option[AnswerRow] = userAnswers.get(AncillaryEngineeringWhichTradePage) map {

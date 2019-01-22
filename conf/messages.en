@@ -210,3 +210,16 @@ garageHandOrCleaner.title = Are you a garage hand or cleaner?
 garageHandOrCleaner.heading = Are you a garage hand or cleaner?
 garageHandOrCleaner.checkYourAnswersLabel = garageHandOrCleaner
 garageHandOrCleaner.error.required = Select yes if you are a garage hand or cleaner?
+
+factoryEngineeringList2.title = Is your job title listed?
+factoryEngineeringList2.heading = Is your job title listed?
+factoryEngineeringList2.secondaryHeading = Factory or workshop engineers list 2
+factoryEngineeringList2.checkYourAnswersLabel = Is your job title listed?
+factoryEngineeringList2.error.required = Select yes if your job title listed
+factoryEngineeringList2.occupation1 = Carding engineer
+factoryEngineeringList2.occupation2 = Chainmaker
+factoryEngineeringList2.occupation3 = Cleaner
+factoryEngineeringList2.occupation4 = Galvaniser
+factoryEngineeringList2.occupation5 = Tinner
+factoryEngineeringList2.occupation6 = Toolmakers in the lock making industry
+factoryEngineeringList2.occupation7 = Wire drawers in the wire drawing industry
