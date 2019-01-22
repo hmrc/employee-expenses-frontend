@@ -117,3 +117,8 @@ GET        /which-railway-trade                             controllers.transpor
 POST       /which-railway-trade                             controllers.transport.WhichRailwayTradeController.onSubmit(mode: Mode = NormalMode)
 GET        /change-which-railway-trade                      controllers.transport.WhichRailwayTradeController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-which-railway-trade                      controllers.transport.WhichRailwayTradeController.onSubmit(mode: Mode = CheckMode)
+
+GET        /transport-carpenter                             controllers.transport.TransportCarpenterController.onPageLoad(mode: Mode = NormalMode)
+POST       /transport-carpenter                             controllers.transport.TransportCarpenterController.onSubmit(mode: Mode = NormalMode)
+GET        /change-transport-carpenter                      controllers.transport.TransportCarpenterController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-transport-carpenter                      controllers.transport.TransportCarpenterController.onSubmit(mode: Mode = CheckMode)
