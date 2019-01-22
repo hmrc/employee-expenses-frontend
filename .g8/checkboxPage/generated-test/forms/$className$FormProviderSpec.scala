@@ -17,7 +17,7 @@ class $className$FormProviderSpec extends CheckboxFieldBehaviours {
       form,
       fieldName,
       validValues  = $className$.values,
-      invalidError = FormError(s"$fieldName[0]", "error.invalid")
+      invalidError = FormError(s"\$fieldName[0]", "error.invalid")
     )
 
     behave like mandatoryCheckboxField(
