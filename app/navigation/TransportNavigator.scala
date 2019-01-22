@@ -16,19 +16,33 @@
 
 package navigation
 
-import controllers.routes
+import controllers.transport.routes
 import javax.inject.Inject
-import models.UserAnswers
+import models.TypeOfTransport._
+import models._
 import pages.Page
+import pages.transport.TypeOfTransportPage
 import play.api.mvc.Call
 
 class TransportNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case TypeOfTransportPage => userAnswers => typeOfTransportOptions(NormalMode)(userAnswers)
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+  }
+
+  private def typeOfTransportOptions(mode: Mode)(userAnswers: UserAnswers) = {
+    userAnswers.get(TypeOfTransportPage) match {
+      case Some(Airlines) => routes.AirlineJobListController.onPageLoad(mode)
+      case Some(PublicTransport) => routes.GarageHandOrCleanerController.onPageLoad(mode)
+      case Some(Railways) => routes.WhichRailwayTradeController.onPageLoad(mode)
+      case Some(SeamanCarpenter) => routes.TransportCarpenterController.onPageLoad(mode)
+      //case Some(Vehicles) => ???
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
   }
 }
