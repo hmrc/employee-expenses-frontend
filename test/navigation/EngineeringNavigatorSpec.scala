@@ -17,12 +17,12 @@
 package navigation
 
 import base.SpecBase
-import models.AncillaryEngineeringWhichTrade.{ApprenticeOrStorekeeper, LabourerSupervisorOrUnskilledWorker, PatternMaker}
+import models.AncillaryEngineeringWhichTrade._
 import models.TypeOfEngineering._
 import models._
 import org.scalatest.prop.PropertyChecks
 import pages._
-import pages.engineering.{AncillaryEngineeringWhichTradePage, ConstructionalEngineeringApprenticePage, ConstructionalEngineeringList1Page, ConstructionalEngineeringList2Page}
+import pages.engineering._
 
 class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
 
@@ -149,14 +149,39 @@ class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
         }
       }
 
+      //Factory Engineering
 
+      "from FactoryEngineeringList1" must {
 
-        "in Check mode" must {
+        "go to EmployerContribution when yes is selected" in {
+          val answers = emptyUserAnswers.set(FactoryEngineeringList1Page, true).success.value
 
+          navigator.nextPage(FactoryEngineeringList1Page, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
 
+        "go to FactoryEngineeringList2 when no is selected" in {
+          val answers = emptyUserAnswers.set(FactoryEngineeringList1Page, false).success.value
+
+          navigator.nextPage(FactoryEngineeringList1Page, NormalMode)(answers) mustBe
+            controllers.engineering.routes.FactoryEngineeringList2Controller.onPageLoad(NormalMode)
+        }
+      }
+
+      "from FactoryEngineeringList2" must {
+
+        "go to EmployerContribution when yes is selected" in {
+          val answers = emptyUserAnswers.set(FactoryEngineeringList2Page, true).success.value
+
+          navigator.nextPage(FactoryEngineeringList2Page, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+      }
+    }
+
+
+    "in Check mode" must {
 
     }
   }
-
 }
