@@ -1,7 +1,7 @@
 package models
 
 import play.api.libs.json._
-import viewmodels.RadioOption
+import viewmodels.RadioCheckboxOption
 
 sealed trait $className$
 
