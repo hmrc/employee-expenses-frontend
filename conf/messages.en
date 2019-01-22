@@ -223,3 +223,11 @@ factoryEngineeringList2.occupation4 = Galvaniser
 factoryEngineeringList2.occupation5 = Tinner
 factoryEngineeringList2.occupation6 = Toolmakers in the lock making industry
 factoryEngineeringList2.occupation7 = Wire drawers in the wire drawing industry
+
+whichRailwayTrade.title = Which railway trade do you work in?
+whichRailwayTrade.heading = Which railway trade do you work in?
+whichRailwayTrade.vehicleRepairersWagonLifters = Railway vehicle repairers or railway wagon lifters
+whichRailwayTrade.vehiclePainters = Railway vehicle painters
+whichRailwayTrade.noneOfTheAbove = None of the above
+whichRailwayTrade.checkYourAnswersLabel = Which railway trade do you work in?
+whichRailwayTrade.error.required = Select whichRailwayTrade

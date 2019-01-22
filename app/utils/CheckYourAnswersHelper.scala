@@ -19,7 +19,6 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
-import pages.transport.TypeOfTransportPage
 import pages.engineering._
 import pages.healthcare._
 import pages.transport._
@@ -34,6 +33,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def garageHandOrCleaner: Option[AnswerRow] = userAnswers.get(GarageHandOrCleanerPage) map {
     x => AnswerRow("garageHandOrCleaner.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.transport.routes.GarageHandOrCleanerController.onPageLoad(CheckMode).url)
+  }
+
+  def whichRailwayTrade: Option[AnswerRow] = userAnswers.get(WhichRailwayTradePage) map {
+    x => AnswerRow("whichRailwayTrade.checkYourAnswersLabel", s"whichRailwayTrade.$x", true,
+      controllers.transport.routes.WhichRailwayTradeController.onPageLoad(CheckMode).url
+    )
   }
 
   def airlineJobListed: Option[AnswerRow] = userAnswers.get(AirlineJobListPage) map {
