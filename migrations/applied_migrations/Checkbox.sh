@@ -19,7 +19,6 @@ echo "checkbox.heading = checkbox" >> ../conf/messages.en
 echo "checkbox.option1 = option1" >> ../conf/messages.en
 echo "checkbox.option2 = option2" >> ../conf/messages.en
 echo "checkbox.option3 = option3" >> ../conf/messages.en
-echo "checkbox.option4 = option4" >> ../conf/messages.en
 echo "checkbox.checkYourAnswersLabel = checkbox" >> ../conf/messages.en
 echo "checkbox.error.required = Select checkbox" >> ../conf/messages.en
 

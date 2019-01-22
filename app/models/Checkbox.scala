@@ -25,10 +25,9 @@ object Checkbox extends Enumerable.Implicits {
   case object Option1 extends WithName("option1") with Checkbox
   case object Option2 extends WithName("option2") with Checkbox
   case object Option3 extends WithName("option3") with Checkbox
-  case object Option4 extends WithName("option4") with Checkbox
 
   val values: Set[Checkbox] = Set(
-    Option1, Option2, Option3, Option4
+    Option1, Option2, Option3
   )
 
   val options: Set[RadioCheckboxOption] = values.map {
