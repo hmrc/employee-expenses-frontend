@@ -18,7 +18,7 @@ package controllers.engineering
 
 import controllers.actions._
 import forms.engineering.FactoryEngineeringList2FormProvider
-import javax.inject.Inject
+import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.engineering.FactoryEngineeringList2Page
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class FactoryEngineeringList2Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         navigator: Navigator,
+                                         @Named("Engineering") navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
