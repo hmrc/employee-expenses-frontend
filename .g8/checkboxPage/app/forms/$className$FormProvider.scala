@@ -9,7 +9,7 @@ import models.$className$
 
 class $className$FormProvider @Inject() extends Mappings {
 
-  def apply(): Form[$className$] =
+  def apply(): Form[Set[$className$]] =
     Form(
       "value" -> set(enumerable[$className$]("$className;format="decap"$.error.required")).verifying(nonEmptySet("$className;format="decap"$.error.required"))
     )
