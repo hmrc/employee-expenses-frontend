@@ -35,7 +35,7 @@ class CheckboxController @Inject()(
                                     override val messagesApi: MessagesApi,
                                     sessionRepository: SessionRepository,
                                     navigator: Navigator,
-                                    identify: UnauthenticatedIdentifierAction,
+                                    identify: IdentifierAction,
                                     getData: DataRetrievalAction,
                                     requireData: DataRequiredAction,
                                     formProvider: CheckboxFormProvider,
