@@ -53,33 +53,25 @@ awk '/trait ModelGenerators/ {\
     print "    }";\
     next }1' ../test/generators/ModelGenerators.scala > tmp && mv tmp ../test/generators/ModelGenerators.scala
 
-echo "Adding to UserDataGenerator"
+echo "Adding to UserAnswersGenerator"
 awk '/val generators/ {\
     print;\
     print "    arbitrary[($className$Page.type, JsValue)] ::";\
-    next }1' ../test/generators/UserDataGenerator.scala > tmp && mv tmp ../test/generators/UserDataGenerator.scala
+    next }1' ../test/generators/UserAnswersGenerator.scala > tmp && mv tmp ../test/generators/UserAnswersGenerator.scala
 
 echo "Adding helper method to CheckYourAnswersHelper"
 awk '/class/ {\
-     print;\
-     print "";\
-     print "  def $className;format="decap"$: Option[AnswerRow] = userAnswers.get($className$Page) map {";\
-     print "    x => AnswerRow(\"$className;format="decap"$.checkYourAnswersLabel\", s\"$className;format="decap"$.\$x\", true, routes.$className$Controller.onPageLoad(CheckMode).url)";\
-     print "  }";\
-     next }1' ../app/utils/CheckYourAnswersHelper.scala > tmp && mv tmp ../app/utils/CheckYourAnswersHelper.scala
-
- awk '/class/ {\
-     print;\
-     print "";\
-     print "  def $className;format="decap"$: Option[AnswerRow] = userAnswers.get($className$Page) map {";\
-     print "    x => AnswerRow(";\
-     print "        \"$className;format="decap"$.checkYourAnswersLabel\",";\
-     print "        s\"$className;format="decap"$.$x\",";\
-     print "        x.map(value => s\"${messages(s\"$className;format="decap"$.$value\")}\").mkString(\", <br>\"),";\
-     print "        true,";\
-     print "        routes.$className$Controller.onPageLoad(CheckMode).url";\
-     print "    )";\
-     print "  }";\
-     next }1' ../app/utils/CheckYourAnswersHelper.scala > tmp && mv tmp ../app/utils/CheckYourAnswersHelper.scala
+    print;\
+    print "";\
+    print "  def $className;format="decap"$: Option[AnswerRow] = userAnswers.get($className$Page) map {";\
+    print "    x => AnswerRow(";\
+    print "        \"$className;format="decap"$.checkYourAnswersLabel\",";\
+    print "        s\"$className;format="decap"$.$x\",";\
+    print "        x.map(value => messages(s\"$className;format="decap"$.$value\")).mkString(\", <br>\"),";\
+    print "        true,";\
+    print "        routes.$className$Controller.onPageLoad(CheckMode).url";\
+    print "    )";\
+    print "  }";\
+    next }1' ../app/utils/CheckYourAnswersHelper.scala > tmp && mv tmp ../app/utils/CheckYourAnswersHelper.scala
 
 echo "Migration $className;format="snake"$ completed"
