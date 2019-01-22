@@ -122,3 +122,8 @@ GET        /transport-carpenter                             controllers.transpor
 POST       /transport-carpenter                             controllers.transport.TransportCarpenterController.onSubmit(mode: Mode = NormalMode)
 GET        /change-transport-carpenter                      controllers.transport.TransportCarpenterController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-transport-carpenter                      controllers.transport.TransportCarpenterController.onSubmit(mode: Mode = CheckMode)
+
+GET        /transport-vehicle-trade                         controllers.transport.TransportVehicleTradeController.onPageLoad(mode: Mode = NormalMode)
+POST       /transport-vehicle-trade                         controllers.transport.TransportVehicleTradeController.onSubmit(mode: Mode = NormalMode)
+GET        /change-transport-vehicle-trade                  controllers.transport.TransportVehicleTradeController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-transport-vehicle-trade                  controllers.transport.TransportVehicleTradeController.onSubmit(mode: Mode = CheckMode)

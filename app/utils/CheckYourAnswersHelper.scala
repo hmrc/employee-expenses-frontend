@@ -132,4 +132,9 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     x => AnswerRow("transportCarpenter.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.transport.routes.TransportCarpenterController.onPageLoad(CheckMode).url)
   }
+
+  def transportVehicleTrade: Option[AnswerRow] = userAnswers.get(TransportVehicleTradePage) map {
+    x => AnswerRow("transportVehicleTrade.checkYourAnswersLabel", s"transportVehicleTrade.$x", true,
+      controllers.transport.routes.TransportVehicleTradeController.onPageLoad(CheckMode).url)
+  }
 }
