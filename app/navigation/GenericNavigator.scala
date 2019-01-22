@@ -38,6 +38,8 @@ class GenericNavigator @Inject()() extends Navigator {
     userAnswers.get(FirstIndustryOptionsPage) match {
       case Some(Healthcare) =>
         controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode)
+      case Some(Engineering) =>
+        controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode)
       case _ =>
         routes.SessionExpiredController.onPageLoad()
     }
