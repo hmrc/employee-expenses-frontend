@@ -25,9 +25,15 @@ object TransportVehicleTrade extends Enumerable.Implicits {
 
   case object Builder extends WithName("builder") with TransportVehicleTrade
   case object Vehiclerepairerwagonlifter extends WithName("vehicleRepairerWagonLifter") with TransportVehicleTrade
+  case object RailwayVehiclePainter extends WithName("railwayVehiclePainter") with TransportVehicleTrade
+  case object Letterer extends WithName("letterer") with TransportVehicleTrade
+  case object BuildersAssistantOrRepairersAssistant extends WithName("buildersAssistantOrRepairersAssistant") with TransportVehicleTrade
+  case object NoneOfTheAbove extends WithName("noneOfTheAbove") with TransportVehicleTrade
+
+
 
   val values: Seq[TransportVehicleTrade] = Seq(
-    Builder, Vehiclerepairerwagonlifter
+    Builder, Vehiclerepairerwagonlifter,RailwayVehiclePainter, Letterer, BuildersAssistantOrRepairersAssistant, NoneOfTheAbove
   )
 
   val options: Seq[RadioOption] = values.map {
