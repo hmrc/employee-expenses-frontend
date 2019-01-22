@@ -24,11 +24,17 @@ import pages.transport._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryTransportCarpenterPage: Arbitrary[TransportCarpenterPage.type] =
+    Arbitrary(TransportCarpenterPage)
+
   implicit lazy val arbitrarySecondIndustryOptionsPage: Arbitrary[SecondIndustryOptionsPage.type] =
     Arbitrary(SecondIndustryOptionsPage)
 
   implicit lazy val arbitraryGarageHandOrCleanerPage: Arbitrary[GarageHandOrCleanerPage.type] =
     Arbitrary(GarageHandOrCleanerPage)
+
+  implicit lazy val arbitraryWhichRailwayTradePage: Arbitrary[WhichRailwayTradePage.type] =
+    Arbitrary(WhichRailwayTradePage)
 
   implicit lazy val arbitraryFactoryEngineeringList1Page: Arbitrary[FactoryEngineeringList1Page.type] =
     Arbitrary(FactoryEngineeringList1Page)
