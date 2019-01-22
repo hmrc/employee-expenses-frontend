@@ -21,7 +21,7 @@ import models.TypeOfEngineering._
 import models._
 import org.scalatest.prop.PropertyChecks
 import pages._
-import pages.engineering.ConstructionalEngineeringList1Page
+import pages.engineering.{ConstructionalEngineeringList1Page, ConstructionalEngineeringList2Page}
 
 class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
 
@@ -75,12 +75,30 @@ class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
           navigator.nextPage(ConstructionalEngineeringList1Page, NormalMode)(answers) mustBe
             controllers.engineering.routes.ConstructionalEngineeringList2Controller.onPageLoad(NormalMode)
         }
+
+        "from ConstructionalEngineeringList2" must {
+
+          "go to EmployerContribution when Yes is selected" in {
+            val answers = emptyUserAnswers.set(ConstructionalEngineeringList2Page, true).success.value
+
+            navigator.nextPage(ConstructionalEngineeringList2Page, NormalMode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          }
+
+          "go to ConstructionalEngineeringApprentice when No is selected" in {
+            val answers = emptyUserAnswers.set(ConstructionalEngineeringList2Page, false).success.value
+
+            navigator.nextPage(ConstructionalEngineeringList2Page, NormalMode)(answers) mustBe
+              controllers.engineering.routes.ConstructionalEngineeringApprenticeController.onPageLoad(NormalMode)
+          }
+        }
+
+
+        "in Check mode" must {
+
+        }
+
       }
-
-      "in Check mode" must {
-
-      }
-
     }
   }
 
