@@ -42,6 +42,11 @@ POST        /first-industry-type                            controllers.FirstInd
 GET         /change-first-industry-type                     controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-first-industry-type                     controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
+GET         /second-industry-type                           controllers.SecondIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST        /second-industry-type                           controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-second-industry-type                    controllers.SecondIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-second-industry-type                    controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+
 GET         /type-of-engineering                            controllers.engineering.TypeOfEngineeringController.onPageLoad(mode: Mode = NormalMode)
 POST        /type-of-engineering                            controllers.engineering.TypeOfEngineeringController.onSubmit(mode: Mode = NormalMode)
 GET         /change-type-of-engineering                     controllers.engineering.TypeOfEngineeringController.onPageLoad(mode: Mode = CheckMode)
