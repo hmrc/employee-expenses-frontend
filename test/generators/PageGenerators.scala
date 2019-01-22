@@ -33,6 +33,9 @@ trait PageGenerators {
   implicit lazy val arbitraryGarageHandOrCleanerPage: Arbitrary[GarageHandOrCleanerPage.type] =
     Arbitrary(GarageHandOrCleanerPage)
 
+  implicit lazy val arbitraryWhichRailwayTradePage: Arbitrary[WhichRailwayTradePage.type] =
+    Arbitrary(WhichRailwayTradePage)
+
   implicit lazy val arbitraryFactoryEngineeringList1Page: Arbitrary[FactoryEngineeringList1Page.type] =
     Arbitrary(FactoryEngineeringList1Page)
 

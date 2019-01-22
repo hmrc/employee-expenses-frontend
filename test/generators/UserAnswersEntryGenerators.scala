@@ -51,6 +51,14 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
+  implicit lazy val arbitraryWhichRailwayTradeUserAnswersEntry: Arbitrary[(WhichRailwayTradePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[WhichRailwayTradePage.type]
+        value <- arbitrary[WhichRailwayTrade].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
   implicit lazy val arbitraryFactoryEngineeringList1UserAnswersEntry: Arbitrary[(FactoryEngineeringList1Page.type, JsValue)] =
     Arbitrary {
       for {

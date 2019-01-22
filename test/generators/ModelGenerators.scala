@@ -27,6 +27,11 @@ trait ModelGenerators {
       Gen.oneOf(SecondIndustryOptions.values.toSeq)
     }
 
+  implicit lazy val arbitraryWhichRailwayTrade: Arbitrary[WhichRailwayTrade] =
+    Arbitrary {
+      Gen.oneOf(WhichRailwayTrade.values.toSeq)
+    }
+
   implicit lazy val arbitraryAncillaryEngineeringWhichTrade: Arbitrary[AncillaryEngineeringWhichTrade] =
     Arbitrary {
       Gen.oneOf(AncillaryEngineeringWhichTrade.values.toSeq)
