@@ -21,6 +21,7 @@ import models.{CheckMode, UserAnswers}
 import pages._
 import pages.engineering._
 import pages.healthcare._
+import pages.manufacturing._
 import pages.transport._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
@@ -143,4 +144,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     x => AnswerRow("transportVehicleTrade.checkYourAnswersLabel", s"transportVehicleTrade.$x", true,
       controllers.transport.routes.TransportVehicleTradeController.onPageLoad(CheckMode).url)
   }
+
+  //Manufacturing
+  def typeOfManufacturing: Option[AnswerRow] = userAnswers.get(TypeOfManufacturingPage) map {
+    x => AnswerRow("typeOfManufacturing.checkYourAnswersLabel", s"typeOfManufacturing.$x", true,
+      controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(CheckMode).url)
+  }
+
 }
