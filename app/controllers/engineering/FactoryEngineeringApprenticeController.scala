@@ -35,7 +35,7 @@ class FactoryEngineeringApprenticeController @Inject()(
                                                        override val messagesApi: MessagesApi,
                                                        sessionRepository: SessionRepository,
                                                        @Named("Engineering") navigator: Navigator,
-                                                       identify: IdentifierAction,
+                                                       identify: UnauthenticatedIdentifierAction,
                                                        getData: DataRetrievalAction,
                                                        requireData: DataRequiredAction,
                                                        formProvider: FactoryEngineeringApprenticeFormProvider,
