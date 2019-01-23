@@ -21,13 +21,18 @@ import javax.inject.Inject
 import models.TypeOfTransport._
 import models._
 import pages.Page
-import pages.transport.TypeOfTransportPage
+import pages.transport._
 import play.api.mvc.Call
 
 class TransportNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case TypeOfTransportPage => userAnswers => typeOfTransportOptions(NormalMode)(userAnswers)
+    case AirlineJobListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case GarageHandOrCleanerPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case WhichRailwayTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case TransportCarpenterPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case TransportVehicleTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
