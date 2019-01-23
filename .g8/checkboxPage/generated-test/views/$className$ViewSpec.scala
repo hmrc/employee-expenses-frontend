@@ -28,7 +28,7 @@ class $className$ViewSpec extends CheckboxViewBehaviours[$className$] {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like checkboxPage()
+    behave like checkboxPage(form, applyView, messageKeyPrefix, options)
   }
 
   application.stop()
