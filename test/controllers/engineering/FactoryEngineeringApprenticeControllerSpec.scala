@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import base.SpecBase
 import forms.FactoryEngineeringApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.FactoryEngineeringApprenticePage
+import pages.engineering.FactoryEngineeringApprenticePage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.FactoryEngineeringApprenticeView
+import views.html.engineering.FactoryEngineeringApprenticeView
 
 class FactoryEngineeringApprenticeControllerSpec extends SpecBase {
 
@@ -129,7 +128,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

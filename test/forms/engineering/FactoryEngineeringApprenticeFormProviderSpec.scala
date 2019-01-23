@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package forms
+package forms.engineering
 
+import forms.FactoryEngineeringApprenticeFormProvider
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 

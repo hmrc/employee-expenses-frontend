@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import controllers.actions._
 import forms.FactoryEngineeringApprenticeFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
-import pages.FactoryEngineeringApprenticePage
+import pages.engineering.FactoryEngineeringApprenticePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.FactoryEngineeringApprenticeView
+import views.html.engineering.FactoryEngineeringApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 

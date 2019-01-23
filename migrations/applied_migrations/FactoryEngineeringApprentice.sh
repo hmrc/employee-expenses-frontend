@@ -6,11 +6,11 @@ echo "Applying migration FactoryEngineeringApprentice"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /factoryEngineeringApprentice                        controllers.FactoryEngineeringApprenticeController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /factoryEngineeringApprentice                        controllers.FactoryEngineeringApprenticeController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /factoryEngineeringApprentice                        controllers.engineering.FactoryEngineeringApprenticeController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /factoryEngineeringApprentice                        controllers.engineering.FactoryEngineeringApprenticeController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeFactoryEngineeringApprentice                  controllers.FactoryEngineeringApprenticeController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeFactoryEngineeringApprentice                  controllers.FactoryEngineeringApprenticeController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeFactoryEngineeringApprentice                  controllers.engineering.FactoryEngineeringApprenticeController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeFactoryEngineeringApprentice                  controllers.engineering.FactoryEngineeringApprenticeController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

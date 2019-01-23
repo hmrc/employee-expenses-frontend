@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package views
+package views.engineering
 
-import controllers.routes
+import controllers.engineering.routes
 import forms.FactoryEngineeringApprenticeFormProvider
 import models.NormalMode
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.FactoryEngineeringApprenticeView
+import views.html.engineering.FactoryEngineeringApprenticeView
 
 class FactoryEngineeringApprenticeViewSpec extends YesNoViewBehaviours {
 
@@ -30,7 +31,7 @@ class FactoryEngineeringApprenticeViewSpec extends YesNoViewBehaviours {
 
   val form = new FactoryEngineeringApprenticeFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "FactoryEngineeringApprentice view" must {
 

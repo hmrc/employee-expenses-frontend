@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.engineering
 
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class FactoryEngineeringApprenticePageSpec extends PageBehaviours {
+case object FactoryEngineeringApprenticePage extends QuestionPage[Boolean] {
 
-  "FactoryEngineeringApprenticePage" must {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[Boolean](FactoryEngineeringApprenticePage)
-
-    beSettable[Boolean](FactoryEngineeringApprenticePage)
-
-    beRemovable[Boolean](FactoryEngineeringApprenticePage)
-  }
+  override def toString: String = "factoryEngineeringApprentice"
 }
