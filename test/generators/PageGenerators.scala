@@ -25,6 +25,9 @@ import pages.transport._
 
 trait PageGenerators {
 
+  implicit lazy val arbitrarySpecialConstablePage: Arbitrary[SpecialConstablePage.type] =
+    Arbitrary(SpecialConstablePage)
+
   implicit lazy val arbitraryTypeOfManufacturingPage: Arbitrary[TypeOfManufacturingPage.type] =
     Arbitrary(TypeOfManufacturingPage)
 

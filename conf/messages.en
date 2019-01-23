@@ -264,3 +264,8 @@ typeOfManufacturing.woodFurniture = Wood and furniture
 typeOfManufacturing.none = None of the above
 typeOfManufacturing.checkYourAnswersLabel = What type of manufacturing do you work in?
 typeOfManufacturing.error.required = Select what type of manufacturing you work in
+
+specialConstable.title = specialConstable
+specialConstable.heading = specialConstable
+specialConstable.checkYourAnswersLabel = specialConstable
+specialConstable.error.required = Select yes if specialConstable
