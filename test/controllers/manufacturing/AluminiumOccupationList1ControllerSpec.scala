@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.manufacturing
 
 import base.SpecBase
-import forms.AluminiumOccupationList1FormProvider
+import forms.manufacturing.AluminiumOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.AluminiumOccupationList1Page
+import pages.manufacturing.AluminiumOccupationList1Page
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.AluminiumOccupationList1View
+import views.html.manufacturing.AluminiumOccupationList1View
 
 class AluminiumOccupationList1ControllerSpec extends SpecBase {
 
@@ -129,7 +128,7 @@ class AluminiumOccupationList1ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class AluminiumOccupationList1ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

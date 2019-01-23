@@ -28,10 +28,6 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
-  def aluminiumOccupationList1: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList1Page) map {
-    x => AnswerRow("aluminiumOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.AluminiumOccupationList1Controller.onPageLoad(CheckMode).url)
-  }
-
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
     x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
       routes.SecondIndustryOptionsController.onPageLoad(CheckMode).url)
@@ -153,6 +149,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def typeOfManufacturing: Option[AnswerRow] = userAnswers.get(TypeOfManufacturingPage) map {
     x => AnswerRow("typeOfManufacturing.checkYourAnswersLabel", s"typeOfManufacturing.$x", true,
       controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(CheckMode).url)
+  }
+
+  def aluminiumOccupationList1: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList1Page) map {
+    x => AnswerRow("aluminiumOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.manufacturing.routes.AluminiumOccupationList1Controller.onPageLoad(CheckMode).url)
   }
 
 }

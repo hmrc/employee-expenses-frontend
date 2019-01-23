@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.manufacturing
 
 import controllers.actions._
-import forms.AluminiumOccupationList1FormProvider
+import forms.manufacturing.AluminiumOccupationList1FormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.AluminiumOccupationList1Page
+import pages.manufacturing.AluminiumOccupationList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.AluminiumOccupationList1View
+import views.html.manufacturing.AluminiumOccupationList1View
 
 import scala.concurrent.{ExecutionContext, Future}
 

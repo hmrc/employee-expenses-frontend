@@ -6,11 +6,11 @@ echo "Applying migration AluminiumOccupationList1"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /aluminiumOccupationList1                        controllers.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /aluminiumOccupationList1                        controllers.AluminiumOccupationList1Controller.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /aluminiumOccupationList1                        controllers.manufacturing.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /aluminiumOccupationList1                        controllers.manufacturing.AluminiumOccupationList1Controller.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeAluminiumOccupationList1                  controllers.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeAluminiumOccupationList1                  controllers.AluminiumOccupationList1Controller.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeAluminiumOccupationList1                  controllers.manufacturing.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeAluminiumOccupationList1                  controllers.manufacturing.AluminiumOccupationList1Controller.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

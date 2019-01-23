@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.manufacturing
 
-import controllers.routes
-import forms.AluminiumOccupationList1FormProvider
+import controllers.manufacturing.routes
+import forms.manufacturing.AluminiumOccupationList1FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.AluminiumOccupationList1View
+import views.html.manufacturing.AluminiumOccupationList1View
 
 class AluminiumOccupationList1ViewSpec extends YesNoViewBehaviours {
 

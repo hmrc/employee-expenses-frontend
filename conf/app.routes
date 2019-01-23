@@ -138,7 +138,7 @@ POST       /type-of-manufacturing                           controllers.manufact
 GET        /change-type-of-manufacturing                    controllers.manufacturing.TypeOfManufacturingController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-type-of-manufacturing                    controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = CheckMode)
 
-GET        /aluminiumOccupationList1                        controllers.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
-POST       /aluminiumOccupationList1                        controllers.AluminiumOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
-GET        /changeAluminiumOccupationList1                  controllers.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
-POST       /changeAluminiumOccupationList1                  controllers.AluminiumOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
+GET        /aluminiumOccupationList1                        controllers.manufacturing.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /aluminiumOccupationList1                        controllers.manufacturing.AluminiumOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
+GET        /changeAluminiumOccupationList1                  controllers.manufacturing.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /changeAluminiumOccupationList1                  controllers.manufacturing.AluminiumOccupationList1Controller.onSubmit(mode: Mode = CheckMode)

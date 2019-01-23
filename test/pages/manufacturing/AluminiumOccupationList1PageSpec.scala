@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.manufacturing
 
-import javax.inject.Inject
+import pages.behaviours.PageBehaviours
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class AluminiumOccupationList1PageSpec extends PageBehaviours {
 
-class AluminiumOccupationList1FormProvider @Inject() extends Mappings {
+  "AluminiumOccupationList1Page" must {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("aluminiumOccupationList1.error.required")
-    )
+    beRetrievable[Boolean](AluminiumOccupationList1Page)
+
+    beSettable[Boolean](AluminiumOccupationList1Page)
+
+    beRemovable[Boolean](AluminiumOccupationList1Page)
+  }
 }
