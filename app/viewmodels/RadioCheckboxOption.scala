@@ -16,10 +16,10 @@
 
 package viewmodels
 
-case class RadioOption(id: String, value: String, messageKey: String)
+case class RadioCheckboxOption(id: String, value: String, messageKey: String)
 
-object RadioOption {
-  def apply(keyPrefix: String, option: String): RadioOption = RadioOption(
+object RadioCheckboxOption {
+  def apply(keyPrefix: String, option: String): RadioCheckboxOption = RadioCheckboxOption(
     s"$keyPrefix.$option",
     option,
     s"$keyPrefix.$option"

@@ -22,9 +22,10 @@ import pages._
 import pages.engineering._
 import pages.healthcare._
 import pages.transport._
+import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
     x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
