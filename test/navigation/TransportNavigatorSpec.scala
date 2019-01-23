@@ -51,7 +51,7 @@ class TransportNavigatorSpec extends SpecBase {
           navigator.nextPage(TypeOfTransportPage, NormalMode)(answers) mustBe routes.TransportCarpenterController.onPageLoad(NormalMode)
         }
 
-        "go to TransportVechileTrade when Vehicles is selected" ignore {
+        "go to TransportVechileTrade when Vehicles is selected" in {
           val answers = emptyUserAnswers.set(TypeOfTransportPage, Airlines).success.value
           navigator.nextPage(TypeOfTransportPage, NormalMode)(answers) mustBe routes.AirlineJobListController.onPageLoad(NormalMode)
         }
