@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.police
 
-import pages.behaviours.PageBehaviours
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class SpecialConstablePageSpec extends PageBehaviours {
+class SpecialConstableFormProvider @Inject() extends Mappings {
 
-  "SpecialConstablePage" must {
-
-    beRetrievable[Boolean](SpecialConstablePage)
-
-    beSettable[Boolean](SpecialConstablePage)
-
-    beRemovable[Boolean](SpecialConstablePage)
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("specialConstable.error.required")
+    )
 }

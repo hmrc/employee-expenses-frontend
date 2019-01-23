@@ -22,15 +22,12 @@ import pages._
 import pages.engineering._
 import pages.healthcare._
 import pages.manufacturing._
+import pages.police.SpecialConstablePage
 import pages.transport._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
-
-  def specialConstable: Option[AnswerRow] = userAnswers.get(SpecialConstablePage) map {
-    x => AnswerRow("specialConstable.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.SpecialConstableController.onPageLoad(CheckMode).url)
-  }
 
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
     x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
@@ -150,9 +147,17 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   }
 
   //Manufacturing
+
   def typeOfManufacturing: Option[AnswerRow] = userAnswers.get(TypeOfManufacturingPage) map {
     x => AnswerRow("typeOfManufacturing.checkYourAnswersLabel", s"typeOfManufacturing.$x", true,
       controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(CheckMode).url)
+  }
+
+  //Police
+
+  def specialConstable: Option[AnswerRow] = userAnswers.get(SpecialConstablePage) map {
+    x => AnswerRow("specialConstable.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.police.routes.SpecialConstableController.onPageLoad(CheckMode).url)
   }
 
 }

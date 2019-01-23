@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package pages
+package navigation
 
-import play.api.libs.json.JsPath
+import controllers.routes
+import javax.inject.Inject
+import models.UserAnswers
+import pages.Page
+import play.api.mvc.Call
 
-case object SpecialConstablePage extends QuestionPage[Boolean] {
+class PoliceNavigator @Inject()() extends Navigator {
 
-  override def path: JsPath = JsPath \ toString
+  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
+    case _ => _ => routes.SessionExpiredController.onPageLoad()
+  }
 
-  override def toString: String = "specialConstable"
+  protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case _ => _ => routes.SessionExpiredController.onPageLoad()
+  }
 }

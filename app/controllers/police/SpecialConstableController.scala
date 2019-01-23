@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.police
 
 import controllers.actions._
-import forms.SpecialConstableFormProvider
+import forms.police.SpecialConstableFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.SpecialConstablePage
+import pages.police.SpecialConstablePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.SpecialConstableView
+import views.html.police.SpecialConstableView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class SpecialConstableController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
+                                         @Named("Police") navigator: Navigator,
                                          identify: IdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
@@ -56,7 +56,7 @@ class SpecialConstableController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(

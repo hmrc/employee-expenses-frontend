@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package views
+package views.police
 
-import controllers.routes
-import forms.SpecialConstableFormProvider
+import controllers.police.routes
+import forms.police.SpecialConstableFormProvider
 import models.NormalMode
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.SpecialConstableView
+import views.html.police.SpecialConstableView
 
 class SpecialConstableViewSpec extends YesNoViewBehaviours {
 
@@ -30,7 +31,7 @@ class SpecialConstableViewSpec extends YesNoViewBehaviours {
 
   val form = new SpecialConstableFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "SpecialConstable view" must {
 

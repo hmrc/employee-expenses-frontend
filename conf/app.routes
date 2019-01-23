@@ -138,7 +138,7 @@ POST       /type-of-manufacturing                           controllers.manufact
 GET        /change-type-of-manufacturing                    controllers.manufacturing.TypeOfManufacturingController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-type-of-manufacturing                    controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = CheckMode)
 
-GET        /specialConstable                        controllers.SpecialConstableController.onPageLoad(mode: Mode = NormalMode)
-POST       /specialConstable                        controllers.SpecialConstableController.onSubmit(mode: Mode = NormalMode)
-GET        /changeSpecialConstable                  controllers.SpecialConstableController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeSpecialConstable                  controllers.SpecialConstableController.onSubmit(mode: Mode = CheckMode)
+GET        /special-constable                               controllers.police.SpecialConstableController.onPageLoad(mode: Mode = NormalMode)
+POST       /special-constable                               controllers.police.SpecialConstableController.onSubmit(mode: Mode = NormalMode)
+GET        /change-special-constable                        controllers.police.SpecialConstableController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-special-constable                        controllers.police.SpecialConstableController.onSubmit(mode: Mode = CheckMode)

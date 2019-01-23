@@ -6,11 +6,11 @@ echo "Applying migration SpecialConstable"
 echo "Adding routes to conf/app.routes"
 
 echo "" >> ../conf/app.routes
-echo "GET        /specialConstable                        controllers.SpecialConstableController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
-echo "POST       /specialConstable                        controllers.SpecialConstableController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "GET        /specialConstable                        controllers.police.SpecialConstableController.onPageLoad(mode: Mode = NormalMode)" >> ../conf/app.routes
+echo "POST       /specialConstable                        controllers.police.SpecialConstableController.onSubmit(mode: Mode = NormalMode)" >> ../conf/app.routes
 
-echo "GET        /changeSpecialConstable                  controllers.SpecialConstableController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
-echo "POST       /changeSpecialConstable                  controllers.SpecialConstableController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "GET        /changeSpecialConstable                  controllers.police.SpecialConstableController.onPageLoad(mode: Mode = CheckMode)" >> ../conf/app.routes
+echo "POST       /changeSpecialConstable                  controllers.police.SpecialConstableController.onSubmit(mode: Mode = CheckMode)" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

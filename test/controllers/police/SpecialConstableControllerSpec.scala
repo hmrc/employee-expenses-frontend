@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.police
 
 import base.SpecBase
-import forms.SpecialConstableFormProvider
+import forms.police.SpecialConstableFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.SpecialConstablePage
+import pages.police.SpecialConstablePage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.SpecialConstableView
+import views.html.police.SpecialConstableView
 
 class SpecialConstableControllerSpec extends SpecBase {
 
@@ -35,7 +34,7 @@ class SpecialConstableControllerSpec extends SpecBase {
   val formProvider = new SpecialConstableFormProvider()
   val form = formProvider()
 
-  lazy val specialConstableRoute = routes.SpecialConstableController.onPageLoad(NormalMode).url
+  lazy val specialConstableRoute: String = routes.SpecialConstableController.onPageLoad(NormalMode).url
 
   "SpecialConstable Controller" must {
 
@@ -81,7 +80,7 @@ class SpecialConstableControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Police").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -129,7 +128,7 @@ class SpecialConstableControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class SpecialConstableControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
