@@ -122,3 +122,8 @@ GET        /transport-carpenter                             controllers.transpor
 POST       /transport-carpenter                             controllers.transport.TransportCarpenterController.onSubmit(mode: Mode = NormalMode)
 GET        /change-transport-carpenter                      controllers.transport.TransportCarpenterController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-transport-carpenter                      controllers.transport.TransportCarpenterController.onSubmit(mode: Mode = CheckMode)
+
+GET        /factoryEngineeringApprentice                        controllers.FactoryEngineeringApprenticeController.onPageLoad(mode: Mode = NormalMode)
+POST       /factoryEngineeringApprentice                        controllers.FactoryEngineeringApprenticeController.onSubmit(mode: Mode = NormalMode)
+GET        /changeFactoryEngineeringApprentice                  controllers.FactoryEngineeringApprenticeController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeFactoryEngineeringApprentice                  controllers.FactoryEngineeringApprenticeController.onSubmit(mode: Mode = CheckMode)

@@ -236,3 +236,8 @@ transportCarpenter.title = Are you a carpenter on a passenger liner?
 transportCarpenter.heading = Are you a carpenter on a passenger liner?
 transportCarpenter.checkYourAnswersLabel = Are you a carpenter on a passenger liner?
 transportCarpenter.error.required = Select yes if you are a carpenter on a passenger liner?
+
+factoryEngineeringApprentice.title = factoryEngineeringApprentice
+factoryEngineeringApprentice.heading = factoryEngineeringApprentice
+factoryEngineeringApprentice.checkYourAnswersLabel = factoryEngineeringApprentice
+factoryEngineeringApprentice.error.required = Select yes if factoryEngineeringApprentice
