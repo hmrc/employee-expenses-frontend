@@ -23,7 +23,7 @@ import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.ClaimAmount
-import pages.healthcare.{HealthcareList1Page, HealthcareList2Page}
+import pages.healthcare.HealthcareList2Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -34,16 +34,16 @@ import views.html.healthcare.HealthcareList2View
 import scala.concurrent.{ExecutionContext, Future}
 
 class HealthcareList2Controller @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Healthcare") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: HealthcareList2FormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: HealthcareList2View,
-                                         claimAmounts: ClaimAmountsConfig
+                                           override val messagesApi: MessagesApi,
+                                           sessionRepository: SessionRepository,
+                                           @Named("Healthcare") navigator: Navigator,
+                                           identify: UnauthenticatedIdentifierAction,
+                                           getData: DataRetrievalAction,
+                                           requireData: DataRequiredAction,
+                                           formProvider: HealthcareList2FormProvider,
+                                           val controllerComponents: MessagesControllerComponents,
+                                           view: HealthcareList2View,
+                                           claimAmounts: ClaimAmountsConfig
 
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
@@ -67,21 +67,13 @@ class HealthcareList2Controller @Inject()(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
-        value => {
-          if (value) {
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList2Page, value))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Healthcare.list2))
-              _ <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(HealthcareList2Page, mode)(updatedAnswers))
-          } else {
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList2Page, value))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Healthcare.allOther))
-              _ <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(HealthcareList2Page, mode)(updatedAnswers))
-          }
-        }
+        value =>
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList2Page, value))
+            amount: Int = if (value) claimAmounts.Healthcare.list2 else claimAmounts.Healthcare.allOther
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
+            _ <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(HealthcareList2Page, mode)(updatedAnswers))
       )
   }
 }
