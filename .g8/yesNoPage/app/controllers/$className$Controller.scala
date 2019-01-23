@@ -18,7 +18,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class $className;format="cap"$Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         navigator: Navigator,
+                                         @Named("$navRoute$") navigator: Navigator,
                                          identify: IdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,

@@ -67,7 +67,7 @@ class $className$ControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("$navRoute$").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
