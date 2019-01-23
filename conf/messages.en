@@ -264,3 +264,8 @@ typeOfManufacturing.woodFurniture = Wood and furniture
 typeOfManufacturing.none = None of the above
 typeOfManufacturing.checkYourAnswersLabel = What type of manufacturing do you work in?
 typeOfManufacturing.error.required = Select what type of manufacturing you work in
+
+aluminiumOccupationList1.title = aluminiumOccupationList1
+aluminiumOccupationList1.heading = aluminiumOccupationList1
+aluminiumOccupationList1.checkYourAnswersLabel = aluminiumOccupationList1
+aluminiumOccupationList1.error.required = Select yes if aluminiumOccupationList1
