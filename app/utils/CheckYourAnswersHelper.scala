@@ -67,6 +67,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
       controllers.engineering.routes.FactoryEngineeringList2Controller.onPageLoad(CheckMode).url)
   }
 
+  def factoryEngineeringApprentice: Option[AnswerRow] = userAnswers.get(FactoryEngineeringApprenticePage) map {
+    x => AnswerRow("factoryEngineeringApprentice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(CheckMode).url)
+  }
+
   def ancillaryEngineeringWhichTrade: Option[AnswerRow] = userAnswers.get(AncillaryEngineeringWhichTradePage) map {
     x => AnswerRow("ancillaryEngineeringWhichTrade.checkYourAnswersLabel", s"ancillaryEngineeringWhichTrade.$x", true,
       controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(CheckMode).url)
@@ -131,5 +136,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def transportCarpenter: Option[AnswerRow] = userAnswers.get(TransportCarpenterPage) map {
     x => AnswerRow("transportCarpenter.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.transport.routes.TransportCarpenterController.onPageLoad(CheckMode).url)
+  }
+
+  def transportVehicleTrade: Option[AnswerRow] = userAnswers.get(TransportVehicleTradePage) map {
+    x => AnswerRow("transportVehicleTrade.checkYourAnswersLabel", s"transportVehicleTrade.$x", true,
+      controllers.transport.routes.TransportVehicleTradeController.onPageLoad(CheckMode).url)
   }
 }
