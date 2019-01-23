@@ -92,8 +92,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
 
   private def ancillaryEngineeringWhichTrade(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(AncillaryEngineeringWhichTradePage) match {
-      case Some(PatternMaker) | Some(LabourerSupervisorOrUnskilledWorker) |
-           Some(ApprenticeOrStorekeeper) | Some(AncillaryEngineeringWhichTrade.NoneOfTheAbove) =>
+      case Some(_) =>
         controllers.routes.EmployerContributionController.onPageLoad(mode)
       case _ =>
         controllers.routes.SessionExpiredController.onPageLoad()

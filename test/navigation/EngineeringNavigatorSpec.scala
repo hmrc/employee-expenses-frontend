@@ -115,39 +115,17 @@ class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
         }
       }
 
-
       //Ancillary Engineering
 
       "from AncillaryEngineeringWhichTrade" must {
-
-        "go to EmployerContribution when PatternMaker is selected" in {
-          val answers = emptyUserAnswers.set(AncillaryEngineeringWhichTradePage, PatternMaker).success.value
-
-          navigator.nextPage(AncillaryEngineeringWhichTradePage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          for (trade <- AncillaryEngineeringWhichTrade.values) {
+            s"goto EmployerContribution when '$trade' selected" in {
+              val answers = emptyUserAnswers.set(AncillaryEngineeringWhichTradePage, trade).success.value
+              navigator.nextPage(AncillaryEngineeringWhichTradePage, NormalMode)(answers) mustBe
+                controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+            }
+          }
         }
-
-        "go to EmployerContribution when LabourerSupervisorOrUnskilledWorker is selected" in {
-          val answers = emptyUserAnswers.set(AncillaryEngineeringWhichTradePage, LabourerSupervisorOrUnskilledWorker).success.value
-
-          navigator.nextPage(AncillaryEngineeringWhichTradePage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "go to EmployerContribution when ApprenticeOrStorekeeper is selected" in {
-          val answers = emptyUserAnswers.set(AncillaryEngineeringWhichTradePage, ApprenticeOrStorekeeper).success.value
-
-          navigator.nextPage(AncillaryEngineeringWhichTradePage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "go to EmployerContribution when NoneOfTheAbove is selected" in {
-          val answers = emptyUserAnswers.set(AncillaryEngineeringWhichTradePage, AncillaryEngineeringWhichTrade.NoneOfTheAbove).success.value
-
-          navigator.nextPage(AncillaryEngineeringWhichTradePage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-      }
 
       //Factory Engineering
 
@@ -203,9 +181,8 @@ class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
       }
     }
 
+    /*    "in Check mode" must {
 
-    "in Check mode" must {
-
-    }
+        }*/
   }
 }
