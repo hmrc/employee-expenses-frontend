@@ -176,6 +176,30 @@ class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
           navigator.nextPage(FactoryEngineeringList2Page, NormalMode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
+
+        "go to FactoryEngineeringApprentice when no is selected" in {
+          val answers = emptyUserAnswers.set(FactoryEngineeringList2Page, false).success.value
+
+          navigator.nextPage(FactoryEngineeringList2Page, NormalMode)(answers) mustBe
+            controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(NormalMode)
+        }
+      }
+
+      "from FactoryEngineeringApprentice" must {
+
+        "go to EmployerContribution when yes is selected" in {
+          val answers = emptyUserAnswers.set(FactoryEngineeringApprenticePage, true).success.value
+
+          navigator.nextPage(FactoryEngineeringApprenticePage, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to EmployerContribution when no is selected" in {
+          val answers = emptyUserAnswers.set(FactoryEngineeringApprenticePage, false).success.value
+
+          navigator.nextPage(FactoryEngineeringApprenticePage, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
       }
     }
 
