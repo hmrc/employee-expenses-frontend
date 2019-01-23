@@ -35,7 +35,7 @@ class AluminiumOccupationList1Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          @Named("Manufacturing") navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: AluminiumOccupationList1FormProvider,
