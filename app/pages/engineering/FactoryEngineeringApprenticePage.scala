@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package viewmodels
+package pages.engineering
 
-case class RadioOption(id: String, value: String, messageKey: String)
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-object RadioOption {
-  def apply(keyPrefix: String, option: String): RadioOption = RadioOption(
-    s"$keyPrefix.$option",
-    option,
-    s"$keyPrefix.$option"
-  )
+case object FactoryEngineeringApprenticePage extends QuestionPage[Boolean] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "factoryEngineeringApprentice"
 }

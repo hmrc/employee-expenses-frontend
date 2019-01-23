@@ -27,6 +27,30 @@ import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
+  implicit lazy val arbitraryFactoryEngineeringApprenticeUserAnswersEntry: Arbitrary[(FactoryEngineeringApprenticePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[FactoryEngineeringApprenticePage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryTransportVehicleTradeUserAnswersEntry: Arbitrary[(TransportVehicleTradePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[TransportVehicleTradePage.type]
+        value <- arbitrary[TransportVehicleTrade].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryTransportCarpenterUserAnswersEntry: Arbitrary[(TransportCarpenterPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[TransportCarpenterPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
   implicit lazy val arbitrarySecondIndustryOptionsUserAnswersEntry: Arbitrary[(SecondIndustryOptionsPage.type, JsValue)] =
     Arbitrary {
       for {
@@ -40,6 +64,14 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       for {
         page  <- arbitrary[GarageHandOrCleanerPage.type]
         value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryWhichRailwayTradeUserAnswersEntry: Arbitrary[(WhichRailwayTradePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[WhichRailwayTradePage.type]
+        value <- arbitrary[WhichRailwayTrade].map(Json.toJson(_))
       } yield (page, value)
     }
 

@@ -1,7 +1,7 @@
 package models
 
 import play.api.libs.json._
-import viewmodels.RadioOption
+import viewmodels.RadioCheckboxOption
 
 sealed trait $className$
 
@@ -14,9 +14,9 @@ object $className$ extends Enumerable.Implicits {
     $option1key;format="Camel"$, $option2key;format="Camel"$
   )
 
-  val options: Seq[RadioOption] = values.map {
+  val options: Seq[RadioCheckboxOption] = values.map {
     value =>
-      RadioOption("$className;format="decap"$", value.toString)
+      RadioCheckboxOption("$className;format="decap"$", value.toString)
   }
 
   implicit val enumerable: Enumerable[$className$] =

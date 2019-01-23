@@ -17,7 +17,7 @@
 package models
 
 import play.api.libs.json._
-import viewmodels.RadioOption
+import viewmodels.RadioCheckboxOption
 
 sealed trait TypeOfTransport
 
@@ -33,9 +33,9 @@ object TypeOfTransport extends Enumerable.Implicits {
     Airlines, PublicTransport, Railways, SeamanCarpenter, Vehicles
   )
 
-  val options: Seq[RadioOption] = values.map {
+  val options: Seq[RadioCheckboxOption] = values.map {
     value =>
-      RadioOption("typeOfTransport", value.toString)
+      RadioCheckboxOption("typeOfTransport", value.toString)
   }
 
   implicit val enumerable: Enumerable[TypeOfTransport] =

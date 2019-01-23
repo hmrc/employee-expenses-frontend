@@ -16,7 +16,7 @@
 
 package models
 
-import viewmodels.RadioOption
+import viewmodels.RadioCheckboxOption
 
 sealed trait AncillaryEngineeringWhichTrade
 
@@ -31,9 +31,9 @@ object AncillaryEngineeringWhichTrade extends Enumerable.Implicits {
     PatternMaker, LabourerSupervisorOrUnskilledWorker, ApprenticeOrStorekeeper, NoneOfTheAbove
   )
 
-  val options: Seq[RadioOption] = values.map {
+  val options: Seq[RadioCheckboxOption] = values.map {
     value =>
-      RadioOption("ancillaryEngineeringWhichTrade", value.toString)
+      RadioCheckboxOption("ancillaryEngineeringWhichTrade", value.toString)
   }
 
   implicit val enumerable: Enumerable[AncillaryEngineeringWhichTrade] =

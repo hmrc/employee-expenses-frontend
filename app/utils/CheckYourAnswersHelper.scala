@@ -19,32 +19,17 @@ package utils
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
-import pages.transport.TypeOfTransportPage
 import pages.engineering._
 import pages.healthcare._
 import pages.transport._
+import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
-    x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true, routes.SecondIndustryOptionsController.onPageLoad(CheckMode).url)
-  }
-
-  def garageHandOrCleaner: Option[AnswerRow] = userAnswers.get(GarageHandOrCleanerPage) map {
-    x => AnswerRow("garageHandOrCleaner.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      controllers.transport.routes.GarageHandOrCleanerController.onPageLoad(CheckMode).url)
-  }
-
-  def airlineJobListed: Option[AnswerRow] = userAnswers.get(AirlineJobListPage) map {
-    x => AnswerRow("airlineJobListed.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      controllers.transport.routes.AirlineJobListController.onPageLoad(CheckMode).url
-    )
-  }
-
-  def typeOfTransport: Option[AnswerRow] = userAnswers.get(TypeOfTransportPage) map {
-    x => AnswerRow("typeOfTransport.checkYourAnswersLabel", s"typeOfTransport.$x", true,
-      controllers.transport.routes.TypeOfTransportController.onPageLoad(CheckMode).url)
+    x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
+      routes.SecondIndustryOptionsController.onPageLoad(CheckMode).url)
   }
 
   def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
@@ -83,6 +68,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
       controllers.engineering.routes.FactoryEngineeringList2Controller.onPageLoad(CheckMode).url)
   }
 
+  def factoryEngineeringApprentice: Option[AnswerRow] = userAnswers.get(FactoryEngineeringApprenticePage) map {
+    x => AnswerRow("factoryEngineeringApprentice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(CheckMode).url)
+  }
+
   def ancillaryEngineeringWhichTrade: Option[AnswerRow] = userAnswers.get(AncillaryEngineeringWhichTradePage) map {
     x => AnswerRow("ancillaryEngineeringWhichTrade.checkYourAnswersLabel", s"ancillaryEngineeringWhichTrade.$x", true,
       controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(CheckMode).url)
@@ -118,5 +108,39 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def ambulanceStaff: Option[AnswerRow] = userAnswers.get(AmbulanceStaffPage) map {
     x => AnswerRow("ambulanceStaff.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(CheckMode).url)
+  }
+
+  //Transport
+
+  def garageHandOrCleaner: Option[AnswerRow] = userAnswers.get(GarageHandOrCleanerPage) map {
+    x => AnswerRow("garageHandOrCleaner.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.transport.routes.GarageHandOrCleanerController.onPageLoad(CheckMode).url)
+  }
+
+  def whichRailwayTrade: Option[AnswerRow] = userAnswers.get(WhichRailwayTradePage) map {
+    x => AnswerRow("whichRailwayTrade.checkYourAnswersLabel", s"whichRailwayTrade.$x", true,
+      controllers.transport.routes.WhichRailwayTradeController.onPageLoad(CheckMode).url
+    )
+  }
+
+  def airlineJobListed: Option[AnswerRow] = userAnswers.get(AirlineJobListPage) map {
+    x => AnswerRow("airlineJobListed.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.transport.routes.AirlineJobListController.onPageLoad(CheckMode).url
+    )
+  }
+
+  def typeOfTransport: Option[AnswerRow] = userAnswers.get(TypeOfTransportPage) map {
+    x => AnswerRow("typeOfTransport.checkYourAnswersLabel", s"typeOfTransport.$x", true,
+      controllers.transport.routes.TypeOfTransportController.onPageLoad(CheckMode).url)
+  }
+
+  def transportCarpenter: Option[AnswerRow] = userAnswers.get(TransportCarpenterPage) map {
+    x => AnswerRow("transportCarpenter.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.transport.routes.TransportCarpenterController.onPageLoad(CheckMode).url)
+  }
+
+  def transportVehicleTrade: Option[AnswerRow] = userAnswers.get(TransportVehicleTradePage) map {
+    x => AnswerRow("transportVehicleTrade.checkYourAnswersLabel", s"transportVehicleTrade.$x", true,
+      controllers.transport.routes.TransportVehicleTradeController.onPageLoad(CheckMode).url)
   }
 }
