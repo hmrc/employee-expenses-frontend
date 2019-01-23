@@ -20,9 +20,13 @@ import org.scalacheck.Arbitrary
 import pages._
 import pages.healthcare._
 import pages.engineering._
+import pages.manufacturing.TypeOfManufacturingPage
 import pages.transport._
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryTypeOfManufacturingPage: Arbitrary[TypeOfManufacturingPage.type] =
+    Arbitrary(TypeOfManufacturingPage)
 
   implicit lazy val arbitraryTransportVehicleTradePage: Arbitrary[TransportVehicleTradePage.type] =
     Arbitrary(TransportVehicleTradePage)

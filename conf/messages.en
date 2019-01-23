@@ -252,3 +252,15 @@ factoryEngineeringApprentice.title = Are you an apprentice or storekeeper?
 factoryEngineeringApprentice.heading = Are you an apprentice or storekeeper?
 factoryEngineeringApprentice.checkYourAnswersLabel = Are you an apprentice or storekeeper?
 factoryEngineeringApprentice.error.required = Select yes if you are an apprentice or storekeeper
+
+typeOfManufacturing.title = What type of manufacturing do you work in?
+typeOfManufacturing.heading = What type of manufacturing do you work in?
+typeOfManufacturing.aluminium = Aluminium
+typeOfManufacturing.brassCopper = Brass and copper
+typeOfManufacturing.glass = Glass
+typeOfManufacturing.ironSteel = Iron and steel
+typeOfManufacturing.preciousMetals = Precious metals
+typeOfManufacturing.woodFurniture = Wood and furniture
+typeOfManufacturing.none = None of the above
+typeOfManufacturing.checkYourAnswersLabel = What type of manufacturing do you work in?
+typeOfManufacturing.error.required = Select what type of manufacturing you work in

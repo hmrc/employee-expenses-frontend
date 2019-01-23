@@ -132,3 +132,8 @@ GET        /transport-vehicle-trade                         controllers.transpor
 POST       /transport-vehicle-trade                         controllers.transport.TransportVehicleTradeController.onSubmit(mode: Mode = NormalMode)
 GET        /change-transport-vehicle-trade                  controllers.transport.TransportVehicleTradeController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-transport-vehicle-trade                  controllers.transport.TransportVehicleTradeController.onSubmit(mode: Mode = CheckMode)
+
+GET        /type-of-manufacturing                           controllers.manufacturing.TypeOfManufacturingController.onPageLoad(mode: Mode = NormalMode)
+POST       /type-of-manufacturing                           controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = NormalMode)
+GET        /change-type-of-manufacturing                    controllers.manufacturing.TypeOfManufacturingController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-type-of-manufacturing                    controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = CheckMode)
