@@ -20,7 +20,7 @@ import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.healthcare.HealthcareList1FormProvider
 import javax.inject.{Inject, Named}
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.ClaimAmount
 import pages.healthcare.HealthcareList1Page
@@ -67,18 +67,11 @@ class HealthcareList1Controller @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
-          if (value) {
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList1Page, value))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Healthcare.list1))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(HealthcareList1Page, mode)(updatedAnswers))
-          } else {
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList1Page, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(HealthcareList1Page, mode)(updatedAnswers))
-          }
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList1Page, value))
+            newAnswers     <- if (value) Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Healthcare.list1)) else Future.successful(updatedAnswers)
+            _              <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(HealthcareList1Page, mode)(newAnswers))
         }
       )
   }
