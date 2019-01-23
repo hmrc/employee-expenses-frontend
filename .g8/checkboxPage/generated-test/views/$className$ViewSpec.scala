@@ -16,7 +16,7 @@ class $className$ViewSpec extends CheckboxViewBehaviours[$className$] {
   val form = new $className$FormProvider()()
 
   def applyView(form: Form[Set[$className$]]): HtmlFormat.Appendable =
-    application.injector.instanceOf[$className$].apply(form, NormalMode)(fakeRequest, messages)
+    application.injector.instanceOf[$className$View].apply(form, NormalMode)(fakeRequest, messages)
 
   val messageKeyPrefix = "$className;format="decap"$"
 
