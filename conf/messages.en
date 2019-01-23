@@ -247,3 +247,8 @@ transportVehicleTrade.buildersAssistantOrRepairersAssistant = Builder’s assist
 transportVehicleTrade.noneOfTheAbove = None of the above
 transportVehicleTrade.checkYourAnswersLabel = Which vehicle trade do you work in?
 transportVehicleTrade.error.required = Select which vehicle trade you work in
+
+factoryEngineeringApprentice.title = Are you an apprentice or storekeeper?
+factoryEngineeringApprentice.heading = Are you an apprentice or storekeeper?
+factoryEngineeringApprentice.checkYourAnswersLabel = Are you an apprentice or storekeeper?
+factoryEngineeringApprentice.error.required = Select yes if you are an apprentice or storekeeper

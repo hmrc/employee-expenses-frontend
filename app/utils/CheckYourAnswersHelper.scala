@@ -67,6 +67,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
       controllers.engineering.routes.FactoryEngineeringList2Controller.onPageLoad(CheckMode).url)
   }
 
+  def factoryEngineeringApprentice: Option[AnswerRow] = userAnswers.get(FactoryEngineeringApprenticePage) map {
+    x => AnswerRow("factoryEngineeringApprentice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(CheckMode).url)
+  }
+
   def ancillaryEngineeringWhichTrade: Option[AnswerRow] = userAnswers.get(AncillaryEngineeringWhichTradePage) map {
     x => AnswerRow("ancillaryEngineeringWhichTrade.checkYourAnswersLabel", s"ancillaryEngineeringWhichTrade.$x", true,
       controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(CheckMode).url)
