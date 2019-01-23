@@ -44,9 +44,7 @@ class ClaimAmountService @Inject()()(implicit ec: ExecutionContext) {
     }
   }
 
-  def band1(userAnswers: UserAnswers): String =
-    percentage(actualClaimAmount(userAnswers), 20)
+  def band1(userAnswers: UserAnswers): String = percentage(actualClaimAmount(userAnswers), 20)
 
-  def band2(userAnswers: UserAnswers): String =
-    percentage(actualClaimAmount(userAnswers), 40)
+  def band2(userAnswers: UserAnswers): String = percentage(actualClaimAmount(userAnswers), 40)
 }
