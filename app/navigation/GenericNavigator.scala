@@ -26,12 +26,12 @@ import play.api.mvc.Call
 class GenericNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case FirstIndustryOptionsPage => userAnswers => firstIndustryOptions(NormalMode)(userAnswers)
+    case FirstIndustryOptionsPage => firstIndustryOptions(NormalMode)
     case _ => _ => routes.IndexController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case FirstIndustryOptionsPage => userAnswers => firstIndustryOptions(CheckMode)(userAnswers)
+    case FirstIndustryOptionsPage => firstIndustryOptions(CheckMode)
     case _ => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
