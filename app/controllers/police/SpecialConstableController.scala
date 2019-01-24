@@ -14,41 +14,41 @@
  * limitations under the License.
  */
 
-package controllers.engineering
+package controllers.police
 
 import controllers.actions._
-import forms.engineering.TypeOfEngineeringFormProvider
+import forms.police.SpecialConstableFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, Mode}
+import models.Mode
 import navigation.Navigator
-import pages.engineering.TypeOfEngineeringPage
+import pages.police.SpecialConstablePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.engineering.TypeOfEngineeringView
+import views.html.police.SpecialConstableView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TypeOfEngineeringController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       @Named("Engineering") navigator: Navigator,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: TypeOfEngineeringFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: TypeOfEngineeringView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class SpecialConstableController @Inject()(
+                                         override val messagesApi: MessagesApi,
+                                         sessionRepository: SessionRepository,
+                                         @Named("Police") navigator: Navigator,
+                                         identify: UnauthenticatedIdentifierAction,
+                                         getData: DataRetrievalAction,
+                                         requireData: DataRequiredAction,
+                                         formProvider: SpecialConstableFormProvider,
+                                         val controllerComponents: MessagesControllerComponents,
+                                         view: SpecialConstableView
+                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(TypeOfEngineeringPage) match {
+      val preparedForm = request.userAnswers.get(SpecialConstablePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,9 +65,9 @@ class TypeOfEngineeringController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfEngineeringPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(SpecialConstablePage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TypeOfEngineeringPage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SpecialConstablePage, mode)(updatedAnswers))
         }
       )
   }

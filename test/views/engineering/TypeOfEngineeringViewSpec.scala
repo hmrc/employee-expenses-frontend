@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.engineering
 
-import forms.TypeOfEngineeringFormProvider
+import forms.engineering.TypeOfEngineeringFormProvider
 import models.{NormalMode, TypeOfEngineering}
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
-import views.html.TypeOfEngineeringView
+import views.html.engineering.TypeOfEngineeringView
 
 class TypeOfEngineeringViewSpec extends ViewBehaviours {
 
@@ -29,9 +30,9 @@ class TypeOfEngineeringViewSpec extends ViewBehaviours {
 
   val form = new TypeOfEngineeringFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  val view = application.injector.instanceOf[TypeOfEngineeringView]
+  val view: TypeOfEngineeringView = application.injector.instanceOf[TypeOfEngineeringView]
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
     view.apply(form, NormalMode)(fakeRequest, messages)

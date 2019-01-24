@@ -45,13 +45,13 @@ class ClaimAmountControllerSpec extends SpecBase {
         )
       )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
+      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
 
       status(result) mustEqual OK
       contentAsString(result) mustEqual
-        view(claimAmount, Some("36.00"), Some("72.00"))(fakeRequest, messages).toString
+        view(claimAmount, "36.00", "72.00", "/employee-expenses")(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -59,7 +59,7 @@ class ClaimAmountControllerSpec extends SpecBase {
     "redirect to Session Expired for a GET" when {
       "no existing data is found" in {
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-        val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
+        val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
@@ -72,7 +72,7 @@ class ClaimAmountControllerSpec extends SpecBase {
         val claimAmount = 180
         val userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> claimAmount))
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-        val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
+        val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
@@ -92,12 +92,12 @@ class ClaimAmountControllerSpec extends SpecBase {
         )
       )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
+      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
 
       contentAsString(result) mustEqual
-        view(claimAmount, Some("20.00"), Some("40.00"))(fakeRequest, messages).toString
+        view(claimAmount, "20.00", "40.00", "/employee-expenses")(fakeRequest, messages).toString
       application.stop()
     }
 
@@ -114,11 +114,11 @@ class ClaimAmountControllerSpec extends SpecBase {
           )
         )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
+      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
       contentAsString(result) mustEqual
-        view(claimAmount, Some("19.00"), Some("38.00"))(fakeRequest, messages).toString
+        view(claimAmount - employerContribution, "19.00", "38.00", "/employee-expenses")(fakeRequest, messages).toString
 
       application.stop()
     }

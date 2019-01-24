@@ -22,6 +22,7 @@ import pages._
 import pages.engineering._
 import pages.healthcare._
 import pages.manufacturing._
+import pages.police._
 import pages.transport._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
@@ -146,6 +147,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   }
 
   //Manufacturing
+
   def typeOfManufacturing: Option[AnswerRow] = userAnswers.get(TypeOfManufacturingPage) map {
     x => AnswerRow("typeOfManufacturing.checkYourAnswersLabel", s"typeOfManufacturing.$x", true,
       controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(CheckMode).url)
@@ -154,6 +156,13 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def aluminiumOccupationList1: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList1Page) map {
     x => AnswerRow("aluminiumOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.manufacturing.routes.AluminiumOccupationList1Controller.onPageLoad(CheckMode).url)
+  }
+
+  //Police
+
+  def specialConstable: Option[AnswerRow] = userAnswers.get(SpecialConstablePage) map {
+    x => AnswerRow("specialConstable.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.police.routes.SpecialConstableController.onPageLoad(CheckMode).url)
   }
 
 }

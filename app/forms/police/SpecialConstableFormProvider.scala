@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(messageKey: String = "", href: String, idKey: String = "site.continue")(implicit messages: Messages)
+package forms.police
 
-<div class="section">
-    <a id ="@messages(idKey).toLowerCase" href="@href" role="button" class="button">@messages(messageKey)</a>
-</div>
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
+
+class SpecialConstableFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("specialConstable.error.required")
+    )
+}

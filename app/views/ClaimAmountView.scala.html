@@ -20,8 +20,9 @@
 
 @(
     claimAmount: Int,
-    band1: Option[String] = None,
-    band2: Option[String] = None
+    band1: String,
+    band2: String,
+    onwardRoute: String
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
@@ -34,13 +35,9 @@
 
     <p>@messages("claimAmount.description")</p>
 
-    @if(band1.isDefined){
-        <p id="band-1">Band 1 : £@band1</p>
-    }
+    <p id="band-1">Band 1 : £@band1</p>
 
-    @if(band2.isDefined){
-        <p id="band-2">Band 2 : £@band2</p>
-    }
+    <p id="band-2">Band 2 : £@band2</p>
 
-    @components.submit_button()
+    @components.button_link(onwardRoute, messages("site.continue"))
 }

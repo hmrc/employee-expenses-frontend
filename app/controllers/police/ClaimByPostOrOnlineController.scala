@@ -14,52 +14,30 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.police
 
 import config.FrontendAppConfig
 import controllers.actions._
-import javax.inject.{Inject, Named}
-import models.Mode
-import navigation.Navigator
-import pages.{ClaimAmount, EmployerContributionPage}
+import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
-import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.ClaimAmountView
+import views.html.police.ClaimByPostOrOnlineView
 
 import scala.concurrent.ExecutionContext
 
-class ClaimAmountController @Inject()(
-                                       appConfig: FrontendAppConfig,
+class ClaimByPostOrOnlineController @Inject()(
                                        override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       @Named("Generic") navigator: Navigator,
                                        identify: UnauthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: ClaimAmountView,
-                                       claimAmountService: ClaimAmountService
+                                       frontendAppConfig: FrontendAppConfig,
+                                       view: ClaimByPostOrOnlineView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  import claimAmountService._
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-
+  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      (request.userAnswers.get(EmployerContributionPage), request.userAnswers.get(ClaimAmount)) match {
-        case (Some(_), Some(amount)) =>
-          val claimAmount: Int = actualClaimAmount(request.userAnswers, amount)
-          Ok(view(
-            claimAmount = claimAmount,
-            band1 = taxCalculation(appConfig.taxPercentageBand1, claimAmount),
-            band2 = taxCalculation(appConfig.taxPercentageBand2, claimAmount),
-            onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
-          ))
-        case _ =>
-          Redirect(routes.SessionExpiredController.onPageLoad())
-      }
+      Ok(view(frontendAppConfig.p87Url))
   }
 }

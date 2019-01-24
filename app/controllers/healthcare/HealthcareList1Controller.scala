@@ -16,11 +16,13 @@
 
 package controllers.healthcare
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.healthcare.HealthcareList1FormProvider
 import javax.inject.{Inject, Named}
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.healthcare.HealthcareList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,8 +42,9 @@ class HealthcareList1Controller @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: HealthcareList1FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: HealthcareList1View
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                         view: HealthcareList1View,
+                                         claimAmounts: ClaimAmountsConfig
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -56,7 +59,7 @@ class HealthcareList1Controller @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -66,8 +69,9 @@ class HealthcareList1Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList1Page, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HealthcareList1Page, mode)(updatedAnswers))
+            newAnswers     <- if (value) Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Healthcare.list1)) else Future.successful(updatedAnswers)
+            _              <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(HealthcareList1Page, mode)(newAnswers))
         }
       )
   }

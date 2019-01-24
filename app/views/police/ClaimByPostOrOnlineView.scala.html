@@ -14,8 +14,19 @@
  * limitations under the License.
  *@
 
-@(messageKey: String = "", href: String, idKey: String = "site.continue")(implicit messages: Messages)
+@this(
+    main_template: MainTemplate
+)
 
-<div class="section">
-    <a id ="@messages(idKey).toLowerCase" href="@href" role="button" class="button">@messages(messageKey)</a>
-</div>
+@(p87Url: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    title = messages("claimByPostOrOnline.title")
+    ) {
+
+    @components.back_link()
+
+    @components.heading("claimByPostOrOnline.heading")
+
+    @components.button_link("site.continue", p87Url)
+}

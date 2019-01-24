@@ -35,7 +35,6 @@ GET         /change-claiming-for-more-than-one-job          controllers.Multiple
 POST        /change-claiming-for-more-than-one-job          controllers.MultipleEmploymentsController.onSubmit(mode: Mode = CheckMode)
 
 GET         /claim-amount                                   controllers.ClaimAmountController.onPageLoad(mode: Mode = NormalMode)
-GET         /check-claim-amount                             controllers.ClaimAmountController.onPageLoad(mode: Mode = CheckMode)
 
 GET         /first-industry-type                            controllers.FirstIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
 POST        /first-industry-type                            controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
@@ -137,6 +136,13 @@ GET        /type-of-manufacturing                           controllers.manufact
 POST       /type-of-manufacturing                           controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = NormalMode)
 GET        /change-type-of-manufacturing                    controllers.manufacturing.TypeOfManufacturingController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-type-of-manufacturing                    controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = CheckMode)
+
+GET        /special-constable                               controllers.police.SpecialConstableController.onPageLoad(mode: Mode = NormalMode)
+POST       /special-constable                               controllers.police.SpecialConstableController.onSubmit(mode: Mode = NormalMode)
+GET        /change-special-constable                        controllers.police.SpecialConstableController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-special-constable                        controllers.police.SpecialConstableController.onSubmit(mode: Mode = CheckMode)
+
+GET        /claim-by-post-or-online                         controllers.police.ClaimByPostOrOnlineController.onPageLoad()
 
 GET        /aluminium-occupation-list-1                     controllers.manufacturing.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
 POST       /aluminium-occupation-list-1                     controllers.manufacturing.AluminiumOccupationList1Controller.onSubmit(mode: Mode = NormalMode)

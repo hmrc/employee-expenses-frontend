@@ -22,7 +22,8 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages._
 import pages.healthcare._
 import pages.engineering._
-import pages.manufacturing.{AluminiumOccupationList1Page, TypeOfManufacturingPage}
+import pages.manufacturing._
+import pages.police._
 import pages.transport._
 import play.api.libs.json.{JsValue, Json}
 
@@ -32,6 +33,14 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[AluminiumOccupationList1Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitrarySpecialConstableUserAnswersEntry: Arbitrary[(SpecialConstablePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[SpecialConstablePage.type]
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }

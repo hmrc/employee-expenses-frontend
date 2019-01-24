@@ -24,13 +24,14 @@ import pages.{FirstIndustryOptionsPage, Page}
 import play.api.mvc.Call
 
 class GenericNavigator @Inject()() extends Navigator {
+
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case FirstIndustryOptionsPage => ua => firstIndustryOptions(NormalMode)(ua)
+    case FirstIndustryOptionsPage => firstIndustryOptions(NormalMode)
     case _ => _ => routes.IndexController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case FirstIndustryOptionsPage => ua => firstIndustryOptions(CheckMode)(ua)
+    case FirstIndustryOptionsPage => firstIndustryOptions(CheckMode)
     case _ => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
@@ -38,6 +39,8 @@ class GenericNavigator @Inject()() extends Navigator {
     userAnswers.get(FirstIndustryOptionsPage) match {
       case Some(Healthcare) =>
         controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode)
+      case Some(Engineering) =>
+        controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode)
       case _ =>
         routes.SessionExpiredController.onPageLoad()
     }

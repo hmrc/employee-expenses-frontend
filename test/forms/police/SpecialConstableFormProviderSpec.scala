@@ -14,19 +14,32 @@
  * limitations under the License.
  */
 
-package pages
+package forms.police
 
-import models.TypeOfEngineering
-import pages.behaviours.PageBehaviours
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-class TypeOfEngineeringSpec extends PageBehaviours {
+class SpecialConstableFormProviderSpec extends BooleanFieldBehaviours {
 
-  "TypeOfEngineeringPage" must {
+  val requiredKey = "specialConstable.error.required"
+  val invalidKey = "error.boolean"
 
-    beRetrievable[TypeOfEngineering](TypeOfEngineeringPage)
+  val form = new SpecialConstableFormProvider()()
 
-    beSettable[TypeOfEngineering](TypeOfEngineeringPage)
+  ".value" must {
 
-    beRemovable[TypeOfEngineering](TypeOfEngineeringPage)
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
   }
 }

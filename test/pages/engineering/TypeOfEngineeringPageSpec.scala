@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package pages.engineering
 
 import models.TypeOfEngineering
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-case object TypeOfEngineeringPage extends QuestionPage[TypeOfEngineering] {
+class TypeOfEngineeringSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ toString
+  "TypeOfEngineeringPage" must {
 
-  override def toString: String = "typeOfEngineering"
+    beRetrievable[TypeOfEngineering](TypeOfEngineeringPage)
+
+    beSettable[TypeOfEngineering](TypeOfEngineeringPage)
+
+    beRemovable[TypeOfEngineering](TypeOfEngineeringPage)
+  }
 }

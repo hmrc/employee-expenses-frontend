@@ -81,7 +81,9 @@ trait ViewBehaviours extends ViewSpecBase {
                    bulletList: Seq[String]): Unit = {
 
     "behave like a page with a list" must {
+
       "have a list" in {
+
         val doc = asDocument(view)
         bulletList.foreach {
           x => assertRenderedById(doc, s"bullet-$x")
@@ -89,6 +91,7 @@ trait ViewBehaviours extends ViewSpecBase {
       }
 
       "have correct values" in {
+
         val doc = asDocument(view)
         bulletList.foreach{
           x => assertContainsMessages(doc, s"$pageKey.$x")
@@ -101,7 +104,29 @@ trait ViewBehaviours extends ViewSpecBase {
                               heading: String): Unit = {
 
     "behave like a page with a secondary header" in {
+
       Jsoup.parse(view.toString()).getElementsByClass("heading-secondary").text() must include(heading)
+    }
+  }
+
+  def pageWithButtonLink(view: HtmlFormat.Appendable,
+                         url: String,
+                         id: String): Unit = {
+
+    "behave like a page with a button link" must {
+
+      "have a button" in {
+
+        val doc = asDocument(view)
+        assertRenderedById(doc, messages(id).toLowerCase)
+      }
+
+      "have a url" in {
+
+        val doc = asDocument(view)
+        val result = doc.getElementById(messages(id).toLowerCase)
+        result.attr("href") mustBe url
+      }
     }
   }
 
