@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.engineering
 
 import base.SpecBase
-import forms.TypeOfEngineeringFormProvider
+import forms.engineering.TypeOfEngineeringFormProvider
 import models.{NormalMode, TypeOfEngineering, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.TypeOfEngineeringPage
+import pages.engineering.TypeOfEngineeringPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.TypeOfEngineeringView
+import views.html.engineering.TypeOfEngineeringView
 
 class TypeOfEngineeringControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val typeOfEngineeringRoute = controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode).url
+  lazy val typeOfEngineeringRoute: String = controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode).url
 
   val formProvider = new TypeOfEngineeringFormProvider()
   val form = formProvider()
@@ -127,7 +127,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase {
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -144,7 +144,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

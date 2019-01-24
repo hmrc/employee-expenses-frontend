@@ -21,7 +21,7 @@ import javax.inject.Inject
 import models.TypeOfEngineering._
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.engineering._
-import pages.{Page, TypeOfEngineeringPage}
+import pages.Page
 import play.api.mvc.Call
 
 class EngineeringNavigator @Inject()() extends Navigator {

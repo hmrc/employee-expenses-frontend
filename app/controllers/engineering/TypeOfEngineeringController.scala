@@ -17,17 +17,17 @@
 package controllers.engineering
 
 import controllers.actions._
-import forms.TypeOfEngineeringFormProvider
+import forms.engineering.TypeOfEngineeringFormProvider
 import javax.inject.{Inject, Named}
 import models.{Enumerable, Mode}
 import navigation.Navigator
-import pages.TypeOfEngineeringPage
+import pages.engineering.TypeOfEngineeringPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.TypeOfEngineeringView
+import views.html.engineering.TypeOfEngineeringView
 
 import scala.concurrent.{ExecutionContext, Future}
 
