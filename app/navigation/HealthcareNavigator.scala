@@ -16,43 +16,42 @@
 
 package navigation
 
-import controllers.routes
+import controllers.routes._
+import controllers.healthcare.routes._
 import javax.inject.Inject
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import pages.healthcare._
 import play.api.mvc.Call
-import controllers.healthcare.routes._
 
 class HealthcareNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case AmbulanceStaffPage  => ambulanceStaff(NormalMode)
     case HealthcareList1Page => healthcareList1(NormalMode)
-    case HealthcareList2Page => _ => routes.ClaimAmountController.onPageLoad(NormalMode)
+    case HealthcareList2Page => healthcareList2(NormalMode)
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case AmbulanceStaffPage  => ambulanceStaff(CheckMode)
     case HealthcareList1Page => healthcareList1(CheckMode)
-    case HealthcareList2Page => _ => routes.ClaimAmountController.onPageLoad(CheckMode)
+    case HealthcareList2Page => healthcareList2(CheckMode)
   }
 
   def ambulanceStaff(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(AmbulanceStaffPage) match {
-    case Some(true)  =>
-      routes.ClaimAmountController.onPageLoad(mode)
-    case Some(false) =>
-      HealthcareList1Controller.onPageLoad(mode)
-    case _           =>
-      routes.SessionExpiredController.onPageLoad()
+    case Some(true)  => EmployerContributionController.onPageLoad(mode)
+    case Some(false) => HealthcareList1Controller.onPageLoad(mode)
+    case _           => SessionExpiredController.onPageLoad()
   }
 
-  def healthcareList1(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(AmbulanceStaffPage) match {
-    case Some(true)  =>
-      routes.ClaimAmountController.onPageLoad(mode)
-    case Some(false) =>
-      HealthcareList2Controller.onPageLoad(mode)
-    case _           =>
-      routes.SessionExpiredController.onPageLoad()
+  def healthcareList1(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(HealthcareList1Page) match {
+    case Some(true)  => EmployerContributionController.onPageLoad(mode)
+    case Some(false) => HealthcareList2Controller.onPageLoad(mode)
+    case _           => SessionExpiredController.onPageLoad()
+  }
+
+  def healthcareList2(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(HealthcareList2Page) match {
+    case Some(true) | Some(false) => EmployerContributionController.onPageLoad(mode)
+    case _                        => SessionExpiredController.onPageLoad()
   }
 }

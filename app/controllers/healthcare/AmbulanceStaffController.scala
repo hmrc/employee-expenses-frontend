@@ -16,11 +16,13 @@
 
 package controllers.healthcare
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.healthcare.AmbulanceStaffFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.healthcare.AmbulanceStaffPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,16 +34,17 @@ import views.html.healthcare.AmbulanceStaffView
 import scala.concurrent.{ExecutionContext, Future}
 
 class AmbulanceStaffController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Healthcare") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: AmbulanceStaffFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: AmbulanceStaffView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                          override val messagesApi: MessagesApi,
+                                          sessionRepository: SessionRepository,
+                                          @Named("Healthcare") navigator: Navigator,
+                                          identify: UnauthenticatedIdentifierAction,
+                                          getData: DataRetrievalAction,
+                                          requireData: DataRequiredAction,
+                                          formProvider: AmbulanceStaffFormProvider,
+                                          val controllerComponents: MessagesControllerComponents,
+                                          view: AmbulanceStaffView,
+                                          claimAmounts: ClaimAmountsConfig
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -56,7 +59,7 @@ class AmbulanceStaffController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -66,7 +69,8 @@ class AmbulanceStaffController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            newAnswers     <- if (value) Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Healthcare.ambulanceStaff)) else Future.successful(updatedAnswers)
+            _              <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(AmbulanceStaffPage, mode)(updatedAnswers))
         }
       )

@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,32 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(
-    main_template: MainTemplate
-)
+package config
 
-@(
-    claimAmount: Int,
-    band1: String,
-    band2: String,
-    onwardRoute: String
-)(implicit request: Request[_], messages: Messages)
+import com.google.inject.Inject
+import javax.inject.Singleton
+import play.api.Configuration
 
-@main_template(
-    title = messages("claimAmount.title", claimAmount)
-    ) {
-
-    @components.back_link()
-
-    @components.heading(messages("claimAmount.heading", claimAmount))
-
-    <p>@messages("claimAmount.description")</p>
-
-    <p id="band-1">Band 1 : £@band1</p>
-
-    <p id="band-2">Band 2 : £@band2</p>
-
-    @components.button_link(onwardRoute, messages("site.continue"))
+@Singleton
+class ClaimAmountsConfig @Inject() (configuration: Configuration) {
+  object Healthcare {
+    lazy val ambulanceStaff: Int = configuration.get[Int]("claim-amounts.healthcare.ambulance-staff")
+    lazy val list1: Int = configuration.get[Int]("claim-amounts.healthcare.list-1")
+    lazy val list2: Int = configuration.get[Int]("claim-amounts.healthcare.list-2")
+    lazy val allOther: Int = configuration.get[Int]("claim-amounts.healthcare.all-other")
+  }
 }

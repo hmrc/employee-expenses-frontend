@@ -54,6 +54,12 @@
         Map("url" -> controllers.routes.Assets.versioned("stylesheets/employeeexpensesfrontend-app.css"))
     }
 
+    @scriptElem = @{
+        Seq(
+            Map("url" -> controllers.routes.Assets.versioned("javascripts/employeeexpensesfrontend.js"))
+        )
+    }
+
     @scalate.render(
         "/templates/mustache/production/govuk-template.mustache.html",
         Map(
@@ -63,6 +69,7 @@
             "sidebar" -> sidebarContent,
             "scriptElems" -> scriptElem,
             "linkElems" -> linkElem,
+            "scriptElems" -> scriptElem,
             "mainClass" -> mainClass,
             "article" -> articleContent,
             "isWelsh" -> {

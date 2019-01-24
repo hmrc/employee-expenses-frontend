@@ -21,6 +21,7 @@ import forms.healthcare.AmbulanceStaffFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.healthcare.AmbulanceStaffPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -32,9 +33,9 @@ class AmbulanceStaffControllerSpec extends SpecBase {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new AmbulanceStaffFormProvider()
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
-  lazy val ambulanceStaffRoute = controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode).url
+  lazy val ambulanceStaffRoute: String = controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode).url
 
   "AmbulanceStaff Controller" must {
 
@@ -76,7 +77,7 @@ class AmbulanceStaffControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to the next page when true is submitted" in {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -86,6 +87,26 @@ class AmbulanceStaffControllerSpec extends SpecBase {
       val request =
         FakeRequest(POST, ambulanceStaffRoute)
           .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
+
+    "redirect to the next page when false is submitted" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Healthcare").toInstance(new FakeNavigator(onwardRoute)))
+          .build()
+
+      val request =
+        FakeRequest(POST, ambulanceStaffRoute)
+          .withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
 
