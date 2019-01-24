@@ -269,3 +269,6 @@ specialConstable.title = Are you a special constable?
 specialConstable.heading = Are you a special constable?
 specialConstable.checkYourAnswersLabel = Are you a special constable?
 specialConstable.error.required = Select yes if you are a special constable
+
+claimByPostOrOnline.title = claimByPostOrOnline
+claimByPostOrOnline.heading = claimByPostOrOnline
