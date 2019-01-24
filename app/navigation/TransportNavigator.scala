@@ -47,6 +47,7 @@ class TransportNavigator @Inject()() extends Navigator {
       case Some(Railways) => routes.WhichRailwayTradeController.onPageLoad(mode)
       case Some(SeamanCarpenter) => routes.TransportCarpenterController.onPageLoad(mode)
       case Some(Vehicles) => routes.TransportVehicleTradeController.onPageLoad(mode)
+      case Some(NoneOfTheAbove) => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
