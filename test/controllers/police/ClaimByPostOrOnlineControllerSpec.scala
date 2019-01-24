@@ -35,10 +35,12 @@ class ClaimByPostOrOnlineControllerSpec extends SpecBase {
 
       val view = application.injector.instanceOf[ClaimByPostOrOnlineView]
 
+      val p87Url = frontendAppConfig.p87Url
+
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view()(fakeRequest, messages).toString
+        view(p87Url)(fakeRequest, messages).toString
 
       application.stop()
     }

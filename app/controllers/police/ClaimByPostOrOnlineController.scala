@@ -16,6 +16,7 @@
 
 package controllers.police
 
+import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -31,11 +32,12 @@ class ClaimByPostOrOnlineController @Inject()(
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
                                        val controllerComponents: MessagesControllerComponents,
+                                       frontendAppConfig: FrontendAppConfig,
                                        view: ClaimByPostOrOnlineView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view())
+      Ok(view(frontendAppConfig.p87Url))
   }
 }
