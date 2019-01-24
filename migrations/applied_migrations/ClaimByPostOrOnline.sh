@@ -5,7 +5,7 @@ echo "Applying migration ClaimByPostOrOnline"
 
 echo "Adding routes to conf/app.routes"
 echo "" >> ../conf/app.routes
-echo "GET        /claimByPostOrOnline                       controllers.ClaimByPostOrOnlineController.onPageLoad()" >> ../conf/app.routes
+echo "GET        /claimByPostOrOnline                       controllers.police.ClaimByPostOrOnlineController.onPageLoad()" >> ../conf/app.routes
 
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en

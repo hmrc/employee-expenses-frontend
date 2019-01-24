@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.police
 
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.ClaimByPostOrOnlineView
+import views.html.police.ClaimByPostOrOnlineView
 
 class ClaimByPostOrOnlineControllerSpec extends SpecBase {
 
@@ -29,7 +29,7 @@ class ClaimByPostOrOnlineControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, routes.ClaimByPostOrOnlineController.onPageLoad().url)
+      val request = FakeRequest(GET, controllers.police.routes.ClaimByPostOrOnlineController.onPageLoad().url)
 
       val result = route(application, request).value
 

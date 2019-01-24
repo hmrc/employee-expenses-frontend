@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.police
 
+import play.api.Application
 import views.behaviours.ViewBehaviours
-import views.html.ClaimByPostOrOnlineView
+import views.html.police.ClaimByPostOrOnlineView
 
 class ClaimByPostOrOnlineViewSpec extends ViewBehaviours {
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "ClaimByPostOrOnline view" must {
 

@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.police
 
 import controllers.actions._
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.ClaimByPostOrOnlineView
+import views.html.police.ClaimByPostOrOnlineView
 
 import scala.concurrent.ExecutionContext
 
 class ClaimByPostOrOnlineController @Inject()(
                                        override val messagesApi: MessagesApi,
-                                       identify: IdentifierAction,
+                                       identify: UnauthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
                                        val controllerComponents: MessagesControllerComponents,
