@@ -31,52 +31,39 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
 
 
   "ClaimAmountService" must {
-    "deduction" when {
-      "return correct Int when given two claimAmount and deduction" in {
-        val claimAmount = 180
-        val deduction = 100
-
-        claimAmountService.deduction(claimAmount, deduction) mustBe 80
-      }
-    }
-
-    "percentage" when {
-      "return correct amount as string when given amount and percentage" in {
-        val amount: Double = 180
-        val percentage: Double = 50
-
-        claimAmountService.percentage(amount, percentage) mustBe "90.00"
-      }
-    }
-
-    "actualClaimAmount" when {
-      "return a deduction amount when claimAmount and expensesEmployerPaid is defined" in {
-        val userAnswers = emptyUserAnswers.set(ClaimAmount, 180).success.value
-        val newUserAnswers = userAnswers.set(ExpensesEmployerPaidPage, 100).success.value
-
-        claimAmountService.actualClaimAmount(newUserAnswers) mustBe 80
-      }
-
-      "return claim amount when expensesEmployerPaid is not defined" in {
-        val userAnswers = emptyUserAnswers.set(ClaimAmount, 180).success.value
-
-        claimAmountService.actualClaimAmount(userAnswers) mustBe 180
-      }
-    }
 
     "band1" when {
-      "return 20% of claim amount as a string" in {
-        val userAnswers = emptyUserAnswers.set(ClaimAmount, 180).success.value
+      "return 20% of claim amount as a string with contribution from employer" in {
+        val userAnswers = emptyUserAnswers.set(ExpensesEmployerPaidPage, 50).success.value
+        val actualClaimAmount = claimAmountService.actualClaimAmount(userAnswers, 100)
 
-        claimAmountService.band1(userAnswers) mustBe "36.00"
+        actualClaimAmount mustBe 50
+
+        claimAmountService.taxCalculation(
+          percentage = frontendAppConfig.band1,
+          amount = actualClaimAmount
+        ) mustBe "10.00"
+      }
+
+      "return 20% of claim amount as a string" in {
+        val userAnswers = emptyUserAnswers
+        val actualClaimAmount = claimAmountService.actualClaimAmount(userAnswers, 100)
+
+        actualClaimAmount mustBe 100
+
+        claimAmountService.taxCalculation(
+          percentage = frontendAppConfig.band1,
+          amount = actualClaimAmount
+        ) mustBe "20.00"
       }
     }
 
     "band2" when {
       "return 40% of claim amount as a string" in {
-        val userAnswers = emptyUserAnswers.set(ClaimAmount, 180).success.value
-
-        claimAmountService.band1(userAnswers) mustBe "36.00"
+        claimAmountService.taxCalculation(
+          percentage = frontendAppConfig.band2,
+          amount = 180
+        ) mustBe "72.00"
       }
     }
   }

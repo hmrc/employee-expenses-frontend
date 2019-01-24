@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.{Inject, Named}
 import models.Mode
@@ -31,6 +32,7 @@ import views.html.ClaimAmountView
 import scala.concurrent.ExecutionContext
 
 class ClaimAmountController @Inject()(
+                                       appConfig: FrontendAppConfig,
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: SessionRepository,
                                        @Named("Generic") navigator: Navigator,
@@ -42,22 +44,22 @@ class ClaimAmountController @Inject()(
                                        claimAmountService: ClaimAmountService
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(mode : Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  import claimAmountService._
+
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+
     implicit request =>
       (request.userAnswers.get(EmployerContributionPage), request.userAnswers.get(ClaimAmount)) match {
-        case (Some(_), Some(_)) =>
+        case (Some(_), Some(amount)) =>
+          val claimAmount: Int = actualClaimAmount(request.userAnswers, amount)
           Ok(view(
-            claimAmount = claimAmountService.actualClaimAmount(request.userAnswers),
-            band1 = claimAmountService.band1(request.userAnswers),
-            band2 = claimAmountService.band2(request.userAnswers)
+            claimAmount = claimAmount,
+            band1 = taxCalculation(appConfig.band1, claimAmount),
+            band2 = taxCalculation(appConfig.band2, claimAmount),
+            onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
           ))
         case _ =>
           Redirect(routes.SessionExpiredController.onPageLoad())
       }
-  }
-
-  def onSubmit(mode : Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
-      Redirect(navigator.nextPage(ClaimAmount, mode)(request.userAnswers))
   }
 }

@@ -25,26 +25,18 @@ import scala.math.BigDecimal.RoundingMode
 
 class ClaimAmountService @Inject()()(implicit ec: ExecutionContext) {
 
-  def deduction(claimAmount: Int, expensesEmployerPaid: Int): Int =
-    claimAmount - expensesEmployerPaid
-
-  def percentage(amount: Double, percentage: Double): String =
-    BigDecimal((amount / 100) * percentage).setScale(2, RoundingMode.DOWN).toString
-
-  def actualClaimAmount(userAnswers: UserAnswers): Int = {
-
-    val claimAmount: Option[Int] = userAnswers.get(ClaimAmount)
-
-    val expensesEmployerPaid: Option[Int] = userAnswers.get(ExpensesEmployerPaidPage)
-
-    if (claimAmount.isDefined && expensesEmployerPaid.isDefined) {
-      deduction(claimAmount.get, expensesEmployerPaid.get)
-    } else {
-      claimAmount.get
+  def actualClaimAmount(userAnswers: UserAnswers, claimAmount: Int): Int = {
+    userAnswers.get(ExpensesEmployerPaidPage) match {
+      case Some(expensesPaid) =>
+        claimAmount - expensesPaid
+      case None =>
+        claimAmount
     }
   }
 
-  def band1(userAnswers: UserAnswers): String = percentage(actualClaimAmount(userAnswers), 20)
+  def taxCalculation(percentage: Int, amount: Int): String = {
+    BigDecimal((amount.toDouble / 100) * percentage).setScale(2, RoundingMode.DOWN).toString
+  }
 
-  def band2(userAnswers: UserAnswers): String = percentage(actualClaimAmount(userAnswers), 40)
+
 }

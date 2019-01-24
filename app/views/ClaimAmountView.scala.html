@@ -21,7 +21,8 @@
 @(
     claimAmount: Int,
     band1: String,
-    band2: String
+    band2: String,
+    onwardRoute: String
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
@@ -38,5 +39,5 @@
 
     <p id="band-2">Band 2 : £@band2</p>
 
-    @components.submit_button()
+    @components.button_link(onwardRoute, messages("site.continue"))
 }
