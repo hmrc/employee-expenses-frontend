@@ -18,9 +18,8 @@ package navigation
 
 import controllers.routes
 import javax.inject.Inject
-import models.AncillaryEngineeringWhichTrade.{ApprenticeOrStorekeeper, LabourerSupervisorOrUnskilledWorker, PatternMaker}
 import models.TypeOfEngineering._
-import models.{AncillaryEngineeringWhichTrade, CheckMode, Mode, NormalMode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.engineering._
 import pages.{Page, TypeOfEngineeringPage}
 import play.api.mvc.Call
@@ -28,19 +27,19 @@ import play.api.mvc.Call
 class EngineeringNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TypeOfEngineeringPage => userAnswers => typeOfEngineeringOptions(NormalMode)(userAnswers)
-    case ConstructionalEngineeringList1Page => userAnswers => constructionalEngineeringList1(NormalMode)(userAnswers)
-    case ConstructionalEngineeringList2Page => userAnswers => constructionalEngineeringList2(NormalMode)(userAnswers)
-    case ConstructionalEngineeringApprenticePage => userAnswers => constructionalEngineeringApprentice(NormalMode)(userAnswers)
-    case AncillaryEngineeringWhichTradePage => userAnswers => ancillaryEngineeringWhichTrade(NormalMode)(userAnswers)
-    case FactoryEngineeringList1Page => userAnswers => factoryEngineeringList1(NormalMode)(userAnswers)
-    case FactoryEngineeringList2Page => userAnswers => factoryEngineeringList2(NormalMode)(userAnswers)
-    case FactoryEngineeringApprenticePage => userAnswers => factoryEngineeringApprentice(NormalMode)(userAnswers)
+    case TypeOfEngineeringPage => typeOfEngineeringOptions(NormalMode)
+    case ConstructionalEngineeringList1Page => constructionalEngineeringList1(NormalMode)
+    case ConstructionalEngineeringList2Page => constructionalEngineeringList2(NormalMode)
+    case ConstructionalEngineeringApprenticePage => constructionalEngineeringApprentice(NormalMode)
+    case AncillaryEngineeringWhichTradePage => ancillaryEngineeringWhichTrade(NormalMode)
+    case FactoryEngineeringList1Page => factoryEngineeringList1(NormalMode)
+    case FactoryEngineeringList2Page => factoryEngineeringList2(NormalMode)
+    case FactoryEngineeringApprenticePage => factoryEngineeringApprentice(NormalMode)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TypeOfEngineeringPage => userAnswers => typeOfEngineeringOptions(CheckMode)(userAnswers)
+    case TypeOfEngineeringPage => typeOfEngineeringOptions(CheckMode)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
 
