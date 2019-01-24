@@ -144,7 +144,7 @@ POST       /change-special-constable                        controllers.police.S
 
 GET        /claim-by-post-or-online                         controllers.police.ClaimByPostOrOnlineController.onPageLoad()
 
-GET        /aluminiumOccupationList3                        controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = NormalMode)
-POST       /aluminiumOccupationList3                        controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = NormalMode)
-GET        /changeAluminiumOccupationList3                  controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = CheckMode)
-POST       /changeAluminiumOccupationList3                  controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = CheckMode)
+GET        /aluminium-occupation-list-3                        controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /aluminium-occupation-list-3                        controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = CheckMode)
