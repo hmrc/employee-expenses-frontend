@@ -118,13 +118,13 @@ trait ViewBehaviours extends ViewSpecBase {
       "have a button" in {
 
         val doc = asDocument(view)
-        assertRenderedById(doc, messages(id))
+        assertRenderedById(doc, messages(id).toLowerCase)
       }
 
       "have a url" in {
 
         val doc = asDocument(view)
-        val result = doc.getElementById(messages(id))
+        val result = doc.getElementById(messages(id).toLowerCase)
         result.attr("href") mustBe url
       }
     }
