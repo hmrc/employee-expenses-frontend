@@ -18,7 +18,7 @@ package navigation
 
 import base.SpecBase
 import controllers.transport.routes
-import models.TypeOfTransport._
+import models.TypeOfTransport.{NoneOfTheAbove, _}
 import models.WhichRailwayTrade._
 import models._
 import pages.transport._
@@ -57,13 +57,15 @@ class TransportNavigatorSpec extends SpecBase {
         }
 
         "go to TransportVehicleTrade when 'Vehicles' is selected" in {
-          val answers = emptyUserAnswers.set(TypeOfTransportPage, Airlines).success.value
+          val answers = emptyUserAnswers.set(TypeOfTransportPage, Vehicles).success.value
           navigator.nextPage(TypeOfTransportPage, NormalMode)(answers) mustBe
-            routes.AirlineJobListController.onPageLoad(NormalMode)
+            routes.TransportVehicleTradeController.onPageLoad(NormalMode)
         }
 
         "go to EmployerContributionController when 'None of the above' is selected" in {
-
+          val answers = emptyUserAnswers.set(TypeOfTransportPage, NoneOfTheAbove).success.value
+          navigator.nextPage(TypeOfTransportPage, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
       }
 
