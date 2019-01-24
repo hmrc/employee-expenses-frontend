@@ -23,7 +23,7 @@ import org.scalatest.TryValues
 import pages._
 import pages.engineering._
 import pages.healthcare._
-import pages.manufacturing.TypeOfManufacturingPage
+import pages.manufacturing.{AluminiumOccupationList2Page, TypeOfManufacturingPage}
 import pages.police.SpecialConstablePage
 import pages.transport._
 import play.api.libs.json.{JsValue, Json}
@@ -32,6 +32,7 @@ trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
+    arbitrary[(AluminiumOccupationList2Page.type, JsValue)] ::
     arbitrary[(SpecialConstablePage.type, JsValue)] ::
     arbitrary[(TypeOfManufacturingPage.type, JsValue)] ::
     arbitrary[(FactoryEngineeringApprenticePage.type, JsValue)] ::
