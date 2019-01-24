@@ -273,3 +273,8 @@ specialConstable.error.required = Select yes if you are a special constable
 
 claimByPostOrOnline.title = You can claim tax relief for these expenses by post or using an online form
 claimByPostOrOnline.heading = You can claim tax relief for these expenses by post or using an online form
+
+aluminiumOccupationList3.title = aluminiumOccupationList3
+aluminiumOccupationList3.heading = aluminiumOccupationList3
+aluminiumOccupationList3.checkYourAnswersLabel = aluminiumOccupationList3
+aluminiumOccupationList3.error.required = Select yes if aluminiumOccupationList3
