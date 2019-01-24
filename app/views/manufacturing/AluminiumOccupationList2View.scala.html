@@ -34,7 +34,22 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("aluminiumOccupationList2.heading")
+        @components.heading(
+            headingKey = "aluminiumOccupationList2.heading",
+            secondaryHeaderKey = Some("aluminiumOccupationList2.secondaryHeading")
+        )
+
+        @components.list(
+            pageKey = Some("aluminiumOccupationList2"),
+            bulletList = Seq(
+                "occupation1",
+                "occupation2",
+                "occupation3",
+                "occupation4",
+                "occupation5",
+                "occupation6"
+            )
+        )
 
         @components.input_yes_no(
             field = form("value"),

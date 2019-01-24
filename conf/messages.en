@@ -274,7 +274,15 @@ specialConstable.error.required = Select yes if you are a special constable
 claimByPostOrOnline.title = You can claim tax relief for these expenses by post or using an online form
 claimByPostOrOnline.heading = You can claim tax relief for these expenses by post or using an online form
 
-aluminiumOccupationList2.title = aluminiumOccupationList2
-aluminiumOccupationList2.heading = aluminiumOccupationList2
-aluminiumOccupationList2.checkYourAnswersLabel = aluminiumOccupationList2
-aluminiumOccupationList2.error.required = Select yes if aluminiumOccupationList2
+aluminiumOccupationList2.title = Is your job title listed?
+aluminiumOccupationList2.heading = Is your job title listed?
+aluminiumOccupationList2.secondaryHeading = Aluminium occupation list 2
+aluminiumOccupationList2.checkYourAnswersLabel = Is your job title listed?
+aluminiumOccupationList2.error.required = Select yes if your job title is listed?
+aluminiumOccupationList2.occupation1 = Continual casting operator
+aluminiumOccupationList2.occupation2 = Process operator
+aluminiumOccupationList2.occupation3 = De-dimpler
+aluminiumOccupationList2.occupation4 = Drier
+aluminiumOccupationList2.occupation5 = Drill puncher
+aluminiumOccupationList2.occupation6 = Dross unloader
+
