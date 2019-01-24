@@ -141,3 +141,5 @@ GET        /special-constable                               controllers.police.S
 POST       /special-constable                               controllers.police.SpecialConstableController.onSubmit(mode: Mode = NormalMode)
 GET        /change-special-constable                        controllers.police.SpecialConstableController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-special-constable                        controllers.police.SpecialConstableController.onSubmit(mode: Mode = CheckMode)
+
+GET        /claim-by-post-or-online                         controllers.police.ClaimByPostOrOnlineController.onPageLoad()
