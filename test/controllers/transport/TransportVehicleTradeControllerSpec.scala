@@ -14,39 +14,39 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.transport
 
 import base.SpecBase
-import forms.TypeOfEngineeringFormProvider
-import models.{NormalMode, TypeOfEngineering, UserAnswers}
+import forms.TransportVehicleTradeFormProvider
+import models.{NormalMode, TransportVehicleTrade, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.TypeOfEngineeringPage
+import pages.transport.TransportVehicleTradePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.TypeOfEngineeringView
+import views.html.transport.TransportVehicleTradeView
 
-class TypeOfEngineeringControllerSpec extends SpecBase {
+class TransportVehicleTradeControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val typeOfEngineeringRoute = controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode).url
+  lazy val transportVehicleTradeRoute = routes.TransportVehicleTradeController.onPageLoad(NormalMode).url
 
-  val formProvider = new TypeOfEngineeringFormProvider()
+  val formProvider = new TransportVehicleTradeFormProvider()
   val form = formProvider()
 
-  "TypeOfEngineering Controller" must {
+  "TransportVehicleTrade Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, typeOfEngineeringRoute)
+      val request = FakeRequest(GET, transportVehicleTradeRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TypeOfEngineeringView]
+      val view = application.injector.instanceOf[TransportVehicleTradeView]
 
       status(result) mustEqual OK
 
@@ -58,20 +58,20 @@ class TypeOfEngineeringControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TypeOfEngineeringPage, TypeOfEngineering.values.head).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(TransportVehicleTradePage, TransportVehicleTrade.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, typeOfEngineeringRoute)
+      val request = FakeRequest(GET, transportVehicleTradeRoute)
 
-      val view = application.injector.instanceOf[TypeOfEngineeringView]
+      val view = application.injector.instanceOf[TransportVehicleTradeView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(TypeOfEngineering.values.head), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(TransportVehicleTrade.values.head), NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -80,12 +80,12 @@ class TypeOfEngineeringControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
-        FakeRequest(POST, typeOfEngineeringRoute)
-          .withFormUrlEncodedBody(("value", TypeOfEngineering.options.head.value))
+        FakeRequest(POST, transportVehicleTradeRoute)
+          .withFormUrlEncodedBody(("value", TransportVehicleTrade.options.head.value))
 
       val result = route(application, request).value
 
@@ -101,12 +101,12 @@ class TypeOfEngineeringControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, typeOfEngineeringRoute)
+        FakeRequest(POST, transportVehicleTradeRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TypeOfEngineeringView]
+      val view = application.injector.instanceOf[TransportVehicleTradeView]
 
       val result = route(application, request).value
 
@@ -122,12 +122,12 @@ class TypeOfEngineeringControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, typeOfEngineeringRoute)
+      val request = FakeRequest(GET, transportVehicleTradeRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -137,14 +137,14 @@ class TypeOfEngineeringControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, typeOfEngineeringRoute)
-          .withFormUrlEncodedBody(("value", TypeOfEngineering.values.head.toString))
+        FakeRequest(POST, transportVehicleTradeRoute)
+          .withFormUrlEncodedBody(("value", TransportVehicleTrade.values.head.toString))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

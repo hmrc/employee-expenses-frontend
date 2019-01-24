@@ -14,36 +14,36 @@
  * limitations under the License.
  */
 
-package views
+package views.manufacturing
 
-import forms.TypeOfEngineeringFormProvider
-import models.{NormalMode, TypeOfEngineering}
+import forms.manufacturing.TypeOfManufacturingFormProvider
+import models.{NormalMode, TypeOfManufacturing}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.ViewBehaviours
-import views.html.TypeOfEngineeringView
+import views.html.manufacturing.TypeOfManufacturingView
 
-class TypeOfEngineeringViewSpec extends ViewBehaviours {
+class TypeOfManufacturingViewSpec extends ViewBehaviours {
 
-  val messageKeyPrefix = "typeOfEngineering"
+  val messageKeyPrefix = "typeOfManufacturing"
 
-  val form = new TypeOfEngineeringFormProvider()()
+  val form = new TypeOfManufacturingFormProvider()()
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  val view = application.injector.instanceOf[TypeOfEngineeringView]
+  val view = application.injector.instanceOf[TypeOfManufacturingView]
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
     view.apply(form, NormalMode)(fakeRequest, messages)
 
-  "TypeOfEngineeringView" must {
+  "TypeOfManufacturingView" must {
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
   }
 
-  "TypeOfEngineeringView" when {
+  "TypeOfManufacturingView" when {
 
     "rendered" must {
 
@@ -51,13 +51,13 @@ class TypeOfEngineeringViewSpec extends ViewBehaviours {
 
         val doc = asDocument(applyView(form))
 
-        for (option <- TypeOfEngineering.options) {
+        for (option <- TypeOfManufacturing.options) {
           assertContainsRadioButton(doc, option.id, "value", option.value, false)
         }
       }
     }
 
-    for (option <- TypeOfEngineering.options) {
+    for (option <- TypeOfManufacturing.options) {
 
       s"rendered with a value of '${option.value}'" must {
 
@@ -67,7 +67,7 @@ class TypeOfEngineeringViewSpec extends ViewBehaviours {
 
           assertContainsRadioButton(doc, option.id, "value", option.value, true)
 
-          for (unselectedOption <- TypeOfEngineering.options.filterNot(o => o == option)) {
+          for (unselectedOption <- TypeOfManufacturing.options.filterNot(o => o == option)) {
             assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
           }
         }

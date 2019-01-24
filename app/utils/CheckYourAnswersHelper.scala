@@ -21,10 +21,13 @@ import models.{CheckMode, UserAnswers}
 import pages._
 import pages.engineering._
 import pages.healthcare._
+import pages.manufacturing._
+import pages.police.SpecialConstablePage
 import pages.transport._
+import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
     x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
@@ -65,6 +68,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def factoryEngineeringList2: Option[AnswerRow] = userAnswers.get(FactoryEngineeringList2Page) map {
     x => AnswerRow("factoryEngineeringList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.engineering.routes.FactoryEngineeringList2Controller.onPageLoad(CheckMode).url)
+  }
+
+  def factoryEngineeringApprentice: Option[AnswerRow] = userAnswers.get(FactoryEngineeringApprenticePage) map {
+    x => AnswerRow("factoryEngineeringApprentice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(CheckMode).url)
   }
 
   def ancillaryEngineeringWhichTrade: Option[AnswerRow] = userAnswers.get(AncillaryEngineeringWhichTradePage) map {
@@ -132,4 +140,24 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     x => AnswerRow("transportCarpenter.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.transport.routes.TransportCarpenterController.onPageLoad(CheckMode).url)
   }
+
+  def transportVehicleTrade: Option[AnswerRow] = userAnswers.get(TransportVehicleTradePage) map {
+    x => AnswerRow("transportVehicleTrade.checkYourAnswersLabel", s"transportVehicleTrade.$x", true,
+      controllers.transport.routes.TransportVehicleTradeController.onPageLoad(CheckMode).url)
+  }
+
+  //Manufacturing
+
+  def typeOfManufacturing: Option[AnswerRow] = userAnswers.get(TypeOfManufacturingPage) map {
+    x => AnswerRow("typeOfManufacturing.checkYourAnswersLabel", s"typeOfManufacturing.$x", true,
+      controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(CheckMode).url)
+  }
+
+  //Police
+
+  def specialConstable: Option[AnswerRow] = userAnswers.get(SpecialConstablePage) map {
+    x => AnswerRow("specialConstable.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.police.routes.SpecialConstableController.onPageLoad(CheckMode).url)
+  }
+
 }

@@ -98,9 +98,14 @@ POST        /change-factory-engineering-list-2              controllers.engineer
 
 
 GET         /factory-engineering-list-1                     controllers.engineering.FactoryEngineeringList1Controller.onPageLoad(mode: Mode = NormalMode)
-POST        /factory-engineering-list-1                      controllers.engineering.FactoryEngineeringList1Controller.onSubmit(mode: Mode = NormalMode)
+POST        /factory-engineering-list-1                     controllers.engineering.FactoryEngineeringList1Controller.onSubmit(mode: Mode = NormalMode)
 GET         /change-factory-engineering-list-1              controllers.engineering.FactoryEngineeringList1Controller.onPageLoad(mode: Mode = CheckMode)
 POST        /change-factory-engineering-list-1              controllers.engineering.FactoryEngineeringList1Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /factory-engineering-apprentice                  controllers.engineering.FactoryEngineeringApprenticeController.onPageLoad(mode: Mode = NormalMode)
+POST       /factory-engineering-apprentice                  controllers.engineering.FactoryEngineeringApprenticeController.onSubmit(mode: Mode = NormalMode)
+GET        /change-factory-engineering-apprentice           controllers.engineering.FactoryEngineeringApprenticeController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-factory-engineering-apprentice           controllers.engineering.FactoryEngineeringApprenticeController.onSubmit(mode: Mode = CheckMode)
 
 GET        /airline-job-listed                              controllers.transport.AirlineJobListController.onPageLoad(mode: Mode = NormalMode)
 POST       /airline-job-listed                              controllers.transport.AirlineJobListController.onSubmit(mode: Mode = NormalMode)
@@ -121,3 +126,18 @@ GET        /transport-carpenter                             controllers.transpor
 POST       /transport-carpenter                             controllers.transport.TransportCarpenterController.onSubmit(mode: Mode = NormalMode)
 GET        /change-transport-carpenter                      controllers.transport.TransportCarpenterController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-transport-carpenter                      controllers.transport.TransportCarpenterController.onSubmit(mode: Mode = CheckMode)
+
+GET        /transport-vehicle-trade                         controllers.transport.TransportVehicleTradeController.onPageLoad(mode: Mode = NormalMode)
+POST       /transport-vehicle-trade                         controllers.transport.TransportVehicleTradeController.onSubmit(mode: Mode = NormalMode)
+GET        /change-transport-vehicle-trade                  controllers.transport.TransportVehicleTradeController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-transport-vehicle-trade                  controllers.transport.TransportVehicleTradeController.onSubmit(mode: Mode = CheckMode)
+
+GET        /type-of-manufacturing                           controllers.manufacturing.TypeOfManufacturingController.onPageLoad(mode: Mode = NormalMode)
+POST       /type-of-manufacturing                           controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = NormalMode)
+GET        /change-type-of-manufacturing                    controllers.manufacturing.TypeOfManufacturingController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-type-of-manufacturing                    controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = CheckMode)
+
+GET        /special-constable                               controllers.police.SpecialConstableController.onPageLoad(mode: Mode = NormalMode)
+POST       /special-constable                               controllers.police.SpecialConstableController.onSubmit(mode: Mode = NormalMode)
+GET        /change-special-constable                        controllers.police.SpecialConstableController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-special-constable                        controllers.police.SpecialConstableController.onSubmit(mode: Mode = CheckMode)

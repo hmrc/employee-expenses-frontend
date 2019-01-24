@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package viewmodels
 
-import models.TypeOfEngineering
-import pages.behaviours.PageBehaviours
+case class RadioCheckboxOption(id: String, value: String, messageKey: String)
 
-class TypeOfEngineeringSpec extends PageBehaviours {
-
-  "TypeOfEngineeringPage" must {
-
-    beRetrievable[TypeOfEngineering](TypeOfEngineeringPage)
-
-    beSettable[TypeOfEngineering](TypeOfEngineeringPage)
-
-    beRemovable[TypeOfEngineering](TypeOfEngineeringPage)
-  }
+object RadioCheckboxOption {
+  def apply(keyPrefix: String, option: String): RadioCheckboxOption = RadioCheckboxOption(
+    s"$keyPrefix.$option",
+    option,
+    s"$keyPrefix.$option"
+  )
 }

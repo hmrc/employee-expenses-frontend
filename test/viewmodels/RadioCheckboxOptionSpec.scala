@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package pages
+package viewmodels
 
-import models.TypeOfEngineering
-import play.api.libs.json.JsPath
+import base.SpecBase
 
-case object TypeOfEngineeringPage extends QuestionPage[TypeOfEngineering] {
+class RadioCheckboxOptionSpec extends SpecBase {
 
-  override def path: JsPath = JsPath \ toString
+  "Radio Option" must {
 
-  override def toString: String = "typeOfEngineering"
+    "build correctly from a key prefix and option" in {
+
+      val radioOption = RadioCheckboxOption("prefix", "option")
+
+      radioOption.id mustEqual "prefix.option"
+      radioOption.value mustEqual "option"
+      radioOption.messageKey mustEqual "prefix.option"
+    }
+  }
 }

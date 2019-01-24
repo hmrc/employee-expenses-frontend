@@ -16,7 +16,8 @@
 
 package models
 
-import viewmodels.RadioOption
+import play.api.libs.json._
+import viewmodels.RadioCheckboxOption
 
 sealed trait EmployerContribution
 
@@ -31,9 +32,9 @@ object EmployerContribution extends Enumerable.Implicits {
     All, Some, None
   )
 
-  val options: Seq[RadioOption] = values.map {
+  val options: Seq[RadioCheckboxOption] = values.map {
     value =>
-      RadioOption("employerContribution", value.toString)
+      RadioCheckboxOption("employerContribution", value.toString)
   }
 
   implicit val enumerable: Enumerable[EmployerContribution] =

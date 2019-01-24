@@ -22,10 +22,44 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages._
 import pages.healthcare._
 import pages.engineering._
+import pages.manufacturing.TypeOfManufacturingPage
+import pages.police.SpecialConstablePage
 import pages.transport._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitrarySpecialConstableUserAnswersEntry: Arbitrary[(SpecialConstablePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[SpecialConstablePage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryTypeOfManufacturingUserAnswersEntry: Arbitrary[(TypeOfManufacturingPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[TypeOfManufacturingPage.type]
+        value <- arbitrary[TypeOfManufacturing].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryFactoryEngineeringApprenticeUserAnswersEntry: Arbitrary[(FactoryEngineeringApprenticePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[FactoryEngineeringApprenticePage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryTransportVehicleTradeUserAnswersEntry: Arbitrary[(TransportVehicleTradePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[TransportVehicleTradePage.type]
+        value <- arbitrary[TransportVehicleTrade].map(Json.toJson(_))
+      } yield (page, value)
+    }
 
   implicit lazy val arbitraryTransportCarpenterUserAnswersEntry: Arbitrary[(TransportCarpenterPage.type, JsValue)] =
     Arbitrary {

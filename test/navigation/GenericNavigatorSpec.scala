@@ -18,10 +18,12 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
-import pages._
+import models.FirstIndustryOptions.Engineering
 import models._
+import org.scalatest.prop.PropertyChecks
+import pages._
 
-class NavigatorSpec extends SpecBase {
+class GenericNavigatorSpec extends SpecBase with PropertyChecks {
 
   val navigator = new GenericNavigator
 
@@ -33,6 +35,13 @@ class NavigatorSpec extends SpecBase {
 
         case object UnknownPage extends Page
         navigator.nextPage(UnknownPage, NormalMode)(UserAnswers(userAnswersId)) mustBe routes.IndexController.onPageLoad()
+      }
+
+      "go to TypeOfEngineeringPage from FirstIndustryOptionsPage when Engineering is selected" in {
+        val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, Engineering).success.value
+
+        navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode)
       }
     }
 

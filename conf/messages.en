@@ -209,7 +209,7 @@ airlineJobList.error.required = Select yes if your job title listed?
 garageHandOrCleaner.title = Are you a garage hand or cleaner?
 garageHandOrCleaner.heading = Are you a garage hand or cleaner?
 garageHandOrCleaner.checkYourAnswersLabel = garageHandOrCleaner
-garageHandOrCleaner.error.required = Select yes if you are a garage hand or cleaner?
+garageHandOrCleaner.error.required = Select yes if you are a garage hand or cleaner
 
 factoryEngineeringList2.title = Is your job title listed?
 factoryEngineeringList2.heading = Is your job title listed?
@@ -230,9 +230,42 @@ whichRailwayTrade.vehicleRepairersWagonLifters = Railway vehicle repairers or ra
 whichRailwayTrade.vehiclePainters = Railway vehicle painters
 whichRailwayTrade.noneOfTheAbove = None of the above
 whichRailwayTrade.checkYourAnswersLabel = Which railway trade do you work in?
-whichRailwayTrade.error.required = Select whichRailwayTrade
+whichRailwayTrade.error.required = Select railway trade you work in
 
 transportCarpenter.title = Are you a carpenter on a passenger liner?
 transportCarpenter.heading = Are you a carpenter on a passenger liner?
 transportCarpenter.checkYourAnswersLabel = Are you a carpenter on a passenger liner?
-transportCarpenter.error.required = Select yes if you are a carpenter on a passenger liner?
+transportCarpenter.error.required = Select yes if you are a carpenter on a passenger liner
+
+transportVehicleTrade.title = Which vehicle trade do you work in?
+transportVehicleTrade.heading = Which vehicle trade do you work in?
+transportVehicleTrade.builder = Builder
+transportVehicleTrade.vehicleRepairerWagonLifter = Railway vehicle repairer or railway wagon lifter
+transportVehicleTrade.railwayVehiclePainter = Railway vehicle painter
+transportVehicleTrade.letterer = Letterer
+transportVehicleTrade.buildersAssistantOrRepairersAssistant = Builder’s assistant or repairer’s assistant
+transportVehicleTrade.noneOfTheAbove = None of the above
+transportVehicleTrade.checkYourAnswersLabel = Which vehicle trade do you work in?
+transportVehicleTrade.error.required = Select which vehicle trade you work in
+
+factoryEngineeringApprentice.title = Are you an apprentice or storekeeper?
+factoryEngineeringApprentice.heading = Are you an apprentice or storekeeper?
+factoryEngineeringApprentice.checkYourAnswersLabel = Are you an apprentice or storekeeper?
+factoryEngineeringApprentice.error.required = Select yes if you are an apprentice or storekeeper
+
+typeOfManufacturing.title = What type of manufacturing do you work in?
+typeOfManufacturing.heading = What type of manufacturing do you work in?
+typeOfManufacturing.aluminium = Aluminium
+typeOfManufacturing.brassCopper = Brass and copper
+typeOfManufacturing.glass = Glass
+typeOfManufacturing.ironSteel = Iron and steel
+typeOfManufacturing.preciousMetals = Precious metals
+typeOfManufacturing.woodFurniture = Wood and furniture
+typeOfManufacturing.none = None of the above
+typeOfManufacturing.checkYourAnswersLabel = What type of manufacturing do you work in?
+typeOfManufacturing.error.required = Select what type of manufacturing you work in
+
+specialConstable.title = Are you a special constable?
+specialConstable.heading = Are you a special constable?
+specialConstable.checkYourAnswersLabel = Are you a special constable?
+specialConstable.error.required = Select yes if you are a special constable

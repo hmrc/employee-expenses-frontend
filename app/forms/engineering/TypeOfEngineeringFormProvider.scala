@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package viewmodels
+package forms.engineering
 
-case class RadioOption(id: String, value: String, messageKey: String)
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.TypeOfEngineering
+import play.api.data.Form
 
-object RadioOption {
-  def apply(keyPrefix: String, option: String): RadioOption = RadioOption(
-    s"$keyPrefix.$option",
-    option,
-    s"$keyPrefix.$option"
-  )
+class TypeOfEngineeringFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[TypeOfEngineering] =
+    Form(
+      "value" -> enumerable[TypeOfEngineering]("typeOfEngineering.error.required")
+    )
 }
