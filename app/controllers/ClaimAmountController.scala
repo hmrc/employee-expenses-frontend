@@ -54,8 +54,8 @@ class ClaimAmountController @Inject()(
           val claimAmount: Int = actualClaimAmount(request.userAnswers, amount)
           Ok(view(
             claimAmount = claimAmount,
-            band1 = taxCalculation(appConfig.band1, claimAmount),
-            band2 = taxCalculation(appConfig.band2, claimAmount),
+            band1 = taxCalculation(appConfig.taxPercentageBand1, claimAmount),
+            band2 = taxCalculation(appConfig.taxPercentageBand2, claimAmount),
             onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
           ))
         case _ =>

@@ -40,7 +40,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         actualClaimAmount mustBe 50
 
         claimAmountService.taxCalculation(
-          percentage = frontendAppConfig.band1,
+          percentage = frontendAppConfig.taxPercentageBand1,
           amount = actualClaimAmount
         ) mustBe "10.00"
       }
@@ -52,7 +52,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         actualClaimAmount mustBe 100
 
         claimAmountService.taxCalculation(
-          percentage = frontendAppConfig.band1,
+          percentage = frontendAppConfig.taxPercentageBand1,
           amount = actualClaimAmount
         ) mustBe "20.00"
       }
@@ -61,7 +61,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
     "band2" when {
       "return 40% of claim amount as a string" in {
         claimAmountService.taxCalculation(
-          percentage = frontendAppConfig.band2,
+          percentage = frontendAppConfig.taxPercentageBand2,
           amount = 180
         ) mustBe "72.00"
       }
