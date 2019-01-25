@@ -35,7 +35,7 @@ class IronSteelOccupationController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          @Named("Generic") navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: IronSteelOccupationFormProvider,
