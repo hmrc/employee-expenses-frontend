@@ -28,6 +28,9 @@ import pages.transport._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryIronSteelOccupationPage: Arbitrary[IronSteelOccupationPage.type] =
+    Arbitrary(IronSteelOccupationPage)
+
   implicit lazy val arbitraryAluminiumApprenticePage: Arbitrary[AluminiumApprenticePage.type] =
     Arbitrary(AluminiumApprenticePage)
 

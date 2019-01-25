@@ -291,3 +291,8 @@ aluminiumOccupationList1.occupation4 = Mould-man
 aluminiumOccupationList1.occupation5 = Pourer
 aluminiumOccupationList1.occupation6 = Remelt department labourer
 aluminiumOccupationList1.occupation7 = Roll flatteners
+
+ironSteelOccupation.title = ironSteelOccupation
+ironSteelOccupation.heading = ironSteelOccupation
+ironSteelOccupation.checkYourAnswersLabel = ironSteelOccupation
+ironSteelOccupation.error.required = Select yes if ironSteelOccupation
