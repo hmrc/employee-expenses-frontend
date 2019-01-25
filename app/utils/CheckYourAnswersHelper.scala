@@ -176,4 +176,9 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       controllers.police.routes.SpecialConstableController.onPageLoad(CheckMode).url)
   }
 
+  def policeOccupationList: Option[AnswerRow] = userAnswers.get(PoliceOccupationListPage) map {
+    x => AnswerRow("policeOccupationList.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.police.routes.PoliceOccupationListController.onPageLoad(CheckMode).url)
+  }
+
 }
