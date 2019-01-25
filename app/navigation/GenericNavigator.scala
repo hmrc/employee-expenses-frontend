@@ -48,6 +48,7 @@ class GenericNavigator @Inject()() extends Navigator {
     userAnswers.get(MultipleEmploymentsPage) match {
       case Some(true)  => ClaimByAlternativeController.onPageLoad()
       case Some(false) => FirstIndustryOptionsController.onPageLoad(mode)
+      case _           => SessionExpiredController.onPageLoad()
     }
 
   private def firstIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
