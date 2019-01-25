@@ -205,7 +205,7 @@ airlineJobList.occupation1 = Pilot
 airlineJobList.occupation2 = Co-pilot
 airlineJobList.occupation3 = Uniformed flight deck crew
 airlineJobList.checkYourAnswersLabel = Is your job title listed?
-airlineJobList.error.required = Select yes if your job title listed?
+airlineJobList.error.required = Select yes if your job title is listed
 
 garageHandOrCleaner.title = Are you a garage hand or cleaner?
 garageHandOrCleaner.heading = Are you a garage hand or cleaner?
@@ -304,3 +304,35 @@ ironSteelOccupation.occupation4 = Timekeeper
 ironSteelOccupation.occupation5 = Pourer
 ironSteelOccupation.occupation6 = Warehouse staff and weighmen
 
+
+policeOccupationList.title = Is your job title listed?
+policeOccupationList.heading = Is your job title listed?
+policeOccupationList.checkYourAnswersLabel = Is your job title listed?
+policeOccupationList.error.required = Select yes if your job title is listed
+policeOccupationList.occupation1 = Police officer (with a rank of up to and including Chief Inspector)
+policeOccupationList.occupation2 = Police community support officer
+
+aluminiumOccupationList2.title = Is your job title listed?
+aluminiumOccupationList2.heading = Is your job title listed?
+aluminiumOccupationList2.secondaryHeading = Aluminium occupation list 2
+aluminiumOccupationList2.checkYourAnswersLabel = Is your job title listed?
+aluminiumOccupationList2.error.required = Select yes if your job title is listed?
+aluminiumOccupationList2.occupation1 = Continual casting operator
+aluminiumOccupationList2.occupation2 = Process operator
+aluminiumOccupationList2.occupation3 = De-dimpler
+aluminiumOccupationList2.occupation4 = Drier
+aluminiumOccupationList2.occupation5 = Drill puncher
+aluminiumOccupationList2.occupation6 = Dross unloader
+
+
+ironSteelOccupationList.title = Is your job title listed?
+ironSteelOccupationList.heading = Is your job title listed?
+ironSteelOccupationList.secondaryHeading = Iron and steel occupation list
+ironSteelOccupationList.checkYourAnswersLabel = Is your job title listed?
+ironSteelOccupationList.error.required = Select yes if your job title is listed
+ironSteelOccupationList.occupation1 = Day labourer
+ironSteelOccupationList.occupation2 = General labourer
+ironSteelOccupationList.occupation3 = Stockman
+ironSteelOccupationList.occupation4 = Timekeeper
+ironSteelOccupationList.occupation5 = Pourer
+ironSteelOccupationList.occupation6 = Warehouse staff and weighmen

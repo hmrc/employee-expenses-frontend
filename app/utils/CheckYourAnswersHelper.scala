@@ -152,6 +152,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
 
   //Manufacturing
 
+  def aluminiumOccupationList2: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList2Page) map {
+    x => AnswerRow("aluminiumOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.manufacturing.routes.AluminiumOccupationList2Controller.onPageLoad(CheckMode).url)
+  }
+
+
   def typeOfManufacturing: Option[AnswerRow] = userAnswers.get(TypeOfManufacturingPage) map {
     x => AnswerRow("typeOfManufacturing.checkYourAnswersLabel", s"typeOfManufacturing.$x", true,
       controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(CheckMode).url)
@@ -167,11 +173,21 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       controllers.manufacturing.routes.AluminiumOccupationList1Controller.onPageLoad(CheckMode).url)
   }
 
+  def ironSteelOccupationList: Option[AnswerRow] = userAnswers.get(IronSteelOccupationListPage) map {
+    x => AnswerRow("ironSteelOccupationList.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.manufacturing.routes.IronSteelOccupationListController.onPageLoad(CheckMode).url)
+  }
+
   //Police
 
   def specialConstable: Option[AnswerRow] = userAnswers.get(SpecialConstablePage) map {
     x => AnswerRow("specialConstable.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.police.routes.SpecialConstableController.onPageLoad(CheckMode).url)
+  }
+
+  def policeOccupationList: Option[AnswerRow] = userAnswers.get(PoliceOccupationListPage) map {
+    x => AnswerRow("policeOccupationList.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.police.routes.PoliceOccupationListController.onPageLoad(CheckMode).url)
   }
 
 }
