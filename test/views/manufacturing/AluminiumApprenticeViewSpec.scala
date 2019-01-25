@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.manufacturing
 
-import controllers.routes
-import forms.AluminiumApprenticeFormProvider
+import controllers.manufacturing.routes
+import forms.manufacturing.AluminiumApprenticeFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.AluminiumApprenticeView
+import views.html.manufacturing.AluminiumApprenticeView
 
 class AluminiumApprenticeViewSpec extends YesNoViewBehaviours {
 

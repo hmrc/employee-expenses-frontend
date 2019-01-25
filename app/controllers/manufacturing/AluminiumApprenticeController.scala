@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.manufacturing
 
 import controllers.actions._
-import forms.AluminiumApprenticeFormProvider
+import forms.manufacturing.AluminiumApprenticeFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.AluminiumApprenticePage
+import pages.manufacturing.AluminiumApprenticePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.AluminiumApprenticeView
+import views.html.manufacturing.AluminiumApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +35,7 @@ class AluminiumApprenticeController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          @Named("Generic") navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: AluminiumApprenticeFormProvider,

@@ -22,7 +22,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages._
 import pages.healthcare._
 import pages.engineering._
-import pages.manufacturing.TypeOfManufacturingPage
+import pages.manufacturing.{AluminiumApprenticePage, TypeOfManufacturingPage}
 import pages.police.SpecialConstablePage
 import pages.transport._
 import play.api.libs.json.{JsValue, Json}
