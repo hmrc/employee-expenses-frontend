@@ -291,3 +291,8 @@ aluminiumOccupationList1.occupation4 = Mould-man
 aluminiumOccupationList1.occupation5 = Pourer
 aluminiumOccupationList1.occupation6 = Remelt department labourer
 aluminiumOccupationList1.occupation7 = Roll flatteners
+
+policeOccupationList.title = policeOccupationList
+policeOccupationList.heading = policeOccupationList
+policeOccupationList.checkYourAnswersLabel = policeOccupationList
+policeOccupationList.error.required = Select yes if policeOccupationList

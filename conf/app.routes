@@ -153,3 +153,8 @@ GET        /aluminium-occupation-list-1                     controllers.manufact
 POST       /aluminium-occupation-list-1                     controllers.manufacturing.AluminiumOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
 GET        /change-aluminium-occupation-list-1              controllers.manufacturing.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-aluminium-occupation-list-1              controllers.manufacturing.AluminiumOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /policeOccupationList                        controllers.PoliceOccupationListController.onPageLoad(mode: Mode = NormalMode)
+POST       /policeOccupationList                        controllers.PoliceOccupationListController.onSubmit(mode: Mode = NormalMode)
+GET        /changePoliceOccupationList                  controllers.PoliceOccupationListController.onPageLoad(mode: Mode = CheckMode)
+POST       /changePoliceOccupationList                  controllers.PoliceOccupationListController.onSubmit(mode: Mode = CheckMode)
