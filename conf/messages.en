@@ -336,3 +336,14 @@ ironSteelOccupationList.occupation3 = Stockman
 ironSteelOccupationList.occupation4 = Timekeeper
 ironSteelOccupationList.occupation5 = Pourer
 ironSteelOccupationList.occupation6 = Warehouse staff and weighmen
+
+woodFurnitureOccupationList1.title = Is your job title listed?
+woodFurnitureOccupationList1.heading = Is your job title listed?
+woodFurnitureOccupationList1.secondaryHeading = Wood and furniture occupation list 1
+woodFurnitureOccupationList1.checkYourAnswersLabel = Is your job title listed?
+woodFurnitureOccupationList1.error.required = Select yes if your job title is listed
+woodFurnitureOccupationList1.occupation1 = Carpenter
+woodFurnitureOccupationList1.occupation2 = Cabinetmaker
+woodFurnitureOccupationList1.occupation3 = Joiner
+woodFurnitureOccupationList1.occupation4 = Wood carver
+woodFurnitureOccupationList1.occupation5 = Woodcutting machinist
