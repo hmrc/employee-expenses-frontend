@@ -168,3 +168,8 @@ GET        /iron-steel-occupation-list                      controllers.manufact
 POST       /iron-steel-occupation-list                      controllers.manufacturing.IronSteelOccupationListController.onSubmit(mode: Mode = NormalMode)
 GET        /change-iron-steel-occupation-list               controllers.manufacturing.IronSteelOccupationListController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-iron-steel-occupation-list               controllers.manufacturing.IronSteelOccupationListController.onSubmit(mode: Mode = CheckMode)
+
+GET        /iron-steel-occupation                        controllers.manufacturing.IronSteelOccupationController.onPageLoad(mode: Mode = NormalMode)
+POST       /iron-steel-occupation                        controllers.manufacturing.IronSteelOccupationController.onSubmit(mode: Mode = NormalMode)
+GET        /change-iron-steel-occupation                  controllers.manufacturing.IronSteelOccupationController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-iron-steel-occupation                  controllers.manufacturing.IronSteelOccupationController.onSubmit(mode: Mode = CheckMode)
