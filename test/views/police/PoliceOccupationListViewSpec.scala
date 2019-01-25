@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.police
 
-import controllers.routes
-import forms.PoliceOccupationListFormProvider
+import controllers.police.routes
+import forms.police.PoliceOccupationListFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.PoliceOccupationListView
+import views.html.police.PoliceOccupationListView
 
 class PoliceOccupationListViewSpec extends YesNoViewBehaviours {
 

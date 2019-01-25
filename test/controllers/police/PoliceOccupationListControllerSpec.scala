@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.police
 
 import base.SpecBase
-import forms.PoliceOccupationListFormProvider
+import forms.police.PoliceOccupationListFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.PoliceOccupationListPage
+import pages.police.PoliceOccupationListPage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.PoliceOccupationListView
+import views.html.police.PoliceOccupationListView
 
 class PoliceOccupationListControllerSpec extends SpecBase {
 
@@ -35,7 +34,7 @@ class PoliceOccupationListControllerSpec extends SpecBase {
   val formProvider = new PoliceOccupationListFormProvider()
   val form = formProvider()
 
-  lazy val policeOccupationListRoute = routes.PoliceOccupationListController.onPageLoad(NormalMode).url
+  lazy val policeOccupationListRoute: String = routes.PoliceOccupationListController.onPageLoad(NormalMode).url
 
   "PoliceOccupationList Controller" must {
 
@@ -129,7 +128,7 @@ class PoliceOccupationListControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class PoliceOccupationListControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
