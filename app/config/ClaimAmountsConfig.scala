@@ -38,7 +38,7 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
   }
 
   object AncillaryEngineering {
-    lazy val patternMaker: Int = configuration.get[Int]("claim-amounts.engineering.ancillary-engineering.pattern-make")
+    lazy val patternMaker: Int = configuration.get[Int]("claim-amounts.engineering.ancillary-engineering.pattern-maker")
     lazy val labourerSupervisorUnskilledWorker: Int =
       configuration.get[Int]("claim-amounts.engineering.ancillary-engineering.labourer-supervisor-unskilledWorker")
     lazy val apprentice: Int = configuration.get[Int]("claim-amounts.engineering.ancillary-engineering.apprentice")
