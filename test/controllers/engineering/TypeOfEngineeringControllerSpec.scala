@@ -96,6 +96,26 @@ class TypeOfEngineeringControllerSpec extends SpecBase {
       application.stop()
     }
 
+    "redirect to the next page when answer is NoneOfTheAbove" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
+          .build()
+
+      val request =
+        FakeRequest(POST, typeOfEngineeringRoute)
+          .withFormUrlEncodedBody(("value", TypeOfEngineering.NoneOfTheAbove.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
+
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()

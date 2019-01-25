@@ -16,11 +16,13 @@
 
 package controllers.engineering
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.engineering.AncillaryEngineeringWhichTradeFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, Mode}
+import models.{AncillaryEngineeringWhichTrade, Enumerable, Mode}
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.engineering.AncillaryEngineeringWhichTradePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class AncillaryEngineeringWhichTradeController @Inject()(
                                        requireData: DataRequiredAction,
                                        formProvider: AncillaryEngineeringWhichTradeFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: AncillaryEngineeringWhichTradeView
+                                       view: AncillaryEngineeringWhichTradeView,
+                                       claimAmounts: ClaimAmountsConfig
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -66,6 +69,13 @@ class AncillaryEngineeringWhichTradeController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AncillaryEngineeringWhichTradePage, value))
+            amount: Int = value match {
+              case AncillaryEngineeringWhichTrade.PatternMaker => claimAmounts.AncillaryEngineering.patternMaker
+              case AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker => claimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
+              case AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper => claimAmounts.AncillaryEngineering.apprentice
+              case AncillaryEngineeringWhichTrade.NoneOfTheAbove => claimAmounts.AncillaryEngineering.allOther
+            }
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(updatedAnswers))
         }
