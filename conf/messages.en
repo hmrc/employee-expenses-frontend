@@ -274,6 +274,11 @@ specialConstable.error.required = Select yes if you are a special constable
 claimByPostOrOnline.title = You can claim tax relief for these expenses by post or using an online form
 claimByPostOrOnline.heading = You can claim tax relief for these expenses by post or using an online form
 
+aluminiumApprentice.title = Are you an apprentice?
+aluminiumApprentice.heading = Are you an apprentice?
+aluminiumApprentice.checkYourAnswersLabel = Are you an apprentice?
+aluminiumApprentice.error.required = Select yes if you are an apprentice
+
 aluminiumOccupationList1.title = Is your job title listed?
 aluminiumOccupationList1.heading = Is your job title listed?
 aluminiumOccupationList1.secondaryHeading = Aluminium occupation list 1

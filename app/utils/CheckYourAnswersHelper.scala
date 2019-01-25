@@ -153,6 +153,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(CheckMode).url)
   }
 
+  def aluminiumApprentice: Option[AnswerRow] = userAnswers.get(AluminiumApprenticePage) map {
+    x => AnswerRow("aluminiumApprentice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.manufacturing.routes.AluminiumApprenticeController.onPageLoad(CheckMode).url)
+  }
+
   def aluminiumOccupationList1: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList1Page) map {
     x => AnswerRow("aluminiumOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.manufacturing.routes.AluminiumOccupationList1Controller.onPageLoad(CheckMode).url)
