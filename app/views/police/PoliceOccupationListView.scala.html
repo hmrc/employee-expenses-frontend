@@ -36,10 +36,18 @@
 
         @components.heading("policeOccupationList.heading")
 
+        @components.list(
+            pageKey = Some("policeOccupationList"),
+            bulletList = Seq(
+                "occupation1",
+                "occupation2"
+            )
+        )
+
         @components.input_yes_no(
-            field = form("value"),
-            label = messages("policeOccupationList.heading"),
-            labelClass = Some("visually-hidden")
+        field = form("value"),
+        label = messages("policeOccupationList.heading"),
+        labelClass = Some("visually-hidden")
         )
 
         @components.submit_button()

@@ -292,7 +292,9 @@ aluminiumOccupationList1.occupation5 = Pourer
 aluminiumOccupationList1.occupation6 = Remelt department labourer
 aluminiumOccupationList1.occupation7 = Roll flatteners
 
-policeOccupationList.title = policeOccupationList
-policeOccupationList.heading = policeOccupationList
-policeOccupationList.checkYourAnswersLabel = policeOccupationList
-policeOccupationList.error.required = Select yes if policeOccupationList
+policeOccupationList.title = Is your job title listed?
+policeOccupationList.heading = Is your job title listed?
+policeOccupationList.checkYourAnswersLabel = Is your job title listed?
+policeOccupationList.error.required = Select yes if your job title is listed
+policeOccupationList.occupation1 = Police officer (with a rank of up to and including Chief Inspector)
+policeOccupationList.occupation2 = Police community support officer

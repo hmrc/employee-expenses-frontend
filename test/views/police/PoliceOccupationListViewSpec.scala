@@ -44,6 +44,13 @@ class PoliceOccupationListViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(form, applyView, messageKeyPrefix, routes.PoliceOccupationListController.onSubmit(NormalMode).url)
+
+    behave like pageWithList(applyView(form), messageKeyPrefix,
+      Seq(
+        "occupation1",
+        "occupation2"
+      )
+    )
   }
 
   application.stop()
