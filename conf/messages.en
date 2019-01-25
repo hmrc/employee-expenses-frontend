@@ -291,3 +291,23 @@ aluminiumOccupationList1.occupation4 = Mould-man
 aluminiumOccupationList1.occupation5 = Pourer
 aluminiumOccupationList1.occupation6 = Remelt department labourer
 aluminiumOccupationList1.occupation7 = Roll flatteners
+
+policeOccupationList.title = Is your job title listed?
+policeOccupationList.heading = Is your job title listed?
+policeOccupationList.checkYourAnswersLabel = Is your job title listed?
+policeOccupationList.error.required = Select yes if your job title is listed
+policeOccupationList.occupation1 = Police officer (with a rank of up to and including Chief Inspector)
+policeOccupationList.occupation2 = Police community support officer
+
+aluminiumOccupationList2.title = Is your job title listed?
+aluminiumOccupationList2.heading = Is your job title listed?
+aluminiumOccupationList2.secondaryHeading = Aluminium occupation list 2
+aluminiumOccupationList2.checkYourAnswersLabel = Is your job title listed?
+aluminiumOccupationList2.error.required = Select yes if your job title is listed?
+aluminiumOccupationList2.occupation1 = Continual casting operator
+aluminiumOccupationList2.occupation2 = Process operator
+aluminiumOccupationList2.occupation3 = De-dimpler
+aluminiumOccupationList2.occupation4 = Drier
+aluminiumOccupationList2.occupation5 = Drill puncher
+aluminiumOccupationList2.occupation6 = Dross unloader
+
