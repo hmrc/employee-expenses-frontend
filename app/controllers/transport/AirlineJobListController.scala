@@ -16,11 +16,13 @@
 
 package controllers.transport
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.transport.AirlineJobListFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.transport.AirlineJobListPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,8 +42,9 @@ class AirlineJobListController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: AirlineJobListFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: AirlineJobListView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                         view: AirlineJobListView,
+                                         claimAmounts: ClaimAmountsConfig
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -56,7 +59,7 @@ class AirlineJobListController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -66,8 +69,13 @@ class AirlineJobListController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AirlineJobListPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AirlineJobListPage, mode)(updatedAnswers))
+            newAnswers     <- if (value) {
+                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Transport.pilotsFlightDeck))
+                              } else {
+                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Transport.cabinCrew))
+                              }
+            _              <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(AirlineJobListPage, mode)(newAnswers))
         }
       )
   }
