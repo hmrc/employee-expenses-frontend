@@ -323,3 +323,8 @@ ironSteelOccupationList.occupation3 = Stockman
 ironSteelOccupationList.occupation4 = Timekeeper
 ironSteelOccupationList.occupation5 = Pourer
 ironSteelOccupationList.occupation6 = Warehouse staff and weighmen
+
+woodFurnitureOccupationList1.title = woodFurnitureOccupationList1
+woodFurnitureOccupationList1.heading = woodFurnitureOccupationList1
+woodFurnitureOccupationList1.checkYourAnswersLabel = woodFurnitureOccupationList1
+woodFurnitureOccupationList1.error.required = Select yes if woodFurnitureOccupationList1
