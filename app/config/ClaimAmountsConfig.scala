@@ -36,7 +36,7 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
     lazy val list1: Int = configuration.get[Int]("claim-amounts.engineering.constructional-engineering.list-1")
     lazy val list2: Int = configuration.get[Int]("claim-amounts.engineering.constructional-engineering.list-2")
     lazy val apprentice: Int = configuration.get[Int]("claim-amounts.engineering.constructional-engineering.apprentice")
-    lazy val allOther: Int = configuration.get[Int]("claim-amounts.constructional-engineering.all-other")
+    lazy val allOther: Int = configuration.get[Int]("claim-amounts.engineering.constructional-engineering.all-other")
   }
 
   object AncillaryEngineering {

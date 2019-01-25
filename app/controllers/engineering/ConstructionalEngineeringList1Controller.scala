@@ -69,12 +69,13 @@ class ConstructionalEngineeringList1Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionalEngineeringList1Page, value))
-            _              <- if (value) {
+            newAnswers     <- if (value) {
                                 Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.ConstructionalEngineering.list1))
                               } else {
                                 Future.successful(updatedAnswers)
                               }
-          } yield Redirect(navigator.nextPage(ConstructionalEngineeringList1Page, mode)(updatedAnswers))
+            _ <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(ConstructionalEngineeringList1Page, mode)(newAnswers))
         }
       )
   }

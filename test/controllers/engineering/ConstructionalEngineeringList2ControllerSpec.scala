@@ -76,7 +76,7 @@ class ConstructionalEngineeringList2ControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to the next page when answer is true" in {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -86,6 +86,26 @@ class ConstructionalEngineeringList2ControllerSpec extends SpecBase {
       val request =
         FakeRequest(POST, constructionalEngineeringList2Route)
           .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
+
+    "redirect to the next page when answer is false" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
+          .build()
+
+      val request =
+        FakeRequest(POST, constructionalEngineeringList2Route)
+          .withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
 

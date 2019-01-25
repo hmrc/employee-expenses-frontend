@@ -69,11 +69,12 @@ class TypeOfEngineeringController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfEngineeringPage, value))
-            _              <- value match {
+            newAnswers     <- value match {
                                 case TypeOfEngineering.NoneOfTheAbove => Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.defaultRate))
                                 case _ => Future.successful(updatedAnswers)
                                }
-          } yield Redirect(navigator.nextPage(TypeOfEngineeringPage, mode)(updatedAnswers))
+            _ <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(TypeOfEngineeringPage, mode)(newAnswers))
         }
       )
   }

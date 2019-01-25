@@ -76,7 +76,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to the next page when answer is true" in {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -95,6 +95,27 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase {
 
       application.stop()
     }
+
+    "redirect to the next page when answer is false" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
+          .build()
+
+      val request =
+        FakeRequest(POST, factoryEngineeringApprenticeRoute)
+          .withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
+
 
     "return a Bad Request and errors when invalid data is submitted" in {
 

@@ -69,12 +69,13 @@ class FactoryEngineeringList2Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FactoryEngineeringList2Page, value))
-            _              <- if (value) {
+            newAnswers     <- if (value) {
                                 Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.FactoryEngineering.list2))
                               } else {
                                 Future.successful(updatedAnswers)
                               }
-          } yield Redirect(navigator.nextPage(FactoryEngineeringList2Page, mode)(updatedAnswers))
+            _ <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(FactoryEngineeringList2Page, mode)(newAnswers))
         }
       )
   }
