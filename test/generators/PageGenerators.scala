@@ -20,8 +20,6 @@ import org.scalacheck.Arbitrary
 import pages._
 import pages.healthcare._
 import pages.engineering._
-import pages.manufacturing.{AluminiumApprenticePage, TypeOfManufacturingPage}
-import pages.police.SpecialConstablePage
 import pages.manufacturing._
 import pages.police._
 import pages.transport._
@@ -33,6 +31,9 @@ trait PageGenerators {
 
   implicit lazy val arbitraryAluminiumApprenticePage: Arbitrary[AluminiumApprenticePage.type] =
     Arbitrary(AluminiumApprenticePage)
+
+  implicit lazy val arbitraryAluminiumOccupationList2Page: Arbitrary[AluminiumOccupationList2Page.type] =
+    Arbitrary(AluminiumOccupationList2Page)
 
   implicit lazy val arbitrarySpecialConstablePage: Arbitrary[SpecialConstablePage.type] =
     Arbitrary(SpecialConstablePage)
