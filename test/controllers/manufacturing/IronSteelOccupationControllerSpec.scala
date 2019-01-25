@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.manufacturing
 
 import base.SpecBase
-import forms.IronSteelOccupationFormProvider
+import forms.manufacturing.IronSteelOccupationFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.IronSteelOccupationPage
+import pages.manufacturing.IronSteelOccupationPage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.IronSteelOccupationView
+import views.html.manufacturing.IronSteelOccupationView
 
 class IronSteelOccupationControllerSpec extends SpecBase {
 
@@ -129,7 +128,7 @@ class IronSteelOccupationControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class IronSteelOccupationControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

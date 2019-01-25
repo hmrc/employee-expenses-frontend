@@ -1,7 +1,7 @@
 package views
 
 import controllers.routes
-import forms.IronSteelOccupationFormProvider
+import forms.manufacturing.IronSteelOccupationFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

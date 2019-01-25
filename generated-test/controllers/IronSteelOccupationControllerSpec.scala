@@ -1,10 +1,10 @@
 package controllers
 
 import base.SpecBase
-import forms.IronSteelOccupationFormProvider
+import forms.manufacturing.IronSteelOccupationFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.IronSteelOccupationPage
+import pages.manufacturing.IronSteelOccupationPage
 import play.api.inject.bind
 import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call

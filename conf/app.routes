@@ -154,7 +154,7 @@ POST       /aluminium-occupation-list-1                     controllers.manufact
 GET        /change-aluminium-occupation-list-1              controllers.manufacturing.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-aluminium-occupation-list-1              controllers.manufacturing.AluminiumOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
 
-GET        /ironSteelOccupation                        controllers.IronSteelOccupationController.onPageLoad(mode: Mode = NormalMode)
-POST       /ironSteelOccupation                        controllers.IronSteelOccupationController.onSubmit(mode: Mode = NormalMode)
-GET        /changeIronSteelOccupation                  controllers.IronSteelOccupationController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeIronSteelOccupation                  controllers.IronSteelOccupationController.onSubmit(mode: Mode = CheckMode)
+GET        /ironSteelOccupation                        controllers.manufacturing.IronSteelOccupationController.onPageLoad(mode: Mode = NormalMode)
+POST       /ironSteelOccupation                        controllers.manufacturing.IronSteelOccupationController.onSubmit(mode: Mode = NormalMode)
+GET        /changeIronSteelOccupation                  controllers.manufacturing.IronSteelOccupationController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeIronSteelOccupation                  controllers.manufacturing.IronSteelOccupationController.onSubmit(mode: Mode = CheckMode)

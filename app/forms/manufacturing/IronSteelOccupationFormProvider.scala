@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.manufacturing
 
-import pages.behaviours.PageBehaviours
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class IronSteelOccupationPageSpec extends PageBehaviours {
+class IronSteelOccupationFormProvider @Inject() extends Mappings {
 
-  "IronSteelOccupationPage" must {
-
-    beRetrievable[Boolean](IronSteelOccupationPage)
-
-    beSettable[Boolean](IronSteelOccupationPage)
-
-    beRemovable[Boolean](IronSteelOccupationPage)
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("ironSteelOccupation.error.required")
+    )
 }

@@ -1,6 +1,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.manufacturing.IronSteelOccupationFormProvider
 import play.api.data.FormError
 
 class IronSteelOccupationFormProviderSpec extends BooleanFieldBehaviours {

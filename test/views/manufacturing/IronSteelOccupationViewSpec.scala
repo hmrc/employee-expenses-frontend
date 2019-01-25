@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.manufacturing
 
-import controllers.routes
-import forms.IronSteelOccupationFormProvider
+import controllers.manufacturing.routes
+import forms.manufacturing.IronSteelOccupationFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.IronSteelOccupationView
+import views.html.manufacturing.IronSteelOccupationView
 
 class IronSteelOccupationViewSpec extends YesNoViewBehaviours {
 
