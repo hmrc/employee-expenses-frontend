@@ -205,7 +205,7 @@ airlineJobList.occupation1 = Pilot
 airlineJobList.occupation2 = Co-pilot
 airlineJobList.occupation3 = Uniformed flight deck crew
 airlineJobList.checkYourAnswersLabel = Is your job title listed?
-airlineJobList.error.required = Select yes if your job title listed?
+airlineJobList.error.required = Select yes if your job title is listed
 
 garageHandOrCleaner.title = Are you a garage hand or cleaner?
 garageHandOrCleaner.heading = Are you a garage hand or cleaner?
@@ -311,3 +311,15 @@ aluminiumOccupationList2.occupation4 = Drier
 aluminiumOccupationList2.occupation5 = Drill puncher
 aluminiumOccupationList2.occupation6 = Dross unloader
 
+
+ironSteelOccupationList.title = Is your job title listed?
+ironSteelOccupationList.heading = Is your job title listed?
+ironSteelOccupationList.secondaryHeading = Iron and steel occupation list
+ironSteelOccupationList.checkYourAnswersLabel = Is your job title listed?
+ironSteelOccupationList.error.required = Select yes if your job title is listed
+ironSteelOccupationList.occupation1 = Day labourer
+ironSteelOccupationList.occupation2 = General labourer
+ironSteelOccupationList.occupation3 = Stockman
+ironSteelOccupationList.occupation4 = Timekeeper
+ironSteelOccupationList.occupation5 = Pourer
+ironSteelOccupationList.occupation6 = Warehouse staff and weighmen
