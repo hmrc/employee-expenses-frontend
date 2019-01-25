@@ -278,3 +278,16 @@ aluminiumApprentice.title = Are you an apprentice?
 aluminiumApprentice.heading = Are you an apprentice?
 aluminiumApprentice.checkYourAnswersLabel = Are you an apprentice?
 aluminiumApprentice.error.required = Select yes if you are an apprentice
+
+aluminiumOccupationList1.title = Is your job title listed?
+aluminiumOccupationList1.heading = Is your job title listed?
+aluminiumOccupationList1.secondaryHeading = Aluminium occupation list 1
+aluminiumOccupationList1.checkYourAnswersLabel = Is your job title listed?
+aluminiumOccupationList1.error.required = Select yes if your job title is listed?
+aluminiumOccupationList1.occupation1 = Fireman (engaged to light and maintain furnaces)
+aluminiumOccupationList1.occupation2 = Furnace operator or their helper
+aluminiumOccupationList1.occupation3 = Leader
+aluminiumOccupationList1.occupation4 = Mould-man
+aluminiumOccupationList1.occupation5 = Pourer
+aluminiumOccupationList1.occupation6 = Remelt department labourer
+aluminiumOccupationList1.occupation7 = Roll flatteners

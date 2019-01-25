@@ -22,14 +22,12 @@ import pages._
 import pages.engineering._
 import pages.healthcare._
 import pages.manufacturing._
-import pages.police.SpecialConstablePage
+import pages.police._
 import pages.transport._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
-
-
 
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
     x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
@@ -158,6 +156,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def aluminiumApprentice: Option[AnswerRow] = userAnswers.get(AluminiumApprenticePage) map {
     x => AnswerRow("aluminiumApprentice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.manufacturing.routes.AluminiumApprenticeController.onPageLoad(CheckMode).url)
+  }
+
+  def aluminiumOccupationList1: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList1Page) map {
+    x => AnswerRow("aluminiumOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.manufacturing.routes.AluminiumOccupationList1Controller.onPageLoad(CheckMode).url)
   }
 
   //Police
