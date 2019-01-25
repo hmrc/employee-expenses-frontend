@@ -16,11 +16,13 @@
 
 package controllers.engineering
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.engineering.ConstructionalEngineeringList2FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.engineering.ConstructionalEngineeringList2Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class ConstructionalEngineeringList2Controller @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: ConstructionalEngineeringList2FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: ConstructionalEngineeringList2View
+                                         view: ConstructionalEngineeringList2View,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -56,7 +59,7 @@ class ConstructionalEngineeringList2Controller @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -66,7 +69,11 @@ class ConstructionalEngineeringList2Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionalEngineeringList2Page, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            _              <- if (value) {
+                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.ConstructionalEngineering.list2))
+                              } else {
+                                Future.successful(updatedAnswers)
+                              }
           } yield Redirect(navigator.nextPage(ConstructionalEngineeringList2Page, mode)(updatedAnswers))
         }
       )
