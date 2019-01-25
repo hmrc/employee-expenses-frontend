@@ -76,7 +76,7 @@ class AncillaryEngineeringWhichTradeController @Inject()(
               case AncillaryEngineeringWhichTrade.NoneOfTheAbove => claimAmounts.AncillaryEngineering.allOther
             }
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(updatedAnswers)
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(updatedAnswers))
         }
       )

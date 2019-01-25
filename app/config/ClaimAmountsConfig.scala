@@ -23,6 +23,8 @@ import play.api.Configuration
 @Singleton
 class ClaimAmountsConfig @Inject() (configuration: Configuration) {
 
+  lazy val defaultRate: Int = configuration.get[Int]("claim-amounts.default-rate")
+
   object Healthcare {
     lazy val ambulanceStaff: Int = configuration.get[Int]("claim-amounts.healthcare.ambulance-staff")
     lazy val list1: Int = configuration.get[Int]("claim-amounts.healthcare.list-1")

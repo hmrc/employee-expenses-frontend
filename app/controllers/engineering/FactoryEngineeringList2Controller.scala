@@ -16,11 +16,13 @@
 
 package controllers.engineering
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.engineering.FactoryEngineeringList2FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.engineering.FactoryEngineeringList2Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class FactoryEngineeringList2Controller @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: FactoryEngineeringList2FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: FactoryEngineeringList2View
+                                         view: FactoryEngineeringList2View,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,7 +69,11 @@ class FactoryEngineeringList2Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FactoryEngineeringList2Page, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            _              <- if (value) {
+                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.FactoryEngineering.list2))
+                              } else {
+                                Future.successful(updatedAnswers)
+                              }
           } yield Redirect(navigator.nextPage(FactoryEngineeringList2Page, mode)(updatedAnswers))
         }
       )
