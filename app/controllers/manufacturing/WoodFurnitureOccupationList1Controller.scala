@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.manufacturing
 
 import controllers.actions._
-import forms.WoodFurnitureOccupationList1FormProvider
+import forms.manufacturing.WoodFurnitureOccupationList1FormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.WoodFurnitureOccupationList1Page
+import pages.manufacturing.WoodFurnitureOccupationList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.WoodFurnitureOccupationList1View
+import views.html.manufacturing.WoodFurnitureOccupationList1View
 
 import scala.concurrent.{ExecutionContext, Future}
 

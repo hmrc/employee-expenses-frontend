@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.manufacturing.WoodFurnitureOccupationList1FormProvider
 import play.api.data.FormError
 
 class WoodFurnitureOccupationList1FormProviderSpec extends BooleanFieldBehaviours {

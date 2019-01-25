@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package pages
+package pages.manufacturing
 
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
 case object WoodFurnitureOccupationList1Page extends QuestionPage[Boolean] {
