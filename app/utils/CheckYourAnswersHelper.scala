@@ -158,7 +158,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       AluminiumOccupationList2Controller.onPageLoad(CheckMode).url)
   }
 
-
   def typeOfManufacturing: Option[AnswerRow] = userAnswers.get(TypeOfManufacturingPage) map {
     x => AnswerRow("typeOfManufacturing.checkYourAnswersLabel", s"typeOfManufacturing.$x", true,
       TypeOfManufacturingController.onPageLoad(CheckMode).url)
@@ -192,6 +191,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def woodFurnitureOccupationList1: Option[AnswerRow] = userAnswers.get(WoodFurnitureOccupationList1Page) map {
     x => AnswerRow("woodFurnitureOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       WoodFurnitureOccupationList1Controller.onPageLoad(CheckMode).url)
+  }
+
+  def woodFurnitureOccupationList3: Option[AnswerRow] = userAnswers.get(WoodFurnitureOccupationList3Page) map {
+    x => AnswerRow("woodFurnitureOccupationList3.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      WoodFurnitureOccupationList3Controller.onPageLoad(CheckMode).url)
   }
 
   //Police

@@ -37,6 +37,14 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
+  implicit lazy val arbitraryWoodFurnitureOccupationList3UserAnswersEntry: Arbitrary[(WoodFurnitureOccupationList3Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[WoodFurnitureOccupationList3Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
   implicit lazy val arbitraryWoodFurnitureOccupationList1UserAnswersEntry: Arbitrary[(WoodFurnitureOccupationList1Page.type, JsValue)] =
     Arbitrary {
       for {
