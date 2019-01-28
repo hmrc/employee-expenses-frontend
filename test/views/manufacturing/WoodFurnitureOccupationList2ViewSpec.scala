@@ -16,24 +16,24 @@
 
 package views.manufacturing
 
-import forms.manufacturing.WoodFurnitureOccupationList1FormProvider
+import forms.WoodFurnitureOccupationList2FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.manufacturing.WoodFurnitureOccupationList1View
+import views.html.manufacturing.WoodFurnitureOccupationList2View
 
-class WoodFurnitureOccupationList1ViewSpec extends YesNoViewBehaviours {
+class WoodFurnitureOccupationList2ViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "woodFurnitureOccupationList1"
+  val messageKeyPrefix = "woodFurnitureOccupationList2"
 
-  val form = new WoodFurnitureOccupationList1FormProvider()()
+  val form = new WoodFurnitureOccupationList2FormProvider()()
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "WoodFurnitureOccupationList1 view" must {
+  "WoodFurnitureOccupationList2 view" must {
 
-    val view = application.injector.instanceOf[WoodFurnitureOccupationList1View]
+    val view = application.injector.instanceOf[WoodFurnitureOccupationList2View]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -42,17 +42,18 @@ class WoodFurnitureOccupationList1ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, controllers.manufacturing.routes.WoodFurnitureOccupationList1Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, controllers.manufacturing.routes.WoodFurnitureOccupationList2Controller.onSubmit(NormalMode).url)
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
         "occupation1",
         "occupation2",
-        "occupation3",
-        "occupation4",
-        "occupation5"
+        "occupation3"
       )
     )
+    
+    behave like pageWithSecondaryHeader(applyView(form), messages(s"$messageKeyPrefix.secondaryHeading"))
+
   }
 
   application.stop()
