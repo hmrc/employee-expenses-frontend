@@ -19,12 +19,12 @@ package forms.manufacturing
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class AluminiumApprenticeFormProviderSpec extends BooleanFieldBehaviours {
+class ManufacturingApprenticeFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "aluminiumApprentice.error.required"
+  val requiredKey = "manufacturingApprentice.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new AluminiumApprenticeFormProvider()()
+  val form = new ManufacturingApprenticeFormProvider()()
 
   ".value" must {
 

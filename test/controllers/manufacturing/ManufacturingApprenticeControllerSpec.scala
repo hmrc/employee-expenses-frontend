@@ -17,36 +17,36 @@
 package controllers.manufacturing
 
 import base.SpecBase
-import forms.manufacturing.AluminiumApprenticeFormProvider
+import forms.manufacturing.ManufacturingApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.manufacturing.AluminiumApprenticePage
+import pages.manufacturing.ManufacturingApprenticePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.manufacturing.AluminiumApprenticeView
+import views.html.manufacturing.ManufacturingApprenticeView
 
-class AluminiumApprenticeControllerSpec extends SpecBase {
+class ManufacturingApprenticeControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AluminiumApprenticeFormProvider()
+  val formProvider = new ManufacturingApprenticeFormProvider()
   val form = formProvider()
 
-  lazy val aluminiumApprenticeRoute = routes.AluminiumApprenticeController.onPageLoad(NormalMode).url
+  lazy val manufacturingApprenticeRoute = routes.ManufacturingApprenticeController.onPageLoad(NormalMode).url
 
-  "AluminiumApprentice Controller" must {
+  "ManufacturingApprentice Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, aluminiumApprenticeRoute)
+      val request = FakeRequest(GET, manufacturingApprenticeRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[AluminiumApprenticeView]
+      val view = application.injector.instanceOf[ManufacturingApprenticeView]
 
       status(result) mustEqual OK
 
@@ -58,13 +58,13 @@ class AluminiumApprenticeControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(AluminiumApprenticePage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(ManufacturingApprenticePage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, aluminiumApprenticeRoute)
+      val request = FakeRequest(GET, manufacturingApprenticeRoute)
 
-      val view = application.injector.instanceOf[AluminiumApprenticeView]
+      val view = application.injector.instanceOf[ManufacturingApprenticeView]
 
       val result = route(application, request).value
 
@@ -84,7 +84,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase {
           .build()
 
       val request =
-        FakeRequest(POST, aluminiumApprenticeRoute)
+        FakeRequest(POST, manufacturingApprenticeRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -101,12 +101,12 @@ class AluminiumApprenticeControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, aluminiumApprenticeRoute)
+        FakeRequest(POST, manufacturingApprenticeRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[AluminiumApprenticeView]
+      val view = application.injector.instanceOf[ManufacturingApprenticeView]
 
       val result = route(application, request).value
 
@@ -122,7 +122,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, aluminiumApprenticeRoute)
+      val request = FakeRequest(GET, manufacturingApprenticeRoute)
 
       val result = route(application, request).value
 
@@ -138,7 +138,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, aluminiumApprenticeRoute)
+        FakeRequest(POST, manufacturingApprenticeRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value

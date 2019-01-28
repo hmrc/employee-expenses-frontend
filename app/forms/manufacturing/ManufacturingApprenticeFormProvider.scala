@@ -20,10 +20,10 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 
-class AluminiumApprenticeFormProvider @Inject() extends Mappings {
+class ManufacturingApprenticeFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("aluminiumApprentice.error.required")
+      "value" -> boolean("manufacturingApprentice.error.required")
     )
 }

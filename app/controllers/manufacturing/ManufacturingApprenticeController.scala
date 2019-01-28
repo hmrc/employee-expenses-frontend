@@ -17,30 +17,30 @@
 package controllers.manufacturing
 
 import controllers.actions._
-import forms.manufacturing.AluminiumApprenticeFormProvider
+import forms.manufacturing.ManufacturingApprenticeFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
-import pages.manufacturing.AluminiumApprenticePage
+import pages.manufacturing.ManufacturingApprenticePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.manufacturing.AluminiumApprenticeView
+import views.html.manufacturing.ManufacturingApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AluminiumApprenticeController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Manufacturing") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: AluminiumApprenticeFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: AluminiumApprenticeView
+class ManufacturingApprenticeController @Inject()(
+                                                   override val messagesApi: MessagesApi,
+                                                   sessionRepository: SessionRepository,
+                                                   @Named("Manufacturing") navigator: Navigator,
+                                                   identify: UnauthenticatedIdentifierAction,
+                                                   getData: DataRetrievalAction,
+                                                   requireData: DataRequiredAction,
+                                                   formProvider: ManufacturingApprenticeFormProvider,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   view: ManufacturingApprenticeView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -48,7 +48,7 @@ class AluminiumApprenticeController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(AluminiumApprenticePage) match {
+      val preparedForm = request.userAnswers.get(ManufacturingApprenticePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,9 +65,9 @@ class AluminiumApprenticeController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AluminiumApprenticePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ManufacturingApprenticePage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AluminiumApprenticePage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(ManufacturingApprenticePage, mode)(updatedAnswers))
         }
       )
   }

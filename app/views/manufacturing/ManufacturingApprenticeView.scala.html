@@ -25,20 +25,20 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("aluminiumApprentice.title")}"
+    title = s"${errorPrefix(form)} ${messages("manufacturingApprentice.title")}"
     ) {
 
-    @formHelper(action = AluminiumApprenticeController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = ManufacturingApprenticeController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading("aluminiumApprentice.heading")
+        @components.heading("manufacturingApprentice.heading")
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("aluminiumApprentice.heading"),
+            label = messages("manufacturingApprentice.heading"),
             labelClass = Some("visually-hidden")
         )
 
