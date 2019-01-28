@@ -25,20 +25,28 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.IndexView
 
+import scala.concurrent.{ExecutionContext, Future}
+
 class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  view: IndexView,
                                  identify: UnauthenticatedIdentifierAction,
                                  getData: DataRetrievalAction,
                                  sessionRepository: SessionRepository
-                               ) extends FrontendBaseController with I18nSupport {
+                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData) {
-    implicit request => {
-      if (request.userAnswers.isEmpty) {
-        sessionRepository.set(UserAnswers(request.mongoKey))
+  def onPageLoad: Action[AnyContent] = (identify andThen getData).async {
+    implicit request =>
+
+      val updateSession = if (request.userAnswers.isEmpty) {
+        sessionRepository.set(UserAnswers(request.mongoKey)).map(_ => ())
+      } else {
+        Future.successful(())
       }
-    }
-      Ok(view())
+
+      updateSession.map {
+        _ =>
+          Ok(view())
+      }
   }
 }
