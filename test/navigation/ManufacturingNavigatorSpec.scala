@@ -78,6 +78,66 @@ class ManufacturingNavigatorSpec extends SpecBase {
             controllers.routes.SessionExpiredController.onPageLoad()
         }
       }
+
+      "in Aluminium journey" must {
+        "go to EmployerContributionController from AluminiumOccupatinoList1 when 'Yes' is selected" in {
+          val answers = emptyUserAnswers.set(AluminiumOccupationList1Page, true).success.value
+          navigator.nextPage(AluminiumOccupationList1Page, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to AluminiumOccupationList2 from AluminiumOccupatinoList1 when 'No' is selected" in {
+          val answers = emptyUserAnswers.set(AluminiumOccupationList1Page, false).success.value
+          navigator.nextPage(AluminiumOccupationList1Page, NormalMode)(answers) mustBe
+            controllers.manufacturing.routes.AluminiumOccupationList2Controller.onPageLoad(NormalMode)
+        }
+
+        "go to EmployerContributionController from AluminiumOccupatinoList2 when 'Yes' is selected" in {
+          val answers = emptyUserAnswers.set(AluminiumOccupationList2Page, true).success.value
+          navigator.nextPage(AluminiumOccupationList2Page, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to AluminiumOccupationList3 from AluminiumOccupatinoList2 when 'No' is selected" ignore {
+          val answers = emptyUserAnswers.set(AluminiumOccupationList2Page, false).success.value
+          /*
+                    navigator.nextPage(AluminiumOccupationList2Page, NormalMode)(answers) mustBe
+                      controllers.manufacturing.routes.AluminiumOccupationList3Controller.onPageLoad(NormalMode)
+          */
+        }
+
+        "go to EmployerContributionController from AluminiumOccupatinoList3 when 'Yes' is selected" ignore {
+/*
+          val answers = emptyUserAnswers.set(AluminiumOccupationList3Page, true).success.value
+          navigator.nextPage(AluminiumOccupationList2Page, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+*/
+        }
+
+        "go to ManufacturingApprentice from AluminiumOccupatinoList3 when 'No' is selected" ignore {
+/*
+          val answers = emptyUserAnswers.set(AluminiumOccupationList3Page, false).success.value
+          navigator.nextPage(AluminiumOccupationList3Page, NormalMode)(answers) mustBe
+            controllers.manufacturing.routes.ManufacturingApprenticeController.onPageLoad(NormalMode)
+*/
+        }
+
+        "go to EmployerContributionController from ManufacturingApprentice when 'Yes' is selected" ignore {
+/*
+          val answers = emptyUserAnswers.set(ManufacturingApprenticePage, true).success.value
+          navigator.nextPage(ManufacturingApprenticePage, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+*/
+        }
+
+        "go to EmployerContributionController from ManufacturingApprentice when 'No' is selected" ignore {
+/*
+          val answers = emptyUserAnswers.set(ManufacturingApprenticePage, false).success.value
+          navigator.nextPage(ManufacturingApprenticePage, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+*/
+        }
+      }
     }
 
 
