@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.foodCatering
 
 import base.SpecBase
-import forms.CateringStaffNHSFormProvider
+import forms.foodCatering.CateringStaffNHSFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.CateringStaffNHSPage
+import pages.foodCatering.CateringStaffNHSPage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.CateringStaffNHSView
 
 class CateringStaffNHSControllerSpec extends SpecBase {
 
@@ -81,7 +79,7 @@ class CateringStaffNHSControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("FoodCatering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package views
+package views.foodCatering
 
-import controllers.routes
-import forms.CateringStaffNHSFormProvider
+import forms.foodCatering.CateringStaffNHSFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.CateringStaffNHSView
 
 class CateringStaffNHSViewSpec extends YesNoViewBehaviours {
 

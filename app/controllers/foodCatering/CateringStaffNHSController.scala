@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.foodCatering
 
 import controllers.actions._
-import forms.CateringStaffNHSFormProvider
+import forms.foodCatering.CateringStaffNHSFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.CateringStaffNHSPage
+import pages.foodCatering.CateringStaffNHSPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CateringStaffNHSController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
+                                         @Named("FoodCatering") navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,

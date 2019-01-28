@@ -20,6 +20,7 @@ import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.engineering._
+import pages.foodCatering._
 import pages.healthcare._
 import pages.manufacturing._
 import pages.police._

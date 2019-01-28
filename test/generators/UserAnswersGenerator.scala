@@ -22,6 +22,7 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
 import pages.engineering._
+import pages.foodCatering.CateringStaffNHSPage
 import pages.healthcare._
 import pages.manufacturing._
 import pages.police._

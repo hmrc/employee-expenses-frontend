@@ -14,32 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.foodCatering
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import pages.behaviours.PageBehaviours
 
-class CateringStaffNHSFormProviderSpec extends BooleanFieldBehaviours {
+class CateringStaffNHSPageSpec extends PageBehaviours {
 
-  val requiredKey = "cateringStaffNHS.error.required"
-  val invalidKey = "error.boolean"
+  "CateringStaffNHSPage" must {
 
-  val form = new CateringStaffNHSFormProvider()()
+    beRetrievable[Boolean](CateringStaffNHSPage)
 
-  ".value" must {
+    beSettable[Boolean](CateringStaffNHSPage)
 
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    beRemovable[Boolean](CateringStaffNHSPage)
   }
 }
