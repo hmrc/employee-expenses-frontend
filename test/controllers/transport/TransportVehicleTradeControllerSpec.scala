@@ -76,24 +76,26 @@ class TransportVehicleTradeControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    for (trade <- TransportVehicleTrade.values) {
+      s"redirect to the next page when valid data for '$trade' is submitted" in {
 
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
-          .build()
+        val application =
+          applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
+            .build()
 
-      val request =
-        FakeRequest(POST, transportVehicleTradeRoute)
-          .withFormUrlEncodedBody(("value", TransportVehicleTrade.options.head.value))
+        val request =
+          FakeRequest(POST, transportVehicleTradeRoute)
+            .withFormUrlEncodedBody(("value", trade.toString))
 
-      val result = route(application, request).value
+        val result = route(application, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual onwardRoute.url
 
-      application.stop()
+        application.stop()
+      }
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {

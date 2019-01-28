@@ -16,11 +16,13 @@
 
 package controllers.engineering
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.engineering.TypeOfEngineeringFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, Mode}
+import models.{Enumerable, Mode, TypeOfEngineering}
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.engineering.TypeOfEngineeringPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class TypeOfEngineeringController @Inject()(
                                        requireData: DataRequiredAction,
                                        formProvider: TypeOfEngineeringFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: TypeOfEngineeringView
+                                       view: TypeOfEngineeringView,
+                                       claimAmounts: ClaimAmountsConfig
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -66,8 +69,12 @@ class TypeOfEngineeringController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfEngineeringPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TypeOfEngineeringPage, mode)(updatedAnswers))
+            newAnswers     <- value match {
+                                case TypeOfEngineering.NoneOfTheAbove => Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.defaultRate))
+                                case _ => Future.successful(updatedAnswers)
+                               }
+            _ <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(TypeOfEngineeringPage, mode)(newAnswers))
         }
       )
   }

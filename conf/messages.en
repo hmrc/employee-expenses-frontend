@@ -205,7 +205,7 @@ airlineJobList.occupation1 = Pilot
 airlineJobList.occupation2 = Co-pilot
 airlineJobList.occupation3 = Uniformed flight deck crew
 airlineJobList.checkYourAnswersLabel = Is your job title listed?
-airlineJobList.error.required = Select yes if your job title listed?
+airlineJobList.error.required = Select yes if your job title is listed
 
 garageHandOrCleaner.title = Are you a garage hand or cleaner?
 garageHandOrCleaner.heading = Are you a garage hand or cleaner?
@@ -273,6 +273,110 @@ specialConstable.error.required = Select yes if you are a special constable
 
 claimByPostOrOnline.title = You can claim tax relief for these expenses by post or using an online form
 claimByPostOrOnline.heading = You can claim tax relief for these expenses by post or using an online form
+
+aluminiumApprentice.title = Are you an apprentice?
+aluminiumApprentice.heading = Are you an apprentice?
+aluminiumApprentice.checkYourAnswersLabel = Are you an apprentice?
+aluminiumApprentice.error.required = Select yes if you are an apprentice
+
+aluminiumOccupationList1.title = Is your job title listed?
+aluminiumOccupationList1.heading = Is your job title listed?
+aluminiumOccupationList1.secondaryHeading = Aluminium occupation list 1
+aluminiumOccupationList1.checkYourAnswersLabel = Is your job title listed?
+aluminiumOccupationList1.error.required = Select yes if your job title is listed?
+aluminiumOccupationList1.occupation1 = Fireman (engaged to light and maintain furnaces)
+aluminiumOccupationList1.occupation2 = Furnace operator or their helper
+aluminiumOccupationList1.occupation3 = Leader
+aluminiumOccupationList1.occupation4 = Mould-man
+aluminiumOccupationList1.occupation5 = Pourer
+aluminiumOccupationList1.occupation6 = Remelt department labourer
+aluminiumOccupationList1.occupation7 = Roll flatteners
+
+ironSteelOccupation.title = Is your job title listed?
+ironSteelOccupation.heading = Is your job title listed?
+ironSteelOccupation.secondaryHeading = Iron and steel occupation list
+ironSteelOccupation.checkYourAnswersLabel = Is your job title listed?
+ironSteelOccupation.error.required = Select yes if your job title is listed
+ironSteelOccupation.occupation1 = Day labourer
+ironSteelOccupation.occupation2 = General labourer
+ironSteelOccupation.occupation3 = Stockman
+ironSteelOccupation.occupation4 = Timekeeper
+ironSteelOccupation.occupation5 = Pourer
+ironSteelOccupation.occupation6 = Warehouse staff and weighmen
+
+policeOccupationList.title = Is your job title listed?
+policeOccupationList.heading = Is your job title listed?
+policeOccupationList.checkYourAnswersLabel = Is your job title listed?
+policeOccupationList.error.required = Select yes if your job title is listed
+policeOccupationList.occupation1 = Police officer (with a rank of up to and including Chief Inspector)
+policeOccupationList.occupation2 = Police community support officer
+
+aluminiumOccupationList2.title = Is your job title listed?
+aluminiumOccupationList2.heading = Is your job title listed?
+aluminiumOccupationList2.secondaryHeading = Aluminium occupation list 2
+aluminiumOccupationList2.checkYourAnswersLabel = Is your job title listed?
+aluminiumOccupationList2.error.required = Select yes if your job title is listed?
+aluminiumOccupationList2.occupation1 = Continual casting operator
+aluminiumOccupationList2.occupation2 = Process operator
+aluminiumOccupationList2.occupation3 = De-dimpler
+aluminiumOccupationList2.occupation4 = Drier
+aluminiumOccupationList2.occupation5 = Drill puncher
+aluminiumOccupationList2.occupation6 = Dross unloader
+
+ironSteelOccupationList.title = Is your job title listed?
+ironSteelOccupationList.heading = Is your job title listed?
+ironSteelOccupationList.secondaryHeading = Iron and steel occupation list
+ironSteelOccupationList.checkYourAnswersLabel = Is your job title listed?
+ironSteelOccupationList.error.required = Select yes if your job title is listed
+ironSteelOccupationList.occupation1 = Day labourer
+ironSteelOccupationList.occupation2 = General labourer
+ironSteelOccupationList.occupation3 = Stockman
+ironSteelOccupationList.occupation4 = Timekeeper
+ironSteelOccupationList.occupation5 = Pourer
+ironSteelOccupationList.occupation6 = Warehouse staff and weighmen
+
+woodFurnitureOccupationList1.title = Is your job title listed?
+woodFurnitureOccupationList1.heading = Is your job title listed?
+woodFurnitureOccupationList1.secondaryHeading = Wood and furniture occupation list 1
+woodFurnitureOccupationList1.checkYourAnswersLabel = Is your job title listed?
+woodFurnitureOccupationList1.error.required = Select yes if your job title is listed
+woodFurnitureOccupationList1.occupation1 = Carpenter
+woodFurnitureOccupationList1.occupation2 = Cabinetmaker
+woodFurnitureOccupationList1.occupation3 = Joiner
+woodFurnitureOccupationList1.occupation4 = Wood carver
+woodFurnitureOccupationList1.occupation5 = Woodcutting machinist
+
+woodFurnitureOccupationList2.title = Is your job title listed?
+woodFurnitureOccupationList2.heading = Is your job title listed?
+woodFurnitureOccupationList2.secondaryHeading = Wood and furniture occupation list 2
+woodFurnitureOccupationList2.checkYourAnswersLabel = Is your job title listed?
+woodFurnitureOccupationList2.error.required = Select yes if your job title is listed
+woodFurnitureOccupationList2.occupation1 = Artificial limb maker (other than in wood)
+woodFurnitureOccupationList2.occupation2 = Organ builder
+woodFurnitureOccupationList2.occupation3 = Packaging case maker
+
+woodFurnitureOccupationList3.title = Is your job title listed?
+woodFurnitureOccupationList3.heading = Is your job title listed?
+woodFurnitureOccupationList3.secondaryHeading = Wood and furniture occupation list 3
+woodFurnitureOccupationList3.checkYourAnswersLabel = Is your occupation listed?
+woodFurnitureOccupationList3.error.required = Select yes if your job title is listed
+woodFurnitureOccupationList3.occupation1 = Cooper that does not provide their own tools
+woodFurnitureOccupationList3.occupation2 = Labourer
+woodFurnitureOccupationList3.occupation3 = Polisher
+woodFurnitureOccupationList3.occupation4 = Upholsterer
+
+cateringStaffNHS.title = Are you catering staff in the NHS?
+cateringStaffNHS.heading = Are you catering staff in the NHS?
+cateringStaffNHS.checkYourAnswersLabel = Are you catering staff in the NHS?
+cateringStaffNHS.error.required = Select yes if you are catering staff in the NHS
+
+clothing.title = Is your job title listed?
+clothing.heading = Is your job title listed?
+clothing.checkYourAnswersLabel = Is your job title listed?
+clothing.error.required = Select yes your job title is listed
+clothing.occupation1 = Leather currier (wet worker)
+clothing.occupation2 = Fellmongering worker
+clothing.occupation3 = Tanning operative (wet)
 
 aluminiumOccupationList3.title = Is your job title listed?
 aluminiumOccupationList3.heading = Is your job title listed?

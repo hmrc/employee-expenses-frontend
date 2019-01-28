@@ -16,11 +16,13 @@
 
 package controllers.transport
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.transport.TransportCarpenterFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.transport.TransportCarpenterPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,8 +42,9 @@ class TransportCarpenterController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: TransportCarpenterFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: TransportCarpenterView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                         view: TransportCarpenterView,
+                                         claimAmounts: ClaimAmountsConfig
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -66,8 +69,13 @@ class TransportCarpenterController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportCarpenterPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TransportCarpenterPage, mode)(updatedAnswers))
+            newAnswers     <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Transport.passengerLiners))
+            } else {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Transport.cargoTankersCoastersFerries))
+            }
+            _              <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(TransportCarpenterPage, mode)(newAnswers))
         }
       )
   }
