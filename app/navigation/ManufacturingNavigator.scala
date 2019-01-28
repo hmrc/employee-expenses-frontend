@@ -16,19 +16,35 @@
 
 package navigation
 
-import controllers.routes
+import controllers.manufacturing.routes
 import javax.inject.Inject
-import models.UserAnswers
+import models.TypeOfManufacturing._
+import models.{Mode, NormalMode, UserAnswers}
 import pages.Page
+import pages.manufacturing._
 import play.api.mvc.Call
 
 class ManufacturingNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case TypeOfManufacturingPage => TypeOfManufacturing(NormalMode)
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+  }
+
+  def TypeOfManufacturing(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(TypeOfManufacturingPage) match {
+      case Some(Aluminium) => controllers.manufacturing.routes.AluminiumOccupationList1Controller.onPageLoad(mode)
+      case Some(BrassCopper) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(Glass) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(IronSteel) => controllers.manufacturing.routes.IronSteelOccupationListController.onPageLoad(mode)
+      case Some(PreciousMetals) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(WoodFurniture) => controllers.manufacturing.routes.WoodFurnitureOccupationList1Controller.onPageLoad(mode)
+      case Some(NoneOfAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
   }
 }
