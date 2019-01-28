@@ -51,6 +51,9 @@ class WoodFurnitureOccupationList2ViewSpec extends YesNoViewBehaviours {
         "occupation3"
       )
     )
+    
+    behave like pageWithSecondaryHeader(applyView(form), messages(s"$messageKeyPrefix.secondaryHeading"))
+
   }
 
   application.stop()
