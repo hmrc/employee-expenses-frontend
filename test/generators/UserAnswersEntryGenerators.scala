@@ -22,10 +22,10 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages._
 import pages.healthcare._
 import pages.engineering._
-import pages.foodCatering.CateringStaffNHSPage
 import pages.manufacturing._
 import pages.police._
 import pages.transport._
+import pages.foodCatering._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
@@ -34,6 +34,22 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[CateringStaffNHSPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryWoodFurnitureOccupationList2UserAnswersEntry: Arbitrary[(WoodFurnitureOccupationList2Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[WoodFurnitureOccupationList2Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryWoodFurnitureOccupationList3UserAnswersEntry: Arbitrary[(WoodFurnitureOccupationList3Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[WoodFurnitureOccupationList3Page.type]
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }

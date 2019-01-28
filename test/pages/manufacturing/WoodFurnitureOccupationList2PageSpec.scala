@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package pages.foodCatering
+package pages.manufacturing
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-case object CateringStaffNHSPage extends QuestionPage[Boolean] {
+class WoodFurnitureOccupationList2PageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ toString
+  "WoodFurnitureOccupationList2Page.scala" must {
 
-  override def toString: String = "cateringStaffNHS"
+    beRetrievable[Boolean](WoodFurnitureOccupationList2Page)
+
+    beSettable[Boolean](WoodFurnitureOccupationList2Page)
+
+    beRemovable[Boolean](WoodFurnitureOccupationList2Page)
+  }
 }

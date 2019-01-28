@@ -16,41 +16,43 @@
 
 package views.manufacturing
 
-import forms.manufacturing.WoodFurnitureOccupationList1FormProvider
+import controllers.manufacturing.routes
+import forms.WoodFurnitureOccupationList3FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.manufacturing.WoodFurnitureOccupationList1View
+import views.html.manufacturing.WoodFurnitureOccupationList3View
 
-class WoodFurnitureOccupationList1ViewSpec extends YesNoViewBehaviours {
+class WoodFurnitureOccupationList3ViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "woodFurnitureOccupationList1"
+  val messageKeyPrefix = "woodFurnitureOccupationList3"
 
-  val form = new WoodFurnitureOccupationList1FormProvider()()
+  val form = new WoodFurnitureOccupationList3FormProvider()()
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "WoodFurnitureOccupationList1 view" must {
+  "WoodFurnitureOccupationList3 view" must {
 
-    val view = application.injector.instanceOf[WoodFurnitureOccupationList1View]
+    val view = application.injector.instanceOf[WoodFurnitureOccupationList3View]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
+    behave like pageWithSecondaryHeader(applyView(form), messages(s"$messageKeyPrefix.secondaryHeading"))
+
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, controllers.manufacturing.routes.WoodFurnitureOccupationList1Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.WoodFurnitureOccupationList3Controller.onSubmit(NormalMode).url)
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
         "occupation1",
         "occupation2",
         "occupation3",
-        "occupation4",
-        "occupation5"
+        "occupation4"
       )
     )
   }

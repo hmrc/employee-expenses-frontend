@@ -17,30 +17,30 @@
 package controllers.manufacturing
 
 import controllers.actions._
-import forms.manufacturing.WoodFurnitureOccupationList1FormProvider
+import forms.WoodFurnitureOccupationList2FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
-import pages.manufacturing.WoodFurnitureOccupationList1Page
+import pages.manufacturing.WoodFurnitureOccupationList2Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.manufacturing.WoodFurnitureOccupationList1View
+import views.html.manufacturing.WoodFurnitureOccupationList2View
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class WoodFurnitureOccupationList1Controller @Inject()(
+class WoodFurnitureOccupationList2Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          @Named("Manufacturing") navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
-                                         formProvider: WoodFurnitureOccupationList1FormProvider,
+                                         formProvider: WoodFurnitureOccupationList2FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: WoodFurnitureOccupationList1View
+                                         view: WoodFurnitureOccupationList2View
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -48,7 +48,7 @@ class WoodFurnitureOccupationList1Controller @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(WoodFurnitureOccupationList1Page) match {
+      val preparedForm = request.userAnswers.get(WoodFurnitureOccupationList2Page) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,9 +65,9 @@ class WoodFurnitureOccupationList1Controller @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(WoodFurnitureOccupationList1Page, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(WoodFurnitureOccupationList2Page, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(WoodFurnitureOccupationList1Page, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(WoodFurnitureOccupationList2Page, mode)(updatedAnswers))
         }
       )
   }

@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package pages.foodCatering
+package forms
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-case object CateringStaffNHSPage extends QuestionPage[Boolean] {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def path: JsPath = JsPath \ toString
+class WoodFurnitureOccupationList2FormProvider @Inject() extends Mappings {
 
-  override def toString: String = "cateringStaffNHS"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("woodFurnitureOccupationList2.error.required")
+    )
 }

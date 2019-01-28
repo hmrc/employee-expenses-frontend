@@ -18,6 +18,7 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
+import controllers.foodCatering.routes._
 import models.EmployerContribution._
 import models.FirstIndustryOptions._
 import models._
@@ -94,7 +95,7 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, FoodAndCatering).success.value
 
         navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.CateringStaffNHSController.onPageLoad(NormalMode)
+          CateringStaffNHSController.onPageLoad(NormalMode)
       }
 
       "go to SecondIndustryOptionsController from FirstIndustryOptionsPage when Engineering is selected" ignore {

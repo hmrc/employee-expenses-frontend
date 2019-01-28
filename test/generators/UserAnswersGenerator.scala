@@ -22,11 +22,11 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
 import pages.engineering._
-import pages.foodCatering.CateringStaffNHSPage
 import pages.healthcare._
 import pages.manufacturing._
 import pages.police._
 import pages.transport._
+import pages.foodCatering._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends TryValues {
@@ -34,6 +34,8 @@ trait UserAnswersGenerator extends TryValues {
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
     arbitrary[(CateringStaffNHSPage.type, JsValue)] ::
+    arbitrary[(WoodFurnitureOccupationList2Page.type, JsValue)] ::
+    arbitrary[(WoodFurnitureOccupationList3Page.type, JsValue)] ::
     arbitrary[(WoodFurnitureOccupationList1Page.type, JsValue)] ::
     arbitrary[(IronSteelOccupationListPage.type, JsValue)] ::
     arbitrary[(PoliceOccupationListPage.type, JsValue)] ::

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.foodCatering
+package pages.manufacturing
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object CateringStaffNHSPage extends QuestionPage[Boolean] {
+case object WoodFurnitureOccupationList2Page extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "cateringStaffNHS"
+  override def toString: String = "woodFurnitureOccupationList2"
 }

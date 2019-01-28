@@ -20,6 +20,7 @@ import controllers.routes._
 import controllers.healthcare.routes._
 import controllers.engineering.routes._
 import controllers.transport.routes._
+import controllers.foodCatering.routes._
 import javax.inject.Inject
 import models.FirstIndustryOptions._
 import models.{CheckMode, EmployerContribution, Mode, NormalMode, UserAnswers}
