@@ -347,3 +347,13 @@ woodFurnitureOccupationList1.occupation2 = Cabinetmaker
 woodFurnitureOccupationList1.occupation3 = Joiner
 woodFurnitureOccupationList1.occupation4 = Wood carver
 woodFurnitureOccupationList1.occupation5 = Woodcutting machinist
+
+woodFurnitureOccupationList3.title = Is your job title listed?
+woodFurnitureOccupationList3.heading = Is your job title listed?
+woodFurnitureOccupationList3.secondaryHeading = Wood and furniture occupation list 3
+woodFurnitureOccupationList3.checkYourAnswersLabel = Is your occupation listed?
+woodFurnitureOccupationList3.error.required = Select yes if your job title is listed
+woodFurnitureOccupationList3.occupation1 = Cooper that does not provide their own tools
+woodFurnitureOccupationList3.occupation2 = Labourer
+woodFurnitureOccupationList3.occupation3 = Polisher
+woodFurnitureOccupationList3.occupation4 = Upholsterer

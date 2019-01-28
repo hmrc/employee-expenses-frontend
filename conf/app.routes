@@ -178,3 +178,8 @@ GET        /wood-furniture-occupation-list-1                        controllers.
 POST       /wood-furniture-occupation-list-1                        controllers.manufacturing.WoodFurnitureOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
 GET        /change-wood-furniture-occupation-list-1                 controllers.manufacturing.WoodFurnitureOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-wood-furniture-occupation-list-1                  controllers.manufacturing.WoodFurnitureOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /wood-furniture-occupation-list-3                controllers.manufacturing.WoodFurnitureOccupationList3Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /wood-furniture-occupation-list-3                controllers.manufacturing.WoodFurnitureOccupationList3Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-wood-furniture-occupation-list-3         controllers.manufacturing.WoodFurnitureOccupationList3Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-wood-furniture-occupation-list-3         controllers.manufacturing.WoodFurnitureOccupationList3Controller.onSubmit(mode: Mode = CheckMode)

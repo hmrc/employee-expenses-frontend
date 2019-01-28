@@ -161,7 +161,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       controllers.manufacturing.routes.AluminiumOccupationList2Controller.onPageLoad(CheckMode).url)
   }
 
-
   def typeOfManufacturing: Option[AnswerRow] = userAnswers.get(TypeOfManufacturingPage) map {
     x => AnswerRow("typeOfManufacturing.checkYourAnswersLabel", s"typeOfManufacturing.$x", true,
       controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(CheckMode).url)
@@ -180,6 +179,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def ironSteelOccupationList: Option[AnswerRow] = userAnswers.get(IronSteelOccupationListPage) map {
     x => AnswerRow("ironSteelOccupationList.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       controllers.manufacturing.routes.IronSteelOccupationListController.onPageLoad(CheckMode).url)
+  }
+
+  def woodFurnitureOccupationList3: Option[AnswerRow] = userAnswers.get(WoodFurnitureOccupationList3Page) map {
+    x => AnswerRow("woodFurnitureOccupationList3.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, controllers.manufacturing.routes.WoodFurnitureOccupationList3Controller.onPageLoad(CheckMode).url)
   }
 
   //Police
