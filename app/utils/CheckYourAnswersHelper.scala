@@ -29,6 +29,10 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def woodFurnitureOccupationList2: Option[AnswerRow] = userAnswers.get(WoodFurnitureOccupationList2Page) map {
+    x => AnswerRow("woodFurnitureOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.WoodFurnitureOccupationList2Controller.onPageLoad(CheckMode).url)
+  }
+
   def ironSteelOccupation: Option[AnswerRow] = userAnswers.get(IronSteelOccupationPage) map {
     x => AnswerRow("ironSteelOccupation.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, controllers.manufacturing.routes.IronSteelOccupationController.onPageLoad(CheckMode).url)
   }

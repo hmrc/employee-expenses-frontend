@@ -347,3 +347,8 @@ woodFurnitureOccupationList1.occupation2 = Cabinetmaker
 woodFurnitureOccupationList1.occupation3 = Joiner
 woodFurnitureOccupationList1.occupation4 = Wood carver
 woodFurnitureOccupationList1.occupation5 = Woodcutting machinist
+
+woodFurnitureOccupationList2.title = woodFurnitureOccupationList2
+woodFurnitureOccupationList2.heading = woodFurnitureOccupationList2
+woodFurnitureOccupationList2.checkYourAnswersLabel = woodFurnitureOccupationList2
+woodFurnitureOccupationList2.error.required = Select yes if woodFurnitureOccupationList2
