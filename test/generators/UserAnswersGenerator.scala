@@ -21,6 +21,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
+import pages.clothing.ClothingPage
 import pages.engineering._
 import pages.healthcare._
 import pages.manufacturing._
@@ -33,6 +34,7 @@ trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
+    arbitrary[(ClothingPage.type, JsValue)] ::
     arbitrary[(CateringStaffNHSPage.type, JsValue)] ::
     arbitrary[(WoodFurnitureOccupationList2Page.type, JsValue)] ::
     arbitrary[(WoodFurnitureOccupationList3Page.type, JsValue)] ::

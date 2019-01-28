@@ -304,7 +304,6 @@ ironSteelOccupation.occupation4 = Timekeeper
 ironSteelOccupation.occupation5 = Pourer
 ironSteelOccupation.occupation6 = Warehouse staff and weighmen
 
-
 policeOccupationList.title = Is your job title listed?
 policeOccupationList.heading = Is your job title listed?
 policeOccupationList.checkYourAnswersLabel = Is your job title listed?
@@ -323,7 +322,6 @@ aluminiumOccupationList2.occupation3 = De-dimpler
 aluminiumOccupationList2.occupation4 = Drier
 aluminiumOccupationList2.occupation5 = Drill puncher
 aluminiumOccupationList2.occupation6 = Dross unloader
-
 
 ironSteelOccupationList.title = Is your job title listed?
 ironSteelOccupationList.heading = Is your job title listed?
@@ -357,7 +355,6 @@ woodFurnitureOccupationList2.occupation1 = Artificial limb maker (other than in 
 woodFurnitureOccupationList2.occupation2 = Organ builder
 woodFurnitureOccupationList2.occupation3 = Packaging case maker
 
-
 woodFurnitureOccupationList3.title = Is your job title listed?
 woodFurnitureOccupationList3.heading = Is your job title listed?
 woodFurnitureOccupationList3.secondaryHeading = Wood and furniture occupation list 3
@@ -372,3 +369,11 @@ cateringStaffNHS.title = Are you catering staff in the NHS?
 cateringStaffNHS.heading = Are you catering staff in the NHS?
 cateringStaffNHS.checkYourAnswersLabel = Are you catering staff in the NHS?
 cateringStaffNHS.error.required = Select yes if you are catering staff in the NHS
+
+clothing.title = Is your job title listed?
+clothing.heading = Is your job title listed?
+clothing.checkYourAnswersLabel = Is your job title listed?
+clothing.error.required = Select yes your job title is listed
+clothing.occupation1 = Leather currier (wet worker)
+clothing.occupation2 = Fellmongering worker
+clothing.occupation3 = Tanning operative (wet)
