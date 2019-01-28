@@ -90,11 +90,11 @@ class GenericNavigatorSpec extends SpecBase {
         //          controllers.retail.routes.RetailController.onPageLoad(NormalMode)
       }
 
-      "go to NhsCateringStaffController from FirstIndustryOptionsPage when Engineering is selected" ignore {
+      "go to CateringStaffNHSController from FirstIndustryOptionsPage when Engineering is selected" in {
         val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, FoodAndCatering).success.value
 
-        //        navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
-        //          controllers.catering.routes.NhsCateringStaffController.onPageLoad(NormalMode)
+        navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.CateringStaffNHSController.onPageLoad(NormalMode)
       }
 
       "go to SecondIndustryOptionsController from FirstIndustryOptionsPage when Engineering is selected" ignore {

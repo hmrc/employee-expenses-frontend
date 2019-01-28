@@ -29,6 +29,10 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def cateringStaffNHS: Option[AnswerRow] = userAnswers.get(CateringStaffNHSPage) map {
+    x => AnswerRow("cateringStaffNHS.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.CateringStaffNHSController.onPageLoad(CheckMode).url)
+  }
+
   def ironSteelOccupation: Option[AnswerRow] = userAnswers.get(IronSteelOccupationPage) map {
     x => AnswerRow("ironSteelOccupation.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, controllers.manufacturing.routes.IronSteelOccupationController.onPageLoad(CheckMode).url)
   }

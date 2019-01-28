@@ -347,3 +347,8 @@ woodFurnitureOccupationList1.occupation2 = Cabinetmaker
 woodFurnitureOccupationList1.occupation3 = Joiner
 woodFurnitureOccupationList1.occupation4 = Wood carver
 woodFurnitureOccupationList1.occupation5 = Woodcutting machinist
+
+cateringStaffNHS.title = Are you catering staff in the NHS?
+cateringStaffNHS.heading = Are you catering staff in the NHS?
+cateringStaffNHS.checkYourAnswersLabel = Are you catering staff in the NHS?
+cateringStaffNHS.error.required = Select yes if you are catering staff in the NHS
