@@ -41,7 +41,7 @@ class WoodFurnitureOccupationList3ViewSpec extends YesNoViewBehaviours {
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
-    behave like pageWithSecondaryHeader(applyView(form), s"$messageKeyPrefix.secondaryHeader")
+    behave like pageWithSecondaryHeader(applyView(form), messages(s"$messageKeyPrefix.secondaryHeading"))
 
     behave like pageWithBackLink(applyView(form))
 
