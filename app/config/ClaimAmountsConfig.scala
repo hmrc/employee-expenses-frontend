@@ -22,6 +22,7 @@ import play.api.Configuration
 
 @Singleton
 class ClaimAmountsConfig @Inject() (configuration: Configuration) {
+  lazy val defaultClaim: Int = configuration.get[Int]("claim-amounts.default-claim")
   object Healthcare {
     lazy val ambulanceStaff: Int = configuration.get[Int]("claim-amounts.healthcare.ambulance-staff")
     lazy val list1: Int = configuration.get[Int]("claim-amounts.healthcare.list-1")
@@ -37,5 +38,6 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
     lazy val paintersLetterersAssistants: Int = configuration.get[Int]("claim-amounts.transport.vehicle-trade.painters-letterers-assistants")
     lazy val passengerLiners: Int = configuration.get[Int]("claim-amounts.transport.seaman.passenger-liners")
     lazy val cargoTankersCoastersFerries: Int = configuration.get[Int]("claim-amounts.transport.seaman.cargo-tankers-coasters-ferries")
+    lazy val default: Int = configuration.get[Int]("claim-amounts.transport.default")
   }
 }

@@ -67,6 +67,11 @@ class TransportNavigatorSpec extends SpecBase {
           navigator.nextPage(TypeOfTransportPage, NormalMode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
+
+        "go to Session Expired when no option available" in {
+          navigator.nextPage(TypeOfTransportPage, NormalMode)(emptyUserAnswers) mustBe
+            controllers.routes.SessionExpiredController.onPageLoad()
+        }
       }
 
       "on AirlineJobListController" must {

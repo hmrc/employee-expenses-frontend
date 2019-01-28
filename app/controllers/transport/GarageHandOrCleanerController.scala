@@ -16,11 +16,13 @@
 
 package controllers.transport
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.transport.GarageHandOrCleanerFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.transport.GarageHandOrCleanerPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class GarageHandOrCleanerController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: GarageHandOrCleanerFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: GarageHandOrCleanerView
+                                         view: GarageHandOrCleanerView,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,8 +69,13 @@ class GarageHandOrCleanerController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(GarageHandOrCleanerPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(GarageHandOrCleanerPage, mode)(updatedAnswers))
+            newAnswers     <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Transport.garageHands))
+            } else {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Transport.conductorsDrivers))
+            }
+            _              <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(GarageHandOrCleanerPage, mode)(newAnswers))
         }
       )
   }
