@@ -188,3 +188,8 @@ GET        /wood-furniture-occupation-list-3                controllers.manufact
 POST       /wood-furniture-occupation-list-3                controllers.manufacturing.WoodFurnitureOccupationList3Controller.onSubmit(mode: Mode = NormalMode)
 GET        /change-wood-furniture-occupation-list-3         controllers.manufacturing.WoodFurnitureOccupationList3Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-wood-furniture-occupation-list-3         controllers.manufacturing.WoodFurnitureOccupationList3Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /catering-staff-NHS                              controllers.foodCatering.CateringStaffNHSController.onPageLoad(mode: Mode = NormalMode)
+POST       /catering-staff-NHS                              controllers.foodCatering.CateringStaffNHSController.onSubmit(mode: Mode = NormalMode)
+GET        /change-catering-staff-NHS                       controllers.foodCatering.CateringStaffNHSController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-catering-staff-NHS                       controllers.foodCatering.CateringStaffNHSController.onSubmit(mode: Mode = CheckMode)

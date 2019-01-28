@@ -20,6 +20,7 @@ import controllers.routes._
 import controllers.healthcare.routes._
 import controllers.engineering.routes._
 import controllers.transport.routes._
+import controllers.foodCatering.routes._
 import javax.inject.Inject
 import models.FirstIndustryOptions._
 import models.{CheckMode, EmployerContribution, Mode, NormalMode, UserAnswers}
@@ -56,6 +57,7 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Healthcare)               => AmbulanceStaffController.onPageLoad(mode)
       case Some(Engineering)              => TypeOfEngineeringController.onPageLoad(mode)
       case Some(TransportAndDistribution) => TypeOfTransportController.onPageLoad(mode)
+      case Some(FoodAndCatering)          => CateringStaffNHSController.onPageLoad(mode)
       case _                              => SessionExpiredController.onPageLoad()
     }
 

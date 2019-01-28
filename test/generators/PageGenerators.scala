@@ -23,8 +23,12 @@ import pages.engineering._
 import pages.manufacturing._
 import pages.police._
 import pages.transport._
+import pages.foodCatering._
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryCateringStaffNHSPage: Arbitrary[CateringStaffNHSPage.type] =
+    Arbitrary(CateringStaffNHSPage)
 
   implicit lazy val arbitraryWoodFurnitureOccupationList2Page: Arbitrary[WoodFurnitureOccupationList2Page.type] =
     Arbitrary(WoodFurnitureOccupationList2Page)

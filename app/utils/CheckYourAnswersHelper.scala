@@ -22,9 +22,11 @@ import controllers.manufacturing.routes._
 import controllers.healthcare.routes._
 import controllers.transport.routes._
 import controllers.police.routes._
+import controllers.foodCatering.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.engineering._
+import pages.foodCatering._
 import pages.healthcare._
 import pages.manufacturing._
 import pages.police._
@@ -208,6 +210,13 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def policeOccupationList: Option[AnswerRow] = userAnswers.get(PoliceOccupationListPage) map {
     x => AnswerRow("policeOccupationList.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       PoliceOccupationListController.onPageLoad(CheckMode).url)
+  }
+
+  //FoodCatering
+
+  def cateringStaffNHS: Option[AnswerRow] = userAnswers.get(CateringStaffNHSPage) map {
+    x => AnswerRow("cateringStaffNHS.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      CateringStaffNHSController.onPageLoad(CheckMode).url)
   }
 
 }

@@ -367,3 +367,8 @@ woodFurnitureOccupationList3.occupation1 = Cooper that does not provide their ow
 woodFurnitureOccupationList3.occupation2 = Labourer
 woodFurnitureOccupationList3.occupation3 = Polisher
 woodFurnitureOccupationList3.occupation4 = Upholsterer
+
+cateringStaffNHS.title = Are you catering staff in the NHS?
+cateringStaffNHS.heading = Are you catering staff in the NHS?
+cateringStaffNHS.checkYourAnswersLabel = Are you catering staff in the NHS?
+cateringStaffNHS.error.required = Select yes if you are catering staff in the NHS
