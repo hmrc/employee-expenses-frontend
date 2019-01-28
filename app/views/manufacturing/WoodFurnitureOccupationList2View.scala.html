@@ -25,10 +25,10 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("woodFurnitureOccupationList1.title")}"
+    title = s"${errorPrefix(form)} ${messages("woodFurnitureOccupationList2.title")}"
     ) {
 
-    @formHelper(action = WoodFurnitureOccupationList1Controller.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = WoodFurnitureOccupationList2Controller.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -36,23 +36,21 @@
 
         @components.heading(
             headingKey = "woodFurnitureOccupationList1.heading",
-            secondaryHeaderKey = Some("woodFurnitureOccupationList1.secondaryHeading")
+            secondaryHeaderKey = Some("woodFurnitureOccupationList2.secondaryHeading")
         )
 
         @components.list(
-            pageKey = Some("woodFurnitureOccupationList1"),
-            bulletList = Seq(
-                "occupation1",
-                "occupation2",
-                "occupation3",
-                "occupation4",
-                "occupation5"
+            pageKey = Some("woodFurnitureOccupationList2"),
+                bulletList = Seq(
+                    "occupation1",
+                    "occupation2",
+                    "occupation3"
             )
         )
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("woodFurnitureOccupationList1.heading"),
+            label = messages("woodFurnitureOccupationList2.heading"),
             labelClass = Some("visually-hidden")
         )
 

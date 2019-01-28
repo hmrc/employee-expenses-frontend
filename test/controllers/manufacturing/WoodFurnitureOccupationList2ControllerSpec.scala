@@ -16,37 +16,38 @@
 
 package controllers.manufacturing
 
+import controllers.routes.SessionExpiredController
 import base.SpecBase
-import forms.manufacturing.AluminiumApprenticeFormProvider
+import forms.WoodFurnitureOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.manufacturing.AluminiumApprenticePage
+import pages.manufacturing.WoodFurnitureOccupationList2Page
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.manufacturing.AluminiumApprenticeView
+import views.html.manufacturing.WoodFurnitureOccupationList2View
 
-class AluminiumApprenticeControllerSpec extends SpecBase {
+class WoodFurnitureOccupationList2ControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AluminiumApprenticeFormProvider()
+  val formProvider = new WoodFurnitureOccupationList2FormProvider()
   val form = formProvider()
 
-  lazy val aluminiumApprenticeRoute = routes.AluminiumApprenticeController.onPageLoad(NormalMode).url
+  lazy val woodFurnitureOccupationList2Route = controllers.manufacturing.routes.WoodFurnitureOccupationList2Controller.onPageLoad(NormalMode).url
 
-  "AluminiumApprentice Controller" must {
+  "WoodFurnitureOccupationList2 Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, aluminiumApprenticeRoute)
+      val request = FakeRequest(GET, woodFurnitureOccupationList2Route)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[AluminiumApprenticeView]
+      val view = application.injector.instanceOf[WoodFurnitureOccupationList2View]
 
       status(result) mustEqual OK
 
@@ -58,13 +59,13 @@ class AluminiumApprenticeControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(AluminiumApprenticePage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(WoodFurnitureOccupationList2Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, aluminiumApprenticeRoute)
+      val request = FakeRequest(GET, woodFurnitureOccupationList2Route)
 
-      val view = application.injector.instanceOf[AluminiumApprenticeView]
+      val view = application.injector.instanceOf[WoodFurnitureOccupationList2View]
 
       val result = route(application, request).value
 
@@ -84,7 +85,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase {
           .build()
 
       val request =
-        FakeRequest(POST, aluminiumApprenticeRoute)
+        FakeRequest(POST, woodFurnitureOccupationList2Route)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -101,12 +102,12 @@ class AluminiumApprenticeControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, aluminiumApprenticeRoute)
+        FakeRequest(POST, woodFurnitureOccupationList2Route)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[AluminiumApprenticeView]
+      val view = application.injector.instanceOf[WoodFurnitureOccupationList2View]
 
       val result = route(application, request).value
 
@@ -122,13 +123,13 @@ class AluminiumApprenticeControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, aluminiumApprenticeRoute)
+      val request = FakeRequest(GET, woodFurnitureOccupationList2Route)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -138,14 +139,14 @@ class AluminiumApprenticeControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, aluminiumApprenticeRoute)
+        FakeRequest(POST, woodFurnitureOccupationList2Route)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

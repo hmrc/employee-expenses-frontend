@@ -26,6 +26,9 @@ import pages.transport._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryWoodFurnitureOccupationList2Page: Arbitrary[WoodFurnitureOccupationList2Page.type] =
+    Arbitrary(WoodFurnitureOccupationList2Page)
+
   implicit lazy val arbitraryWoodFurnitureOccupationList1Page: Arbitrary[WoodFurnitureOccupationList1Page.type] =
     Arbitrary(WoodFurnitureOccupationList1Page)
 
