@@ -27,7 +27,9 @@ import play.api.mvc.Call
 class ManufacturingNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TypeOfManufacturingPage => TypeOfManufacturing(NormalMode)
+    case TypeOfManufacturingPage => typeOfManufacturing(NormalMode)
+    case AluminiumOccupationList1Page => aluminiumOccupationList1(NormalMode)
+    case AluminiumOccupationList2Page => aluminiumOccupationList2(NormalMode)
     case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
@@ -35,7 +37,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
-  def TypeOfManufacturing(mode: Mode)(userAnswers: UserAnswers): Call = {
+  def typeOfManufacturing(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(TypeOfManufacturingPage) match {
       case Some(Aluminium) => controllers.manufacturing.routes.AluminiumOccupationList1Controller.onPageLoad(mode)
       case Some(BrassCopper) => controllers.routes.EmployerContributionController.onPageLoad(mode)
@@ -44,6 +46,22 @@ class ManufacturingNavigator @Inject()() extends Navigator {
       case Some(PreciousMetals) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(WoodFurniture) => controllers.manufacturing.routes.WoodFurnitureOccupationList1Controller.onPageLoad(mode)
       case Some(NoneOfAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  def aluminiumOccupationList1(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(AluminiumOccupationList1Page) match {
+      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(false) => controllers.manufacturing.routes.AluminiumOccupationList2Controller.onPageLoad(mode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  def aluminiumOccupationList2(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(AluminiumOccupationList2Page) match {
+      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      //case Some(false) => controllers.manufacturing.routes.AluminiumOccupationList3Controller.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
