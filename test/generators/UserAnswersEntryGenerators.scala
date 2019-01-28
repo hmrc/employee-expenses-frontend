@@ -20,14 +20,56 @@ import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
+import pages.clothing.ClothingPage
 import pages.healthcare._
 import pages.engineering._
 import pages.manufacturing._
 import pages.police._
 import pages.transport._
+import pages.foodCatering._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryClothingUserAnswersEntry: Arbitrary[(ClothingPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[ClothingPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryCateringStaffNHSUserAnswersEntry: Arbitrary[(CateringStaffNHSPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[CateringStaffNHSPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryWoodFurnitureOccupationList2UserAnswersEntry: Arbitrary[(WoodFurnitureOccupationList2Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[WoodFurnitureOccupationList2Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryWoodFurnitureOccupationList3UserAnswersEntry: Arbitrary[(WoodFurnitureOccupationList3Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[WoodFurnitureOccupationList3Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryWoodFurnitureOccupationList1UserAnswersEntry: Arbitrary[(WoodFurnitureOccupationList1Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[WoodFurnitureOccupationList1Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
 
   implicit lazy val arbitraryPoliceOccupationListUserAnswersEntry: Arbitrary[(PoliceOccupationListPage.type, JsValue)] =
     Arbitrary {
@@ -41,6 +83,14 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[IronSteelOccupationListPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryIronSteelOccupationUserAnswersEntry: Arbitrary[(IronSteelOccupationPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[IronSteelOccupationPage.type]
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }

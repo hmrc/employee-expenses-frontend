@@ -168,3 +168,33 @@ GET        /iron-steel-occupation-list                      controllers.manufact
 POST       /iron-steel-occupation-list                      controllers.manufacturing.IronSteelOccupationListController.onSubmit(mode: Mode = NormalMode)
 GET        /change-iron-steel-occupation-list               controllers.manufacturing.IronSteelOccupationListController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-iron-steel-occupation-list               controllers.manufacturing.IronSteelOccupationListController.onSubmit(mode: Mode = CheckMode)
+
+GET        /iron-steel-occupation                        controllers.manufacturing.IronSteelOccupationController.onPageLoad(mode: Mode = NormalMode)
+POST       /iron-steel-occupation                        controllers.manufacturing.IronSteelOccupationController.onSubmit(mode: Mode = NormalMode)
+GET        /change-iron-steel-occupation                  controllers.manufacturing.IronSteelOccupationController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-iron-steel-occupation                  controllers.manufacturing.IronSteelOccupationController.onSubmit(mode: Mode = CheckMode)
+
+GET        /wood-furniture-occupation-list-1                        controllers.manufacturing.WoodFurnitureOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /wood-furniture-occupation-list-1                        controllers.manufacturing.WoodFurnitureOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-wood-furniture-occupation-list-1                 controllers.manufacturing.WoodFurnitureOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-wood-furniture-occupation-list-1                  controllers.manufacturing.WoodFurnitureOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /wood-furniture-occupation-list-2                        controllers.manufacturing.WoodFurnitureOccupationList2Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /wood-furniture-occupation-list-2                        controllers.manufacturing.WoodFurnitureOccupationList2Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-wood-furniture-occupation-list-2                 controllers.manufacturing.WoodFurnitureOccupationList2Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-wood-furniture-occupation-list-2                  controllers.manufacturing.WoodFurnitureOccupationList2Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /wood-furniture-occupation-list-3                controllers.manufacturing.WoodFurnitureOccupationList3Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /wood-furniture-occupation-list-3                controllers.manufacturing.WoodFurnitureOccupationList3Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-wood-furniture-occupation-list-3         controllers.manufacturing.WoodFurnitureOccupationList3Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-wood-furniture-occupation-list-3         controllers.manufacturing.WoodFurnitureOccupationList3Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /catering-staff-NHS                              controllers.foodCatering.CateringStaffNHSController.onPageLoad(mode: Mode = NormalMode)
+POST       /catering-staff-NHS                              controllers.foodCatering.CateringStaffNHSController.onSubmit(mode: Mode = NormalMode)
+GET        /change-catering-staff-NHS                       controllers.foodCatering.CateringStaffNHSController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-catering-staff-NHS                       controllers.foodCatering.CateringStaffNHSController.onSubmit(mode: Mode = CheckMode)
+
+GET        /clothing                                        controllers.clothing.ClothingController.onPageLoad(mode: Mode = NormalMode)
+POST       /clothing                                        controllers.clothing.ClothingController.onSubmit(mode: Mode = NormalMode)
+GET        /change-clothing                                 controllers.clothing.ClothingController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-clothing                                 controllers.clothing.ClothingController.onSubmit(mode: Mode = CheckMode)

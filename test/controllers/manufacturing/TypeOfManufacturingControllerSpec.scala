@@ -31,7 +31,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val typeOfManufacturingRoute = routes.TypeOfManufacturingController.onPageLoad(NormalMode).url
+  lazy val typeOfManufacturingRoute = controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(NormalMode).url
 
   val formProvider = new TypeOfManufacturingFormProvider()
   val form = formProvider()
