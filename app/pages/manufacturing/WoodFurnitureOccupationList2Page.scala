@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.manufacturing
 
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class WoodFurnitureOccupationList2PageSpec extends PageBehaviours {
+case object WoodFurnitureOccupationList2Page extends QuestionPage[Boolean] {
 
-  "WoodFurnitureOccupationList2Page" must {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[Boolean](WoodFurnitureOccupationList2Page)
-
-    beSettable[Boolean](WoodFurnitureOccupationList2Page)
-
-    beRemovable[Boolean](WoodFurnitureOccupationList2Page)
-  }
+  override def toString: String = "woodFurnitureOccupationList2"
 }

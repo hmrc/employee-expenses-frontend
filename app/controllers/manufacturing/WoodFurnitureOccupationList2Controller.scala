@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.manufacturing
 
 import controllers.actions._
 import forms.WoodFurnitureOccupationList2FormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.WoodFurnitureOccupationList2Page
+import pages.manufacturing.WoodFurnitureOccupationList2Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.WoodFurnitureOccupationList2View
+import views.html.manufacturing.WoodFurnitureOccupationList2View
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class WoodFurnitureOccupationList2Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         @Named("Manufacturing") navigator: Navigator,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: WoodFurnitureOccupationList2FormProvider,

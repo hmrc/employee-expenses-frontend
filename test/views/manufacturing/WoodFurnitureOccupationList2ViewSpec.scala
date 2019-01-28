@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package views
+package views.manufacturing
 
-import controllers.routes
 import forms.WoodFurnitureOccupationList2FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.WoodFurnitureOccupationList2View
+import views.html.manufacturing.WoodFurnitureOccupationList2View
 
 class WoodFurnitureOccupationList2ViewSpec extends YesNoViewBehaviours {
 
@@ -43,7 +42,15 @@ class WoodFurnitureOccupationList2ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.WoodFurnitureOccupationList2Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, controllers.manufacturing.routes.WoodFurnitureOccupationList2Controller.onSubmit(NormalMode).url)
+
+    behave like pageWithList(applyView(form), messageKeyPrefix,
+      Seq(
+        "occupation1",
+        "occupation2",
+        "occupation3"
+      )
+    )
   }
 
   application.stop()

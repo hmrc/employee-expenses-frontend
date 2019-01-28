@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.manufacturing
 
+import controllers.routes.SessionExpiredController
 import base.SpecBase
 import forms.WoodFurnitureOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.WoodFurnitureOccupationList2Page
+import pages.manufacturing.WoodFurnitureOccupationList2Page
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.WoodFurnitureOccupationList2View
+import views.html.manufacturing.WoodFurnitureOccupationList2View
 
 class WoodFurnitureOccupationList2ControllerSpec extends SpecBase {
 
@@ -35,7 +35,7 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase {
   val formProvider = new WoodFurnitureOccupationList2FormProvider()
   val form = formProvider()
 
-  lazy val woodFurnitureOccupationList2Route = routes.WoodFurnitureOccupationList2Controller.onPageLoad(NormalMode).url
+  lazy val woodFurnitureOccupationList2Route = controllers.manufacturing.routes.WoodFurnitureOccupationList2Controller.onPageLoad(NormalMode).url
 
   "WoodFurnitureOccupationList2 Controller" must {
 
@@ -81,7 +81,7 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -129,7 +129,7 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +146,7 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

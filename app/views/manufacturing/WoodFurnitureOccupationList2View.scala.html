@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.routes._
+@import controllers.manufacturing.routes._
 @import models.Mode
 
 @this(
@@ -34,7 +34,19 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("woodFurnitureOccupationList2.heading")
+        @components.heading(
+            headingKey = "woodFurnitureOccupationList1.heading",
+            secondaryHeaderKey = Some("woodFurnitureOccupationList2.secondaryHeading")
+        )
+
+        @components.list(
+            pageKey = Some("woodFurnitureOccupationList2"),
+                bulletList = Seq(
+                    "occupation1",
+                    "occupation2",
+                    "occupation3"
+            )
+        )
 
         @components.input_yes_no(
             field = form("value"),
