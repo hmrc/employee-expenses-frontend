@@ -20,10 +20,10 @@ import forms.transport.WhichRailwayTradeFormProvider
 import models.{NormalMode, WhichRailwayTrade}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.ViewBehaviours
+import views.behaviours.OptionsViewBehaviours
 import views.html.transport.WhichRailwayTradeView
 
-class WhichRailwayTradeViewSpec extends ViewBehaviours {
+class WhichRailwayTradeViewSpec extends OptionsViewBehaviours[WhichRailwayTrade] {
 
   val messageKeyPrefix = "whichRailwayTrade"
 
@@ -41,38 +41,8 @@ class WhichRailwayTradeViewSpec extends ViewBehaviours {
     behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
-  }
 
-  "WhichRailwayTradeView" when {
-
-    "rendered" must {
-
-      "contain radio buttons for the value" in {
-
-        val doc = asDocument(applyView(form))
-
-        for (option <- WhichRailwayTrade.options) {
-          assertContainsRadioButton(doc, option.id, "value", option.value, false)
-        }
-      }
-    }
-
-    for (option <- WhichRailwayTrade.options) {
-
-      s"rendered with a value of '${option.value}'" must {
-
-        s"have the '${option.value}' radio button selected" in {
-
-          val doc = asDocument(applyView(form.bind(Map("value" -> s"${option.value}"))))
-
-          assertContainsRadioButton(doc, option.id, "value", option.value, true)
-
-          for (unselectedOption <- WhichRailwayTrade.options.filterNot(o => o == option)) {
-            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
-          }
-        }
-      }
-    }
+    behave like optionsPage(form, applyView, WhichRailwayTrade.options)
   }
 
   application.stop()
