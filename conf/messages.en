@@ -391,6 +391,11 @@ aluminiumOccupationList3.occupation5 = Truck driver
 aluminiumOccupationList3.occupation6 = Measurer
 aluminiumOccupationList3.occupation7 = Storekeeper
 
+securityGuardNHS.title = Are you a security guard for the NHS?
+securityGuardNHS.heading = Are you a security guard for the NHS?
+securityGuardNHS.checkYourAnswersLabel = Are you a security guard for the NHS?
+securityGuardNHS.error.required = Select yes you are a security guard for the NHS
+
 printingOccupationList1.title = Is your job title listed?
 printingOccupationList1.heading = Is your job title listed?
 printingOccupationList1.secondaryHeading = Printing occupation list 3
