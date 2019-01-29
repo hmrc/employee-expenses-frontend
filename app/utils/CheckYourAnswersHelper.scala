@@ -44,11 +44,6 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
-  def electrical: Option[AnswerRow] = userAnswers.get(ElectricalPage) map {
-    x => AnswerRow("electrical.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      ElectricalController.onPageLoad(CheckMode).url)
-  }
-
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
     x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
       SecondIndustryOptionsController.onPageLoad(CheckMode).url)
@@ -261,6 +256,13 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def printingOccupationList2: Option[AnswerRow] = userAnswers.get(PrintingOccupationList2Page) map {
     x => AnswerRow("printingOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       PrintingOccupationList2Controller.onPageLoad(CheckMode).url)
+  }
+
+  //Electrical
+
+  def electrical: Option[AnswerRow] = userAnswers.get(ElectricalPage) map {
+    x => AnswerRow("electrical.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      ElectricalController.onPageLoad(CheckMode).url)
   }
 
 }
