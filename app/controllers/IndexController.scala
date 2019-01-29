@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
+import controllers.actions.{DataRetrievalAction, UnauthenticatedIdentifierAction}
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
 import play.api.i18n.I18nSupport
@@ -32,7 +32,6 @@ class IndexController @Inject()(
                                  view: IndexView,
                                  identify: UnauthenticatedIdentifierAction,
                                  getData: DataRetrievalAction,
-                                 requireData: DataRequiredAction,
                                  sessionRepository: SessionRepository
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
