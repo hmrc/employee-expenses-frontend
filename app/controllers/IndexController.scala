@@ -32,7 +32,6 @@ class IndexController @Inject()(
                                  view: IndexView,
                                  identify: UnauthenticatedIdentifierAction,
                                  getData: DataRetrievalAction,
-                                 requireData: DataRequiredAction,
                                  sessionRepository: SessionRepository
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
