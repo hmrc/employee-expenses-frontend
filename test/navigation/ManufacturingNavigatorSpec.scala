@@ -128,8 +128,61 @@ class ManufacturingNavigatorSpec extends SpecBase {
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
       }
-    }
 
+      "in Iron and Steel journey" must {
+        "go to EmployerContributionController when 'Yes' is selected" in {
+          val answers = emptyUserAnswers.set(IronSteelOccupationListPage, true).success.value
+          navigator.nextPage(IronSteelOccupationListPage, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to ManufacturingApprentice when 'No' is selected" in {
+          val answers = emptyUserAnswers.set(IronSteelOccupationListPage, false).success.value
+          navigator.nextPage(IronSteelOccupationListPage, NormalMode)(answers) mustBe
+            routes.ManufacturingApprenticeController.onPageLoad(NormalMode)
+        }
+      }
+
+      "in Wood Furniture journey" must {
+        "go to EmployerContributionController from WoodFurnitureOccupationList1 when 'Yes' is selected" in {
+        val answers = emptyUserAnswers.set(WoodFurnitureOccupationList1Page, true).success.value
+          navigator.nextPage(WoodFurnitureOccupationList1Page, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to WoodFurnitureOccupationList2 from WoodFurnitureOccupationList1 when 'No' is selected" in {
+          val answers = emptyUserAnswers.set(WoodFurnitureOccupationList1Page, false).success.value
+          navigator.nextPage(WoodFurnitureOccupationList1Page, NormalMode)(answers) mustBe
+            routes.WoodFurnitureOccupationList2Controller.onPageLoad(NormalMode)
+        }
+
+        "go to EmployerContributionController from WoodFurnitureOccupationList2 when 'Yes' is selected" in {
+          val answers = emptyUserAnswers.set(WoodFurnitureOccupationList2Page, true).success.value
+          navigator.nextPage(WoodFurnitureOccupationList2Page, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to WoodFurnitureOccupationList3 from WoodFurnitureOccupationList2 when 'No' is selected" in {
+          val answers = emptyUserAnswers.set(WoodFurnitureOccupationList2Page, false).success.value
+          navigator.nextPage(WoodFurnitureOccupationList2Page, NormalMode)(answers) mustBe
+            routes.WoodFurnitureOccupationList3Controller.onPageLoad(NormalMode)
+        }
+
+        "go to EmployerContributionController from WoodFurnitureOccupationList3 when 'Yes' is selected" in {
+          val answers = emptyUserAnswers.set(WoodFurnitureOccupationList3Page, true).success.value
+          navigator.nextPage(WoodFurnitureOccupationList3Page, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to EmployerContributionController from WoodFurnitureOccupationList3 when 'No' is selected" in {
+          val answers = emptyUserAnswers.set(WoodFurnitureOccupationList3Page, false).success.value
+          navigator.nextPage(WoodFurnitureOccupationList3Page, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+
+      }
+    }
 
     "in Check mode" must {
 
