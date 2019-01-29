@@ -378,6 +378,19 @@ clothing.occupation1 = Leather currier (wet worker)
 clothing.occupation2 = Fellmongering worker
 clothing.occupation3 = Tanning operative (wet)
 
+aluminiumOccupationList3.title = Is your job title listed?
+aluminiumOccupationList3.heading = Is your job title listed?
+aluminiumOccupationList3.secondaryHeading = Aluminium occupation list 3
+aluminiumOccupationList3.checkYourAnswersLabel = aluminiumOccupationList3
+aluminiumOccupationList3.error.required = Select yes if your job title is listed
+aluminiumOccupationList3.occupation1 = Cable hand
+aluminiumOccupationList3.occupation2 = Case maker
+aluminiumOccupationList3.occupation3 = Labourer
+aluminiumOccupationList3.occupation4 = Mate
+aluminiumOccupationList3.occupation5 = Truck driver
+aluminiumOccupationList3.occupation6 = Measurer
+aluminiumOccupationList3.occupation7 = Storekeeper
+
 securityGuardNHS.title = Are you a security guard for the NHS?
 securityGuardNHS.heading = Are you a security guard for the NHS?
 securityGuardNHS.checkYourAnswersLabel = Are you a security guard for the NHS?

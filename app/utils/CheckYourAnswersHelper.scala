@@ -169,6 +169,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       AluminiumOccupationList2Controller.onPageLoad(CheckMode).url)
   }
 
+  def aluminiumOccupationList3: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList3Page) map {
+    x => AnswerRow("aluminiumOccupationList3.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      controllers.manufacturing.routes.AluminiumOccupationList3Controller.onPageLoad(CheckMode).url)
+  }
+
   def typeOfManufacturing: Option[AnswerRow] = userAnswers.get(TypeOfManufacturingPage) map {
     x => AnswerRow("typeOfManufacturing.checkYourAnswersLabel", s"typeOfManufacturing.$x", true,
       TypeOfManufacturingController.onPageLoad(CheckMode).url)
