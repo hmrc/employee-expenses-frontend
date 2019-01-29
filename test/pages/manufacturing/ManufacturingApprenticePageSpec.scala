@@ -20,7 +20,7 @@ import pages.behaviours.PageBehaviours
 
 class ManufacturingApprenticePageSpec extends PageBehaviours {
 
-  "AluminiumApprenticePage" must {
+  "ManufacturingApprenticePage" must {
 
     beRetrievable[Boolean](ManufacturingApprenticePage)
 

@@ -30,6 +30,8 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     case TypeOfManufacturingPage => typeOfManufacturing(NormalMode)
     case AluminiumOccupationList1Page => aluminiumOccupationList1(NormalMode)
     case AluminiumOccupationList2Page => aluminiumOccupationList2(NormalMode)
+    case AluminiumOccupationList3Page => aluminiumOccupationList3(NormalMode)
+    case ManufacturingApprenticePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
@@ -61,7 +63,15 @@ class ManufacturingNavigator @Inject()() extends Navigator {
   def aluminiumOccupationList2(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(AluminiumOccupationList2Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      //case Some(false) => controllers.manufacturing.routes.AluminiumOccupationList3Controller.onPageLoad(mode)
+      case Some(false) => controllers.manufacturing.routes.AluminiumOccupationList3Controller.onPageLoad(mode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  def aluminiumOccupationList3(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(AluminiumOccupationList3Page) match {
+      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(false) => controllers.manufacturing.routes.ManufacturingApprenticeController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
