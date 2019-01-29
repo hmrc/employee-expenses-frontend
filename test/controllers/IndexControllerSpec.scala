@@ -25,7 +25,7 @@ class IndexControllerSpec extends SpecBase {
 
   "Index Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return Redirect to the first page of the application and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -33,12 +33,7 @@ class IndexControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[IndexView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view()(fakeRequest, messages).toString
+      status(result) mustEqual SEE_OTHER
 
       application.stop()
     }
