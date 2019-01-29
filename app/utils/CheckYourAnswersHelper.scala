@@ -38,6 +38,10 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def securityGuardNHS: Option[AnswerRow] = userAnswers.get(SecurityGuardNHSPage) map {
+    x => AnswerRow("securityGuardNHS.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.SecurityGuardNHSController.onPageLoad(CheckMode).url)
+  }
+
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
     x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
       SecondIndustryOptionsController.onPageLoad(CheckMode).url)

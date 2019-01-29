@@ -28,6 +28,9 @@ import pages.foodCatering._
 
 trait PageGenerators {
 
+  implicit lazy val arbitrarySecurityGuardNHSPage: Arbitrary[SecurityGuardNHSPage.type] =
+    Arbitrary(SecurityGuardNHSPage)
+
   implicit lazy val arbitraryClothingPage: Arbitrary[ClothingPage.type] =
     Arbitrary(ClothingPage)
 

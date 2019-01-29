@@ -377,3 +377,8 @@ clothing.error.required = Select yes your job title is listed
 clothing.occupation1 = Leather currier (wet worker)
 clothing.occupation2 = Fellmongering worker
 clothing.occupation3 = Tanning operative (wet)
+
+securityGuardNHS.title = securityGuardNHS
+securityGuardNHS.heading = securityGuardNHS
+securityGuardNHS.checkYourAnswersLabel = securityGuardNHS
+securityGuardNHS.error.required = Select yes if securityGuardNHS
