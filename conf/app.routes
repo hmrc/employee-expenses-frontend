@@ -218,3 +218,8 @@ GET        /printing-occupation-list-2                      controllers.printing
 POST       /printing-occupation-list-2                      controllers.printing.PrintingOccupationList2Controller.onSubmit(mode: Mode = NormalMode)
 GET        /change-printing-occupation-list-2               controllers.printing.PrintingOccupationList2Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-printing-occupation-list-2               controllers.printing.PrintingOccupationList2Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /electrical                                      controllers.electrical.ElectricalController.onPageLoad(mode: Mode = NormalMode)
+POST       /electrical                                      controllers.electrical.ElectricalController.onSubmit(mode: Mode = NormalMode)
+GET        /change-electrical                               controllers.electrical.ElectricalController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-electrical                               controllers.electrical.ElectricalController.onSubmit(mode: Mode = CheckMode)

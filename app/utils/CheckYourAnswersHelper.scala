@@ -26,9 +26,11 @@ import controllers.foodCatering.routes._
 import controllers.clothing.routes._
 import controllers.security.routes._
 import controllers.printing.routes._
+import controllers.electrical.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.clothing.ClothingPage
+import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.foodCatering._
 import pages.healthcare._
@@ -41,6 +43,11 @@ import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
+
+  def electrical: Option[AnswerRow] = userAnswers.get(ElectricalPage) map {
+    x => AnswerRow("electrical.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      ElectricalController.onPageLoad(CheckMode).url)
+  }
 
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
     x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,

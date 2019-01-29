@@ -417,3 +417,8 @@ printingOccupationList2.occupation2 = Compositors (letterpress section)
 printingOccupationList2.occupation3 = Readers (letterpress section)
 printingOccupationList2.occupation4 = Telecommunications and electronic section wire room operators
 printingOccupationList2.occupation5 = Warehousemen (paper box making section)
+
+electrical.title = Are you only claiming for laundry costs?
+electrical.heading = Are you only claiming for laundry costs?
+electrical.checkYourAnswersLabel = Are you only claiming for laundry costs?
+electrical.error.required = Select yes if you are only claiming for laundry costs
