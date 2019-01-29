@@ -398,7 +398,7 @@ securityGuardNHS.error.required = Select yes you are a security guard for the NH
 
 printingOccupationList1.title = Is your job title listed?
 printingOccupationList1.heading = Is your job title listed?
-printingOccupationList1.secondaryHeading = Printing occupation list 3
+printingOccupationList1.secondaryHeading = Printing occupation list 1
 printingOccupationList1.checkYourAnswersLabel = Is your job title listed?
 printingOccupationList1.error.required = Select yes if your job title is listed
 printingOccupationList1.occupation1 = Letterpress section-electrical engineers (rotary presses)
@@ -406,3 +406,14 @@ printingOccupationList1.occupation2 = Electrotypers
 printingOccupationList1.occupation3 = Ink and roller makers
 printingOccupationList1.occupation4 = Machine minders (rotary)
 printingOccupationList1.occupation5 = Maintenance engineers (rotary presses) and stereotypers
+
+printingOccupationList2.title = Is your job title listed?
+printingOccupationList2.heading = Is your job title listed?
+printingOccupationList2.secondaryHeading = Printing occupation list 2
+printingOccupationList2.checkYourAnswersLabel = Is your job title listed?
+printingOccupationList2.error.required = Select yes if your job title is listed
+printingOccupationList2.occupation1 = Bench hands (periodical and bookbinding section)
+printingOccupationList2.occupation2 = Compositors (letterpress section)
+printingOccupationList2.occupation3 = Readers (letterpress section)
+printingOccupationList2.occupation4 = Telecommunications and electronic section wire room operators
+printingOccupationList2.occupation5 = Warehousemen (paper box making section)
