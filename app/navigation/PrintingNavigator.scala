@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package forms
+package navigation
 
+import controllers.routes
 import javax.inject.Inject
+import models.UserAnswers
+import pages.Page
+import play.api.mvc.Call
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class PrintingNavigator @Inject()() extends Navigator {
 
-class PrintingOccupationList1FormProvider @Inject() extends Mappings {
+  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
+    case _ => _ => routes.SessionExpiredController.onPageLoad()
+  }
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("printingOccupationList1.error.required")
-    )
+  protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case _ => _ => routes.SessionExpiredController.onPageLoad()
+  }
 }

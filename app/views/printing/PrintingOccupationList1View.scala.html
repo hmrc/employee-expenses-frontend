@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.routes._
+@import controllers.printing.routes._
 @import models.Mode
 
 @this(
@@ -34,7 +34,21 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("printingOccupationList1.heading")
+        @components.heading(
+            headingKey = "printingOccupationList1.heading",
+            secondaryHeaderKey = Some("printingOccupationList1.secondaryHeading")
+        )
+
+        @components.list(
+            pageKey = Some("printingOccupationList1"),
+            bulletList = Seq(
+                "occupation1",
+                "occupation2",
+                "occupation3",
+                "occupation4",
+                "occupation5"
+            )
+        )
 
         @components.input_yes_no(
             field = form("value"),

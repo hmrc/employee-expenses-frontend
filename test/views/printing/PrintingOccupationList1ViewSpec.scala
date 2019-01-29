@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.printing
 
-import controllers.routes
-import forms.PrintingOccupationList1FormProvider
+import controllers.printing.routes
+import forms.printing.PrintingOccupationList1FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.PrintingOccupationList1View
+import views.html.printing.PrintingOccupationList1View
 
 class PrintingOccupationList1ViewSpec extends YesNoViewBehaviours {
 
@@ -41,9 +41,21 @@ class PrintingOccupationList1ViewSpec extends YesNoViewBehaviours {
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
-    behave like pageWithBackLink(applyView(form))
+    behave like pageWithSecondaryHeader(applyView(form), messages(s"$messageKeyPrefix.secondaryHeading"))
+
+    behave like pageWithList(applyView(form), messageKeyPrefix,
+      Seq(
+        "occupation1",
+        "occupation2",
+        "occupation3",
+        "occupation4",
+        "occupation5"
+      )
+    )
 
     behave like yesNoPage(form, applyView, messageKeyPrefix, routes.PrintingOccupationList1Controller.onSubmit(NormalMode).url)
+
+    behave like pageWithBackLink(applyView(form))
   }
 
   application.stop()

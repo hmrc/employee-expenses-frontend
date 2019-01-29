@@ -24,6 +24,7 @@ import controllers.transport.routes._
 import controllers.police.routes._
 import controllers.foodCatering.routes._
 import controllers.clothing.routes._
+import controllers.printing.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.clothing.ClothingPage
@@ -32,6 +33,7 @@ import pages.foodCatering._
 import pages.healthcare._
 import pages.manufacturing._
 import pages.police._
+import pages.printing._
 import pages.transport._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
@@ -39,7 +41,8 @@ import viewmodels.AnswerRow
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
   def printingOccupationList1: Option[AnswerRow] = userAnswers.get(PrintingOccupationList1Page) map {
-    x => AnswerRow("printingOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.PrintingOccupationList1Controller.onPageLoad(CheckMode).url)
+    x => AnswerRow("printingOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      PrintingOccupationList1Controller.onPageLoad(CheckMode).url)
   }
 
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {

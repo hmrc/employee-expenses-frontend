@@ -27,6 +27,7 @@ import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
+import pages.printing.PrintingOccupationList1Page
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {

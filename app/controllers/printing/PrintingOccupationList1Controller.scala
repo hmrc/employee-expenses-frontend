@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.printing
 
 import controllers.actions._
-import forms.PrintingOccupationList1FormProvider
+import forms.printing.PrintingOccupationList1FormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.PrintingOccupationList1Page
+import pages.printing.PrintingOccupationList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.PrintingOccupationList1View
+import views.html.printing.PrintingOccupationList1View
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +35,7 @@ class PrintingOccupationList1Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          @Named("Printing") navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: PrintingOccupationList1FormProvider,

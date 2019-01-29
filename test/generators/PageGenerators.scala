@@ -27,6 +27,7 @@ import pages.manufacturing.{AluminiumOccupationList3Page, TypeOfManufacturingPag
 import pages.police.SpecialConstablePage
 import pages.transport._
 import pages.foodCatering._
+import pages.printing.PrintingOccupationList1Page
 
 trait PageGenerators {
 
