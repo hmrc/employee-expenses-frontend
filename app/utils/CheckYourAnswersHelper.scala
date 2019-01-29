@@ -256,4 +256,9 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       PrintingOccupationList1Controller.onPageLoad(CheckMode).url)
   }
 
+  def printingOccupationList2: Option[AnswerRow] = userAnswers.get(PrintingOccupationList2Page) map {
+    x => AnswerRow("printingOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      PrintingOccupationList2Controller.onPageLoad(CheckMode).url)
+  }
+
 }
