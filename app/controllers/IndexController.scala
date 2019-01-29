@@ -16,9 +16,9 @@
 
 package controllers
 
-import controllers.actions.{DataRetrievalAction, UnauthenticatedIdentifierAction}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
 import javax.inject.Inject
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -32,6 +32,7 @@ class IndexController @Inject()(
                                  view: IndexView,
                                  identify: UnauthenticatedIdentifierAction,
                                  getData: DataRetrievalAction,
+                                 requireData: DataRequiredAction,
                                  sessionRepository: SessionRepository
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
@@ -46,7 +47,7 @@ class IndexController @Inject()(
 
       updateSession.map {
         _ =>
-          Ok(view())
+          Redirect(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
       }
   }
 }
