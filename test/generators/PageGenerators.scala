@@ -25,6 +25,7 @@ import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
+import pages.security.SecurityGuardNHSPage
 
 trait PageGenerators {
 

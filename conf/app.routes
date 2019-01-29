@@ -199,7 +199,7 @@ POST       /clothing                                        controllers.clothing
 GET        /change-clothing                                 controllers.clothing.ClothingController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-clothing                                 controllers.clothing.ClothingController.onSubmit(mode: Mode = CheckMode)
 
-GET        /securityGuardNHS                        controllers.SecurityGuardNHSController.onPageLoad(mode: Mode = NormalMode)
-POST       /securityGuardNHS                        controllers.SecurityGuardNHSController.onSubmit(mode: Mode = NormalMode)
-GET        /changeSecurityGuardNHS                  controllers.SecurityGuardNHSController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeSecurityGuardNHS                  controllers.SecurityGuardNHSController.onSubmit(mode: Mode = CheckMode)
+GET        /security-guard-NHS                              controllers.security.SecurityGuardNHSController.onPageLoad(mode: Mode = NormalMode)
+POST       /security-guard-NHS                              controllers.security.SecurityGuardNHSController.onSubmit(mode: Mode = NormalMode)
+GET        /change-security-guard-NHS                       controllers.security.SecurityGuardNHSController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-security-guard-NHS                       controllers.security.SecurityGuardNHSController.onSubmit(mode: Mode = CheckMode)

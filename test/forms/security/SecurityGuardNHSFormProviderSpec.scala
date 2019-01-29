@@ -14,18 +14,32 @@
  * limitations under the License.
  */
 
-package pages
+package forms.security
 
-import pages.behaviours.PageBehaviours
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-class SecurityGuardNHSPageSpec extends PageBehaviours {
+class SecurityGuardNHSFormProviderSpec extends BooleanFieldBehaviours {
 
-  "SecurityGuardNHSPage" must {
+  val requiredKey = "securityGuardNHS.error.required"
+  val invalidKey = "error.boolean"
 
-    beRetrievable[Boolean](SecurityGuardNHSPage)
+  val form = new SecurityGuardNHSFormProvider()()
 
-    beSettable[Boolean](SecurityGuardNHSPage)
+  ".value" must {
 
-    beRemovable[Boolean](SecurityGuardNHSPage)
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
   }
 }

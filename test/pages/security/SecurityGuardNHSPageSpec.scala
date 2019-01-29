@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.security
 
-import javax.inject.Inject
+import pages.behaviours.PageBehaviours
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class SecurityGuardNHSPageSpec extends PageBehaviours {
 
-class SecurityGuardNHSFormProvider @Inject() extends Mappings {
+  "SecurityGuardNHSPage" must {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("securityGuardNHS.error.required")
-    )
+    beRetrievable[Boolean](SecurityGuardNHSPage)
+
+    beSettable[Boolean](SecurityGuardNHSPage)
+
+    beRemovable[Boolean](SecurityGuardNHSPage)
+  }
 }

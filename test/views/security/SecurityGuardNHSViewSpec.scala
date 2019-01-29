@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.security
 
-import controllers.routes
-import forms.SecurityGuardNHSFormProvider
+import forms.security.SecurityGuardNHSFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.SecurityGuardNHSView
+import views.html.security.SecurityGuardNHSView
+import controllers.security.routes._
 
 class SecurityGuardNHSViewSpec extends YesNoViewBehaviours {
 
@@ -43,7 +43,7 @@ class SecurityGuardNHSViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.SecurityGuardNHSController.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, SecurityGuardNHSController.onSubmit(NormalMode).url)
   }
 
   application.stop()

@@ -378,7 +378,7 @@ clothing.occupation1 = Leather currier (wet worker)
 clothing.occupation2 = Fellmongering worker
 clothing.occupation3 = Tanning operative (wet)
 
-securityGuardNHS.title = securityGuardNHS
-securityGuardNHS.heading = securityGuardNHS
-securityGuardNHS.checkYourAnswersLabel = securityGuardNHS
-securityGuardNHS.error.required = Select yes if securityGuardNHS
+securityGuardNHS.title = Are you a security guard for the NHS?
+securityGuardNHS.heading = Are you a security guard for the NHS?
+securityGuardNHS.checkYourAnswersLabel = Are you a security guard for the NHS?
+securityGuardNHS.error.required = Select yes you are a security guard for the NHS

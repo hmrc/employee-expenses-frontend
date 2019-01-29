@@ -24,6 +24,7 @@ import controllers.transport.routes._
 import controllers.police.routes._
 import controllers.foodCatering.routes._
 import controllers.clothing.routes._
+import controllers.security.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.clothing.ClothingPage
@@ -32,6 +33,7 @@ import pages.foodCatering._
 import pages.healthcare._
 import pages.manufacturing._
 import pages.police._
+import pages.security.SecurityGuardNHSPage
 import pages.transport._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
@@ -39,7 +41,8 @@ import viewmodels.AnswerRow
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
   def securityGuardNHS: Option[AnswerRow] = userAnswers.get(SecurityGuardNHSPage) map {
-    x => AnswerRow("securityGuardNHS.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, routes.SecurityGuardNHSController.onPageLoad(CheckMode).url)
+    x => AnswerRow("securityGuardNHS.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      SecurityGuardNHSController.onPageLoad(CheckMode).url)
   }
 
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {

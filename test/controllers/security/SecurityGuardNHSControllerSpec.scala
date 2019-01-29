@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.security
 
+import controllers.security.routes._
 import base.SpecBase
-import forms.SecurityGuardNHSFormProvider
+import forms.security.SecurityGuardNHSFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.SecurityGuardNHSPage
+import pages.security.SecurityGuardNHSPage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.SecurityGuardNHSView
+import views.html.security.SecurityGuardNHSView
 
 class SecurityGuardNHSControllerSpec extends SpecBase {
 
@@ -129,7 +129,7 @@ class SecurityGuardNHSControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +146,7 @@ class SecurityGuardNHSControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.security
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-case object SecurityGuardNHSPage extends QuestionPage[Boolean] {
+class SecurityGuardNHSFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "securityGuardNHS"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("securityGuardNHS.error.required")
+    )
 }

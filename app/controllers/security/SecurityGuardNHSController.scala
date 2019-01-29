@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.security
 
 import controllers.actions._
-import forms.SecurityGuardNHSFormProvider
+import forms.security.SecurityGuardNHSFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.SecurityGuardNHSPage
+import pages.security.SecurityGuardNHSPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.SecurityGuardNHSView
+import views.html.security.SecurityGuardNHSView
 
 import scala.concurrent.{ExecutionContext, Future}
 
