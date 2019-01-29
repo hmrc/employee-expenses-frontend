@@ -21,10 +21,10 @@ import models.{FirstIndustryOptions, NormalMode}
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.ViewBehaviours
+import views.behaviours.OptionsViewBehaviours
 import views.html.FirstIndustryOptionsView
 
-class FirstIndustryOptionsViewSpec extends ViewBehaviours {
+class FirstIndustryOptionsViewSpec extends OptionsViewBehaviours[FirstIndustryOptions] {
 
   val messageKeyPrefix = "firstIndustryOptions"
   val form = new FirstIndustryOptionsFormProvider()()
@@ -38,41 +38,8 @@ class FirstIndustryOptionsViewSpec extends ViewBehaviours {
 
     behave like normalPage(applyView(form), messageKeyPrefix)
     behave like pageWithBackLink(applyView(form))
+    behave like optionsPage(form, applyView, FirstIndustryOptions.options)
   }
 
-  "FirstIndustryOptionsView" when {
-
-    "rendered" must {
-
-      "contain radio buttons for the values" in {
-
-        val doc = asDocument(applyView(form))
-
-        for (option <- FirstIndustryOptions.options) {
-
-          assertContainsRadioButton(doc, option.id, "value", option.value, false)
-        }
-      }
-    }
-    for (option <- FirstIndustryOptions.options) {
-
-      s"rendered with a value of '${option.value}' " must {
-
-        s"have the '${option.value}' radio button selected" in {
-
-          val doc = asDocument(applyView(form.bind(Map("value" -> s"${option.value}"))))
-
-          assertContainsRadioButton(doc, option.id, "value", option.value, true)
-
-          for (unselectedOption <- FirstIndustryOptions.options.filterNot(o => o == option)) {
-
-            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
-
-          }
-        }
-      }
-
-    }
-  }
   application.stop()
 }
