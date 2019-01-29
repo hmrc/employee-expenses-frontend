@@ -26,9 +26,11 @@ import controllers.foodCatering.routes._
 import controllers.clothing.routes._
 import controllers.security.routes._
 import controllers.printing.routes._
+import controllers.electrical.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.clothing.ClothingPage
+import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.foodCatering._
 import pages.healthcare._
@@ -259,6 +261,13 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def printingOccupationList2: Option[AnswerRow] = userAnswers.get(PrintingOccupationList2Page) map {
     x => AnswerRow("printingOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       PrintingOccupationList2Controller.onPageLoad(CheckMode).url)
+  }
+
+  //Electrical
+
+  def electrical: Option[AnswerRow] = userAnswers.get(ElectricalPage) map {
+    x => AnswerRow("electrical.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      ElectricalController.onPageLoad(CheckMode).url)
   }
 
 }
