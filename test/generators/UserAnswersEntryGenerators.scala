@@ -21,15 +21,58 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
 import pages.clothing.ClothingPage
+import pages.electrical.ElectricalPage
 import pages.healthcare._
 import pages.engineering._
 import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
+import pages.security._
+import pages.printing._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryElectricalUserAnswersEntry: Arbitrary[(ElectricalPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[ElectricalPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryPrintingOccupationList2UserAnswersEntry: Arbitrary[(PrintingOccupationList2Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[PrintingOccupationList2Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryThirdIndustryOptionsUserAnswersEntry: Arbitrary[(ThirdIndustryOptionsPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[ThirdIndustryOptionsPage.type]
+        value <- arbitrary[ThirdIndustryOptions].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitrarySecurityGuardNHSUserAnswersEntry: Arbitrary[(SecurityGuardNHSPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[SecurityGuardNHSPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryPrintingOccupationList1UserAnswersEntry: Arbitrary[(PrintingOccupationList1Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[PrintingOccupationList1Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
 
   implicit lazy val arbitraryClothingUserAnswersEntry: Arbitrary[(ClothingPage.type, JsValue)] =
     Arbitrary {

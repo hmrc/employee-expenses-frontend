@@ -203,3 +203,28 @@ GET        /aluminium-occupation-list-3                        controllers.manuf
 POST       /aluminium-occupation-list-3                        controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = NormalMode)
 GET        /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /security-guard-NHS                              controllers.security.SecurityGuardNHSController.onPageLoad(mode: Mode = NormalMode)
+POST       /security-guard-NHS                              controllers.security.SecurityGuardNHSController.onSubmit(mode: Mode = NormalMode)
+GET        /change-security-guard-NHS                       controllers.security.SecurityGuardNHSController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-security-guard-NHS                       controllers.security.SecurityGuardNHSController.onSubmit(mode: Mode = CheckMode)
+
+GET        /printing-occupation-list-1                      controllers.printing.PrintingOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /printing-occupation-list-1                      controllers.printing.PrintingOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-printing-occupation-list-1               controllers.printing.PrintingOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-printing-occupation-list-1               controllers.printing.PrintingOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /printing-occupation-list-2                      controllers.printing.PrintingOccupationList2Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /printing-occupation-list-2                      controllers.printing.PrintingOccupationList2Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-printing-occupation-list-2               controllers.printing.PrintingOccupationList2Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-printing-occupation-list-2               controllers.printing.PrintingOccupationList2Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /electrical                                      controllers.electrical.ElectricalController.onPageLoad(mode: Mode = NormalMode)
+POST       /electrical                                      controllers.electrical.ElectricalController.onSubmit(mode: Mode = NormalMode)
+GET        /change-electrical                               controllers.electrical.ElectricalController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-electrical                               controllers.electrical.ElectricalController.onSubmit(mode: Mode = CheckMode)
+
+GET        /third-industry-options                          controllers.ThirdIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST       /third-industry-options                          controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-third-industry-options                   controllers.ThirdIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-third-industry-options                   controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = CheckMode)

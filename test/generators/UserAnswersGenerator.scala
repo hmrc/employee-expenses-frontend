@@ -22,18 +22,26 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
 import pages.clothing.ClothingPage
+import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.healthcare._
 import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
+import pages.printing._
+import pages.security._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
+    arbitrary[(ElectricalPage.type, JsValue)] ::
+    arbitrary[(PrintingOccupationList2Page.type, JsValue)] ::
+    arbitrary[(ThirdIndustryOptionsPage.type, JsValue)] ::
+    arbitrary[(SecurityGuardNHSPage.type, JsValue)] ::
+    arbitrary[(PrintingOccupationList1Page.type, JsValue)] ::
     arbitrary[(ClothingPage.type, JsValue)] ::
     arbitrary[(CateringStaffNHSPage.type, JsValue)] ::
     arbitrary[(WoodFurnitureOccupationList2Page.type, JsValue)] ::

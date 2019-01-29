@@ -24,19 +24,30 @@ import controllers.transport.routes._
 import controllers.police.routes._
 import controllers.foodCatering.routes._
 import controllers.clothing.routes._
+import controllers.security.routes._
+import controllers.printing.routes._
+import controllers.electrical.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.clothing.ClothingPage
+import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.foodCatering._
 import pages.healthcare._
 import pages.manufacturing._
 import pages.police._
+import pages.printing._
+import pages.security.SecurityGuardNHSPage
 import pages.transport._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
+
+  def thirdIndustryOptions: Option[AnswerRow] = userAnswers.get(ThirdIndustryOptionsPage) map {
+    x => AnswerRow("thirdIndustryOptions.checkYourAnswersLabel", s"thirdIndustryOptions.$x", true,
+      ThirdIndustryOptionsController.onPageLoad(CheckMode).url)
+  }
 
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
     x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
@@ -231,6 +242,32 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def clothing: Option[AnswerRow] = userAnswers.get(ClothingPage) map {
     x => AnswerRow("clothing.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       ClothingController.onPageLoad(CheckMode).url)
+  }
+
+  //Secuirty
+
+  def securityGuardNHS: Option[AnswerRow] = userAnswers.get(SecurityGuardNHSPage) map {
+    x => AnswerRow("securityGuardNHS.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      SecurityGuardNHSController.onPageLoad(CheckMode).url)
+  }
+
+  //Printing
+
+  def printingOccupationList1: Option[AnswerRow] = userAnswers.get(PrintingOccupationList1Page) map {
+    x => AnswerRow("printingOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      PrintingOccupationList1Controller.onPageLoad(CheckMode).url)
+  }
+
+  def printingOccupationList2: Option[AnswerRow] = userAnswers.get(PrintingOccupationList2Page) map {
+    x => AnswerRow("printingOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      PrintingOccupationList2Controller.onPageLoad(CheckMode).url)
+  }
+
+  //Electrical
+
+  def electrical: Option[AnswerRow] = userAnswers.get(ElectricalPage) map {
+    x => AnswerRow("electrical.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      ElectricalController.onPageLoad(CheckMode).url)
   }
 
 }
