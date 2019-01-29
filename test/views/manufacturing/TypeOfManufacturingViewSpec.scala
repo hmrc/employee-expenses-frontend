@@ -20,10 +20,10 @@ import forms.manufacturing.TypeOfManufacturingFormProvider
 import models.{NormalMode, TypeOfManufacturing}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.ViewBehaviours
+import views.behaviours.OptionsViewBehaviours
 import views.html.manufacturing.TypeOfManufacturingView
 
-class TypeOfManufacturingViewSpec extends ViewBehaviours {
+class TypeOfManufacturingViewSpec extends OptionsViewBehaviours[TypeOfManufacturing] {
 
   val messageKeyPrefix = "typeOfManufacturing"
 
@@ -41,38 +41,8 @@ class TypeOfManufacturingViewSpec extends ViewBehaviours {
     behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
-  }
 
-  "TypeOfManufacturingView" when {
-
-    "rendered" must {
-
-      "contain radio buttons for the value" in {
-
-        val doc = asDocument(applyView(form))
-
-        for (option <- TypeOfManufacturing.options) {
-          assertContainsRadioButton(doc, option.id, "value", option.value, false)
-        }
-      }
-    }
-
-    for (option <- TypeOfManufacturing.options) {
-
-      s"rendered with a value of '${option.value}'" must {
-
-        s"have the '${option.value}' radio button selected" in {
-
-          val doc = asDocument(applyView(form.bind(Map("value" -> s"${option.value}"))))
-
-          assertContainsRadioButton(doc, option.id, "value", option.value, true)
-
-          for (unselectedOption <- TypeOfManufacturing.options.filterNot(o => o == option)) {
-            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
-          }
-        }
-      }
-    }
+    behave like optionsPage(form, applyView, TypeOfManufacturing.options)
   }
 
   application.stop()
