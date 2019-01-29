@@ -30,6 +30,9 @@ import pages.printing._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryThirdIndustryOptionsPage: Arbitrary[ThirdIndustryOptionsPage.type] =
+    Arbitrary(ThirdIndustryOptionsPage)
+
   implicit lazy val arbitraryPrintingOccupationList1Page: Arbitrary[PrintingOccupationList1Page.type] =
     Arbitrary(PrintingOccupationList1Page)
 

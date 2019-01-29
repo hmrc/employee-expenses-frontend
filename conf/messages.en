@@ -406,3 +406,14 @@ printingOccupationList1.occupation2 = Electrotypers
 printingOccupationList1.occupation3 = Ink and roller makers
 printingOccupationList1.occupation4 = Machine minders (rotary)
 printingOccupationList1.occupation5 = Maintenance engineers (rotary presses) and stereotypers
+
+thirdIndustryOptions.title = What type of industry do you work in?
+thirdIndustryOptions.heading = What type of industry do you work in?
+thirdIndustryOptions.electrical = Electrical
+thirdIndustryOptions.education = Education
+thirdIndustryOptions.banksBuildingSocieties = Banks and building societies
+thirdIndustryOptions.security = Security
+thirdIndustryOptions.printing = Printing
+thirdIndustryOptions.none = None of the above
+thirdIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
+thirdIndustryOptions.error.required = Select the industry you work in

@@ -213,3 +213,8 @@ GET        /printing-occupation-list-1                      controllers.printing
 POST       /printing-occupation-list-1                      controllers.printing.PrintingOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
 GET        /change-printing-occupation-list-1               controllers.printing.PrintingOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-printing-occupation-list-1               controllers.printing.PrintingOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /third-industry-options                          controllers.ThirdIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST       /third-industry-options                          controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-third-industry-options                   controllers.ThirdIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-third-industry-options                   controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
