@@ -417,3 +417,14 @@ printingOccupationList2.occupation2 = Compositors (letterpress section)
 printingOccupationList2.occupation3 = Readers (letterpress section)
 printingOccupationList2.occupation4 = Telecommunications and electronic section wire room operators
 printingOccupationList2.occupation5 = Warehousemen (paper box making section)
+
+thirdIndustryOptions.title = What type of industry do you work in?
+thirdIndustryOptions.heading = What type of industry do you work in?
+thirdIndustryOptions.electrical = Electrical
+thirdIndustryOptions.education = Education
+thirdIndustryOptions.banksBuildingSocieties = Banks and building societies
+thirdIndustryOptions.security = Security
+thirdIndustryOptions.printing = Printing
+thirdIndustryOptions.none = None of the above
+thirdIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
+thirdIndustryOptions.error.required = Select the industry you work in

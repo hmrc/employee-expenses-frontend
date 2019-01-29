@@ -42,6 +42,11 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def thirdIndustryOptions: Option[AnswerRow] = userAnswers.get(ThirdIndustryOptionsPage) map {
+    x => AnswerRow("thirdIndustryOptions.checkYourAnswersLabel", s"thirdIndustryOptions.$x", true,
+      ThirdIndustryOptionsController.onPageLoad(CheckMode).url)
+  }
+
   def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
     x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
       SecondIndustryOptionsController.onPageLoad(CheckMode).url)
