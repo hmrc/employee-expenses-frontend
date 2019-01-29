@@ -198,3 +198,8 @@ GET        /clothing                                        controllers.clothing
 POST       /clothing                                        controllers.clothing.ClothingController.onSubmit(mode: Mode = NormalMode)
 GET        /change-clothing                                 controllers.clothing.ClothingController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-clothing                                 controllers.clothing.ClothingController.onSubmit(mode: Mode = CheckMode)
+
+GET        /aluminium-occupation-list-3                        controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /aluminium-occupation-list-3                        controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = CheckMode)
