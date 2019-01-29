@@ -26,8 +26,12 @@ import pages.police._
 import pages.transport._
 import pages.foodCatering._
 import pages.security._
+import pages.printing._
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryPrintingOccupationList1Page: Arbitrary[PrintingOccupationList1Page.type] =
+    Arbitrary(PrintingOccupationList1Page)
 
   implicit lazy val arbitraryAluminiumOccupationList3Page: Arbitrary[AluminiumOccupationList3Page.type] =
     Arbitrary(AluminiumOccupationList3Page)

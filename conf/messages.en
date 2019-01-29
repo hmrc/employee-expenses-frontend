@@ -395,3 +395,14 @@ securityGuardNHS.title = Are you a security guard for the NHS?
 securityGuardNHS.heading = Are you a security guard for the NHS?
 securityGuardNHS.checkYourAnswersLabel = Are you a security guard for the NHS?
 securityGuardNHS.error.required = Select yes you are a security guard for the NHS
+
+printingOccupationList1.title = Is your job title listed?
+printingOccupationList1.heading = Is your job title listed?
+printingOccupationList1.secondaryHeading = Printing occupation list 3
+printingOccupationList1.checkYourAnswersLabel = Is your job title listed?
+printingOccupationList1.error.required = Select yes if your job title is listed
+printingOccupationList1.occupation1 = Letterpress section-electrical engineers (rotary presses)
+printingOccupationList1.occupation2 = Electrotypers
+printingOccupationList1.occupation3 = Ink and roller makers
+printingOccupationList1.occupation4 = Machine minders (rotary)
+printingOccupationList1.occupation5 = Maintenance engineers (rotary presses) and stereotypers

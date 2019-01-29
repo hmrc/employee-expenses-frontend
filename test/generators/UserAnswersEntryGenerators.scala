@@ -27,7 +27,8 @@ import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
-import pages.security.SecurityGuardNHSPage
+import pages.security._
+import pages.printing._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
@@ -36,6 +37,14 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[SecurityGuardNHSPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryPrintingOccupationList1UserAnswersEntry: Arbitrary[(PrintingOccupationList1Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[PrintingOccupationList1Page.type]
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }
