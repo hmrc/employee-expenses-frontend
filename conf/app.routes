@@ -203,3 +203,8 @@ GET        /aluminium-occupation-list-3                        controllers.manuf
 POST       /aluminium-occupation-list-3                        controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = NormalMode)
 GET        /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /printingOccupationList1                        controllers.PrintingOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /printingOccupationList1                        controllers.PrintingOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
+GET        /changePrintingOccupationList1                  controllers.PrintingOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /changePrintingOccupationList1                  controllers.PrintingOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
