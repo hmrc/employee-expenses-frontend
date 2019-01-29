@@ -40,7 +40,7 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(Names.named("Engineering")).to(classOf[EngineeringNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named("Healthcare")).to(classOf[HealthcareNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named("Transport")).to(classOf[TransportNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Manufacturing")).to(classOf[TransportNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named("Manufacturing")).to(classOf[ManufacturingNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named("Police")).to(classOf[PoliceNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named("FoodCatering")).to(classOf[FoodCateringNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named("Clothing")).to(classOf[ClothingNavigator])

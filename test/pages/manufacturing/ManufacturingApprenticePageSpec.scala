@@ -14,32 +14,18 @@
  * limitations under the License.
  */
 
-package forms.manufacturing
+package pages.manufacturing
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import pages.behaviours.PageBehaviours
 
-class AluminiumApprenticeFormProviderSpec extends BooleanFieldBehaviours {
+class ManufacturingApprenticePageSpec extends PageBehaviours {
 
-  val requiredKey = "aluminiumApprentice.error.required"
-  val invalidKey = "error.boolean"
+  "ManufacturingApprenticePage" must {
 
-  val form = new AluminiumApprenticeFormProvider()()
+    beRetrievable[Boolean](ManufacturingApprenticePage)
 
-  ".value" must {
+    beSettable[Boolean](ManufacturingApprenticePage)
 
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    beRemovable[Boolean](ManufacturingApprenticePage)
   }
 }

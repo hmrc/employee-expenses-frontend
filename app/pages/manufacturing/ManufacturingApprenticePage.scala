@@ -16,16 +16,12 @@
 
 package pages.manufacturing
 
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class AluminiumApprenticePageSpec extends PageBehaviours {
+case object ManufacturingApprenticePage extends QuestionPage[Boolean] {
 
-  "AluminiumApprenticePage" must {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[Boolean](AluminiumApprenticePage)
-
-    beSettable[Boolean](AluminiumApprenticePage)
-
-    beRemovable[Boolean](AluminiumApprenticePage)
-  }
+  override def toString: String = "manufacturingApprentice"
 }
