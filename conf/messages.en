@@ -422,3 +422,14 @@ electrical.title = Are you only claiming for laundry costs?
 electrical.heading = Are you only claiming for laundry costs?
 electrical.checkYourAnswersLabel = Are you only claiming for laundry costs?
 electrical.error.required = Select yes if you are only claiming for laundry costs
+
+thirdIndustryOptions.title = What type of industry do you work in?
+thirdIndustryOptions.heading = What type of industry do you work in?
+thirdIndustryOptions.electrical = Electrical
+thirdIndustryOptions.education = Education
+thirdIndustryOptions.banksBuildingSocieties = Banks and building societies
+thirdIndustryOptions.security = Security
+thirdIndustryOptions.printing = Printing
+thirdIndustryOptions.none = None of the above
+thirdIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
+thirdIndustryOptions.error.required = Select the industry you work in
