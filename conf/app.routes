@@ -203,3 +203,8 @@ GET        /aluminium-occupation-list-3                        controllers.manuf
 POST       /aluminium-occupation-list-3                        controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = NormalMode)
 GET        /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /security-guard-NHS                              controllers.security.SecurityGuardNHSController.onPageLoad(mode: Mode = NormalMode)
+POST       /security-guard-NHS                              controllers.security.SecurityGuardNHSController.onSubmit(mode: Mode = NormalMode)
+GET        /change-security-guard-NHS                       controllers.security.SecurityGuardNHSController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-security-guard-NHS                       controllers.security.SecurityGuardNHSController.onSubmit(mode: Mode = CheckMode)
