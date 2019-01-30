@@ -17,6 +17,8 @@
 package controllers
 
 import base.SpecBase
+import models.NormalMode
+import models.requests._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
@@ -24,15 +26,19 @@ class IndexControllerSpec extends SpecBase {
 
   "Index Controller" must {
 
-    "return Redirect to the first page of the application and the correct view for a GET" in {
+    "redirect to the first page of the application and the correct view for a GET when user answers is empty" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, routes.IndexController.onPageLoad().url)
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
 
-      val result = route(application, request).value
+      val dataRequest = DataRequest(request = request, mongoKey = "test", nino = None, userAnswers = emptyUserAnswers)
+
+      val result = route(application, dataRequest).value
 
       status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
 
       application.stop()
     }

@@ -17,7 +17,7 @@
 package controllers.electrical
 
 import base.SpecBase
-import controllers.routes
+import controllers.electrical.routes._
 import forms.electrical.ElectricalFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -35,7 +35,7 @@ class ElectricalControllerSpec extends SpecBase {
   val formProvider = new ElectricalFormProvider()
   val form = formProvider()
 
-  lazy val electricalRoute = routes.ElectricalController.onPageLoad(NormalMode).url
+  lazy val electricalRoute = ElectricalController.onPageLoad(NormalMode).url
 
   "Electrical Controller" must {
 
