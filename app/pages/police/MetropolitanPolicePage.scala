@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.police
 
-import models.{EmployerContribution, UserAnswers}
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-import scala.util.{Success, Try}
-
-case object EmployerContributionPage extends QuestionPage[EmployerContribution] {
+case object MetropolitanPolicePage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "employerContribution"
-
-  override def cleanup(value: Option[EmployerContribution], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match  {
-      case Some(EmployerContribution.Some) => Success(userAnswers)
-      case _ => userAnswers.remove(ExpensesEmployerPaidPage)
-  }
+  override def toString: String = "metropolitanPolice"
 }

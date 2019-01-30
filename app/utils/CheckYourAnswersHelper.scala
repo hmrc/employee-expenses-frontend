@@ -230,6 +230,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       PoliceOccupationListController.onPageLoad(CheckMode).url)
   }
 
+  def metropolitanPolice: Option[AnswerRow] = userAnswers.get(MetropolitanPolicePage) map {
+    x => AnswerRow("metropolitanPolice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      MetropolitanPoliceController.onPageLoad(CheckMode).url)
+  }
+
   //FoodCatering
 
   def cateringStaffNHS: Option[AnswerRow] = userAnswers.get(CateringStaffNHSPage) map {
@@ -244,7 +249,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       ClothingController.onPageLoad(CheckMode).url)
   }
 
-  //Secuirty
+  //Security
 
   def securityGuardNHS: Option[AnswerRow] = userAnswers.get(SecurityGuardNHSPage) map {
     x => AnswerRow("securityGuardNHS.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,

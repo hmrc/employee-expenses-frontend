@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.police
 
-import models.{EmployerContribution, UserAnswers}
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-import scala.util.{Success, Try}
+class MetropolitanPoliceFormProvider @Inject() extends Mappings {
 
-case object EmployerContributionPage extends QuestionPage[EmployerContribution] {
-
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "employerContribution"
-
-  override def cleanup(value: Option[EmployerContribution], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match  {
-      case Some(EmployerContribution.Some) => Success(userAnswers)
-      case _ => userAnswers.remove(ExpensesEmployerPaidPage)
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("metropolitanPolice.error.required")
+    )
 }
