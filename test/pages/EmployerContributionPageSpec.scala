@@ -16,10 +16,14 @@
 
 package pages
 
-import models.EmployerContribution
+import base.SpecBase
+import generators.Generators
+import models.{EmployerContribution, UserAnswers}
 import pages.behaviours.PageBehaviours
 
-class EmployerContributionPageSpec extends PageBehaviours {
+import scala.util.Try
+
+class EmployerContributionPageSpec extends PageBehaviours with Generators {
 
   "EmployerContributionPage" must {
 
@@ -28,5 +32,26 @@ class EmployerContributionPageSpec extends PageBehaviours {
     beSettable[EmployerContribution](EmployerContributionPage)
 
     beRemovable[EmployerContribution](EmployerContributionPage)
+
+    "remove ExpensesPaid amount when EmployerContribution is None" in {
+      val userAnswers: Try[UserAnswers] = emptyUserAnswers.set(ExpensesEmployerPaidPage, 100)
+      val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage, EmployerContribution.None).get
+
+      updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe None
+    }
+
+    "remove ExpensesPaid amount when EmployerContribution is All" in {
+      val userAnswers: Try[UserAnswers] = emptyUserAnswers.set(ExpensesEmployerPaidPage, 180)
+      val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage, EmployerContribution.All).get
+
+      updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe None
+    }
+
+    "keep ExpensesPaid amount when EmployerContribution is Some" in {
+      val userAnswers: Try[UserAnswers] = emptyUserAnswers.set(ExpensesEmployerPaidPage, 100)
+      val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage, EmployerContribution.Some).get
+
+      updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe Some(100)
+    }
   }
 }
