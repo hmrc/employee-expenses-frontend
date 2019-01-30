@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.police
 
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class MetropolitanPolicePageSpec extends PageBehaviours {
+case object MetropolitanPolicePage extends QuestionPage[Boolean] {
 
-  "MetropolitanPolicePage" must {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[Boolean](MetropolitanPolicePage)
-
-    beSettable[Boolean](MetropolitanPolicePage)
-
-    beRemovable[Boolean](MetropolitanPolicePage)
-  }
+  override def toString: String = "metropolitanPolice"
 }

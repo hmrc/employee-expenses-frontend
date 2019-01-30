@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.police
 
 import base.SpecBase
-import forms.MetropolitanPoliceFormProvider
+import forms.police.MetropolitanPoliceFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.MetropolitanPolicePage
+import pages.police.MetropolitanPolicePage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.MetropolitanPoliceView
+import views.html.police.MetropolitanPoliceView
 
 class MetropolitanPoliceControllerSpec extends SpecBase {
 
@@ -35,7 +34,7 @@ class MetropolitanPoliceControllerSpec extends SpecBase {
   val formProvider = new MetropolitanPoliceFormProvider()
   val form = formProvider()
 
-  lazy val metropolitanPoliceRoute = routes.MetropolitanPoliceController.onPageLoad(NormalMode).url
+  lazy val metropolitanPoliceRoute: String = routes.MetropolitanPoliceController.onPageLoad(NormalMode).url
 
   "MetropolitanPolice Controller" must {
 
@@ -129,7 +128,7 @@ class MetropolitanPoliceControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class MetropolitanPoliceControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

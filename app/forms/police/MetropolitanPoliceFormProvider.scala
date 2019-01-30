@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.police
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-case object MetropolitanPolicePage extends QuestionPage[Boolean] {
+class MetropolitanPoliceFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "metropolitanPolice"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("metropolitanPolice.error.required")
+    )
 }

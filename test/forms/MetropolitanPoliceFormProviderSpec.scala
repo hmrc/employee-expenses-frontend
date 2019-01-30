@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.police.MetropolitanPoliceFormProvider
 import play.api.data.FormError
 
 class MetropolitanPoliceFormProviderSpec extends BooleanFieldBehaviours {

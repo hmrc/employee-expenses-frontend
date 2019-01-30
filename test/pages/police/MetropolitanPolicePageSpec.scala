@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.police
 
-import javax.inject.Inject
+import pages.behaviours.PageBehaviours
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class MetropolitanPolicePageSpec extends PageBehaviours {
 
-class MetropolitanPoliceFormProvider @Inject() extends Mappings {
+  "MetropolitanPolicePage" must {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("metropolitanPolice.error.required")
-    )
+    beRetrievable[Boolean](MetropolitanPolicePage)
+
+    beSettable[Boolean](MetropolitanPolicePage)
+
+    beRemovable[Boolean](MetropolitanPolicePage)
+  }
 }

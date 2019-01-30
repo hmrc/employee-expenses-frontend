@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package views
+package views.police
 
-import controllers.routes
-import forms.MetropolitanPoliceFormProvider
+import controllers.police.routes
+import forms.police.MetropolitanPoliceFormProvider
 import models.NormalMode
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.MetropolitanPoliceView
+import views.html.police.MetropolitanPoliceView
 
 class MetropolitanPoliceViewSpec extends YesNoViewBehaviours {
 
@@ -30,7 +31,7 @@ class MetropolitanPoliceViewSpec extends YesNoViewBehaviours {
 
   val form = new MetropolitanPoliceFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "MetropolitanPolice view" must {
 
