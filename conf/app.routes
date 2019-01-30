@@ -228,3 +228,8 @@ GET        /third-industry-options                          controllers.ThirdInd
 POST       /third-industry-options                          controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
 GET        /change-third-industry-options                   controllers.ThirdIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-third-industry-options                   controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /metropolitanPolice                        controllers.MetropolitanPoliceController.onPageLoad(mode: Mode = NormalMode)
+POST       /metropolitanPolice                        controllers.MetropolitanPoliceController.onSubmit(mode: Mode = NormalMode)
+GET        /changeMetropolitanPolice                  controllers.MetropolitanPoliceController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeMetropolitanPolice                  controllers.MetropolitanPoliceController.onSubmit(mode: Mode = CheckMode)
