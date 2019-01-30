@@ -120,4 +120,9 @@ trait PageBehaviours extends WordSpec with MustMatchers with PropertyChecks with
   def beSettable[A]: BeSettable[A] = new BeSettable[A]
 
   def beRemovable[A]: BeRemovable[A] = new BeRemovable[A]
+
+  val userAnswersId = "id"
+
+  def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
+
 }
