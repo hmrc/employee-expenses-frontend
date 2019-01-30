@@ -233,3 +233,8 @@ GET        /metropolitan-police                             controllers.police.M
 POST       /metropolitan-police                             controllers.police.MetropolitanPoliceController.onSubmit(mode: Mode = NormalMode)
 GET        /change-metropolitan-police                      controllers.police.MetropolitanPoliceController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-metropolitan-police                      controllers.police.MetropolitanPoliceController.onSubmit(mode: Mode = CheckMode)
+
+GET        /communitySupportOfficer                        controllers.CommunitySupportOfficerController.onPageLoad(mode: Mode = NormalMode)
+POST       /communitySupportOfficer                        controllers.CommunitySupportOfficerController.onSubmit(mode: Mode = NormalMode)
+GET        /changeCommunitySupportOfficer                  controllers.CommunitySupportOfficerController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeCommunitySupportOfficer                  controllers.CommunitySupportOfficerController.onSubmit(mode: Mode = CheckMode)

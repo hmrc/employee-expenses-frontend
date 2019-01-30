@@ -31,6 +31,9 @@ import pages.printing._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryCommunitySupportOfficerPage: Arbitrary[CommunitySupportOfficerPage.type] =
+    Arbitrary(CommunitySupportOfficerPage)
+
   implicit lazy val arbitraryMetropolitanPolicePage: Arbitrary[MetropolitanPolicePage.type] =
     Arbitrary(MetropolitanPolicePage)
 
