@@ -438,3 +438,6 @@ metropolitanPolice.title = Do you work for the Metropolitan Police?
 metropolitanPolice.heading = Do you work for the Metropolitan Police?
 metropolitanPolice.checkYourAnswersLabel = Do you work for the Metropolitan Police?
 metropolitanPolice.error.required = Select yes if you work for the Metropolitan Police
+
+cannotClaimExpense.title = cannotClaimExpense
+cannotClaimExpense.heading = cannotClaimExpense
