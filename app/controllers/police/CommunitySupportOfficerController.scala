@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.police
 
 import controllers.actions._
-import forms.CommunitySupportOfficerFormProvider
+import forms.police.CommunitySupportOfficerFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.CommunitySupportOfficerPage
+import pages.police.CommunitySupportOfficerPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.CommunitySupportOfficerView
+import views.html.police.CommunitySupportOfficerView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class giCommunitySupportOfficerController @Inject()(
+class CommunitySupportOfficerController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         @Named("Police") navigator: Navigator,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: CommunitySupportOfficerFormProvider,
@@ -56,7 +56,7 @@ class giCommunitySupportOfficerController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(

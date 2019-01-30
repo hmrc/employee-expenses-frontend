@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.police
 
-import pages.behaviours.PageBehaviours
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class CommunitySupportOfficerPageSpec extends PageBehaviours {
+class CommunitySupportOfficerFormProvider @Inject() extends Mappings {
 
-  "CommunitySupportOfficerPage" must {
-
-    beRetrievable[Boolean](CommunitySupportOfficerPage)
-
-    beSettable[Boolean](CommunitySupportOfficerPage)
-
-    beRemovable[Boolean](CommunitySupportOfficerPage)
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("communitySupportOfficer.error.required")
+    )
 }

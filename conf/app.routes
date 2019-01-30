@@ -234,7 +234,7 @@ POST       /metropolitan-police                             controllers.police.M
 GET        /change-metropolitan-police                      controllers.police.MetropolitanPoliceController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-metropolitan-police                      controllers.police.MetropolitanPoliceController.onSubmit(mode: Mode = CheckMode)
 
-GET        /communitySupportOfficer                        controllers.CommunitySupportOfficerController.onPageLoad(mode: Mode = NormalMode)
-POST       /communitySupportOfficer                        controllers.CommunitySupportOfficerController.onSubmit(mode: Mode = NormalMode)
-GET        /changeCommunitySupportOfficer                  controllers.CommunitySupportOfficerController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeCommunitySupportOfficer                  controllers.CommunitySupportOfficerController.onSubmit(mode: Mode = CheckMode)
+GET        /community-support-officer                       controllers.police.CommunitySupportOfficerController.onPageLoad(mode: Mode = NormalMode)
+POST       /community-support-officer                       controllers.police.CommunitySupportOfficerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-community-support-officer                controllers.police.CommunitySupportOfficerController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-community-support-officer                controllers.police.CommunitySupportOfficerController.onSubmit(mode: Mode = CheckMode)

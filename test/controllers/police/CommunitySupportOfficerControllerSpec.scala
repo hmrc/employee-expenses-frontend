@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.police
 
 import base.SpecBase
-import forms.CommunitySupportOfficerFormProvider
+import forms.police.CommunitySupportOfficerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.CommunitySupportOfficerPage
+import pages.police.CommunitySupportOfficerPage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.CommunitySupportOfficerView
+import views.html.police.CommunitySupportOfficerView
 
 class CommunitySupportOfficerControllerSpec extends SpecBase {
 
@@ -37,7 +36,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase {
 
   lazy val communitySupportOfficerRoute = routes.CommunitySupportOfficerController.onPageLoad(NormalMode).url
 
-  "CommunitySupportOfficer Controller" must {
+  "CommunitySupportOfficer Controller" must {git 
 
     "return OK and the correct view for a GET" in {
 
@@ -129,7 +128,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

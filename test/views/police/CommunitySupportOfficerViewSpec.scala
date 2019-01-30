@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.police
 
-import controllers.routes
-import forms.CommunitySupportOfficerFormProvider
+import forms.police.CommunitySupportOfficerFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.CommunitySupportOfficerView
+import views.html.police.CommunitySupportOfficerView
+import controllers.police.routes
 
 class CommunitySupportOfficerViewSpec extends YesNoViewBehaviours {
 
