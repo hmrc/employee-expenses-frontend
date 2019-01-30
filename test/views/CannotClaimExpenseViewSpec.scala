@@ -16,22 +16,28 @@
 
 package views
 
+import play.api.Application
 import views.behaviours.ViewBehaviours
 import views.html.CannotClaimExpenseView
 
 class CannotClaimExpenseViewSpec extends ViewBehaviours {
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val govUkUrl: String = frontendAppConfig.govUkUrl
 
   "CannotClaimExpense view" must {
 
     val view = application.injector.instanceOf[CannotClaimExpenseView]
 
-    val applyView = view.apply()(fakeRequest, messages)
+    val applyView = view.apply(govUkUrl)(fakeRequest, messages)
 
     behave like normalPage(applyView, "cannotClaimExpense")
 
     behave like pageWithBackLink(applyView)
+
+    behave like pageWithBodyText(applyView, "cannotClaimExpense.body")
+
+    behave like pageWithHyperLink(applyView, govUkUrl)
   }
 
   application.stop()

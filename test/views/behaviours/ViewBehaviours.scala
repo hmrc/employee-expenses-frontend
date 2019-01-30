@@ -93,7 +93,7 @@ trait ViewBehaviours extends ViewSpecBase {
       "have correct values" in {
 
         val doc = asDocument(view)
-        bulletList.foreach{
+        bulletList.foreach {
           x => assertContainsMessages(doc, s"$pageKey.$x")
         }
       }
@@ -130,4 +130,31 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
+  def pageWithBodyText(view: HtmlFormat.Appendable,
+                       messageKey: String*): Unit = {
+
+    "behave like a page with body text" must {
+
+      "display content" in {
+        val doc = asDocument(view)
+        for (key <- messageKey) {
+          assertContainsMessages(doc, key)
+        }
+      }
+    }
+  }
+
+  def pageWithHyperLink(view: HtmlFormat.Appendable,
+                        url: String,
+                        id: String = "link"): Unit = {
+
+    "behave like a page with a url link" must {
+      "display link" in {
+        val doc = asDocument(view)
+        doc.getElementById(id).attr("href") mustBe url
+      }
+    }
+  }
+
 }
+

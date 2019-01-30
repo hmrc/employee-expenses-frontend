@@ -38,7 +38,7 @@ class CannotClaimExpenseControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view()(fakeRequest, messages).toString
+        view(frontendAppConfig.govUkUrl)(fakeRequest, messages).toString
 
       application.stop()
     }

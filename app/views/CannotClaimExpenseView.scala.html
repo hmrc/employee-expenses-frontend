@@ -18,7 +18,7 @@
     main_template: MainTemplate
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(govUkUrl: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("cannotClaimExpense.title")
@@ -27,4 +27,9 @@
     @components.back_link()
 
     @components.heading("cannotClaimExpense.heading")
+
+    <p>@messages("cannotClaimExpense.body")</p>
+
+    <p><a id="link" href=@govUkUrl>@messages("cannotClaimExpense.hyperLink")</a></p>
+
 }
