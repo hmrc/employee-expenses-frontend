@@ -19,6 +19,7 @@ package generators
 import org.scalacheck.Arbitrary
 import pages._
 import pages.clothing._
+import pages.construction.JoinerCarpenterPage
 import pages.electrical.ElectricalPage
 import pages.healthcare._
 import pages.engineering._
@@ -30,6 +31,9 @@ import pages.security._
 import pages.printing._
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryJoinerCarpenterPage: Arbitrary[JoinerCarpenterPage.type] =
+    Arbitrary(JoinerCarpenterPage)
 
   implicit lazy val arbitraryCommunitySupportOfficerPage: Arbitrary[CommunitySupportOfficerPage.type] =
     Arbitrary(CommunitySupportOfficerPage)
