@@ -289,4 +289,9 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       JoinerCarpenterController.onPageLoad(CheckMode).url)
   }
 
+  def stoneMason: Option[AnswerRow] = userAnswers.get(StoneMasonPage) map {
+    x => AnswerRow("stoneMason.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      StoneMasonController.onPageLoad(CheckMode).url)
+  }
+
 }

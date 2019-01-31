@@ -32,6 +32,9 @@ import pages.printing._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryStoneMasonPage: Arbitrary[StoneMasonPage.type] =
+    Arbitrary(StoneMasonPage)
+
   implicit lazy val arbitraryJoinerCarpenterPage: Arbitrary[JoinerCarpenterPage.type] =
     Arbitrary(JoinerCarpenterPage)
 

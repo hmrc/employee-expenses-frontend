@@ -451,3 +451,8 @@ joinerCarpenter.title = Are you a joiner or carpenter?
 joinerCarpenter.heading = Are you a joiner or carpenter?
 joinerCarpenter.checkYourAnswersLabel = Are you a joiner or carpenter?
 joinerCarpenter.error.required = Select yes if you are a joiner or carpenter
+
+stoneMason.title = stoneMason
+stoneMason.heading = stoneMason
+stoneMason.checkYourAnswersLabel = stoneMason
+stoneMason.error.required = Select yes if stoneMason
