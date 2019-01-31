@@ -21,8 +21,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc._
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.http.SessionKeys
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -43,7 +42,7 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
 
       val unAuthAction = new UnauthenticatedIdentifierAction(frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
-      val result = controller.onPageLoad()(fakeRequest.withSession("mongoKey" -> "key"))
+      val result = controller.onPageLoad()(fakeRequest.withSession(frontendAppConfig.mongoKey -> "key"))
 
       status(result) mustBe OK
 
@@ -58,12 +57,12 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
 
       val unAuthAction = new UnauthenticatedIdentifierAction(frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
-      val request = fakeRequest.withSession("mongoKey" -> "key")
+      val request = fakeRequest.withSession(frontendAppConfig.mongoKey -> "key")
       val result: Future[Result] = controller.onPageLoad()(request)
 
       whenReady(result) {
         result =>
-          result.session(request).data.get("mongoKey") must contain("key")
+          result.session(request).data.get(frontendAppConfig.mongoKey) must contain("key")
       }
 
       application.stop()
@@ -77,7 +76,7 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
 
       val unAuthAction = new UnauthenticatedIdentifierAction(frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
-      val result = controller.onPageLoad()(fakeRequest.withSession("sessionId" -> "key"))
+      val result = controller.onPageLoad()(fakeRequest.withSession(SessionKeys.sessionId -> "key"))
 
       status(result) mustBe OK
 
@@ -91,12 +90,12 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
 
       val unAuthAction = new UnauthenticatedIdentifierAction(frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
-      val request = fakeRequest.withSession("sessionId" -> "key")
+      val request = fakeRequest.withSession(SessionKeys.sessionId -> "key")
       val result = controller.onPageLoad()(request)
 
       whenReady(result) {
         result =>
-          result.session(request).data.get("mongoKey") must contain("key")
+          result.session(request).data.get(frontendAppConfig.mongoKey) must contain("key")
       }
 
       application.stop()

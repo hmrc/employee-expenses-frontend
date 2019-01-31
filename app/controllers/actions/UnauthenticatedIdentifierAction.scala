@@ -37,7 +37,7 @@ class UnauthenticatedIdentifierAction @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    val existingMongoKey = request.session.get("mongoKey")
+    val existingMongoKey = request.session.get(config.mongoKey)
 
     val mongoKey: String = existingMongoKey
       .orElse(hc.sessionId.map(_.value))
@@ -46,7 +46,7 @@ class UnauthenticatedIdentifierAction @Inject()(
     block(IdentifierRequest(request, mongoKey)).map {
       result =>
         if (existingMongoKey.isEmpty) {
-          result.addingToSession("mongoKey" -> mongoKey)(request)
+          result.addingToSession(config.mongoKey -> mongoKey)(request)
         } else {
           result
         }

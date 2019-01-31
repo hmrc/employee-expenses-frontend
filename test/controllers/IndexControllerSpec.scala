@@ -17,12 +17,21 @@
 package controllers
 
 import base.SpecBase
+import config.FrontendAppConfig
+import controllers.actions.{DataRetrievalAction, UnauthenticatedIdentifierAction}
 import models.NormalMode
-import models.requests._
+import org.scalatest.concurrent.ScalaFutures
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
+import uk.gov.hmrc.http.SessionKeys
 
-class IndexControllerSpec extends SpecBase {
+import scala.concurrent.ExecutionContext
+
+
+class IndexControllerSpec extends SpecBase with ScalaFutures {
+
 
   "Index Controller" must {
 
@@ -30,15 +39,28 @@ class IndexControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
+      val injector = application.injector
 
-      val dataRequest = DataRequest(request = request, mongoKey = "test", nino = None, userAnswers = emptyUserAnswers)
+      val controller =
+        new IndexController(
+          controllerComponents = injector.instanceOf[MessagesControllerComponents],
+          identify = injector.instanceOf[UnauthenticatedIdentifierAction],
+          getData = injector.instanceOf[DataRetrievalAction],
+          sessionRepository = injector.instanceOf[SessionRepository]
+        )(ec = injector.instanceOf[ExecutionContext])
 
-      val result = route(application, dataRequest).value
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
+
+      val result = controller.onPageLoad(request)
 
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+
+      whenReady(result) {
+        result =>
+          result.session(request).data.get(frontendAppConfig.mongoKey) must contain("key")
+      }
 
       application.stop()
     }

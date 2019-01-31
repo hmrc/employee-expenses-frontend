@@ -44,7 +44,7 @@ class IndexController @Inject()(
 
       updateSession.map {
         _ =>
-          Redirect(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+          Redirect(routes.MultipleEmploymentsController.onPageLoad(NormalMode))
       }
   }
 }
