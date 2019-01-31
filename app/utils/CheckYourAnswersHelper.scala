@@ -44,6 +44,8 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+
+
   def thirdIndustryOptions: Option[AnswerRow] = userAnswers.get(ThirdIndustryOptionsPage) map {
     x => AnswerRow("thirdIndustryOptions.checkYourAnswersLabel", s"thirdIndustryOptions.$x", true,
       ThirdIndustryOptionsController.onPageLoad(CheckMode).url)
@@ -225,14 +227,19 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       SpecialConstableController.onPageLoad(CheckMode).url)
   }
 
-  def policeOccupationList: Option[AnswerRow] = userAnswers.get(PoliceOccupationListPage) map {
-    x => AnswerRow("policeOccupationList.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      PoliceOccupationListController.onPageLoad(CheckMode).url)
+  def policeOfficer: Option[AnswerRow] = userAnswers.get(PoliceOfficerPage) map {
+    x => AnswerRow("policeOfficer.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      PoliceOfficerController.onPageLoad(CheckMode).url)
   }
 
   def metropolitanPolice: Option[AnswerRow] = userAnswers.get(MetropolitanPolicePage) map {
     x => AnswerRow("metropolitanPolice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       MetropolitanPoliceController.onPageLoad(CheckMode).url)
+  }
+
+  def communitySupportOfficer: Option[AnswerRow] = userAnswers.get(CommunitySupportOfficerPage) map {
+    x => AnswerRow("communitySupportOfficer.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      CommunitySupportOfficerController.onPageLoad(CheckMode).url)
   }
 
   //FoodCatering

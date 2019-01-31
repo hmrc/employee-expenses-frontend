@@ -19,12 +19,12 @@ package forms.police
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class PoliceOccupationListFormProviderSpec extends BooleanFieldBehaviours {
+class CommunitySupportOfficerFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "policeOccupationList.error.required"
+  val requiredKey = "communitySupportOfficer.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new PoliceOccupationListFormProvider()()
+  val form = new CommunitySupportOfficerFormProvider()()
 
   ".value" must {
 

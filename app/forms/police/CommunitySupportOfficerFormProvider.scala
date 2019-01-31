@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package pages.police
+package forms.police
 
-import pages.behaviours.PageBehaviours
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class PoliceOccupationListPageSpec extends PageBehaviours {
+class CommunitySupportOfficerFormProvider @Inject() extends Mappings {
 
-  "PoliceOccupationListPage" must {
-
-    beRetrievable[Boolean](PoliceOccupationListPage)
-
-    beSettable[Boolean](PoliceOccupationListPage)
-
-    beRemovable[Boolean](PoliceOccupationListPage)
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("communitySupportOfficer.error.required")
+    )
 }

@@ -16,12 +16,16 @@
 
 package pages.police
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-case object PoliceOccupationListPage extends QuestionPage[Boolean] {
+class CommunitySupportOfficerPageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ toString
+  "CommunitySupportOfficerPage" must {
 
-  override def toString: String = "policeOccupationList"
+    beRetrievable[Boolean](CommunitySupportOfficerPage)
+
+    beSettable[Boolean](CommunitySupportOfficerPage)
+
+    beRemovable[Boolean](CommunitySupportOfficerPage)
+  }
 }
