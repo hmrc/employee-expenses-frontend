@@ -19,6 +19,7 @@ package views.police
 import controllers.police.routes
 import forms.police.PoliceOfficerFormProvider
 import models.NormalMode
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -30,7 +31,7 @@ class PoliceOfficerViewSpec extends YesNoViewBehaviours {
 
   val form = new PoliceOfficerFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "PoliceOfficer view" must {
 
@@ -44,13 +45,6 @@ class PoliceOfficerViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(form, applyView, messageKeyPrefix, routes.PoliceOfficerController.onSubmit(NormalMode).url)
-
-    behave like pageWithList(applyView(form), messageKeyPrefix,
-      Seq(
-        "occupation1",
-        "occupation2"
-      )
-    )
   }
 
   application.stop()
