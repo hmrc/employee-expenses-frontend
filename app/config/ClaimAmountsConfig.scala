@@ -70,4 +70,8 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
     lazy val communitySupportOfficer: Int = configuration.get[Int]("claim-amounts.police.community-support-officer")
     lazy val policeOfficer: Int = configuration.get[Int]("claim-amounts.police.police-officer")
   }
+
+  object Security {
+    lazy val nhsSecurity: Int = configuration.get[Int]("claim-amounts.security.nhs-security")
+  }
 }
