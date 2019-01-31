@@ -17,9 +17,8 @@
 package controllers
 
 import base.SpecBase
-import config.FrontendAppConfig
 import controllers.actions.{DataRetrievalAction, UnauthenticatedIdentifierAction}
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
 import org.scalatest.concurrent.ScalaFutures
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
@@ -38,6 +37,36 @@ class IndexControllerSpec extends SpecBase with ScalaFutures {
     "redirect to the first page of the application and the correct view for a GET when user answers is empty" in {
 
       val application = applicationBuilder(userAnswers = None).build()
+
+      val injector = application.injector
+
+      val controller =
+        new IndexController(
+          controllerComponents = injector.instanceOf[MessagesControllerComponents],
+          identify = injector.instanceOf[UnauthenticatedIdentifierAction],
+          getData = injector.instanceOf[DataRetrievalAction],
+          sessionRepository = injector.instanceOf[SessionRepository]
+        )(ec = injector.instanceOf[ExecutionContext])
+
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
+
+      val result = controller.onPageLoad(request)
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+
+      whenReady(result) {
+        result =>
+          result.session(request).data.get(frontendAppConfig.mongoKey) must contain("key")
+      }
+
+      application.stop()
+    }
+
+    "redirect to the first page of the application and the correct view for a GET when user answers is not empty" in {
+
+      val application = applicationBuilder(userAnswers = Some(UserAnswers("testId"))).build()
 
       val injector = application.injector
 
