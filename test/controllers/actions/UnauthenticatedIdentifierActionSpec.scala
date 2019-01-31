@@ -19,15 +19,17 @@ package controllers.actions
 import base.SpecBase
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
-import play.api.mvc.{BodyParsers, Results}
+import play.api.mvc._
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.SessionKeys
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-class UnAuthActionSpec extends SpecBase with ScalaFutures with MockitoSugar {
+class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures with MockitoSugar {
 
   class Harness(authAction: IdentifierAction) {
-    def onPageLoad() = authAction { _ => Results.Ok }
+    def onPageLoad(): Action[AnyContent] = authAction { _ => Results.Ok }
   }
 
   "Un Auth Action" when {
@@ -40,9 +42,28 @@ class UnAuthActionSpec extends SpecBase with ScalaFutures with MockitoSugar {
 
       val unAuthAction = new UnauthenticatedIdentifierAction(frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
-      val result = controller.onPageLoad()(fakeRequest.withSession("mongoKey" -> "key"))
+      val result = controller.onPageLoad()(fakeRequest.withSession(frontendAppConfig.mongoKey -> "key"))
 
       status(result) mustBe OK
+
+      application.stop()
+    }
+
+    "update session with mongoKey" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+
+      val unAuthAction = new UnauthenticatedIdentifierAction(frontendAppConfig, bodyParsers)
+      val controller = new Harness(unAuthAction)
+      val request = fakeRequest.withSession(frontendAppConfig.mongoKey -> "key")
+      val result: Future[Result] = controller.onPageLoad()(request)
+
+      whenReady(result) {
+        result =>
+          result.session(request).data.get(frontendAppConfig.mongoKey) must contain("key")
+      }
 
       application.stop()
     }
@@ -55,9 +76,27 @@ class UnAuthActionSpec extends SpecBase with ScalaFutures with MockitoSugar {
 
       val unAuthAction = new UnauthenticatedIdentifierAction(frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
-      val result = controller.onPageLoad()(fakeRequest.withSession("sessionId" -> "key"))
+      val result = controller.onPageLoad()(fakeRequest.withSession(SessionKeys.sessionId -> "key"))
 
       status(result) mustBe OK
+
+      application.stop()
+    }
+
+    "update session with mongoKey when there is no mongoKey but a sessionId is present" in {
+      val application = applicationBuilder(userAnswers = None).build()
+
+      val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+
+      val unAuthAction = new UnauthenticatedIdentifierAction(frontendAppConfig, bodyParsers)
+      val controller = new Harness(unAuthAction)
+      val request = fakeRequest.withSession(SessionKeys.sessionId -> "key")
+      val result = controller.onPageLoad()(request)
+
+      whenReady(result) {
+        result =>
+          result.session(request).data.get(frontendAppConfig.mongoKey) must contain("key")
+      }
 
       application.stop()
     }

@@ -48,7 +48,7 @@ class RedirectMongoKeyControllerSpec extends SpecBase with ScalaFutures {
 
       val session = await(controller.onPageLoad("key", None)(fakeRequest)).newSession.get
 
-      session.get("mongoKey").get mustBe "key"
+      session.get(frontendAppConfig.mongoKey).get mustBe "key"
 
       application.stop()
     }

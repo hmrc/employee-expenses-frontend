@@ -44,7 +44,7 @@ class AuthenticatedIdentifierAction @Inject()(
       x =>
         val nino = x.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
 
-        request.session.get("mongoKey") match {
+        request.session.get(config.mongoKey) match {
           case Some(key) => block(IdentifierRequest(request, key, Some(nino)))
           case _ =>
             if (request.uri.contains("/employee-expenses/session-key")) {
@@ -55,7 +55,7 @@ class AuthenticatedIdentifierAction @Inject()(
         }
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
-        unauthorised(request.session.get("mongoKey"))
+        unauthorised(request.session.get(config.mongoKey))
       case _: InsufficientConfidenceLevel =>
         insufficientConfidence(request.getQueryString("key"))
       case _ =>

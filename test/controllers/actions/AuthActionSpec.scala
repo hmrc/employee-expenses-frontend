@@ -48,7 +48,7 @@ class AuthActionSpec extends SpecBase {
 
         val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new MissingBearerToken), frontendAppConfig, bodyParsers)
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest.withSession("mongoKey" -> "key"))
+        val result = controller.onPageLoad()(fakeRequest.withSession(frontendAppConfig.mongoKey -> "key"))
 
         status(result) mustBe SEE_OTHER
 
@@ -68,7 +68,7 @@ class AuthActionSpec extends SpecBase {
 
         val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new UnauthorizedException("unAuth")), frontendAppConfig, bodyParsers)
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest.withSession("mongoKey" -> "key"))
+        val result = controller.onPageLoad()(fakeRequest.withSession(frontendAppConfig.mongoKey -> "key"))
 
         status(result) mustBe SEE_OTHER
 
@@ -266,7 +266,7 @@ class AuthActionSpec extends SpecBase {
 
         val authAction = new AuthenticatedIdentifierAction(new FakePassingAuthConnector(Future.successful(Some("nino"))), frontendAppConfig, bodyParsers)
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest.withSession("mongoKey" -> "key"))
+        val result = controller.onPageLoad()(fakeRequest.withSession(frontendAppConfig.mongoKey -> "key"))
 
         status(result) mustBe OK
 

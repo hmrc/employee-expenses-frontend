@@ -28,12 +28,13 @@ import scala.concurrent.ExecutionContext
 class RedirectMongoKeyController @Inject()(
                                             config: FrontendAppConfig,
                                             identify: IdentifierAction,
-                                            val controllerComponents: MessagesControllerComponents
+                                            val controllerComponents: MessagesControllerComponents,
+                                            appConfig: FrontendAppConfig
                                           )(implicit ec: ExecutionContext) extends FrontendBaseController {
 
   def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify {
     implicit request =>
       Redirect(routes.CheckYourAnswersController.onPageLoad())
-        .addingToSession("mongoKey" -> key)(request)
+        .addingToSession(appConfig.mongoKey -> key)(request)
   }
 }
