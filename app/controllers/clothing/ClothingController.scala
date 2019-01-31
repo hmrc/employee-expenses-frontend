@@ -16,11 +16,13 @@
 
 package controllers.clothing
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.clothing.ClothingFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.clothing.ClothingPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class ClothingController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: ClothingFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: ClothingView
+                                         view: ClothingView,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -56,7 +59,7 @@ class ClothingController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -66,6 +69,8 @@ class ClothingController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ClothingPage, value))
+            amount = if (value) claimAmounts.Clothing.clothingList else claimAmounts.defaultRate
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(ClothingPage, mode)(updatedAnswers))
         }
