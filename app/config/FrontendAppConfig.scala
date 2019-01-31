@@ -49,6 +49,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val unauthorisedCallback: String = configuration.get[String]("identity-verification-uplift.unauthorised-callback.url")
 
   lazy val p87Url: String = configuration.get[String]("p87.url")
+  lazy val govUkUrl: String = configuration.get[String]("govUk.url")
 
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")
