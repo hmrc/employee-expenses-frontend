@@ -18,28 +18,28 @@ package navigation
 
 import base.SpecBase
 import models.NormalMode
-import pages.security.SecurityGuardNHSPage
+import pages.clothing.ClothingPage
 
-class SecurityNavigatorSpec extends SpecBase {
+class ClothingNavigatorSpec extends SpecBase {
 
-  val navigator = new SecurityNavigator
+  val navigator = new ClothingNavigator
 
-  "Security Navigator" when {
+  "Clothing Navigator" when {
     "in Normal mode" must {
 
-      "from SecurityGuardNHS" must {
+      "from Clothing" must {
 
         "go to EmployerContribution when 'Yes' is selected" in {
-          val answers = emptyUserAnswers.set(SecurityGuardNHSPage, true).success.value
+          val answers = emptyUserAnswers.set(ClothingPage, true).success.value
 
-          navigator.nextPage(SecurityGuardNHSPage, NormalMode)(answers) mustBe
+          navigator.nextPage(ClothingPage, NormalMode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
 
         "go to EmployerContribution when 'No' is selected" in {
-          val answers = emptyUserAnswers.set(SecurityGuardNHSPage, false).success.value
+          val answers = emptyUserAnswers.set(ClothingPage, false).success.value
 
-          navigator.nextPage(SecurityGuardNHSPage, NormalMode)(answers) mustBe
+          navigator.nextPage(ClothingPage, NormalMode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
 
         }
