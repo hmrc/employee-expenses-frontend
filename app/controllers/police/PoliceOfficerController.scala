@@ -16,11 +16,13 @@
 
 package controllers.police
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.police.PoliceOfficerFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.police.PoliceOfficerPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class PoliceOfficerController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: PoliceOfficerFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: PoliceOfficerView
+                                         view: PoliceOfficerView,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,6 +69,8 @@ class PoliceOfficerController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PoliceOfficerPage, value))
+            amount: Int = if(value) claimAmounts.Police.policeOfficer else claimAmounts.defaultRate
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PoliceOfficerPage, mode)(updatedAnswers))
         }

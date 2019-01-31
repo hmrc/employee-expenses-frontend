@@ -16,11 +16,13 @@
 
 package controllers.police
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.police.CommunitySupportOfficerFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.police.CommunitySupportOfficerPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class CommunitySupportOfficerController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: CommunitySupportOfficerFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: CommunitySupportOfficerView
+                                         view: CommunitySupportOfficerView,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,7 +69,12 @@ class CommunitySupportOfficerController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CommunitySupportOfficerPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            newUserAnswers <- if (value) {
+                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Police.communitySupportOfficer))
+                              } else {
+                                Future.successful(updatedAnswers)
+                              }
+            _              <- sessionRepository.set(newUserAnswers)
           } yield Redirect(navigator.nextPage(CommunitySupportOfficerPage, mode)(updatedAnswers))
         }
       )
