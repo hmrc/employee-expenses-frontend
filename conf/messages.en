@@ -443,3 +443,8 @@ cannotClaimExpense.title = You cannot claim this expense
 cannotClaimExpense.heading = You cannot claim this expense
 cannotClaimExpense.body = This is due to your employer's arrangements with HMRC.
 cannotClaimExpense.hyperLink = Return to GOV.UK
+
+communitySupportOfficer.title = Are you a community support officer?
+communitySupportOfficer.heading = Are you a community support officer?
+communitySupportOfficer.checkYourAnswersLabel = Are you a community support officer?
+communitySupportOfficer.error.required = Select yes if you are a community support officer

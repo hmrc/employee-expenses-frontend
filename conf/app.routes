@@ -235,3 +235,8 @@ GET        /change-metropolitan-police                      controllers.police.M
 POST       /change-metropolitan-police                      controllers.police.MetropolitanPoliceController.onSubmit(mode: Mode = CheckMode)
 
 GET        /cannot-claim-expense                            controllers.CannotClaimExpenseController.onPageLoad()
+
+GET        /community-support-officer                       controllers.police.CommunitySupportOfficerController.onPageLoad(mode: Mode = NormalMode)
+POST       /community-support-officer                       controllers.police.CommunitySupportOfficerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-community-support-officer                controllers.police.CommunitySupportOfficerController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-community-support-officer                controllers.police.CommunitySupportOfficerController.onSubmit(mode: Mode = CheckMode)

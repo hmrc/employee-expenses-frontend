@@ -44,6 +44,8 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+
+
   def thirdIndustryOptions: Option[AnswerRow] = userAnswers.get(ThirdIndustryOptionsPage) map {
     x => AnswerRow("thirdIndustryOptions.checkYourAnswersLabel", s"thirdIndustryOptions.$x", true,
       ThirdIndustryOptionsController.onPageLoad(CheckMode).url)
@@ -233,6 +235,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def metropolitanPolice: Option[AnswerRow] = userAnswers.get(MetropolitanPolicePage) map {
     x => AnswerRow("metropolitanPolice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       MetropolitanPoliceController.onPageLoad(CheckMode).url)
+  }
+
+  def communitySupportOfficer: Option[AnswerRow] = userAnswers.get(CommunitySupportOfficerPage) map {
+    x => AnswerRow("communitySupportOfficer.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      CommunitySupportOfficerController.onPageLoad(CheckMode).url)
   }
 
   //FoodCatering
