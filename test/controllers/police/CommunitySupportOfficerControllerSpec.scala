@@ -36,7 +36,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase {
 
   lazy val communitySupportOfficerRoute = routes.CommunitySupportOfficerController.onPageLoad(NormalMode).url
 
-  "CommunitySupportOfficer Controller" must {git 
+  "CommunitySupportOfficer Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -80,7 +80,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Police").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
