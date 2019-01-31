@@ -65,4 +65,9 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
     lazy val cargoTankersCoastersFerries: Int = configuration.get[Int]("claim-amounts.transport.seaman.cargo-tankers-coasters-ferries")
     lazy val default: Int = configuration.get[Int]("claim-amounts.transport.default")
   }
+
+  object Police {
+    lazy val communitySupportOfficer: Int = configuration.get[Int]("claim-amounts.police.community-support-officer")
+    lazy val policeOfficer: Int = configuration.get[Int]("claim-amounts.police.police-officer")
+  }
 }

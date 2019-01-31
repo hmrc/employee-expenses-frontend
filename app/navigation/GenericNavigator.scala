@@ -72,8 +72,7 @@ class GenericNavigator @Inject()() extends Navigator {
   private def expensesEmployerPaid(mode: Mode)(userAnswers: UserAnswers): Call =
     (userAnswers.get(ClaimAmount), userAnswers.get(ExpensesEmployerPaidPage)) match {
       case (Some(claimAmount), Some(expensesPaid)) =>
-        if (claimAmount > expensesPaid) ClaimAmountController.onPageLoad()
-        else CannotClaimController.onPageLoad()
+        if (claimAmount > expensesPaid) ClaimAmountController.onPageLoad() else CannotClaimController.onPageLoad()
       case _                                       =>
         SessionExpiredController.onPageLoad()
     }
