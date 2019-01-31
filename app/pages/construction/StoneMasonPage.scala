@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.construction
 
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class StoneMasonPageSpec extends PageBehaviours {
+case object StoneMasonPage extends QuestionPage[Boolean] {
 
-  "StoneMasonPage" must {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[Boolean](StoneMasonPage)
-
-    beSettable[Boolean](StoneMasonPage)
-
-    beRemovable[Boolean](StoneMasonPage)
-  }
+  override def toString: String = "stoneMason"
 }

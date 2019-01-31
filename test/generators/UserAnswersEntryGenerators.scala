@@ -21,7 +21,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
 import pages.clothing.ClothingPage
-import pages.construction.JoinerCarpenterPage
+import pages.construction.{JoinerCarpenterPage, StoneMasonPage}
 import pages.electrical.ElectricalPage
 import pages.healthcare._
 import pages.engineering._

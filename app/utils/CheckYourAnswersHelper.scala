@@ -31,7 +31,7 @@ import controllers.construction.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.clothing.ClothingPage
-import pages.construction.JoinerCarpenterPage
+import pages.construction.{JoinerCarpenterPage, StoneMasonPage}
 import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.foodCatering._

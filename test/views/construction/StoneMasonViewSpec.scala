@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package views
+package views.construction
 
-import controllers.routes
-import forms.StoneMasonFormProvider
+import controllers.construction.routes
+import forms.construction.StoneMasonFormProvider
 import models.NormalMode
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.StoneMasonView
+import views.html.construction.StoneMasonView
 
 class StoneMasonViewSpec extends YesNoViewBehaviours {
 
@@ -30,7 +31,7 @@ class StoneMasonViewSpec extends YesNoViewBehaviours {
 
   val form = new StoneMasonFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "StoneMason view" must {
 

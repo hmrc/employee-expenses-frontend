@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.construction
 
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
 
 class StoneMasonFormProvider @Inject() extends Mappings {

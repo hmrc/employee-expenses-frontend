@@ -14,32 +14,21 @@
  * limitations under the License.
  */
 
-package forms
+package navigation
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import controllers.routes
+import javax.inject.Inject
+import models.UserAnswers
+import pages.Page
+import play.api.mvc.Call
 
-class StoneMasonFormProviderSpec extends BooleanFieldBehaviours {
+class ConstructionNavigator @Inject()() extends Navigator {
 
-  val requiredKey = "stoneMason.error.required"
-  val invalidKey = "error.boolean"
+  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
+    case _ => _ => routes.SessionExpiredController.onPageLoad()
+  }
 
-  val form = new StoneMasonFormProvider()()
-
-  ".value" must {
-
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+  protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
 }

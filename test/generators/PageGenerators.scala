@@ -19,7 +19,7 @@ package generators
 import org.scalacheck.Arbitrary
 import pages._
 import pages.clothing._
-import pages.construction.JoinerCarpenterPage
+import pages.construction.{JoinerCarpenterPage, StoneMasonPage}
 import pages.electrical.ElectricalPage
 import pages.healthcare._
 import pages.engineering._

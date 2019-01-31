@@ -246,7 +246,7 @@ POST       /joiner-carpenter                                controllers.construc
 GET        /change-joiner-carpenter                         controllers.construction.JoinerCarpenterController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-joiner-carpenter                         controllers.construction.JoinerCarpenterController.onSubmit(mode: Mode = CheckMode)
 
-GET        /stoneMason                        controllers.StoneMasonController.onPageLoad(mode: Mode = NormalMode)
-POST       /stoneMason                        controllers.StoneMasonController.onSubmit(mode: Mode = NormalMode)
-GET        /changeStoneMason                  controllers.StoneMasonController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeStoneMason                  controllers.StoneMasonController.onSubmit(mode: Mode = CheckMode)
+GET        /stone-mason                                     controllers.construction.StoneMasonController.onPageLoad(mode: Mode = NormalMode)
+POST       /stone-mason                                     controllers.construction.StoneMasonController.onSubmit(mode: Mode = NormalMode)
+GET        /change-stone-mason                              controllers.construction.StoneMasonController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-stone-mason                              controllers.construction.StoneMasonController.onSubmit(mode: Mode = CheckMode)

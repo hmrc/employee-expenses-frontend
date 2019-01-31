@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.construction
 
 import controllers.actions._
-import forms.StoneMasonFormProvider
+import forms.construction.StoneMasonFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.StoneMasonPage
+import pages.construction.StoneMasonPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.StoneMasonView
+import views.html.construction.StoneMasonView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -56,7 +56,7 @@ class StoneMasonController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
