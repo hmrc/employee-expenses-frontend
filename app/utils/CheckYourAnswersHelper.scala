@@ -46,6 +46,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
 
 
 
+
+
   def thirdIndustryOptions: Option[AnswerRow] = userAnswers.get(ThirdIndustryOptionsPage) map {
     x => AnswerRow("thirdIndustryOptions.checkYourAnswersLabel", s"thirdIndustryOptions.$x", true,
       ThirdIndustryOptionsController.onPageLoad(CheckMode).url)
@@ -280,6 +282,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def electrical: Option[AnswerRow] = userAnswers.get(ElectricalPage) map {
     x => AnswerRow("electrical.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       ElectricalController.onPageLoad(CheckMode).url)
+  }
+
+  //Construction
+  
+  def joinerCarpenter: Option[AnswerRow] = userAnswers.get(JoinerCarpenterPage) map {
+    x => AnswerRow("joinerCarpenter.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, JoinerCarpenterController.onPageLoad(CheckMode).url)
   }
 
 }

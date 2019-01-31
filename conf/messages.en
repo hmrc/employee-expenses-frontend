@@ -446,3 +446,8 @@ communitySupportOfficer.title = Are you a community support officer?
 communitySupportOfficer.heading = Are you a community support officer?
 communitySupportOfficer.checkYourAnswersLabel = Are you a community support officer?
 communitySupportOfficer.error.required = Select yes if you are a community support officer
+
+joinerCarpenter.title = joinerCarpenter
+joinerCarpenter.heading = joinerCarpenter
+joinerCarpenter.checkYourAnswersLabel = joinerCarpenter
+joinerCarpenter.error.required = Select yes if joinerCarpenter
