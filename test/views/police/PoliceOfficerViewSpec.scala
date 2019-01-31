@@ -17,24 +17,24 @@
 package views.police
 
 import controllers.police.routes
-import forms.police.PoliceOccupationListFormProvider
+import forms.police.PoliceOfficerFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.police.PoliceOccupationListView
+import views.html.police.PoliceOfficerView
 
-class PoliceOccupationListViewSpec extends YesNoViewBehaviours {
+class PoliceOfficerViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "policeOccupationList"
+  val messageKeyPrefix = "policeOfficer"
 
-  val form = new PoliceOccupationListFormProvider()()
+  val form = new PoliceOfficerFormProvider()()
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "PoliceOccupationList view" must {
+  "PoliceOfficer view" must {
 
-    val view = application.injector.instanceOf[PoliceOccupationListView]
+    val view = application.injector.instanceOf[PoliceOfficerView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -43,7 +43,7 @@ class PoliceOccupationListViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.PoliceOccupationListController.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.PoliceOfficerController.onSubmit(NormalMode).url)
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(

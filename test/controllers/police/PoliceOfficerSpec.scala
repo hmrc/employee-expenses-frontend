@@ -17,36 +17,36 @@
 package controllers.police
 
 import base.SpecBase
-import forms.police.PoliceOccupationListFormProvider
+import forms.police.PoliceOfficerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.police.PoliceOccupationListPage
+import pages.police.PoliceOfficerPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.police.PoliceOccupationListView
+import views.html.police.PoliceOfficerView
 
-class PoliceOccupationListControllerSpec extends SpecBase {
+class PoliceOfficerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new PoliceOccupationListFormProvider()
+  val formProvider = new PoliceOfficerFormProvider()
   val form = formProvider()
 
-  lazy val policeOccupationListRoute: String = routes.PoliceOccupationListController.onPageLoad(NormalMode).url
+  lazy val policeOfficerRoute: String = routes.PoliceOfficerController.onPageLoad(NormalMode).url
 
-  "PoliceOccupationList Controller" must {
+  "PoliceOfficer Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, policeOccupationListRoute)
+      val request = FakeRequest(GET, policeOfficerRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[PoliceOccupationListView]
+      val view = application.injector.instanceOf[PoliceOfficerView]
 
       status(result) mustEqual OK
 
@@ -58,13 +58,13 @@ class PoliceOccupationListControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PoliceOccupationListPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(PoliceOfficerPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, policeOccupationListRoute)
+      val request = FakeRequest(GET, policeOfficerRoute)
 
-      val view = application.injector.instanceOf[PoliceOccupationListView]
+      val view = application.injector.instanceOf[PoliceOfficerView]
 
       val result = route(application, request).value
 
@@ -84,7 +84,7 @@ class PoliceOccupationListControllerSpec extends SpecBase {
           .build()
 
       val request =
-        FakeRequest(POST, policeOccupationListRoute)
+        FakeRequest(POST, policeOfficerRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -101,12 +101,12 @@ class PoliceOccupationListControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, policeOccupationListRoute)
+        FakeRequest(POST, policeOfficerRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[PoliceOccupationListView]
+      val view = application.injector.instanceOf[PoliceOfficerView]
 
       val result = route(application, request).value
 
@@ -122,7 +122,7 @@ class PoliceOccupationListControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, policeOccupationListRoute)
+      val request = FakeRequest(GET, policeOfficerRoute)
 
       val result = route(application, request).value
 
@@ -138,7 +138,7 @@ class PoliceOccupationListControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, policeOccupationListRoute)
+        FakeRequest(POST, policeOfficerRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value

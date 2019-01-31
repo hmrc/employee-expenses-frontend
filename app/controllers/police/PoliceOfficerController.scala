@@ -17,30 +17,30 @@
 package controllers.police
 
 import controllers.actions._
-import forms.police.PoliceOccupationListFormProvider
+import forms.police.PoliceOfficerFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
-import pages.police.PoliceOccupationListPage
+import pages.police.PoliceOfficerPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.police.PoliceOccupationListView
+import views.html.police.PoliceOfficerView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PoliceOccupationListController @Inject()(
+class PoliceOfficerController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          @Named("Generic") navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
-                                         formProvider: PoliceOccupationListFormProvider,
+                                         formProvider: PoliceOfficerFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: PoliceOccupationListView
+                                         view: PoliceOfficerView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -48,7 +48,7 @@ class PoliceOccupationListController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(PoliceOccupationListPage) match {
+      val preparedForm = request.userAnswers.get(PoliceOfficerPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,9 +65,9 @@ class PoliceOccupationListController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PoliceOccupationListPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PoliceOfficerPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PoliceOccupationListPage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(PoliceOfficerPage, mode)(updatedAnswers))
         }
       )
   }

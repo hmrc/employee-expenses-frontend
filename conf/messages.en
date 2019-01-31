@@ -304,12 +304,12 @@ ironSteelOccupation.occupation4 = Timekeeper
 ironSteelOccupation.occupation5 = Pourer
 ironSteelOccupation.occupation6 = Warehouse staff and weighmen
 
-policeOccupationList.title = Is your job title listed?
-policeOccupationList.heading = Is your job title listed?
-policeOccupationList.checkYourAnswersLabel = Is your job title listed?
-policeOccupationList.error.required = Select yes if your job title is listed
-policeOccupationList.occupation1 = Police officer (with a rank of up to and including Chief Inspector)
-policeOccupationList.occupation2 = Police community support officer
+policeOfficer.title = Is your job title listed?
+policeOfficer.heading = Is your job title listed?
+policeOfficer.checkYourAnswersLabel = Is your job title listed?
+policeOfficer.error.required = Select yes if your job title is listed
+policeOfficer.occupation1 = Police officer (with a rank of up to and including Chief Inspector)
+policeOfficer.occupation2 = Police community support officer
 
 aluminiumOccupationList2.title = Is your job title listed?
 aluminiumOccupationList2.heading = Is your job title listed?

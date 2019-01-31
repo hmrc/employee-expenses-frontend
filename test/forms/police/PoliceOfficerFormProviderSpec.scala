@@ -16,14 +16,30 @@
 
 package forms.police
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-class PoliceOccupationListFormProvider @Inject() extends Mappings {
+class PoliceOfficerFormProviderSpec extends BooleanFieldBehaviours {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("policeOccupationList.error.required")
+  val requiredKey = "policeOfficer.error.required"
+  val invalidKey = "error.boolean"
+
+  val form = new PoliceOfficerFormProvider()()
+
+  ".value" must {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
     )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }
