@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.construction
 
 import controllers.actions._
-import forms.JoinerCarpenterFormProvider
+import forms.construction.JoinerCarpenterFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.JoinerCarpenterPage
+import pages.construction.JoinerCarpenterPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.JoinerCarpenterView
+import views.html.construction.JoinerCarpenterView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class JoinerCarpenterController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         @Named("Construction") navigator: Navigator,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: JoinerCarpenterFormProvider,

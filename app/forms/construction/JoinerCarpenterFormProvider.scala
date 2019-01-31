@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.construction
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-case object JoinerCarpenterPage extends QuestionPage[Boolean] {
+class JoinerCarpenterFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "joinerCarpenter"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("joinerCarpenter.error.required")
+    )
 }

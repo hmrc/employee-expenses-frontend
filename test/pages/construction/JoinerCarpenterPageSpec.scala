@@ -14,32 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.construction
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import pages.behaviours.PageBehaviours
 
-class JoinerCarpenterFormProviderSpec extends BooleanFieldBehaviours {
+class JoinerCarpenterPageSpec extends PageBehaviours {
 
-  val requiredKey = "joinerCarpenter.error.required"
-  val invalidKey = "error.boolean"
+  "JoinerCarpenterPage" must {
 
-  val form = new JoinerCarpenterFormProvider()()
+    beRetrievable[Boolean](JoinerCarpenterPage)
 
-  ".value" must {
+    beSettable[Boolean](JoinerCarpenterPage)
 
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    beRemovable[Boolean](JoinerCarpenterPage)
   }
 }

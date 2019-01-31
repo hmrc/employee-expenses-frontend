@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.construction
 
-import controllers.routes
-import forms.JoinerCarpenterFormProvider
+import controllers.construction.routes
+import forms.construction.JoinerCarpenterFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.JoinerCarpenterView
+import views.html.construction.JoinerCarpenterView
 
 class JoinerCarpenterViewSpec extends YesNoViewBehaviours {
 

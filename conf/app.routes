@@ -241,7 +241,7 @@ POST       /community-support-officer                       controllers.police.C
 GET        /change-community-support-officer                controllers.police.CommunitySupportOfficerController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-community-support-officer                controllers.police.CommunitySupportOfficerController.onSubmit(mode: Mode = CheckMode)
 
-GET        /joinerCarpenter                        controllers.JoinerCarpenterController.onPageLoad(mode: Mode = NormalMode)
-POST       /joinerCarpenter                        controllers.JoinerCarpenterController.onSubmit(mode: Mode = NormalMode)
-GET        /changeJoinerCarpenter                  controllers.JoinerCarpenterController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeJoinerCarpenter                  controllers.JoinerCarpenterController.onSubmit(mode: Mode = CheckMode)
+GET        /joiner-carpenter                                controllers.construction.JoinerCarpenterController.onPageLoad(mode: Mode = NormalMode)
+POST       /joiner-carpenter                                controllers.construction.JoinerCarpenterController.onSubmit(mode: Mode = NormalMode)
+GET        /change-joiner-carpenter                         controllers.construction.JoinerCarpenterController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-joiner-carpenter                         controllers.construction.JoinerCarpenterController.onSubmit(mode: Mode = CheckMode)
