@@ -16,19 +16,43 @@
 
 package navigation
 
-import controllers.routes
+import controllers.police._
 import javax.inject.Inject
-import models.UserAnswers
+import models.{Mode, NormalMode, UserAnswers}
 import pages.Page
+import pages.police.{CommunitySupportOfficerPage, SpecialConstablePage}
 import play.api.mvc.Call
 
 class PoliceNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case SpecialConstablePage => specialConstable(NormalMode)
+    case CommunitySupportOfficerPage => communitySupportOfficer(NormalMode)
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
+
+  def specialConstable(mode: Mode)(userAnswers: UserAnswers) = {
+    userAnswers.get(SpecialConstablePage) match {
+
+      case Some(true) => ???
+      case Some(false) => routes.CommunitySupportOfficerController.onPageLoad(mode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+
+    }
+  }
+
+  def communitySupportOfficer(mode: Mode)(userAnswers: UserAnswers) = {
+    userAnswers.get(CommunitySupportOfficerPage) match {
+
+      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(false) => routes.MetropolitanPoliceController.onPageLoad(mode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+
+    }
+  }
+
 }
