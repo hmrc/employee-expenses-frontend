@@ -16,11 +16,13 @@
 
 package controllers.security
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.security.SecurityGuardNHSFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.security.SecurityGuardNHSPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class SecurityGuardNHSController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: SecurityGuardNHSFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: SecurityGuardNHSView
+                                         view: SecurityGuardNHSView,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -56,7 +59,7 @@ class SecurityGuardNHSController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -66,6 +69,8 @@ class SecurityGuardNHSController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityGuardNHSPage, value))
+            amount: Int =  if (value) claimAmounts.Security.nhsSecurity else claimAmounts.defaultRate
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(SecurityGuardNHSPage, mode)(updatedAnswers))
         }
