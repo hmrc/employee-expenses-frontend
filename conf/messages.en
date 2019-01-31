@@ -304,12 +304,10 @@ ironSteelOccupation.occupation4 = Timekeeper
 ironSteelOccupation.occupation5 = Pourer
 ironSteelOccupation.occupation6 = Warehouse staff and weighmen
 
-policeOccupationList.title = Is your job title listed?
-policeOccupationList.heading = Is your job title listed?
-policeOccupationList.checkYourAnswersLabel = Is your job title listed?
-policeOccupationList.error.required = Select yes if your job title is listed
-policeOccupationList.occupation1 = Police officer (with a rank of up to and including Chief Inspector)
-policeOccupationList.occupation2 = Police community support officer
+policeOfficer.title = Are you a police officer with a rank of up to and including Chief Inspector?
+policeOfficer.heading = Are you a police officer with a rank of up to and including Chief Inspector?
+policeOfficer.checkYourAnswersLabel = Are you a police officer with a rank of up to and including Chief Inspector?
+policeOfficer.error.required = Select yes if you are a police officer with a rank of up to and including Chief Inspector
 
 aluminiumOccupationList2.title = Is your job title listed?
 aluminiumOccupationList2.heading = Is your job title listed?
@@ -438,6 +436,11 @@ metropolitanPolice.title = Do you work for the Metropolitan Police?
 metropolitanPolice.heading = Do you work for the Metropolitan Police?
 metropolitanPolice.checkYourAnswersLabel = Do you work for the Metropolitan Police?
 metropolitanPolice.error.required = Select yes if you work for the Metropolitan Police
+
+cannotClaimExpense.title = You cannot claim this expense
+cannotClaimExpense.heading = You cannot claim this expense
+cannotClaimExpense.body = This is due to your employer's arrangements with HMRC.
+cannotClaimExpense.hyperLink = Return to GOV.UK
 
 communitySupportOfficer.title = Are you a community support officer?
 communitySupportOfficer.heading = Are you a community support officer?

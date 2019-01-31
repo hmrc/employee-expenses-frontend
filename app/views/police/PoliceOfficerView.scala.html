@@ -25,28 +25,20 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("policeOccupationList.title")}"
+    title = s"${errorPrefix(form)} ${messages("policeOfficer.title")}"
     ) {
 
-    @formHelper(action = PoliceOccupationListController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = PoliceOfficerController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading("policeOccupationList.heading")
-
-        @components.list(
-            pageKey = Some("policeOccupationList"),
-            bulletList = Seq(
-                "occupation1",
-                "occupation2"
-            )
-        )
+        @components.heading("policeOfficer.heading")
 
         @components.input_yes_no(
         field = form("value"),
-        label = messages("policeOccupationList.heading"),
+        label = messages("policeOfficer.heading"),
         labelClass = Some("visually-hidden")
         )
 
