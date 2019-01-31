@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class PoliceOfficerController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
+                                         @Named("Police") navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
