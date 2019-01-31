@@ -20,39 +20,50 @@ import controllers.police._
 import javax.inject.Inject
 import models.{Mode, NormalMode, UserAnswers}
 import pages.Page
-import pages.police.{CommunitySupportOfficerPage, SpecialConstablePage}
+import pages.police._
 import play.api.mvc.Call
 
 class PoliceNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case SpecialConstablePage => specialConstable(NormalMode)
-    case CommunitySupportOfficerPage => communitySupportOfficer(NormalMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+    case SpecialConstablePage         => specialConstable(NormalMode)
+    case CommunitySupportOfficerPage  => communitySupportOfficer(NormalMode)
+    case MetropolitanPolicePage       => metropolitanPolice(NormalMode)
+    case PoliceOfficerPage            => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case _                            => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
-  def specialConstable(mode: Mode)(userAnswers: UserAnswers) = {
+  def specialConstable(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(SpecialConstablePage) match {
 
-      case Some(true) => ???
-      case Some(false) => routes.CommunitySupportOfficerController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case Some(true)   => controllers.routes.CannotClaimExpenseController.onPageLoad()
+      case Some(false)  => routes.CommunitySupportOfficerController.onPageLoad(mode)
+      case _            => controllers.routes.SessionExpiredController.onPageLoad()
 
     }
   }
 
-  def communitySupportOfficer(mode: Mode)(userAnswers: UserAnswers) = {
+  def communitySupportOfficer(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(CommunitySupportOfficerPage) match {
 
-      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case Some(false) => routes.MetropolitanPoliceController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case Some(true)   => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(false)  => routes.MetropolitanPoliceController.onPageLoad(mode)
+      case _            => controllers.routes.SessionExpiredController.onPageLoad()
 
     }
   }
 
+  def metropolitanPolice(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(MetropolitanPolicePage) match {
+
+      case Some(true)    => controllers.routes.CannotClaimExpenseController.onPageLoad()
+      case Some(false)   => routes.PoliceOfficerController.onPageLoad(mode)
+      case _             => controllers.routes.SessionExpiredController.onPageLoad()
+
+    }
+  }
 }
