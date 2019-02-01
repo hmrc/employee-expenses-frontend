@@ -357,15 +357,16 @@ woodFurnitureOccupationList2.occupation1 = artificial limb maker (other than in 
 woodFurnitureOccupationList2.occupation2 = organ builder
 woodFurnitureOccupationList2.occupation3 = packaging case maker
 
-woodFurnitureOccupationList3.title = Is your job title listed?
-woodFurnitureOccupationList3.heading = Is your job title listed?
-woodFurnitureOccupationList3.secondaryHeading = Wood and furniture occupation list 3
-woodFurnitureOccupationList3.checkYourAnswersLabel = Is your occupation listed?
-woodFurnitureOccupationList3.error.required = Select yes if your job title is listed
-woodFurnitureOccupationList3.occupation1 = Cooper that does not provide their own tools
-woodFurnitureOccupationList3.occupation2 = Labourer
-woodFurnitureOccupationList3.occupation3 = Polisher
-woodFurnitureOccupationList3.occupation4 = Upholsterer
+woodFurnitureOccupationList3.title = Wood and furniture occupation list 3 of 3
+woodFurnitureOccupationList3.heading = Wood and furniture occupation list 3 of 3
+woodFurnitureOccupationList3.checkYourAnswersLabel =Wood and furniture occupation list 3 of 3
+woodFurnitureOccupationList3.error.required = Select yes if your occupation is listed
+woodFurnitureOccupationList3.listText = The occupations are:
+woodFurnitureOccupationList3.radioLabel = Is your occupation listed?
+woodFurnitureOccupationList3.occupation1 = cooper that does not provide their own tools
+woodFurnitureOccupationList3.occupation2 = labourer
+woodFurnitureOccupationList3.occupation3 = polisher
+woodFurnitureOccupationList3.occupation4 = upholsterer
 
 cateringStaffNHS.title = Are you catering staff in the NHS?
 cateringStaffNHS.heading = Are you catering staff in the NHS?

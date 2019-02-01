@@ -43,11 +43,11 @@ class WoodFurnitureOccupationList2ViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(
-      form,
-      applyView,
-      messageKeyPrefix,
-      controllers.manufacturing.routes.WoodFurnitureOccupationList2Controller.onSubmit(NormalMode).url,
-      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+                          form,
+                          applyView,
+                          messageKeyPrefix,
+                          controllers.manufacturing.routes.WoodFurnitureOccupationList2Controller.onSubmit(NormalMode).url,
+                          legendLabel = Some(messageKeyPrefix + ".radioLabel")
 
     )
 

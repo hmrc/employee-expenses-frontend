@@ -44,12 +44,12 @@ class AluminiumOccupationList3ViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(
-      form = form,
-      createView = applyView,
-      messageKeyPrefix = messageKeyPrefix,
-      expectedFormAction = routes.AluminiumOccupationList3Controller.onSubmit(NormalMode).url,
-      legendLabel = Some(messageKeyPrefix + ".radioLabel")
-      )
+                          form = form,
+                          createView = applyView,
+                          messageKeyPrefix = messageKeyPrefix,
+                          expectedFormAction = routes.AluminiumOccupationList3Controller.onSubmit(NormalMode).url,
+                          legendLabel = Some(messageKeyPrefix + ".radioLabel")
+                          )
 
 
 

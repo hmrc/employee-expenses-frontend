@@ -44,11 +44,11 @@ class ClothingViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(
-      form,
-      applyView,
-      messageKeyPrefix,
-      routes.ClothingController.onSubmit(NormalMode).url,
-        legendLabel = Some(messageKeyPrefix + ".radioLabel")
+                          form,
+                          applyView,
+                          messageKeyPrefix,
+                          routes.ClothingController.onSubmit(NormalMode).url,
+                          legendLabel = Some(messageKeyPrefix + ".radioLabel")
 
     )
 
