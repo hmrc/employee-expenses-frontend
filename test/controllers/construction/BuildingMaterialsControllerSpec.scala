@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.construction
 
 import base.SpecBase
-import forms.BuildingMaterialsFormProvider
+import forms.construction.BuildingMaterialsFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.BuildingMaterialsPage
+import pages.construction.BuildingMaterialsPage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.BuildingMaterialsView
+import views.html.construction.BuildingMaterialsView
 
 class BuildingMaterialsControllerSpec extends SpecBase {
 
@@ -129,7 +128,7 @@ class BuildingMaterialsControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class BuildingMaterialsControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

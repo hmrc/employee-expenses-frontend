@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages
+package pages.construction
 
 import pages.behaviours.PageBehaviours
 

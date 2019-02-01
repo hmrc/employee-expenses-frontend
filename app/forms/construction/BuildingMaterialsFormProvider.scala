@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.construction
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-case object BuildingMaterialsPage extends QuestionPage[Boolean] {
+class BuildingMaterialsFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "buildingMaterials"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("buildingMaterials.error.required")
+    )
 }

@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package views
+package views.construction
 
-import controllers.routes
-import forms.BuildingMaterialsFormProvider
+import controllers.construction.routes
+import forms.construction.BuildingMaterialsFormProvider
 import models.NormalMode
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.BuildingMaterialsView
+import views.html.construction.BuildingMaterialsView
 
 class BuildingMaterialsViewSpec extends YesNoViewBehaviours {
 
@@ -30,7 +31,7 @@ class BuildingMaterialsViewSpec extends YesNoViewBehaviours {
 
   val form = new BuildingMaterialsFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "BuildingMaterials view" must {
 

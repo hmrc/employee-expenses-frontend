@@ -22,7 +22,7 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
 import pages.clothing.ClothingPage
-import pages.construction.JoinerCarpenterPage
+import pages.construction.{BuildingMaterialsPage, JoinerCarpenterPage}
 import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.healthcare._
