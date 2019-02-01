@@ -426,18 +426,17 @@ printingOccupationList1.occupation3 = letterpress section-electrical engineers (
 printingOccupationList1.occupation4 = machine minders (rotary)
 printingOccupationList1.occupation5 = maintenance engineers (rotary presses) and stereotypers
 
-printingOccupationList2.title = Is your job title listed?
-printingOccupationList2.heading = Is your job title listed?
-printingOccupationList2.secondaryHeading = Printing occupation list 2
-printingOccupationList2.checkYourAnswersLabel = Is your job title listed?
-printingOccupationList2.error.required = Select yes if your job title is listed
+printingOccupationList2.title = Printing occupation list 2 of 2
+printingOccupationList2.heading = Printing occupation list 2 of 2
+printingOccupationList2.checkYourAnswersLabel = Printing occupation list 2 of 2
+printingOccupationList2.error.required = Select yes if your occupation is listed
 printingOccupationList2.listText = The occupations are:
 printingOccupationList2.radioLabel = Is your occupation listed?
-printingOccupationList2.occupation1 = Bench hands (periodical and bookbinding section)
-printingOccupationList2.occupation2 = Compositors (letterpress section)
-printingOccupationList2.occupation3 = Readers (letterpress section)
-printingOccupationList2.occupation4 = Telecommunications and electronic section wire room operators
-printingOccupationList2.occupation5 = Warehousemen (paper box making section)
+printingOccupationList2.occupation1 = bench hands (periodical and bookbinding section)
+printingOccupationList2.occupation2 = compositors (letterpress section)
+printingOccupationList2.occupation3 = readers (letterpress section)
+printingOccupationList2.occupation4 = telecommunications and electronic section wire room operators
+printingOccupationList2.occupation5 = warehousemen (paper box making section)
 
 electrical.title = Are you only claiming for laundry costs?
 electrical.heading = Are you only claiming for laundry costs?
