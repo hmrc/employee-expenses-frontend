@@ -31,6 +31,7 @@ import play.api.test.FakeRequest
 import utils.MockScalate
 import com.github.tototoshi.play2.scalate.Scalate
 import play.api.Application
+import uk.gov.hmrc.http.logging.Authorization
 
 
 
@@ -51,6 +52,8 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
   val fakeNino = "AB123456A"
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+
+  lazy val hcWithAuth: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization("authed")))
 
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 

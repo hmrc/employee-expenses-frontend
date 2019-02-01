@@ -23,8 +23,8 @@ import views.ViewSpecBase
 trait ViewBehaviours extends ViewSpecBase {
 
   def normalPage(view: HtmlFormat.Appendable,
-                 messageKeyPrefix: String,
-                 expectedGuidanceKeys: String*): Unit = {
+    messageKeyPrefix: String,
+    expectedGuidanceKeys: String*): Unit = {
 
     "behave like a normal page" when {
 
@@ -33,8 +33,8 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          val nav = doc.getElementById("proposition-menu")
-          val span = nav.children.first
+          assertRenderedById(doc, "proposition-menu")
+          assertRenderedByCssSelector(doc, "span.header__menu__proposition-name")
         }
 
         "display the correct browser title" in {
@@ -59,6 +59,21 @@ trait ViewBehaviours extends ViewSpecBase {
 
           val doc = asDocument(view)
           assertRenderedById(doc, "switchToWelsh")
+        }
+      }
+    }
+  }
+
+  def normalPageWithAccountMenu(view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a normal page with account menu" when {
+
+      "rendered" must {
+
+        "have the correct menu items" in {
+
+          val doc = asDocument(view)
+          assertRenderedById(doc, "secondary-nav")
         }
       }
     }
