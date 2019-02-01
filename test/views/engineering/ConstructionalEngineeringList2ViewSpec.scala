@@ -44,12 +44,11 @@ class ConstructionalEngineeringList2ViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(
-                          form,
-                          applyView,
-                          messageKeyPrefix,
-                          controllers.engineering.routes.ConstructionalEngineeringList2Controller.onSubmit(NormalMode).url,
-                          legendLabel = Some(messageKeyPrefix + ".radioLabel")
-
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = controllers.engineering.routes.ConstructionalEngineeringList2Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
     )
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
