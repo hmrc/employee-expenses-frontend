@@ -15,18 +15,21 @@
  *@
 
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
+@import uk.gov.hmrc.http.HeaderCarrier
+
+@import uk.gov.hmrc.http.HeaderCarrier
 
 @this(
     main_template: MainTemplate
 )
 
-@(answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(answerSections: Seq[Section])(implicit request: Request[_], messages: Messages, hc: HeaderCarrier)
 
 @main_template(
     title = messages("checkYourAnswers.title")
     ) {
 
-    @components.heading("checkYourAnswers.heading")</h1>
+    @components.heading("checkYourAnswers.heading")
 
     <p>@messages("checkYourAnswers.guidance")</p>
 

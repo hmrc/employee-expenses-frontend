@@ -38,7 +38,7 @@ class SessionExpiredControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view()(fakeRequest, messages).toString
+        view()(fakeRequest, messages, hc).toString
 
       application.stop()
     }

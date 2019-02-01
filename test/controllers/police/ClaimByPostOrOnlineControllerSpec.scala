@@ -40,7 +40,7 @@ class ClaimByPostOrOnlineControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(p87Url)(fakeRequest, messages).toString
+        view(p87Url)(fakeRequest, messages, hc).toString
 
       application.stop()
     }

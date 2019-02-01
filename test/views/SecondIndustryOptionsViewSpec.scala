@@ -34,7 +34,7 @@ class SecondIndustryOptionsViewSpec extends OptionsViewBehaviours[SecondIndustry
   val view = application.injector.instanceOf[SecondIndustryOptionsView]
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode)(fakeRequest, messages)
+    view.apply(form, NormalMode)(fakeRequest, messages, hc)
 
   "SecondIndustryOptionsView" must {
 

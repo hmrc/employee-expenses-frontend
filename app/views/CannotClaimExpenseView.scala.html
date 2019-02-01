@@ -14,11 +14,13 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.http.HeaderCarrier
+
 @this(
     main_template: MainTemplate
 )
 
-@(govUkUrl: String)(implicit request: Request[_], messages: Messages)
+@(govUkUrl: String)(implicit request: Request[_], messages: Messages, hc: HeaderCarrier)
 
 @main_template(
     title = messages("cannotClaimExpense.title")

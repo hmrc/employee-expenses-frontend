@@ -34,7 +34,7 @@ class WhichRailwayTradeViewSpec extends OptionsViewBehaviours[WhichRailwayTrade]
   val view = application.injector.instanceOf[WhichRailwayTradeView]
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode)(fakeRequest, messages)
+    view.apply(form, NormalMode)(fakeRequest, messages, hc)
 
   "WhichRailwayTradeView" must {
 

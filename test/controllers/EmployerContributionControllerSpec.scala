@@ -52,7 +52,7 @@ class EmployerContributionControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode)(fakeRequest, messages).toString
+        view(form, NormalMode)(fakeRequest, messages, hc).toString
 
       application.stop()
     }
@@ -72,7 +72,7 @@ class EmployerContributionControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(EmployerContribution.values.head), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(EmployerContribution.values.head), NormalMode)(fakeRequest, messages, hc).toString
 
       application.stop()
     }
@@ -114,7 +114,7 @@ class EmployerContributionControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(fakeRequest, messages).toString
+        view(boundForm, NormalMode)(fakeRequest, messages, hc).toString
 
       application.stop()
     }

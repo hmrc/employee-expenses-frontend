@@ -17,12 +17,14 @@
 @import controllers.healthcare.routes._
 @import models.Mode
 
+@import uk.gov.hmrc.http.HeaderCarrier
+
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages, hc: HeaderCarrier)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("ambulanceStaff.title")}"

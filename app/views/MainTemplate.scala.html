@@ -17,6 +17,9 @@
 @import config.FrontendAppConfig
 @import com.github.tototoshi.play2.scalate._
 @import scalate._
+@import uk.gov.hmrc.http.HeaderCarrier
+
+@import uk.gov.hmrc.http.HeaderCarrier
 
 @this(
         appConfig: FrontendAppConfig,
@@ -36,49 +39,55 @@
         mainContent: Html
 )(implicit
         request: Request[_],
-        messages: Messages
+        messages: Messages,
+        hc: HeaderCarrier
 )
 
-    @sidebarContent = @{
-        sidebarLinks.map {
-            links =>
-                sidebar(links, Some("sidebar"))
-        }
-    }
+@hideAccountMenu = @{
+    hc.authorization.isEmpty
+}
 
-    @articleContent = @{
-        article(mainContent)
+@sidebarContent = @{
+    sidebarLinks.map {
+        links =>
+            sidebar(links, Some("sidebar"))
     }
+}
 
-    @linkElem = @{
-        Map("url" -> controllers.routes.Assets.versioned("stylesheets/employeeexpensesfrontend-app.css"))
-    }
+@articleContent = @{
+    article(mainContent)
+}
 
-    @scriptElem = @{
-        Seq(
-            Map("url" -> controllers.routes.Assets.versioned("javascripts/employeeexpensesfrontend.js"))
-        )
-    }
+@linkElem = @{
+    Map("url" -> controllers.routes.Assets.versioned("stylesheets/employeeexpensesfrontend-app.css"))
+}
 
-    @scalate.render(
-        "/templates/mustache/production/govuk-template.mustache.html",
-        Map(
-            "pageTitle" -> title,
-            "navTitle" -> messages("site.service_name"),
-            "assetsPath" -> appConfig.assetsPath,
-            "sidebar" -> sidebarContent,
-            "scriptElems" -> scriptElem,
-            "linkElems" -> linkElem,
-            "scriptElems" -> scriptElem,
-            "mainClass" -> mainClass,
-            "article" -> articleContent,
-            "isWelsh" -> {
-                messages.lang.code == "cy"
-            },
-            "showPropositionLinks" -> true,
-            "langSelector" -> {
-                Map("enUrl" -> appConfig.routeToSwitchLanguage("english"),
-                    "cyUrl" -> appConfig.routeToSwitchLanguage("cymraeg"))
-            }
-        )
+@scriptElem = @{
+    Seq(
+        Map("url" -> controllers.routes.Assets.versioned("javascripts/employeeexpensesfrontend.js"))
     )
+}
+
+@scalate.render(
+    "/templates/mustache/production/govuk-template.mustache.html",
+    Map(
+        "pageTitle" -> title,
+        "navTitle" -> messages("site.service_name"),
+        "hideAccountMenu" -> hideAccountMenu,
+        "assetsPath" -> appConfig.assetsPath,
+        "sidebar" -> sidebarContent,
+        "scriptElems" -> scriptElem,
+        "linkElems" -> linkElem,
+        "scriptElems" -> scriptElem,
+        "mainClass" -> mainClass,
+        "article" -> articleContent,
+        "isWelsh" -> {
+            messages.lang.code == "cy"
+        },
+        "showPropositionLinks" -> true,
+        "langSelector" -> {
+            Map("enUrl" -> appConfig.routeToSwitchLanguage("english"),
+                "cyUrl" -> appConfig.routeToSwitchLanguage("cymraeg"))
+        }
+    )
+)

@@ -34,18 +34,17 @@ import views.html.transport.TransportVehicleTradeView
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransportVehicleTradeController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       @Named("Transport")navigator: Navigator,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: TransportVehicleTradeFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: TransportVehicleTradeView,
-                                       claimAmounts: ClaimAmountsConfig
-
-)(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                                 override val messagesApi: MessagesApi,
+                                                 sessionRepository: SessionRepository,
+                                                 @Named("Transport") navigator: Navigator,
+                                                 identify: UnauthenticatedIdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 formProvider: TransportVehicleTradeFormProvider,
+                                                 val controllerComponents: MessagesControllerComponents,
+                                                 view: TransportVehicleTradeView,
+                                                 claimAmounts: ClaimAmountsConfig
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
 
@@ -78,8 +77,8 @@ class TransportVehicleTradeController @Inject()(
               case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => claimAmounts.Transport.paintersLetterersAssistants
               case TransportVehicleTrade.NoneOfTheAbove => claimAmounts.Transport.default
             }
-            newAnswers     <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _              <- sessionRepository.set(newAnswers)
+            newAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
+            _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(TransportVehicleTradePage, mode)(updatedAnswers))
         }
       )
