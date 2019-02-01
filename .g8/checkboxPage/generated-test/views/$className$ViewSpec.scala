@@ -16,7 +16,10 @@ class $className$ViewSpec extends CheckboxViewBehaviours[$className$] {
   val form = new $className$FormProvider()()
 
   def applyView(form: Form[Set[$className$]]): HtmlFormat.Appendable =
-    application.injector.instanceOf[$className$View].apply(form, NormalMode)(fakeRequest, messages)
+    application.injector.instanceOf[$className$View].apply(form, NormalMode)(fakeRequest, messages, hc)
+
+  def applyViewWithAuth(form: Form[Set[$className$]]): HtmlFormat.Appendable =
+    application.injector.instanceOf[$className$View].apply(form, NormalMode)(fakeRequest, messages, hcWithAuth)
 
   val messageKeyPrefix = "$className;format="decap"$"
 
@@ -25,6 +28,8 @@ class $className$ViewSpec extends CheckboxViewBehaviours[$className$] {
   "$className$View" must {
 
     behave like normalPage(applyView(form), messageKeyPrefix)
+
+    behave like normalPageWithAccountMenu(applyViewWithAuth(form))
 
     behave like pageWithBackLink(applyView(form))
 
