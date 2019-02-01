@@ -43,8 +43,14 @@ class ConstructionalEngineeringList2ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix,
-      controllers.engineering.routes.ConstructionalEngineeringList2Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+                          form,
+                          applyView,
+                          messageKeyPrefix,
+                          controllers.engineering.routes.ConstructionalEngineeringList2Controller.onSubmit(NormalMode).url,
+                          legendLabel = Some(messageKeyPrefix + ".radioLabel")
+
+    )
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
@@ -60,7 +66,7 @@ class ConstructionalEngineeringList2ViewSpec extends YesNoViewBehaviours {
       )
     )
 
-    behave like pageWithSecondaryHeader(applyView(form), messages("constructionalEngineeringList2.secondaryHeading"))
+    behave like pageWithBodyText(applyView(form), "constructionalEngineeringList2.listText")
   }
 
   application.stop()
