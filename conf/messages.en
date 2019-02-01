@@ -347,14 +347,15 @@ woodFurnitureOccupationList1.occupation3 = joiner
 woodFurnitureOccupationList1.occupation4 = wood carver
 woodFurnitureOccupationList1.occupation5 = woodcutting machinist
 
-woodFurnitureOccupationList2.title = Is your job title listed?
-woodFurnitureOccupationList2.heading = Is your job title listed?
-woodFurnitureOccupationList2.secondaryHeading = Wood and furniture occupation list 2
-woodFurnitureOccupationList2.checkYourAnswersLabel = Is your job title listed?
-woodFurnitureOccupationList2.error.required = Select yes if your job title is listed
-woodFurnitureOccupationList2.occupation1 = Artificial limb maker (other than in wood)
-woodFurnitureOccupationList2.occupation2 = Organ builder
-woodFurnitureOccupationList2.occupation3 = Packaging case maker
+woodFurnitureOccupationList2.title = Wood and furniture occupation list 2 of 3
+woodFurnitureOccupationList2.heading = Wood and furniture occupation list 2 of 3
+woodFurnitureOccupationList2.checkYourAnswersLabel = Wood and furniture occupation list 2 of 3
+woodFurnitureOccupationList2.error.required = Select yes if your occupation is listed
+woodFurnitureOccupationList2.listText = The occupations are:
+woodFurnitureOccupationList2.radioLabel = Is your occupation listed?
+woodFurnitureOccupationList2.occupation1 = artificial limb maker (other than in wood)
+woodFurnitureOccupationList2.occupation2 = organ builder
+woodFurnitureOccupationList2.occupation3 = packaging case maker
 
 woodFurnitureOccupationList3.title = Is your job title listed?
 woodFurnitureOccupationList3.heading = Is your job title listed?
