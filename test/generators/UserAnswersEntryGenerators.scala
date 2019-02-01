@@ -21,7 +21,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
 import pages.clothing.ClothingPage
-import pages.construction.{BuildingMaterialsPage, JoinerCarpenterPage}
+import pages.construction._
 import pages.electrical.ElectricalPage
 import pages.healthcare._
 import pages.engineering._
@@ -39,6 +39,14 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[BuildingMaterialsPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryStoneMasonUserAnswersEntry: Arbitrary[(StoneMasonPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[StoneMasonPage.type]
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }

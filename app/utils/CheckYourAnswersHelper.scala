@@ -31,7 +31,7 @@ import controllers.construction.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.clothing.ClothingPage
-import pages.construction.{BuildingMaterialsPage, JoinerCarpenterPage}
+import pages.construction._
 import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.foodCatering._
@@ -292,6 +292,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def buildingMaterials: Option[AnswerRow] = userAnswers.get(BuildingMaterialsPage) map {
     x => AnswerRow("buildingMaterials.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       BuildingMaterialsController.onPageLoad(CheckMode).url)
+  }
+
+  def stoneMason: Option[AnswerRow] = userAnswers.get(StoneMasonPage) map {
+    x => AnswerRow("stoneMason.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      StoneMasonController.onPageLoad(CheckMode).url)
   }
 
 }

@@ -439,7 +439,7 @@ metropolitanPolice.error.required = Select yes if you work for the Metropolitan 
 
 cannotClaimExpense.title = You cannot claim this expense
 cannotClaimExpense.heading = You cannot claim this expense
-cannotClaimExpense.body = This is due to your employer's arrangements with HMRC.
+cannotClaimExpense.body = This is due to your employer’s arrangements with HMRC.
 cannotClaimExpense.hyperLink = Return to GOV.UK
 
 communitySupportOfficer.title = Are you a community support officer?
@@ -456,3 +456,8 @@ buildingMaterials.title = Do you work in building materials?
 buildingMaterials.heading = Do you work in building materials?
 buildingMaterials.checkYourAnswersLabel = Do you work in building materials?
 buildingMaterials.error.required = Select yes if you work in building materials
+
+stoneMason.title = Are you a stone mason?
+stoneMason.heading = Are you a stone mason?
+stoneMason.checkYourAnswersLabel = Are you a stone mason?
+stoneMason.error.required = Select yes if you are a stone mason

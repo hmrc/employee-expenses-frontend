@@ -22,7 +22,7 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
 import pages.clothing.ClothingPage
-import pages.construction.{BuildingMaterialsPage, JoinerCarpenterPage}
+import pages.construction._
 import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.healthcare._
@@ -38,6 +38,7 @@ trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
+    arbitrary[(StoneMasonPage.type, JsValue)] ::
     arbitrary[(BuildingMaterialsPage.type, JsValue)] ::
     arbitrary[(JoinerCarpenterPage.type, JsValue)] ::
     arbitrary[(CommunitySupportOfficerPage.type, JsValue)] ::

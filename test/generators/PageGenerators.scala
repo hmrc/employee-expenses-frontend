@@ -19,7 +19,7 @@ package generators
 import org.scalacheck.Arbitrary
 import pages._
 import pages.clothing._
-import pages.construction.{BuildingMaterialsPage, JoinerCarpenterPage}
+import pages.construction._
 import pages.electrical.ElectricalPage
 import pages.healthcare._
 import pages.engineering._
@@ -34,6 +34,9 @@ trait PageGenerators {
 
   implicit lazy val arbitraryBuildingMaterialsPage: Arbitrary[BuildingMaterialsPage.type] =
     Arbitrary(BuildingMaterialsPage)
+
+  implicit lazy val arbitraryStoneMasonPage: Arbitrary[StoneMasonPage.type] =
+    Arbitrary(StoneMasonPage)
 
   implicit lazy val arbitraryJoinerCarpenterPage: Arbitrary[JoinerCarpenterPage.type] =
     Arbitrary(JoinerCarpenterPage)
