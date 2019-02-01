@@ -19,6 +19,7 @@ package views.manufacturing
 import controllers.manufacturing.routes
 import forms.manufacturing.IronSteelOccupationListFormProvider
 import models.NormalMode
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -30,7 +31,7 @@ class IronSteelOccupationListViewSpec extends YesNoViewBehaviours {
 
   val form = new IronSteelOccupationListFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "IronSteelOccupationList view" must {
 
@@ -44,11 +45,11 @@ class IronSteelOccupationListViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(
-                          form,
-                          applyView,
-                          messageKeyPrefix,
-                          routes.IronSteelOccupationListController.onSubmit(NormalMode).url,
-                          legendLabel = Some(messageKeyPrefix + ".radioLabel")
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.IronSteelOccupationListController.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
 
     )
 
