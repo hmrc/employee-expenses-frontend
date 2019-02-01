@@ -35,23 +35,24 @@
         @components.error_summary(form.errors)
 
         @components.heading(
-            headingKey = "factoryEngineeringList1.heading",
-            secondaryHeaderKey = Some("factoryEngineeringList1.secondaryHeading")
+            headingKey = "factoryEngineeringList1.heading"
         )
 
         @components.list(
             pageKey = Some("factoryEngineeringList1"),
+            listText = Some("constructionalEngineeringList1.listText"),
+
             bulletList = Seq(
-                "occupation1",
-                "occupation2",
-                "occupation3"
+                            "occupation1",
+                            "occupation2",
+                            "occupation3"
             )
         )
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("factoryEngineeringList1.heading"),
-            labelClass = Some("visually-hidden")
+            label = messages("factoryEngineeringList1.radioLabel"),
+            labelClass = Some("heading-medium")
         )
 
         @components.submit_button()

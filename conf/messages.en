@@ -192,14 +192,16 @@ ancillaryEngineeringWhichTrade.noneOfTheAbove = None of the above
 ancillaryEngineeringWhichTrade.checkYourAnswersLabel = Which trade do you work in?
 ancillaryEngineeringWhichTrade.error.required = Select which trade you work in
 
-factoryEngineeringList1.title = Is your job title listed?
-factoryEngineeringList1.heading = Is your job title listed?
-factoryEngineeringList1.secondaryHeading = Factory or workshop engineers list 1
-factoryEngineeringList1.checkYourAnswersLabel = Is your job title listed?
-factoryEngineeringList1.error.required = Select yes if your job title is listed
-factoryEngineeringList1.occupation1 = Pattern maker
-factoryEngineeringList1.occupation2 = Letterpress section-electrical engineers (rotary presses)
-factoryEngineeringList1.occupation3 = Maintenance engineers (rotary presses) and stereotypers
+factoryEngineeringList1.title = Factory or workshop engineers list 1 of 2
+factoryEngineeringList1.heading = Factory or workshop engineers list 1 of 2
+factoryEngineeringList1.checkYourAnswersLabel = Factory or workshop engineers list 1 of 2
+factoryEngineeringList1.error.required = Select yes if your occupation is listed
+factoryEngineeringList1.listText = The occupations are:
+factoryEngineeringList1.radioLabel = Is your occupation listed?
+factoryEngineeringList1.occupation1 = letterpress section-electrical engineers (rotary presses)
+factoryEngineeringList1.occupation2 = maintenance engineers (rotary presses) and stereotypers
+factoryEngineeringList1.occupation3 = pattern maker
+
 
 airlineJobList.title = Is your job title listed?
 airlineJobList.heading = Is your job title listed?
