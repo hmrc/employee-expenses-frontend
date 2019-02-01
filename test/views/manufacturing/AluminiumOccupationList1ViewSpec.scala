@@ -57,7 +57,6 @@ class AluminiumOccupationList1ViewSpec extends YesNoViewBehaviours {
       )
     )
 
-    behave like pageWithSecondaryHeader(applyView(form), messages(s"$messageKeyPrefix.secondaryHeading"))
   }
 
   application.stop()
