@@ -203,13 +203,16 @@ factoryEngineeringList1.occupation2 = maintenance engineers (rotary presses) and
 factoryEngineeringList1.occupation3 = pattern maker
 
 
-airlineJobList.title = Is your job title listed?
-airlineJobList.heading = Is your job title listed?
-airlineJobList.occupation1 = Pilot
-airlineJobList.occupation2 = Co-pilot
-airlineJobList.occupation3 = Uniformed flight deck crew
-airlineJobList.checkYourAnswersLabel = Is your job title listed?
-airlineJobList.error.required = Select yes if your job title is listed
+airlineJobList.title = Airline occupation list
+airlineJobList.heading = Airline occupation list
+airlineJobList.listText = The occupations are:
+airlineJobList.radioLabel = Is your occupation listed?
+airlineJobList.occupation1 = co-pilot
+airlineJobList.occupation2 = helicopter pilot
+airlineJobList.occupation3 = pilot
+airlineJobList.occupation4 = uniformed flight deck crew
+airlineJobList.checkYourAnswersLabel = Airline occupation list
+airlineJobList.error.required = Select yes if your occupation is listed
 
 garageHandOrCleaner.title = Are you a garage hand or cleaner?
 garageHandOrCleaner.heading = Are you a garage hand or cleaner?
