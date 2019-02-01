@@ -43,7 +43,14 @@ class ClothingViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.ClothingController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      routes.ClothingController.onSubmit(NormalMode).url,
+        legendLabel = Some(messageKeyPrefix + ".radioLabel")
+
+    )
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
@@ -52,6 +59,9 @@ class ClothingViewSpec extends YesNoViewBehaviours {
         "occupation3"
       )
     )
+    behave like pageWithBodyText(applyView(form), "aluminiumOccupationList1.listText")
+
+
   }
 
   application.stop()
