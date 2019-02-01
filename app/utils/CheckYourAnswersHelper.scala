@@ -31,7 +31,7 @@ import controllers.construction.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.clothing.ClothingPage
-import pages.construction.JoinerCarpenterPage
+import pages.construction.{JoinerCarpenterPage, StoneMasonPage}
 import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.foodCatering._
@@ -287,6 +287,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def joinerCarpenter: Option[AnswerRow] = userAnswers.get(JoinerCarpenterPage) map {
     x => AnswerRow("joinerCarpenter.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       JoinerCarpenterController.onPageLoad(CheckMode).url)
+  }
+
+  def stoneMason: Option[AnswerRow] = userAnswers.get(StoneMasonPage) map {
+    x => AnswerRow("stoneMason.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      StoneMasonController.onPageLoad(CheckMode).url)
   }
 
 }
