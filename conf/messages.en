@@ -169,16 +169,17 @@ typeOfTransport.noneOfTheAbove = None of the above
 typeOfTransport.checkYourAnswersLabel = What type of transport and distribution do you work in?
 typeOfTransport.error.required = Select what type of transport and distribution do you work in
 
-healthcareList2.title = Is your job title listed?
-healthcareList2.heading = Is your job title listed?
-healthcareList2.secondaryHeading = Healthcare occupation list 2
-healthcareList2.checkYourAnswersLabel = Is your job title listed?
-healthcareList2.error.required = Select yes if your job title is listed
-healthcareList2.occupation1 = Plaster room orderly
-healthcareList2.occupation2 = Hospital porter
-healthcareList2.occupation3 = Ward clerk
-healthcareList2.occupation4 = Sterile supply worker
-healthcareList2.occupation5 = Hospital domestic or catering staff
+healthcareList2.title = Healthcare occupation occupation list 2 of 2
+healthcareList2.heading = Healthcare occupation occupation list 2 of 2
+healthcareList2.checkYourAnswersLabel = Healthcare occupation occupation list 2 of 2
+healthcareList2.error.required = Select yes if your occupation is listed
+healthcareList2.listText = The occupations are:
+healthcareList2.radioLabel = Is your occupation listed?
+healthcareList2.occupation1 = hospital domestic or catering staff
+healthcareList2.occupation2 = hospital porter
+healthcareList2.occupation3 = plaster room orderly
+healthcareList2.occupation4 = sterile supply worker
+healthcareList2.occupation5 = ward clerk
 
 constructionalEngineeringApprentice.title = Are you an apprentice or storekeeper?
 constructionalEngineeringApprentice.heading = Are you an apprentice or storekeeper?
