@@ -35,7 +35,7 @@ class StoneMasonController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          @Named("Construction") navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: StoneMasonFormProvider,
