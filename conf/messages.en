@@ -451,3 +451,8 @@ joinerCarpenter.title = Are you a joiner or carpenter?
 joinerCarpenter.heading = Are you a joiner or carpenter?
 joinerCarpenter.checkYourAnswersLabel = Are you a joiner or carpenter?
 joinerCarpenter.error.required = Select yes if you are a joiner or carpenter
+
+buildingMaterials.title = buildingMaterials
+buildingMaterials.heading = buildingMaterials
+buildingMaterials.checkYourAnswersLabel = buildingMaterials
+buildingMaterials.error.required = Select yes if buildingMaterials

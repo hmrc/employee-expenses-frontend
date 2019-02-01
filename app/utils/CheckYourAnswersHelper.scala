@@ -289,4 +289,9 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       JoinerCarpenterController.onPageLoad(CheckMode).url)
   }
 
+  def buildingMaterials: Option[AnswerRow] = userAnswers.get(BuildingMaterialsPage) map {
+    x => AnswerRow("buildingMaterials.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      BuildingMaterialsController.onPageLoad(CheckMode).url)
+  }
+
 }
