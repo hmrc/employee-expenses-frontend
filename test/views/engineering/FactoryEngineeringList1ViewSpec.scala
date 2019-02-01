@@ -45,11 +45,11 @@ class FactoryEngineeringList1ViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(
-                          form,
-                          applyView,
-                          messageKeyPrefix,
-                          routes.FactoryEngineeringList1Controller.onSubmit(NormalMode).url,
-                          legendLabel = Some(messageKeyPrefix + ".radioLabel")
+      form,
+      applyView,
+      messageKeyPrefix,
+      routes.FactoryEngineeringList1Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
 
     )
 
@@ -58,7 +58,7 @@ class FactoryEngineeringList1ViewSpec extends YesNoViewBehaviours {
         "occupation1",
         "occupation2",
         "occupation3"
-     g )
+      )
     )
 
     behave like pageWithBodyText(applyView(form), "constructionalEngineeringList1.listText")

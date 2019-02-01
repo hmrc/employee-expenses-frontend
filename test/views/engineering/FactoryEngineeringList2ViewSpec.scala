@@ -58,7 +58,7 @@ class FactoryEngineeringList2ViewSpec extends YesNoViewBehaviours {
       )
     )
 
-    behave like pageWithSecondaryHeader(applyView(form), messages("factoryEngineeringList2.secondaryHeading"))
+    behave like pageWithBodyText(applyView(form), "factoryEngineeringList2.listText")
   }
 
   application.stop()
