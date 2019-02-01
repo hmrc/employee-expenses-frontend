@@ -18,48 +18,48 @@
 @import controllers.engineering.routes._
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+        main_template: MainTemplate,
+        formHelper: FormWithCSRF
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("constructionalEngineeringList2.title")}"
+    @main_template(
+        title = s"${errorPrefix(form)} ${messages("constructionalEngineeringList2.title")}"
     ) {
 
-    @formHelper(action = ConstructionalEngineeringList2Controller.onSubmit(mode), 'autoComplete -> "off") {
+        @formHelper(action = ConstructionalEngineeringList2Controller.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+            @components.back_link()
 
-        @components.error_summary(form.errors)
+            @components.error_summary(form.errors)
 
-        @components.heading(
-            headingKey = "constructionalEngineeringList2.heading"
-        )
-
-        @components.list(
-            pageKey = Some("constructionalEngineeringList2"),
-            listText = Some("constructionalEngineeringList2.listText"),
-            bulletList = Seq(
-                            "occupation1",
-                            "occupation2",
-                            "occupation3",
-                            "occupation4",
-                            "occupation5",
-                            "occupation6",
-                            "occupation7",
-                            "occupation8",
-                            "occupation9"
+            @components.heading(
+                headingKey = "constructionalEngineeringList2.heading"
             )
-        )
 
-        @components.input_yes_no(
-            field = form("value"),
-            label = messages("constructionalEngineeringList2.radioLabel"),
-            labelClass = Some("heading-medium")
-        )
+            @components.list(
+                pageKey = Some("constructionalEngineeringList2"),
+                listText = Some("constructionalEngineeringList2.listText"),
+                bulletList = Seq(
+                    "occupation1",
+                    "occupation2",
+                    "occupation3",
+                    "occupation4",
+                    "occupation5",
+                    "occupation6",
+                    "occupation7",
+                    "occupation8",
+                    "occupation9"
+                )
+            )
 
-        @components.submit_button()
+            @components.input_yes_no(
+                field = form("value"),
+                label = messages("constructionalEngineeringList2.radioLabel"),
+                labelClass = Some("heading-medium")
+            )
+
+            @components.submit_button()
+        }
     }
-}

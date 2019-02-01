@@ -19,6 +19,7 @@ package views.clothing
 import controllers.clothing.routes
 import forms.clothing.ClothingFormProvider
 import models.NormalMode
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -30,7 +31,7 @@ class ClothingViewSpec extends YesNoViewBehaviours {
 
   val form = new ClothingFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "Clothing view" must {
 
@@ -44,11 +45,11 @@ class ClothingViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(
-                          form,
-                          applyView,
-                          messageKeyPrefix,
-                          routes.ClothingController.onSubmit(NormalMode).url,
-                          legendLabel = Some(messageKeyPrefix + ".radioLabel")
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.ClothingController.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
 
     )
 
