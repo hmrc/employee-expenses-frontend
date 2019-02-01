@@ -38,7 +38,12 @@ class WoodFurnitureOccupationList1ViewSpec extends YesNoViewBehaviours {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages, hc)
 
+    def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode)(fakeRequest, messages, hcWithAuth)
+
     behave like normalPage(applyView(form), messageKeyPrefix)
+
+    behave like normalPageWithAccountMenu(applyViewWithAuth(form))
 
     behave like pageWithBackLink(applyView(form))
 

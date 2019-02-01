@@ -42,7 +42,6 @@ class MultipleEmploymentsViewSpec extends YesNoViewBehaviours {
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages, hcWithAuth)
 
-
     behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like normalPageWithAccountMenu(applyViewWithAuth(form))

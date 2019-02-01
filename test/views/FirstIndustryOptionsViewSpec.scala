@@ -34,10 +34,17 @@ class FirstIndustryOptionsViewSpec extends OptionsViewBehaviours[FirstIndustryOp
   def applyView(form: Form[_]): HtmlFormat.Appendable =
     view.apply(form, NormalMode)(fakeRequest, messages, hc)
 
+  def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
+    view.apply(form, NormalMode)(fakeRequest, messages, hcWithAuth)
+
   "FirstIndustryOptionsView" must {
 
     behave like normalPage(applyView(form), messageKeyPrefix)
+
+    behave like normalPageWithAccountMenu(applyViewWithAuth(form))
+
     behave like pageWithBackLink(applyView(form))
+
     behave like optionsPage(form, applyView, FirstIndustryOptions.options)
   }
 

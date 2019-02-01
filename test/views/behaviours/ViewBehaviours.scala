@@ -37,6 +37,12 @@ trait ViewBehaviours extends ViewSpecBase {
           assertRenderedByCssSelector(doc, "span.header__menu__proposition-name")
         }
 
+        "assert account menu hidden when user not logged in" in {
+
+          val doc = asDocument(view)
+          assertNotRenderedById(doc, "secondary-nav")
+        }
+
         "display the correct browser title" in {
 
           val doc = asDocument(view)

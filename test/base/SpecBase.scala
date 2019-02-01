@@ -53,7 +53,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  lazy val hcWithAuth: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization("authed")))
+  lazy val hcWithAuth: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization("")))
 
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 
