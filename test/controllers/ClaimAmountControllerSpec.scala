@@ -51,7 +51,7 @@ class ClaimAmountControllerSpec extends SpecBase {
 
       status(result) mustEqual OK
       contentAsString(result) mustEqual
-        view(claimAmount, "36.00", "72.00", "/employee-expenses")(fakeRequest, messages, hc).toString
+        view(claimAmount, "36.00", "72.00", "/employee-expenses")(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -97,7 +97,7 @@ class ClaimAmountControllerSpec extends SpecBase {
       val view = application.injector.instanceOf[ClaimAmountView]
 
       contentAsString(result) mustEqual
-        view(claimAmount, "20.00", "40.00", "/employee-expenses")(fakeRequest, messages, hc).toString
+        view(claimAmount, "20.00", "40.00", "/employee-expenses")(fakeRequest, messages).toString
       application.stop()
     }
 
@@ -118,7 +118,7 @@ class ClaimAmountControllerSpec extends SpecBase {
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
       contentAsString(result) mustEqual
-        view(claimAmount - employerContribution, "19.00", "38.00", "/employee-expenses")(fakeRequest, messages, hc).toString
+        view(claimAmount - employerContribution, "19.00", "38.00", "/employee-expenses")(fakeRequest, messages).toString
 
       application.stop()
     }

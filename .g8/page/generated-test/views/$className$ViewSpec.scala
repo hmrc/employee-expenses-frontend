@@ -11,9 +11,9 @@ class $className$ViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[$className$View]
 
-    val applyView = view.apply()(fakeRequest, messages, hc)
+    val applyView = view.apply()(fakeRequest, messages)
 
-    val applyViewWithAuth = view.apply()(fakeRequest, messages, hcWithAuth)
+    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(applyView, "$className;format="decap"$")
 

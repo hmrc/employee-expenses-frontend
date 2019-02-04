@@ -30,7 +30,7 @@ class ClaimByPostOrOnlineViewSpec extends ViewBehaviours {
 
     val p87Url = frontendAppConfig.p87Url
 
-    val applyView = view.apply(p87Url)(fakeRequest, messages, hc)
+    val applyView = view.apply(p87Url)(fakeRequest, messages)
 
     behave like normalPage(applyView, "claimByPostOrOnline")
 

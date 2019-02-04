@@ -15,16 +15,14 @@
  *@
 
 @import controllers.routes._
-@import models.{Mode, EmployerContribution}
-
-@import uk.gov.hmrc.http.HeaderCarrier
+@import models.{EmployerContribution, Mode}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages, hc: HeaderCarrier)
+@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("employerContribution.title")}"

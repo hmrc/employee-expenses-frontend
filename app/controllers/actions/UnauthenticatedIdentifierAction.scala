@@ -37,6 +37,8 @@ class UnauthenticatedIdentifierAction @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
+    implicit val hideAccountMenu: Boolean = hc.authorization.isEmpty
+
     val existingMongoKey = request.session.get(config.mongoKey)
 
     val mongoKey: String = existingMongoKey

@@ -27,7 +27,7 @@ class CannotClaimViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[CannotClaimView]
 
-    val applyView = view.apply()(fakeRequest, messages, hc)
+    val applyView = view.apply()(fakeRequest, messages)
 
     behave like normalPage(applyView, "cannotClaim")
 

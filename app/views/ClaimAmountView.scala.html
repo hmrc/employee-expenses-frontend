@@ -14,8 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.http.HeaderCarrier
-
 @this(
     main_template: MainTemplate
 )
@@ -25,7 +23,7 @@
     band1: String,
     band2: String,
     onwardRoute: String
-)(implicit request: Request[_], messages: Messages, hc: HeaderCarrier)
+)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("claimAmount.title", claimAmount)

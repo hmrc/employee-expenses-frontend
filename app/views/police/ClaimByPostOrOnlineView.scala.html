@@ -14,13 +14,11 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.http.HeaderCarrier
-
 @this(
     main_template: MainTemplate
 )
 
-@(p87Url: String)(implicit request: Request[_], messages: Messages, hc: HeaderCarrier)
+@(p87Url: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("claimByPostOrOnline.title")

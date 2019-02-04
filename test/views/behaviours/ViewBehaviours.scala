@@ -37,7 +37,7 @@ trait ViewBehaviours extends ViewSpecBase {
           assertRenderedByCssSelector(doc, "span.header__menu__proposition-name")
         }
 
-        "assert account menu hidden when user not logged in" in {
+        "hide account menu when user not logged in" in {
 
           val doc = asDocument(view)
           assertNotRenderedById(doc, "secondary-nav")
@@ -76,7 +76,7 @@ trait ViewBehaviours extends ViewSpecBase {
 
       "rendered" must {
 
-        "have the correct menu items" in {
+        "show account menu when user logged in" in {
 
           val doc = asDocument(view)
           assertRenderedById(doc, "secondary-nav")

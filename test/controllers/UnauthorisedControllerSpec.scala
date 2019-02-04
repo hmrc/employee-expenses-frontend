@@ -38,7 +38,7 @@ class UnauthorisedControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view()(fakeRequest, messages, hc).toString
+        view()(fakeRequest, messages).toString
 
       application.stop()
     }

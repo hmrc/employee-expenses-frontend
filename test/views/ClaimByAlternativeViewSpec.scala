@@ -27,7 +27,7 @@ class ClaimByAlternativeViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[ClaimByAlternativeView]
 
-    val applyView = view.apply()(fakeRequest, messages, hc)
+    val applyView = view.apply()(fakeRequest, messages)
 
     behave like normalPage(applyView, "claimByAlternative")
 

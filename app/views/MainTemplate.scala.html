@@ -14,12 +14,8 @@
  * limitations under the License.
  *@
 
-@import config.FrontendAppConfig
 @import com.github.tototoshi.play2.scalate._
-@import scalate._
-@import uk.gov.hmrc.http.HeaderCarrier
-
-@import uk.gov.hmrc.http.HeaderCarrier
+@import config.FrontendAppConfig
 
 @this(
         appConfig: FrontendAppConfig,
@@ -39,13 +35,8 @@
         mainContent: Html
 )(implicit
         request: Request[_],
-        messages: Messages,
-        hc: HeaderCarrier
+        messages: Messages
 )
-
-@hideAccountMenu = @{
-    hc.authorization.isEmpty
-}
 
 @sidebarContent = @{
     sidebarLinks.map {
@@ -73,7 +64,7 @@
     Map(
         "pageTitle" -> title,
         "navTitle" -> messages("site.service_name"),
-        "hideAccountMenu" -> hideAccountMenu,
+        "hideAccountMenu" -> request.session.get("authToken").isEmpty,
         "assetsPath" -> appConfig.assetsPath,
         "sidebar" -> sidebarContent,
         "scriptElems" -> scriptElem,

@@ -36,7 +36,7 @@ class ClaimAmountViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[ClaimAmountView]
 
-    val applyView = view.apply(claimAmount, "20", "30", "/employee-expenses")(fakeRequest, messages, hc)
+    val applyView = view.apply(claimAmount, "20", "30", "/employee-expenses")(fakeRequest, messages)
 
     "behave like a page with dynamic title" when {
       val doc = asDocument(applyView)

@@ -37,10 +37,10 @@ class AmbulanceStaffViewSpec extends YesNoViewBehaviours {
     val view = application.injector.instanceOf[AmbulanceStaffView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest, messages, hc)
+      view.apply(form, NormalMode)(fakeRequest, messages)
 
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest, messages, hcWithAuth)
+      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

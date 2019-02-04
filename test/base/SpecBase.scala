@@ -16,22 +16,21 @@
 
 package base
 
+import com.github.tototoshi.play2.scalate.Scalate
 import config.FrontendAppConfig
 import controllers.actions._
 import models.UserAnswers
-import uk.gov.hmrc.http.HeaderCarrier
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
+import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.MockScalate
-import com.github.tototoshi.play2.scalate.Scalate
-import play.api.Application
-import uk.gov.hmrc.http.logging.Authorization
 
 
 
@@ -52,8 +51,6 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
   val fakeNino = "AB123456A"
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
-
-  lazy val hcWithAuth: HeaderCarrier = HeaderCarrier(authorization = Some(Authorization("")))
 
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 

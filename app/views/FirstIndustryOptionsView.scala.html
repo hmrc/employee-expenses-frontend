@@ -15,17 +15,14 @@
  *@
 
 @import controllers.routes._
-@import models.{Mode, FirstIndustryOptions}
-@import uk.gov.hmrc.http.HeaderCarrier
-
-@import uk.gov.hmrc.http.HeaderCarrier
+@import models.{FirstIndustryOptions, Mode}
 
 @this(
         main_template: MainTemplate,
         formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages, hc: HeaderCarrier)
+@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("firstIndustryOptions.title")}"

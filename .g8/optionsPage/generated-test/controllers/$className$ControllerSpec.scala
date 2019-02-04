@@ -36,7 +36,7 @@ class $className$ControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode)(fakeRequest, messages, hc).toString
+        view(form, NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -56,7 +56,7 @@ class $className$ControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill($className$.values.head), NormalMode)(fakeRequest, messages, hc).toString
+        view(form.fill($className$.values.head), NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -98,7 +98,7 @@ class $className$ControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(fakeRequest, messages, hc).toString
+        view(boundForm, NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }
