@@ -20,45 +20,46 @@
 @import uk.gov.hmrc.http.HeaderCarrier
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+        main_template: MainTemplate,
+        formHelper: FormWithCSRF
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages, hc: HeaderCarrier)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("factoryEngineeringList2.title")}"
+    @main_template(
+        title = s"${errorPrefix(form)} ${messages("factoryEngineeringList2.title")}"
     ) {
 
-    @formHelper(action = FactoryEngineeringList2Controller.onSubmit(mode), 'autoComplete -> "off") {
+        @formHelper(action = FactoryEngineeringList2Controller.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+            @components.back_link()
 
-        @components.error_summary(form.errors)
+            @components.error_summary(form.errors)
 
-        @components.heading(
-            headingKey = "factoryEngineeringList2.heading",
-            secondaryHeaderKey = Some("factoryEngineeringList2.secondaryHeading") )
-
-        @components.list(
-            pageKey = Some("factoryEngineeringList2"),
-            bulletList = Seq(
-                "occupation1",
-                "occupation2",
-                "occupation3",
-                "occupation4",
-                "occupation5",
-                "occupation6",
-                "occupation7"
+            @components.heading(
+                headingKey = "factoryEngineeringList2.heading"
             )
-        )
 
-        @components.input_yes_no(
-            field = form("value"),
-            label = messages("factoryEngineeringList2.heading"),
-            labelClass = Some("visually-hidden")
-        )
+            @components.list(
+                pageKey = Some("factoryEngineeringList2"),
+                listText = Some("factoryEngineeringList2.listText"),
+                bulletList = Seq(
+                    "occupation1",
+                    "occupation2",
+                    "occupation3",
+                    "occupation4",
+                    "occupation5",
+                    "occupation6",
+                    "occupation7"
+                )
+            )
 
-        @components.submit_button()
+            @components.input_yes_no(
+                field = form("value"),
+                label = messages("factoryEngineeringList2.radioLabel"),
+                labelClass = Some("heading-medium")
+            )
+
+            @components.submit_button()
+        }
     }
-}

@@ -40,17 +40,19 @@
 
         @components.list(
             pageKey = Some("clothing"),
+            listText = Some("clothing.listText"),
             bulletList = Seq(
-                "occupation1",
-                "occupation2",
-                "occupation3"
+
+                            "occupation1",
+                            "occupation2",
+                            "occupation3"
             )
         )
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("clothing.heading"),
-            labelClass = Some("visually-hidden")
+            label = messages("clothing.radioLabel"),
+            labelClass = Some("heading-medium")
         )
 
         @components.submit_button()

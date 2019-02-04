@@ -14,49 +14,32 @@
  * limitations under the License.
  *@
 
-@import controllers.healthcare.routes._
+@import controllers.construction.routes._
 @import models.Mode
-
-@import uk.gov.hmrc.http.HeaderCarrier
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages, hc: HeaderCarrier)
+@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("healthcareList2.title")}"
+    title = s"${errorPrefix(form)} ${messages("buildingMaterials.title")}"
     ) {
 
-    @formHelper(action = HealthcareList2Controller.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = BuildingMaterialsController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading(
-            headingKey = "healthcareList2.heading"
-        )
-
-        @components.list(
-            pageKey = Some("healthcareList2"),
-            listText = Some("healthcareList2.listText"),
-            bulletList = Seq(
-                "occupation1",
-                "occupation2",
-                "occupation3",
-                "occupation4",
-                "occupation5"
-
-            )
-        )
+        @components.heading("buildingMaterials.heading")
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("healthcareList2.radioLabel"),
-            labelClass = Some("heading-medium")
+            label = messages("buildingMaterials.heading"),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button()

@@ -17,6 +17,7 @@
 @(
         pageKey: Option[String] = None,
         addCssClass: Option[String] = None,
+        listText: Option[String] = None,
         bulletList: Seq[String]
 )(implicit messages: Messages)
 
@@ -26,6 +27,10 @@
 
 @text(bullet: String) = @{
     if(pageKey.isDefined) messages(s"${pageKey.get}.$bullet") else bullet
+}
+
+@if(listText.isDefined) {
+    <p>@messages(listText.get)</p>
 }
 
 @list = {

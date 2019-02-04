@@ -47,7 +47,13 @@ class HealthcareList1ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, controllers.healthcare.routes.HealthcareList1Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = controllers.healthcare.routes.HealthcareList1Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+    )
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
@@ -57,11 +63,10 @@ class HealthcareList1ViewSpec extends YesNoViewBehaviours {
         "occupation4",
         "occupation5",
         "occupation6"
-
       )
     )
 
-    behave like pageWithSecondaryHeader(applyView(form), messages("healthcareList1.secondaryHeading"))
+    behave like pageWithBodyText(applyView(form), "healthcareList1.listText")
   }
 
   application.stop()

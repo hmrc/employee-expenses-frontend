@@ -48,15 +48,24 @@ class AirlineJobListViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.AirlineJobListController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.AirlineJobListController.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+    )
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
         "occupation1",
         "occupation2",
-        "occupation3"
+        "occupation3",
+        "occupation4"
       )
     )
+
+    behave like pageWithBodyText(applyView(form), "airlineJobList.listText")
   }
 
   application.stop()

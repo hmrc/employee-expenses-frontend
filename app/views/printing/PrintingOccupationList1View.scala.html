@@ -37,12 +37,12 @@
         @components.error_summary(form.errors)
 
         @components.heading(
-            headingKey = "printingOccupationList1.heading",
-            secondaryHeaderKey = Some("printingOccupationList1.secondaryHeading")
+            headingKey = "printingOccupationList1.heading"
         )
 
         @components.list(
             pageKey = Some("printingOccupationList1"),
+            listText = Some("printingOccupationList1.listText"),
             bulletList = Seq(
                 "occupation1",
                 "occupation2",
@@ -54,8 +54,8 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("printingOccupationList1.heading"),
-            labelClass = Some("visually-hidden")
+            label = messages("printingOccupationList1.radioLabel"),
+            labelClass = Some("heading-medium")
         )
 
         @components.submit_button()

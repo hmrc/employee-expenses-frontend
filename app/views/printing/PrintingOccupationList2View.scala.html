@@ -20,15 +20,15 @@
 @import uk.gov.hmrc.http.HeaderCarrier
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+        main_template: MainTemplate,
+        formHelper: FormWithCSRF
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages, hc: HeaderCarrier)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("printingOccupationList2.title")}"
-    ) {
+) {
 
     @formHelper(action = PrintingOccupationList2Controller.onSubmit(mode), 'autoComplete -> "off") {
 
@@ -37,12 +37,12 @@
         @components.error_summary(form.errors)
 
         @components.heading(
-            headingKey = "printingOccupationList2.heading",
-            secondaryHeaderKey = Some("printingOccupationList2.secondaryHeading")
+            headingKey = "printingOccupationList2.heading"
         )
 
         @components.list(
             pageKey = Some("printingOccupationList2"),
+            listText = Some("printingOccupationList1.listText"),
             bulletList = Seq(
                 "occupation1",
                 "occupation2",
@@ -54,8 +54,8 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("printingOccupationList2.heading"),
-            labelClass = Some("visually-hidden")
+            label = messages("printingOccupationList2.radioLabel"),
+            labelClass = Some("heading-medium")
         )
 
         @components.submit_button()
