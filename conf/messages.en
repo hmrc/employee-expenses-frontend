@@ -474,6 +474,11 @@ joinerCarpenter.heading = Are you a joiner or carpenter?
 joinerCarpenter.checkYourAnswersLabel = Are you a joiner or carpenter?
 joinerCarpenter.error.required = Select yes if you are a joiner or carpenter
 
+buildingMaterials.title = Do you work in building materials?
+buildingMaterials.heading = Do you work in building materials?
+buildingMaterials.checkYourAnswersLabel = Do you work in building materials?
+buildingMaterials.error.required = Select yes if you work in building materials
+
 stoneMason.title = Are you a stone mason?
 stoneMason.heading = Are you a stone mason?
 stoneMason.checkYourAnswersLabel = Are you a stone mason?
