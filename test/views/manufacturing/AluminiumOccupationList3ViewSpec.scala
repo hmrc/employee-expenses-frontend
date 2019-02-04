@@ -43,7 +43,14 @@ class AluminiumOccupationList3ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.AluminiumOccupationList3Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.AluminiumOccupationList3Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+    )
+
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
@@ -57,7 +64,7 @@ class AluminiumOccupationList3ViewSpec extends YesNoViewBehaviours {
       )
     )
 
-    behave like pageWithSecondaryHeader(applyView(form), messages(s"$messageKeyPrefix.secondaryHeading"))
+    behave like pageWithBodyText(applyView(form), "aluminiumOccupationList3.listText")
   }
 
   application.stop()

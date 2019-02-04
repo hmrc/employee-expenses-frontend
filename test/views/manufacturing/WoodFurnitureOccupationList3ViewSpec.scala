@@ -41,11 +41,16 @@ class WoodFurnitureOccupationList3ViewSpec extends YesNoViewBehaviours {
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
-    behave like pageWithSecondaryHeader(applyView(form), messages(s"$messageKeyPrefix.secondaryHeading"))
-
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.WoodFurnitureOccupationList3Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = controllers.manufacturing.routes.WoodFurnitureOccupationList3Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+    )
+
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
@@ -55,6 +60,9 @@ class WoodFurnitureOccupationList3ViewSpec extends YesNoViewBehaviours {
         "occupation4"
       )
     )
+
+    behave like pageWithBodyText(applyView(form), "woodFurnitureOccupationList1.listText")
+
   }
 
   application.stop()

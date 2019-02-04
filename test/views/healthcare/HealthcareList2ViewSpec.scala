@@ -16,9 +16,9 @@
 
 package views.healthcare
 
-import controllers.routes
 import forms.HealthcareList2FormProvider
 import models.NormalMode
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -30,7 +30,7 @@ class HealthcareList2ViewSpec extends YesNoViewBehaviours {
 
   val form = new HealthcareList2FormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "HealthcareList2 view" must {
 
@@ -43,7 +43,13 @@ class HealthcareList2ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, controllers.healthcare.routes.HealthcareList2Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = controllers.healthcare.routes.HealthcareList2Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+    )
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
@@ -52,11 +58,10 @@ class HealthcareList2ViewSpec extends YesNoViewBehaviours {
         "occupation3",
         "occupation4",
         "occupation5"
-
       )
     )
 
-    behave like pageWithSecondaryHeader(applyView(form), messages("healthcareList2.secondaryHeading"))
+    behave like pageWithBodyText(applyView(form), "healthcareList1.listText")
   }
 
 

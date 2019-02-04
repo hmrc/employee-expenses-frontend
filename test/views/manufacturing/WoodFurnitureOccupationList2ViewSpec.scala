@@ -42,7 +42,14 @@ class WoodFurnitureOccupationList2ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, controllers.manufacturing.routes.WoodFurnitureOccupationList2Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = controllers.manufacturing.routes.WoodFurnitureOccupationList2Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+
+    )
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
@@ -51,8 +58,8 @@ class WoodFurnitureOccupationList2ViewSpec extends YesNoViewBehaviours {
         "occupation3"
       )
     )
-    
-    behave like pageWithSecondaryHeader(applyView(form), messages(s"$messageKeyPrefix.secondaryHeading"))
+
+    behave like pageWithBodyText(applyView(form), "woodFurnitureOccupationList2.listText")
 
   }
 

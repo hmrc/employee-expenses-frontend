@@ -41,8 +41,6 @@ class PrintingOccupationList1ViewSpec extends YesNoViewBehaviours {
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
-    behave like pageWithSecondaryHeader(applyView(form), messages(s"$messageKeyPrefix.secondaryHeading"))
-
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
         "occupation1",
@@ -53,9 +51,17 @@ class PrintingOccupationList1ViewSpec extends YesNoViewBehaviours {
       )
     )
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.PrintingOccupationList1Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.PrintingOccupationList1Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+    )
 
     behave like pageWithBackLink(applyView(form))
+
+    behave like pageWithBodyText(applyView(form), "printingOccupationList1.listText")
   }
 
   application.stop()

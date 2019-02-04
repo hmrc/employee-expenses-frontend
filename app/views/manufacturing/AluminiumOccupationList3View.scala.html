@@ -18,46 +18,46 @@
 @import models.Mode
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+        main_template: MainTemplate,
+        formHelper: FormWithCSRF
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("aluminiumOccupationList3.title")}"
+    @main_template(
+        title = s"${errorPrefix(form)} ${messages("aluminiumOccupationList3.title")}"
     ) {
 
-    @formHelper(action = AluminiumOccupationList3Controller.onSubmit(mode), 'autoComplete -> "off") {
+        @formHelper(action = AluminiumOccupationList3Controller.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+            @components.back_link()
 
-        @components.error_summary(form.errors)
+            @components.error_summary(form.errors)
 
-        @components.heading(
-            headingKey = "aluminiumOccupationList3.heading",
-            secondaryHeaderKey = Some("aluminiumOccupationList3.secondaryHeading")
-        )
-
-        @components.list(
-            pageKey = Some("aluminiumOccupationList3"),
-            bulletList = Seq(
-                "occupation1",
-                "occupation2",
-                "occupation3",
-                "occupation4",
-                "occupation5",
-                "occupation6",
-                "occupation7"
+            @components.heading(
+                headingKey = "aluminiumOccupationList3.heading"
             )
-        )
 
-        @components.input_yes_no(
-            field = form("value"),
-            label = messages("aluminiumOccupationList3.heading"),
-            labelClass = Some("visually-hidden")
-        )
+            @components.list(
+                pageKey = Some("aluminiumOccupationList3"),
+                listText = Some("aluminiumOccupationList3.listText"),
+                bulletList = Seq(
+                    "occupation1",
+                    "occupation2",
+                    "occupation3",
+                    "occupation4",
+                    "occupation5",
+                    "occupation6",
+                    "occupation7"
+                )
+            )
 
-        @components.submit_button()
+            @components.input_yes_no(
+                field = form("value"),
+                label = messages("aluminiumOccupationList3.radioLabel"),
+                labelClass = Some("heading-medium")
+            )
+
+            @components.submit_button()
+        }
     }
-}
