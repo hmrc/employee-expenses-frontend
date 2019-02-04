@@ -43,7 +43,13 @@ class ConstructionOccupationList1ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.ConstructionOccupationList1Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.ConstructionOccupationList1Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+
+    )
 
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
@@ -52,6 +58,9 @@ class ConstructionOccupationList1ViewSpec extends YesNoViewBehaviours {
         "occupation3"
       )
     )
+
+    behave like pageWithBodyText(applyView(form), "constructionOccupationList1.listText")
+
 
   }
 

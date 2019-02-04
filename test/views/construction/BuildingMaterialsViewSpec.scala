@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package views.clothing
+package views.construction
 
-import controllers.clothing.routes
-import forms.clothing.ClothingFormProvider
+import controllers.construction.routes
+import forms.construction.BuildingMaterialsFormProvider
 import models.NormalMode
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.clothing.ClothingView
+import views.html.construction.BuildingMaterialsView
 
-class ClothingViewSpec extends YesNoViewBehaviours {
+class BuildingMaterialsViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "clothing"
+  val messageKeyPrefix = "buildingMaterials"
 
-  val form = new ClothingFormProvider()()
+  val form = new BuildingMaterialsFormProvider()()
 
   val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "Clothing view" must {
+  "BuildingMaterials view" must {
 
-    val view = application.injector.instanceOf[ClothingView]
+    val view = application.injector.instanceOf[BuildingMaterialsView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -44,25 +44,7 @@ class ClothingViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(
-      form = form,
-      createView = applyView,
-      messageKeyPrefix = messageKeyPrefix,
-      expectedFormAction = routes.ClothingController.onSubmit(NormalMode).url,
-      legendLabel = Some(messageKeyPrefix + ".radioLabel")
-
-    )
-
-    behave like pageWithList(applyView(form), messageKeyPrefix,
-      Seq(
-        "occupation1",
-        "occupation2",
-        "occupation3"
-      )
-    )
-    behave like pageWithBodyText(applyView(form), "aluminiumOccupationList1.listText")
-
-
+    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.BuildingMaterialsController.onSubmit(NormalMode).url)
   }
 
   application.stop()
