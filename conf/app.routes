@@ -255,3 +255,8 @@ GET        /stone-mason                                     controllers.construc
 POST       /stone-mason                                     controllers.construction.StoneMasonController.onSubmit(mode: Mode = NormalMode)
 GET        /change-stone-mason                              controllers.construction.StoneMasonController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-stone-mason                              controllers.construction.StoneMasonController.onSubmit(mode: Mode = CheckMode)
+
+GET        /construction-occupation-list-1                  controllers.construction.ConstructionOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /construction-occupation-list-1                  controllers.construction.ConstructionOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-construction-occupation-list-1           controllers.construction.ConstructionOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-construction-occupation-list-1           controllers.construction.ConstructionOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
