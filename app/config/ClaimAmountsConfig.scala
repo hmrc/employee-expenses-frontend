@@ -78,4 +78,9 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
   object Clothing {
     lazy val clothingList: Int = configuration.get[Int]("claim-amounts.clothing.clothing-list")
   }
+
+  object Electrical {
+    lazy val onlyLaundry: Int = configuration.get[Int]("claim-amounts.electrical.only-laundry")
+    lazy val allOther: Int = configuration.get[Int]("claim-amounts.electrical.all-other")
+  }
 }
