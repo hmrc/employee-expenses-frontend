@@ -48,10 +48,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
 
   def constructionOccupationList2: Option[AnswerRow] = userAnswers.get(ConstructionOccupationList2Page) map {
     x => AnswerRow("constructionOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      controllers.routes.ConstructionOccupationList2Controller.onPageLoad(CheckMode).url)
+      ConstructionOccupationList2Controller.onPageLoad(CheckMode).url)
   }
-
-
 
   def thirdIndustryOptions: Option[AnswerRow] = userAnswers.get(ThirdIndustryOptionsPage) map {
     x => AnswerRow("thirdIndustryOptions.checkYourAnswersLabel", s"thirdIndustryOptions.$x", true,

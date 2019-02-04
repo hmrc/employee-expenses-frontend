@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.construction
 
 import base.SpecBase
-import forms.ConstructionOccupationList2FormProvider
+import forms.construction.ConstructionOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.ConstructionOccupationList2Page
+import pages.construction.ConstructionOccupationList2Page
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.ConstructionOccupationList2View
+import views.html.construction.ConstructionOccupationList2View
 
 class ConstructionOccupationList2ControllerSpec extends SpecBase {
 
@@ -81,7 +80,7 @@ class ConstructionOccupationList2ControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -129,7 +128,7 @@ class ConstructionOccupationList2ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class ConstructionOccupationList2ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.construction
 
-import javax.inject.Inject
+import pages.behaviours.PageBehaviours
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class ConstructionOccupationList2PageSpec extends PageBehaviours {
 
-class ConstructionOccupationList2FormProvider @Inject() extends Mappings {
+  "ConstructionOccupationList2Page" must {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("constructionOccupationList2.error.required")
-    )
+    beRetrievable[Boolean](ConstructionOccupationList2Page)
+
+    beSettable[Boolean](ConstructionOccupationList2Page)
+
+    beRemovable[Boolean](ConstructionOccupationList2Page)
+  }
 }

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package pages
+package pages.construction
 
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
 case object ConstructionOccupationList2Page extends QuestionPage[Boolean] {

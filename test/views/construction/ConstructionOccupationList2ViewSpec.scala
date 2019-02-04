@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.construction
 
-import controllers.routes
-import forms.ConstructionOccupationList2FormProvider
+import controllers.construction.routes
+import forms.construction.ConstructionOccupationList2FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.ConstructionOccupationList2View
+import views.html.construction.ConstructionOccupationList2View
 
 class ConstructionOccupationList2ViewSpec extends YesNoViewBehaviours {
 
@@ -48,7 +48,24 @@ class ConstructionOccupationList2ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.ConstructionOccupationList2Controller.onSubmit(NormalMode).url)
+    behave like yesNoPage(form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.ConstructionOccupationList2Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+
+    )
+    behave like pageWithList(applyView(form), messageKeyPrefix,
+      Seq(
+        "occupation1",
+        "occupation2",
+        "occupation3"
+      )
+    )
+
+    behave like pageWithBodyText(applyView(form), "constructionOccupationList2.listText")
+
+
   }
 
   application.stop()

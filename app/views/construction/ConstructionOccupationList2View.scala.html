@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.routes._
+@import controllers.construction.routes._
 @import models.Mode
 
 @this(
@@ -34,12 +34,22 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("constructionOccupationList2.heading")
+        @components.heading(
+            headingKey = "constructionOccupationList2.heading")
 
+        @components.list(
+            pageKey = Some("constructionOccupationList2"),
+            listText = Some("constructionOccupationList2.listText"),
+            bulletList = Seq(
+                "occupation1",
+                "occupation2",
+                "occupation3"
+                )
+        )
         @components.input_yes_no(
             field = form("value"),
-            label = messages("constructionOccupationList2.heading"),
-            labelClass = Some("visually-hidden")
+            label = messages("constructionOccupationList2.radioLabel"),
+            labelClass = Some("heading-medium")
         )
 
         @components.submit_button()

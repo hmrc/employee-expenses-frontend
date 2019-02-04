@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.construction
 
 import controllers.actions._
-import forms.ConstructionOccupationList2FormProvider
+import forms.construction.ConstructionOccupationList2FormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.ConstructionOccupationList2Page
+import pages.construction.ConstructionOccupationList2Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.ConstructionOccupationList2View
+import views.html.construction.ConstructionOccupationList2View
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConstructionOccupationList2Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         @Named("Construction") navigator: Navigator,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: ConstructionOccupationList2FormProvider,
@@ -56,7 +56,7 @@ class ConstructionOccupationList2Controller @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(

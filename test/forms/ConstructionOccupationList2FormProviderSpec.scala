@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.construction.ConstructionOccupationList2FormProvider
 import play.api.data.FormError
 
 class ConstructionOccupationList2FormProviderSpec extends BooleanFieldBehaviours {
