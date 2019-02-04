@@ -4,7 +4,7 @@
     main_template: MainTemplate
 )
 
-@()(implicit request: Request[_], messages: Messages: HeaderCarrier)
+@()(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("$className;format="decap"$.title")
