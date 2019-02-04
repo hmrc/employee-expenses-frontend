@@ -17,12 +17,13 @@
 package controllers
 
 import com.google.inject.Inject
+import config.ClaimAmountsConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
 import forms.FirstIndustryOptionsFormProvider
 import javax.inject.Named
-import models.{Enumerable, FirstIndustryOptions, Mode, UserAnswers}
+import models.{Enumerable, FirstIndustryOptions, Mode}
 import navigation.Navigator
-import pages.FirstIndustryOptionsPage
+import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -41,29 +42,35 @@ class FirstIndustryOptionsController @Inject()(
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: FirstIndustryOptionsView,
                                                 sessionRepository: SessionRepository,
-                                                @Named("Generic") navigator: Navigator
+                                                @Named("Generic") navigator: Navigator,
+                                                claimAmounts: ClaimAmountsConfig
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form: Form[FirstIndustryOptions] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
+
       val preparedForm = request.userAnswers.get(FirstIndustryOptionsPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
+
       Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
+
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, mode))),
+
         value => {
           for {
-            updatedAnswers: UserAnswers <- Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value))
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value))
+            newAnswers     <- if (value == FirstIndustryOptions.Retail) Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.defaultRate)) else Future.successful(updatedAnswers)
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(FirstIndustryOptionsPage, mode)(updatedAnswers))
         }
       )

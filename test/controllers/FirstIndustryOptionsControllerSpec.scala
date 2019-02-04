@@ -17,19 +17,27 @@
 package controllers
 
 import base.SpecBase
+import config.ClaimAmountsConfig
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
 import forms.FirstIndustryOptionsFormProvider
+import javax.inject.Named
 import models.{FirstIndustryOptions, NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
+import navigation.{FakeNavigator, GenericNavigator, Navigator}
+import org.scalatest.concurrent.ScalaFutures
 import pages.FirstIndustryOptionsPage
 import play.api.Application
+import play.api.i18n.MessagesApi
 import play.api.inject.bind
-import play.api.mvc.Call
+import play.api.mvc.{Call, MessagesControllerComponents}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.FirstIndustryOptionsView
 
+import scala.concurrent.ExecutionContext
 
-class FirstIndustryOptionsControllerSpec extends SpecBase {
+
+class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures {
 
   def onwardRoute = Call("GET", "/FOO")
 
@@ -50,7 +58,6 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual view(form, NormalMode)(fakeRequest, messages).toString
 
-
       application.stop()
     }
 
@@ -68,7 +75,6 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
         view(form.fill(FirstIndustryOptions.values.head), NormalMode)(fakeRequest, messages).toString
 
       application.stop()
-
     }
 
     "redirect to next page when valid data is submitted" in {
@@ -85,7 +91,45 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual onwardRoute.url
 
       application.stop()
+    }
 
+    "save claim amount when 'Retail' is selected" in {
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+        .build()
+
+      val injector = application.injector
+
+      val controller =
+        new FirstIndustryOptionsController(
+          messagesApi = injector.instanceOf[MessagesApi],
+          identify = injector.instanceOf[UnauthenticatedIdentifierAction],
+          getData = injector.instanceOf[DataRetrievalAction],
+          requireData = injector.instanceOf[DataRequiredAction],
+          formProvider = injector.instanceOf[FirstIndustryOptionsFormProvider],
+          controllerComponents = injector.instanceOf[MessagesControllerComponents],
+          view = injector.instanceOf[FirstIndustryOptionsView],
+          sessionRepository = injector.instanceOf[SessionRepository],
+          navigator = injector.instanceOf[GenericNavigator],
+          claimAmounts = injector.instanceOf[ClaimAmountsConfig]
+        )(ec = injector.instanceOf[ExecutionContext])
+
+      val request = FakeRequest(POST, firstIndustryOptionsRoute)
+        .withSession(frontendAppConfig.mongoKey -> "key")
+        .withFormUrlEncodedBody(("value", FirstIndustryOptions.Retail.toString))
+
+      val result = controller.onSubmit(NormalMode)(request)
+
+      status(result) mustEqual SEE_OTHER
+
+      whenReady(result) {
+        res =>
+          println(s"#####\n\n${res.session(request).data}\n\n#####")
+      }
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
     }
 
     "return a bad request and errors when bad data is submitted" in {
@@ -102,7 +146,6 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
       contentAsString(result) mustEqual view(boundForm, NormalMode)(fakeRequest, messages).toString
 
       application.stop()
-
     }
 
     "redirect to session expired for a Get if no existing data is found" in {
@@ -118,8 +161,8 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
-
     }
+
     "redirect to session expired for a Post if no existing data is found" in {
 
       val application: Application = applicationBuilder(userAnswers = None)
@@ -133,7 +176,6 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
-
     }
   }
 
