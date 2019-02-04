@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package views.engineering
+package views.construction
 
-import forms.engineering.ConstructionalEngineeringList1FormProvider
+import controllers.construction.routes
+import forms.construction.ConstructionOccupationList1FormProvider
 import models.NormalMode
-import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.engineering.ConstructionalEngineeringList1View
+import views.html.construction.ConstructionOccupationList1View
 
-class ConstructionalEngineeringList1ViewSpec extends YesNoViewBehaviours {
+class ConstructionOccupationList1ViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "constructionalEngineeringList1"
+  val messageKeyPrefix = "constructionOccupationList1"
 
-  val form = new ConstructionalEngineeringList1FormProvider()()
+  val form = new ConstructionOccupationList1FormProvider()()
 
-  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "ConstructionalEngineeringList1 view" must {
+  "ConstructionOccupationList1 view" must {
 
-    val view = application.injector.instanceOf[ConstructionalEngineeringList1View]
+    val view = application.injector.instanceOf[ConstructionOccupationList1View]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -43,11 +43,10 @@ class ConstructionalEngineeringList1ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(
-      form = form,
+    behave like yesNoPage(form,
       createView = applyView,
       messageKeyPrefix = messageKeyPrefix,
-      expectedFormAction = controllers.engineering.routes.ConstructionalEngineeringList1Controller.onSubmit(NormalMode).url,
+      expectedFormAction = routes.ConstructionOccupationList1Controller.onSubmit(NormalMode).url,
       legendLabel = Some(messageKeyPrefix + ".radioLabel")
 
     )
@@ -60,9 +59,10 @@ class ConstructionalEngineeringList1ViewSpec extends YesNoViewBehaviours {
       )
     )
 
-    behave like pageWithBodyText(applyView(form), "constructionalEngineeringList1.listText")
-  }
+    behave like pageWithBodyText(applyView(form), "constructionOccupationList1.listText")
 
+
+  }
 
   application.stop()
 }

@@ -46,6 +46,8 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+
+
   def thirdIndustryOptions: Option[AnswerRow] = userAnswers.get(ThirdIndustryOptionsPage) map {
     x => AnswerRow("thirdIndustryOptions.checkYourAnswersLabel", s"thirdIndustryOptions.$x", true,
       ThirdIndustryOptionsController.onPageLoad(CheckMode).url)
@@ -297,6 +299,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def stoneMason: Option[AnswerRow] = userAnswers.get(StoneMasonPage) map {
     x => AnswerRow("stoneMason.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       StoneMasonController.onPageLoad(CheckMode).url)
+  }
+  def constructionOccupationList1: Option[AnswerRow] = userAnswers.get(ConstructionOccupationList1Page) map {
+    x => AnswerRow("constructionOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      ConstructionOccupationList1Controller.onPageLoad(CheckMode).url)
   }
 
 }
