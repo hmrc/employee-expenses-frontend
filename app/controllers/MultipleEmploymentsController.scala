@@ -19,7 +19,7 @@ package controllers
 import controllers.actions._
 import forms.MultipleEmploymentsFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
 import pages.MultipleEmploymentsPage
 import play.api.data.Form
@@ -56,7 +56,7 @@ class MultipleEmploymentsController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(

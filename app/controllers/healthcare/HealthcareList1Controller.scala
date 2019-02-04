@@ -20,7 +20,7 @@ import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.healthcare.HealthcareList1FormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
 import pages.ClaimAmount
 import pages.healthcare.HealthcareList1Page
