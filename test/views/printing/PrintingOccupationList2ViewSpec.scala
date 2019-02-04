@@ -47,8 +47,6 @@ class PrintingOccupationList2ViewSpec extends YesNoViewBehaviours {
 
     behave like normalPageWithAccountMenu(applyViewWithAuth(form))
 
-    behave like pageWithSecondaryHeader(applyView(form), messages(s"$messageKeyPrefix.secondaryHeading"))
-
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
         "occupation1",
