@@ -17,15 +17,37 @@
 package navigation
 
 import base.SpecBase
-import navigation.PrintingNavigator
+import models.NormalMode
+import controllers.printing.routes
+import pages.printing._
 
 class PrintingNavigatorSpec extends SpecBase {
-  val Navigator = new PrintingNavigator
+  val navigator = new PrintingNavigator
 
   "PrintingNavigator" when {
     "in Normal Mode" must {
-      "" in {
+      "go to EmployerContributionController from PrintingOccupationList1Page when 'Yes' is selected" in {
+        val answers = emptyUserAnswers.set(PrintingOccupationList1Page, true).success.value
+        navigator.nextPage(PrintingOccupationList1Page, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+      }
 
+      "go to PrintingOccupationList2Controller from PrintingOccupationList1Page when 'No' is selected" in {
+        val answers = emptyUserAnswers.set(PrintingOccupationList1Page, false).success.value
+        navigator.nextPage(PrintingOccupationList1Page, NormalMode)(answers) mustBe
+          routes.PrintingOccupationList2Controller.onPageLoad(NormalMode)
+      }
+
+      "go to EmployerContributionController from PrintingOccupationList2Controller when 'Yes' is selected" in {
+        val answers = emptyUserAnswers.set(PrintingOccupationList2Page, true).success.value
+        navigator.nextPage(PrintingOccupationList2Page, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+      }
+
+      "go to EmployerContributionController from PrintingOccupationList2Controller when 'No' is selected" in {
+        val answers = emptyUserAnswers.set(PrintingOccupationList2Page, false).success.value
+        navigator.nextPage(PrintingOccupationList2Page, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
       }
     }
   }
