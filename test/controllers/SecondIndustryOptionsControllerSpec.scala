@@ -18,9 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.SecondIndustryOptionsFormProvider
+import generators.Generators
 import models.{NormalMode, SecondIndustryOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalacheck.Gen
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.prop.PropertyChecks
 import pages.{ClaimAmount, SecondIndustryOptionsPage}
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -29,7 +32,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.SecondIndustryOptionsView
 
-class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
+class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -85,15 +88,20 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
           .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, secondIndustryOptionsRoute)
-          .withFormUrlEncodedBody(("value", SecondIndustryOptions.options.head.value))
+      val secondIndustryOptions: Gen[SecondIndustryOptions] = Gen.oneOf(SecondIndustryOptions.values)
 
-      val result = route(application, request).value
 
-      status(result) mustEqual SEE_OTHER
+      forAll(secondIndustryOptions) {
+        secondIndustryOption =>
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+          val request = FakeRequest(POST, secondIndustryOptionsRoute)
+              .withFormUrlEncodedBody(("value", secondIndustryOption.toString))
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual onwardRoute.url
+      }
 
       application.stop()
     }
