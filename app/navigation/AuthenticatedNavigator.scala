@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package forms
+package navigation
 
-import forms.mappings.Mappings
-import models.FirstIndustryOptions
-import play.api.data.Form
+import javax.inject.Inject
+import models.UserAnswers
+import pages.Page
+import play.api.mvc.Call
+import controllers.routes._
 
-class FirstIndustryOptionsFormProvider extends Mappings {
+class AuthenticatedNavigator @Inject()() extends Navigator {
+  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
+    case _ => _ => SessionExpiredController.onPageLoad()
+  }
 
-  def apply(): Form[FirstIndustryOptions] = Form(
-    "value" -> enumerable[FirstIndustryOptions](requiredKey = "firstIndustryOptions.error.required" )
-  )
+  protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case _ => _ => SessionExpiredController.onPageLoad()
+  }
+
 }

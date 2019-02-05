@@ -45,5 +45,5 @@ object FirstIndustryOptions extends Enumerable.Implicits {
   }
 
   implicit val enumerable:Enumerable[FirstIndustryOptions] =
-    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+    Enumerable(values.map(v => v.toString -> v): _*)
 }

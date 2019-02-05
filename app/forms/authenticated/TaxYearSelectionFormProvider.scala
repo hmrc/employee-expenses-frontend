@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.authenticated
 
 import forms.mappings.Mappings
-import models.FirstIndustryOptions
+import javax.inject.Inject
+import models.TaxYearSelection
 import play.api.data.Form
+import play.api.data.Forms.seq
 
-class FirstIndustryOptionsFormProvider extends Mappings {
+class TaxYearSelectionFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[FirstIndustryOptions] = Form(
-    "value" -> enumerable[FirstIndustryOptions](requiredKey = "firstIndustryOptions.error.required" )
-  )
+  def apply(): Form[TaxYearSelection] =
+    Form(
+      "value" -> enumerable[TaxYearSelection]("taxYearSelection.error.required")
+    )
 }

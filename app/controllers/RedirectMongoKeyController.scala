@@ -21,6 +21,8 @@ import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import controllers.authenticated.routes._
+import models.NormalMode
 
 import scala.concurrent.ExecutionContext
 
@@ -34,7 +36,7 @@ class RedirectMongoKeyController @Inject()(
 
   def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify {
     implicit request =>
-      Redirect(routes.CheckYourAnswersController.onPageLoad())
+      Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
         .addingToSession(appConfig.mongoKey -> key)(request)
   }
 }

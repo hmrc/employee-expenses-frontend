@@ -503,3 +503,13 @@ constructionOccupationList2.listText = The occupations are:
 constructionOccupationList2.occupation1 = labourer
 constructionOccupationList2.occupation2 = navvy
 constructionOccupationList2.occupation3 = tilemaker
+
+taxYearSelection.title = Which tax years do you want to claim for?
+taxYearSelection.heading = Which tax years do you want to claim for?
+taxYearSelection.currentYear = 6 April 2018 to 5 April 2019 (the current tax year)
+taxYearSelection.currentYearMinus1 = 6 April 2017 to 5 April 2018
+taxYearSelection.currentYearMinus2 = 6 April 2016 to 5 April 2017
+taxYearSelection.currentYearMinus3 = 6 April 2015 to 5 April 2016
+taxYearSelection.currentYearMinus4 = 6 April 2014 to 5 April 2015
+taxYearSelection.checkYourAnswersLabel = Which tax years do you want to claim for?
+taxYearSelection.error.required = Select which tax years you want to claim for
