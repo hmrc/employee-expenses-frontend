@@ -16,11 +16,13 @@
 
 package controllers.electrical
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.electrical.ElectricalFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.electrical.ElectricalPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,16 +34,17 @@ import views.html.electrical.ElectricalView
 import scala.concurrent.{ExecutionContext, Future}
 
 class ElectricalController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Electrical") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: ElectricalFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: ElectricalView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      override val messagesApi: MessagesApi,
+                                      sessionRepository: SessionRepository,
+                                      @Named("Electrical") navigator: Navigator,
+                                      identify: UnauthenticatedIdentifierAction,
+                                      getData: DataRetrievalAction,
+                                      requireData: DataRequiredAction,
+                                      formProvider: ElectricalFormProvider,
+                                      val controllerComponents: MessagesControllerComponents,
+                                      view: ElectricalView,
+                                      claimAmounts: ClaimAmountsConfig
+                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -56,9 +59,8 @@ class ElectricalController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, mode))),
@@ -66,8 +68,12 @@ class ElectricalController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ElectricalPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ElectricalPage, mode)(updatedAnswers))
+            amount = if (value) claimAmounts.Electrical.onlyLaundry else claimAmounts.Electrical.allOther
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
+            _ <- sessionRepository.set(updatedAnswers)
+          } yield {
+            Redirect(navigator.nextPage(ElectricalPage, mode)(updatedAnswers))
+          }
         }
       )
   }

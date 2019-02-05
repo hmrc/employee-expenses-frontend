@@ -18,18 +18,23 @@ package controllers
 
 import base.SpecBase
 import forms.FirstIndustryOptionsFormProvider
+import generators.Generators
 import models.{FirstIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.FirstIndustryOptionsPage
+import org.scalacheck.Gen
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.prop.PropertyChecks
+import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.FirstIndustryOptionsView
 
 
-class FirstIndustryOptionsControllerSpec extends SpecBase {
+class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators {
 
   def onwardRoute = Call("GET", "/FOO")
 
@@ -50,7 +55,6 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual view(form, NormalMode)(fakeRequest, messages).toString
 
-
       application.stop()
     }
 
@@ -68,7 +72,6 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
         view(form.fill(FirstIndustryOptions.values.head), NormalMode)(fakeRequest, messages).toString
 
       application.stop()
-
     }
 
     "redirect to next page when valid data is submitted" in {
@@ -76,15 +79,40 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
       val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
         .build()
-      val request = FakeRequest(POST, firstIndustryOptionsRoute)
-        .withFormUrlEncodedBody(("value", FirstIndustryOptions.options.head.value))
-      val result = route(application, request).value
 
-      status(result) mustEqual SEE_OTHER
+      val firstIndustryOptions: Gen[FirstIndustryOptions] = Gen.oneOf(FirstIndustryOptions.values)
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+      forAll(firstIndustryOptions) {
+        firstIndustryOption =>
+
+          val request = FakeRequest(POST, firstIndustryOptionsRoute)
+            .withFormUrlEncodedBody(("value", firstIndustryOption.toString))
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual onwardRoute.url
+      }
 
       application.stop()
+    }
+
+
+    "save ClaimAmount when 'Retail' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, firstIndustryOptionsRoute).withFormUrlEncodedBody(("value", FirstIndustryOptions.Retail.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.defaultRate))
+      }
 
     }
 
@@ -102,7 +130,6 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
       contentAsString(result) mustEqual view(boundForm, NormalMode)(fakeRequest, messages).toString
 
       application.stop()
-
     }
 
     "redirect to session expired for a Get if no existing data is found" in {
@@ -118,8 +145,8 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
-
     }
+
     "redirect to session expired for a Post if no existing data is found" in {
 
       val application: Application = applicationBuilder(userAnswers = None)
@@ -133,7 +160,6 @@ class FirstIndustryOptionsControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
-
     }
   }
 
