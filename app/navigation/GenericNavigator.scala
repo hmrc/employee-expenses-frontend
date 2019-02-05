@@ -16,15 +16,18 @@
 
 package navigation
 
-import controllers.routes._
-import controllers.healthcare.routes._
-import controllers.engineering.routes._
-import controllers.transport.routes._
-import controllers.foodCatering.routes._
 import controllers.construction.routes._
+import controllers.engineering.routes._
+import controllers.foodCatering.routes._
+import controllers.healthcare.routes._
+import controllers.manufacturing.routes._
+import controllers.police.routes._
+import controllers.clothing.routes._
+import controllers.routes._
+import controllers.transport.routes._
 import javax.inject.Inject
 import models.FirstIndustryOptions._
-import models.SecondIndustryOptions.{Construction, Council}
+import models.SecondIndustryOptions._
 import models.{CheckMode, EmployerContribution, Mode, NormalMode, UserAnswers}
 import pages._
 import play.api.mvc.Call
@@ -69,7 +72,11 @@ class GenericNavigator @Inject()() extends Navigator {
   private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(SecondIndustryOptionsPage) match {
       case Some(Construction)             => JoinerCarpenterController.onPageLoad(mode)
+      case Some(ManufacturingWarehousing) => TypeOfManufacturingController.onPageLoad(mode)
       case Some(Council)                  => EmployerContributionController.onPageLoad(mode)
+      case Some(Police)                   => SpecialConstableController.onPageLoad(mode)
+      case Some(ClothingTextiles)         => ClothingController.onPageLoad(mode)
+      case Some(NoneOfAbove)              => ThirdIndustryOptionsController.onPageLoad(mode)
       case _                              => SessionExpiredController.onPageLoad()
     }
 
