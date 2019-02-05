@@ -20,12 +20,16 @@ import controllers.routes._
 import controllers.healthcare.routes._
 import controllers.engineering.routes._
 import controllers.transport.routes._
+import controllers.electrical.routes._
+import controllers.printing.routes._
+import controllers.security.routes._
 import controllers.foodCatering.routes._
 import controllers.construction.routes._
 import javax.inject.Inject
+import models.{FirstIndustryOptions, SecondIndustryOptions, ThirdIndustryOptions}
 import models.FirstIndustryOptions._
 import models.SecondIndustryOptions.{Construction, NoneOfAbove}
-import models.ThirdIndustryOptions.Education
+import models.ThirdIndustryOptions._
 import models.{CheckMode, EmployerContribution, Mode, NormalMode, UserAnswers}
 import pages._
 import play.api.mvc.Call
@@ -64,7 +68,7 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Healthcare)               => AmbulanceStaffController.onPageLoad(mode)
       case Some(Retail)                   => EmployerContributionController.onPageLoad(mode)
       case Some(TransportAndDistribution) => TypeOfTransportController.onPageLoad(mode)
-      case Some(NoneOfTheAbove)           => SecondIndustryOptionsController.onPageLoad(mode)
+      case Some(FirstIndustryOptions.NoneOfTheAbove)           => SecondIndustryOptionsController.onPageLoad(mode)
       case _                              => SessionExpiredController.onPageLoad()
     }
 
@@ -87,13 +91,18 @@ class GenericNavigator @Inject()() extends Navigator {
   private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(SecondIndustryOptionsPage) match {
       case Some(Construction) => JoinerCarpenterController.onPageLoad(mode)
-      case Some(NoneOfAbove)  => ThirdIndustryOptionsController.onPageLoad(mode)
+      case Some(SecondIndustryOptions.NoneOfAbove)  => ThirdIndustryOptionsController.onPageLoad(mode)
       case _ => SessionExpiredController.onPageLoad()
     }
 
   private def thirdIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(ThirdIndustryOptionsPage) match {
       case Some(Education) => EmployerContributionController.onPageLoad(mode)
+      case Some(BanksBuildingSocieties) => EmployerContributionController.onPageLoad(NormalMode)
+      case Some(Electrical) => ElectricalController.onPageLoad(NormalMode)
+      case Some(Printing) => PrintingOccupationList1Controller.onPageLoad(NormalMode)
+      case Some(Security) => SecurityGuardNHSController.onPageLoad(NormalMode)
+      case Some(ThirdIndustryOptions.NoneOfAbove) => EmployerContributionController.onPageLoad(mode)
       case _ => SessionExpiredController.onPageLoad()
     }
 }

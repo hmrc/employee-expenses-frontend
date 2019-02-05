@@ -53,6 +53,7 @@ class ClaimAmountControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(claimAmount, "36.00", "72.00", "/employee-expenses")(fakeRequest, messages).toString
 
+      application.requestFactory
       application.stop()
     }
 
