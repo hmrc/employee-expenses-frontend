@@ -21,7 +21,7 @@ import config.ClaimAmountsConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
 import forms.FirstIndustryOptionsFormProvider
 import javax.inject.Named
-import models.{Enumerable, FirstIndustryOptions, Mode}
+import models.{Enumerable, FirstIndustryOptions, Mode, UserAnswers}
 import navigation.Navigator
 import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.data.Form
@@ -70,7 +70,7 @@ class FirstIndustryOptionsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value))
             newAnswers     <- if (value == FirstIndustryOptions.Retail) Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.defaultRate)) else Future.successful(updatedAnswers)
-            _              <- sessionRepository.set(updatedAnswers)
+            _              <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(FirstIndustryOptionsPage, mode)(updatedAnswers))
         }
       )

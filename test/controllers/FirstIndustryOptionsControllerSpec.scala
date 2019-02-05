@@ -17,27 +17,22 @@
 package controllers
 
 import base.SpecBase
-import config.ClaimAmountsConfig
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
 import forms.FirstIndustryOptionsFormProvider
-import javax.inject.Named
+import generators.Generators
 import models.{FirstIndustryOptions, NormalMode, UserAnswers}
-import navigation.{FakeNavigator, GenericNavigator, Navigator}
-import org.scalatest.concurrent.ScalaFutures
+import navigation.{FakeNavigator, Navigator}
+import org.scalacheck.Gen
+import org.scalatest.prop.PropertyChecks
 import pages.FirstIndustryOptionsPage
 import play.api.Application
-import play.api.i18n.MessagesApi
 import play.api.inject.bind
-import play.api.mvc.{Call, MessagesControllerComponents}
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
 import views.html.FirstIndustryOptionsView
 
-import scala.concurrent.ExecutionContext
 
-
-class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures {
+class FirstIndustryOptionsControllerSpec extends SpecBase with PropertyChecks with Generators {
 
   def onwardRoute = Call("GET", "/FOO")
 
@@ -79,57 +74,25 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures {
 
     "redirect to next page when valid data is submitted" in {
 
-      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
-      val request = FakeRequest(POST, firstIndustryOptionsRoute)
-        .withFormUrlEncodedBody(("value", FirstIndustryOptions.options.head.value))
-      val result = route(application, request).value
+      val firstIndustryOptions: Gen[FirstIndustryOptions] = Gen.oneOf(FirstIndustryOptions.values)
 
-      status(result) mustEqual SEE_OTHER
+      forAll(firstIndustryOptions) {
+        firstIndustryOption =>
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+          val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+            .build()
 
-      application.stop()
-    }
+          val request = FakeRequest(POST, firstIndustryOptionsRoute)
+            .withFormUrlEncodedBody(("value", firstIndustryOption.toString))
+          val result = route(application, request).value
 
-    "save claim amount when 'Retail' is selected" in {
-      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
+          status(result) mustEqual SEE_OTHER
 
-      val injector = application.injector
+          redirectLocation(result).value mustEqual onwardRoute.url
 
-      val controller =
-        new FirstIndustryOptionsController(
-          messagesApi = injector.instanceOf[MessagesApi],
-          identify = injector.instanceOf[UnauthenticatedIdentifierAction],
-          getData = injector.instanceOf[DataRetrievalAction],
-          requireData = injector.instanceOf[DataRequiredAction],
-          formProvider = injector.instanceOf[FirstIndustryOptionsFormProvider],
-          controllerComponents = injector.instanceOf[MessagesControllerComponents],
-          view = injector.instanceOf[FirstIndustryOptionsView],
-          sessionRepository = injector.instanceOf[SessionRepository],
-          navigator = injector.instanceOf[GenericNavigator],
-          claimAmounts = injector.instanceOf[ClaimAmountsConfig]
-        )(ec = injector.instanceOf[ExecutionContext])
-
-      val request = FakeRequest(POST, firstIndustryOptionsRoute)
-        .withSession(frontendAppConfig.mongoKey -> "key")
-        .withFormUrlEncodedBody(("value", FirstIndustryOptions.Retail.toString))
-
-      val result = controller.onSubmit(NormalMode)(request)
-
-      status(result) mustEqual SEE_OTHER
-
-      whenReady(result) {
-        res =>
-          println(s"#####\n\n${res.session(request).data}\n\n#####")
+          application.stop()
       }
-
-      redirectLocation(result).value mustEqual onwardRoute.url
-
-      application.stop()
     }
 
     "return a bad request and errors when bad data is submitted" in {
