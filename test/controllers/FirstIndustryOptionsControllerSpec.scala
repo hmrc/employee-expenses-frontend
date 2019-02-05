@@ -74,14 +74,14 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with PropertyChecks wi
 
     "redirect to next page when valid data is submitted" in {
 
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+        .build()
+
       val firstIndustryOptions: Gen[FirstIndustryOptions] = Gen.oneOf(FirstIndustryOptions.values)
 
       forAll(firstIndustryOptions) {
         firstIndustryOption =>
-
-          val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-            .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
-            .build()
 
           val request = FakeRequest(POST, firstIndustryOptionsRoute)
             .withFormUrlEncodedBody(("value", firstIndustryOption.toString))
@@ -90,9 +90,9 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with PropertyChecks wi
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual onwardRoute.url
-
-          application.stop()
       }
+
+      application.stop()
     }
 
     "return a bad request and errors when bad data is submitted" in {
