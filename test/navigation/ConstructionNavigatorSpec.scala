@@ -47,9 +47,7 @@ class ConstructionNavigatorSpec extends SpecBase {
         }
 
         "go to SessionExpired when no data is available" in {
-          val answers = emptyUserAnswers
-
-          navigator.nextPage(JoinerCarpenterPage, NormalMode)(answers) mustBe
+          navigator.nextPage(JoinerCarpenterPage, NormalMode)(emptyUserAnswers) mustBe
             controllers.routes.SessionExpiredController.onPageLoad()
         }
       }
@@ -71,9 +69,7 @@ class ConstructionNavigatorSpec extends SpecBase {
         }
 
         "go to SessionExpired when no data is available" in {
-          val answers = emptyUserAnswers
-
-          navigator.nextPage(StoneMasonPage, NormalMode)(answers) mustBe
+          navigator.nextPage(StoneMasonPage, NormalMode)(emptyUserAnswers) mustBe
             controllers.routes.SessionExpiredController.onPageLoad()
         }
       }
@@ -96,9 +92,7 @@ class ConstructionNavigatorSpec extends SpecBase {
         }
 
         "go to SessionExpired when no data is available" in {
-          val answers = emptyUserAnswers
-
-          navigator.nextPage(ConstructionOccupationList1Page, NormalMode)(answers) mustBe
+          navigator.nextPage(ConstructionOccupationList1Page, NormalMode)(emptyUserAnswers) mustBe
             controllers.routes.SessionExpiredController.onPageLoad()
         }
 
@@ -122,9 +116,7 @@ class ConstructionNavigatorSpec extends SpecBase {
         }
 
         "go to SessionExpired when no data is available" in {
-          val answers = emptyUserAnswers
-
-          navigator.nextPage(ConstructionOccupationList2Page, NormalMode)(answers) mustBe
+          navigator.nextPage(ConstructionOccupationList2Page, NormalMode)(emptyUserAnswers) mustBe
             controllers.routes.SessionExpiredController.onPageLoad()
         }
 
@@ -144,9 +136,7 @@ class ConstructionNavigatorSpec extends SpecBase {
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
         "go to SessionExpired when no data is available" in {
-          val answers = emptyUserAnswers
-
-          navigator.nextPage(BuildingMaterialsPage, NormalMode)(answers) mustBe
+          navigator.nextPage(BuildingMaterialsPage, NormalMode)(emptyUserAnswers) mustBe
             controllers.routes.SessionExpiredController.onPageLoad()
         }
       }

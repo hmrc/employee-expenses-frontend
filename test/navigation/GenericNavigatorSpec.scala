@@ -57,9 +57,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
-        val answers = emptyUserAnswers
-
-        navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
+        navigator.nextPage(MultipleEmploymentsPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
       }
 
@@ -108,9 +106,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SessionExpiredController from FirstIndustryOptionsPage when no data is available" in {
-        val answers = emptyUserAnswers
-
-        navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
+        navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
       }
 
@@ -125,9 +121,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SessionExpiredController from SecondIndustryOptionsPage when no data is available" in {
-        val answers = emptyUserAnswers
-
-        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
       }
 
@@ -155,9 +149,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SessionExpiredController from EmployerContributionPage when no data is available" in {
-        val answers = emptyUserAnswers
-
-        navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
+        navigator.nextPage(EmployerContributionPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
       }
 
@@ -180,9 +172,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SessionExpiredController from ExpensesEmployerPaidPage when no data is available" in {
-        val answers = emptyUserAnswers
-
-        navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(answers) mustBe
+        navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
       }
     }
