@@ -24,7 +24,8 @@ import controllers.foodCatering.routes._
 import controllers.construction.routes._
 import javax.inject.Inject
 import models.FirstIndustryOptions._
-import models.SecondIndustryOptions.Construction
+import models.SecondIndustryOptions.{Construction, NoneOfAbove}
+import models.ThirdIndustryOptions.Education
 import models.{CheckMode, EmployerContribution, Mode, NormalMode, UserAnswers}
 import pages._
 import play.api.mvc.Call
@@ -35,6 +36,7 @@ class GenericNavigator @Inject()() extends Navigator {
     case MultipleEmploymentsPage  => multipleEmployments(NormalMode)
     case FirstIndustryOptionsPage => firstIndustryOptions(NormalMode)
     case SecondIndustryOptionsPage => secondIndustryOptions(NormalMode)
+    case ThirdIndustryOptionsPage => thirdIndustryOptions(NormalMode)
     case EmployerContributionPage => employerContribution(NormalMode)
     case ExpensesEmployerPaidPage => expensesEmployerPaid(NormalMode)
     case _ =>                   _ => IndexController.onPageLoad()
@@ -85,6 +87,13 @@ class GenericNavigator @Inject()() extends Navigator {
   private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(SecondIndustryOptionsPage) match {
       case Some(Construction) => JoinerCarpenterController.onPageLoad(mode)
+      case Some(NoneOfAbove)  => ThirdIndustryOptionsController.onPageLoad(mode)
+      case _ => SessionExpiredController.onPageLoad()
+    }
+
+  private def thirdIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(ThirdIndustryOptionsPage) match {
+      case Some(Education) => EmployerContributionController.onPageLoad(mode)
       case _ => SessionExpiredController.onPageLoad()
     }
 }
