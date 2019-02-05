@@ -24,7 +24,7 @@ import controllers.foodCatering.routes._
 import controllers.construction.routes._
 import javax.inject.Inject
 import models.FirstIndustryOptions._
-import models.SecondIndustryOptions.Construction
+import models.SecondIndustryOptions.{Construction, Council}
 import models.{CheckMode, EmployerContribution, Mode, NormalMode, UserAnswers}
 import pages._
 import play.api.mvc.Call
@@ -66,8 +66,15 @@ class GenericNavigator @Inject()() extends Navigator {
       case _                              => SessionExpiredController.onPageLoad()
     }
 
+  private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(SecondIndustryOptionsPage) match {
+      case Some(Construction)             => JoinerCarpenterController.onPageLoad(mode)
+      case Some(Council)                  => EmployerContributionController.onPageLoad(mode)
+      case _ => SessionExpiredController.onPageLoad()
+    }
+
   private def employerContribution(mode: Mode)(userAnswers: UserAnswers): Call =
-    userAnswers.get(EmployerContributionPage) match {
+  userAnswers.get(EmployerContributionPage) match {
       case Some(EmployerContribution.All)  => CannotClaimController.onPageLoad()
       case Some(EmployerContribution.None) => ClaimAmountController.onPageLoad()
       case Some(EmployerContribution.Some) => ExpensesEmployerPaidController.onPageLoad(mode)
@@ -75,16 +82,11 @@ class GenericNavigator @Inject()() extends Navigator {
     }
 
   private def expensesEmployerPaid(mode: Mode)(userAnswers: UserAnswers): Call =
-    (userAnswers.get(ClaimAmount), userAnswers.get(ExpensesEmployerPaidPage)) match {
+  (userAnswers.get(ClaimAmount), userAnswers.get(ExpensesEmployerPaidPage)) match {
       case (Some(claimAmount), Some(expensesPaid)) =>
-        if (claimAmount > expensesPaid) ClaimAmountController.onPageLoad() else CannotClaimController.onPageLoad()
+    if (claimAmount > expensesPaid) ClaimAmountController.onPageLoad() else CannotClaimController.onPageLoad()
       case _                                       =>
-        SessionExpiredController.onPageLoad()
+    SessionExpiredController.onPageLoad()
     }
 
-  private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
-    userAnswers.get(SecondIndustryOptionsPage) match {
-      case Some(Construction) => JoinerCarpenterController.onPageLoad(mode)
-      case _ => SessionExpiredController.onPageLoad()
-    }
 }

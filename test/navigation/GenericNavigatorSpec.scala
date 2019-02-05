@@ -120,6 +120,14 @@ class GenericNavigatorSpec extends SpecBase {
 
       }
 
+      "go to EmployersContributionsPage from SecondIndustryOptionsPage when Council is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Council).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+
+      }
+
       "go to SessionExpiredController from SecondIndustryOptionsPage when no data is available" in {
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
