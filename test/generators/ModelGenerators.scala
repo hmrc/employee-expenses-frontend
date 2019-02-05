@@ -24,51 +24,51 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryThirdIndustryOptions: Arbitrary[ThirdIndustryOptions] =
     Arbitrary {
-      Gen.oneOf(ThirdIndustryOptions.values.toSeq)
+      Gen.oneOf(ThirdIndustryOptions.values)
     }
 
   implicit lazy val arbitraryTypeOfManufacturing: Arbitrary[TypeOfManufacturing] =
     Arbitrary {
-      Gen.oneOf(TypeOfManufacturing.values.toSeq)
+      Gen.oneOf(TypeOfManufacturing.values)
     }
 
   implicit lazy val arbitraryTransportVehicleTrade: Arbitrary[TransportVehicleTrade] =
     Arbitrary {
-      Gen.oneOf(TransportVehicleTrade.values.toSeq)
+      Gen.oneOf(TransportVehicleTrade.values)
     }
 
   implicit lazy val arbitrarySecondIndustryOptions: Arbitrary[SecondIndustryOptions] =
     Arbitrary {
-      Gen.oneOf(SecondIndustryOptions.values.toSeq)
+      Gen.oneOf(SecondIndustryOptions.values)
     }
 
   implicit lazy val arbitraryWhichRailwayTrade: Arbitrary[WhichRailwayTrade] =
     Arbitrary {
-      Gen.oneOf(WhichRailwayTrade.values.toSeq)
+      Gen.oneOf(WhichRailwayTrade.values)
     }
 
   implicit lazy val arbitraryAncillaryEngineeringWhichTrade: Arbitrary[AncillaryEngineeringWhichTrade] =
     Arbitrary {
-      Gen.oneOf(AncillaryEngineeringWhichTrade.values.toSeq)
+      Gen.oneOf(AncillaryEngineeringWhichTrade.values)
     }
 
   implicit lazy val arbitraryTypeOfTransport: Arbitrary[TypeOfTransport] =
     Arbitrary {
-      Gen.oneOf(TypeOfTransport.values.toSeq)
+      Gen.oneOf(TypeOfTransport.values)
     }
 
   implicit lazy val arbitraryTypeOfEngineering: Arbitrary[TypeOfEngineering] =
     Arbitrary {
-      Gen.oneOf(TypeOfEngineering.values.toSeq)
+      Gen.oneOf(TypeOfEngineering.values)
     }
 
   implicit lazy val arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
     Arbitrary {
-      Gen.oneOf(EmployerContribution.values.toSeq)
+      Gen.oneOf(EmployerContribution.values)
     }
 
   implicit lazy val arbitraryFirstIndustryOptions: Arbitrary[FirstIndustryOptions] =
     Arbitrary {
-      Gen.oneOf(FirstIndustryOptions.values.toSeq)
+      Gen.oneOf(FirstIndustryOptions.values)
     }
 }

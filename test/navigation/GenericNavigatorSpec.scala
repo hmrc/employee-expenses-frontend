@@ -84,25 +84,25 @@ class GenericNavigatorSpec extends SpecBase {
           controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode)
       }
 
-      "go to RetailController from FirstIndustryOptionsPage when Engineering is selected" ignore {
+      "go to EmployerContributionController from FirstIndustryOptionsPage when Retail is selected" in {
         val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, Retail).success.value
 
-        //        navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
-        //          controllers.retail.routes.RetailController.onPageLoad(NormalMode)
+        navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
       }
 
-      "go to CateringStaffNHSController from FirstIndustryOptionsPage when Engineering is selected" in {
+      "go to CateringStaffNHSController from FirstIndustryOptionsPage when FoodAndCatering is selected" in {
         val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, FoodAndCatering).success.value
 
         navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
           CateringStaffNHSController.onPageLoad(NormalMode)
       }
 
-      "go to SecondIndustryOptionsController from FirstIndustryOptionsPage when Engineering is selected" ignore {
+      "go to SecondIndustryOptionsController from FirstIndustryOptionsPage when NoneOfTheAbove is selected" in {
         val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, NoneOfTheAbove).success.value
 
-        //        navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
-        //          controllers.routes.SecondIndustryOptionsController.onPageLoad(NormalMode)
+        navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.SecondIndustryOptionsController.onPageLoad(NormalMode)
       }
 
       "go to SessionExpiredController from FirstIndustryOptionsPage when no data is available" in {
