@@ -22,17 +22,19 @@ import generators.Generators
 import models.{FirstIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.prop.PropertyChecks
-import pages.FirstIndustryOptionsPage
+import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.FirstIndustryOptionsView
 
 
-class FirstIndustryOptionsControllerSpec extends SpecBase with PropertyChecks with Generators {
+class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators {
 
   def onwardRoute = Call("GET", "/FOO")
 
@@ -93,6 +95,25 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with PropertyChecks wi
       }
 
       application.stop()
+    }
+
+
+    "save ClaimAmount when 'Retail' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, firstIndustryOptionsRoute).withFormUrlEncodedBody(("value", FirstIndustryOptions.Retail.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.defaultRate))
+      }
+
     }
 
     "return a bad request and errors when bad data is submitted" in {
