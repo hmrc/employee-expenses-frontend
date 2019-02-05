@@ -13,7 +13,11 @@ class $className$ViewSpec extends ViewBehaviours {
 
     val applyView = view.apply()(fakeRequest, messages)
 
+    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+
     behave like normalPage(applyView, "$className;format="decap"$")
+
+    behave like normalPageWithAccountMenu(applyViewWithAuth, "$className;format="decap"$")
 
     behave like pageWithBackLink(applyView)
   }

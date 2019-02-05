@@ -167,8 +167,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        ua =>
-          ua.get.get(ClaimAmount) mustBe Some(claimAmountsConfig.Electrical.onlyLaundry)
+        _.map{_.get(ClaimAmount)} mustBe Some(claimAmountsConfig.Electrical.onlyLaundry)
       }
 
       application.stop()

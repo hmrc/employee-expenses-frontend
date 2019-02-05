@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@import config.FrontendAppConfig
 @import com.github.tototoshi.play2.scalate._
+@import config.FrontendAppConfig
 @import scalate._
 
 @this(
@@ -39,46 +39,47 @@
         messages: Messages
 )
 
-    @sidebarContent = @{
-        sidebarLinks.map {
-            links =>
-                sidebar(links, Some("sidebar"))
-        }
+@sidebarContent = @{
+    sidebarLinks.map {
+        links =>
+            sidebar(links, Some("sidebar"))
     }
+}
 
-    @articleContent = @{
-        article(mainContent)
-    }
+@articleContent = @{
+    article(mainContent)
+}
 
-    @linkElem = @{
-        Map("url" -> controllers.routes.Assets.versioned("stylesheets/employeeexpensesfrontend-app.css"))
-    }
+@linkElem = @{
+    Map("url" -> controllers.routes.Assets.versioned("stylesheets/employeeexpensesfrontend-app.css"))
+}
 
-    @scriptElem = @{
-        Seq(
-            Map("url" -> controllers.routes.Assets.versioned("javascripts/employeeexpensesfrontend.js"))
-        )
-    }
-
-    @scalate.render(
-        "/templates/mustache/production/govuk-template.mustache.html",
-        Map(
-            "pageTitle" -> title,
-            "navTitle" -> messages("site.service_name"),
-            "assetsPath" -> appConfig.assetsPath,
-            "sidebar" -> sidebarContent,
-            "scriptElems" -> scriptElem,
-            "linkElems" -> linkElem,
-            "scriptElems" -> scriptElem,
-            "mainClass" -> mainClass,
-            "article" -> articleContent,
-            "isWelsh" -> {
-                messages.lang.code == "cy"
-            },
-            "showPropositionLinks" -> true,
-            "langSelector" -> {
-                Map("enUrl" -> appConfig.routeToSwitchLanguage("english"),
-                    "cyUrl" -> appConfig.routeToSwitchLanguage("cymraeg"))
-            }
-        )
+@scriptElem = @{
+    Seq(
+        Map("url" -> controllers.routes.Assets.versioned("javascripts/employeeexpensesfrontend.js"))
     )
+}
+
+@scalate.render(
+    "/templates/mustache/production/govuk-template.mustache.html",
+    Map(
+        "pageTitle" -> title,
+        "navTitle" -> messages("site.service_name"),
+        "hideAccountMenu" -> request.session.get("authToken").isEmpty,
+        "assetsPath" -> appConfig.assetsPath,
+        "sidebar" -> sidebarContent,
+        "scriptElems" -> scriptElem,
+        "linkElems" -> linkElem,
+        "scriptElems" -> scriptElem,
+        "mainClass" -> mainClass,
+        "article" -> articleContent,
+        "isWelsh" -> {
+            messages.lang.code == "cy"
+        },
+        "showPropositionLinks" -> true,
+        "langSelector" -> {
+            Map("enUrl" -> appConfig.routeToSwitchLanguage("english"),
+                "cyUrl" -> appConfig.routeToSwitchLanguage("cymraeg"))
+        }
+    )
+)

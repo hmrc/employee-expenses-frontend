@@ -39,7 +39,12 @@ class ConstructionalEngineeringList1ViewSpec extends YesNoViewBehaviours {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
 
+    def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+
     behave like normalPage(applyView(form), messageKeyPrefix)
+
+    behave like normalPageWithAccountMenu(applyViewWithAuth(form))
 
     behave like pageWithBackLink(applyView(form))
 
@@ -56,12 +61,7 @@ class ConstructionalEngineeringList1ViewSpec extends YesNoViewBehaviours {
       Seq(
         "occupation1",
         "occupation2",
-        "occupation3",
-        "occupation4",
-        "occupation5",
-        "occupation6",
-        "occupation7",
-        "occupation8"
+        "occupation3"
       )
     )
 
