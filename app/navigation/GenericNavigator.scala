@@ -27,6 +27,7 @@ import controllers.routes._
 import controllers.transport.routes._
 import javax.inject.Inject
 import models.FirstIndustryOptions._
+import models.ThirdIndustryOptions.Education
 import models.SecondIndustryOptions._
 import models.{CheckMode, EmployerContribution, Mode, NormalMode, UserAnswers}
 import pages._
@@ -38,6 +39,7 @@ class GenericNavigator @Inject()() extends Navigator {
     case MultipleEmploymentsPage  => multipleEmployments(NormalMode)
     case FirstIndustryOptionsPage => firstIndustryOptions(NormalMode)
     case SecondIndustryOptionsPage => secondIndustryOptions(NormalMode)
+    case ThirdIndustryOptionsPage => thirdIndustryOptions(NormalMode)
     case EmployerContributionPage => employerContribution(NormalMode)
     case ExpensesEmployerPaidPage => expensesEmployerPaid(NormalMode)
     case _ =>                   _ => IndexController.onPageLoad()
@@ -81,7 +83,7 @@ class GenericNavigator @Inject()() extends Navigator {
     }
 
   private def employerContribution(mode: Mode)(userAnswers: UserAnswers): Call =
-  userAnswers.get(EmployerContributionPage) match {
+   userAnswers.get(EmployerContributionPage) match {
       case Some(EmployerContribution.All)  => CannotClaimController.onPageLoad()
       case Some(EmployerContribution.None) => ClaimAmountController.onPageLoad()
       case Some(EmployerContribution.Some) => ExpensesEmployerPaidController.onPageLoad(mode)
@@ -89,11 +91,16 @@ class GenericNavigator @Inject()() extends Navigator {
     }
 
   private def expensesEmployerPaid(mode: Mode)(userAnswers: UserAnswers): Call =
-  (userAnswers.get(ClaimAmount), userAnswers.get(ExpensesEmployerPaidPage)) match {
+    (userAnswers.get(ClaimAmount), userAnswers.get(ExpensesEmployerPaidPage)) match {
       case (Some(claimAmount), Some(expensesPaid)) =>
-    if (claimAmount > expensesPaid) ClaimAmountController.onPageLoad() else CannotClaimController.onPageLoad()
-      case _                                       =>
-    SessionExpiredController.onPageLoad()
+        if (claimAmount > expensesPaid) ClaimAmountController.onPageLoad() else CannotClaimController.onPageLoad()
+      case _ =>
+        SessionExpiredController.onPageLoad()
     }
 
+  private def thirdIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(ThirdIndustryOptionsPage) match {
+      case Some(Education) => EmployerContributionController.onPageLoad(mode)
+      case _ => SessionExpiredController.onPageLoad()
+    }
 }
