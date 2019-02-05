@@ -16,11 +16,13 @@
 
 package controllers.construction
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.construction.JoinerCarpenterFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.construction.JoinerCarpenterPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class JoinerCarpenterController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: JoinerCarpenterFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: JoinerCarpenterView
+                                         view: JoinerCarpenterView,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -56,7 +59,7 @@ class JoinerCarpenterController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -66,8 +69,13 @@ class JoinerCarpenterController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(JoinerCarpenterPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(JoinerCarpenterPage, mode)(updatedAnswers))
+            newUserAnswers <- if (value) {
+                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Construction.joinersCarpenters))
+                              } else {
+                                Future.successful(updatedAnswers)
+                              }
+            _              <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(JoinerCarpenterPage, mode)(newUserAnswers))
         }
       )
   }

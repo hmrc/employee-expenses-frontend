@@ -16,11 +16,13 @@
 
 package controllers.construction
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.construction.StoneMasonFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.construction.StoneMasonPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,8 +42,9 @@ class StoneMasonController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: StoneMasonFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: StoneMasonView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                         view: StoneMasonView,
+                                         claimAmounts: ClaimAmountsConfig
+                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -66,8 +69,13 @@ class StoneMasonController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(StoneMasonPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(StoneMasonPage, mode)(updatedAnswers))
+            newUserAnswers <- if (value) {
+                                  Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Construction.stoneMasons))
+                                } else {
+                                  Future.successful(updatedAnswers)
+                                }
+            _              <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(StoneMasonPage, mode)(newUserAnswers))
         }
       )
   }

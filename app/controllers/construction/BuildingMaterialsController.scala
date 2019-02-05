@@ -16,11 +16,13 @@
 
 package controllers.construction
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.construction.BuildingMaterialsFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.construction.BuildingMaterialsPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class BuildingMaterialsController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: BuildingMaterialsFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: BuildingMaterialsView
+                                         view: BuildingMaterialsView,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,6 +69,8 @@ class BuildingMaterialsController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(BuildingMaterialsPage, value))
+            amount: Int = if (value) claimAmounts.Construction.buildingMaterials else claimAmounts.Construction.allOther
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(BuildingMaterialsPage, mode)(updatedAnswers))
         }
