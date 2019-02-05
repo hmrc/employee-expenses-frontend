@@ -493,3 +493,13 @@ constructionOccupationList1.listText = The occupations are:
 constructionOccupationList1.occupation1 = asphalt labourer
 constructionOccupationList1.occupation2 = cement works
 constructionOccupationList1.occupation3 = roofing felt
+
+constructionOccupationList2.title = constructionOccupationList2
+constructionOccupationList2.heading = Construction occupation list 2 of 2
+constructionOccupationList2.checkYourAnswersLabel = Construction occupation list 1 of 2
+constructionOccupationList2.error.required = Select yes if your occupation is listed
+constructionOccupationList2.radioLabel = Is your occupation listed?
+constructionOccupationList2.listText = The occupations are:
+constructionOccupationList2.occupation1 = labourer
+constructionOccupationList2.occupation2 = navvy
+constructionOccupationList2.occupation3 = tilemaker
