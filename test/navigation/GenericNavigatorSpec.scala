@@ -19,8 +19,10 @@ package navigation
 import base.SpecBase
 import controllers.routes
 import controllers.foodCatering.routes._
+import controllers.construction.routes._
 import models.EmployerContribution._
 import models.FirstIndustryOptions._
+import models.SecondIndustryOptions._
 import models._
 import pages._
 
@@ -109,6 +111,23 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers
 
         navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.SessionExpiredController.onPageLoad()
+      }
+
+      //SecondIndustryOptionsPage
+
+      "go JoinerCarpenterController from SecondIndustryOptionsPage when Construction is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.construction.routes.JoinerCarpenterController.onPageLoad(NormalMode)
+
+      }
+
+      "go to SessionExpiredController from SecondIndustryOptionsPage when no data is available" in {
+        val answers = emptyUserAnswers
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
       }
 
