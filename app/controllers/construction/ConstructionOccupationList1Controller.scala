@@ -16,11 +16,13 @@
 
 package controllers.construction
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.construction.ConstructionOccupationList1FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.construction.ConstructionOccupationList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class ConstructionOccupationList1Controller @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: ConstructionOccupationList1FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: ConstructionOccupationList1View
+                                         view: ConstructionOccupationList1View,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -56,7 +59,7 @@ class ConstructionOccupationList1Controller @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -66,8 +69,13 @@ class ConstructionOccupationList1Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionOccupationList1Page, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ConstructionOccupationList1Page, mode)(updatedAnswers))
+            newUserAnswers <- if (value) {
+                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Construction.list1))
+                              } else {
+                                Future.successful(updatedAnswers)
+                              }
+            _              <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(ConstructionOccupationList1Page, mode)(newUserAnswers))
         }
       )
   }

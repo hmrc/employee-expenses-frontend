@@ -79,6 +79,15 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
     lazy val clothingList: Int = configuration.get[Int]("claim-amounts.clothing.clothing-list")
   }
 
+  object Construction {
+    lazy val joinersCarpenters: Int = configuration.get[Int]("claim-amounts.construction.joiners-carpenters")
+    lazy val stoneMasons: Int = configuration.get[Int]("claim-amounts.construction.stone-masons")
+    lazy val list1: Int = configuration.get[Int]("claim-amounts.construction.list-1")
+    lazy val list2: Int = configuration.get[Int]("claim-amounts.construction.list-2")
+    lazy val buildingMaterials: Int = configuration.get[Int]("claim-amounts.construction.building-materials")
+    lazy val allOther: Int = configuration.get[Int]("claim-amounts.construction.all-other")
+  }
+
   object Electrical {
     lazy val onlyLaundry: Int = configuration.get[Int]("claim-amounts.electrical.only-laundry")
     lazy val allOther: Int = configuration.get[Int]("claim-amounts.electrical.all-other")

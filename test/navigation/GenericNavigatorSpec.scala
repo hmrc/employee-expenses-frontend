@@ -19,8 +19,10 @@ package navigation
 import base.SpecBase
 import controllers.routes
 import controllers.foodCatering.routes._
+import controllers.construction.routes._
 import models.EmployerContribution._
 import models.FirstIndustryOptions._
+import models.SecondIndustryOptions._
 import models._
 import pages._
 
@@ -55,9 +57,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
-        val answers = emptyUserAnswers
-
-        navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
+        navigator.nextPage(MultipleEmploymentsPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
       }
 
@@ -106,9 +106,22 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SessionExpiredController from FirstIndustryOptionsPage when no data is available" in {
-        val answers = emptyUserAnswers
+        navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
+          controllers.routes.SessionExpiredController.onPageLoad()
+      }
 
-        navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
+      //SecondIndustryOptionsPage
+
+      "go JoinerCarpenterController from SecondIndustryOptionsPage when Construction is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.construction.routes.JoinerCarpenterController.onPageLoad(NormalMode)
+
+      }
+
+      "go to SessionExpiredController from SecondIndustryOptionsPage when no data is available" in {
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
       }
 
@@ -136,9 +149,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SessionExpiredController from EmployerContributionPage when no data is available" in {
-        val answers = emptyUserAnswers
-
-        navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
+        navigator.nextPage(EmployerContributionPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
       }
 
@@ -161,9 +172,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SessionExpiredController from ExpensesEmployerPaidPage when no data is available" in {
-        val answers = emptyUserAnswers
-
-        navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(answers) mustBe
+        navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
       }
     }

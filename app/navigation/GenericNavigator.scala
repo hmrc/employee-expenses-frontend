@@ -21,8 +21,10 @@ import controllers.healthcare.routes._
 import controllers.engineering.routes._
 import controllers.transport.routes._
 import controllers.foodCatering.routes._
+import controllers.construction.routes._
 import javax.inject.Inject
 import models.FirstIndustryOptions._
+import models.SecondIndustryOptions.Construction
 import models.{CheckMode, EmployerContribution, Mode, NormalMode, UserAnswers}
 import pages._
 import play.api.mvc.Call
@@ -32,6 +34,7 @@ class GenericNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case MultipleEmploymentsPage  => multipleEmployments(NormalMode)
     case FirstIndustryOptionsPage => firstIndustryOptions(NormalMode)
+    case SecondIndustryOptionsPage => secondIndustryOptions(NormalMode)
     case EmployerContributionPage => employerContribution(NormalMode)
     case ExpensesEmployerPaidPage => expensesEmployerPaid(NormalMode)
     case _ =>                   _ => IndexController.onPageLoad()
@@ -77,5 +80,11 @@ class GenericNavigator @Inject()() extends Navigator {
         if (claimAmount > expensesPaid) ClaimAmountController.onPageLoad() else CannotClaimController.onPageLoad()
       case _                                       =>
         SessionExpiredController.onPageLoad()
+    }
+
+  private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(SecondIndustryOptionsPage) match {
+      case Some(Construction) => JoinerCarpenterController.onPageLoad(mode)
+      case _ => SessionExpiredController.onPageLoad()
     }
 }
