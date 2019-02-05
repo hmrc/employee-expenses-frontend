@@ -23,6 +23,7 @@ import controllers.construction.routes._
 import models.EmployerContribution._
 import models.FirstIndustryOptions._
 import models.SecondIndustryOptions._
+import models.ThirdIndustryOptions.Education
 import models._
 import pages._
 
@@ -117,11 +118,31 @@ class GenericNavigatorSpec extends SpecBase {
 
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
           controllers.construction.routes.JoinerCarpenterController.onPageLoad(NormalMode)
+      }
 
+      "go ThirdIndustryOptionsController from SecondIndustryOptionsPage when NoneOfAbove is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, NoneOfAbove).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.ThirdIndustryOptionsController.onPageLoad(NormalMode)
       }
 
       "go to SessionExpiredController from SecondIndustryOptionsPage when no data is available" in {
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
+          controllers.routes.SessionExpiredController.onPageLoad()
+      }
+
+      //ThirdIndustryOptionsPage
+
+      "go EmployerContributionController from ThirdIndustryOptionsPage when Education is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, Education).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+      }
+
+      "go to SessionExpiredController from ThirdIndustryOptionsPage when no data is available" in {
+        navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
       }
 

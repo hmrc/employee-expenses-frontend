@@ -16,12 +16,13 @@
 
 package controllers
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.ThirdIndustryOptionsFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, Mode}
+import models.{Enumerable, Mode, ThirdIndustryOptions}
 import navigation.Navigator
-import pages.ThirdIndustryOptionsPage
+import pages.{ClaimAmount, ThirdIndustryOptionsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -32,16 +33,17 @@ import views.html.ThirdIndustryOptionsView
 import scala.concurrent.{ExecutionContext, Future}
 
 class ThirdIndustryOptionsController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       @Named("Generic") navigator: Navigator,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: ThirdIndustryOptionsFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: ThirdIndustryOptionsView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                                override val messagesApi: MessagesApi,
+                                                sessionRepository: SessionRepository,
+                                                @Named("Generic") navigator: Navigator,
+                                                identify: UnauthenticatedIdentifierAction,
+                                                getData: DataRetrievalAction,
+                                                requireData: DataRequiredAction,
+                                                formProvider: ThirdIndustryOptionsFormProvider,
+                                                val controllerComponents: MessagesControllerComponents,
+                                                view: ThirdIndustryOptionsView,
+                                                claimAmounts: ClaimAmountsConfig
+                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
 
@@ -66,8 +68,9 @@ class ThirdIndustryOptionsController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ThirdIndustryOptionsPage, mode)(updatedAnswers))
+            newAnswers <- if (value == ThirdIndustryOptions.Education) Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.defaultRate)) else Future.successful(updatedAnswers)
+            _ <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(ThirdIndustryOptionsPage, mode)(newAnswers))
         }
       )
   }

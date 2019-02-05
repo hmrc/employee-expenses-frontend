@@ -18,17 +18,21 @@ package controllers
 
 import base.SpecBase
 import forms.ThirdIndustryOptionsFormProvider
+import generators.Generators
 import models.{NormalMode, ThirdIndustryOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.ThirdIndustryOptionsPage
+import org.scalacheck.Gen
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.prop.PropertyChecks
+import pages.{ClaimAmount, ThirdIndustryOptionsPage}
 import play.api.inject.bind
-import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.ThirdIndustryOptionsView
 
-class ThirdIndustryOptionsControllerSpec extends SpecBase {
+class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -84,15 +88,21 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase {
           .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, thirdIndustryOptionsRoute)
-          .withFormUrlEncodedBody(("value", ThirdIndustryOptions.options.head.value))
+      val thirdIndustryOptions: Gen[ThirdIndustryOptions] = Gen.oneOf(ThirdIndustryOptions.values)
 
-      val result = route(application, request).value
+      forAll(thirdIndustryOptions) {
+        thirdIndustryOption =>
 
-      status(result) mustEqual SEE_OTHER
+          val request =
+            FakeRequest(POST, thirdIndustryOptionsRoute)
+              .withFormUrlEncodedBody(("value", thirdIndustryOption.toString))
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual onwardRoute.url
+      }
 
       application.stop()
     }
@@ -148,6 +158,22 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "save ClaimAmount when 'Education' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, thirdIndustryOptionsRoute).withFormUrlEncodedBody(("value", ThirdIndustryOptions.Education.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.defaultRate))
+      }
     }
   }
 }
