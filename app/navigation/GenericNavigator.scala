@@ -70,7 +70,7 @@ class GenericNavigator @Inject()() extends Navigator {
     userAnswers.get(SecondIndustryOptionsPage) match {
       case Some(Construction)             => JoinerCarpenterController.onPageLoad(mode)
       case Some(Council)                  => EmployerContributionController.onPageLoad(mode)
-      case _ => SessionExpiredController.onPageLoad()
+      case _                              => SessionExpiredController.onPageLoad()
     }
 
   private def employerContribution(mode: Mode)(userAnswers: UserAnswers): Call =
