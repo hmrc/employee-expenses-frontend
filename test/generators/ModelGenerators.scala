@@ -22,6 +22,11 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryFourthIndustryOptions: Arbitrary[FourthIndustryOptions] =
+    Arbitrary {
+      Gen.oneOf(FourthIndustryOptions.values.toSeq)
+    }
+
   implicit lazy val arbitraryThirdIndustryOptions: Arbitrary[ThirdIndustryOptions] =
     Arbitrary {
       Gen.oneOf(ThirdIndustryOptions.values)

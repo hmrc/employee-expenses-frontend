@@ -503,3 +503,10 @@ constructionOccupationList2.listText = The occupations are:
 constructionOccupationList2.occupation1 = labourer
 constructionOccupationList2.occupation2 = navvy
 constructionOccupationList2.occupation3 = tilemaker
+
+fourthIndustryOptions.title = Industry list 3 of 4
+fourthIndustryOptions.heading = Industry list 3 of 4
+fourthIndustryOptions.agriculture = agriculture
+fourthIndustryOptions.fireService = fire service
+fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
+fourthIndustryOptions.error.required = Select fourthIndustryOptions
