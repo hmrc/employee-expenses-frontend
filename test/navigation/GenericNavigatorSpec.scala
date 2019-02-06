@@ -17,10 +17,11 @@
 package navigation
 
 import base.SpecBase
-import controllers.routes
 import controllers.foodCatering.routes._
+import controllers.routes
 import models.EmployerContribution._
 import models.FirstIndustryOptions._
+import models.FourthIndustryOptions.{Agriculture, FireService, Heating, Leisure, Prisons}
 import models.SecondIndustryOptions._
 import models.ThirdIndustryOptions.Education
 import models._
@@ -168,9 +169,59 @@ class GenericNavigatorSpec extends SpecBase {
           controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
       }
 
+      "go FourthIndustryOptionsController from ThirdIndustryOptionsPage when NoneOfAbove is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, ThirdIndustryOptions.NoneOfAbove).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.FourthIndustryOptionsController.onPageLoad(NormalMode)
+      }
+
       "go to SessionExpiredController from ThirdIndustryOptionsPage when no data is available" in {
         navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
           controllers.routes.SessionExpiredController.onPageLoad()
+      }
+
+      //FourthIndustryOptionsPage
+
+      "go EmployerContributionController from FourthIndustryOptionsPage when 'agriculture' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Agriculture).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+      }
+
+      "go EmployerContributionController from FourthIndustryOptionsPage when 'fire service' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, FireService).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+      }
+
+      "go HeatingController from FourthIndustryOptionsPage when 'heating' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Heating).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.heating.routes.HeatingOccupationListController.onPageLoad(NormalMode)
+      }
+
+      "go EmployerContributionController from FourthIndustryOptionsPage when 'leisure' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Leisure).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+      }
+
+      "go EmployerContributionController from FourthIndustryOptionsPage when 'prison' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Prisons).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+      }
+
+      "go to SessionExpiredController from FourthIndustryOptionsPage when no data is available" in {
+        navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
+          controllers.routes.SessionExpiredController.onPageLoad()
+
       }
 
       //EmployerContributionPage
