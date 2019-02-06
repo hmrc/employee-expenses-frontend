@@ -21,6 +21,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
+import pages.authenticated.TaxYearSelectionPage
 import pages.clothing.ClothingPage
 import pages.construction._
 import pages.electrical.ElectricalPage
@@ -30,6 +31,7 @@ import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
+import pages.heating._
 import pages.printing._
 import pages.security._
 import play.api.libs.json.{JsValue, Json}
@@ -38,6 +40,8 @@ trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
+    arbitrary[(TaxYearSelectionPage.type, JsValue)] ::
+    arbitrary[(HeatingOccupationListPage.type, JsValue)] ::
     arbitrary[(FourthIndustryOptionsPage.type, JsValue)] ::
     arbitrary[(IronMiningPage.type, JsValue)] ::
     arbitrary[(IronMiningListPage.type, JsValue)] ::

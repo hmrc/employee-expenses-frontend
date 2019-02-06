@@ -515,6 +515,19 @@ fourthIndustryOptions.noneOfTheAbove = show more industries
 fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
 fourthIndustryOptions.error.required = Select the industry you work in
 
+heatingOccupationList.title = Heating occupation list
+heatingOccupationList.heading = Heating occupation list
+heatingOccupationList.checkYourAnswersLabel = Heating Occupation List
+heatingOccupationList.error.required = Select yes if your occupation is listed
+heatingOccupationList.radioLabel = Is your occupation listed?
+heatingOccupationList.listText = The occupations are:
+heatingOccupationList.occupation1 = coverer
+heatingOccupationList.occupation2 = domestic glaziers
+heatingOccupationList.occupation3 = heating engineers
+heatingOccupationList.occupation4 = laggers
+heatingOccupationList.occupation5 = pipe fitters
+heatingOccupationList.occupation6 = plumber
+
 ironMining.title = Do you work in iron mining?
 ironMining.heading = Do you work in iron mining?
 ironMining.checkYourAnswersLabel = Do you work in iron mining?
@@ -528,3 +541,13 @@ ironMiningList.radioLabel = Is your occupation listed?
 ironMiningList.listText = The occupations are:
 ironMiningList.occupation1 = fillers
 ironMiningList.occupation2 = miners and underground workers
+
+taxYearSelection.title = Which tax years do you want to claim for?
+taxYearSelection.heading = Which tax years do you want to claim for?
+taxYearSelection.currentYear = 6 April 2018 to 5 April 2019 (the current tax year)
+taxYearSelection.currentYearMinus1 = 6 April 2017 to 5 April 2018
+taxYearSelection.currentYearMinus2 = 6 April 2016 to 5 April 2017
+taxYearSelection.currentYearMinus3 = 6 April 2015 to 5 April 2016
+taxYearSelection.currentYearMinus4 = 6 April 2014 to 5 April 2015
+taxYearSelection.checkYourAnswersLabel = Which tax years do you want to claim for?
+taxYearSelection.error.required = Select which tax years you want to claim for

@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.heating
 
-import forms.mappings.Mappings
-import models.FirstIndustryOptions
-import play.api.data.Form
+import pages.behaviours.PageBehaviours
 
-class FirstIndustryOptionsFormProvider extends Mappings {
+class HeatingOccupationListPageSpec extends PageBehaviours {
 
-  def apply(): Form[FirstIndustryOptions] = Form(
-    "value" -> enumerable[FirstIndustryOptions](requiredKey = "firstIndustryOptions.error.required" )
-  )
+  "HeatingOccupationListPage" must {
+
+    beRetrievable[Boolean](HeatingOccupationListPage)
+
+    beSettable[Boolean](HeatingOccupationListPage)
+
+    beRemovable[Boolean](HeatingOccupationListPage)
+  }
 }

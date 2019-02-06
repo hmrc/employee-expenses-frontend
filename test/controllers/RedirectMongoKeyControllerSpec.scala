@@ -17,6 +17,9 @@
 package controllers
 
 import base.SpecBase
+import models.NormalMode
+import controllers.routes._
+import controllers.authenticated.routes._
 import org.scalatest.concurrent.ScalaFutures
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -29,13 +32,13 @@ class RedirectMongoKeyControllerSpec extends SpecBase with ScalaFutures {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, routes.RedirectMongoKeyController.onPageLoad("key", None).url)
+      val request = FakeRequest(GET, RedirectMongoKeyController.onPageLoad("key", None).url)
 
       val result = route(application, request).value
 
       status(result) mustEqual 303
 
-      redirectLocation(result).get mustBe routes.CheckYourAnswersController.onPageLoad().url
+      redirectLocation(result).get mustBe TaxYearSelectionController.onPageLoad(NormalMode).url
 
       application.stop()
     }

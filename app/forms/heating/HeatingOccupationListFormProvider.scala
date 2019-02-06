@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package forms
+package forms.heating
 
 import forms.mappings.Mappings
-import models.FirstIndustryOptions
+import javax.inject.Inject
 import play.api.data.Form
 
-class FirstIndustryOptionsFormProvider extends Mappings {
+class HeatingOccupationListFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[FirstIndustryOptions] = Form(
-    "value" -> enumerable[FirstIndustryOptions](requiredKey = "firstIndustryOptions.error.required" )
-  )
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("heatingOccupationList.error.required")
+    )
 }
