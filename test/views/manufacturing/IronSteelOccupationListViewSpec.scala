@@ -64,12 +64,11 @@ class IronSteelOccupationListViewSpec extends YesNoViewBehaviours {
         "occupation2",
         "occupation3",
         "occupation4",
-        "occupation5",
-        "occupation6"
+        "occupation5"
       )
     )
 
-    behave like pageWithBodyText(applyView(form), "aluminiumOccupationList3.listText")
+    behave like pageWithBodyText(applyView(form), "ironSteelOccupationList.listText")
   }
 
   application.stop()
