@@ -30,6 +30,7 @@ import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
+import pages.heating._
 import pages.printing._
 import pages.security._
 import play.api.libs.json.{JsValue, Json}
@@ -38,6 +39,7 @@ trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
+    arbitrary[(HeatingOccupationListPage.type, JsValue)] ::
     arbitrary[(FourthIndustryOptionsPage.type, JsValue)] ::
     arbitrary[(IronMiningPage.type, JsValue)] ::
     arbitrary[(ConstructionOccupationList2Page.type, JsValue)] ::

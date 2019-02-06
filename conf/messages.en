@@ -493,7 +493,7 @@ constructionOccupationList1.occupation1 = asphalt labourer
 constructionOccupationList1.occupation2 = cement works
 constructionOccupationList1.occupation3 = roofing felt
 
-constructionOccupationList2.title = constructionOccupationList2
+constructionOccupationList2.title = Construction occupation list 2 of 2
 constructionOccupationList2.heading = Construction occupation list 2 of 2
 constructionOccupationList2.checkYourAnswersLabel = Construction occupation list 1 of 2
 constructionOccupationList2.error.required = Select yes if your occupation is listed
@@ -514,6 +514,22 @@ fourthIndustryOptions.prisons = prisons
 fourthIndustryOptions.noneOfTheAbove = show more industries
 fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
 fourthIndustryOptions.error.required = Select the industry you work in
+
+heatingOccupationList.title = Heating occupation list
+heatingOccupationList.heading = Heating occupation list
+heatingOccupationList.checkYourAnswersLabel = Heating Occupation List
+heatingOccupationList.error.required = Select yes if your occupation is listed
+heatingOccupationList.radioLabel = Is your occupation listed?
+heatingOccupationList.listText = The occupations are:
+heatingOccupationList.occupation1 = coverer
+heatingOccupationList.occupation2 = domestic glaziers
+heatingOccupationList.occupation3 = heating engineers
+heatingOccupationList.occupation4 = laggers
+heatingOccupationList.occupation5 = pipe fitters
+heatingOccupationList.occupation6 = plumber
+
+
+
 
 ironMining.title = Do you work in iron mining?
 ironMining.heading = Do you work in iron mining?
