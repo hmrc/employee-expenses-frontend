@@ -16,7 +16,6 @@
 
 package models
 
-import play.api.libs.json._
 import viewmodels.RadioCheckboxOption
 
 sealed trait FourthIndustryOptions
@@ -24,10 +23,14 @@ sealed trait FourthIndustryOptions
 object FourthIndustryOptions extends Enumerable.Implicits {
 
   case object Agriculture extends WithName("agriculture") with FourthIndustryOptions
-  case object Fireservice extends WithName("fireService") with FourthIndustryOptions
+  case object FireService extends WithName("fireService") with FourthIndustryOptions
+  case object Heating extends WithName("heating") with FourthIndustryOptions
+  case object Leisure extends WithName("leisure") with FourthIndustryOptions
+  case object Prisons extends WithName("prisons") with FourthIndustryOptions
+  case object ShowMoreIndustries extends WithName("showMoreIndustries") with FourthIndustryOptions
 
   val values: Seq[FourthIndustryOptions] = Seq(
-    Agriculture, Fireservice
+    Agriculture, FireService, Heating, Leisure, Prisons, ShowMoreIndustries
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {
