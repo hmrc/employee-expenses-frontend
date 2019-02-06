@@ -16,11 +16,13 @@
 
 package controllers.manufacturing
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.manufacturing.IronMiningListFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.manufacturing.IronMiningListPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class IronMiningListController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: IronMiningListFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: IronMiningListView
+                                         view: IronMiningListView,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,8 +69,13 @@ class IronMiningListController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IronMiningListPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IronMiningListPage, mode)(updatedAnswers))
+            newUserAnswers <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.ironMiningList1))
+            } else {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.ironMiningAllOther))
+            }
+            _              <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(IronMiningListPage, mode)(newUserAnswers))
         }
       )
   }

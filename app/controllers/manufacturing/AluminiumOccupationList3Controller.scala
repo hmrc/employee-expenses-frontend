@@ -16,11 +16,13 @@
 
 package controllers.manufacturing
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.manufacturing.AluminiumOccupationList3FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.manufacturing.AluminiumOccupationList3Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class AluminiumOccupationList3Controller @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: AluminiumOccupationList3FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: AluminiumOccupationList3View
+                                         view: AluminiumOccupationList3View,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,8 +69,13 @@ class AluminiumOccupationList3Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AluminiumOccupationList3Page, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AluminiumOccupationList3Page, mode)(updatedAnswers))
+            newUserAnswers <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.aluminiumList1))
+            } else {
+              Future.successful(updatedAnswers)
+            }
+            _              <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(AluminiumOccupationList3Page, mode)(newUserAnswers))
         }
       )
   }

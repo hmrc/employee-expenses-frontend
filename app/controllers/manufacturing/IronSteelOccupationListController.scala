@@ -16,11 +16,13 @@
 
 package controllers.manufacturing
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.manufacturing.IronSteelOccupationListFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.manufacturing.IronSteelOccupationListPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class IronSteelOccupationListController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: IronSteelOccupationListFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: IronSteelOccupationListView
+                                         view: IronSteelOccupationListView,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,8 +69,13 @@ class IronSteelOccupationListController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IronSteelOccupationListPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IronSteelOccupationListPage, mode)(updatedAnswers))
+            newUserAnswers <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.ironSteelList1))
+            } else {
+              Future.successful(updatedAnswers)
+            }
+            _              <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(IronSteelOccupationListPage, mode)(newUserAnswers))
         }
       )
   }
