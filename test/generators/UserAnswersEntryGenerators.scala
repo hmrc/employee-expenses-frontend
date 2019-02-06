@@ -35,6 +35,22 @@ import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
+  implicit lazy val arbitraryFourthIndustryOptionsUserAnswersEntry: Arbitrary[(FourthIndustryOptionsPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[FourthIndustryOptionsPage.type]
+        value <- arbitrary[FourthIndustryOptions].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryIronMiningUserAnswersEntry: Arbitrary[(IronMiningPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[IronMiningPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
   implicit lazy val arbitraryIronMiningListUserAnswersEntry: Arbitrary[(IronMiningListPage.type, JsValue)] =
     Arbitrary {
       for {
