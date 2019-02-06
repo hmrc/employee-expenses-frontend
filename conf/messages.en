@@ -483,7 +483,7 @@ stoneMason.heading = Are you a stone mason?
 stoneMason.checkYourAnswersLabel = Are you a stone mason?
 stoneMason.error.required = Select yes if you are a stone mason
 
-constructionOccupationList1.title = Is your job title listed?
+constructionOccupationList1.title = Construction occupation list 1 of 2
 constructionOccupationList1.heading = Construction occupation list 1 of 2
 constructionOccupationList1.checkYourAnswersLabel = Construction occupation list 1 of 2
 constructionOccupationList1.error.required = Select yes if your occupation is listed
@@ -528,13 +528,19 @@ heatingOccupationList.occupation4 = laggers
 heatingOccupationList.occupation5 = pipe fitters
 heatingOccupationList.occupation6 = plumber
 
-
-
-
 ironMining.title = Do you work in iron mining?
 ironMining.heading = Do you work in iron mining?
 ironMining.checkYourAnswersLabel = Do you work in iron mining?
 ironMining.error.required = Select yes if you work in iron mining
+
+ironMiningList.title = Iron mining occupation list
+ironMiningList.heading = Iron mining occupation list
+ironMiningList.checkYourAnswersLabel = Iron mining occupation list
+ironMiningList.error.required = Select yes if your occupation is listed
+ironMiningList.radioLabel = Is your occupation listed?
+ironMiningList.listText = The occupations are:
+ironMiningList.occupation1 = fillers
+ironMiningList.occupation2 = miners and underground workers
 
 taxYearSelection.title = Which tax years do you want to claim for?
 taxYearSelection.heading = Which tax years do you want to claim for?
