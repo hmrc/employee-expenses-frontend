@@ -19,7 +19,6 @@ package navigation
 import base.SpecBase
 import controllers.routes
 import controllers.foodCatering.routes._
-import controllers.construction.routes._
 import models.EmployerContribution._
 import models.FirstIndustryOptions._
 import models.SecondIndustryOptions._
@@ -113,7 +112,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       //SecondIndustryOptionsPage
 
-      "go JoinerCarpenterController from SecondIndustryOptionsPage when Construction is selected" in {
+      "go JoinerCarpenterController from SecondIndustryOptionsPage when 'Construction' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
 
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
@@ -121,6 +120,42 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go ThirdIndustryOptionsController from SecondIndustryOptionsPage when NoneOfAbove is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, SecondIndustryOptions.NoneOfAbove).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+        controllers.routes.ThirdIndustryOptionsController.onPageLoad(NormalMode)
+
+      }
+
+      "go to EmployersContributionsController from SecondIndustryOptionsPage when 'Council' is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Council).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+      }
+
+      "go to TypeOfManufacturingController from SecondIndustryOptionsPage when 'ManufacturingWarehousing' is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, ManufacturingWarehousing).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(NormalMode)
+      }
+
+      "go to SpecialConstableController from SecondIndustryOptionsPage when 'Police' is selected" in{
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Police).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.police.routes.SpecialConstableController.onPageLoad(NormalMode)
+      }
+
+      "go to ClothingController from SecondIndustryOptionsPage when 'ClothingTextiles' is selected" in{
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, ClothingTextiles).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.clothing.routes.ClothingController.onPageLoad(NormalMode)
+      }
+
+      "go to ThirdIndustryOptionsController from SecondIndustryOptionsPage when 'None of the above' is selected" in{
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, SecondIndustryOptions.NoneOfAbove).success.value
 
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe

@@ -18,6 +18,7 @@ package generators
 
 import org.scalacheck.Arbitrary
 import pages._
+import pages.authenticated.TaxYearSelectionPage
 import pages.clothing._
 import pages.construction._
 import pages.electrical.ElectricalPage
@@ -27,10 +28,26 @@ import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
+import pages.heating._
 import pages.security._
 import pages.printing._
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryHeatingOccupationListPage: Arbitrary[HeatingOccupationListPage.type] =
+    Arbitrary(HeatingOccupationListPage)
+
+  implicit lazy val arbitraryTaxYearSelectionPage: Arbitrary[TaxYearSelectionPage.type] =
+    Arbitrary(TaxYearSelectionPage)
+
+  implicit lazy val arbitraryFourthIndustryOptionsPage: Arbitrary[FourthIndustryOptionsPage.type] =
+    Arbitrary(FourthIndustryOptionsPage)
+
+  implicit lazy val arbitraryIronMiningPage: Arbitrary[IronMiningPage.type] =
+    Arbitrary(IronMiningPage)
+
+  implicit lazy val arbitraryIronMiningListPage: Arbitrary[IronMiningListPage.type] =
+    Arbitrary(IronMiningListPage)
 
   implicit lazy val arbitraryConstructionOccupationList2Page: Arbitrary[ConstructionOccupationList2Page.type] =
     Arbitrary(ConstructionOccupationList2Page)

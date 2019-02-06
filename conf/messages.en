@@ -267,13 +267,13 @@ factoryEngineeringApprentice.error.required = Select yes if you are an apprentic
 
 typeOfManufacturing.title = What type of manufacturing do you work in?
 typeOfManufacturing.heading = What type of manufacturing do you work in?
-typeOfManufacturing.aluminium = Aluminium
-typeOfManufacturing.brassCopper = Brass and copper
-typeOfManufacturing.glass = Glass
-typeOfManufacturing.ironSteel = Iron and steel
-typeOfManufacturing.preciousMetals = Precious metals
-typeOfManufacturing.woodFurniture = Wood and furniture
-typeOfManufacturing.none = None of the above
+typeOfManufacturing.aluminium = aluminium
+typeOfManufacturing.brassCopper = brass and copper
+typeOfManufacturing.glass = glass
+typeOfManufacturing.ironSteel = iron and steel
+typeOfManufacturing.preciousMetals = quarrying and precious metals
+typeOfManufacturing.woodFurniture = wood and furniture
+typeOfManufacturing.none = manufacturing type not listed
 typeOfManufacturing.checkYourAnswersLabel = What type of manufacturing do you work in?
 typeOfManufacturing.error.required = Select what type of manufacturing you work in
 
@@ -341,11 +341,10 @@ ironSteelOccupationList.error.required = Select yes if your occupation is listed
 ironSteelOccupationList.listText = The occupations are:
 ironSteelOccupationList.radioLabel = Is your occupation listed?
 ironSteelOccupationList.occupation1 = day labourer
-ironSteelOccupationList.occupation2 = deneral labourer
+ironSteelOccupationList.occupation2 = general labourer
 ironSteelOccupationList.occupation3 = stockman
 ironSteelOccupationList.occupation4 = timekeeper
-ironSteelOccupationList.occupation5 = pourer
-ironSteelOccupationList.occupation6 = warehouse staff and weighmen
+ironSteelOccupationList.occupation5 = warehouse staff and weighmen
 
 woodFurnitureOccupationList1.title = Wood and furniture occupation list 1 of 3
 woodFurnitureOccupationList1.heading = Wood and furniture occupation list 1 of 3
@@ -484,7 +483,7 @@ stoneMason.heading = Are you a stone mason?
 stoneMason.checkYourAnswersLabel = Are you a stone mason?
 stoneMason.error.required = Select yes if you are a stone mason
 
-constructionOccupationList1.title = Is your job title listed?
+constructionOccupationList1.title = Construction occupation list 1 of 2
 constructionOccupationList1.heading = Construction occupation list 1 of 2
 constructionOccupationList1.checkYourAnswersLabel = Construction occupation list 1 of 2
 constructionOccupationList1.error.required = Select yes if your occupation is listed
@@ -494,7 +493,7 @@ constructionOccupationList1.occupation1 = asphalt labourer
 constructionOccupationList1.occupation2 = cement works
 constructionOccupationList1.occupation3 = roofing felt
 
-constructionOccupationList2.title = constructionOccupationList2
+constructionOccupationList2.title = Construction occupation list 2 of 2
 constructionOccupationList2.heading = Construction occupation list 2 of 2
 constructionOccupationList2.checkYourAnswersLabel = Construction occupation list 1 of 2
 constructionOccupationList2.error.required = Select yes if your occupation is listed
@@ -503,3 +502,52 @@ constructionOccupationList2.listText = The occupations are:
 constructionOccupationList2.occupation1 = labourer
 constructionOccupationList2.occupation2 = navvy
 constructionOccupationList2.occupation3 = tilemaker
+
+fourthIndustryOptions.title = Industry list 4 of 4
+fourthIndustryOptions.heading = Industry list 4 of 4
+fourthIndustryOptions.listText = Select your industry.
+fourthIndustryOptions.agriculture = agriculture
+fourthIndustryOptions.fireService = fire service
+fourthIndustryOptions.heating = heating
+fourthIndustryOptions.leisure = leisure
+fourthIndustryOptions.prisons = prisons
+fourthIndustryOptions.noneOfTheAbove = show more industries
+fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
+fourthIndustryOptions.error.required = Select the industry you work in
+
+heatingOccupationList.title = Heating occupation list
+heatingOccupationList.heading = Heating occupation list
+heatingOccupationList.checkYourAnswersLabel = Heating Occupation List
+heatingOccupationList.error.required = Select yes if your occupation is listed
+heatingOccupationList.radioLabel = Is your occupation listed?
+heatingOccupationList.listText = The occupations are:
+heatingOccupationList.occupation1 = coverer
+heatingOccupationList.occupation2 = domestic glaziers
+heatingOccupationList.occupation3 = heating engineers
+heatingOccupationList.occupation4 = laggers
+heatingOccupationList.occupation5 = pipe fitters
+heatingOccupationList.occupation6 = plumber
+
+ironMining.title = Do you work in iron mining?
+ironMining.heading = Do you work in iron mining?
+ironMining.checkYourAnswersLabel = Do you work in iron mining?
+ironMining.error.required = Select yes if you work in iron mining
+
+ironMiningList.title = Iron mining occupation list
+ironMiningList.heading = Iron mining occupation list
+ironMiningList.checkYourAnswersLabel = Iron mining occupation list
+ironMiningList.error.required = Select yes if your occupation is listed
+ironMiningList.radioLabel = Is your occupation listed?
+ironMiningList.listText = The occupations are:
+ironMiningList.occupation1 = fillers
+ironMiningList.occupation2 = miners and underground workers
+
+taxYearSelection.title = Which tax years do you want to claim for?
+taxYearSelection.heading = Which tax years do you want to claim for?
+taxYearSelection.currentYear = 6 April 2018 to 5 April 2019 (the current tax year)
+taxYearSelection.currentYearMinus1 = 6 April 2017 to 5 April 2018
+taxYearSelection.currentYearMinus2 = 6 April 2016 to 5 April 2017
+taxYearSelection.currentYearMinus3 = 6 April 2015 to 5 April 2016
+taxYearSelection.currentYearMinus4 = 6 April 2014 to 5 April 2015
+taxYearSelection.checkYourAnswersLabel = Which tax years do you want to claim for?
+taxYearSelection.error.required = Select which tax years you want to claim for

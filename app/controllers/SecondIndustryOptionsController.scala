@@ -18,11 +18,12 @@ package controllers
 
 import com.google.inject.Inject
 import com.google.inject.name.Named
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.SecondIndustryOptionsFormProvider
 import models.{Enumerable, Mode, SecondIndustryOptions}
 import navigation.Navigator
-import pages.SecondIndustryOptionsPage
+import pages.{ClaimAmount, SecondIndustryOptionsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -41,7 +42,8 @@ class SecondIndustryOptionsController @Inject()(
                                        requireData: DataRequiredAction,
                                        formProvider: SecondIndustryOptionsFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: SecondIndustryOptionsView
+                                       view: SecondIndustryOptionsView,
+                                       claimAmounts: ClaimAmountsConfig
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form: Form[SecondIndustryOptions] = formProvider()
@@ -67,8 +69,12 @@ class SecondIndustryOptionsController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SecondIndustryOptionsPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SecondIndustryOptionsPage, mode)(updatedAnswers))
+            newUserAnswers <- value match {
+                                case SecondIndustryOptions.Council  => Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.defaultRate))
+                                case _                              => Future.successful(updatedAnswers)
+                              }
+            _              <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(SecondIndustryOptionsPage, mode)(newUserAnswers))
         }
       )
   }
