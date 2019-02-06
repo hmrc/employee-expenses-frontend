@@ -512,6 +512,6 @@ fourthIndustryOptions.fireService = fire service
 fourthIndustryOptions.heating = heating
 fourthIndustryOptions.leisure = leisure
 fourthIndustryOptions.prisons = prisons
-fourthIndustryOptions.showMoreIndustries = show more industries
+fourthIndustryOptions.noneOfTheAbove = show more industries
 fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
 fourthIndustryOptions.error.required = Select the industry you work in
