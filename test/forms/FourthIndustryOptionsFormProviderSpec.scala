@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-package forms.authenticated
+package forms
 
-import forms.behaviours.CheckboxFieldBehaviours
-import models.TaxYearSelection
+import forms.behaviours.OptionFieldBehaviours
+import models.FourthIndustryOptions
 import play.api.data.FormError
 
-class TaxYearSelectionFormProviderSpec extends CheckboxFieldBehaviours {
+class FourthIndustryOptionsFormProviderSpec extends OptionFieldBehaviours {
 
-  val form = new TaxYearSelectionFormProvider()()
+  val form = new FourthIndustryOptionsFormProvider()()
 
   ".value" must {
 
     val fieldName = "value"
-    val requiredKey = "taxYearSelection.error.required"
+    val requiredKey = "fourthIndustryOptions.error.required"
 
-    behave like checkboxField[TaxYearSelection](
+    behave like optionsField[FourthIndustryOptions](
       form,
       fieldName,
-      validValues  = TaxYearSelection.values,
-      invalidError = FormError(s"$fieldName[0]", "error.invalid")
+      validValues  = FourthIndustryOptions.values,
+      invalidError = FormError(fieldName, "error.invalid")
     )
 
-    behave like mandatoryCheckboxField(
+    behave like mandatoryField(
       form,
       fieldName,
-      requiredKey
+      requiredError = FormError(fieldName, requiredKey)
     )
   }
 }

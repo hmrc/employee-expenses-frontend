@@ -246,10 +246,10 @@ POST        /joiner-carpenter                                    controllers.con
 GET         /change-joiner-carpenter                             controllers.construction.JoinerCarpenterController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-joiner-carpenter                             controllers.construction.JoinerCarpenterController.onSubmit(mode: Mode = CheckMode)
 
-GET         /building-materials                                  controllers.construction.BuildingMaterialsController.onPageLoad(mode: Mode = NormalMode)
-POST        /building-materials                                  controllers.construction.BuildingMaterialsController.onSubmit(mode: Mode = NormalMode)
-GET         /change-building-materials                           controllers.construction.BuildingMaterialsController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-building-materials                           controllers.construction.BuildingMaterialsController.onSubmit(mode: Mode = CheckMode)
+GET        /building-materials                               controllers.construction.BuildingMaterialsController.onPageLoad(mode: Mode = NormalMode)
+POST       /building-materials                               controllers.construction.BuildingMaterialsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-building-materials                         controllers.construction.BuildingMaterialsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-building-materials                         controllers.construction.BuildingMaterialsController.onSubmit(mode: Mode = CheckMode)
 
 GET         /stone-mason                                         controllers.construction.StoneMasonController.onPageLoad(mode: Mode = NormalMode)
 POST        /stone-mason                                         controllers.construction.StoneMasonController.onSubmit(mode: Mode = NormalMode)
@@ -261,12 +261,22 @@ POST        /construction-occupation-list-1                      controllers.con
 GET         /change-construction-occupation-list-1               controllers.construction.ConstructionOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
 POST        /change-construction-occupation-list-1               controllers.construction.ConstructionOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
 
-GET         /construction-occupation-list-2                      controllers.construction.ConstructionOccupationList2Controller.onPageLoad(mode: Mode = NormalMode)
-POST        /construction-occupation-list-2                      controllers.construction.ConstructionOccupationList2Controller.onSubmit(mode: Mode = NormalMode)
-GET         /change-construction-occupation-list-2               controllers.construction.ConstructionOccupationList2Controller.onPageLoad(mode: Mode = CheckMode)
-POST        /change-construction-occupation-list-2               controllers.construction.ConstructionOccupationList2Controller.onSubmit(mode: Mode = CheckMode)
+GET        /construction-occupation-list-2                           controllers.construction.ConstructionOccupationList2Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /construction-occupation-list-2                          controllers.construction.ConstructionOccupationList2Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-construction-occupation-list-2                  controllers.construction.ConstructionOccupationList2Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-construction-occupation-list-2                  controllers.construction.ConstructionOccupationList2Controller.onSubmit(mode: Mode = CheckMode)
 
 GET         /which-tax-year                                      controllers.authenticated.TaxYearSelectionController.onPageLoad(mode: Mode = NormalMode)
 POST        /which-tax-year                                      controllers.authenticated.TaxYearSelectionController.onSubmit(mode: Mode = NormalMode)
 GET         /change-which-tax-year                               controllers.authenticated.TaxYearSelectionController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-which-tax-year                               controllers.authenticated.TaxYearSelectionController.onSubmit(mode: Mode = CheckMode)
+
+GET        /iron-mining                                     controllers.manufacturing.IronMiningController.onPageLoad(mode: Mode = NormalMode)
+POST       /iron-mining                                     controllers.manufacturing.IronMiningController.onSubmit(mode: Mode = NormalMode)
+GET        /change-iron-mining                              controllers.manufacturing.IronMiningController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-iron-mining                              controllers.manufacturing.IronMiningController.onSubmit(mode: Mode = CheckMode)
+
+GET        /fourth-industry-type                            controllers.FourthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST       /fourth-industry-type                            controllers.FourthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-fourth-industry-type                     controllers.FourthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-fourth-industry-type                     controllers.FourthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)

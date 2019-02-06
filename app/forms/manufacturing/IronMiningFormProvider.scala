@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package navigation
+package forms.manufacturing
 
+import forms.mappings.Mappings
 import javax.inject.Inject
-import models.{CheckMode, NormalMode, UserAnswers}
-import pages.Page
-import play.api.mvc.Call
-import controllers.authenticated.routes._
-import pages.authenticated._
+import play.api.data.Form
 
-class AuthenticatedNavigator @Inject()() extends Navigator {
-  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => _ => TaxYearSelectionController.onPageLoad(NormalMode)
-  }
+class IronMiningFormProvider @Inject() extends Mappings {
 
-  protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => _ => TaxYearSelectionController.onPageLoad(CheckMode)
-  }
-
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("ironMining.error.required")
+    )
 }

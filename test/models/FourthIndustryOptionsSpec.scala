@@ -16,47 +16,46 @@
 
 package models
 
-import generators.ModelGenerators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks
 import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json.{JsError, JsString, Json}
 
-class TaxYearSelectionSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues with ModelGenerators {
+class FourthIndustryOptionsSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues {
 
-  "TaxYearSelection" must {
+  "FourthIndustryOptions" must {
 
     "deserialise valid values" in {
 
-      val gen = arbitrary[TaxYearSelection]
+      val gen = Gen.oneOf(FourthIndustryOptions.values.toSeq)
 
       forAll(gen) {
-        taxYearSelection =>
+        fourthIndustryOptions =>
 
-          JsString(taxYearSelection.toString).validate[TaxYearSelection].asOpt.value mustEqual taxYearSelection
+          JsString(fourthIndustryOptions.toString).validate[FourthIndustryOptions].asOpt.value mustEqual fourthIndustryOptions
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!TaxYearSelection.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] suchThat (!FourthIndustryOptions.values.map(_.toString).contains(_))
 
       forAll(gen) {
         invalidValue =>
 
-          JsString(invalidValue).validate[TaxYearSelection] mustEqual JsError("error.invalid")
+          JsString(invalidValue).validate[FourthIndustryOptions] mustEqual JsError("error.invalid")
       }
     }
 
     "serialise" in {
 
-      val gen = arbitrary[TaxYearSelection]
+      val gen = Gen.oneOf(FourthIndustryOptions.values.toSeq)
 
       forAll(gen) {
-        taxYearSelection =>
+        fourthIndustryOptions =>
 
-          Json.toJson(taxYearSelection) mustEqual JsString(taxYearSelection.toString)
+          Json.toJson(fourthIndustryOptions) mustEqual JsString(fourthIndustryOptions.toString)
       }
     }
   }

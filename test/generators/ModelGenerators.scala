@@ -17,7 +17,6 @@
 package generators
 
 import models._
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
@@ -25,6 +24,11 @@ trait ModelGenerators {
   implicit lazy val arbitraryTaxYearSelection: Arbitrary[TaxYearSelection] =
     Arbitrary {
       Gen.oneOf(TaxYearSelection.values)
+    }
+
+  implicit lazy val arbitraryFourthIndustryOptions: Arbitrary[FourthIndustryOptions] =
+    Arbitrary {
+      Gen.oneOf(FourthIndustryOptions.values.toSeq)
     }
 
   implicit lazy val arbitraryThirdIndustryOptions: Arbitrary[ThirdIndustryOptions] =

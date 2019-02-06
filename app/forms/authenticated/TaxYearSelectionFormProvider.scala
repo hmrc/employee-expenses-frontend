@@ -24,8 +24,8 @@ import play.api.data.Forms.seq
 
 class TaxYearSelectionFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[TaxYearSelection] =
+  def apply(): Form[Seq[TaxYearSelection]] =
     Form(
-      "value" -> enumerable[TaxYearSelection]("taxYearSelection.error.required")
+      "value" -> seq(enumerable[TaxYearSelection]("taxYearSelection.error.required")).verifying(nonEmptySeq("taxYearSelection.error.required"))
     )
 }

@@ -16,42 +16,39 @@
 
 package controllers
 
-import com.google.inject.Inject
-import com.google.inject.name.Named
-import config.ClaimAmountsConfig
 import controllers.actions._
-import forms.SecondIndustryOptionsFormProvider
-import models.{Enumerable, Mode, SecondIndustryOptions}
+import forms.FourthIndustryOptionsFormProvider
+import javax.inject.{Inject, Named}
+import models.{Enumerable, Mode}
 import navigation.Navigator
-import pages.{ClaimAmount, SecondIndustryOptionsPage}
+import pages.FourthIndustryOptionsPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.SecondIndustryOptionsView
+import views.html.FourthIndustryOptionsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SecondIndustryOptionsController @Inject()(
+class FourthIndustryOptionsController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: SessionRepository,
                                        @Named("Generic") navigator: Navigator,
                                        identify: UnauthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
-                                       formProvider: SecondIndustryOptionsFormProvider,
+                                       formProvider: FourthIndustryOptionsFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: SecondIndustryOptionsView,
-                                       claimAmounts: ClaimAmountsConfig
+                                       view: FourthIndustryOptionsView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  val form: Form[SecondIndustryOptions] = formProvider()
+  val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(SecondIndustryOptionsPage) match {
+      val preparedForm = request.userAnswers.get(FourthIndustryOptionsPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -68,13 +65,9 @@ class SecondIndustryOptionsController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SecondIndustryOptionsPage, value))
-            newUserAnswers <- value match {
-                                case SecondIndustryOptions.Council  => Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.defaultRate))
-                                case _                              => Future.successful(updatedAnswers)
-                              }
-            _              <- sessionRepository.set(newUserAnswers)
-          } yield Redirect(navigator.nextPage(SecondIndustryOptionsPage, mode)(newUserAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(FourthIndustryOptionsPage, mode)(updatedAnswers))
         }
       )
   }

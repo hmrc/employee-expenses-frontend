@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package pages.authenticated
+package pages
 
-import models.TaxYearSelection
-import pages.behaviours.PageBehaviours
+import models.FourthIndustryOptions
+import play.api.libs.json.JsPath
 
-class TaxYearSelectionPageSpec extends PageBehaviours {
+case object FourthIndustryOptionsPage extends QuestionPage[FourthIndustryOptions] {
 
-  "TaxYearSelectionPage" must {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[Seq[TaxYearSelection]](TaxYearSelectionPage)
-
-    beSettable[Seq[TaxYearSelection]](TaxYearSelectionPage)
-
-    beRemovable[Seq[TaxYearSelection]](TaxYearSelectionPage)
-  }
+  override def toString: String = "fourthIndustryOptions"
 }

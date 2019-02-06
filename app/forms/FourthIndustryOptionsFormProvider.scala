@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package navigation
+package forms
 
 import javax.inject.Inject
-import models.{CheckMode, NormalMode, UserAnswers}
-import pages.Page
-import play.api.mvc.Call
-import controllers.authenticated.routes._
-import pages.authenticated._
 
-class AuthenticatedNavigator @Inject()() extends Navigator {
-  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => _ => TaxYearSelectionController.onPageLoad(NormalMode)
-  }
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.FourthIndustryOptions
 
-  protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => _ => TaxYearSelectionController.onPageLoad(CheckMode)
-  }
+class FourthIndustryOptionsFormProvider @Inject() extends Mappings {
 
+  def apply(): Form[FourthIndustryOptions] =
+    Form(
+      "value" -> enumerable[FourthIndustryOptions]("fourthIndustryOptions.error.required")
+    )
 }

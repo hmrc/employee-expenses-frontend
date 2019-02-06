@@ -17,41 +17,37 @@
 package controllers
 
 import base.SpecBase
-import forms.ThirdIndustryOptionsFormProvider
-import generators.Generators
-import models.{NormalMode, ThirdIndustryOptions, UserAnswers}
+import forms.FourthIndustryOptionsFormProvider
+import models.{NormalMode, FourthIndustryOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.scalacheck.Gen
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.prop.PropertyChecks
-import pages.{ClaimAmount, ThirdIndustryOptionsPage}
+import pages.FourthIndustryOptionsPage
 import play.api.inject.bind
+import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
-import views.html.ThirdIndustryOptionsView
+import views.html.FourthIndustryOptionsView
 
-class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators {
+class FourthIndustryOptionsControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val thirdIndustryOptionsRoute = routes.ThirdIndustryOptionsController.onPageLoad(NormalMode).url
+  lazy val fourthIndustryOptionsRoute = routes.FourthIndustryOptionsController.onPageLoad(NormalMode).url
 
-  val formProvider = new ThirdIndustryOptionsFormProvider()
+  val formProvider = new FourthIndustryOptionsFormProvider()
   val form = formProvider()
 
-  "ThirdIndustryOptions Controller" must {
+  "FourthIndustryOptions Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, thirdIndustryOptionsRoute)
+      val request = FakeRequest(GET, fourthIndustryOptionsRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ThirdIndustryOptionsView]
+      val view = application.injector.instanceOf[FourthIndustryOptionsView]
 
       status(result) mustEqual OK
 
@@ -63,20 +59,20 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ThirdIndustryOptionsPage, ThirdIndustryOptions.values.head).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(FourthIndustryOptionsPage, FourthIndustryOptions.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, thirdIndustryOptionsRoute)
+      val request = FakeRequest(GET, fourthIndustryOptionsRoute)
 
-      val view = application.injector.instanceOf[ThirdIndustryOptionsView]
+      val view = application.injector.instanceOf[FourthIndustryOptionsView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(ThirdIndustryOptions.values.head), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(FourthIndustryOptions.values.head), NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -88,21 +84,15 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
           .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val thirdIndustryOptions: Gen[ThirdIndustryOptions] = Gen.oneOf(ThirdIndustryOptions.values)
+      val request =
+        FakeRequest(POST, fourthIndustryOptionsRoute)
+          .withFormUrlEncodedBody(("value", FourthIndustryOptions.options.head.value))
 
-      forAll(thirdIndustryOptions) {
-        thirdIndustryOption =>
+      val result = route(application, request).value
 
-          val request =
-            FakeRequest(POST, thirdIndustryOptionsRoute)
-              .withFormUrlEncodedBody(("value", thirdIndustryOption.toString))
+      status(result) mustEqual SEE_OTHER
 
-          val result = route(application, request).value
-
-          status(result) mustEqual SEE_OTHER
-
-          redirectLocation(result).value mustEqual onwardRoute.url
-      }
+      redirectLocation(result).value mustEqual onwardRoute.url
 
       application.stop()
     }
@@ -112,12 +102,12 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, thirdIndustryOptionsRoute)
+        FakeRequest(POST, fourthIndustryOptionsRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[ThirdIndustryOptionsView]
+      val view = application.injector.instanceOf[FourthIndustryOptionsView]
 
       val result = route(application, request).value
 
@@ -133,7 +123,7 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, thirdIndustryOptionsRoute)
+      val request = FakeRequest(GET, fourthIndustryOptionsRoute)
 
       val result = route(application, request).value
 
@@ -148,8 +138,8 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, thirdIndustryOptionsRoute)
-          .withFormUrlEncodedBody(("value", ThirdIndustryOptions.values.head.toString))
+        FakeRequest(POST, fourthIndustryOptionsRoute)
+          .withFormUrlEncodedBody(("value", FourthIndustryOptions.values.head.toString))
 
       val result = route(application, request).value
 
@@ -158,22 +148,6 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
-    }
-
-    "save ClaimAmount when 'Education' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, thirdIndustryOptionsRoute).withFormUrlEncodedBody(("value", ThirdIndustryOptions.Education.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.defaultRate))
-      }
     }
   }
 }

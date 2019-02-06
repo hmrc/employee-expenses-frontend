@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.manufacturing
 
-import javax.inject.Inject
-import models.{CheckMode, NormalMode, UserAnswers}
-import pages.Page
-import play.api.mvc.Call
-import controllers.authenticated.routes._
-import pages.authenticated._
+import pages.behaviours.PageBehaviours
 
-class AuthenticatedNavigator @Inject()() extends Navigator {
-  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => _ => TaxYearSelectionController.onPageLoad(NormalMode)
+class IronMiningPageSpec extends PageBehaviours {
+
+  "IronMiningPage" must {
+
+    beRetrievable[Boolean](IronMiningPage)
+
+    beSettable[Boolean](IronMiningPage)
+
+    beRemovable[Boolean](IronMiningPage)
   }
-
-  protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => _ => TaxYearSelectionController.onPageLoad(CheckMode)
-  }
-
 }

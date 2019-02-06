@@ -48,7 +48,7 @@ class TaxYearSelectionController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm: Form[TaxYearSelection] = request.userAnswers.get(TaxYearSelectionPage) match {
+      val preparedForm: Form[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -60,7 +60,7 @@ class TaxYearSelectionController @Inject()(
     implicit request =>
 
       form.bindFromRequest().fold(
-        (formWithErrors: Form[TaxYearSelection]) =>
+        (formWithErrors: Form[Seq[TaxYearSelection]]) =>
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {

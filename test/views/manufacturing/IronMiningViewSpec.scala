@@ -17,25 +17,24 @@
 package views.manufacturing
 
 import controllers.manufacturing.routes
-import forms.manufacturing.IronSteelOccupationListFormProvider
+import forms.manufacturing.IronMiningFormProvider
 import models.NormalMode
-import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.manufacturing.IronSteelOccupationListView
+import views.html.manufacturing.IronMiningView
 
-class IronSteelOccupationListViewSpec extends YesNoViewBehaviours {
+class IronMiningViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "ironSteelOccupationList"
+  val messageKeyPrefix = "ironMining"
 
-  val form = new IronSteelOccupationListFormProvider()()
+  val form = new IronMiningFormProvider()()
 
-  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "IronSteelOccupationList view" must {
+  "IronMining view" must {
 
-    val view = application.injector.instanceOf[IronSteelOccupationListView]
+    val view = application.injector.instanceOf[IronMiningView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -49,26 +48,7 @@ class IronSteelOccupationListViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(
-      form = form,
-      createView = applyView,
-      messageKeyPrefix = messageKeyPrefix,
-      expectedFormAction = routes.IronSteelOccupationListController.onSubmit(NormalMode).url,
-      legendLabel = Some(messageKeyPrefix + ".radioLabel")
-
-    )
-
-    behave like pageWithList(applyView(form), messageKeyPrefix,
-      Seq(
-        "occupation1",
-        "occupation2",
-        "occupation3",
-        "occupation4",
-        "occupation5"
-      )
-    )
-
-    behave like pageWithBodyText(applyView(form), "ironSteelOccupationList.listText")
+    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.IronMiningController.onSubmit(NormalMode).url)
   }
 
   application.stop()

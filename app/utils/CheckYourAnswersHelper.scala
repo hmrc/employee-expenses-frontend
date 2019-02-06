@@ -63,6 +63,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       ThirdIndustryOptionsController.onPageLoad(CheckMode).url)
   }
 
+  def fourthIndustryOptions: Option[AnswerRow] = userAnswers.get(FourthIndustryOptionsPage) map {
+    x => AnswerRow("fourthIndustryOptions.checkYourAnswersLabel", s"fourthIndustryOptions.$x", true,
+      FourthIndustryOptionsController.onPageLoad(CheckMode).url)
+  }
+
   def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
     x => AnswerRow("employerContribution.checkYourAnswersLabel", s"employerContribution.$x", true,
       EmployerContributionController.onPageLoad(CheckMode).url)
@@ -208,6 +213,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def ironSteelOccupationList: Option[AnswerRow] = userAnswers.get(IronSteelOccupationListPage) map {
     x => AnswerRow("ironSteelOccupationList.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       IronSteelOccupationListController.onPageLoad(CheckMode).url)
+  }
+
+  def ironMining: Option[AnswerRow] = userAnswers.get(IronMiningPage) map {
+    x => AnswerRow("ironMining.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      IronMiningController.onPageLoad(CheckMode).url)
   }
 
   def woodFurnitureOccupationList2: Option[AnswerRow] = userAnswers.get(WoodFurnitureOccupationList2Page) map {

@@ -14,43 +14,39 @@
  * limitations under the License.
  */
 
-package controllers.electrical
+package controllers.manufacturing
 
 import base.SpecBase
-import controllers.electrical.routes._
-import forms.electrical.ElectricalFormProvider
+import forms.manufacturing.IronMiningFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import pages.ClaimAmount
-import pages.electrical.ElectricalPage
+import pages.manufacturing.IronMiningPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
-import views.html.electrical.ElectricalView
+import views.html.manufacturing.IronMiningView
 
-class ElectricalControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
+class IronMiningControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ElectricalFormProvider()
+  val formProvider = new IronMiningFormProvider()
   val form = formProvider()
 
-  lazy val electricalRoute = ElectricalController.onPageLoad(NormalMode).url
+  lazy val ironMiningRoute = routes.IronMiningController.onPageLoad(NormalMode).url
 
-  "Electrical Controller" must {
+  "IronMining Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, electricalRoute)
+      val request = FakeRequest(GET, ironMiningRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ElectricalView]
+      val view = application.injector.instanceOf[IronMiningView]
 
       status(result) mustEqual OK
 
@@ -62,13 +58,13 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ElectricalPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(IronMiningPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, electricalRoute)
+      val request = FakeRequest(GET, ironMiningRoute)
 
-      val view = application.injector.instanceOf[ElectricalView]
+      val view = application.injector.instanceOf[IronMiningView]
 
       val result = route(application, request).value
 
@@ -84,11 +80,11 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Electrical").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
-        FakeRequest(POST, electricalRoute)
+        FakeRequest(POST, ironMiningRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -105,12 +101,12 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, electricalRoute)
+        FakeRequest(POST, ironMiningRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[ElectricalView]
+      val view = application.injector.instanceOf[IronMiningView]
 
       val result = route(application, request).value
 
@@ -126,7 +122,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, electricalRoute)
+      val request = FakeRequest(GET, ironMiningRoute)
 
       val result = route(application, request).value
 
@@ -142,7 +138,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, electricalRoute)
+        FakeRequest(POST, ironMiningRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -150,44 +146,6 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "when true save only landry value to claim amount" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, electricalRoute)
-        .withFormUrlEncodedBody(("value", "true"))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Electrical.onlyLaundry))
-      }
-
-      application.stop()
-    }
-
-    "when false save all other workers value to claim amount" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, electricalRoute)
-        .withFormUrlEncodedBody(("value", "false"))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Electrical.allOther))
-      }
 
       application.stop()
     }

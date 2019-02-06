@@ -29,12 +29,16 @@ object TaxYearSelection extends Enumerable.Implicits {
   case object CurrentYearMinus4 extends WithName("currentYearMinus4") with TaxYearSelection
 
   val values: Seq[TaxYearSelection] = Seq(
-    CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4
+    CurrentYear,
+    CurrentYearMinus1,
+    CurrentYearMinus2,
+    CurrentYearMinus3,
+    CurrentYearMinus4
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {
     value =>
-      RadioCheckboxOption("taxYearSelection", value.toString)
+      RadioCheckboxOption("taxYearSelection", s"$value")
   }
 
   implicit val enumerable: Enumerable[TaxYearSelection] =

@@ -25,35 +25,21 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("ironSteelOccupationList.title")}"
+    title = s"${errorPrefix(form)} ${messages("ironMining.title")}"
     ) {
 
-    @formHelper(action = IronSteelOccupationListController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = IronMiningController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading(
-            headingKey = "ironSteelOccupationList.heading"
-        )
-
-        @components.list(
-            pageKey = Some("ironSteelOccupationList"),
-            listText = Some("ironSteelOccupationList.listText"),
-            bulletList = Seq(
-                "occupation1",
-                "occupation2",
-                "occupation3",
-                "occupation4",
-                "occupation5"
-            )
-        )
+        @components.heading("ironMining.heading")
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("ironSteelOccupationList.radioLabel"),
-            labelClass = Some("heading-medium")
+            label = messages("ironMining.heading"),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button()
