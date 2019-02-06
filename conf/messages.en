@@ -341,11 +341,10 @@ ironSteelOccupationList.error.required = Select yes if your occupation is listed
 ironSteelOccupationList.listText = The occupations are:
 ironSteelOccupationList.radioLabel = Is your occupation listed?
 ironSteelOccupationList.occupation1 = day labourer
-ironSteelOccupationList.occupation2 = deneral labourer
+ironSteelOccupationList.occupation2 = general labourer
 ironSteelOccupationList.occupation3 = stockman
 ironSteelOccupationList.occupation4 = timekeeper
-ironSteelOccupationList.occupation5 = pourer
-ironSteelOccupationList.occupation6 = warehouse staff and weighmen
+ironSteelOccupationList.occupation5 = warehouse staff and weighmen
 
 woodFurnitureOccupationList1.title = Wood and furniture occupation list 1 of 3
 woodFurnitureOccupationList1.heading = Wood and furniture occupation list 1 of 3
