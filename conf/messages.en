@@ -502,3 +502,15 @@ constructionOccupationList2.listText = The occupations are:
 constructionOccupationList2.occupation1 = labourer
 constructionOccupationList2.occupation2 = navvy
 constructionOccupationList2.occupation3 = tilemaker
+
+fourthIndustryOptions.title = Industry list 4 of 4
+fourthIndustryOptions.heading = Industry list 4 of 4
+fourthIndustryOptions.listText = Select your industry.
+fourthIndustryOptions.agriculture = agriculture
+fourthIndustryOptions.fireService = fire service
+fourthIndustryOptions.heating = heating
+fourthIndustryOptions.leisure = leisure
+fourthIndustryOptions.prisons = prisons
+fourthIndustryOptions.noneOfTheAbove = show more industries
+fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
+fourthIndustryOptions.error.required = Select the industry you work in
