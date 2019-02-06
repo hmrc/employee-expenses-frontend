@@ -15,15 +15,15 @@ class $className$ViewSpec extends CheckboxViewBehaviours[$className$] {
 
   val form = new $className$FormProvider()()
 
-  def applyView(form: Form[Set[$className$]]): HtmlFormat.Appendable =
+  def applyView(form: Form[Seq[$className$]]): HtmlFormat.Appendable =
     application.injector.instanceOf[$className$View].apply(form, NormalMode)(fakeRequest, messages)
 
-  def applyViewWithAuth(form: Form[Set[$className$]]): HtmlFormat.Appendable =
+  def applyViewWithAuth(form: Form[Seq[$className$]]): HtmlFormat.Appendable =
     application.injector.instanceOf[$className$View].apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   val messageKeyPrefix = "$className;format="decap"$"
 
-  val options: Set[RadioCheckboxOption] = $className$.options
+  val options: Seq[RadioCheckboxOption] = $className$.options
 
   "$className$View" must {
 

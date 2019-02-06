@@ -10,11 +10,11 @@ object $className$ extends Enumerable.Implicits {
   case object $option2key;format="Camel"$ extends WithName("$option2key;format="decap"$") with $className$
   case object $option3key;format="Camel"$ extends WithName("$option3key;format="decap"$") with $className$
 
-  val values: Set[$className$] = Set(
+  val values: Seq[$className$] = Seq(
     $option1key;format="Camel"$, $option2key;format="Camel"$, $option3key;format="Camel"$
   )
 
-  val options: Set[RadioCheckboxOption] = values.map {
+  val options: Seq[RadioCheckboxOption] = values.map {
     value =>
       RadioCheckboxOption("$className;format="decap"$", value.toString)
   }

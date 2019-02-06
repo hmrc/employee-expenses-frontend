@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package forms
+package pages.authenticated
 
-import forms.mappings.Mappings
-import models.FirstIndustryOptions
-import play.api.data.Form
+import models.TaxYearSelection
+import pages.behaviours.PageBehaviours
 
-class FirstIndustryOptionsFormProvider extends Mappings {
+class TaxYearSelectionPageSpec extends PageBehaviours {
 
-  def apply(): Form[FirstIndustryOptions] = Form(
-    "value" -> enumerable[FirstIndustryOptions](requiredKey = "firstIndustryOptions.error.required" )
-  )
+  "TaxYearSelectionPage" must {
+
+    beRetrievable[Seq[TaxYearSelection]](TaxYearSelectionPage)
+
+    beSettable[Seq[TaxYearSelection]](TaxYearSelectionPage)
+
+    beRemovable[Seq[TaxYearSelection]](TaxYearSelectionPage)
+  }
 }

@@ -29,8 +29,10 @@ import controllers.printing.routes._
 import controllers.electrical.routes._
 import controllers.heating.routes._
 import controllers.construction.routes._
+import controllers.authenticated.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
+import pages.authenticated.TaxYearSelectionPage
 import pages.clothing.ClothingPage
 import pages.construction._
 import pages.electrical.ElectricalPage
@@ -48,9 +50,14 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
-  def fourthIndustryOptions: Option[AnswerRow] = userAnswers.get(FourthIndustryOptionsPage) map {
-    x => AnswerRow("fourthIndustryOptions.checkYourAnswersLabel", s"fourthIndustryOptions.$x", true,
-      FourthIndustryOptionsController.onPageLoad(CheckMode).url)
+  def firstIndustryOptions: Option[AnswerRow] = userAnswers.get(FirstIndustryOptionsPage) map {
+    x => AnswerRow("firstIndustryOptions.checkYourAnswersLabel", s"taxYearSelection.$x", false,
+      FirstIndustryOptionsController.onPageLoad(CheckMode).url)
+  }
+
+  def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
+    x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
+      SecondIndustryOptionsController.onPageLoad(CheckMode).url)
   }
 
   def thirdIndustryOptions: Option[AnswerRow] = userAnswers.get(ThirdIndustryOptionsPage) map {
@@ -58,9 +65,9 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       ThirdIndustryOptionsController.onPageLoad(CheckMode).url)
   }
 
-  def secondIndustryOptions: Option[AnswerRow] = userAnswers.get(SecondIndustryOptionsPage) map {
-    x => AnswerRow("secondIndustryOptions.checkYourAnswersLabel", s"secondIndustryOptions.$x", true,
-      SecondIndustryOptionsController.onPageLoad(CheckMode).url)
+  def fourthIndustryOptions: Option[AnswerRow] = userAnswers.get(FourthIndustryOptionsPage) map {
+    x => AnswerRow("fourthIndustryOptions.checkYourAnswersLabel", s"fourthIndustryOptions.$x", true,
+      FourthIndustryOptionsController.onPageLoad(CheckMode).url)
   }
 
   def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
@@ -77,9 +84,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     x => AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"$x", false,
       ExpensesEmployerPaidController.onPageLoad(CheckMode).url)
   }
-  def firstIndustryOptions: Option[AnswerRow] = userAnswers.get(FirstIndustryOptionsPage) map {
-    x => AnswerRow("firstIndustryOptions.checkYourAnswersLabel", s"$x", false,
-      FirstIndustryOptionsController.onPageLoad(CheckMode).url)
+
+  //Authenticated
+
+  def taxYearSelection: Option[AnswerRow] = userAnswers.get(TaxYearSelectionPage) map {
+    x => AnswerRow("taxYearSelection.checkYourAnswersLabel", s"taxYearSelection.$x", true,
+      TaxYearSelectionController.onPageLoad(CheckMode).url)
   }
 
   //Engineering
