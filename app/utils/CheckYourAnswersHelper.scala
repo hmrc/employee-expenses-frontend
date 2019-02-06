@@ -16,6 +16,7 @@
 
 package utils
 
+import controllers.routes
 import controllers.routes._
 import controllers.engineering.routes._
 import controllers.manufacturing.routes._
@@ -127,6 +128,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def constructionalEngineeringList2: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList2Page) map {
     x => AnswerRow("constructionalEngineeringList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       ConstructionalEngineeringList2Controller.onPageLoad(CheckMode).url)
+  }
+
+  def constructionalEngineeringList3: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList3Page) map {
+    x => AnswerRow("constructionalEngineeringList3.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      ConstructionalEngineeringList3Controller.onPageLoad(CheckMode).url)
   }
 
   def constructionalEngineeringApprentice: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringApprenticePage) map {
