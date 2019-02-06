@@ -46,6 +46,8 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+
+
   def constructionOccupationList2: Option[AnswerRow] = userAnswers.get(ConstructionOccupationList2Page) map {
     x => AnswerRow("constructionOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       ConstructionOccupationList2Controller.onPageLoad(CheckMode).url)
@@ -308,4 +310,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       ConstructionOccupationList1Controller.onPageLoad(CheckMode).url)
   }
 
+  //Heating
+
+  def heatingOccupationList: Option[AnswerRow] = userAnswers.get(HeatingOccupationListPage) map {
+    x => AnswerRow("heatingOccupationList.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      HeatingOccupationListController.onPageLoad(CheckMode).url)
+  }
 }

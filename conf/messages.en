@@ -503,3 +503,8 @@ constructionOccupationList2.listText = The occupations are:
 constructionOccupationList2.occupation1 = labourer
 constructionOccupationList2.occupation2 = navvy
 constructionOccupationList2.occupation3 = tilemaker
+
+heatingOccupationList.title = heatingOccupationList
+heatingOccupationList.heading = heatingOccupationList
+heatingOccupationList.checkYourAnswersLabel = heatingOccupationList
+heatingOccupationList.error.required = Select yes if heatingOccupationList

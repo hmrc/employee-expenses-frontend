@@ -265,3 +265,8 @@ GET        /construction-occupation-list-2                           controllers
 POST       /construction-occupation-list-2                          controllers.construction.ConstructionOccupationList2Controller.onSubmit(mode: Mode = NormalMode)
 GET        /change-construction-occupation-list-2                  controllers.construction.ConstructionOccupationList2Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-construction-occupation-list-2                  controllers.construction.ConstructionOccupationList2Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /heatingOccupationList                        controllers.HeatingOccupationListController.onPageLoad(mode: Mode = NormalMode)
+POST       /heatingOccupationList                        controllers.HeatingOccupationListController.onSubmit(mode: Mode = NormalMode)
+GET        /changeHeatingOccupationList                  controllers.HeatingOccupationListController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeHeatingOccupationList                  controllers.HeatingOccupationListController.onSubmit(mode: Mode = CheckMode)
