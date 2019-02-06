@@ -232,11 +232,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       WoodFurnitureOccupationList2Controller.onPageLoad(CheckMode).url)
   }
 
-  def ironSteelOccupation: Option[AnswerRow] = userAnswers.get(IronSteelOccupationPage) map {
-    x => AnswerRow("ironSteelOccupation.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      IronSteelOccupationController.onPageLoad(CheckMode).url)
-  }
-
   def woodFurnitureOccupationList1: Option[AnswerRow] = userAnswers.get(WoodFurnitureOccupationList1Page) map {
     x => AnswerRow("woodFurnitureOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       WoodFurnitureOccupationList1Controller.onPageLoad(CheckMode).url)

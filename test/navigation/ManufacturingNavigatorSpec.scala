@@ -49,10 +49,10 @@ class ManufacturingNavigatorSpec extends SpecBase {
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
 
-        "go to IronSteelOccupationListController when 'IronSteel' is selected" in {
+        "go to IronMiningController when 'IronSteel' is selected" in {
           val answers = emptyUserAnswers.set(TypeOfManufacturingPage, IronSteel).success.value
           navigator.nextPage(TypeOfManufacturingPage, NormalMode)(answers) mustBe
-            routes.IronSteelOccupationListController.onPageLoad(NormalMode)
+            routes.IronMiningController.onPageLoad(NormalMode)
         }
 
         "go to EmployerContributionController when 'PreciousMetals' is selected" in {
@@ -130,16 +130,52 @@ class ManufacturingNavigatorSpec extends SpecBase {
       }
 
       "in Iron and Steel journey" must {
-        "go to EmployerContributionController when 'Yes' is selected" in {
+        "go to IronMiningListController from IronMiningController when 'Yes' is selected" in {
+          val answers = emptyUserAnswers.set(IronMiningPage, true).success.value
+          navigator.nextPage(IronMiningPage, NormalMode)(answers) mustBe
+            routes.IronMiningListController.onPageLoad(NormalMode)
+        }
+
+        "go to IronSteelOccupationListController from IronMiningController when 'No' is selected" in {
+          val answers = emptyUserAnswers.set(IronMiningPage, false).success.value
+          navigator.nextPage(IronMiningPage, NormalMode)(answers) mustBe
+            routes.IronSteelOccupationListController.onPageLoad(NormalMode)
+        }
+
+        "go to EmployerContributionController from IronMiningListController when 'Yes' is selected" in {
+          val answers = emptyUserAnswers.set(IronMiningListPage, true).success.value
+          navigator.nextPage(IronMiningListPage, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to EmployerContributionController from IronMiningListController when 'No' is selected" in {
+          val answers = emptyUserAnswers.set(IronMiningListPage, false).success.value
+          navigator.nextPage(IronMiningListPage, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to EmployerContributionController from IronSteelOccupationListController when 'Yes' is selected" in {
           val answers = emptyUserAnswers.set(IronSteelOccupationListPage, true).success.value
           navigator.nextPage(IronSteelOccupationListPage, NormalMode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
 
-        "go to ManufacturingApprentice when 'No' is selected" in {
+        "go to ManufacturingApprentice from IronSteelOccupationListController when 'No' is selected" in {
           val answers = emptyUserAnswers.set(IronSteelOccupationListPage, false).success.value
           navigator.nextPage(IronSteelOccupationListPage, NormalMode)(answers) mustBe
             routes.ManufacturingApprenticeController.onPageLoad(NormalMode)
+        }
+
+        "go to EmployerContributionController from ManufacturingApprentice when 'Yes' is selected" in {
+          val answers = emptyUserAnswers.set(ManufacturingApprenticePage, true).success.value
+          navigator.nextPage(ManufacturingApprenticePage, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to EmployerContributionController from ManufacturingApprentice when 'No' is selected" in {
+          val answers = emptyUserAnswers.set(ManufacturingApprenticePage, false).success.value
+          navigator.nextPage(ManufacturingApprenticePage, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
       }
 

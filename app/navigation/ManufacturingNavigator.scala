@@ -32,6 +32,8 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     case AluminiumOccupationList2Page => aluminiumOccupationList2(NormalMode)
     case AluminiumOccupationList3Page => aluminiumOccupationList3(NormalMode)
     case ManufacturingApprenticePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case IronMiningPage => ironMining(NormalMode)
+    case IronMiningListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case IronSteelOccupationListPage => ironSteelOccupationList(NormalMode)
     case WoodFurnitureOccupationList1Page => woodFurnitureOccupationList1(NormalMode)
     case WoodFurnitureOccupationList2Page => woodFurnitureOccupationList2(NormalMode)
@@ -48,7 +50,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
       case Some(Aluminium) => routes.AluminiumOccupationList1Controller.onPageLoad(mode)
       case Some(BrassCopper) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(Glass) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case Some(IronSteel) => routes.IronSteelOccupationListController.onPageLoad(mode)
+      case Some(IronSteel) => routes.IronMiningController.onPageLoad(mode)
       case Some(PreciousMetals) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(WoodFurniture) => routes.WoodFurnitureOccupationList1Controller.onPageLoad(mode)
       case Some(NoneOfAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
@@ -76,6 +78,14 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     userAnswers.get(AluminiumOccupationList3Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.ManufacturingApprenticeController.onPageLoad(mode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  def ironMining(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(IronMiningPage) match {
+      case Some(true) => routes.IronMiningListController.onPageLoad(mode)
+      case Some(false) => routes.IronSteelOccupationListController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
