@@ -18,7 +18,7 @@ package service
 
 import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
-import models.{IabdUpdateData, TaxCodeRecord, TaxYear}
+import models.{IabdUpdateData, TaxCodeRecord, TaiTaxYear}
 import org.joda.time.LocalDate
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
@@ -35,7 +35,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
   private val mockCitizenDetailsConnector = mock[CitizenDetailsConnector]
   private val taiService = new TaiService(mockTaiConnector, mockCitizenDetailsConnector)
 
-  private val taxYear = TaxYear()
+  private val taxYear = TaiTaxYear()
   private val etag = 1
   private val taxCodeRecords = Seq(TaxCodeRecord(
       taxCode = "830L",

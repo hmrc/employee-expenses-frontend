@@ -16,7 +16,9 @@
 
 package models
 
+import uk.gov.hmrc.time.TaxYear
 import viewmodels.RadioCheckboxOption
+
 
 sealed trait TaxYearSelection
 
@@ -36,10 +38,20 @@ object TaxYearSelection extends Enumerable.Implicits {
     CurrentYearMinus4
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map {
-    value =>
-      RadioCheckboxOption("taxYearSelection", s"$value")
-  }
+  val options: Seq[RadioCheckboxOption] = Seq(
+    taxYearRadioCheckboxOption(TaxYear.current, CurrentYear),
+    taxYearRadioCheckboxOption(TaxYear.current, CurrentYearMinus1),
+    taxYearRadioCheckboxOption(TaxYear.current, CurrentYearMinus2),
+    taxYearRadioCheckboxOption(TaxYear.current, CurrentYearMinus3),
+    taxYearRadioCheckboxOption(TaxYear.current, CurrentYearMinus4)
+  )
+
+  private def taxYearRadioCheckboxOption(taxYear: TaxYear, option: TaxYearSelection) =
+    RadioCheckboxOption(
+      keyPrefix = "taxYearSelection",
+      option = s"$option",
+      messageArgs = Seq("taxYearSelection", taxYear.startYear.toString, taxYear.finishYear.toString): _*
+    )
 
   implicit val enumerable: Enumerable[TaxYearSelection] =
     Enumerable(values.map(v => v.toString -> v): _*)

@@ -23,7 +23,7 @@ import org.scalatest.prop.PropertyChecks
 import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json.{JsError, JsString, Json}
 
-class TaxYearSelectionSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues with ModelGenerators {
+class TaiTaxYearSelectionSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues with ModelGenerators {
 
   "TaxYearSelection" must {
 

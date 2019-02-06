@@ -16,12 +16,25 @@
 
 package viewmodels
 
-case class RadioCheckboxOption(id: String, value: String, messageKey: String)
+import play.api.i18n.Messages
+import play.twirl.api.{Html, HtmlFormat}
+
+case class Message(key: String, args: Any*) {
+
+  def html(implicit messages: Messages): HtmlFormat.Appendable =
+    Html(string)
+
+  def string(implicit messages: Messages): String =
+    messages(key, args: _*)
+}
+
+case class RadioCheckboxOption(id: String, value: String, message: Message)
 
 object RadioCheckboxOption {
-  def apply(keyPrefix: String, option: String): RadioCheckboxOption = RadioCheckboxOption(
-    s"$keyPrefix.$option",
-    option,
-    s"$keyPrefix.$option"
-  )
+  def apply(keyPrefix: String, option: String, messageArgs: Any*): RadioCheckboxOption =
+    RadioCheckboxOption(
+      id = s"$keyPrefix.$option",
+      value = option,
+      message = Message(s"$keyPrefix.$option", messageArgs)
+    )
 }

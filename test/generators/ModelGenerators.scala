@@ -16,7 +16,7 @@
 
 package generators
 
-import models._
+import models.{TaxYearSelection, _}
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
