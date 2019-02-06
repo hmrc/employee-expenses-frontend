@@ -27,6 +27,7 @@ import controllers.clothing.routes._
 import controllers.security.routes._
 import controllers.printing.routes._
 import controllers.electrical.routes._
+import controllers.heating.routes._
 import controllers.construction.routes._
 import controllers.authenticated.routes._
 import models.{CheckMode, UserAnswers}
@@ -38,6 +39,7 @@ import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.foodCatering._
 import pages.healthcare._
+import pages.heating._
 import pages.manufacturing._
 import pages.police._
 import pages.printing._
@@ -328,4 +330,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       ConstructionOccupationList2Controller.onPageLoad(CheckMode).url)
   }
 
+  //Heating
+
+  def heatingOccupationList: Option[AnswerRow] = userAnswers.get(HeatingOccupationListPage) map {
+    x => AnswerRow("heatingOccupationList.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      HeatingOccupationListController.onPageLoad(CheckMode).url)
+  }
 }

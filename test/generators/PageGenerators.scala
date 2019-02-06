@@ -28,10 +28,14 @@ import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
+import pages.heating._
 import pages.security._
 import pages.printing._
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryHeatingOccupationListPage: Arbitrary[HeatingOccupationListPage.type] =
+    Arbitrary(HeatingOccupationListPage)
 
   implicit lazy val arbitraryTaxYearSelectionPage: Arbitrary[TaxYearSelectionPage.type] =
     Arbitrary(TaxYearSelectionPage)
