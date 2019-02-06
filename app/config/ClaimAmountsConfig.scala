@@ -92,4 +92,25 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
     lazy val onlyLaundry: Int = configuration.get[Int]("claim-amounts.electrical.only-laundry")
     lazy val allOther: Int = configuration.get[Int]("claim-amounts.electrical.all-other")
   }
+
+  object Manufacturing {
+    lazy val aluminiumList1: Int = configuration.get[Int]("claim-amounts.manufacturing.aluminium.list-1")
+    lazy val aluminiumList2: Int = configuration.get[Int]("claim-amounts.manufacturing.aluminium.list-2")
+    lazy val aluminiumList3: Int = configuration.get[Int]("claim-amounts.manufacturing.aluminium.list-3")
+    lazy val aluminiumApprentice: Int = configuration.get[Int]("claim-amounts.manufacturing.aluminium.apprentice")
+    lazy val aluminiumAllOther: Int = configuration.get[Int]("claim-amounts.manufacturing.aluminium.all-other")
+    lazy val brassCopper: Int = configuration.get[Int]("claim-amounts.manufacturing.brass-copper")
+    lazy val glass: Int = configuration.get[Int]("claim-amounts.manufacturing.glass")
+    lazy val ironMiningList1: Int = configuration.get[Int]("claim-amounts.manufacturing.iron-steel.iron-mining.list-1")
+    lazy val ironMiningAllOther: Int = configuration.get[Int]("claim-amounts.manufacturing.iron-steel.iron-mining.all-other")
+    lazy val ironSteelList1: Int = configuration.get[Int]("claim-amounts.manufacturing.iron-steel.list-1")
+    lazy val ironSteelAllOther: Int = configuration.get[Int]("claim-amounts.manufacturing.iron-steel.all-other")
+    lazy val ironSteelApprentice: Int = configuration.get[Int]("claim-amounts.manufacturing.iron-steel.apprentice")
+    lazy val quarryingPreciousMetals: Int = configuration.get[Int]("claim-amounts.manufacturing.quarrying-precious-metals")
+    lazy val woodFurnitureList1: Int = configuration.get[Int]("claim-amounts.manufacturing.wood-furniture.list-1")
+    lazy val woodFurnitureList2: Int = configuration.get[Int]("claim-amounts.manufacturing.wood-furniture.list-2")
+    lazy val woodFurnitureList3: Int = configuration.get[Int]("claim-amounts.manufacturing.wood-furniture.list-3")
+    lazy val woodFurnitureAllOther: Int = configuration.get[Int]("claim-amounts.manufacturing.wood-furniture.all-other")
+    lazy val default: Int = configuration.get[Int]("claim-amounts.manufacturing.default")
+  }
 }
