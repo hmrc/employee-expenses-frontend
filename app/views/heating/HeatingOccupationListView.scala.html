@@ -36,10 +36,23 @@
 
         @components.heading("heatingOccupationList.heading")
 
+        @components.list(
+            pageKey = Some("heatingOccupationList"),
+            listText = Some("heatingOccupationList.listText"),
+            bulletList = Seq(
+                            "occupation1",
+                            "occupation2",
+                            "occupation3",
+                            "occupation4",
+                            "occupation5",
+                            "occupation6"
+            )
+        )
+
         @components.input_yes_no(
             field = form("value"),
-            label = messages("heatingOccupationList.heading"),
-            labelClass = Some("visually-hidden")
+            label = messages("heatingOccupationList.radioLabel"),
+            labelClass = Some("heading-medium")
         )
 
         @components.submit_button()

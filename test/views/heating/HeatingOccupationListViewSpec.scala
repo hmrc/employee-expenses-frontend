@@ -48,7 +48,26 @@ class HeatingOccupationListViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.HeatingOccupationListController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.HeatingOccupationListController.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+
+    )
+    behave like pageWithList(applyView(form), messageKeyPrefix,
+      Seq(
+        "occupation1",
+        "occupation2",
+        "occupation3",
+        "occupation4",
+        "occupation5",
+        "occupation6"
+      )
+    )
+    behave like pageWithBodyText(applyView(form), "aluminiumOccupationList1.listText")
+
   }
 
   application.stop()
