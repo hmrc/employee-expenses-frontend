@@ -514,3 +514,8 @@ fourthIndustryOptions.prisons = prisons
 fourthIndustryOptions.noneOfTheAbove = show more industries
 fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
 fourthIndustryOptions.error.required = Select the industry you work in
+
+ironMining.title = Do you work in iron mining?
+ironMining.heading = Do you work in iron mining?
+ironMining.checkYourAnswersLabel = Do you work in iron mining?
+ironMining.error.required = Select yes if you work in iron mining
