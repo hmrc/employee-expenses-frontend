@@ -66,7 +66,7 @@ class HeatingOccupationListViewSpec extends YesNoViewBehaviours {
         "occupation6"
       )
     )
-    behave like pageWithBodyText(applyView(form), "aluminiumOccupationList1.listText")
+    behave like pageWithBodyText(applyView(form), "heatingOccupationList.listText")
 
   }
 
