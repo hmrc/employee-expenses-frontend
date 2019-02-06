@@ -44,7 +44,7 @@ class $className$Controller @Inject()(
     implicit request =>
 
       form.bindFromRequest().fold(
-        (formWithErrors: Form[Set[$className$]]) =>
+        (formWithErrors: Form[Seq[$className$]]) =>
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {

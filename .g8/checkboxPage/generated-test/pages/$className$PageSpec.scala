@@ -7,10 +7,10 @@ class $className$PageSpec extends PageBehaviours {
 
   "$className$Page" must {
 
-    beRetrievable[Set[$className$]]($className$Page)
+    beRetrievable[Seq[$className$]]($className$Page)
 
-    beSettable[Set[$className$]]($className$Page)
+    beSettable[Seq[$className$]]($className$Page)
 
-    beRemovable[Set[$className$]]($className$Page)
+    beRemovable[Seq[$className$]]($className$Page)
   }
 }
