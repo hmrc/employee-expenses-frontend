@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.heating
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-case object HeatingOccupationListPage extends QuestionPage[Boolean] {
+class HeatingOccupationListFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "heatingOccupationList"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("heatingOccupationList.error.required")
+    )
 }

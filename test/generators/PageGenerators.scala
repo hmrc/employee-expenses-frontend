@@ -27,6 +27,7 @@ import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
+import pages.heating.HeatingOccupationListPage
 import pages.security._
 import pages.printing._
 

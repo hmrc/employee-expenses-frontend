@@ -17,25 +17,25 @@
 package controllers.heating
 
 import controllers.actions._
-import forms.HeatingOccupationListFormProvider
+import forms.heating.HeatingOccupationListFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
-import pages.HeatingOccupationListPage
+import pages.heating.HeatingOccupationListPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.HeatingOccupationListView
+import views.html.heating.HeatingOccupationListView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class HeatingOccupationListController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         @Named("Heating") navigator: Navigator,
+                                         identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: HeatingOccupationListFormProvider,

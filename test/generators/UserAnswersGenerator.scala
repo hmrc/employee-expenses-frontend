@@ -30,6 +30,7 @@ import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
+import pages.heating.HeatingOccupationListPage
 import pages.printing._
 import pages.security._
 import play.api.libs.json.{JsValue, Json}

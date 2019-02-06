@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.heating
 
-import controllers.routes
-import forms.HeatingOccupationListFormProvider
+import controllers.heating.routes
+import forms.heating.HeatingOccupationListFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.HeatingOccupationListView
+import views.html.heating.HeatingOccupationListView
 
 class HeatingOccupationListViewSpec extends YesNoViewBehaviours {
 

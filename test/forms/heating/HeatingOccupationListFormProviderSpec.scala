@@ -14,18 +14,32 @@
  * limitations under the License.
  */
 
-package pages
+package forms.heating
 
-import pages.behaviours.PageBehaviours
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-class HeatingOccupationListPageSpec extends PageBehaviours {
+class HeatingOccupationListFormProviderSpec extends BooleanFieldBehaviours {
 
-  "HeatingOccupationListPage" must {
+  val requiredKey = "heatingOccupationList.error.required"
+  val invalidKey = "error.boolean"
 
-    beRetrievable[Boolean](HeatingOccupationListPage)
+  val form = new HeatingOccupationListFormProvider()()
 
-    beSettable[Boolean](HeatingOccupationListPage)
+  ".value" must {
 
-    beRemovable[Boolean](HeatingOccupationListPage)
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
   }
 }

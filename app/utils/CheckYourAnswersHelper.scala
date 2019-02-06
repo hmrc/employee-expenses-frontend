@@ -27,6 +27,7 @@ import controllers.clothing.routes._
 import controllers.security.routes._
 import controllers.printing.routes._
 import controllers.electrical.routes._
+import controllers.heating.routes._
 import controllers.construction.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
@@ -36,6 +37,7 @@ import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.foodCatering._
 import pages.healthcare._
+import pages.heating.HeatingOccupationListPage
 import pages.manufacturing._
 import pages.police._
 import pages.printing._
