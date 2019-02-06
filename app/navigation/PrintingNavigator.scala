@@ -16,19 +16,30 @@
 
 package navigation
 
-import controllers.routes
+import controllers.printing.routes
 import javax.inject.Inject
-import models.UserAnswers
+import models.{Mode, NormalMode, UserAnswers}
 import pages.Page
+import pages.printing._
 import play.api.mvc.Call
 
 class PrintingNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case PrintingOccupationList1Page => printingOccupationList1(NormalMode)
+    case PrintingOccupationList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+  }
+
+  def printingOccupationList1 (mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(PrintingOccupationList1Page) match {
+      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(false) => routes.PrintingOccupationList2Controller.onPageLoad(mode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
   }
 }
