@@ -37,7 +37,7 @@ import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.foodCatering._
 import pages.healthcare._
-import pages.heating.HeatingOccupationListPage
+import pages.heating._
 import pages.manufacturing._
 import pages.police._
 import pages.printing._
@@ -48,11 +48,9 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
-
-
-  def constructionOccupationList2: Option[AnswerRow] = userAnswers.get(ConstructionOccupationList2Page) map {
-    x => AnswerRow("constructionOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      ConstructionOccupationList2Controller.onPageLoad(CheckMode).url)
+  def fourthIndustryOptions: Option[AnswerRow] = userAnswers.get(FourthIndustryOptionsPage) map {
+    x => AnswerRow("fourthIndustryOptions.checkYourAnswersLabel", s"fourthIndustryOptions.$x", true,
+      FourthIndustryOptionsController.onPageLoad(CheckMode).url)
   }
 
   def thirdIndustryOptions: Option[AnswerRow] = userAnswers.get(ThirdIndustryOptionsPage) map {
@@ -310,6 +308,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def constructionOccupationList1: Option[AnswerRow] = userAnswers.get(ConstructionOccupationList1Page) map {
     x => AnswerRow("constructionOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       ConstructionOccupationList1Controller.onPageLoad(CheckMode).url)
+  }
+
+  def constructionOccupationList2: Option[AnswerRow] = userAnswers.get(ConstructionOccupationList2Page) map {
+    x => AnswerRow("constructionOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      ConstructionOccupationList2Controller.onPageLoad(CheckMode).url)
   }
 
   //Heating

@@ -29,7 +29,7 @@ import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
-import pages.heating.HeatingOccupationListPage
+import pages.heating._
 import pages.security._
 import pages.printing._
 import play.api.libs.json.{JsValue, Json}
@@ -41,6 +41,14 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       for {
         page  <- arbitrary[HeatingOccupationListPage.type]
         value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryFourthIndustryOptionsUserAnswersEntry: Arbitrary[(FourthIndustryOptionsPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[FourthIndustryOptionsPage.type]
+        value <- arbitrary[FourthIndustryOptions].map(Json.toJson(_))
       } yield (page, value)
     }
 

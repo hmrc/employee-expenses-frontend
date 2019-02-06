@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@import controllers.manufacturing.routes._
-@import models.Mode
+@import controllers.routes._
+@import models.{Mode, FourthIndustryOptions}
 
 @this(
     main_template: MainTemplate,
@@ -25,35 +25,24 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("ironSteelOccupationList.title")}"
+    title = s"${errorPrefix(form)} ${messages("fourthIndustryOptions.title")}"
     ) {
 
-    @formHelper(action = IronSteelOccupationListController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = FourthIndustryOptionsController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading(
-            headingKey = "ironSteelOccupationList.heading"
-        )
+        @components.heading("fourthIndustryOptions.heading")
 
-        @components.list(
-            pageKey = Some("ironSteelOccupationList"),
-            listText = Some("ironSteelOccupationList.listText"),
-            bulletList = Seq(
-                "occupation1",
-                "occupation2",
-                "occupation3",
-                "occupation4",
-                "occupation5"
-            )
-        )
+        <p>@Messages("fourthIndustryOptions.listText")</p>
 
-        @components.input_yes_no(
+        @components.input_radio(
             field = form("value"),
-            label = messages("ironSteelOccupationList.radioLabel"),
-            labelClass = Some("heading-medium")
+            legend = messages("fourthIndustryOptions.heading"),
+            legendClass = Some("visually-hidden"),
+            inputs = FourthIndustryOptions.options
         )
 
         @components.submit_button()

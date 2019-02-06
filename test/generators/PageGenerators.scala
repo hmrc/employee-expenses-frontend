@@ -27,7 +27,7 @@ import pages.manufacturing._
 import pages.police._
 import pages.transport._
 import pages.foodCatering._
-import pages.heating.HeatingOccupationListPage
+import pages.heating._
 import pages.security._
 import pages.printing._
 
@@ -35,6 +35,9 @@ trait PageGenerators {
 
   implicit lazy val arbitraryHeatingOccupationListPage: Arbitrary[HeatingOccupationListPage.type] =
     Arbitrary(HeatingOccupationListPage)
+
+  implicit lazy val arbitraryFourthIndustryOptionsPage: Arbitrary[FourthIndustryOptionsPage.type] =
+    Arbitrary(FourthIndustryOptionsPage)
 
   implicit lazy val arbitraryConstructionOccupationList2Page: Arbitrary[ConstructionOccupationList2Page.type] =
     Arbitrary(ConstructionOccupationList2Page)
