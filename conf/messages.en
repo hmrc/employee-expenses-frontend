@@ -267,13 +267,13 @@ factoryEngineeringApprentice.error.required = Select yes if you are an apprentic
 
 typeOfManufacturing.title = What type of manufacturing do you work in?
 typeOfManufacturing.heading = What type of manufacturing do you work in?
-typeOfManufacturing.aluminium = Aluminium
-typeOfManufacturing.brassCopper = Brass and copper
-typeOfManufacturing.glass = Glass
-typeOfManufacturing.ironSteel = Iron and steel
-typeOfManufacturing.preciousMetals = Precious metals
-typeOfManufacturing.woodFurniture = Wood and furniture
-typeOfManufacturing.none = None of the above
+typeOfManufacturing.aluminium = aluminium
+typeOfManufacturing.brassCopper = brass and copper
+typeOfManufacturing.glass = glass
+typeOfManufacturing.ironSteel = iron and steel
+typeOfManufacturing.preciousMetals = quarrying and precious metals
+typeOfManufacturing.woodFurniture = wood and furniture
+typeOfManufacturing.none = manufacturing type not listed
 typeOfManufacturing.checkYourAnswersLabel = What type of manufacturing do you work in?
 typeOfManufacturing.error.required = Select what type of manufacturing you work in
 
@@ -341,11 +341,10 @@ ironSteelOccupationList.error.required = Select yes if your occupation is listed
 ironSteelOccupationList.listText = The occupations are:
 ironSteelOccupationList.radioLabel = Is your occupation listed?
 ironSteelOccupationList.occupation1 = day labourer
-ironSteelOccupationList.occupation2 = deneral labourer
+ironSteelOccupationList.occupation2 = general labourer
 ironSteelOccupationList.occupation3 = stockman
 ironSteelOccupationList.occupation4 = timekeeper
-ironSteelOccupationList.occupation5 = pourer
-ironSteelOccupationList.occupation6 = warehouse staff and weighmen
+ironSteelOccupationList.occupation5 = warehouse staff and weighmen
 
 woodFurnitureOccupationList1.title = Wood and furniture occupation list 1 of 3
 woodFurnitureOccupationList1.heading = Wood and furniture occupation list 1 of 3
@@ -503,6 +502,18 @@ constructionOccupationList2.listText = The occupations are:
 constructionOccupationList2.occupation1 = labourer
 constructionOccupationList2.occupation2 = navvy
 constructionOccupationList2.occupation3 = tilemaker
+
+fourthIndustryOptions.title = Industry list 4 of 4
+fourthIndustryOptions.heading = Industry list 4 of 4
+fourthIndustryOptions.listText = Select your industry.
+fourthIndustryOptions.agriculture = agriculture
+fourthIndustryOptions.fireService = fire service
+fourthIndustryOptions.heating = heating
+fourthIndustryOptions.leisure = leisure
+fourthIndustryOptions.prisons = prisons
+fourthIndustryOptions.noneOfTheAbove = show more industries
+fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
+fourthIndustryOptions.error.required = Select the industry you work in
 
 ironMining.title = Do you work in iron mining?
 ironMining.heading = Do you work in iron mining?
