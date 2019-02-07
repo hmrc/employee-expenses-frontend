@@ -562,3 +562,8 @@ constructionalEngineeringList3.occupation1 = banksmen
 constructionalEngineeringList3.occupation2 = labourers
 constructionalEngineeringList3.occupation3 = shop-helpers
 constructionalEngineeringList3.occupation4 = slewers and straighteners
+
+yourEmployer.title = Is {0} your employer?
+yourEmployer.heading = Is {0} your employer?
+yourEmployer.checkYourAnswersLabel = Is {0} your employer?
+yourEmployer.error.required = Select yes if {0} is your employer?

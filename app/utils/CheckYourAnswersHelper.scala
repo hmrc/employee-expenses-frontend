@@ -33,7 +33,7 @@ import controllers.construction.routes._
 import controllers.authenticated.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
-import pages.authenticated.TaxYearSelectionPage
+import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import pages.clothing.ClothingPage
 import pages.construction._
 import pages.electrical.ElectricalPage
@@ -87,6 +87,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   }
 
   //Authenticated
+
+  def yourEmployer: Option[AnswerRow] = userAnswers.get(YourEmployerPage) map {
+    x => AnswerRow("yourEmployer.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      YourEmployerController.onPageLoad(CheckMode).url)
+  }
 
   def taxYearSelection: Option[AnswerRow] = userAnswers.get(TaxYearSelectionPage) map {
     x => AnswerRow("taxYearSelection.checkYourAnswersLabel", s"taxYearSelection.$x", true,

@@ -295,3 +295,8 @@ GET        /constructional-engineering-list-3               controllers.engineer
 POST       /constructional-engineering-list-3               controllers.engineering.ConstructionalEngineeringList3Controller.onSubmit(mode: Mode = NormalMode)
 GET        /change-constructional-engineering-list-3        controllers.engineering.ConstructionalEngineeringList3Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-constructional-engineering-list-3        controllers.engineering.ConstructionalEngineeringList3Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /your-employer                                   controllers.authenticated.YourEmployerController.onPageLoad(mode: Mode = NormalMode)
+POST       /your-employer                                   controllers.authenticated.YourEmployerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-your-employer                            controllers.authenticated.YourEmployerController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-your-employer                            controllers.authenticated.YourEmployerController.onSubmit(mode: Mode = CheckMode)
