@@ -40,17 +40,17 @@ object TaxYearSelection extends Enumerable.Implicits {
 
   val options: Seq[RadioCheckboxOption] = Seq(
     taxYearRadioCheckboxOption(TaxYear.current, CurrentYear),
-    taxYearRadioCheckboxOption(TaxYear.current, CurrentYearMinus1),
-    taxYearRadioCheckboxOption(TaxYear.current, CurrentYearMinus2),
-    taxYearRadioCheckboxOption(TaxYear.current, CurrentYearMinus3),
-    taxYearRadioCheckboxOption(TaxYear.current, CurrentYearMinus4)
+    taxYearRadioCheckboxOption(TaxYear.current.back(1), CurrentYearMinus1),
+    taxYearRadioCheckboxOption(TaxYear.current.back(2), CurrentYearMinus2),
+    taxYearRadioCheckboxOption(TaxYear.current.back(3), CurrentYearMinus3),
+    taxYearRadioCheckboxOption(TaxYear.current.back(4), CurrentYearMinus4)
   )
 
   private def taxYearRadioCheckboxOption(taxYear: TaxYear, option: TaxYearSelection) =
     RadioCheckboxOption(
       keyPrefix = "taxYearSelection",
       option = s"$option",
-      messageArgs = Seq("taxYearSelection", taxYear.startYear.toString, taxYear.finishYear.toString): _*
+      messageArgs = Seq(taxYear.startYear.toString.format("YYYY"), taxYear.finishYear.toString.format("YYYY")): _*
     )
 
   implicit val enumerable: Enumerable[TaxYearSelection] =

@@ -35,6 +35,6 @@ object RadioCheckboxOption {
     RadioCheckboxOption(
       id = s"$keyPrefix.$option",
       value = option,
-      message = Message(s"$keyPrefix.$option", messageArgs)
+      message = Message(s"$keyPrefix.$option", messageArgs: _*)
     )
 }
