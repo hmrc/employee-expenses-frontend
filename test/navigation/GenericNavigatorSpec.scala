@@ -205,13 +205,6 @@ class GenericNavigatorSpec extends SpecBase {
           controllers.security.routes.SecurityGuardNHSController.onPageLoad(NormalMode)
       }
 
-      "go FourthIndustryOptionsController from ThirdIndustryOptionsPage when None of the above is selected" in {
-        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, ThirdIndustryOptions.NoneOfAbove).success.value
-
-        navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.FourthIndustryOptionsController.onPageLoad(NormalMode)
-      }
-
       "go FourthIndustryOptionsController from ThirdIndustryOptionsPage when NoneOfAbove is selected" in {
         val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, ThirdIndustryOptions.NoneOfAbove).success.value
 
