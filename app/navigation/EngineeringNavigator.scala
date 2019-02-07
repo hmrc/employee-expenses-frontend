@@ -30,6 +30,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     case TypeOfEngineeringPage => typeOfEngineeringOptions(NormalMode)
     case ConstructionalEngineeringList1Page => constructionalEngineeringList1(NormalMode)
     case ConstructionalEngineeringList2Page => constructionalEngineeringList2(NormalMode)
+    case ConstructionalEngineeringList3Page => constructionalEngineeringList3(NormalMode)
     case ConstructionalEngineeringApprenticePage => constructionalEngineeringApprentice(NormalMode)
     case AncillaryEngineeringWhichTradePage => ancillaryEngineeringWhichTrade(NormalMode)
     case FactoryEngineeringList1Page => factoryEngineeringList1(NormalMode)
@@ -71,6 +72,17 @@ class EngineeringNavigator @Inject()() extends Navigator {
 
   private def constructionalEngineeringList2(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(ConstructionalEngineeringList2Page) match {
+      case Some(true) =>
+        controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(false) =>
+        controllers.engineering.routes.ConstructionalEngineeringList3Controller.onPageLoad(mode)
+      case _ =>
+        controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  private def constructionalEngineeringList3(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(ConstructionalEngineeringList3Page) match {
       case Some(true) =>
         controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) =>
