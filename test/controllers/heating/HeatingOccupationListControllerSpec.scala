@@ -20,14 +20,17 @@ import base.SpecBase
 import forms.heating.HeatingOccupationListFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.heating.HeatingOccupationListPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.heating.HeatingOccupationListView
 
-class HeatingOccupationListControllerSpec extends SpecBase {
+class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -95,6 +98,41 @@ class HeatingOccupationListControllerSpec extends SpecBase {
 
       application.stop()
     }
+
+    "save ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[Navigator].qualifiedWith("Heating").toInstance(new FakeNavigator(onwardRoute)))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, heatingOccupationListRoute).withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Heating.list))
+      }
+    }
+
+    "save ClaimAmount when 'No' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[Navigator].qualifiedWith("Heating").toInstance(new FakeNavigator(onwardRoute)))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, heatingOccupationListRoute).withFormUrlEncodedBody(("value", "false"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Heating.allOther))
+      }
+    }
+
 
     "return a Bad Request and errors when invalid data is submitted" in {
 

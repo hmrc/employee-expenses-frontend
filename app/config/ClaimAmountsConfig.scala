@@ -93,4 +93,17 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
     lazy val onlyLaundry: Int = configuration.get[Int]("claim-amounts.electrical.only-laundry")
     lazy val allOther: Int = configuration.get[Int]("claim-amounts.electrical.all-other")
   }
+
+  object Generic {
+    lazy val agriculture: Int = configuration.get[Int]("claim-amounts.agriculture")
+    lazy val fireService: Int = configuration.get[Int]("claim-amounts.fire-service")
+    lazy val leisure: Int = configuration.get[Int]("claim-amounts.default-rate")
+    lazy val prisons: Int = configuration.get[Int]("claim-amounts.prisons")
+  }
+
+  object Heating {
+    lazy val list = configuration.get[Int]("claim-amounts.heating.list")
+    lazy val allOther = configuration.get[Int]("claim-amounts.heating.all-other")
+  }
+
 }
