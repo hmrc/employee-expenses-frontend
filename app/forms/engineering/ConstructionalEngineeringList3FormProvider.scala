@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package navigation
+package forms.engineering
 
-import controllers.routes
+import forms.mappings.Mappings
 import javax.inject.Inject
-import models.{NormalMode, UserAnswers}
-import pages.Page
-import pages.heating.HeatingOccupationListPage
-import play.api.mvc.Call
+import play.api.data.Form
 
-class HeatingNavigator @Inject()() extends Navigator {
+class ConstructionalEngineeringList3FormProvider @Inject() extends Mappings {
 
-  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case HeatingOccupationListPage => _ => routes.EmployerContributionController.onPageLoad(NormalMode)
-    case _            => _ => routes.SessionExpiredController.onPageLoad()
-  }
-
-  protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("constructionalEngineeringList3.error.required")
+    )
 }

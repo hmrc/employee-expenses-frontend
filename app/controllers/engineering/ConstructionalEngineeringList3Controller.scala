@@ -14,35 +14,35 @@
  * limitations under the License.
  */
 
-package controllers.heating
+package controllers.engineering
 
 import config.ClaimAmountsConfig
 import controllers.actions._
-import forms.heating.HeatingOccupationListFormProvider
+import forms.engineering.ConstructionalEngineeringList3FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.ClaimAmount
-import pages.heating.HeatingOccupationListPage
+import pages.engineering.ConstructionalEngineeringList3Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.heating.HeatingOccupationListView
+import views.html.engineering.ConstructionalEngineeringList3View
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class HeatingOccupationListController @Inject()(
+class ConstructionalEngineeringList3Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Heating") navigator: Navigator,
+                                         @Named("Engineering") navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
-                                         formProvider: HeatingOccupationListFormProvider,
+                                         formProvider: ConstructionalEngineeringList3FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: HeatingOccupationListView,
+                                         view: ConstructionalEngineeringList3View,
                                          claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
@@ -51,7 +51,7 @@ class HeatingOccupationListController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(HeatingOccupationListPage) match {
+      val preparedForm = request.userAnswers.get(ConstructionalEngineeringList3Page) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -59,7 +59,7 @@ class HeatingOccupationListController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -68,11 +68,14 @@ class HeatingOccupationListController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(HeatingOccupationListPage, value))
-            amount = if (value) claimAmounts.Heating.list else claimAmounts.Heating.allOther
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HeatingOccupationListPage, mode)(updatedAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionalEngineeringList3Page, value))
+            newAnswers     <- if (value) {
+                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.ConstructionalEngineering.list3))
+                              } else {
+                                Future.successful(updatedAnswers)
+                              }
+            _              <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(ConstructionalEngineeringList3Page, mode)(newAnswers))
         }
       )
   }
