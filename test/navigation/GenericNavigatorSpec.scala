@@ -23,7 +23,7 @@ import models.EmployerContribution._
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions.{Agriculture, FireService, Heating, Leisure, Prisons}
 import models.SecondIndustryOptions._
-import models.ThirdIndustryOptions.Education
+import models.ThirdIndustryOptions._
 import models._
 import pages._
 
@@ -100,7 +100,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SecondIndustryOptionsController from FirstIndustryOptionsPage when NoneOfTheAbove is selected" in {
-        val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, NoneOfTheAbove).success.value
+        val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.NoneOfTheAbove).success.value
 
         navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
           controllers.routes.SecondIndustryOptionsController.onPageLoad(NormalMode)
@@ -118,6 +118,14 @@ class GenericNavigatorSpec extends SpecBase {
 
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
           controllers.construction.routes.JoinerCarpenterController.onPageLoad(NormalMode)
+      }
+
+      "go ThirdIndustryOptionsController from SecondIndustryOptionsPage when NoneOfAbove is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, SecondIndustryOptions.NoneOfAbove).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+        controllers.routes.ThirdIndustryOptionsController.onPageLoad(NormalMode)
+
       }
 
       "go to EmployersContributionsController from SecondIndustryOptionsPage when 'Council' is selected" in {
@@ -169,6 +177,41 @@ class GenericNavigatorSpec extends SpecBase {
           controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
       }
 
+      "go EmployerContributionController from ThirdIndustryOptionsPage when Banks and Building Societies is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, BanksBuildingSocieties).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+      }
+
+      "go ElectricalControllerPage from ThirdIndustryOptionsPage when Eletrical is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, Electrical).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.electrical.routes.ElectricalController.onPageLoad(NormalMode)
+      }
+
+      "go PrintingOccupationList1Controller from ThirdIndustryOptionsPage when Printing is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, Printing).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.printing.routes.PrintingOccupationList1Controller.onPageLoad(NormalMode)
+      }
+
+      "go SecurityGuardNHSController from ThirdIndustryOptionsPage when Security is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, Security).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.security.routes.SecurityGuardNHSController.onPageLoad(NormalMode)
+      }
+
+      "go FourthIndustryOptionsController from ThirdIndustryOptionsPage when None of the above is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, ThirdIndustryOptions.NoneOfAbove).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.FourthIndustryOptionsController.onPageLoad(NormalMode)
+      }
+
       "go FourthIndustryOptionsController from ThirdIndustryOptionsPage when NoneOfAbove is selected" in {
         val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, ThirdIndustryOptions.NoneOfAbove).success.value
 
@@ -213,6 +256,13 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go EmployerContributionController from FourthIndustryOptionsPage when 'prison' is selected" in {
         val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Prisons).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
+          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+      }
+
+      "go EmployerContributionController from FourthIndustryOptionsPage when 'NoneOfTheAbove' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, FourthIndustryOptions.NoneOfTheAbove).success.value
 
         navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
           controllers.routes.EmployerContributionController.onPageLoad(NormalMode)

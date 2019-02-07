@@ -285,3 +285,13 @@ GET        /fourth-industry-type                            controllers.FourthIn
 POST       /fourth-industry-type                            controllers.FourthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
 GET        /change-fourth-industry-type                     controllers.FourthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-fourth-industry-type                     controllers.FourthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /iron-mining-list                                controllers.manufacturing.IronMiningListController.onPageLoad(mode: Mode = NormalMode)
+POST       /iron-mining-list                                controllers.manufacturing.IronMiningListController.onSubmit(mode: Mode = NormalMode)
+GET        /change-iron-mining-list                         controllers.manufacturing.IronMiningListController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-iron-mining-list                         controllers.manufacturing.IronMiningListController.onSubmit(mode: Mode = CheckMode)
+
+GET        /constructional-engineering-list-3               controllers.engineering.ConstructionalEngineeringList3Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /constructional-engineering-list-3               controllers.engineering.ConstructionalEngineeringList3Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-constructional-engineering-list-3        controllers.engineering.ConstructionalEngineeringList3Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-constructional-engineering-list-3        controllers.engineering.ConstructionalEngineeringList3Controller.onSubmit(mode: Mode = CheckMode)

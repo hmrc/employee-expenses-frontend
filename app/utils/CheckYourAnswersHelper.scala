@@ -16,6 +16,7 @@
 
 package utils
 
+import controllers.routes
 import controllers.routes._
 import controllers.engineering.routes._
 import controllers.manufacturing.routes._
@@ -129,6 +130,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       ConstructionalEngineeringList2Controller.onPageLoad(CheckMode).url)
   }
 
+  def constructionalEngineeringList3: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringList3Page) map {
+    x => AnswerRow("constructionalEngineeringList3.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      ConstructionalEngineeringList3Controller.onPageLoad(CheckMode).url)
+  }
+
   def constructionalEngineeringApprentice: Option[AnswerRow] = userAnswers.get(ConstructionalEngineeringApprenticePage) map {
     x => AnswerRow("constructionalEngineeringApprentice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       ConstructionalEngineeringApprenticeController.onPageLoad(CheckMode).url)
@@ -220,6 +226,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def ironMining: Option[AnswerRow] = userAnswers.get(IronMiningPage) map {
     x => AnswerRow("ironMining.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       IronMiningController.onPageLoad(CheckMode).url)
+  }
+
+  def ironMiningList: Option[AnswerRow] = userAnswers.get(IronMiningListPage) map {
+    x => AnswerRow("ironMiningList.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      IronMiningListController.onPageLoad(CheckMode).url)
   }
 
   def woodFurnitureOccupationList2: Option[AnswerRow] = userAnswers.get(WoodFurnitureOccupationList2Page) map {
