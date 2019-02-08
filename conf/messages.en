@@ -258,7 +258,7 @@ transportVehicleTrade.vehicleRepairerWagonLifter = railway vehicle repairer or r
 transportVehicleTrade.railwayVehiclePainter = railway vehicle painter
 transportVehicleTrade.letterer = letterer
 transportVehicleTrade.buildersAssistantOrRepairersAssistant = builder’s assistant or repairer’s assistant
-transportVehicleTrade.noneOfTheAbove = none of the above
+transportVehicleTrade.noneOfTheAbove = occupation not listed
 transportVehicleTrade.checkYourAnswersLabel = Which vehicle trade do you work in?
 transportVehicleTrade.error.required = Select which vehicle trade you work in
 
