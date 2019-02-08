@@ -80,7 +80,7 @@ firstIndustryOptions.retail = retail
 firstIndustryOptions.engineering = engineering
 firstIndustryOptions.transportAndDistribution = transport and travel
 firstIndustryOptions.noneOfTheAbove = show more industries
-firstIndustryOptions.checkYourAnswersLabel = Industry list 1 of 3?
+firstIndustryOptions.checkYourAnswersLabel = Industry list 1 of 3
 firstIndustryOptions.listText = Select your industry.
 firstIndustryOptions.error.required = Select the industry you work in
 
