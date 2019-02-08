@@ -99,12 +99,13 @@ claimAmount.heading = You can claim tax relief on £{0}
 claimAmount.description = The amount of tax relief you can claim depends on the rate of tax you pay.
 claimAmount.checkYourAnswersLabel = employerContributionClaimValue
 
-typeOfEngineering.title = What type of engineering do you work in?
-typeOfEngineering.heading = What type of engineering do you work in?
-typeOfEngineering.constructionalEngineering = Constructional engineering (includes buildings, shipyards, bridges and roads)
-typeOfEngineering.tradesRelatingToEngineering = Trades relating to engineering
-typeOfEngineering.factoryOrWorkshopEngineering = Factory or workshop engineering
-typeOfEngineering.noneOfTheAbove = None of the above
+typeOfEngineering.title = Engineering industry list
+typeOfEngineering.heading = Engineering industry list
+typeOfEngineering.listText = Select your engineering industry.
+typeOfEngineering.constructionalEngineering = constructional engineering including buildings, shipyards, bridges and roads
+typeOfEngineering.tradesRelatingToEngineering = trades relating to engineering
+typeOfEngineering.factoryOrWorkshopEngineering = factory or workshop engineering
+typeOfEngineering.noneOfTheAbove = industry not listed
 typeOfEngineering.checkYourAnswersLabel = What type of engineering do you work in?
 typeOfEngineering.error.required = Select what type of engineering you work in
 
