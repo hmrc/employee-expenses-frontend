@@ -49,6 +49,8 @@ class TypeOfEngineeringViewSpec extends OptionsViewBehaviours[TypeOfEngineering]
     behave like pageWithBackLink(applyView(form))
 
     behave like optionsPage(form, applyView, TypeOfEngineering.options)
+
+    behave like pageWithBodyText(applyView(form), "typeOfEngineering.listText")
   }
 
   application.stop()
