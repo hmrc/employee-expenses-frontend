@@ -14,42 +14,43 @@
  * limitations under the License.
  */
 
-package controllers.heating
+package controllers.engineering
 
 import base.SpecBase
-import forms.heating.HeatingOccupationListFormProvider
+import forms.engineering.ConstructionalEngineeringList3FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatest.concurrent.ScalaFutures
-import pages.ClaimAmount
-import pages.heating.HeatingOccupationListPage
+import pages.engineering.ConstructionalEngineeringList3Page
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import views.html.engineering.ConstructionalEngineeringList3View
 import repositories.SessionRepository
-import views.html.heating.HeatingOccupationListView
+import pages.ClaimAmount
 
-class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures {
+
+class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFutures {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new HeatingOccupationListFormProvider()
+  val formProvider = new ConstructionalEngineeringList3FormProvider()
   val form = formProvider()
 
-  lazy val heatingOccupationListRoute = routes.HeatingOccupationListController.onPageLoad(NormalMode).url
+  lazy val constructionalEngineeringList3Route = routes.ConstructionalEngineeringList3Controller.onPageLoad(NormalMode).url
 
-  "HeatingOccupationList Controller" must {
+  "ConstructionalEngineeringList3 Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, heatingOccupationListRoute)
+      val request = FakeRequest(GET, constructionalEngineeringList3Route)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[HeatingOccupationListView]
+      val view = application.injector.instanceOf[ConstructionalEngineeringList3View]
 
       status(result) mustEqual OK
 
@@ -61,13 +62,13 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(HeatingOccupationListPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(ConstructionalEngineeringList3Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, heatingOccupationListRoute)
+      val request = FakeRequest(GET, constructionalEngineeringList3Route)
 
-      val view = application.injector.instanceOf[HeatingOccupationListView]
+      val view = application.injector.instanceOf[ConstructionalEngineeringList3View]
 
       val result = route(application, request).value
 
@@ -83,11 +84,11 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Heating").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
-        FakeRequest(POST, heatingOccupationListRoute)
+        FakeRequest(POST, constructionalEngineeringList3Route)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -99,52 +100,17 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures {
       application.stop()
     }
 
-    "save ClaimAmount when 'Yes' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Heating").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, heatingOccupationListRoute).withFormUrlEncodedBody(("value", "true"))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Heating.list))
-      }
-    }
-
-    "save ClaimAmount when 'No' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Heating").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, heatingOccupationListRoute).withFormUrlEncodedBody(("value", "false"))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Heating.allOther))
-      }
-    }
-
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, heatingOccupationListRoute)
+        FakeRequest(POST, constructionalEngineeringList3Route)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[HeatingOccupationListView]
+      val view = application.injector.instanceOf[ConstructionalEngineeringList3View]
 
       val result = route(application, request).value
 
@@ -160,7 +126,7 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, heatingOccupationListRoute)
+      val request = FakeRequest(GET, constructionalEngineeringList3Route)
 
       val result = route(application, request).value
 
@@ -176,7 +142,7 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, heatingOccupationListRoute)
+        FakeRequest(POST, constructionalEngineeringList3Route)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -186,6 +152,23 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "save ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, constructionalEngineeringList3Route).withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.ConstructionalEngineering.list3))
+      }
     }
   }
 }

@@ -90,11 +90,33 @@ class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
 
-        "go to ConstructionalEngineeringApprentice when No is selected" in {
+        "go to ConstructionalEngineeringList3 when No is selected" in {
           val answers = emptyUserAnswers.set(ConstructionalEngineeringList2Page, false).success.value
 
           navigator.nextPage(ConstructionalEngineeringList2Page, NormalMode)(answers) mustBe
+            controllers.engineering.routes.ConstructionalEngineeringList3Controller.onPageLoad(NormalMode)
+        }
+      }
+
+      "from ConstructionalEngineeringList3" must {
+
+        "go to EmployerContribution when Yes is selected" in {
+          val answers = emptyUserAnswers.set(ConstructionalEngineeringList3Page, true).success.value
+
+          navigator.nextPage(ConstructionalEngineeringList3Page, NormalMode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        }
+
+        "go to ConstructionalEngineeringApprentice when No is selected" in {
+          val answers = emptyUserAnswers.set(ConstructionalEngineeringList3Page, false).success.value
+
+          navigator.nextPage(ConstructionalEngineeringList3Page, NormalMode)(answers) mustBe
             controllers.engineering.routes.ConstructionalEngineeringApprenticeController.onPageLoad(NormalMode)
+        }
+
+        "go to SessionExpired when no data is available" in {
+          navigator.nextPage(ConstructionalEngineeringList3Page, NormalMode)(emptyUserAnswers) mustBe
+            controllers.routes.SessionExpiredController.onPageLoad()
         }
       }
 

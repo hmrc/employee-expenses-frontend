@@ -290,3 +290,8 @@ GET        /iron-mining-list                                controllers.manufact
 POST       /iron-mining-list                                controllers.manufacturing.IronMiningListController.onSubmit(mode: Mode = NormalMode)
 GET        /change-iron-mining-list                         controllers.manufacturing.IronMiningListController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-iron-mining-list                         controllers.manufacturing.IronMiningListController.onSubmit(mode: Mode = CheckMode)
+
+GET        /constructional-engineering-list-3               controllers.engineering.ConstructionalEngineeringList3Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /constructional-engineering-list-3               controllers.engineering.ConstructionalEngineeringList3Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-constructional-engineering-list-3        controllers.engineering.ConstructionalEngineeringList3Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-constructional-engineering-list-3        controllers.engineering.ConstructionalEngineeringList3Controller.onSubmit(mode: Mode = CheckMode)
