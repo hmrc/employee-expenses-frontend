@@ -239,10 +239,12 @@ factoryEngineeringList2.occupation6 = toolmakers in the lock making industry
 factoryEngineeringList2.occupation7 = wire drawers in the wire drawing industry
 
 whichRailwayTrade.title = Which railway trade do you work in?
-whichRailwayTrade.heading = Which railway trade do you work in?
-whichRailwayTrade.vehicleRepairersWagonLifters = Railway vehicle repairers or railway wagon lifters
-whichRailwayTrade.vehiclePainters = Railway vehicle painters
-whichRailwayTrade.noneOfTheAbove = None of the above
+whichRailwayTrade.heading = Railway occupations list
+whichRailwayTrade.vehiclePainters = railway vehicle painters
+whichRailwayTrade.vehicleRepairersWagonLifters = railway vehicle repairers or railway wagon lifters
+whichRailwayTrade.noneOfTheAbove = occupation not listed
+whichRailwayTrade.listText = Select your railway occupation.
+
 whichRailwayTrade.checkYourAnswersLabel = Which railway trade do you work in?
 whichRailwayTrade.error.required = Select railway trade you work in
 
