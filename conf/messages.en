@@ -253,12 +253,12 @@ transportCarpenter.error.required = Select yes if you are a carpenter on a passe
 
 transportVehicleTrade.title = Which vehicle trade do you work in?
 transportVehicleTrade.heading = Which vehicle trade do you work in?
-transportVehicleTrade.builder = Builder
-transportVehicleTrade.vehicleRepairerWagonLifter = Railway vehicle repairer or railway wagon lifter
-transportVehicleTrade.railwayVehiclePainter = Railway vehicle painter
-transportVehicleTrade.letterer = Letterer
-transportVehicleTrade.buildersAssistantOrRepairersAssistant = Builder’s assistant or repairer’s assistant
-transportVehicleTrade.noneOfTheAbove = None of the above
+transportVehicleTrade.builder = builder
+transportVehicleTrade.vehicleRepairerWagonLifter = railway vehicle repairer or railway wagon lifter
+transportVehicleTrade.railwayVehiclePainter = railway vehicle painter
+transportVehicleTrade.letterer = letterer
+transportVehicleTrade.buildersAssistantOrRepairersAssistant = builder’s assistant or repairer’s assistant
+transportVehicleTrade.noneOfTheAbove = none of the above
 transportVehicleTrade.checkYourAnswersLabel = Which vehicle trade do you work in?
 transportVehicleTrade.error.required = Select which vehicle trade you work in
 
