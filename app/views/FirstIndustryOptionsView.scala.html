@@ -34,6 +34,8 @@
 
     @components.heading(messages("firstIndustryOptions.heading"))
 
+    <p>@messages("firstIndustryOptions.listText")</p>
+
     @formHelper(action = FirstIndustryOptionsController.onSubmit(mode), 'autoComplete -> "off") {
         @components.input_radio(
             field = form("value"),
