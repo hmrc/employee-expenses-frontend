@@ -160,16 +160,16 @@ healthcareList1.occupation4 = nurse or dental nurse
 healthcareList1.occupation5 = occupational, speech, physio or other therapists
 healthcareList1.occupation6 = phlebotomist or radiographer
 
-typeOfTransport.title = What type of transport and distribution do you work in?
-typeOfTransport.heading = What type of transport and distribution do you work in?
-typeOfTransport.airlines = Airlines
-typeOfTransport.publicTransport = Public transport
-typeOfTransport.railways = Railways
-typeOfTransport.seamanCarpenter = Seaman carpenter
-typeOfTransport.vehicles = Vehicles
-typeOfTransport.noneOfTheAbove = None of the above
-typeOfTransport.checkYourAnswersLabel = What type of transport and distribution do you work in?
-typeOfTransport.error.required = Select what type of transport and distribution do you work in
+typeOfTransport.title = What type of transport or travel do you work in?
+typeOfTransport.heading = What type of transport or travel do you work in?
+typeOfTransport.airlines = airlines
+typeOfTransport.publicTransport = public transport
+typeOfTransport.railways = railways
+typeOfTransport.seamanCarpenter = seaman carpenter
+typeOfTransport.vehicles = vehicles
+typeOfTransport.noneOfTheAbove = none of the above
+typeOfTransport.checkYourAnswersLabel = What type of transport or travel do you work in?
+typeOfTransport.error.required = Select what type of transport or travel do you work in
 
 healthcareList2.title = Healthcare occupation occupation list 2 of 2
 healthcareList2.heading = Healthcare occupation occupation list 2 of 2
