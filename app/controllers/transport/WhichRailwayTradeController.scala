@@ -16,11 +16,13 @@
 
 package controllers.transport
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.transport.WhichRailwayTradeFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, Mode}
+import models.{Enumerable, Mode, WhichRailwayTrade}
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.transport.WhichRailwayTradePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class WhichRailwayTradeController @Inject()(
                                        requireData: DataRequiredAction,
                                        formProvider: WhichRailwayTradeFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: WhichRailwayTradeView
+                                       view: WhichRailwayTradeView,
+                                       claimAmounts: ClaimAmountsConfig
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -66,8 +69,14 @@ class WhichRailwayTradeController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhichRailwayTradePage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(WhichRailwayTradePage, mode)(updatedAnswers))
+            amount: Int = value match {
+              case WhichRailwayTrade.VehiclePainters => claimAmounts.Transport.painter
+              case WhichRailwayTrade.VehicleRepairersWagonLifters => claimAmounts.Transport.vehicleRepairersWagonLifters
+              case WhichRailwayTrade.NoneOfTheAbove => claimAmounts.Transport.notListed
+            }
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
+            _              <- sessionRepository.set(updatedAnswers)          }
+            yield Redirect(navigator.nextPage(WhichRailwayTradePage, mode)(updatedAnswers))
         }
       )
   }

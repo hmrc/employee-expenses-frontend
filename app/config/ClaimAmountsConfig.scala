@@ -64,6 +64,9 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
     lazy val paintersLetterersAssistants: Int = configuration.get[Int]("claim-amounts.transport.vehicle-trade.painters-letterers-assistants")
     lazy val passengerLiners: Int = configuration.get[Int]("claim-amounts.transport.seaman.passenger-liners")
     lazy val cargoTankersCoastersFerries: Int = configuration.get[Int]("claim-amounts.transport.seaman.cargo-tankers-coasters-ferries")
+    lazy val painter: Int = configuration.get[Int]("claim-amounts.transport.railways.vehicle-painters")
+    lazy val vehicleRepairersWagonLifters: Int = configuration.get[Int]("claim-amounts.transport.railways.vehicle-repairers-wagon-lifters")
+    lazy val notListed: Int = configuration.get[Int]("claim-amounts.transport.railways.not-listed")
     lazy val default: Int = configuration.get[Int]("claim-amounts.transport.default")
   }
 

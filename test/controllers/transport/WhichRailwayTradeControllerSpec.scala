@@ -18,16 +18,21 @@ package controllers.transport
 
 import base.SpecBase
 import forms.transport.WhichRailwayTradeFormProvider
-import models.{NormalMode, UserAnswers, WhichRailwayTrade}
+import generators.Generators
+import models.{NormalMode, ThirdIndustryOptions, UserAnswers, WhichRailwayTrade}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.prop.PropertyChecks
+import pages.ClaimAmount
 import pages.transport.WhichRailwayTradePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.transport.WhichRailwayTradeView
 
-class WhichRailwayTradeControllerSpec extends SpecBase {
+class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -116,6 +121,21 @@ class WhichRailwayTradeControllerSpec extends SpecBase {
         view(boundForm, NormalMode)(fakeRequest, messages).toString
 
       application.stop()
+    }
+    "save ClaimAmount when 'Painter' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, whichRailwayTradeRoute).withFormUrlEncodedBody(("value", WhichRailwayTrade.VehiclePainters.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Transport.painter))
+      }
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
