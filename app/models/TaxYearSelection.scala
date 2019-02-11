@@ -55,4 +55,13 @@ object TaxYearSelection extends Enumerable.Implicits {
 
   implicit val enumerable: Enumerable[TaxYearSelection] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
+  def getTaxYear(year: TaxYearSelection): Int = year match {
+    case CurrentYear       => TaxYear.current.startYear
+    case CurrentYearMinus1 => TaxYear.current.back(1).startYear
+    case CurrentYearMinus2 => TaxYear.current.back(2).startYear
+    case CurrentYearMinus3 => TaxYear.current.back(3).startYear
+    case CurrentYearMinus4 => TaxYear.current.back(4).startYear
+    case _                 => throw new IllegalArgumentException("Invalid tax year selected")
+  }
 }

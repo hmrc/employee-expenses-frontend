@@ -171,9 +171,9 @@ typeOfTransport.noneOfTheAbove = none of the above
 typeOfTransport.checkYourAnswersLabel = What type of transport or travel do you work in?
 typeOfTransport.error.required = Select what type of transport or travel do you work in
 
-healthcareList2.title = Healthcare occupation occupation list 2 of 2
-healthcareList2.heading = Healthcare occupation occupation list 2 of 2
-healthcareList2.checkYourAnswersLabel = Healthcare occupation occupation list 2 of 2
+healthcareList2.title = Healthcare occupation list 2 of 2
+healthcareList2.heading = Healthcare occupation list 2 of 2
+healthcareList2.checkYourAnswersLabel = Healthcare occupation list 2 of 2
 healthcareList2.error.required = Select yes if your occupation is listed
 healthcareList2.listText = The occupations are:
 healthcareList2.radioLabel = Is your occupation listed?
