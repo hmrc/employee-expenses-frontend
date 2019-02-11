@@ -188,7 +188,7 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Optio
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.pilotsFlightDeck
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Airlines.pilotsFlightDeck
       }
     }
 
@@ -204,7 +204,7 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Optio
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.cabinCrew
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Airlines.cabinCrew
       }
     }
   }

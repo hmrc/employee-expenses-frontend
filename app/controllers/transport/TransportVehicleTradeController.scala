@@ -69,11 +69,11 @@ class TransportVehicleTradeController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportVehicleTradePage, value))
             amount: Int = value match {
-              case TransportVehicleTrade.Builder => ClaimAmounts.Transport.buildersRepairersWagonLifters
-              case TransportVehicleTrade.VehicleRepairerWagonLifter => ClaimAmounts.Transport.buildersRepairersWagonLifters
-              case TransportVehicleTrade.RailwayVehiclePainter => ClaimAmounts.Transport.paintersLetterersAssistants
-              case TransportVehicleTrade.Letterer => ClaimAmounts.Transport.paintersLetterersAssistants
-              case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => ClaimAmounts.Transport.paintersLetterersAssistants
+              case TransportVehicleTrade.Builder => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
+              case TransportVehicleTrade.VehicleRepairerWagonLifter => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
+              case TransportVehicleTrade.RailwayVehiclePainter => ClaimAmounts.Transport.Railways.vehiclePainters
+              case TransportVehicleTrade.Letterer => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
+              case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
               case TransportVehicleTrade.NoneOfTheAbove => ClaimAmounts.Transport.allOther
             }
             newAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))

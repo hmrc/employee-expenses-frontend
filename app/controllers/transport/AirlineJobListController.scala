@@ -69,9 +69,9 @@ class AirlineJobListController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AirlineJobListPage, value))
             newAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.pilotsFlightDeck))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.Airlines.pilotsFlightDeck))
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.cabinCrew))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew))
             }
             _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(AirlineJobListPage, mode)(newAnswers))

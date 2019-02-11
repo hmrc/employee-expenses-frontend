@@ -17,6 +17,7 @@
 package controllers.transport
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.transport.WhichRailwayTradeFormProvider
 import models.{NormalMode, UserAnswers, WhichRailwayTrade}
 import navigation.{FakeNavigator, Navigator}
@@ -121,54 +122,6 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures {
       application.stop()
     }
 
-    "save ClaimAmount when 'Painter' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, whichRailwayTradeRoute).withFormUrlEncodedBody(("value", WhichRailwayTrade.VehiclePainters.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Transport.painter))
-      }
-    }
-
-    "save ClaimAmount when 'Vehicle repairs wagon lifters' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, whichRailwayTradeRoute).withFormUrlEncodedBody(("value", WhichRailwayTrade.VehicleRepairersWagonLifters.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Transport.vehicleRepairersWagonLifters))
-      }
-    }
-
-    "save ClaimAmount when 'Not listed' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, whichRailwayTradeRoute).withFormUrlEncodedBody(("value", WhichRailwayTrade.NoneOfTheAbove.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Transport.notListed))
-      }
-    }
-
     "redirect to Session Expired for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
@@ -198,6 +151,54 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "save 'vehiclePainters' to ClaimAmount when 'VehiclePainters' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, whichRailwayTradeRoute).withFormUrlEncodedBody(("value", WhichRailwayTrade.VehiclePainters.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.map(_.get(ClaimAmount) mustBe Some(ClaimAmounts.Transport.Railways.vehiclePainters))
+      }
+    }
+
+    "save 'vehicleRepairersWagonLifters' to ClaimAmount when 'VehicleRepairersWagonLifters' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, whichRailwayTradeRoute).withFormUrlEncodedBody(("value", WhichRailwayTrade.VehicleRepairersWagonLifters.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.map(_.get(ClaimAmount) mustBe Some(ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters))
+      }
+    }
+
+    "save 'allOther' to ClaimAmount when 'NoneOfTheAbove' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, whichRailwayTradeRoute).withFormUrlEncodedBody(("value", WhichRailwayTrade.NoneOfTheAbove.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.map(_.get(ClaimAmount) mustBe Some(ClaimAmounts.Transport.Railways.allOther))
+      }
     }
   }
 }

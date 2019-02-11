@@ -189,7 +189,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with O
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.passengerLiners
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Seamen.passengerLiners
       }
     }
 
@@ -205,7 +205,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with O
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.cargoTankersCoastersFerries
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries
       }
     }
   }

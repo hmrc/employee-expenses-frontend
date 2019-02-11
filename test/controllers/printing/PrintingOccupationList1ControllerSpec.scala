@@ -17,9 +17,11 @@
 package controllers.printing
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.printing.PrintingOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
 import pages.ClaimAmount
 import pages.printing.PrintingOccupationList1Page
@@ -30,7 +32,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.printing.PrintingOccupationList1View
 
-class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures{
+class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -119,22 +121,6 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures{
       application.stop()
     }
 
-    "save ClaimAmount when 'Yes' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, printingOccupationList1Route).withFormUrlEncodedBody(("value", "true"))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Printing.list1))
-      }
-    }
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -187,6 +173,22 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures{
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "save ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, printingOccupationList1Route).withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.list1
+      }
     }
   }
 }

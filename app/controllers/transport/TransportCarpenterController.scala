@@ -69,9 +69,9 @@ class TransportCarpenterController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportCarpenterPage, value))
             newAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.passengerLiners))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.Seamen.passengerLiners))
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.cargoTankersCoastersFerries))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries))
             }
             _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(TransportCarpenterPage, mode)(newAnswers))

@@ -188,7 +188,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.garageHands
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.PublicTransport.garageHands
       }
     }
 
@@ -204,7 +204,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.conductorsDrivers
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.PublicTransport.conductorsDrivers
       }
     }
   }

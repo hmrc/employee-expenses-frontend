@@ -16,7 +16,7 @@
 
 package controllers.printing
 
-import config.ClaimAmountsConfig
+import config.{ClaimAmounts, ClaimAmountsConfig}
 import controllers.actions._
 import forms.printing.PrintingOccupationList2FormProvider
 import javax.inject.{Inject, Named}
@@ -42,8 +42,7 @@ class PrintingOccupationList2Controller @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: PrintingOccupationList2FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: PrintingOccupationList2View,
-                                         claimAmounts: ClaimAmountsConfig
+                                         view: PrintingOccupationList2View
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -69,7 +68,7 @@ class PrintingOccupationList2Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PrintingOccupationList2Page, value))
-            amount: Int = if (value) claimAmounts.Printing.list2 else claimAmounts.Printing.allOther
+            amount: Int = if (value) ClaimAmounts.Printing.list2 else ClaimAmounts.Printing.allOther
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PrintingOccupationList2Page, mode)(updatedAnswers))

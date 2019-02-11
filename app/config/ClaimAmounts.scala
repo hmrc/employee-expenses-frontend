@@ -29,6 +29,7 @@ object ClaimAmounts {
     lazy val ambulanceStaff: Int = 185
     lazy val list1: Int = 143
     lazy val list2: Int = 125
+    lazy val catering = 125
     lazy val allOther: Int = 80
   }
 
@@ -55,14 +56,33 @@ object ClaimAmounts {
   }
 
   object Transport {
-    lazy val pilotsFlightDeck: Int = 1022
-    lazy val cabinCrew: Int = 720
-    lazy val garageHands: Int = 80
-    lazy val conductorsDrivers: Int = 60
-    lazy val buildersRepairersWagonLifters: Int = 140
-    lazy val paintersLetterersAssistants: Int = 80
-    lazy val passengerLiners: Int = 165
-    lazy val cargoTankersCoastersFerries: Int = 140
+
+    object Airlines {
+      lazy val pilotsFlightDeck: Int = 1022
+      lazy val cabinCrew: Int = 720
+    }
+
+    object PublicTransport {
+      lazy val garageHands: Int = 80
+      lazy val conductorsDrivers: Int = 60
+    }
+
+    object Railways {
+      lazy val vehiclePainters: Int = 80
+      lazy val vehicleRepairersWagonLifters: Int = 80
+      lazy val allOther: Int = 100
+    }
+
+    object VehicleTrade {
+      lazy val buildersRepairersWagonLifters: Int = 140
+      lazy val paintersLetterersAssistants: Int = 80
+    }
+
+    object Seamen {
+      lazy val passengerLiners: Int = 165
+      lazy val cargoTankersCoastersFerries: Int = 140
+    }
+
     lazy val allOther: Int = 80
   }
 
@@ -105,4 +125,9 @@ object ClaimAmounts {
     lazy val allOther = 100
   }
 
+  object Printing {
+    lazy val list1 = 140
+    lazy val list2 = 60
+    lazy val allOther = 100
+  }
 }

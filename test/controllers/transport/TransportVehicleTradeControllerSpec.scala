@@ -170,7 +170,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.buildersRepairersWagonLifters
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
       }
     }
 
@@ -187,7 +187,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.buildersRepairersWagonLifters
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
       }
     }
 
@@ -204,7 +204,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.paintersLetterersAssistants
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehiclePainters
       }
     }
 
@@ -221,7 +221,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.paintersLetterersAssistants
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
       }
     }
 
@@ -238,7 +238,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.paintersLetterersAssistants
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
       }
     }
 

@@ -69,9 +69,9 @@ class GarageHandOrCleanerController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(GarageHandOrCleanerPage, value))
             newAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.garageHands))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.garageHands))
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.conductorsDrivers))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.conductorsDrivers))
             }
             _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(GarageHandOrCleanerPage, mode)(newAnswers))
