@@ -107,7 +107,7 @@ typeOfEngineering.constructionalEngineering = constructional engineering includi
 typeOfEngineering.tradesRelatingToEngineering = trades relating to engineering
 typeOfEngineering.factoryOrWorkshopEngineering = factory or workshop engineering
 typeOfEngineering.noneOfTheAbove = industry not listed
-typeOfEngineering.checkYourAnswersLabel = What type of engineering do you work in?
+typeOfEngineering.checkYourAnswersLabel = Engineering industry list
 typeOfEngineering.error.required = Select what type of engineering you work in
 
 constructionalEngineeringList1.title = Constructional engineering occupation list 1 of 3
@@ -190,10 +190,10 @@ constructionalEngineeringApprentice.error.required = Select yes if you are an ap
 
 ancillaryEngineeringWhichTrade.title = Which trade do you work in?
 ancillaryEngineeringWhichTrade.heading = Which trade do you work in?
-ancillaryEngineeringWhichTrade.patternMaker = Pattern maker
-ancillaryEngineeringWhichTrade.labourerSupervisorOrUnskilledWorker = Labourer, supervisor or unskilled worker
-ancillaryEngineeringWhichTrade.apprenticeOrStorekeeper = Apprentice or storekeeper
-ancillaryEngineeringWhichTrade.noneOfTheAbove = None of the above
+ancillaryEngineeringWhichTrade.patternMaker = pattern maker
+ancillaryEngineeringWhichTrade.labourerSupervisorOrUnskilledWorker = labourer, supervisor or unskilled worker
+ancillaryEngineeringWhichTrade.apprenticeOrStorekeeper = apprentice or storekeeper
+ancillaryEngineeringWhichTrade.noneOfTheAbove = trade not listed
 ancillaryEngineeringWhichTrade.checkYourAnswersLabel = Which trade do you work in?
 ancillaryEngineeringWhichTrade.error.required = Select which trade you work in
 
