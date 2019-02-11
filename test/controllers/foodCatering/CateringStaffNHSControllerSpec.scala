@@ -139,7 +139,6 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures {
     "save ClaimAmount when 'Yes' is selected" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Heating").toInstance(new FakeNavigator(onwardRoute)))
         .build()
 
       val sessionRepository = application.injector.instanceOf[SessionRepository]
@@ -156,7 +155,6 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures {
     "save ClaimAmount when 'No' is selected" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Heating").toInstance(new FakeNavigator(onwardRoute)))
         .build()
 
       val sessionRepository = application.injector.instanceOf[SessionRepository]
