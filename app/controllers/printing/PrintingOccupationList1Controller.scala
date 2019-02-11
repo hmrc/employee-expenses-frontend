@@ -16,7 +16,7 @@
 
 package controllers.printing
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.printing.PrintingOccupationList1FormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.printing.PrintingOccupationList1View
 import scala.concurrent.{ExecutionContext, Future}
 
 class PrintingOccupationList1Controller @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Printing") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: PrintingOccupationList1FormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: PrintingOccupationList1View,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                   override val messagesApi: MessagesApi,
+                                                   sessionRepository: SessionRepository,
+                                                   @Named("Printing") navigator: Navigator,
+                                                   identify: UnauthenticatedIdentifierAction,
+                                                   getData: DataRetrievalAction,
+                                                   requireData: DataRequiredAction,
+                                                   formProvider: PrintingOccupationList1FormProvider,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   view: PrintingOccupationList1View
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -69,12 +68,12 @@ class PrintingOccupationList1Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PrintingOccupationList1Page, value))
-            newAnswers     <- if (value) {
-                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Printing.list1))
-                              } else {
-                                Future.successful(updatedAnswers)
-                              }
-            _              <- sessionRepository.set(newAnswers)
+            newAnswers <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Printing.list1))
+            } else {
+              Future.successful(updatedAnswers)
+            }
+            _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(PrintingOccupationList1Page, mode)(newAnswers))
         }
       )

@@ -17,9 +17,11 @@
 package controllers.heating
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.heating.HeatingOccupationListFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
 import pages.ClaimAmount
 import pages.heating.HeatingOccupationListPage
@@ -30,7 +32,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.heating.HeatingOccupationListView
 
-class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures {
+class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -99,41 +101,6 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures {
       application.stop()
     }
 
-    "save ClaimAmount when 'Yes' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Heating").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, heatingOccupationListRoute).withFormUrlEncodedBody(("value", "true"))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Heating.list))
-      }
-    }
-
-    "save ClaimAmount when 'No' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Heating").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, heatingOccupationListRoute).withFormUrlEncodedBody(("value", "false"))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Heating.allOther))
-      }
-    }
-
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -184,6 +151,42 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save 'list' to ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, heatingOccupationListRoute).withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Heating.list
+      }
+
+      application.stop()
+    }
+
+    "save 'allOther' to ClaimAmount when 'No' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, heatingOccupationListRoute).withFormUrlEncodedBody(("value", "false"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Heating.allOther
+      }
 
       application.stop()
     }

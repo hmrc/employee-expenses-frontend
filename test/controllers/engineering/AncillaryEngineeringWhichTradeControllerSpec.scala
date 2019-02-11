@@ -17,17 +17,22 @@
 package controllers.engineering
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.engineering.AncillaryEngineeringWhichTradeFormProvider
 import models.{AncillaryEngineeringWhichTrade, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.engineering.AncillaryEngineeringWhichTradePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.engineering.AncillaryEngineeringWhichTradeView
 
-class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase {
+class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -145,6 +150,82 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save 'patternMaker' to ClaimAmount when 'PatternMaker' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, ancillaryEngineeringWhichTradeRoute)
+        .withFormUrlEncodedBody(("value", AncillaryEngineeringWhichTrade.PatternMaker.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.patternMaker
+      }
+
+      application.stop()
+    }
+
+    "save 'labourerSupervisorUnskilledWorker' to ClaimAmount when 'LabourerSupervisorOrUnskilledWorker' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, ancillaryEngineeringWhichTradeRoute)
+        .withFormUrlEncodedBody(("value", AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
+      }
+
+      application.stop()
+    }
+
+    "save 'apprentice' to ClaimAmount when 'ApprenticeOrStorekeeper' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, ancillaryEngineeringWhichTradeRoute)
+        .withFormUrlEncodedBody(("value", AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.apprentice
+      }
+
+      application.stop()
+    }
+
+    "save 'allOther' to ClaimAmount when 'NoneOfTheAbove' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, ancillaryEngineeringWhichTradeRoute)
+        .withFormUrlEncodedBody(("value", AncillaryEngineeringWhichTrade.NoneOfTheAbove.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.allOther
+      }
 
       application.stop()
     }
