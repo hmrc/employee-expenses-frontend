@@ -171,9 +171,9 @@ typeOfTransport.noneOfTheAbove = none of the above
 typeOfTransport.checkYourAnswersLabel = What type of transport or travel do you work in?
 typeOfTransport.error.required = Select what type of transport or travel do you work in
 
-healthcareList2.title = Healthcare occupation occupation list 2 of 2
-healthcareList2.heading = Healthcare occupation occupation list 2 of 2
-healthcareList2.checkYourAnswersLabel = Healthcare occupation occupation list 2 of 2
+healthcareList2.title = Healthcare occupation list 2 of 2
+healthcareList2.heading = Healthcare occupation list 2 of 2
+healthcareList2.checkYourAnswersLabel = Healthcare occupation list 2 of 2
 healthcareList2.error.required = Select yes if your occupation is listed
 healthcareList2.listText = The occupations are:
 healthcareList2.radioLabel = Is your occupation listed?
@@ -547,11 +547,12 @@ ironMiningList.occupation2 = miners and underground workers
 
 taxYearSelection.title = Which tax years do you want to claim for?
 taxYearSelection.heading = Which tax years do you want to claim for?
-taxYearSelection.currentYear = 6 April 2018 to 5 April 2019 (the current tax year)
-taxYearSelection.currentYearMinus1 = 6 April 2017 to 5 April 2018
-taxYearSelection.currentYearMinus2 = 6 April 2016 to 5 April 2017
-taxYearSelection.currentYearMinus3 = 6 April 2015 to 5 April 2016
-taxYearSelection.currentYearMinus4 = 6 April 2014 to 5 April 2015
+taxYearSelection.paragraph = You can claim for the current tax year and previous 4 tax years.
+taxYearSelection.currentYear = 6 April {0} to 5 April {1} (the current tax year)
+taxYearSelection.currentYearMinus1 = 6 April {0} to 5 April {1}
+taxYearSelection.currentYearMinus2 = 6 April {0} to 5 April {1}
+taxYearSelection.currentYearMinus3 = 6 April {0} to 5 April {1}
+taxYearSelection.currentYearMinus4 = 6 April {0} to 5 April {1}
 taxYearSelection.checkYourAnswersLabel = Which tax years do you want to claim for?
 taxYearSelection.error.required = Select which tax years you want to claim for
 

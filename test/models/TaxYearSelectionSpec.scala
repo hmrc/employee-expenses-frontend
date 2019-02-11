@@ -1,63 +1,62 @@
-/*
- * Copyright 2019 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package models
 
-import generators.ModelGenerators
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
-import org.scalatest.prop.PropertyChecks
-import org.scalatest.{MustMatchers, OptionValues, WordSpec}
-import play.api.libs.json.{JsError, JsString, Json}
+import base.SpecBase
+import models.TaxYearSelection._
+import uk.gov.hmrc.time.TaxYear
+import viewmodels.RadioCheckboxOption
 
-class TaxYearSelectionSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues with ModelGenerators {
+class TaxYearSelectionSpec extends SpecBase {
 
-  "TaxYearSelection" must {
+  "TaxYearSelection getTaxYear" must {
+    "return correct tax year in 'YYYY' format " in {
+      val taxYear = TaxYearSelection.CurrentYear
 
-    "deserialise valid values" in {
+      TaxYearSelection.getTaxYear(taxYear) mustBe TaxYear.current.startYear
 
-      val gen = arbitrary[TaxYearSelection]
-
-      forAll(gen) {
-        taxYearSelection =>
-
-          JsString(taxYearSelection.toString).validate[TaxYearSelection].asOpt.value mustEqual taxYearSelection
-      }
     }
 
-    "fail to deserialise invalid values" in {
+    "return current year minus 1 tax year in 'YYYY' format " in {
+      val taxYear = TaxYearSelection.CurrentYearMinus1
 
-      val gen = arbitrary[String] suchThat (!TaxYearSelection.values.map(_.toString).contains(_))
-
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[TaxYearSelection] mustEqual JsError("error.invalid")
-      }
+      TaxYearSelection.getTaxYear(taxYear) mustBe TaxYear.current.back(1).startYear
     }
 
-    "serialise" in {
+    "return current year minus 2 tax year in 'YYYY' format " in {
+      val taxYear = TaxYearSelection.CurrentYearMinus2
 
-      val gen = arbitrary[TaxYearSelection]
+      TaxYearSelection.getTaxYear(taxYear) mustBe TaxYear.current.back(2).startYear
+    }
 
-      forAll(gen) {
-        taxYearSelection =>
+    "return current year minus 3 tax year in 'YYYY' format " in {
+      val taxYear = TaxYearSelection.CurrentYearMinus3
 
-          Json.toJson(taxYearSelection) mustEqual JsString(taxYearSelection.toString)
-      }
+      TaxYearSelection.getTaxYear(taxYear) mustBe TaxYear.current.back(3).startYear
+    }
+
+    "return current year minus 4 tax year in 'YYYY' format " in {
+      val taxYear = TaxYearSelection.CurrentYearMinus4
+
+      TaxYearSelection.getTaxYear(taxYear) mustBe TaxYear.current.back(4).startYear
+    }
+
+    "return a sequence of RadioCheckboxOption from options" in {
+      val taxYearOptions: Seq[RadioCheckboxOption] = TaxYearSelection.options
+
+      taxYearOptions.head.message.string mustBe s"6 April ${TaxYear.current.startYear} to 5 April ${TaxYear.current.finishYear} (the current tax year)"
+      taxYearOptions(1).message.string mustBe s"6 April ${TaxYear.current.back(1).startYear} to 5 April ${TaxYear.current.back(1).finishYear}"
+      taxYearOptions(2).message.string mustBe s"6 April ${TaxYear.current.back(2).startYear} to 5 April ${TaxYear.current.back(2).finishYear}"
+      taxYearOptions(3).message.string mustBe s"6 April ${TaxYear.current.back(3).startYear} to 5 April ${TaxYear.current.back(3).finishYear}"
+      taxYearOptions(4).message.string mustBe s"6 April ${TaxYear.current.back(4).startYear} to 5 April ${TaxYear.current.back(4).finishYear}"
+    }
+
+    "return the correct values" in {
+      val taxYearValues: Seq[TaxYearSelection] = TaxYearSelection.values
+
+      taxYearValues.head mustBe CurrentYear
+      taxYearValues(1) mustBe CurrentYearMinus1
+      taxYearValues(2) mustBe CurrentYearMinus2
+      taxYearValues(3) mustBe CurrentYearMinus3
+      taxYearValues(4) mustBe CurrentYearMinus4
     }
   }
 }
