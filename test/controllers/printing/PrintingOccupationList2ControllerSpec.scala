@@ -21,6 +21,7 @@ import config.ClaimAmounts
 import forms.printing.PrintingOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
 import pages.ClaimAmount
 import pages.printing.PrintingOccupationList2Page
@@ -31,7 +32,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.printing.PrintingOccupationList2View
 
-class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures {
+class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -186,7 +187,7 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures {
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(ClaimAmounts.Printing.list2))
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.list2
       }
     }
 
@@ -202,7 +203,7 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures {
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(ClaimAmounts.Printing.allOther))
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.allOther
       }
     }
   }

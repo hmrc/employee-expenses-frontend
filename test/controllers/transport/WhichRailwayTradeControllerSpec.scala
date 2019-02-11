@@ -21,6 +21,7 @@ import config.ClaimAmounts
 import forms.transport.WhichRailwayTradeFormProvider
 import models.{NormalMode, UserAnswers, WhichRailwayTrade}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
 import pages.ClaimAmount
 import pages.transport.WhichRailwayTradePage
@@ -31,7 +32,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.transport.WhichRailwayTradeView
 
-class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures {
+class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -165,7 +166,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures {
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(ClaimAmounts.Transport.Railways.vehiclePainters))
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehiclePainters
       }
     }
 
@@ -181,7 +182,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures {
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters))
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
       }
     }
 
@@ -197,7 +198,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures {
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(ClaimAmounts.Transport.Railways.allOther))
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.allOther
       }
     }
   }
