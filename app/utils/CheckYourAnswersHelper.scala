@@ -16,7 +16,6 @@
 
 package utils
 
-import controllers.routes
 import controllers.routes._
 import controllers.engineering.routes._
 import controllers.manufacturing.routes._
@@ -50,11 +49,6 @@ import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
-
-  def yourAddress: Option[AnswerRow] = userAnswers.get(YourAddressPage) map {
-    x => AnswerRow("yourAddress.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      YourAddressController.onPageLoad(CheckMode).url)
-  }
 
   def firstIndustryOptions: Option[AnswerRow] = userAnswers.get(FirstIndustryOptionsPage) map {
     x => AnswerRow("firstIndustryOptions.checkYourAnswersLabel", s"taxYearSelection.$x", false,
@@ -96,6 +90,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def taxYearSelection: Option[AnswerRow] = userAnswers.get(TaxYearSelectionPage) map {
     x => AnswerRow("taxYearSelection.checkYourAnswersLabel", s"taxYearSelection.$x", true,
       TaxYearSelectionController.onPageLoad(CheckMode).url)
+  }
+
+  def yourAddress: Option[AnswerRow] = userAnswers.get(YourAddressPage) map {
+    x => AnswerRow("yourAddress.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      YourAddressController.onPageLoad(CheckMode).url)
   }
 
   //Engineering
