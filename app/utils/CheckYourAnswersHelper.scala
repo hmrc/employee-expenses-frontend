@@ -33,7 +33,7 @@ import controllers.construction.routes._
 import controllers.authenticated.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
-import pages.authenticated.TaxYearSelectionPage
+import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
 import pages.clothing.ClothingPage
 import pages.construction._
 import pages.electrical.ElectricalPage
@@ -50,6 +50,11 @@ import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
+
+  def yourAddress: Option[AnswerRow] = userAnswers.get(YourAddressPage) map {
+    x => AnswerRow("yourAddress.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      YourAddressController.onPageLoad(CheckMode).url)
+  }
 
   def firstIndustryOptions: Option[AnswerRow] = userAnswers.get(FirstIndustryOptionsPage) map {
     x => AnswerRow("firstIndustryOptions.checkYourAnswersLabel", s"taxYearSelection.$x", false,

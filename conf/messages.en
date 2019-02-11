@@ -571,3 +571,8 @@ updateEmployerInformation.title = You need to update your employer information
 updateEmployerInformation.heading = You need to update your employer information
 updateEmployerInformation.paragraph1 = You can still complete this claim but you must update your employer information with HMRC when you have finished.
 updateEmployerInformation.paragraph2 = We will give you the link to change your employer information after you have completed this claim.
+
+yourAddress.title = yourAddress
+yourAddress.heading = yourAddress
+yourAddress.checkYourAnswersLabel = yourAddress
+yourAddress.error.required = Select yes if yourAddress

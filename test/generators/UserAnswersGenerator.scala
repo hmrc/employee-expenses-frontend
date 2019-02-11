@@ -21,7 +21,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
-import pages.authenticated.TaxYearSelectionPage
+import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
 import pages.clothing.ClothingPage
 import pages.construction._
 import pages.electrical.ElectricalPage
@@ -40,6 +40,7 @@ trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
+    arbitrary[(YourAddressPage.type, JsValue)] ::
     arbitrary[(ConstructionalEngineeringList3Page.type, JsValue)] ::
     arbitrary[(TaxYearSelectionPage.type, JsValue)] ::
     arbitrary[(HeatingOccupationListPage.type, JsValue)] ::
