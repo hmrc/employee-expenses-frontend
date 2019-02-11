@@ -166,7 +166,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Generic.agriculture
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.agriculture
       }
 
       application.stop()
@@ -184,7 +184,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Generic.fireService
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.fireService
       }
 
       application.stop()
@@ -202,7 +202,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Generic.leisure
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.leisure
       }
 
       application.stop()
@@ -220,7 +220,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Generic.prisons
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.prisons
       }
 
       application.stop()

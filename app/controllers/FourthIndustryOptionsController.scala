@@ -69,10 +69,10 @@ class FourthIndustryOptionsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value))
             newAnswers <- value match {
-              case Agriculture => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Generic.agriculture))
-              case FireService => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Generic.fireService))
-              case Leisure => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Generic.leisure))
-              case Prisons => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Generic.prisons))
+              case Agriculture => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.agriculture))
+              case FireService => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.fireService))
+              case Leisure => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.leisure))
+              case Prisons => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.prisons))
               case _ => Future.successful(updatedAnswers)
             }
             _ <- sessionRepository.set(newAnswers)

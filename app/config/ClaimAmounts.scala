@@ -24,6 +24,10 @@ sealed trait ClaimAmounts
 object ClaimAmounts {
 
   lazy val defaultRate: Int = 60
+  lazy val agriculture: Int = 100
+  lazy val fireService: Int = 80
+  lazy val leisure: Int = 60
+  lazy val prisons: Int = 80
 
   object Healthcare {
     lazy val ambulanceStaff: Int = 185
@@ -110,13 +114,6 @@ object ClaimAmounts {
   object Electrical {
     lazy val onlyLaundry: Int = 60
     lazy val allOther: Int = 120
-  }
-
-  object Generic {
-    lazy val agriculture: Int = 100
-    lazy val fireService: Int = 80
-    lazy val leisure: Int = 60
-    lazy val prisons: Int = 80
   }
 
   object Heating {
