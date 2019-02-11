@@ -76,14 +76,13 @@ object ClaimAmounts {
     object VehicleTrade {
       lazy val buildersRepairersWagonLifters: Int = 140
       lazy val paintersLetterersAssistants: Int = 80
+      lazy val allOther: Int = 60
     }
 
     object Seamen {
       lazy val passengerLiners: Int = 165
       lazy val cargoTankersCoastersFerries: Int = 140
     }
-
-    lazy val allOther: Int = 80
   }
 
   object Police {

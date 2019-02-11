@@ -265,7 +265,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.allOther
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.allOther
       }
 
       application.stop()
