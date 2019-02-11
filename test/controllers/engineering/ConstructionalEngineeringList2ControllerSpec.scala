@@ -191,5 +191,7 @@ class ConstructionalEngineeringList2ControllerSpec extends SpecBase with ScalaFu
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.list2
     }
+
+    application.stop()
   }
 }

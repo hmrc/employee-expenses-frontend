@@ -189,6 +189,8 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.list2
       }
+
+      application.stop()
     }
 
     "save ClaimAmount when 'No' is selected" in {
@@ -205,6 +207,8 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.allOther
       }
+
+      application.stop()
     }
   }
 }

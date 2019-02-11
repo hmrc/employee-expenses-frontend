@@ -171,5 +171,7 @@ class StoneMasonControllerSpec extends SpecBase with ScalaFutures with OptionVal
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.stoneMasons
     }
+
+    application.stop()
   }
 }

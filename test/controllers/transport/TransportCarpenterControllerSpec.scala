@@ -191,6 +191,8 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with O
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Seamen.passengerLiners
       }
+
+      application.stop()
     }
 
     "save ClaimAmount 'cargoTankersCoastersFerries' when false" in {
@@ -207,6 +209,8 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with O
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries
       }
+
+      application.stop()
     }
   }
 }

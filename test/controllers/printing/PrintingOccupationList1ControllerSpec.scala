@@ -189,6 +189,8 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.list1
       }
+
+      application.stop()
     }
   }
 }

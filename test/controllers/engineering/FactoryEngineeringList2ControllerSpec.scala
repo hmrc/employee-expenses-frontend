@@ -190,6 +190,8 @@ class FactoryEngineeringList2ControllerSpec extends SpecBase with ScalaFutures w
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.list2
       }
+
+      application.stop()
     }
   }
 }

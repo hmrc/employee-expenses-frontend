@@ -172,6 +172,8 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with OptionValue
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Clothing.clothingList
     }
+
+    application.stop()
   }
 
   "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
@@ -189,5 +191,7 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with OptionValue
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
     }
+
+    application.stop()
   }
 }

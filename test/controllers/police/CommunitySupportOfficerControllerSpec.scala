@@ -170,6 +170,8 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Police.communitySupportOfficer
       }
+
+      application.stop()
     }
   }
 }

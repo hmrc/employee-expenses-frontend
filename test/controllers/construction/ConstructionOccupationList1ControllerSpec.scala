@@ -169,7 +169,9 @@ class ConstructionOccupationList1ControllerSpec extends SpecBase with ScalaFutur
     route(application, request).value.futureValue
 
     whenReady(sessionRepository.get(userAnswersId)) {
-      _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.list1
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.list1
     }
+
+    application.stop()
   }
 }

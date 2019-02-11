@@ -169,6 +169,8 @@ class SecurityGuardNHSControllerSpec extends SpecBase with ScalaFutures with Opt
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Security.nhsSecurity
       }
+
+      application.stop()
     }
 
     "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
@@ -185,6 +187,8 @@ class SecurityGuardNHSControllerSpec extends SpecBase with ScalaFutures with Opt
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
+
+      application.stop()
     }
   }
 }

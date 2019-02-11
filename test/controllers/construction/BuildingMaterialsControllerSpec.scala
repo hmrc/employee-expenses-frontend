@@ -171,6 +171,8 @@ class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with Op
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.buildingMaterials
     }
+
+    application.stop()
   }
 
   "save 'allOther' to ClaimAmount when 'No' is selected" in {
@@ -188,5 +190,7 @@ class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with Op
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.allOther
     }
+
+    application.stop()
   }
 }

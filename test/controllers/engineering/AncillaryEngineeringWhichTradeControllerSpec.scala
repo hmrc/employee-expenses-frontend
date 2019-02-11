@@ -169,6 +169,8 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.patternMaker
       }
+
+      application.stop()
     }
 
     "save 'labourerSupervisorUnskilledWorker' to ClaimAmount when 'LabourerSupervisorOrUnskilledWorker' is selected" in {
@@ -186,6 +188,8 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
       }
+
+      application.stop()
     }
 
     "save 'apprentice' to ClaimAmount when 'ApprenticeOrStorekeeper' is selected" in {
@@ -203,6 +207,8 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.apprentice
       }
+
+      application.stop()
     }
 
     "save 'allOther' to ClaimAmount when 'NoneOfTheAbove' is selected" in {
@@ -220,6 +226,8 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.allOther
       }
+
+      application.stop()
     }
   }
 }

@@ -187,6 +187,8 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Opti
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.list2
       }
+
+      application.stop()
     }
 
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
@@ -203,6 +205,8 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Opti
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.allOther
       }
+
+      application.stop()
     }
   }
 }

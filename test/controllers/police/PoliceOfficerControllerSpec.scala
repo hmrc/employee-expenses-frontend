@@ -32,7 +32,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.police.PoliceOfficerView
 
-class PoliceOfficerSpec extends SpecBase with ScalaFutures with OptionValues {
+class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -169,6 +169,8 @@ class PoliceOfficerSpec extends SpecBase with ScalaFutures with OptionValues {
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Police.policeOfficer
       }
+
+      application.stop()
     }
 
     "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
@@ -185,6 +187,8 @@ class PoliceOfficerSpec extends SpecBase with ScalaFutures with OptionValues {
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
+
+      application.stop()
     }
   }
 }

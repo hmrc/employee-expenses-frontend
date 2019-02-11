@@ -176,6 +176,8 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
+
+      application.stop()
     }
   }
 }

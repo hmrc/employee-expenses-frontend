@@ -190,6 +190,8 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.apprentice
       }
+
+      application.stop()
     }
 
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
@@ -207,6 +209,8 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.allOther
       }
+
+      application.stop()
     }
   }
 }

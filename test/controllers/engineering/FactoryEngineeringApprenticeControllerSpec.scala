@@ -192,6 +192,8 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.apprentice
     }
+
+    application.stop()
   }
 
   "save 'allOther' to ClaimAmount when 'No' is selected" in {
@@ -209,5 +211,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.allOther
     }
+
+    application.stop()
   }
 }

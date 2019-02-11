@@ -20,9 +20,11 @@ import base.SpecBase
 import config.ClaimAmounts
 import forms.FourthIndustryOptionsFormProvider
 import models.{FourthIndustryOptions, NormalMode, UserAnswers}
+import navigation.{FakeNavigator, Navigator}
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
 import pages.{ClaimAmount, FourthIndustryOptionsPage}
+import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -82,6 +84,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -165,6 +168,8 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Generic.agriculture
       }
+
+      application.stop()
     }
 
     "save ClaimAmount when 'FireService' is selected" in {
@@ -181,6 +186,8 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Generic.fireService
       }
+
+      application.stop()
     }
 
     "save ClaimAmount when 'Leisure' is selected" in {
@@ -197,6 +204,8 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Generic.leisure
       }
+
+      application.stop()
     }
 
     "save ClaimAmount when 'Prisons' is selected" in {
@@ -213,6 +222,8 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Generic.prisons
       }
+
+      application.stop()
     }
   }
 }

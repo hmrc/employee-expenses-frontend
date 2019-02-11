@@ -172,6 +172,8 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
       }
+
+      application.stop()
     }
 
     "save ClaimAmount 'buildersRepairersWagonLifters' when 'VehicleRepairerWagonLifter' is selected" in {
@@ -189,9 +191,11 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
       }
+
+      application.stop()
     }
 
-    "save ClaimAmount 'paintersLetterersAssistants' when 'VehicleRepairerWagonLifter' is selected" in {
+    "save ClaimAmount 'vehiclePainters' when 'RailwayVehiclePainter' is selected" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .build()
@@ -206,9 +210,11 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehiclePainters
       }
+
+      application.stop()
     }
 
-    "save ClaimAmount 'paintersLetterersAssistants' when 'VehicleRepairerWagonLifter' is selected" in {
+    "save ClaimAmount 'paintersLetterersAssistants' when 'Letterer' is selected" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .build()
@@ -223,6 +229,8 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
       }
+
+      application.stop()
     }
 
     "save ClaimAmount 'paintersLetterersAssistants' when 'BuildersAssistantOrRepairersAssistant' is selected" in {
@@ -240,6 +248,8 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
       }
+
+      application.stop()
     }
 
     "save ClaimAmount 'allOther' when 'NoneOfTheAbove' is selected" in {
@@ -257,6 +267,8 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.allOther
       }
+
+      application.stop()
     }
   }
 }

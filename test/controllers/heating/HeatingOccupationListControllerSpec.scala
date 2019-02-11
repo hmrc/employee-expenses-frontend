@@ -169,6 +169,8 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Heating.list
       }
+
+      application.stop()
     }
 
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
@@ -185,6 +187,8 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Heating.allOther
       }
+
+      application.stop()
     }
   }
 }

@@ -171,5 +171,7 @@ class ConstructionOccupationList2ControllerSpec extends SpecBase with ScalaFutur
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.list2
     }
+
+    application.stop()
   }
 }

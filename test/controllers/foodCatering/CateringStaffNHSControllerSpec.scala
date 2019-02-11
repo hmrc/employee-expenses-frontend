@@ -170,6 +170,8 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Opt
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.catering
     }
+
+    application.stop()
   }
 
   "save ClaimAmount when 'No' is selected" in {
@@ -186,5 +188,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Opt
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
     }
+
+    application.stop()
   }
 }

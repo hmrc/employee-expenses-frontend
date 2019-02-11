@@ -171,5 +171,7 @@ class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with Opti
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.joinersCarpenters
     }
+
+    application.stop()
   }
 }

@@ -168,6 +168,8 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Op
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehiclePainters
       }
+
+      application.stop()
     }
 
     "save 'vehicleRepairersWagonLifters' to ClaimAmount when 'VehicleRepairersWagonLifters' is selected" in {
@@ -184,6 +186,8 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Op
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
       }
+
+      application.stop()
     }
 
     "save 'allOther' to ClaimAmount when 'NoneOfTheAbove' is selected" in {
@@ -200,6 +204,8 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Op
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.allOther
       }
+
+      application.stop()
     }
   }
 }

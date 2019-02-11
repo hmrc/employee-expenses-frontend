@@ -190,6 +190,8 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Op
     whenReady(sessionRepository.get(userAnswersId)) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
     }
+
+    application.stop()
   }
 
 }

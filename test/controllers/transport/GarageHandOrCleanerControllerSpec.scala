@@ -190,6 +190,8 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.PublicTransport.garageHands
       }
+
+      application.stop()
     }
 
     "save ClaimAmount 'conductorsDrivers' when false" in {
@@ -206,6 +208,8 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.PublicTransport.conductorsDrivers
       }
+
+      application.stop()
     }
   }
 }

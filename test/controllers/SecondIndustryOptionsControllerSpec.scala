@@ -176,6 +176,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
 
+      application.stop()
     }
   }
 }

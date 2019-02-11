@@ -190,6 +190,8 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Optio
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Airlines.pilotsFlightDeck
       }
+
+      application.stop()
     }
 
     "save ClaimAmount 'CabinCrew' when false" in {
@@ -206,6 +208,8 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Optio
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Airlines.cabinCrew
       }
+
+      application.stop()
     }
   }
 }

@@ -191,6 +191,8 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Optio
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.ambulanceStaff
       }
+
+      application.stop()
     }
   }
 }
