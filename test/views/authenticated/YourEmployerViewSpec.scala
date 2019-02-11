@@ -29,6 +29,7 @@ class YourEmployerViewSpec extends YesNoViewBehaviours {
   val messageKeyPrefix = "yourEmployer"
 
   val form = new YourEmployerFormProvider()()
+  val employerName = "HMRC"
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -37,10 +38,10 @@ class YourEmployerViewSpec extends YesNoViewBehaviours {
     val view = application.injector.instanceOf[YourEmployerView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest, messages)
+      view.apply(form, NormalMode, employerName)(fakeRequest, messages)
 
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+      view.apply(form, NormalMode, employerName)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

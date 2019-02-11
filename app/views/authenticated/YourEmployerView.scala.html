@@ -18,30 +18,30 @@
 @import models.Mode
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+        main_template: MainTemplate,
+        formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, employerName: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("yourEmployer.title")}"
-    ) {
+  @main_template(
+    title = s"${errorPrefix(form)} ${messages("yourEmployer.title", employerName)}"
+  ) {
 
     @formHelper(action = YourEmployerController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+      @components.back_link()
 
-        @components.error_summary(form.errors)
+      @components.error_summary(form.errors)
 
-        @components.heading("yourEmployer.heading")
+      @components.heading(messages("yourEmployer.heading", employerName))
 
-        @components.input_yes_no(
-            field = form("value"),
-            label = messages("yourEmployer.heading"),
-            labelClass = Some("visually-hidden")
-        )
+      @components.input_yes_no(
+        field = form("value"),
+        label = messages("yourEmployer.heading", employerName),
+        labelClass = Some("visually-hidden")
+      )
 
-        @components.submit_button()
+      @components.submit_button()
     }
-}
+  }

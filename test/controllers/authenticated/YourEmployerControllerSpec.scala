@@ -17,22 +17,33 @@
 package controllers.authenticated
 
 import base.SpecBase
+import connectors.TaiConnector
 import forms.authenticated.YourEmployerFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{NormalMode, TaxCodeRecord, UserAnswers}
 import navigation.{AuthenticatedNavigator, FakeNavigator, Navigator}
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.mockito.MockitoSugar
+import org.mockito.Mockito._
 import pages.authenticated.YourEmployerPage
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.authenticated.YourEmployerView
 
-class YourEmployerControllerSpec extends SpecBase {
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
+class YourEmployerControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new YourEmployerFormProvider()
+  val mockTaiConnector = mock[TaiConnector]
   val form = formProvider()
+  val employerName = "HMRC"
+  val taxCodeRecord = TaxCodeRecord
 
   lazy val yourEmployerRoute = routes.YourEmployerController.onPageLoad(NormalMode).url
 
@@ -48,10 +59,12 @@ class YourEmployerControllerSpec extends SpecBase {
 
       val view = application.injector.instanceOf[YourEmployerView]
 
+      when(mockTaiConnector.taiTaxCodeRecords(fakeNino)) thenReturn (Future.successful(validTaiJson))
+
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode)(fakeRequest, messages).toString
+        view(form, NormalMode, employerName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -68,10 +81,13 @@ class YourEmployerControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
+      when(mockTaiConnector.taiTaxCodeRecords(fakeNino)) thenReturn (Future.successful(validTaiJson))
+
+
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode, employerName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -113,7 +129,7 @@ class YourEmployerControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, employerName)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -150,4 +166,35 @@ class YourEmployerControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
+  val validTaiJson = Json.parse(
+    """{
+      															 |  "data" : {
+      															 |    "current": [{
+      															 |      "taxCode": "830L",
+      															 |      "employerName": "HMRC",
+      															 |      "operatedTaxCode": true,
+      															 |      "p2Issued": true,
+      															 |      "startDate": "2018-06-27",
+      															 |      "endDate": "2019-04-05",
+      															 |      "payrollNumber": "1",
+      															 |      "pensionIndicator": true,
+      															 |      "primary": true
+      															 |    }],
+      															 |    "previous": [{
+      															 |      "taxCode": "1150L",
+      															 |      "employerName": "DWP",
+      															 |      "operatedTaxCode": true,
+      															 |      "p2Issued": true,
+      															 |      "startDate": "2018-04-06",
+      															 |      "endDate": "2018-06-26",
+      															 |      "payrollNumber": "1",
+      															 |      "pensionIndicator": true,
+      															 |      "primary": true
+      															 |    }]
+      															 |  },
+      															 |  "links" : [ ]
+      															 |}""".stripMargin)
+
+
 }

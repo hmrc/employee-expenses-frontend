@@ -53,7 +53,7 @@ class YourEmployerController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode))
+      Ok(view(preparedForm, mode, ""))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -61,7 +61,7 @@ class YourEmployerController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
+          Future.successful(BadRequest(view(formWithErrors, mode, ""))),
 
         value => {
           for {
