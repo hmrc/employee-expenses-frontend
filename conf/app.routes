@@ -297,3 +297,5 @@ GET         /change-constructional-engineering-list-3            controllers.eng
 POST        /change-constructional-engineering-list-3            controllers.engineering.ConstructionalEngineeringList3Controller.onSubmit(mode: Mode = CheckMode)
 
 GET         /update-employer-information                         controllers.authenticated.UpdateEmployerInformationController.onPageLoad()
+
+GET        /updateYourAddress                       controllers.UpdateYourAddressController.onPageLoad()
