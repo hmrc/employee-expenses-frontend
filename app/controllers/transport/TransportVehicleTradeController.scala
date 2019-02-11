@@ -16,7 +16,7 @@
 
 package controllers.transport
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.TransportVehicleTradeFormProvider
 import javax.inject.{Inject, Named}
@@ -42,8 +42,7 @@ class TransportVehicleTradeController @Inject()(
                                                  requireData: DataRequiredAction,
                                                  formProvider: TransportVehicleTradeFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 view: TransportVehicleTradeView,
-                                                 claimAmounts: ClaimAmountsConfig
+                                                 view: TransportVehicleTradeView
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -70,16 +69,16 @@ class TransportVehicleTradeController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportVehicleTradePage, value))
             amount: Int = value match {
-              case TransportVehicleTrade.Builder => claimAmounts.Transport.buildersRepairersWagonLifters
-              case TransportVehicleTrade.Vehiclerepairerwagonlifter => claimAmounts.Transport.buildersRepairersWagonLifters
-              case TransportVehicleTrade.RailwayVehiclePainter => claimAmounts.Transport.paintersLetterersAssistants
-              case TransportVehicleTrade.Letterer => claimAmounts.Transport.paintersLetterersAssistants
-              case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => claimAmounts.Transport.paintersLetterersAssistants
-              case TransportVehicleTrade.NoneOfTheAbove => claimAmounts.Transport.default
+              case TransportVehicleTrade.Builder => ClaimAmounts.Transport.buildersRepairersWagonLifters
+              case TransportVehicleTrade.VehicleRepairerWagonLifter => ClaimAmounts.Transport.buildersRepairersWagonLifters
+              case TransportVehicleTrade.RailwayVehiclePainter => ClaimAmounts.Transport.paintersLetterersAssistants
+              case TransportVehicleTrade.Letterer => ClaimAmounts.Transport.paintersLetterersAssistants
+              case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => ClaimAmounts.Transport.paintersLetterersAssistants
+              case TransportVehicleTrade.NoneOfTheAbove => ClaimAmounts.Transport.allOther
             }
             newAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
             _ <- sessionRepository.set(newAnswers)
-          } yield Redirect(navigator.nextPage(TransportVehicleTradePage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(TransportVehicleTradePage, mode)(newAnswers))
         }
       )
   }

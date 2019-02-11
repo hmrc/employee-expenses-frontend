@@ -17,17 +17,22 @@
 package controllers.police
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.police.PoliceOfficerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.police.PoliceOfficerPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.police.PoliceOfficerView
 
-class PoliceOfficerSpec extends SpecBase {
+class PoliceOfficerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -148,6 +153,38 @@ class PoliceOfficerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "save 'policeOfficer' to ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, policeOfficerRoute).withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Police.policeOfficer
+      }
+    }
+
+    "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, policeOfficerRoute).withFormUrlEncodedBody(("value", "false"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+      }
     }
   }
 }

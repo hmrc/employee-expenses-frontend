@@ -17,17 +17,22 @@
 package controllers.engineering
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.FactoryEngineeringApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.engineering.FactoryEngineeringApprenticePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.engineering.FactoryEngineeringApprenticeView
 
-class FactoryEngineeringApprenticeControllerSpec extends SpecBase {
+class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -169,6 +174,40 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+  }
+
+  "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, factoryEngineeringApprenticeRoute)
+      .withFormUrlEncodedBody(("value", "true"))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.apprentice
+    }
+  }
+
+  "save 'allOther' to ClaimAmount when 'No' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, factoryEngineeringApprenticeRoute)
+      .withFormUrlEncodedBody(("value", "false"))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.allOther
     }
   }
 }

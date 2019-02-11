@@ -17,17 +17,23 @@
 package controllers.transport
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.transport.TransportCarpenterFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.transport.TransportCarpenterPage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.transport.TransportCarpenterView
 
-class TransportCarpenterControllerSpec extends SpecBase {
+class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -169,6 +175,38 @@ class TransportCarpenterControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "save ClaimAmount 'passengerLiners' when true" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, transportCarpenterRoute).withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.passengerLiners
+      }
+    }
+
+    "save ClaimAmount 'cargoTankersCoastersFerries' when false" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, transportCarpenterRoute).withFormUrlEncodedBody(("value", "false"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.cargoTankersCoastersFerries
+      }
     }
   }
 }

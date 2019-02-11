@@ -16,19 +16,23 @@
 
 package controllers.security
 
-import controllers.security.routes._
 import base.SpecBase
+import config.ClaimAmounts
 import forms.security.SecurityGuardNHSFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.security.SecurityGuardNHSPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.security.SecurityGuardNHSView
 
-class SecurityGuardNHSControllerSpec extends SpecBase {
+class SecurityGuardNHSControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -149,6 +153,38 @@ class SecurityGuardNHSControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "save 'nhsSecurity' to ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, securityGuardNHSRoute).withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Security.nhsSecurity
+      }
+    }
+
+    "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, securityGuardNHSRoute).withFormUrlEncodedBody(("value", "false"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+      }
     }
   }
 }

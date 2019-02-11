@@ -17,17 +17,22 @@
 package controllers.engineering
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.engineering.TypeOfEngineeringFormProvider
 import models.{NormalMode, TypeOfEngineering, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.engineering.TypeOfEngineeringPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.engineering.TypeOfEngineeringView
 
-class TypeOfEngineeringControllerSpec extends SpecBase {
+class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -169,4 +174,22 @@ class TypeOfEngineeringControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
+  "save 'defaultRate' to ClaimAmount when 'NoneOfTheAbove' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, typeOfEngineeringRoute)
+      .withFormUrlEncodedBody(("value", TypeOfEngineering.NoneOfTheAbove.toString))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+    }
+  }
+
 }

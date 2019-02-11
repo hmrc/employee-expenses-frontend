@@ -17,17 +17,22 @@
 package controllers.engineering
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.engineering.ConstructionalEngineeringApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.engineering.ConstructionalEngineeringApprenticePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.engineering.ConstructionalEngineeringApprenticeView
 
-class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase {
+class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -168,6 +173,40 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, constructionalEngineeringApprenticeRoute)
+        .withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.apprentice
+      }
+    }
+
+    "save 'allOther' to ClaimAmount when 'No' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, constructionalEngineeringApprenticeRoute)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.allOther
+      }
     }
   }
 }

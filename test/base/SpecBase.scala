@@ -17,7 +17,7 @@
 package base
 
 import com.github.tototoshi.play2.scalate.Scalate
-import config.{ClaimAmountsConfig, FrontendAppConfig}
+import config.FrontendAppConfig
 import controllers.actions._
 import models.UserAnswers
 import org.scalatest.TryValues
@@ -31,8 +31,6 @@ import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.MockScalate
-
-
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
@@ -57,8 +55,6 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
   def injector: Injector = app.injector
 
   def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-
-  def claimAmountsConfig: ClaimAmountsConfig = injector.instanceOf[ClaimAmountsConfig]
 
   def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
 

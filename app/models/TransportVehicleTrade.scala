@@ -23,7 +23,7 @@ sealed trait TransportVehicleTrade
 object TransportVehicleTrade extends Enumerable.Implicits {
 
   case object Builder extends WithName("builder") with TransportVehicleTrade
-  case object Vehiclerepairerwagonlifter extends WithName("vehicleRepairerWagonLifter") with TransportVehicleTrade
+  case object VehicleRepairerWagonLifter extends WithName("vehicleRepairerWagonLifter") with TransportVehicleTrade
   case object RailwayVehiclePainter extends WithName("railwayVehiclePainter") with TransportVehicleTrade
   case object Letterer extends WithName("letterer") with TransportVehicleTrade
   case object BuildersAssistantOrRepairersAssistant extends WithName("buildersAssistantOrRepairersAssistant") with TransportVehicleTrade
@@ -32,7 +32,7 @@ object TransportVehicleTrade extends Enumerable.Implicits {
 
 
   val values: Seq[TransportVehicleTrade] = Seq(
-    Builder, BuildersAssistantOrRepairersAssistant, Letterer, Vehiclerepairerwagonlifter,RailwayVehiclePainter,  NoneOfTheAbove
+    Builder, BuildersAssistantOrRepairersAssistant, Letterer, VehicleRepairerWagonLifter,RailwayVehiclePainter,  NoneOfTheAbove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {

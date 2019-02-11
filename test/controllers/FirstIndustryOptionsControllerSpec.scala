@@ -17,12 +17,14 @@
 package controllers
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.FirstIndustryOptionsFormProvider
 import generators.Generators
 import models.{FirstIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.prop.PropertyChecks
 import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.Application
@@ -34,7 +36,7 @@ import repositories.SessionRepository
 import views.html.FirstIndustryOptionsView
 
 
-class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators {
+class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with PropertyChecks with Generators with OptionValues {
 
   def onwardRoute = Call("GET", "/FOO")
 
@@ -97,25 +99,6 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
       application.stop()
     }
 
-
-    "save ClaimAmount when 'Retail' is selected" in {
-
-      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, firstIndustryOptionsRoute).withFormUrlEncodedBody(("value", FirstIndustryOptions.Retail.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.defaultRate))
-      }
-
-    }
-
     "return a bad request and errors when bad data is submitted" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -163,4 +146,20 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
     }
   }
 
+  "save ClaimAmount when 'Retail' is selected" in {
+
+    val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, firstIndustryOptionsRoute).withFormUrlEncodedBody(("value", FirstIndustryOptions.Retail.toString))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+    }
+
+  }
 }

@@ -17,21 +17,23 @@
 package controllers.engineering
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.engineering.ConstructionalEngineeringList3FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.engineering.ConstructionalEngineeringList3Page
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.engineering.ConstructionalEngineeringList3View
 import repositories.SessionRepository
-import pages.ClaimAmount
+import views.html.engineering.ConstructionalEngineeringList3View
 
 
-class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFutures {
+class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -154,10 +156,9 @@ class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFu
       application.stop()
     }
 
-    "save ClaimAmount when 'Yes' is selected" in {
+    "save 'list3' to ClaimAmount when 'Yes' is selected" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
         .build()
 
       val sessionRepository = application.injector.instanceOf[SessionRepository]
@@ -167,7 +168,7 @@ class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFu
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.ConstructionalEngineering.list3))
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.list3
       }
     }
   }

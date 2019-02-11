@@ -17,17 +17,23 @@
 package controllers.transport
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.transport.GarageHandOrCleanerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.transport.GarageHandOrCleanerPage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.transport.GarageHandOrCleanerView
 
-class GarageHandOrCleanerControllerSpec extends SpecBase {
+class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -168,6 +174,38 @@ class GarageHandOrCleanerControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "save ClaimAmount 'garageHands' when true" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, garageHandOrCleanerRoute).withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.garageHands
+      }
+    }
+
+    "save ClaimAmount 'conductorsDrivers' when false" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, garageHandOrCleanerRoute).withFormUrlEncodedBody(("value", "false"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.conductorsDrivers
+      }
     }
   }
 }

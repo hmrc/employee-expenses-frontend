@@ -16,7 +16,7 @@
 
 package controllers.healthcare
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.healthcare.AmbulanceStaffFormProvider
 import javax.inject.{Inject, Named}
@@ -42,8 +42,7 @@ class AmbulanceStaffController @Inject()(
                                           requireData: DataRequiredAction,
                                           formProvider: AmbulanceStaffFormProvider,
                                           val controllerComponents: MessagesControllerComponents,
-                                          view: AmbulanceStaffView,
-                                          claimAmounts: ClaimAmountsConfig
+                                          view: AmbulanceStaffView
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -69,8 +68,8 @@ class AmbulanceStaffController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value))
-            newAnswers     <- if (value) Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Healthcare.ambulanceStaff)) else Future.successful(updatedAnswers)
-            _              <- sessionRepository.set(newAnswers)
+            newAnswers <- if (value) Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Healthcare.ambulanceStaff)) else Future.successful(updatedAnswers)
+            _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(AmbulanceStaffPage, mode)(updatedAnswers))
         }
       )
