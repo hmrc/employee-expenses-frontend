@@ -44,7 +44,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
   private lazy val taiConnector: TaiConnector = app.injector.instanceOf[TaiConnector]
 
-  private val taxYear = TaxYear()
+  private val taxYear = TaiTaxYear()
 
   private val taxCodeRecords = Seq(TaxCodeRecord(
     taxCode = "830L",
