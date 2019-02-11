@@ -72,8 +72,8 @@ object ClaimAmounts {
     }
 
     object Railways {
+      lazy val vehicleRepairersWagonLifters: Int = 140
       lazy val vehiclePainters: Int = 80
-      lazy val vehicleRepairersWagonLifters: Int = 80
       lazy val allOther: Int = 100
     }
 
