@@ -29,6 +29,7 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
     lazy val ambulanceStaff: Int = configuration.get[Int]("claim-amounts.healthcare.ambulance-staff")
     lazy val list1: Int = configuration.get[Int]("claim-amounts.healthcare.list-1")
     lazy val list2: Int = configuration.get[Int]("claim-amounts.healthcare.list-2")
+    lazy val catering: Int = configuration.get[Int]("claim-amounts.healthcare.catering")
     lazy val allOther: Int = configuration.get[Int]("claim-amounts.healthcare.all-other")
   }
 

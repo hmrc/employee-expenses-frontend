@@ -16,12 +16,14 @@
 
 package controllers.foodCatering
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.foodCatering.CateringStaffNHSFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.foodCatering.CateringStaffNHSPage
+import pages.ClaimAmount
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -40,7 +42,8 @@ class CateringStaffNHSController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: CateringStaffNHSFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: CateringStaffNHSView
+                                         view: CateringStaffNHSView,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,8 +69,10 @@ class CateringStaffNHSController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CateringStaffNHSPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CateringStaffNHSPage, mode)(updatedAnswers))
+            amount: Int = if (value) claimAmounts.Healthcare.catering else claimAmounts.defaultRate
+            newAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
+            _  <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(CateringStaffNHSPage, mode)(newAnswers))
         }
       )
   }
