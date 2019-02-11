@@ -16,11 +16,13 @@
 
 package controllers.printing
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.printing.PrintingOccupationList2FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.printing.PrintingOccupationList2Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class PrintingOccupationList2Controller @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: PrintingOccupationList2FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: PrintingOccupationList2View
+                                         view: PrintingOccupationList2View,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -56,7 +59,7 @@ class PrintingOccupationList2Controller @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -66,6 +69,8 @@ class PrintingOccupationList2Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PrintingOccupationList2Page, value))
+            amount: Int = if (value) claimAmounts.Printing.list2 else claimAmounts.Printing.allOther
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PrintingOccupationList2Page, mode)(updatedAnswers))
         }

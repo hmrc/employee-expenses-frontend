@@ -16,11 +16,13 @@
 
 package controllers.printing
 
+import config.ClaimAmountsConfig
 import controllers.actions._
 import forms.printing.PrintingOccupationList1FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.printing.PrintingOccupationList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +42,8 @@ class PrintingOccupationList1Controller @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: PrintingOccupationList1FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: PrintingOccupationList1View
+                                         view: PrintingOccupationList1View,
+                                         claimAmounts: ClaimAmountsConfig
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -56,7 +59,7 @@ class PrintingOccupationList1Controller @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -66,8 +69,13 @@ class PrintingOccupationList1Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PrintingOccupationList1Page, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PrintingOccupationList1Page, mode)(updatedAnswers))
+            newAnswers     <- if (value) {
+                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Printing.list1))
+                              } else {
+                                Future.successful(updatedAnswers)
+                              }
+            _              <- sessionRepository.set(newAnswers)
+          } yield Redirect(navigator.nextPage(PrintingOccupationList1Page, mode)(newAnswers))
         }
       )
   }

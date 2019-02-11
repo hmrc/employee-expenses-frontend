@@ -109,4 +109,10 @@ class ClaimAmountsConfig @Inject() (configuration: Configuration) {
     lazy val allOther = configuration.get[Int]("claim-amounts.heating.all-other")
   }
 
+  object Printing {
+    lazy val list1 = configuration.get[Int]("claim-amounts.printing.list-1")
+    lazy val list2 = configuration.get[Int]("claim-amounts.printing.list-2")
+    lazy val allOther = configuration.get[Int]("claim-amounts.printing.all-other")
+  }
+
 }
