@@ -20,7 +20,7 @@ import connectors.TaiConnector
 import controllers.actions._
 import forms.authenticated.YourEmployerFormProvider
 import javax.inject.{Inject, Named}
-import models.Mode
+import models.{Mode, TaxCodeRecord}
 import navigation.Navigator
 import pages.authenticated.YourEmployerPage
 import play.api.data.Form
@@ -49,19 +49,21 @@ class YourEmployerController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-      taiConnector.taiTaxCodeRecords("AB123456").map {
-        taxRecord =>
+        val preparedForm = request.userAnswers.get(YourEmployerPage) match {
+          case None => form
+          case Some(value) => form.fill(value)
+        }
 
-          val preparedForm = request.userAnswers.get(YourEmployerPage) match {
-            case None => form
-            case Some(value) => form.fill(value)
+      request.nino match {
+        case Some(nino) =>
+          for {
+            taxCodeRecord: Seq[TaxCodeRecord] <- taiConnector.taiTaxCodeRecords(nino)
+          } yield {
+            Ok(view(preparedForm, mode, taxCodeRecord.toString()))
           }
-
-          print(s"\n\n${taxRecord.toString}\n\n")
-
-          Ok(view(preparedForm, mode, taxRecord.toString))
+        case _ =>
+          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
-
 
   }
 
