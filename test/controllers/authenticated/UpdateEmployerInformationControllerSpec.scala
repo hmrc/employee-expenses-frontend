@@ -17,6 +17,7 @@
 package controllers.authenticated
 
 import base.SpecBase
+import models.NormalMode
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.authenticated.UpdateEmployerInformationView
@@ -38,7 +39,7 @@ class UpdateEmployerInformationControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view()(fakeRequest, messages).toString
+        view(NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }

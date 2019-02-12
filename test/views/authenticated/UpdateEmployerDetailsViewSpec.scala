@@ -16,6 +16,7 @@
 
 package views.authenticated
 
+import models.NormalMode
 import views.behaviours.ViewBehaviours
 import views.html.authenticated.UpdateEmployerInformationView
 
@@ -27,9 +28,9 @@ class UpdateEmployerDetailsViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[UpdateEmployerInformationView]
 
-    val applyView = view.apply()(fakeRequest, messages)
+    val applyView = view.apply(NormalMode)(fakeRequest, messages)
 
-    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth = view.apply(NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(applyView, "updateEmployerInformation")
 
