@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.authenticated
 
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.UpdateYourAddressView
+import views.html.authenticated.UpdateYourAddressView
 
 class UpdateYourAddressControllerSpec extends SpecBase {
+  val nextPageURL = "/employee-expenses"
 
   "UpdateYourAddress Controller" must {
 
@@ -38,7 +39,7 @@ class UpdateYourAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view()(fakeRequest, messages).toString
+        view(nextPageURL)(fakeRequest, messages).toString
 
       application.stop()
     }

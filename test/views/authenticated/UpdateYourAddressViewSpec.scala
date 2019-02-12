@@ -14,28 +14,32 @@
  * limitations under the License.
  */
 
-package views
+package views.authenticated
 
 import views.behaviours.ViewBehaviours
-import views.html.UpdateYourAddressView
+import views.html.authenticated.UpdateYourAddressView
 
 class UpdateYourAddressViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val nextPageURL = "/foo"
 
   "UpdateYourAddress view" must {
 
     val view = application.injector.instanceOf[UpdateYourAddressView]
 
-    val applyView = view.apply()(fakeRequest, messages)
-
-    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
-
-    behave like normalPage(applyView, "updateYourAddress")
+    val applyViewWithAuth = view.apply(nextPageURL)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPageWithAccountMenu(applyViewWithAuth)
 
-    behave like pageWithBackLink(applyView)
+    behave like pageWithBackLink(applyViewWithAuth)
+
+    behave like pageWithButtonLink(applyViewWithAuth, nextPageURL, "continue")
+
+    "display page content" in {
+      val doc = asDocument(applyViewWithAuth)
+      assertContainsMessages(doc, "updateYourAddress.guidance1", "updateYourAddress.guidance2")
+    }
   }
 
   application.stop()

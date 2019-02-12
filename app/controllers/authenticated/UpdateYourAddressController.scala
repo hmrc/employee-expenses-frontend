@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.authenticated
 
 import controllers.actions._
-import javax.inject.Inject
+import javax.inject.{Inject, Named}
+import models.NormalMode
+import navigation.Navigator
+import pages.authenticated.UpdateYourAddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.UpdateYourAddressView
+import views.html.authenticated.UpdateYourAddressView
 
 import scala.concurrent.ExecutionContext
 
 class UpdateYourAddressController @Inject()(
                                        override val messagesApi: MessagesApi,
+                                       @Named("Authenticated") navigator: Navigator,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
@@ -36,6 +40,6 @@ class UpdateYourAddressController @Inject()(
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view())
+      Ok(view(navigator.nextPage(UpdateYourAddressPage, NormalMode)(request.userAnswers).url))
   }
 }
