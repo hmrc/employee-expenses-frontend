@@ -298,4 +298,6 @@ POST        /change-constructional-engineering-list-3            controllers.eng
 
 GET         /update-employer-information                         controllers.authenticated.UpdateEmployerInformationController.onPageLoad()
 
-GET         /update-your-address                                  controllers.authenticated.UpdateYourAddressController.onPageLoad()
+GET         /update-your-address                                 controllers.authenticated.UpdateYourAddressController.onPageLoad()
+
+GET         /no-code-change                                      controllers.authenticated.NoCodeChangeController.onPageLoad()
