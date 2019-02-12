@@ -16,6 +16,7 @@
 
 package controllers.authenticated
 
+import connectors.TaiConnector
 import controllers.actions._
 import forms.authenticated.YourEmployerFormProvider
 import javax.inject.{Inject, Named}
@@ -40,20 +41,28 @@ class YourEmployerController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: YourEmployerFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
+                                         taiConnector: TaiConnector,
                                          view: YourEmployerView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
+      taiConnector.taiTaxCodeRecords("AB123456").map {
+        taxRecord =>
 
-      val preparedForm = request.userAnswers.get(YourEmployerPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
+          val preparedForm = request.userAnswers.get(YourEmployerPage) match {
+            case None => form
+            case Some(value) => form.fill(value)
+          }
+
+          print(s"\n\n${taxRecord.toString}\n\n")
+
+          Ok(view(preparedForm, mode, taxRecord.toString))
       }
 
-      Ok(view(preparedForm, mode, ""))
+
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
