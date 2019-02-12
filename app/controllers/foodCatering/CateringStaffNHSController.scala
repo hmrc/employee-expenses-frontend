@@ -16,14 +16,14 @@
 
 package controllers.foodCatering
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.foodCatering.CateringStaffNHSFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
-import pages.foodCatering.CateringStaffNHSPage
 import pages.ClaimAmount
+import pages.foodCatering.CateringStaffNHSPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -34,17 +34,16 @@ import views.html.foodCatering.CateringStaffNHSView
 import scala.concurrent.{ExecutionContext, Future}
 
 class CateringStaffNHSController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("FoodCatering") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: CateringStaffNHSFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: CateringStaffNHSView,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                            override val messagesApi: MessagesApi,
+                                            sessionRepository: SessionRepository,
+                                            @Named("FoodCatering") navigator: Navigator,
+                                            identify: UnauthenticatedIdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            formProvider: CateringStaffNHSFormProvider,
+                                            val controllerComponents: MessagesControllerComponents,
+                                            view: CateringStaffNHSView
+                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -69,9 +68,9 @@ class CateringStaffNHSController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CateringStaffNHSPage, value))
-            amount: Int = if (value) claimAmounts.Healthcare.catering else claimAmounts.defaultRate
+            amount: Int = if (value) ClaimAmounts.Healthcare.catering else ClaimAmounts.defaultRate
             newAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _  <- sessionRepository.set(newAnswers)
+            _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(CateringStaffNHSPage, mode)(newAnswers))
         }
       )

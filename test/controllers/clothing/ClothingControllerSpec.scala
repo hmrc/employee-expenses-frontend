@@ -18,17 +18,22 @@ package controllers.clothing
 
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.clothing.ClothingFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.clothing.ClothingPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.clothing.ClothingView
 
-class ClothingControllerSpec extends SpecBase {
+class ClothingControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -150,5 +155,43 @@ class ClothingControllerSpec extends SpecBase {
 
       application.stop()
     }
+  }
+
+  "save 'clothingList' to ClaimAmount when 'Yes' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, clothingRoute)
+      .withFormUrlEncodedBody(("value", "true"))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.Clothing.clothingList
+    }
+
+    application.stop()
+  }
+
+  "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, clothingRoute)
+      .withFormUrlEncodedBody(("value", "false"))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+    }
+
+    application.stop()
   }
 }

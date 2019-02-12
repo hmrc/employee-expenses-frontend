@@ -17,9 +17,11 @@
 package controllers.foodCatering
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.foodCatering.CateringStaffNHSFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.ScalaFutures
 import pages.foodCatering.CateringStaffNHSPage
 import pages.ClaimAmount
@@ -30,7 +32,7 @@ import play.api.test.Helpers._
 import views.html.foodCatering.CateringStaffNHSView
 import repositories.SessionRepository
 
-class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures {
+class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -136,38 +138,6 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures {
       application.stop()
     }
 
-    "save ClaimAmount when 'Yes' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, cateringStaffNHSRoute).withFormUrlEncodedBody(("value", "true"))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Healthcare.catering))
-      }
-    }
-
-    "save ClaimAmount when 'No' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, cateringStaffNHSRoute).withFormUrlEncodedBody(("value", "false"))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.defaultRate))
-      }
-    }
-
     "redirect to Session Expired for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
@@ -184,5 +154,41 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures {
 
       application.stop()
     }
+  }
+
+  "save ClaimAmount when 'Yes' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, cateringStaffNHSRoute).withFormUrlEncodedBody(("value", "true"))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.catering
+    }
+
+    application.stop()
+  }
+
+  "save ClaimAmount when 'No' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, cateringStaffNHSRoute).withFormUrlEncodedBody(("value", "false"))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+    }
+
+    application.stop()
   }
 }

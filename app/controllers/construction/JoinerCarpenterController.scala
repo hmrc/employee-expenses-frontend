@@ -16,7 +16,7 @@
 
 package controllers.construction
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.construction.JoinerCarpenterFormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.construction.JoinerCarpenterView
 import scala.concurrent.{ExecutionContext, Future}
 
 class JoinerCarpenterController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Construction") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: JoinerCarpenterFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: JoinerCarpenterView,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                           override val messagesApi: MessagesApi,
+                                           sessionRepository: SessionRepository,
+                                           @Named("Construction") navigator: Navigator,
+                                           identify: UnauthenticatedIdentifierAction,
+                                           getData: DataRetrievalAction,
+                                           requireData: DataRequiredAction,
+                                           formProvider: JoinerCarpenterFormProvider,
+                                           val controllerComponents: MessagesControllerComponents,
+                                           view: JoinerCarpenterView
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -70,11 +69,11 @@ class JoinerCarpenterController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(JoinerCarpenterPage, value))
             newUserAnswers <- if (value) {
-                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Construction.joinersCarpenters))
-                              } else {
-                                Future.successful(updatedAnswers)
-                              }
-            _              <- sessionRepository.set(newUserAnswers)
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Construction.joinersCarpenters))
+            } else {
+              Future.successful(updatedAnswers)
+            }
+            _ <- sessionRepository.set(newUserAnswers)
           } yield Redirect(navigator.nextPage(JoinerCarpenterPage, mode)(newUserAnswers))
         }
       )

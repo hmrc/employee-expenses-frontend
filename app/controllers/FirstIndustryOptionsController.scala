@@ -17,11 +17,11 @@
 package controllers
 
 import com.google.inject.Inject
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
 import forms.FirstIndustryOptionsFormProvider
 import javax.inject.Named
-import models.{Enumerable, FirstIndustryOptions, Mode, UserAnswers}
+import models.{Enumerable, FirstIndustryOptions, Mode}
 import navigation.Navigator
 import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.data.Form
@@ -42,8 +42,7 @@ class FirstIndustryOptionsController @Inject()(
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: FirstIndustryOptionsView,
                                                 sessionRepository: SessionRepository,
-                                                @Named("Generic") navigator: Navigator,
-                                                claimAmounts: ClaimAmountsConfig
+                                                @Named("Generic") navigator: Navigator
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form: Form[FirstIndustryOptions] = formProvider()
@@ -69,8 +68,8 @@ class FirstIndustryOptionsController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value))
-            newAnswers     <- if (value == FirstIndustryOptions.Retail) Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.defaultRate)) else Future.successful(updatedAnswers)
-            _              <- sessionRepository.set(newAnswers)
+            newAnswers <- if (value == FirstIndustryOptions.Retail) Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate)) else Future.successful(updatedAnswers)
+            _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(FirstIndustryOptionsPage, mode)(updatedAnswers))
         }
       )
