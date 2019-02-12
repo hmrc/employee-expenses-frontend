@@ -17,40 +17,61 @@
 package controllers.authenticated
 
 import base.SpecBase
+import connectors.CitizenDetailsConnector
 import controllers.authenticated.routes._
 import controllers.routes._
 import forms.authenticated.YourAddressFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{Address, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
+import org.mockito.Mockito._
+import org.mockito.Matchers._
+import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.authenticated.YourAddressView
 
+import scala.concurrent.Future
+
 class YourAddressControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new YourAddressFormProvider()
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
-  lazy val yourAddressRoute = YourAddressController.onPageLoad(NormalMode).url
+  val connector: CitizenDetailsConnector = mock[CitizenDetailsConnector]
+  val address = Address(
+    Some("6 Howsell Road"),
+    Some("Llanddew"),
+    Some("Line 3"),
+    Some("Line 4"),
+    Some("Line 5"),
+    Some("DN16 3FB"),
+    Some("GREAT BRITAIN")
+  )
+
+  lazy val yourAddressRoute: String = YourAddressController.onPageLoad(NormalMode).url
 
   "YourAddress Controller" must {
 
     "return OK and the correct view for a GET" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[CitizenDetailsConnector].toInstance(connector))
+        .build()
 
       val request = FakeRequest(GET, yourAddressRoute)
 
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[YourAddressView]
+
+      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
 
       status(result) mustEqual OK
 
@@ -64,13 +85,17 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       val userAnswers = UserAnswers(userAnswersId).set(YourAddressPage, true).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[CitizenDetailsConnector].toInstance(connector))
+        .build()
 
       val request = FakeRequest(GET, yourAddressRoute)
 
       val view = application.injector.instanceOf[YourAddressView]
 
       val result = route(application, request).value
+
+      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
 
       status(result) mustEqual OK
 
@@ -82,9 +107,12 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "redirect to the next page when valid data is submitted" in {
 
+      val userAnswers = UserAnswers(userAnswersId).set(CitizenDetailsAddress, address).success.value
+
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[CitizenDetailsConnector].toInstance(connector))
           .build()
 
       val request =
@@ -102,7 +130,11 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers = UserAnswers(userAnswersId).set(CitizenDetailsAddress, address).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[CitizenDetailsConnector].toInstance(connector))
+        .build()
 
       val request =
         FakeRequest(POST, yourAddressRoute)

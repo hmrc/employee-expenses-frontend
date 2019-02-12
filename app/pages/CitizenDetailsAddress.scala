@@ -23,5 +23,5 @@ object CitizenDetailsAddress extends QuestionPage[Address] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "address"
+  override def toString: String = "citizenDetailsAddress"
 }

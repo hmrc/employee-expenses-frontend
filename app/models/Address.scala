@@ -17,7 +17,7 @@
 package models
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Reads, Writes}
+import play.api.libs.json._
 
 case class Address(
                     line1: Option[String],
@@ -31,22 +31,22 @@ case class Address(
 
 object Address {
   implicit lazy val reads: Reads[Address] = (
-    (JsPath \ "address" \ "line1").readNullable[String] and
-    (JsPath \ "address" \ "line2").readNullable[String] and
-    (JsPath \ "address" \ "line3").readNullable[String] and
-    (JsPath \ "address" \ "line4").readNullable[String] and
-    (JsPath \ "address" \ "line5").readNullable[String] and
-    (JsPath \ "address" \ "postcode").readNullable[String] and
-    (JsPath \ "address" \ "country").readNullable[String]
+    (__ \ "address" \ "line1").readNullable[String] and
+    (__ \ "address" \ "line2").readNullable[String] and
+    (__ \ "address" \ "line3").readNullable[String] and
+    (__ \ "address" \ "line4").readNullable[String] and
+    (__ \ "address" \ "line5").readNullable[String] and
+    (__ \ "address" \ "postcode").readNullable[String] and
+    (__ \ "address" \ "country").readNullable[String]
   )(Address.apply _)
 
   implicit lazy val writes: Writes[Address] = (
-    (JsPath \ "address" \ "line1").writeNullable[String] and
-    (JsPath \ "address" \ "line2").writeNullable[String] and
-    (JsPath \ "address" \ "line3").writeNullable[String] and
-    (JsPath \ "address" \ "line4").writeNullable[String] and
-    (JsPath \ "address" \ "line5").writeNullable[String] and
-    (JsPath \ "address" \ "postcode").writeNullable[String] and
-    (JsPath \ "address" \ "country").writeNullable[String]
+    (__ \ "address" \ "line1").writeNullable[String] and
+    (__ \ "address" \ "line2").writeNullable[String] and
+    (__ \ "address" \ "line3").writeNullable[String] and
+    (__ \ "address" \ "line4").writeNullable[String] and
+    (__ \ "address" \ "line5").writeNullable[String] and
+    (__ \ "address" \ "postcode").writeNullable[String] and
+    (__ \ "address" \ "country").writeNullable[String]
   )(unlift(Address.unapply))
 }
