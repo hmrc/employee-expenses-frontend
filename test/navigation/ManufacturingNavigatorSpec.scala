@@ -110,23 +110,23 @@ class ManufacturingNavigatorSpec extends SpecBase {
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
 
-/*        "go to ManufacturingApprentice from AluminiumOccupationList3 when 'No' is selected" in {
+        "go to AluminiumApprentice from AluminiumOccupationList3 when 'No' is selected" in {
           val answers = emptyUserAnswers.set(AluminiumOccupationList3Page, false).success.value
           navigator.nextPage(AluminiumOccupationList3Page, NormalMode)(answers) mustBe
-            controllers.manufacturing.routes.ManufacturingApprenticeController.onPageLoad(NormalMode)
-        }*/
+            controllers.manufacturing.routes.AluminiumApprenticeController.onPageLoad(NormalMode)
+        }
 
-/*        "go to EmployerContributionController from ManufacturingApprentice when 'Yes' is selected" in {
-          val answers = emptyUserAnswers.set(ManufacturingApprenticePage, true).success.value
-          navigator.nextPage(ManufacturingApprenticePage, NormalMode)(answers) mustBe
+        "go to EmployerContributionController from AluminiumApprentice when 'Yes' is selected" in {
+          val answers = emptyUserAnswers.set(AluminiumApprenticePage, true).success.value
+          navigator.nextPage(AluminiumApprenticePage, NormalMode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
 
-        "go to EmployerContributionController from ManufacturingApprentice when 'No' is selected" in {
-          val answers = emptyUserAnswers.set(ManufacturingApprenticePage, false).success.value
-          navigator.nextPage(ManufacturingApprenticePage, NormalMode)(answers) mustBe
+        "go to EmployerContributionController from AluminiumApprentice when 'No' is selected" in {
+          val answers = emptyUserAnswers.set(AluminiumApprenticePage, false).success.value
+          navigator.nextPage(AluminiumApprenticePage, NormalMode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }*/
+        }
       }
 
       "in Iron and Steel journey" must {
@@ -160,23 +160,23 @@ class ManufacturingNavigatorSpec extends SpecBase {
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
 
-/*        "go to ManufacturingApprentice from IronSteelOccupationListController when 'No' is selected" in {
+        "go to IronApprentice from IronSteelOccupationListController when 'No' is selected" in {
           val answers = emptyUserAnswers.set(IronSteelOccupationListPage, false).success.value
           navigator.nextPage(IronSteelOccupationListPage, NormalMode)(answers) mustBe
-            routes.ManufacturingApprenticeController.onPageLoad(NormalMode)
-        }*/
+            routes.IronApprenticeController.onPageLoad(NormalMode)
+        }
 
-/*        "go to EmployerContributionController from ManufacturingApprentice when 'Yes' is selected" in {
-          val answers = emptyUserAnswers.set(ManufacturingApprenticePage, true).success.value
-          navigator.nextPage(ManufacturingApprenticePage, NormalMode)(answers) mustBe
+        "go to EmployerContributionController from IronApprentice when 'Yes' is selected" in {
+          val answers = emptyUserAnswers.set(IronApprenticePage, true).success.value
+          navigator.nextPage(IronApprenticePage, NormalMode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
         }
 
-        "go to EmployerContributionController from ManufacturingApprentice when 'No' is selected" in {
-          val answers = emptyUserAnswers.set(ManufacturingApprenticePage, false).success.value
-          navigator.nextPage(ManufacturingApprenticePage, NormalMode)(answers) mustBe
+        "go to EmployerContributionController from IronApprentice when 'No' is selected" in {
+          val answers = emptyUserAnswers.set(IronApprenticePage, false).success.value
+          navigator.nextPage(IronApprenticePage, NormalMode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }*/
+        }
       }
 
       "in Wood Furniture journey" must {

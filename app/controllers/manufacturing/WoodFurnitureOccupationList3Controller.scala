@@ -16,11 +16,13 @@
 
 package controllers.manufacturing
 
+import config.ClaimAmounts
 import controllers.actions._
 import forms.WoodFurnitureOccupationList3FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.manufacturing.WoodFurnitureOccupationList3Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -66,8 +68,13 @@ class WoodFurnitureOccupationList3Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WoodFurnitureOccupationList3Page, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(WoodFurnitureOccupationList3Page, mode)(updatedAnswers))
+            newUserAnswers <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.list3))
+            } else {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.allOther))
+            }
+            _              <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(WoodFurnitureOccupationList3Page, mode)(newUserAnswers))
         }
       )
   }
