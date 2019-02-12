@@ -16,7 +16,7 @@
 
 package controllers.transport
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.transport.WhichRailwayTradeFormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.transport.WhichRailwayTradeView
 import scala.concurrent.{ExecutionContext, Future}
 
 class WhichRailwayTradeController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       @Named("Transport") navigator: Navigator,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: WhichRailwayTradeFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: WhichRailwayTradeView,
-                                       claimAmounts: ClaimAmountsConfig
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                             override val messagesApi: MessagesApi,
+                                             sessionRepository: SessionRepository,
+                                             @Named("Transport") navigator: Navigator,
+                                             identify: UnauthenticatedIdentifierAction,
+                                             getData: DataRetrievalAction,
+                                             requireData: DataRequiredAction,
+                                             formProvider: WhichRailwayTradeFormProvider,
+                                             val controllerComponents: MessagesControllerComponents,
+                                             view: WhichRailwayTradeView
+                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
 
@@ -70,12 +69,12 @@ class WhichRailwayTradeController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhichRailwayTradePage, value))
             amount: Int = value match {
-              case WhichRailwayTrade.VehiclePainters => claimAmounts.Transport.painter
-              case WhichRailwayTrade.VehicleRepairersWagonLifters => claimAmounts.Transport.vehicleRepairersWagonLifters
-              case WhichRailwayTrade.NoneOfTheAbove => claimAmounts.Transport.notListed
+              case WhichRailwayTrade.VehiclePainters => ClaimAmounts.Transport.Railways.vehiclePainters
+              case WhichRailwayTrade.VehicleRepairersWagonLifters => ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
+              case WhichRailwayTrade.NoneOfTheAbove => ClaimAmounts.Transport.Railways.allOther
             }
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _              <- sessionRepository.set(updatedAnswers)          }
+            _ <- sessionRepository.set(updatedAnswers)}
             yield Redirect(navigator.nextPage(WhichRailwayTradePage, mode)(updatedAnswers))
         }
       )

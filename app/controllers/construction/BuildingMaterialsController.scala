@@ -16,7 +16,7 @@
 
 package controllers.construction
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.construction.BuildingMaterialsFormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.construction.BuildingMaterialsView
 import scala.concurrent.{ExecutionContext, Future}
 
 class BuildingMaterialsController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Construction") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: BuildingMaterialsFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: BuildingMaterialsView,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                             override val messagesApi: MessagesApi,
+                                             sessionRepository: SessionRepository,
+                                             @Named("Construction") navigator: Navigator,
+                                             identify: UnauthenticatedIdentifierAction,
+                                             getData: DataRetrievalAction,
+                                             requireData: DataRequiredAction,
+                                             formProvider: BuildingMaterialsFormProvider,
+                                             val controllerComponents: MessagesControllerComponents,
+                                             view: BuildingMaterialsView
+                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -69,9 +68,9 @@ class BuildingMaterialsController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(BuildingMaterialsPage, value))
-            amount: Int = if (value) claimAmounts.Construction.buildingMaterials else claimAmounts.Construction.allOther
+            amount: Int = if (value) ClaimAmounts.Construction.buildingMaterials else ClaimAmounts.Construction.allOther
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(BuildingMaterialsPage, mode)(updatedAnswers))
         }
       )

@@ -17,17 +17,22 @@
 package controllers.construction
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.construction.JoinerCarpenterFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.construction.JoinerCarpenterPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.construction.JoinerCarpenterView
 
-class JoinerCarpenterControllerSpec extends SpecBase {
+class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -149,5 +154,24 @@ class JoinerCarpenterControllerSpec extends SpecBase {
 
       application.stop()
     }
+  }
+
+  "save 'joinersCarpenters' to ClaimAmount when 'Yes' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, joinerCarpenterRoute)
+      .withFormUrlEncodedBody(("value", "true"))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.joinersCarpenters
+    }
+
+    application.stop()
   }
 }

@@ -16,7 +16,7 @@
 
 package controllers.engineering
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.engineering.FactoryEngineeringList1FormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.engineering.FactoryEngineeringList1View
 import scala.concurrent.{ExecutionContext, Future}
 
 class FactoryEngineeringList1Controller @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Engineering") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: FactoryEngineeringList1FormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: FactoryEngineeringList1View,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                   override val messagesApi: MessagesApi,
+                                                   sessionRepository: SessionRepository,
+                                                   @Named("Engineering") navigator: Navigator,
+                                                   identify: UnauthenticatedIdentifierAction,
+                                                   getData: DataRetrievalAction,
+                                                   requireData: DataRequiredAction,
+                                                   formProvider: FactoryEngineeringList1FormProvider,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   view: FactoryEngineeringList1View
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -69,11 +68,11 @@ class FactoryEngineeringList1Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FactoryEngineeringList1Page, value))
-            newAnswers     <- if (value) {
-                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.FactoryEngineering.list1))
-                              } else {
-                                Future.successful(updatedAnswers)
-                              }
+            newAnswers <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.FactoryEngineering.list1))
+            } else {
+              Future.successful(updatedAnswers)
+            }
             _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(FactoryEngineeringList1Page, mode)(newAnswers))
         }

@@ -17,17 +17,22 @@
 package controllers.construction
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.construction.BuildingMaterialsFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
 import pages.construction.BuildingMaterialsPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.construction.BuildingMaterialsView
 
-class BuildingMaterialsControllerSpec extends SpecBase {
+class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -149,5 +154,43 @@ class BuildingMaterialsControllerSpec extends SpecBase {
 
       application.stop()
     }
+  }
+
+  "save 'buildingMaterials' to ClaimAmount when 'Yes' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, buildingMaterialsRoute)
+      .withFormUrlEncodedBody(("value", "true"))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.buildingMaterials
+    }
+
+    application.stop()
+  }
+
+  "save 'allOther' to ClaimAmount when 'No' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, buildingMaterialsRoute)
+      .withFormUrlEncodedBody(("value", "false"))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.allOther
+    }
+
+    application.stop()
   }
 }
