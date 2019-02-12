@@ -18,14 +18,14 @@ package pages.manufacturing
 
 import pages.behaviours.PageBehaviours
 
-class ManufacturingApprenticePageSpec extends PageBehaviours {
+class AluminiumApprenticePageSpec extends PageBehaviours {
 
-  "ManufacturingApprenticePage" must {
+  "AluminiumApprenticePage" must {
 
-    beRetrievable[Boolean](ManufacturingApprenticePage)
+    beRetrievable[Boolean](AluminiumApprenticePage)
 
-    beSettable[Boolean](ManufacturingApprenticePage)
+    beSettable[Boolean](AluminiumApprenticePage)
 
-    beRemovable[Boolean](ManufacturingApprenticePage)
+    beRemovable[Boolean](AluminiumApprenticePage)
   }
 }

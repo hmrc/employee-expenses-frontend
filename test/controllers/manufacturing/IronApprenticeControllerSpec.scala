@@ -17,36 +17,40 @@
 package controllers.manufacturing
 
 import base.SpecBase
-import forms.manufacturing.IronSteelOccupationFormProvider
+import config.ClaimAmounts
+import forms.manufacturing.IronApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.manufacturing.IronSteelOccupationPage
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
+import pages.manufacturing.IronApprenticePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.manufacturing.IronSteelOccupationView
+import repositories.SessionRepository
+import views.html.manufacturing.IronApprenticeView
 
-class IronSteelOccupationControllerSpec extends SpecBase {
+class IronApprenticeControllerSpec extends SpecBase with ScalaFutures {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new IronSteelOccupationFormProvider()
+  val formProvider = new IronApprenticeFormProvider()
   val form = formProvider()
 
-  lazy val ironSteelOccupationRoute = routes.IronSteelOccupationController.onPageLoad(NormalMode).url
+  lazy val ironApprenticeRoute = routes.IronApprenticeController.onPageLoad(NormalMode).url
 
-  "IronSteelOccupation Controller" must {
+  "IronApprentice Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, ironSteelOccupationRoute)
+      val request = FakeRequest(GET, ironApprenticeRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[IronSteelOccupationView]
+      val view = application.injector.instanceOf[IronApprenticeView]
 
       status(result) mustEqual OK
 
@@ -58,13 +62,13 @@ class IronSteelOccupationControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(IronSteelOccupationPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(IronApprenticePage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, ironSteelOccupationRoute)
+      val request = FakeRequest(GET, ironApprenticeRoute)
 
-      val view = application.injector.instanceOf[IronSteelOccupationView]
+      val view = application.injector.instanceOf[IronApprenticeView]
 
       val result = route(application, request).value
 
@@ -84,7 +88,7 @@ class IronSteelOccupationControllerSpec extends SpecBase {
           .build()
 
       val request =
-        FakeRequest(POST, ironSteelOccupationRoute)
+        FakeRequest(POST, ironApprenticeRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -101,12 +105,12 @@ class IronSteelOccupationControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, ironSteelOccupationRoute)
+        FakeRequest(POST, ironApprenticeRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[IronSteelOccupationView]
+      val view = application.injector.instanceOf[IronApprenticeView]
 
       val result = route(application, request).value
 
@@ -122,7 +126,7 @@ class IronSteelOccupationControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, ironSteelOccupationRoute)
+      val request = FakeRequest(GET, ironApprenticeRoute)
 
       val result = route(application, request).value
 
@@ -138,7 +142,7 @@ class IronSteelOccupationControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, ironSteelOccupationRoute)
+        FakeRequest(POST, ironApprenticeRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -146,6 +150,44 @@ class IronSteelOccupationControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, ironApprenticeRoute)
+        .withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.IronSteel.apprentice
+      }
+
+      application.stop()
+    }
+
+    "save 'allOther' to ClaimAmount when 'No' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, ironApprenticeRoute)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.IronSteel.allOther
+      }
 
       application.stop()
     }

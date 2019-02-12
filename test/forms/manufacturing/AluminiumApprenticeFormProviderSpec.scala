@@ -16,14 +16,30 @@
 
 package forms.manufacturing
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-class IronSteelOccupationFormProvider @Inject() extends Mappings {
+class AluminiumApprenticeFormProviderSpec extends BooleanFieldBehaviours {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("ironSteelOccupation.error.required")
+  val requiredKey = "aluminiumApprentice.error.required"
+  val invalidKey = "error.boolean"
+
+  val form = new AluminiumApprenticeFormProvider()()
+
+  ".value" must {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
     )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

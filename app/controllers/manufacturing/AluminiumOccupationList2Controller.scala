@@ -16,11 +16,13 @@
 
 package controllers.manufacturing
 
+import config.ClaimAmounts
 import controllers.actions._
 import forms.manufacturing.AluminiumOccupationList2FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.manufacturing.AluminiumOccupationList2Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,16 +34,16 @@ import views.html.manufacturing.AluminiumOccupationList2View
 import scala.concurrent.{ExecutionContext, Future}
 
 class AluminiumOccupationList2Controller @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Manufacturing") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: AluminiumOccupationList2FormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: AluminiumOccupationList2View
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                    override val messagesApi: MessagesApi,
+                                                    sessionRepository: SessionRepository,
+                                                    @Named("Manufacturing") navigator: Navigator,
+                                                    identify: UnauthenticatedIdentifierAction,
+                                                    getData: DataRetrievalAction,
+                                                    requireData: DataRequiredAction,
+                                                    formProvider: AluminiumOccupationList2FormProvider,
+                                                    val controllerComponents: MessagesControllerComponents,
+                                                    view: AluminiumOccupationList2View
+                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -66,8 +68,13 @@ class AluminiumOccupationList2Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AluminiumOccupationList2Page, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AluminiumOccupationList2Page, mode)(updatedAnswers))
+            newUserAnswers <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.list2))
+            } else {
+              Future.successful(updatedAnswers)
+            }
+            _ <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(AluminiumOccupationList2Page, mode)(newUserAnswers))
         }
       )
   }

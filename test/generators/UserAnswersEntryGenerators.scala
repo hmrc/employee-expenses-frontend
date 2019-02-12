@@ -37,6 +37,22 @@ import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
+  implicit lazy val arbitraryAluminiumApprenticeUserAnswersEntry: Arbitrary[(AluminiumApprenticePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[AluminiumApprenticePage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryIronApprenticeUserAnswersEntry: Arbitrary[(IronApprenticePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[IronApprenticePage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
   implicit lazy val arbitraryConstructionalEngineeringList3UserAnswersEntry: Arbitrary[(ConstructionalEngineeringList3Page.type, JsValue)] =
     Arbitrary {
       for {
@@ -233,22 +249,6 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[IronSteelOccupationListPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitraryIronSteelOccupationUserAnswersEntry: Arbitrary[(IronSteelOccupationPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[IronSteelOccupationPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitraryManufacturingApprenticeUserAnswersEntry: Arbitrary[(ManufacturingApprenticePage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[ManufacturingApprenticePage.type]
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }

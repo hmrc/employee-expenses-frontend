@@ -17,24 +17,24 @@
 package views.manufacturing
 
 import controllers.manufacturing.routes
-import forms.manufacturing.IronSteelOccupationFormProvider
+import forms.manufacturing.IronApprenticeFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.manufacturing.IronSteelOccupationView
+import views.html.manufacturing.IronApprenticeView
 
-class IronSteelOccupationViewSpec extends YesNoViewBehaviours {
+class IronApprenticeViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "ironSteelOccupation"
+  val messageKeyPrefix = "ironApprentice"
 
-  val form = new IronSteelOccupationFormProvider()()
+  val form = new IronApprenticeFormProvider()()
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "IronSteelOccupation view" must {
+  "IronApprentice view" must {
 
-    val view = application.injector.instanceOf[IronSteelOccupationView]
+    val view = application.injector.instanceOf[IronApprenticeView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -48,18 +48,7 @@ class IronSteelOccupationViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.IronSteelOccupationController.onSubmit(NormalMode).url)
-
-    behave like pageWithList(applyView(form), messageKeyPrefix,
-      Seq(
-        "occupation1",
-        "occupation2",
-        "occupation3",
-        "occupation4",
-        "occupation5",
-        "occupation6"
-      )
-    )
+    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.IronApprenticeController.onSubmit(NormalMode).url)
   }
 
   application.stop()

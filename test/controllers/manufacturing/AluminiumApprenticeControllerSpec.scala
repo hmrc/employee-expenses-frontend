@@ -17,36 +17,40 @@
 package controllers.manufacturing
 
 import base.SpecBase
-import forms.manufacturing.ManufacturingApprenticeFormProvider
+import config.ClaimAmounts
+import forms.manufacturing.AluminiumApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.manufacturing.ManufacturingApprenticePage
+import org.scalatest.concurrent.ScalaFutures
+import pages.ClaimAmount
+import pages.manufacturing.AluminiumApprenticePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.manufacturing.ManufacturingApprenticeView
+import repositories.SessionRepository
+import views.html.manufacturing.AluminiumApprenticeView
 
-class ManufacturingApprenticeControllerSpec extends SpecBase {
+class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ManufacturingApprenticeFormProvider()
+  val formProvider = new AluminiumApprenticeFormProvider()
   val form = formProvider()
 
-  lazy val manufacturingApprenticeRoute = routes.ManufacturingApprenticeController.onPageLoad(NormalMode).url
+  lazy val aluminiumApprenticeRoute = routes.AluminiumApprenticeController.onPageLoad(NormalMode).url
 
-  "ManufacturingApprentice Controller" must {
+  "AluminiumApprentice Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, manufacturingApprenticeRoute)
+      val request = FakeRequest(GET, aluminiumApprenticeRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ManufacturingApprenticeView]
+      val view = application.injector.instanceOf[AluminiumApprenticeView]
 
       status(result) mustEqual OK
 
@@ -58,13 +62,13 @@ class ManufacturingApprenticeControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ManufacturingApprenticePage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(AluminiumApprenticePage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, manufacturingApprenticeRoute)
+      val request = FakeRequest(GET, aluminiumApprenticeRoute)
 
-      val view = application.injector.instanceOf[ManufacturingApprenticeView]
+      val view = application.injector.instanceOf[AluminiumApprenticeView]
 
       val result = route(application, request).value
 
@@ -84,7 +88,7 @@ class ManufacturingApprenticeControllerSpec extends SpecBase {
           .build()
 
       val request =
-        FakeRequest(POST, manufacturingApprenticeRoute)
+        FakeRequest(POST, aluminiumApprenticeRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -101,12 +105,12 @@ class ManufacturingApprenticeControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, manufacturingApprenticeRoute)
+        FakeRequest(POST, aluminiumApprenticeRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[ManufacturingApprenticeView]
+      val view = application.injector.instanceOf[AluminiumApprenticeView]
 
       val result = route(application, request).value
 
@@ -122,7 +126,7 @@ class ManufacturingApprenticeControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, manufacturingApprenticeRoute)
+      val request = FakeRequest(GET, aluminiumApprenticeRoute)
 
       val result = route(application, request).value
 
@@ -138,7 +142,7 @@ class ManufacturingApprenticeControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, manufacturingApprenticeRoute)
+        FakeRequest(POST, aluminiumApprenticeRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -146,6 +150,44 @@ class ManufacturingApprenticeControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, aluminiumApprenticeRoute)
+        .withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.Aluminium.apprentice
+      }
+
+      application.stop()
+    }
+
+    "save 'allOther' to ClaimAmount when 'No' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, aluminiumApprenticeRoute)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.Aluminium.allOther
+      }
 
       application.stop()
     }

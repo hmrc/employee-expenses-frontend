@@ -17,24 +17,24 @@
 package views.manufacturing
 
 import controllers.manufacturing.routes
-import forms.manufacturing.ManufacturingApprenticeFormProvider
+import forms.manufacturing.AluminiumApprenticeFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.manufacturing.ManufacturingApprenticeView
+import views.html.manufacturing.AluminiumApprenticeView
 
-class ManufacturingApprenticeViewSpec extends YesNoViewBehaviours {
+class AluminiumApprenticeViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "manufacturingApprentice"
+  val messageKeyPrefix = "aluminiumApprentice"
 
-  val form = new ManufacturingApprenticeFormProvider()()
+  val form = new AluminiumApprenticeFormProvider()()
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "ManufacturingApprentice view" must {
+  "AluminiumApprentice view" must {
 
-    val view = application.injector.instanceOf[ManufacturingApprenticeView]
+    val view = application.injector.instanceOf[AluminiumApprenticeView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -48,7 +48,7 @@ class ManufacturingApprenticeViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.ManufacturingApprenticeController.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.AluminiumApprenticeController.onSubmit(NormalMode).url)
   }
 
   application.stop()

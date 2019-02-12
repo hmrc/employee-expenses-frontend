@@ -16,11 +16,14 @@
 
 package controllers.manufacturing
 
+import config.ClaimAmounts
 import controllers.actions._
 import forms.manufacturing.TypeOfManufacturingFormProvider
 import javax.inject.{Inject, Named}
+import models.TypeOfManufacturing._
 import models.{Enumerable, Mode}
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.manufacturing.TypeOfManufacturingPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,16 +35,16 @@ import views.html.manufacturing.TypeOfManufacturingView
 import scala.concurrent.{ExecutionContext, Future}
 
 class TypeOfManufacturingController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       @Named("Manufacturing") navigator: Navigator,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: TypeOfManufacturingFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: TypeOfManufacturingView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                               override val messagesApi: MessagesApi,
+                                               sessionRepository: SessionRepository,
+                                               @Named("Manufacturing") navigator: Navigator,
+                                               identify: UnauthenticatedIdentifierAction,
+                                               getData: DataRetrievalAction,
+                                               requireData: DataRequiredAction,
+                                               formProvider: TypeOfManufacturingFormProvider,
+                                               val controllerComponents: MessagesControllerComponents,
+                                               view: TypeOfManufacturingView
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
 
@@ -66,8 +69,15 @@ class TypeOfManufacturingController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfManufacturingPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TypeOfManufacturingPage, mode)(updatedAnswers))
+            newUserAnswers <- value match {
+              case BrassCopper => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.brassCopper))
+              case Glass => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.glass))
+              case PreciousMetals => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.quarryingPreciousMetals))
+              case NoneOfAbove => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate))
+              case _ => Future.successful(updatedAnswers)
+            }
+            _ <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(TypeOfManufacturingPage, mode)(newUserAnswers))
         }
       )
   }

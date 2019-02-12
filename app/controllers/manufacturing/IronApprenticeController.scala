@@ -18,39 +18,39 @@ package controllers.manufacturing
 
 import config.ClaimAmounts
 import controllers.actions._
-import forms.WoodFurnitureOccupationList3FormProvider
+import forms.manufacturing.IronApprenticeFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.ClaimAmount
-import pages.manufacturing.WoodFurnitureOccupationList3Page
+import pages.manufacturing.IronApprenticePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.manufacturing.WoodFurnitureOccupationList3View
+import views.html.manufacturing.IronApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class WoodFurnitureOccupationList3Controller @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Manufacturing") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: WoodFurnitureOccupationList3FormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: WoodFurnitureOccupationList3View
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class IronApprenticeController @Inject()(
+                                          override val messagesApi: MessagesApi,
+                                          sessionRepository: SessionRepository,
+                                          @Named("Manufacturing") navigator: Navigator,
+                                          identify: UnauthenticatedIdentifierAction,
+                                          getData: DataRetrievalAction,
+                                          requireData: DataRequiredAction,
+                                          formProvider: IronApprenticeFormProvider,
+                                          val controllerComponents: MessagesControllerComponents,
+                                          view: IronApprenticeView
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(WoodFurnitureOccupationList3Page) match {
+      val preparedForm = request.userAnswers.get(IronApprenticePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -67,14 +67,14 @@ class WoodFurnitureOccupationList3Controller @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(WoodFurnitureOccupationList3Page, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(IronApprenticePage, value))
             newUserAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.list3))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.apprentice))
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.allOther))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.allOther))
             }
-            _              <- sessionRepository.set(newUserAnswers)
-          } yield Redirect(navigator.nextPage(WoodFurnitureOccupationList3Page, mode)(newUserAnswers))
+            _ <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(IronApprenticePage, mode)(newUserAnswers))
         }
       )
   }
