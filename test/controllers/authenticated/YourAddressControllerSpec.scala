@@ -17,19 +17,21 @@
 package controllers.authenticated
 
 import base.SpecBase
+import controllers.authenticated.routes._
+import controllers.routes._
 import forms.authenticated.YourAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.authenticated.YourAddressPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.authenticated.YourAddressView
-import controllers.routes._
-import controllers.authenticated.routes._
 
-class YourAddressControllerSpec extends SpecBase {
+class YourAddressControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -53,7 +55,7 @@ class YourAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode)(fakeRequest, messages).toString
+        view(form, NormalMode, address)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -73,7 +75,7 @@ class YourAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode, address)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -115,7 +117,7 @@ class YourAddressControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, address)(fakeRequest, messages).toString
 
       application.stop()
     }

@@ -16,36 +16,40 @@
 
 package controllers.authenticated
 
+import connectors.CitizenDetailsConnector
 import controllers.actions._
 import forms.authenticated.YourAddressFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import service.TaiService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.authenticated.YourAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class YourAddressController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Authenticated") navigator: Navigator,
-                                         identify: IdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: YourAddressFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: YourAddressView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                       override val messagesApi: MessagesApi,
+                                       citizenDetailsConnector: CitizenDetailsConnector,
+                                       sessionRepository: SessionRepository,
+                                       @Named("Authenticated") navigator: Navigator,
+                                       identify: IdentifierAction,
+                                       getData: DataRetrievalAction,
+                                       requireData: DataRequiredAction,
+                                       formProvider: YourAddressFormProvider,
+                                       val controllerComponents: MessagesControllerComponents,
+                                       view: YourAddressView
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(YourAddressPage) match {
@@ -53,22 +57,38 @@ class YourAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode))
+      request.nino match {
+        case Some(nino) =>
+          for {
+            address <- citizenDetailsConnector.getAddress(nino)
+            saveAddress <- Future.fromTry(request.userAnswers.set(CitizenDetailsAddress, address))
+            _ <- sessionRepository.set(saveAddress)
+          } yield {
+            Ok(view(preparedForm, mode, address))
+          }
+        case _ =>
+          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+      }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
+      request.userAnswers.get(CitizenDetailsAddress) match {
+        case Some(address) =>
+          form.bindFromRequest().fold(
+            (formWithErrors: Form[_]) =>
+              Future.successful(BadRequest(view(formWithErrors, mode, address))),
 
-        value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(YourAddressPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(YourAddressPage, mode)(updatedAnswers))
-        }
-      )
+            value => {
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(YourAddressPage, value))
+                _ <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(YourAddressPage, mode)(updatedAnswers))
+            }
+          )
+        case _ =>
+          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+      }
   }
 }
