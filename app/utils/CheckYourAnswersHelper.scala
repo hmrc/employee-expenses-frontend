@@ -193,16 +193,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
 
   //Manufacturing
 
-  def aluminiumOccupationList2: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList2Page) map {
-    x => AnswerRow("aluminiumOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      AluminiumOccupationList2Controller.onPageLoad(CheckMode).url)
-  }
-
-  def aluminiumOccupationList3: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList3Page) map {
-    x => AnswerRow("aluminiumOccupationList3.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      controllers.manufacturing.routes.AluminiumOccupationList3Controller.onPageLoad(CheckMode).url)
-  }
-
   def typeOfManufacturing: Option[AnswerRow] = userAnswers.get(TypeOfManufacturingPage) map {
     x => AnswerRow("typeOfManufacturing.checkYourAnswersLabel", s"typeOfManufacturing.$x", true,
       TypeOfManufacturingController.onPageLoad(CheckMode).url)
@@ -211,6 +201,21 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def aluminiumOccupationList1: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList1Page) map {
     x => AnswerRow("aluminiumOccupationList1.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       AluminiumOccupationList1Controller.onPageLoad(CheckMode).url)
+  }
+
+  def aluminiumOccupationList2: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList2Page) map {
+    x => AnswerRow("aluminiumOccupationList2.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      AluminiumOccupationList2Controller.onPageLoad(CheckMode).url)
+  }
+
+  def aluminiumOccupationList3: Option[AnswerRow] = userAnswers.get(AluminiumOccupationList3Page) map {
+    x => AnswerRow("aluminiumOccupationList3.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      AluminiumOccupationList3Controller.onPageLoad(CheckMode).url)
+  }
+
+  def aluminiumApprentice: Option[AnswerRow] = userAnswers.get(AluminiumApprenticePage) map {
+    x => AnswerRow("aluminiumApprentice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      AluminiumApprenticeController.onPageLoad(CheckMode).url)
   }
 
   def ironSteelOccupationList: Option[AnswerRow] = userAnswers.get(IronSteelOccupationListPage) map {
@@ -226,6 +231,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def ironMiningList: Option[AnswerRow] = userAnswers.get(IronMiningListPage) map {
     x => AnswerRow("ironMiningList.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       IronMiningListController.onPageLoad(CheckMode).url)
+  }
+
+  def ironApprentice: Option[AnswerRow] = userAnswers.get(IronApprenticePage) map {
+    x => AnswerRow("ironApprentice.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      IronApprenticeController.onPageLoad(CheckMode).url)
   }
 
   def woodFurnitureOccupationList2: Option[AnswerRow] = userAnswers.get(WoodFurnitureOccupationList2Page) map {
