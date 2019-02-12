@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import com.google.inject.name.Named
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.SecondIndustryOptionsFormProvider
 import models.{Enumerable, Mode, SecondIndustryOptions}
@@ -34,17 +34,16 @@ import views.html.SecondIndustryOptionsView
 import scala.concurrent.{ExecutionContext, Future}
 
 class SecondIndustryOptionsController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       @Named("Generic") navigator: Navigator,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: SecondIndustryOptionsFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: SecondIndustryOptionsView,
-                                       claimAmounts: ClaimAmountsConfig
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                                 override val messagesApi: MessagesApi,
+                                                 sessionRepository: SessionRepository,
+                                                 @Named("Generic") navigator: Navigator,
+                                                 identify: UnauthenticatedIdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 formProvider: SecondIndustryOptionsFormProvider,
+                                                 val controllerComponents: MessagesControllerComponents,
+                                                 view: SecondIndustryOptionsView
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form: Form[SecondIndustryOptions] = formProvider()
 
@@ -70,10 +69,10 @@ class SecondIndustryOptionsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SecondIndustryOptionsPage, value))
             newUserAnswers <- value match {
-                                case SecondIndustryOptions.Council  => Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.defaultRate))
-                                case _                              => Future.successful(updatedAnswers)
-                              }
-            _              <- sessionRepository.set(newUserAnswers)
+              case SecondIndustryOptions.Council => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate))
+              case _ => Future.successful(updatedAnswers)
+            }
+            _ <- sessionRepository.set(newUserAnswers)
           } yield Redirect(navigator.nextPage(SecondIndustryOptionsPage, mode)(newUserAnswers))
         }
       )

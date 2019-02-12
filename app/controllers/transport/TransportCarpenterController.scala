@@ -16,7 +16,7 @@
 
 package controllers.transport
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.transport.TransportCarpenterFormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.transport.TransportCarpenterView
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransportCarpenterController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Transport") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: TransportCarpenterFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: TransportCarpenterView,
-                                         claimAmounts: ClaimAmountsConfig
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                              override val messagesApi: MessagesApi,
+                                              sessionRepository: SessionRepository,
+                                              @Named("Transport") navigator: Navigator,
+                                              identify: UnauthenticatedIdentifierAction,
+                                              getData: DataRetrievalAction,
+                                              requireData: DataRequiredAction,
+                                              formProvider: TransportCarpenterFormProvider,
+                                              val controllerComponents: MessagesControllerComponents,
+                                              view: TransportCarpenterView
+                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -69,12 +68,12 @@ class TransportCarpenterController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportCarpenterPage, value))
-            newAnswers     <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Transport.passengerLiners))
+            newAnswers <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.Seamen.passengerLiners))
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Transport.cargoTankersCoastersFerries))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries))
             }
-            _              <- sessionRepository.set(newAnswers)
+            _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(TransportCarpenterPage, mode)(newAnswers))
         }
       )

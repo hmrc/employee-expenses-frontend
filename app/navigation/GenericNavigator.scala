@@ -16,20 +16,25 @@
 
 package navigation
 
+import controllers.clothing.routes._
 import controllers.construction.routes._
+import controllers.electrical.routes._
 import controllers.engineering.routes._
 import controllers.foodCatering.routes._
 import controllers.healthcare.routes._
 import controllers.manufacturing.routes._
 import controllers.police.routes._
-import controllers.clothing.routes._
+import controllers.printing.routes._
+import controllers.heating.routes._
 import controllers.routes._
+import controllers.security.routes._
 import controllers.transport.routes._
 import javax.inject.Inject
 import models.FirstIndustryOptions._
-import models.ThirdIndustryOptions.Education
+import models.FourthIndustryOptions._
 import models.SecondIndustryOptions._
-import models.{CheckMode, EmployerContribution, Mode, NormalMode, UserAnswers}
+import models.ThirdIndustryOptions._
+import models._
 import pages._
 import play.api.mvc.Call
 
@@ -40,6 +45,7 @@ class GenericNavigator @Inject()() extends Navigator {
     case FirstIndustryOptionsPage => firstIndustryOptions(NormalMode)
     case SecondIndustryOptionsPage => secondIndustryOptions(NormalMode)
     case ThirdIndustryOptionsPage => thirdIndustryOptions(NormalMode)
+    case FourthIndustryOptionsPage => fourthIndustryOptions(NormalMode)
     case EmployerContributionPage => employerContribution(NormalMode)
     case ExpensesEmployerPaidPage => expensesEmployerPaid(NormalMode)
     case _ =>                   _ => IndexController.onPageLoad()
@@ -55,9 +61,9 @@ class GenericNavigator @Inject()() extends Navigator {
 
   private def multipleEmployments(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(MultipleEmploymentsPage) match {
-      case Some(true)  => ClaimByAlternativeController.onPageLoad()
-      case Some(false) => FirstIndustryOptionsController.onPageLoad(mode)
-      case _           => SessionExpiredController.onPageLoad()
+      case Some(true)                                 => ClaimByAlternativeController.onPageLoad()
+      case Some(false)                                => FirstIndustryOptionsController.onPageLoad(mode)
+      case _                                          => SessionExpiredController.onPageLoad()
     }
 
   private def firstIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
@@ -67,7 +73,7 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Healthcare)               => AmbulanceStaffController.onPageLoad(mode)
       case Some(Retail)                   => EmployerContributionController.onPageLoad(mode)
       case Some(TransportAndDistribution) => TypeOfTransportController.onPageLoad(mode)
-      case Some(NoneOfTheAbove)           => SecondIndustryOptionsController.onPageLoad(mode)
+      case Some(FirstIndustryOptions.NoneOfTheAbove)           => SecondIndustryOptionsController.onPageLoad(mode)
       case _                              => SessionExpiredController.onPageLoad()
     }
 
@@ -78,16 +84,28 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Council)                  => EmployerContributionController.onPageLoad(mode)
       case Some(Police)                   => SpecialConstableController.onPageLoad(mode)
       case Some(ClothingTextiles)         => ClothingController.onPageLoad(mode)
-      case Some(NoneOfAbove)              => ThirdIndustryOptionsController.onPageLoad(mode)
+      case Some(SecondIndustryOptions.NoneOfAbove) => ThirdIndustryOptionsController.onPageLoad(mode)
       case _                              => SessionExpiredController.onPageLoad()
+    }
+
+  private def fourthIndustryOptions(mode:Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(FourthIndustryOptionsPage) match {
+      case Some(Agriculture)                          => EmployerContributionController.onPageLoad(mode)
+      case Some(FireService)                          => EmployerContributionController.onPageLoad(mode)
+      case Some(Heating)                              => HeatingOccupationListController.onPageLoad(mode)
+      case Some(Leisure)                              => EmployerContributionController.onPageLoad(mode)
+      case Some(Prisons)                              => EmployerContributionController.onPageLoad(mode)
+      case Some(FourthIndustryOptions.NoneOfTheAbove) => EmployerContributionController.onPageLoad(mode)
+      case _                                          => SessionExpiredController.onPageLoad()
+
     }
 
   private def employerContribution(mode: Mode)(userAnswers: UserAnswers): Call =
    userAnswers.get(EmployerContributionPage) match {
-      case Some(EmployerContribution.All)  => CannotClaimController.onPageLoad()
-      case Some(EmployerContribution.None) => ClaimAmountController.onPageLoad()
-      case Some(EmployerContribution.Some) => ExpensesEmployerPaidController.onPageLoad(mode)
-      case _                               => SessionExpiredController.onPageLoad()
+      case Some(EmployerContribution.All)             => CannotClaimController.onPageLoad()
+      case Some(EmployerContribution.None)            => ClaimAmountController.onPageLoad()
+      case Some(EmployerContribution.Some)            => ExpensesEmployerPaidController.onPageLoad(mode)
+      case _                                          => SessionExpiredController.onPageLoad()
     }
 
   private def expensesEmployerPaid(mode: Mode)(userAnswers: UserAnswers): Call =
@@ -101,6 +119,13 @@ class GenericNavigator @Inject()() extends Navigator {
   private def thirdIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(ThirdIndustryOptionsPage) match {
       case Some(Education) => EmployerContributionController.onPageLoad(mode)
+      case Some(BanksBuildingSocieties) => EmployerContributionController.onPageLoad(NormalMode)
+      case Some(Electrical) => ElectricalController.onPageLoad(NormalMode)
+      case Some(Printing) => PrintingOccupationList1Controller.onPageLoad(NormalMode)
+      case Some(Security) => SecurityGuardNHSController.onPageLoad(NormalMode)
+      case Some(ThirdIndustryOptions.NoneOfAbove) => FourthIndustryOptionsController.onPageLoad(mode)
       case _ => SessionExpiredController.onPageLoad()
     }
+
+
 }

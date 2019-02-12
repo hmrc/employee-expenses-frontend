@@ -16,7 +16,7 @@
 
 package controllers.electrical
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.electrical.ElectricalFormProvider
 import javax.inject.{Inject, Named}
@@ -42,8 +42,7 @@ class ElectricalController @Inject()(
                                       requireData: DataRequiredAction,
                                       formProvider: ElectricalFormProvider,
                                       val controllerComponents: MessagesControllerComponents,
-                                      view: ElectricalView,
-                                      claimAmounts: ClaimAmountsConfig
+                                      view: ElectricalView
                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -68,7 +67,7 @@ class ElectricalController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ElectricalPage, value))
-            amount = if (value) claimAmounts.Electrical.onlyLaundry else claimAmounts.Electrical.allOther
+            amount = if (value) ClaimAmounts.Electrical.onlyLaundry else ClaimAmounts.Electrical.allOther
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
