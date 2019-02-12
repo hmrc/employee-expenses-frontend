@@ -16,7 +16,7 @@
 
 package controllers.manufacturing
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.manufacturing.IronMiningListFormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.manufacturing.IronMiningListView
 import scala.concurrent.{ExecutionContext, Future}
 
 class IronMiningListController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Manufacturing") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: IronMiningListFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: IronMiningListView,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                          override val messagesApi: MessagesApi,
+                                          sessionRepository: SessionRepository,
+                                          @Named("Manufacturing") navigator: Navigator,
+                                          identify: UnauthenticatedIdentifierAction,
+                                          getData: DataRetrievalAction,
+                                          requireData: DataRequiredAction,
+                                          formProvider: IronMiningListFormProvider,
+                                          val controllerComponents: MessagesControllerComponents,
+                                          view: IronMiningListView
+                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -70,11 +69,11 @@ class IronMiningListController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IronMiningListPage, value))
             newUserAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.ironMiningList1))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.IronMining.list1))
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.ironMiningAllOther))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.IronMining.allOther))
             }
-            _              <- sessionRepository.set(newUserAnswers)
+            _ <- sessionRepository.set(newUserAnswers)
           } yield Redirect(navigator.nextPage(IronMiningListPage, mode)(newUserAnswers))
         }
       )

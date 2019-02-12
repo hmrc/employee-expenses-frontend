@@ -16,12 +16,12 @@
 
 package controllers.manufacturing
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.manufacturing.TypeOfManufacturingFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, Mode}
 import models.TypeOfManufacturing._
+import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.ClaimAmount
 import pages.manufacturing.TypeOfManufacturingPage
@@ -43,8 +43,7 @@ class TypeOfManufacturingController @Inject()(
                                                requireData: DataRequiredAction,
                                                formProvider: TypeOfManufacturingFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
-                                               view: TypeOfManufacturingView,
-                                               claimAmounts: ClaimAmountsConfig
+                                               view: TypeOfManufacturingView
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -71,10 +70,10 @@ class TypeOfManufacturingController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfManufacturingPage, value))
             newUserAnswers <- value match {
-              case BrassCopper => Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.brassCopper))
-              case Glass => Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.glass))
-              case PreciousMetals => Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.quarryingPreciousMetals))
-              case NoneOfAbove => Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.default))
+              case BrassCopper => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.brassCopper))
+              case Glass => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.glass))
+              case PreciousMetals => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.quarryingPreciousMetals))
+              case NoneOfAbove => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate))
               case _ => Future.successful(updatedAnswers)
             }
             _ <- sessionRepository.set(newUserAnswers)

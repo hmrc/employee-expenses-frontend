@@ -32,16 +32,16 @@ import views.html.manufacturing.IronMiningView
 import scala.concurrent.{ExecutionContext, Future}
 
 class IronMiningController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Manufacturing") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: IronMiningFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: IronMiningView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      override val messagesApi: MessagesApi,
+                                      sessionRepository: SessionRepository,
+                                      @Named("Manufacturing") navigator: Navigator,
+                                      identify: UnauthenticatedIdentifierAction,
+                                      getData: DataRetrievalAction,
+                                      requireData: DataRequiredAction,
+                                      formProvider: IronMiningFormProvider,
+                                      val controllerComponents: MessagesControllerComponents,
+                                      view: IronMiningView
+                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -66,7 +66,7 @@ class IronMiningController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IronMiningPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(IronMiningPage, mode)(updatedAnswers))
         }
       )

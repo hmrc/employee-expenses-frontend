@@ -16,7 +16,7 @@
 
 package controllers.manufacturing
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.manufacturing.IronSteelOccupationListFormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.manufacturing.IronSteelOccupationListView
 import scala.concurrent.{ExecutionContext, Future}
 
 class IronSteelOccupationListController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Manufacturing") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: IronSteelOccupationListFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: IronSteelOccupationListView,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                   override val messagesApi: MessagesApi,
+                                                   sessionRepository: SessionRepository,
+                                                   @Named("Manufacturing") navigator: Navigator,
+                                                   identify: UnauthenticatedIdentifierAction,
+                                                   getData: DataRetrievalAction,
+                                                   requireData: DataRequiredAction,
+                                                   formProvider: IronSteelOccupationListFormProvider,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   view: IronSteelOccupationListView
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -70,11 +69,11 @@ class IronSteelOccupationListController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(IronSteelOccupationListPage, value))
             newUserAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.ironSteelList1))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.list1))
             } else {
               Future.successful(updatedAnswers)
             }
-            _              <- sessionRepository.set(newUserAnswers)
+            _ <- sessionRepository.set(newUserAnswers)
           } yield Redirect(navigator.nextPage(IronSteelOccupationListPage, mode)(newUserAnswers))
         }
       )

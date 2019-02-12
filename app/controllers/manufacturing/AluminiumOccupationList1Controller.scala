@@ -16,7 +16,7 @@
 
 package controllers.manufacturing
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.manufacturing.AluminiumOccupationList1FormProvider
 import javax.inject.{Inject, Named}
@@ -42,8 +42,7 @@ class AluminiumOccupationList1Controller @Inject()(
                                                     requireData: DataRequiredAction,
                                                     formProvider: AluminiumOccupationList1FormProvider,
                                                     val controllerComponents: MessagesControllerComponents,
-                                                    view: AluminiumOccupationList1View,
-                                                    claimAmounts: ClaimAmountsConfig
+                                                    view: AluminiumOccupationList1View
                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -70,7 +69,7 @@ class AluminiumOccupationList1Controller @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AluminiumOccupationList1Page, value))
             newUserAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Manufacturing.aluminiumList1))
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.list1))
             } else {
               Future.successful(updatedAnswers)
             }

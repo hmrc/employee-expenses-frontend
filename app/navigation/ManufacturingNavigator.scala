@@ -31,7 +31,8 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     case AluminiumOccupationList1Page => aluminiumOccupationList1(NormalMode)
     case AluminiumOccupationList2Page => aluminiumOccupationList2(NormalMode)
     case AluminiumOccupationList3Page => aluminiumOccupationList3(NormalMode)
-    case ManufacturingApprenticePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case AluminiumApprenticePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case IronApprenticePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case IronMiningPage => ironMining(NormalMode)
     case IronMiningListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case IronSteelOccupationListPage => ironSteelOccupationList(NormalMode)
@@ -77,7 +78,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
   def aluminiumOccupationList3(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(AluminiumOccupationList3Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case Some(false) => routes.ManufacturingApprenticeController.onPageLoad(mode)
+      case Some(false) => routes.AluminiumApprenticeController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
@@ -93,7 +94,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
   def ironSteelOccupationList(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(IronSteelOccupationListPage) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case Some(false) => routes.ManufacturingApprenticeController.onPageLoad(mode)
+      case Some(false) => routes.IronApprenticeController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }

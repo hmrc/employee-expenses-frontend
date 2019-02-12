@@ -16,11 +16,13 @@
 
 package controllers.manufacturing
 
+import config.ClaimAmounts
 import controllers.actions._
 import forms.manufacturing.AluminiumApprenticeFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.manufacturing.AluminiumApprenticePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,16 +34,16 @@ import views.html.manufacturing.AluminiumApprenticeView
 import scala.concurrent.{ExecutionContext, Future}
 
 class AluminiumApprenticeController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Manufacturing") navigator: Navigator,
-                                         identify: IdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: AluminiumApprenticeFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: AluminiumApprenticeView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               override val messagesApi: MessagesApi,
+                                               sessionRepository: SessionRepository,
+                                               @Named("Manufacturing") navigator: Navigator,
+                                               identify: UnauthenticatedIdentifierAction,
+                                               getData: DataRetrievalAction,
+                                               requireData: DataRequiredAction,
+                                               formProvider: AluminiumApprenticeFormProvider,
+                                               val controllerComponents: MessagesControllerComponents,
+                                               view: AluminiumApprenticeView
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -66,8 +68,13 @@ class AluminiumApprenticeController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AluminiumApprenticePage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AluminiumApprenticePage, mode)(updatedAnswers))
+            newUserAnswers <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.apprentice))
+            } else {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.allOther))
+            }
+            _ <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(AluminiumApprenticePage, mode)(newUserAnswers))
         }
       )
   }
