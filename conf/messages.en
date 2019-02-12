@@ -288,11 +288,6 @@ specialConstable.error.required = Select yes if you are a special constable
 claimByPostOrOnline.title = You can claim tax relief for these expenses by post or using an online form
 claimByPostOrOnline.heading = You can claim tax relief for these expenses by post or using an online form
 
-manufacturingApprentice.title = Are you an apprentice?
-manufacturingApprentice.heading = Are you an apprentice?
-manufacturingApprentice.checkYourAnswersLabel = Are you an apprentice?
-manufacturingApprentice.error.required = Select yes if you are an apprentice
-
 aluminiumOccupationList1.title = Aluminium occupation list 1 of 3
 aluminiumOccupationList1.heading = Aluminium occupation list 1 of 3
 aluminiumOccupationList1.checkYourAnswersLabel = Aluminium occupation list 1 of 3
