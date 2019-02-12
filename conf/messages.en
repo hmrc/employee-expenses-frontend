@@ -564,3 +564,8 @@ aluminiumApprentice.title = Are you an apprentice?
 aluminiumApprentice.heading = Are you an apprentice?
 aluminiumApprentice.checkYourAnswersLabel = Are you an apprentice?
 aluminiumApprentice.error.required = Select yes if you are an apprentice
+
+updateYourAddress.title = You need to update your address
+updateYourAddress.heading = You need to update your address
+updateYourAddress.guidance1 = You can still complete this claim but you must update your address with HMRC when you have finished.
+updateYourAddress.guidance2 = We will give you the link to change your address after you have completed this claim.
