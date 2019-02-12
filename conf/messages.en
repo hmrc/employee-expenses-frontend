@@ -570,5 +570,6 @@ updateYourAddress.heading = You need to update your address
 updateYourAddress.guidance1 = You can still complete this claim but you must update your address with HMRC when you have finished.
 updateYourAddress.guidance2 = We will give you the link to change your address after you have completed this claim.
 
-noCodeChange.title = noCodeChange
-noCodeChange.heading = noCodeChange
+noCodeChange.title = You do not need to do anything else
+noCodeChange.heading = You do not need to do anything else
+noCodeChange.guidance = You will continue to earn an extra £{0} a year before paying tax until you tell us that your employment circumstances have changed.

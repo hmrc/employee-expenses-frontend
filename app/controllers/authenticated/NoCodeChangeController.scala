@@ -18,6 +18,7 @@ package controllers.authenticated
 
 import controllers.actions._
 import javax.inject.Inject
+import pages.ClaimAmount
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -36,6 +37,9 @@ class NoCodeChangeController @Inject()(
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view())
+      request.userAnswers.get(ClaimAmount) match {
+        case Some(amount)  => Ok (view(amount.toString))
+        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+      }
   }
 }

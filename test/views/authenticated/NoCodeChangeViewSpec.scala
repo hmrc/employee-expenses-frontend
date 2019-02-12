@@ -22,20 +22,20 @@ import views.html.authenticated.NoCodeChangeView
 class NoCodeChangeViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val amount = "180"
 
   "NoCodeChange view" must {
 
     val view = application.injector.instanceOf[NoCodeChangeView]
 
-    val applyView = view.apply()(fakeRequest, messages)
-
-    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
-
-    behave like normalPage(applyView, "noCodeChange")
+    val applyViewWithAuth = view.apply(amount)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPageWithAccountMenu(applyViewWithAuth)
 
-    behave like pageWithBackLink(applyView)
+    behave like pageWithBackLink(applyViewWithAuth)
+
+    behave like pageWithBodyText(applyViewWithAuth, messages("noCodeChange.guidance", amount))
+
   }
 
   application.stop()
