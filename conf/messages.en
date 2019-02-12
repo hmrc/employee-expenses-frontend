@@ -555,15 +555,15 @@ updateEmployerInformation.heading = You need to update your employer information
 updateEmployerInformation.paragraph1 = You can still complete this claim but you must update your employer information with HMRC when you have finished.
 updateEmployerInformation.paragraph2 = We will give you the link to change your employer information after you have completed this claim.
 
-ironApprentice.title = Are you an apprentice?
-ironApprentice.heading = Are you an apprentice?
-ironApprentice.checkYourAnswersLabel = Are you an apprentice?
-ironApprentice.error.required = Select yes if you are an apprentice
+ironApprentice.title = Are you an apprentice in the iron and steel industry?
+ironApprentice.heading = Are you an apprentice in the iron and steel industry?
+ironApprentice.checkYourAnswersLabel = Are you an apprentice in the iron and steel industry?
+ironApprentice.error.required = Select yes if you are an apprentice in the iron and steel industry
 
-aluminiumApprentice.title = Are you an apprentice?
-aluminiumApprentice.heading = Are you an apprentice?
-aluminiumApprentice.checkYourAnswersLabel = Are you an apprentice?
-aluminiumApprentice.error.required = Select yes if you are an apprentice
+aluminiumApprentice.title = Are you an apprentice in the aluminium industry?
+aluminiumApprentice.heading = Are you an apprentice in the aluminium industry?
+aluminiumApprentice.checkYourAnswersLabel = Are you an apprentice in the aluminium industry?
+aluminiumApprentice.error.required = Select yes if you are an apprentice in the aluminium industry
 
 updateYourAddress.title = You need to update your address
 updateYourAddress.heading = You need to update your address
