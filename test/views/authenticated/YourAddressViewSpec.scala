@@ -18,7 +18,7 @@ package views.authenticated
 
 import controllers.authenticated.routes._
 import forms.authenticated.YourAddressFormProvider
-import models.{Address, NormalMode}
+import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -35,8 +35,6 @@ class YourAddressViewSpec extends YesNoViewBehaviours {
   "YourAddress view" must {
 
     val view = application.injector.instanceOf[YourAddressView]
-
-    val address = Address(None, None, None, None, None, None, None)
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, address)(fakeRequest, messages)

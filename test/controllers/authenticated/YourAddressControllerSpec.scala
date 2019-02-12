@@ -46,15 +46,6 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
   val form: Form[Boolean] = formProvider()
 
   val connector: CitizenDetailsConnector = mock[CitizenDetailsConnector]
-  val address = Address(
-    Some("6 Howsell Road"),
-    Some("Llanddew"),
-    Some("Line 3"),
-    Some("Line 4"),
-    Some("Line 5"),
-    Some("DN16 3FB"),
-    Some("GREAT BRITAIN")
-  )
 
   lazy val yourAddressRoute: String = YourAddressController.onPageLoad(NormalMode).url
 

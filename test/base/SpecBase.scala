@@ -19,7 +19,7 @@ package base
 import com.github.tototoshi.play2.scalate.Scalate
 import config.FrontendAppConfig
 import controllers.actions._
-import models.UserAnswers
+import models.{Address, UserAnswers}
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
@@ -47,6 +47,16 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
   val userAnswersId = "id"
 
   val fakeNino = "AB123456A"
+
+  val address = Address(
+    Some("6 Howsell Road"),
+    Some("Llanddew"),
+    Some("Line 3"),
+    Some("Line 4"),
+    Some("Line 5"),
+    Some("DN16 3FB"),
+    Some("GREAT BRITAIN")
+  )
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
