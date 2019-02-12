@@ -56,15 +56,13 @@ class YourEmployerController @Inject()(
 
       request.nino match {
         case Some(nino) =>
-          for {
-            taxCodeRecord: Seq[TaxCodeRecord] <- taiConnector.taiTaxCodeRecords(nino)
-          } yield {
-            Ok(view(preparedForm, mode, taxCodeRecord.toString()))
+          taiConnector.taiTaxCodeRecords(nino).map{
+            taxCodeRecords =>
+              Ok(view(preparedForm, mode, taxCodeRecords.toString()))
           }
         case _ =>
           Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
-
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
