@@ -42,10 +42,7 @@ class CitizenDetailsConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpCl
 
     val designatoryDetailsUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/designatory-details"
 
-    httpClient.GET(designatoryDetailsUrl).map {
-      response =>
-        Json.parse(response.body).as[Address]
-    }
+    httpClient.GET[Address](designatoryDetailsUrl)
   }
 }
 
