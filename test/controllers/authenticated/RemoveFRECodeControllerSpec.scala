@@ -85,7 +85,7 @@ class RemoveFRECodeControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, removeFRECodeRoute)
-          .withFormUrlEncodedBody(("value", TaxYearSelection.options("removeFRECode").head.value))
+          .withFormUrlEncodedBody(("value", TaxYearSelection.options.head.value))
 
       val result = route(application, request).value
 

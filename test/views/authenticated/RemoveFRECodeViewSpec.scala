@@ -47,7 +47,7 @@ class RemoveFRECodeViewSpec extends OptionsViewBehaviours[TaxYearSelection] {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, TaxYearSelection.options("removeFRECode"))
+    behave like optionsPage(form, applyView, TaxYearSelection.options)
   }
 
   application.stop()

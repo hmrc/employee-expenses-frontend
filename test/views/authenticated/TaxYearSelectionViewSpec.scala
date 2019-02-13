@@ -38,7 +38,7 @@ class TaxYearSelectionViewSpec extends CheckboxViewBehaviours[TaxYearSelection] 
 
   val messageKeyPrefix = "taxYearSelection"
 
-  val options: Seq[RadioCheckboxOption] = TaxYearSelection.options("taxYearSelection")
+  val options: Seq[RadioCheckboxOption] = TaxYearSelection.options
 
   "TaxYearSelectionView" must {
 

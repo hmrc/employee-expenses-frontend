@@ -56,7 +56,7 @@ class TaxYearSelectionSpec extends SpecBase {
     }
 
     "return a sequence of RadioCheckboxOption from options" in {
-      val taxYearOptions: Seq[RadioCheckboxOption] = TaxYearSelection.options("taxYearSelection")
+      val taxYearOptions: Seq[RadioCheckboxOption] = TaxYearSelection.options
 
       taxYearOptions.head.message.string mustBe s"6 April ${TaxYear.current.startYear} to 5 April ${TaxYear.current.finishYear} (the current tax year)"
       taxYearOptions(1).message.string mustBe s"6 April ${TaxYear.current.back(1).startYear} to 5 April ${TaxYear.current.back(1).finishYear}"
