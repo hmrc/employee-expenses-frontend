@@ -301,3 +301,8 @@ GET         /update-employer-information                         controllers.aut
 GET         /update-your-address                                 controllers.authenticated.UpdateYourAddressController.onPageLoad()
 
 GET         /no-code-change                                      controllers.authenticated.NoCodeChangeController.onPageLoad()
+
+GET        /remove-fre-code                                      controllers.authenticated.RemoveFRECodeController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-fre-code                                      controllers.authenticated.RemoveFRECodeController.onSubmit(mode: Mode = NormalMode)
+GET        /change-remove-fre-code                               controllers.authenticated.RemoveFRECodeController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-remove-fre-code                               controllers.authenticated.RemoveFRECodeController.onSubmit(mode: Mode = CheckMode)

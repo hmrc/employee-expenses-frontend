@@ -573,3 +573,10 @@ updateYourAddress.guidance2 = We will give you the link to change your address a
 noCodeChange.title = You do not need to do anything else
 noCodeChange.heading = You do not need to do anything else
 noCodeChange.guidance = You will continue to earn an extra £{0} a year before paying tax until you tell us that your employment circumstances have changed.
+
+removeFRECode.title = What tax year did this expense end?
+removeFRECode.heading = What tax year did this expense end?
+removeFRECode.option1 = Option 1
+removeFRECode.option2 = Option 2
+removeFRECode.checkYourAnswersLabel = What tax year did this expense end?
+removeFRECode.error.required = Select removeFRECode
