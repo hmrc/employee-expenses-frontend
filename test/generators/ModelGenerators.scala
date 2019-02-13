@@ -21,11 +21,6 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
-  implicit lazy val arbitraryRemoveFRECode: Arbitrary[RemoveFRECode] =
-    Arbitrary {
-      Gen.oneOf(RemoveFRECode.values.toSeq)
-    }
-
   implicit lazy val arbitraryTaxYearSelection: Arbitrary[TaxYearSelection] =
     Arbitrary {
       Gen.oneOf(TaxYearSelection.values)

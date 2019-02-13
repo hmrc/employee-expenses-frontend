@@ -16,17 +16,17 @@
 
 package pages.authenticated
 
-import models.RemoveFRECode
+import models.TaxYearSelection
 import pages.behaviours.PageBehaviours
 
 class RemoveFRECodePageSpec extends PageBehaviours {
 
   "RemoveFRECodePage" must {
 
-    beRetrievable[RemoveFRECode](RemoveFRECodePage)
+    beRetrievable[TaxYearSelection](RemoveFRECodePage)
 
-    beSettable[RemoveFRECode](RemoveFRECodePage)
+    beSettable[TaxYearSelection](RemoveFRECodePage)
 
-    beRemovable[RemoveFRECode](RemoveFRECodePage)
+    beRemovable[TaxYearSelection](RemoveFRECodePage)
   }
 }

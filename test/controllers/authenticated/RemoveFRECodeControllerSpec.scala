@@ -18,7 +18,7 @@ package controllers.authenticated
 
 import base.SpecBase
 import forms.authenticated.RemoveFRECodeFormProvider
-import models.{NormalMode, RemoveFRECode, UserAnswers}
+import models.{NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.authenticated.RemoveFRECodePage
 import play.api.inject.bind
@@ -58,7 +58,7 @@ class RemoveFRECodeControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(RemoveFRECodePage, RemoveFRECode.values.head).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(RemoveFRECodePage, TaxYearSelection.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -71,7 +71,7 @@ class RemoveFRECodeControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(RemoveFRECode.values.head), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(TaxYearSelection.values.head), NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -85,7 +85,7 @@ class RemoveFRECodeControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, removeFRECodeRoute)
-          .withFormUrlEncodedBody(("value", RemoveFRECode.options.head.value))
+          .withFormUrlEncodedBody(("value", TaxYearSelection.options("removeFRECode").head.value))
 
       val result = route(application, request).value
 
@@ -138,7 +138,7 @@ class RemoveFRECodeControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, removeFRECodeRoute)
-          .withFormUrlEncodedBody(("value", RemoveFRECode.values.head.toString))
+          .withFormUrlEncodedBody(("value", TaxYearSelection.values.head.toString))
 
       val result = route(application, request).value
 

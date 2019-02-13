@@ -42,7 +42,7 @@
             field = form("value"),
             legend = messages("taxYearSelection.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = TaxYearSelection.options
+            inputs = TaxYearSelection.options("taxYearSelection")
         )
 
         @components.submit_button()

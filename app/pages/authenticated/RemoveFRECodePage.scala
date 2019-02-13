@@ -16,11 +16,11 @@
 
 package pages.authenticated
 
-import models.RemoveFRECode
+import models.TaxYearSelection
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object RemoveFRECodePage extends QuestionPage[RemoveFRECode] {
+case object RemoveFRECodePage extends QuestionPage[TaxYearSelection] {
 
   override def path: JsPath = JsPath \ toString
 

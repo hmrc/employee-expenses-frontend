@@ -15,7 +15,7 @@
  *@
 
 @import controllers.authenticated.routes._
-@import models.{Mode, RemoveFRECode}
+@import models.{Mode, TaxYearSelection}
 
 @this(
     main_template: MainTemplate,
@@ -40,7 +40,7 @@
             field = form("value"),
             legend = messages("removeFRECode.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = RemoveFRECode.options
+            inputs = TaxYearSelection.options("removeFRECode")
         )
 
         @components.submit_button()

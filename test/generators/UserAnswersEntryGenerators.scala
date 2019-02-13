@@ -41,7 +41,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[RemoveFRECodePage.type]
-        value <- arbitrary[RemoveFRECode].map(Json.toJson(_))
+        value <- arbitrary[TaxYearSelection].map(Json.toJson(_))
       } yield (page, value)
     }
 

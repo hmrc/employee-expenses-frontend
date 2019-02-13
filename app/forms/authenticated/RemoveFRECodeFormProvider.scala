@@ -18,13 +18,13 @@ package forms.authenticated
 
 import forms.mappings.Mappings
 import javax.inject.Inject
-import models.RemoveFRECode
+import models.TaxYearSelection
 import play.api.data.Form
 
 class RemoveFRECodeFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[RemoveFRECode] =
+  def apply(): Form[TaxYearSelection] =
     Form(
-      "value" -> enumerable[RemoveFRECode]("removeFRECode.error.required")
+      "value" -> enumerable[TaxYearSelection]("removeFRECode.error.required")
     )
 }

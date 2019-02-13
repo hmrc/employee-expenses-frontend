@@ -17,7 +17,7 @@
 package forms.authenticated
 
 import forms.behaviours.OptionFieldBehaviours
-import models.RemoveFRECode
+import models.TaxYearSelection
 import play.api.data.FormError
 
 class RemoveFRECodeFormProviderSpec extends OptionFieldBehaviours {
@@ -29,10 +29,10 @@ class RemoveFRECodeFormProviderSpec extends OptionFieldBehaviours {
     val fieldName = "value"
     val requiredKey = "removeFRECode.error.required"
 
-    behave like optionsField[RemoveFRECode](
+    behave like optionsField[TaxYearSelection](
       form,
       fieldName,
-      validValues  = RemoveFRECode.values,
+      validValues  = TaxYearSelection.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

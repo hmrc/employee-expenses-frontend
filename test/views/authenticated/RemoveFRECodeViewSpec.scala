@@ -17,13 +17,13 @@
 package views.authenticated
 
 import forms.authenticated.RemoveFRECodeFormProvider
-import models.{NormalMode, RemoveFRECode}
+import models.{NormalMode, TaxYearSelection}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.OptionsViewBehaviours
 import views.html.authenticated.RemoveFRECodeView
 
-class RemoveFRECodeViewSpec extends OptionsViewBehaviours[RemoveFRECode] {
+class RemoveFRECodeViewSpec extends OptionsViewBehaviours[TaxYearSelection] {
 
   val messageKeyPrefix = "removeFRECode"
 
@@ -47,7 +47,7 @@ class RemoveFRECodeViewSpec extends OptionsViewBehaviours[RemoveFRECode] {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, RemoveFRECode.options)
+    behave like optionsPage(form, applyView, TaxYearSelection.options("removeFRECode"))
   }
 
   application.stop()
