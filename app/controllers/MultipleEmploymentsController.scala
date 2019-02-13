@@ -16,10 +16,11 @@
 
 package controllers
 
+import connectors.TaiConnector
 import controllers.actions._
 import forms.MultipleEmploymentsFormProvider
 import javax.inject.{Inject, Named}
-import models.Mode
+import models.{Mode, TaxYear}
 import navigation.Navigator
 import pages.MultipleEmploymentsPage
 import play.api.data.Form
@@ -40,12 +41,13 @@ class MultipleEmploymentsController @Inject()(
                                          requireData: DataRequiredAction,
                                          formProvider: MultipleEmploymentsFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: MultipleEmploymentsView
+                                         view: MultipleEmploymentsView,
+                                         taiConnector: TaiConnector
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(MultipleEmploymentsPage) match {
@@ -53,7 +55,9 @@ class MultipleEmploymentsController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode))
+      print(s"\n\n\n\n ${taiConnector.getIabds("AA000003", TaxYear(2016), 27).map(x => x)} \n\n\n\n")
+
+      Future.successful(Ok(view(preparedForm, mode)))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
