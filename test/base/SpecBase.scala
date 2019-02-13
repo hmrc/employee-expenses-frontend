@@ -44,11 +44,11 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
       ).build()
   }
 
-  val userAnswersId = "id"
+  lazy val userAnswersId = "id"
 
-  val fakeNino = "AB123456A"
+  lazy val fakeNino = "AB123456A"
 
-  val address = Address(
+  lazy val address = Address(
     Some("6 Howsell Road"),
     Some("Llanddew"),
     Some("Line 3"),

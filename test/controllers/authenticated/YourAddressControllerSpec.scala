@@ -27,6 +27,7 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._
 import org.mockito.Matchers._
+import org.scalatest.BeforeAndAfterEach
 import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
 import play.api.data.Form
@@ -38,7 +39,7 @@ import views.html.authenticated.YourAddressView
 
 import scala.concurrent.Future
 
-class YourAddressControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
+class YourAddressControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -46,6 +47,8 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
   val form: Form[Boolean] = formProvider()
 
   val connector: CitizenDetailsConnector = mock[CitizenDetailsConnector]
+
+  override def beforeEach(): Unit = reset(connector)
 
   lazy val yourAddressRoute: String = YourAddressController.onPageLoad(NormalMode).url
 
@@ -56,13 +59,13 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
         .overrides(bind[CitizenDetailsConnector].toInstance(connector))
         .build()
 
+      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
+
       val request = FakeRequest(GET, yourAddressRoute)
 
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[YourAddressView]
-
-      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
 
       status(result) mustEqual OK
 
@@ -80,13 +83,13 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
         .overrides(bind[CitizenDetailsConnector].toInstance(connector))
         .build()
 
+      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
+
       val request = FakeRequest(GET, yourAddressRoute)
 
       val view = application.injector.instanceOf[YourAddressView]
 
       val result = route(application, request).value
-
-      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
 
       status(result) mustEqual OK
 
