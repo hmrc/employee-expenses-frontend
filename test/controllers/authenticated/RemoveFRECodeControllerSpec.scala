@@ -20,14 +20,18 @@ import base.SpecBase
 import forms.authenticated.RemoveFRECodeFormProvider
 import models.{NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import pages.authenticated.RemoveFRECodePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.authenticated.RemoveFRECodeView
+import repositories.SessionRepository
 
-class RemoveFRECodeControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -147,6 +151,26 @@ class RemoveFRECodeControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    for (option <- TaxYearSelection.values) {
+      s"save '${option}' when '${option}' is selected" in {
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .build()
+
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+        val request = FakeRequest(POST, removeFRECodeRoute)
+          .withFormUrlEncodedBody(("value", option.toString))
+
+        route(application, request).value.futureValue
+
+        whenReady(sessionRepository.get(userAnswersId)) {
+          _.value.get(RemoveFRECodePage).value mustBe option
+        }
+
+        application.stop()
+      }
     }
   }
 }
