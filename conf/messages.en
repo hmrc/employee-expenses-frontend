@@ -573,3 +573,6 @@ updateYourAddress.guidance2 = We will give you the link to change your address a
 noCodeChange.title = You do not need to do anything else
 noCodeChange.heading = You do not need to do anything else
 noCodeChange.guidance = You will continue to earn an extra £{0} a year before paying tax until you tell us that your employment circumstances have changed.
+
+phoneUs.title = You cannot make this change online
+phoneUs.heading = You cannot make this change online

@@ -301,3 +301,5 @@ GET         /update-employer-information                         controllers.aut
 GET         /update-your-address                                 controllers.authenticated.UpdateYourAddressController.onPageLoad()
 
 GET         /no-code-change                                      controllers.authenticated.NoCodeChangeController.onPageLoad()
+
+GET         /phone-us                                            controllers.authenticated.PhoneUsController.onPageLoad()
