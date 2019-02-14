@@ -579,3 +579,8 @@ yourAddress.heading = Is this your address?
 yourAddress.checkYourAnswersLabel = Is this your address?
 yourAddress.error.required = Select yes if this is your address?
 
+
+removeFRECode.title = What tax year did this expense end?
+removeFRECode.heading = What tax year did this expense end?
+removeFRECode.checkYourAnswersLabel = What tax year did this expense end?
+removeFRECode.error.required = Select the year that your expense ended

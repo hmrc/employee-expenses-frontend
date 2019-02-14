@@ -33,6 +33,7 @@ import controllers.authenticated.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
 import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
+import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import pages.clothing.ClothingPage
 import pages.construction._
 import pages.electrical.ElectricalPage
@@ -90,6 +91,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def taxYearSelection: Option[AnswerRow] = userAnswers.get(TaxYearSelectionPage) map {
     x => AnswerRow("taxYearSelection.checkYourAnswersLabel", s"taxYearSelection.$x", true,
       TaxYearSelectionController.onPageLoad(CheckMode).url)
+  }
+
+  def removeFRECode: Option[AnswerRow] = userAnswers.get(RemoveFRECodePage) map {
+    x => AnswerRow("removeFRECode.checkYourAnswersLabel", s"removeFRECode.$x", true,
+      RemoveFRECodeController.onPageLoad(CheckMode).url)
   }
 
   def yourAddress: Option[AnswerRow] = userAnswers.get(YourAddressPage) map {
