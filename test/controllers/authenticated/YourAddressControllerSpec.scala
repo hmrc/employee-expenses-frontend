@@ -99,12 +99,32 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
-
-      val userAnswers = UserAnswers(userAnswersId).set(CitizenDetailsAddress, address).success.value
+    "redirect to update your address if no address returned from Citizen Details" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[CitizenDetailsConnector].toInstance(connector))
+          .build()
+
+      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(emptyAddress)
+
+      val request = FakeRequest(GET, yourAddressRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual UpdateYourAddressController.onPageLoad().url
+
+      application.stop()
+
+    }
+
+    "redirect to the next page when valid data is submitted" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[CitizenDetailsConnector].toInstance(connector))
           .build()
@@ -126,9 +146,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(CitizenDetailsAddress, address).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[CitizenDetailsConnector].toInstance(connector))
         .build()
 
@@ -174,6 +192,28 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val request =
         FakeRequest(POST, yourAddressRoute)
           .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to Session Expired for a POST if call to getAddress fails" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[CitizenDetailsConnector].toInstance(connector))
+          .build()
+
+      when(connector.getAddress(any())(any(), any())) thenReturn Future.failed(new Exception)
+
+      val request = FakeRequest(POST, yourAddressRoute)
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 

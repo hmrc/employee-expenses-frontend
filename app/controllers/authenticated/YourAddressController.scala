@@ -57,7 +57,13 @@ class YourAddressController @Inject()(
 
       for {
         address <- citizenDetailsConnector.getAddress(request.nino.get)
-      } yield Ok(view(preparedForm, mode, address))
+      } yield {
+        if (address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)) {
+          Ok(view(preparedForm, mode, address))
+        } else {
+          Redirect(controllers.authenticated.routes.UpdateYourAddressController.onPageLoad())
+        }
+      }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -76,6 +82,9 @@ class YourAddressController @Inject()(
               } yield Redirect(navigator.nextPage(YourAddressPage, mode)(updatedAnswers))
             }
           )
+      }.recoverWith {
+        case _ =>
+          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
   }
 }

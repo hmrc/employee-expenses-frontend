@@ -27,7 +27,7 @@ import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.MockScalate
@@ -56,6 +56,32 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     Some("Line 5"),
     Some("DN16 3FB"),
     Some("GREAT BRITAIN")
+  )
+
+  lazy val validAddressJson: JsValue = Json.parse(
+    s"""
+       |{
+       |  "address":{
+       |    "line1":"6 Howsell Road",
+       |    "line2":"Llanddew",
+       |    "line3":"Line 3",
+       |    "line4":"Line 4",
+       |    "line5":"Line 5",
+       |    "postcode":"DN16 3FB",
+       |    "country":"GREAT BRITAIN"
+       |  }
+       |}
+     """.stripMargin
+  )
+
+  lazy val emptyAddress = Address(
+    None,
+    None,
+    None,
+    None,
+    None,
+    None,
+    None
   )
 
   implicit val hc: HeaderCarrier = HeaderCarrier()

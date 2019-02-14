@@ -50,22 +50,6 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
        |}
     """.stripMargin)
 
-  private val validAddressJson = Json.parse(
-    s"""
-       |{
-       |  "address":{
-       |    "line1":"6 Howsell Road",
-       |    "line2":"Llanddew",
-       |    "line3":"Line 3",
-       |    "line4":"Line 4",
-       |    "line5":"Line 5",
-       |    "postcode":"DN16 3FB",
-       |    "country":"GREAT BRITAIN"
-       |  }
-       |}
-     """.stripMargin
-  )
-
   "getEtag" must {
     "return an etag on success" in {
       server.stubFor(
