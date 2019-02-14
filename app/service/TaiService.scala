@@ -26,16 +26,20 @@ import scala.concurrent.Future
 
 class TaiService @Inject()(taiConnector: TaiConnector,
                            citizenDetailsConnector: CitizenDetailsConnector
-                          )(implicit hc: HeaderCarrier) {
+                          ) {
 
-  def taxCodeRecords(nino: String): Future[Seq[TaxCodeRecord]] = {
+  def taxCodeRecords(nino: String)(implicit hc: HeaderCarrier): Future[Seq[TaxCodeRecord]] = {
     taiConnector.taiTaxCodeRecords(nino)
   }
 
-  def updateFRE(nino: String, year: TaxYear, expensesData: IabdUpdateData): Future[HttpResponse] = {
+  def updateFRE(nino: String, year: TaxYear, expensesData: IabdUpdateData)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     citizenDetailsConnector.getEtag(nino).flatMap {
       etag => taiConnector.taiFREUpdate(nino, year, etag, expensesData)
     }
+  }
+
+  def getFRE(nino: String, year: TaxYear)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    taiConnector.getIabds(nino, year)
   }
 
 }

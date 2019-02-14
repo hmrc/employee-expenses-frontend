@@ -16,11 +16,10 @@
 
 package controllers
 
-import connectors.TaiConnector
 import controllers.actions._
 import forms.MultipleEmploymentsFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, TaxYear}
+import models.Mode
 import navigation.Navigator
 import pages.MultipleEmploymentsPage
 import play.api.data.Form
@@ -33,17 +32,16 @@ import views.html.MultipleEmploymentsView
 import scala.concurrent.{ExecutionContext, Future}
 
 class MultipleEmploymentsController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: MultipleEmploymentsFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: MultipleEmploymentsView,
-                                         taiConnector: TaiConnector
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               override val messagesApi: MessagesApi,
+                                               sessionRepository: SessionRepository,
+                                               @Named("Generic") navigator: Navigator,
+                                               identify: UnauthenticatedIdentifierAction,
+                                               getData: DataRetrievalAction,
+                                               requireData: DataRequiredAction,
+                                               formProvider: MultipleEmploymentsFormProvider,
+                                               val controllerComponents: MessagesControllerComponents,
+                                               view: MultipleEmploymentsView
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -54,8 +52,6 @@ class MultipleEmploymentsController @Inject()(
         case None => form
         case Some(value) => form.fill(value)
       }
-
-      print(s"\n\n\n\n ${taiConnector.getIabds("AA000003", TaxYear(2016), 27).map(x => x)} \n\n\n\n")
 
       Future.successful(Ok(view(preparedForm, mode)))
   }
@@ -70,7 +66,7 @@ class MultipleEmploymentsController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(MultipleEmploymentsPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(MultipleEmploymentsPage, mode)(updatedAnswers))
         }
       )
