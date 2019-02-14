@@ -18,7 +18,9 @@
     main_template: MainTemplate
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(
+    contactURL: String
+)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("phoneUs.title")
@@ -27,4 +29,6 @@
     @components.back_link()
 
     @components.heading("phoneUs.heading")
+
+    <p>@messages("phoneUs.para1.part1") <a href="@contactURL" >@messages("phoneUs.para1.linkText")</a> @messages("phoneUs.para1.part2")</p>
 }

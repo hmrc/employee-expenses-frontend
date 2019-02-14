@@ -576,3 +576,6 @@ noCodeChange.guidance = You will continue to earn an extra £{0} a year before p
 
 phoneUs.title = You cannot make this change online
 phoneUs.heading = You cannot make this change online
+phoneUs.para1.part1 = You need to
+phoneUs.para1.linkText = call HMRC
+phoneUs.para1.part2 = to provide more information so that we can complete this claim.

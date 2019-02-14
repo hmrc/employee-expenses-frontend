@@ -27,11 +27,16 @@ class PhoneUsViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[PhoneUsView]
 
-    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth = view.apply("/foo")(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPageWithAccountMenu(applyViewWithAuth)
 
     behave like pageWithBackLink(applyViewWithAuth)
+
+    "display page content" in {
+      val doc = asDocument(applyViewWithAuth)
+      assertContainsMessages(doc, "phoneUs.para1.part1","phoneUs.para1.linkText","phoneUs.para1.part2")
+    }
   }
 
   application.stop()
