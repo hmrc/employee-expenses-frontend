@@ -22,7 +22,6 @@ import forms.authenticated.YourAddressFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
-import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -56,25 +55,16 @@ class YourAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      request.nino match {
-        case Some(nino) =>
-          for {
-            address <- citizenDetailsConnector.getAddress(nino)
-            saveAddress <- Future.fromTry(request.userAnswers.set(CitizenDetailsAddress, address))
-            _ <- sessionRepository.set(saveAddress)
-          } yield {
-            Ok(view(preparedForm, mode, address))
-          }
-        case _ =>
-          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
-      }
+      for {
+        address <- citizenDetailsConnector.getAddress(request.nino.get)
+      } yield Ok(view(preparedForm, mode, address))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      request.userAnswers.get(CitizenDetailsAddress) match {
-        case Some(address) =>
+      citizenDetailsConnector.getAddress(request.nino.get).flatMap {
+        address =>
           form.bindFromRequest().fold(
             (formWithErrors: Form[_]) =>
               Future.successful(BadRequest(view(formWithErrors, mode, address))),
@@ -86,8 +76,6 @@ class YourAddressController @Inject()(
               } yield Redirect(navigator.nextPage(YourAddressPage, mode)(updatedAnswers))
             }
           )
-        case _ =>
-          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
   }
 }

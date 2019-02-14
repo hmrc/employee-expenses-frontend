@@ -18,12 +18,11 @@ package controllers.authenticated
 
 import base.SpecBase
 import connectors.CitizenDetailsConnector
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import controllers.authenticated.routes._
 import controllers.routes._
 import forms.authenticated.YourAddressFormProvider
 import models.{NormalMode, UserAnswers}
-import navigation.{AuthenticatedNavigator, FakeNavigator, Navigator}
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -32,16 +31,13 @@ import org.scalatest.mockito.MockitoSugar
 import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
 import play.api.data.Form
-import play.api.i18n.MessagesApi
 import play.api.inject.bind
-import play.api.mvc.{Call, MessagesControllerComponents}
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
-import uk.gov.hmrc.http.SessionKeys
 import views.html.authenticated.YourAddressView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class YourAddressControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar with BeforeAndAfterEach {
 
@@ -75,58 +71,6 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       contentAsString(result) mustEqual
         view(form, NormalMode, address)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "redirect to session expired on a GET when no nino in request" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[CitizenDetailsConnector].toInstance(connector))
-        .build()
-
-      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
-
-      val injector = application.injector
-
-      val controller = new YourAddressController(
-        controllerComponents = injector.instanceOf[MessagesControllerComponents],
-        identify = injector.instanceOf[IdentifierAction],
-        getData = injector.instanceOf[DataRetrievalAction],
-        requireData = injector.instanceOf[DataRequiredAction],
-        formProvider = injector.instanceOf[YourAddressFormProvider],
-        citizenDetailsConnector = injector.instanceOf[CitizenDetailsConnector],
-        sessionRepository = injector.instanceOf[SessionRepository],
-        view = injector.instanceOf[YourAddressView],
-        navigator = injector.instanceOf[AuthenticatedNavigator],
-        messagesApi = injector.instanceOf[MessagesApi]
-      )(ec = injector.instanceOf[ExecutionContext])
-
-
-      val request = FakeRequest(GET, yourAddressRoute).withSession("nino" -> "")
-
-      val result = controller.onPageLoad(NormalMode)(request)
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to session expired on a POST when no address in user answers" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[CitizenDetailsConnector].toInstance(connector))
-        .build()
-
-      val request =
-        FakeRequest(POST, yourAddressRoute)
-          .withFormUrlEncodedBody(("value", "true"))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -165,6 +109,8 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
           .overrides(bind[CitizenDetailsConnector].toInstance(connector))
           .build()
 
+      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
+
       val request =
         FakeRequest(POST, yourAddressRoute)
           .withFormUrlEncodedBody(("value", "true"))
@@ -185,6 +131,8 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[CitizenDetailsConnector].toInstance(connector))
         .build()
+
+      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
 
       val request =
         FakeRequest(POST, yourAddressRoute)
