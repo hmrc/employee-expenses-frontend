@@ -132,11 +132,6 @@ POST        /transport-vehicle-trade                             controllers.tra
 GET         /change-transport-vehicle-trade                      controllers.transport.TransportVehicleTradeController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-transport-vehicle-trade                      controllers.transport.TransportVehicleTradeController.onSubmit(mode: Mode = CheckMode)
 
-GET         /type-of-manufacturing                               controllers.manufacturing.TypeOfManufacturingController.onPageLoad(mode: Mode = NormalMode)
-POST        /type-of-manufacturing                               controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = NormalMode)
-GET         /change-type-of-manufacturing                        controllers.manufacturing.TypeOfManufacturingController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-type-of-manufacturing                        controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = CheckMode)
-
 GET         /special-constable                                   controllers.police.SpecialConstableController.onPageLoad(mode: Mode = NormalMode)
 POST        /special-constable                                   controllers.police.SpecialConstableController.onSubmit(mode: Mode = NormalMode)
 GET         /change-special-constable                            controllers.police.SpecialConstableController.onPageLoad(mode: Mode = CheckMode)
@@ -144,35 +139,55 @@ POST        /change-special-constable                            controllers.pol
 
 GET         /claim-by-post-or-online                             controllers.police.ClaimByPostOrOnlineController.onPageLoad()
 
-GET         /manufacturing-apprentice                            controllers.manufacturing.ManufacturingApprenticeController.onPageLoad(mode: Mode = NormalMode)
-POST        /manufacturing-apprentice                            controllers.manufacturing.ManufacturingApprenticeController.onSubmit(mode: Mode = NormalMode)
-GET         /change-manufacturing-apprentice                     controllers.manufacturing.ManufacturingApprenticeController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-manufacturing-apprentice                     controllers.manufacturing.ManufacturingApprenticeController.onSubmit(mode: Mode = CheckMode)
+GET         /police-officer                                      controllers.police.PoliceOfficerController.onPageLoad(mode: Mode = NormalMode)
+POST        /police-officer                                      controllers.police.PoliceOfficerController.onSubmit(mode: Mode = NormalMode)
+GET         /change-police-officer                               controllers.police.PoliceOfficerController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-police-officer                               controllers.police.PoliceOfficerController.onSubmit(mode: Mode = CheckMode)
+
+GET         /type-of-manufacturing                               controllers.manufacturing.TypeOfManufacturingController.onPageLoad(mode: Mode = NormalMode)
+POST        /type-of-manufacturing                               controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = NormalMode)
+GET         /change-type-of-manufacturing                        controllers.manufacturing.TypeOfManufacturingController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-type-of-manufacturing                        controllers.manufacturing.TypeOfManufacturingController.onSubmit(mode: Mode = CheckMode)
 
 GET         /aluminium-occupation-list-1                         controllers.manufacturing.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
 POST        /aluminium-occupation-list-1                         controllers.manufacturing.AluminiumOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
 GET         /change-aluminium-occupation-list-1                  controllers.manufacturing.AluminiumOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
 POST        /change-aluminium-occupation-list-1                  controllers.manufacturing.AluminiumOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
 
-GET         /police-officer                                      controllers.police.PoliceOfficerController.onPageLoad(mode: Mode = NormalMode)
-POST        /police-officer                                      controllers.police.PoliceOfficerController.onSubmit(mode: Mode = NormalMode)
-GET         /change-police-officer                               controllers.police.PoliceOfficerController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-police-officer                               controllers.police.PoliceOfficerController.onSubmit(mode: Mode = CheckMode)
-
 GET         /aluminium-occupation-list-2                         controllers.manufacturing.AluminiumOccupationList2Controller.onPageLoad(mode: Mode = NormalMode)
 POST        /aluminium-occupation-list-2                         controllers.manufacturing.AluminiumOccupationList2Controller.onSubmit(mode: Mode = NormalMode)
 GET         /change-aluminium-occupation-list-2                  controllers.manufacturing.AluminiumOccupationList2Controller.onPageLoad(mode: Mode = CheckMode)
 POST        /change-aluminium-occupation-list-2                  controllers.manufacturing.AluminiumOccupationList2Controller.onSubmit(mode: Mode = CheckMode)
+
+GET         /aluminium-occupation-list-3                         controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = NormalMode)
+POST        /aluminium-occupation-list-3                         controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = NormalMode)
+GET         /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = CheckMode)
+POST        /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = CheckMode)
+
+GET         /aluminium-apprentice                                controllers.manufacturing.AluminiumApprenticeController.onPageLoad(mode: Mode = NormalMode)
+POST        /aluminium-apprentice                                controllers.manufacturing.AluminiumApprenticeController.onSubmit(mode: Mode = NormalMode)
+GET         /change-aluminium-apprentice                         controllers.manufacturing.AluminiumApprenticeController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-aluminium-apprentice                         controllers.manufacturing.AluminiumApprenticeController.onSubmit(mode: Mode = CheckMode)
 
 GET         /iron-steel-occupation-list                          controllers.manufacturing.IronSteelOccupationListController.onPageLoad(mode: Mode = NormalMode)
 POST        /iron-steel-occupation-list                          controllers.manufacturing.IronSteelOccupationListController.onSubmit(mode: Mode = NormalMode)
 GET         /change-iron-steel-occupation-list                   controllers.manufacturing.IronSteelOccupationListController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-iron-steel-occupation-list                   controllers.manufacturing.IronSteelOccupationListController.onSubmit(mode: Mode = CheckMode)
 
-GET         /iron-steel-occupation                               controllers.manufacturing.IronSteelOccupationController.onPageLoad(mode: Mode = NormalMode)
-POST        /iron-steel-occupation                               controllers.manufacturing.IronSteelOccupationController.onSubmit(mode: Mode = NormalMode)
-GET         /change-iron-steel-occupation                        controllers.manufacturing.IronSteelOccupationController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-iron-steel-occupation                        controllers.manufacturing.IronSteelOccupationController.onSubmit(mode: Mode = CheckMode)
+GET         /iron-mining                                         controllers.manufacturing.IronMiningController.onPageLoad(mode: Mode = NormalMode)
+POST        /iron-mining                                         controllers.manufacturing.IronMiningController.onSubmit(mode: Mode = NormalMode)
+GET         /change-iron-mining                                  controllers.manufacturing.IronMiningController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-iron-mining                                  controllers.manufacturing.IronMiningController.onSubmit(mode: Mode = CheckMode)
+
+GET         /iron-mining-list                                    controllers.manufacturing.IronMiningListController.onPageLoad(mode: Mode = NormalMode)
+POST        /iron-mining-list                                    controllers.manufacturing.IronMiningListController.onSubmit(mode: Mode = NormalMode)
+GET         /change-iron-mining-list                             controllers.manufacturing.IronMiningListController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-iron-mining-list                             controllers.manufacturing.IronMiningListController.onSubmit(mode: Mode = CheckMode)
+
+GET         /iron-apprentice                                     controllers.manufacturing.IronApprenticeController.onPageLoad(mode: Mode = NormalMode)
+POST        /iron-apprentice                                     controllers.manufacturing.IronApprenticeController.onSubmit(mode: Mode = NormalMode)
+GET         /change-iron-apprentice                              controllers.manufacturing.IronApprenticeController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-iron-apprentice                              controllers.manufacturing.IronApprenticeController.onSubmit(mode: Mode = CheckMode)
 
 GET         /wood-furniture-occupation-list-1                    controllers.manufacturing.WoodFurnitureOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
 POST        /wood-furniture-occupation-list-1                    controllers.manufacturing.WoodFurnitureOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
@@ -198,11 +213,6 @@ GET         /clothing                                            controllers.clo
 POST        /clothing                                            controllers.clothing.ClothingController.onSubmit(mode: Mode = NormalMode)
 GET         /change-clothing                                     controllers.clothing.ClothingController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-clothing                                     controllers.clothing.ClothingController.onSubmit(mode: Mode = CheckMode)
-
-GET         /aluminium-occupation-list-3                         controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = NormalMode)
-POST        /aluminium-occupation-list-3                         controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = NormalMode)
-GET         /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onPageLoad(mode: Mode = CheckMode)
-POST        /change-aluminium-occupation-list-3                  controllers.manufacturing.AluminiumOccupationList3Controller.onSubmit(mode: Mode = CheckMode)
 
 GET         /security-guard-NHS                                  controllers.security.SecurityGuardNHSController.onPageLoad(mode: Mode = NormalMode)
 POST        /security-guard-NHS                                  controllers.security.SecurityGuardNHSController.onSubmit(mode: Mode = NormalMode)
@@ -276,20 +286,10 @@ POST        /heating-occupation-list                             controllers.hea
 GET         /change-heating-occupation-list                      controllers.heating.HeatingOccupationListController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-heating-occupation-list                      controllers.heating.HeatingOccupationListController.onSubmit(mode: Mode = CheckMode)
 
-GET         /iron-mining                                         controllers.manufacturing.IronMiningController.onPageLoad(mode: Mode = NormalMode)
-POST        /iron-mining                                         controllers.manufacturing.IronMiningController.onSubmit(mode: Mode = NormalMode)
-GET         /change-iron-mining                                  controllers.manufacturing.IronMiningController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-iron-mining                                  controllers.manufacturing.IronMiningController.onSubmit(mode: Mode = CheckMode)
-
 GET         /fourth-industry-type                                controllers.FourthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
 POST        /fourth-industry-type                                controllers.FourthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
 GET         /change-fourth-industry-type                         controllers.FourthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-fourth-industry-type                         controllers.FourthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
-
-GET         /iron-mining-list                                    controllers.manufacturing.IronMiningListController.onPageLoad(mode: Mode = NormalMode)
-POST        /iron-mining-list                                    controllers.manufacturing.IronMiningListController.onSubmit(mode: Mode = NormalMode)
-GET         /change-iron-mining-list                             controllers.manufacturing.IronMiningListController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-iron-mining-list                             controllers.manufacturing.IronMiningListController.onSubmit(mode: Mode = CheckMode)
 
 GET         /constructional-engineering-list-3                   controllers.engineering.ConstructionalEngineeringList3Controller.onPageLoad(mode: Mode = NormalMode)
 POST        /constructional-engineering-list-3                   controllers.engineering.ConstructionalEngineeringList3Controller.onSubmit(mode: Mode = NormalMode)
@@ -302,3 +302,7 @@ GET         /your-address                                        controllers.aut
 POST        /your-address                                        controllers.authenticated.YourAddressController.onSubmit(mode: Mode = NormalMode)
 GET         /change-your-address                                 controllers.authenticated.YourAddressController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-your-address                                 controllers.authenticated.YourAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET         /update-your-address                                 controllers.authenticated.UpdateYourAddressController.onPageLoad()
+
+GET         /no-code-change                                      controllers.authenticated.NoCodeChangeController.onPageLoad()

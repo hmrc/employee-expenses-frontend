@@ -14,32 +14,18 @@
  * limitations under the License.
  */
 
-package forms.manufacturing
+package pages.manufacturing
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import pages.behaviours.PageBehaviours
 
-class IronSteelOccupationFormProviderSpec extends BooleanFieldBehaviours {
+class IronApprenticePageSpec extends PageBehaviours {
 
-  val requiredKey = "ironSteelOccupation.error.required"
-  val invalidKey = "error.boolean"
+  "IronApprenticePage" must {
 
-  val form = new IronSteelOccupationFormProvider()()
+    beRetrievable[Boolean](IronApprenticePage)
 
-  ".value" must {
+    beSettable[Boolean](IronApprenticePage)
 
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    beRemovable[Boolean](IronApprenticePage)
   }
 }

@@ -126,4 +126,38 @@ object ClaimAmounts {
     lazy val list2 = 60
     lazy val allOther = 100
   }
+
+  object Manufacturing {
+
+    lazy val brassCopper = 120
+    lazy val glass = 80
+    lazy val quarryingPreciousMetals = 100
+
+    object Aluminium {
+      lazy val list1 = 140
+      lazy val list2 = 140
+      lazy val list3 = 80
+      lazy val apprentice = 60
+      lazy val allOther = 120
+    }
+
+    object IronSteel {
+      lazy val list1 = 80
+      lazy val allOther = 140
+      lazy val apprentice = 60
+    }
+
+    object IronMining {
+      lazy val list1 = 120
+      lazy val allOther = 100
+    }
+
+    object WoodFurniture {
+      lazy val list1 = 140
+      lazy val list2 = 120
+      lazy val list3 = 60
+      lazy val allOther = 100
+    }
+  }
+
 }

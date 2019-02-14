@@ -288,11 +288,6 @@ specialConstable.error.required = Select yes if you are a special constable
 claimByPostOrOnline.title = You can claim tax relief for these expenses by post or using an online form
 claimByPostOrOnline.heading = You can claim tax relief for these expenses by post or using an online form
 
-manufacturingApprentice.title = Are you an apprentice?
-manufacturingApprentice.heading = Are you an apprentice?
-manufacturingApprentice.checkYourAnswersLabel = Are you an apprentice?
-manufacturingApprentice.error.required = Select yes if you are an apprentice
-
 aluminiumOccupationList1.title = Aluminium occupation list 1 of 3
 aluminiumOccupationList1.heading = Aluminium occupation list 1 of 3
 aluminiumOccupationList1.checkYourAnswersLabel = Aluminium occupation list 1 of 3
@@ -306,18 +301,6 @@ aluminiumOccupationList1.occupation4 = mould-man
 aluminiumOccupationList1.occupation5 = pourer
 aluminiumOccupationList1.occupation6 = remelt department labourer
 aluminiumOccupationList1.occupation7 = roll flatteners
-
-ironSteelOccupation.title = Is your job title listed?
-ironSteelOccupation.heading = Is your job title listed?
-ironSteelOccupation.secondaryHeading = Iron and steel occupation list
-ironSteelOccupation.checkYourAnswersLabel = Is your job title listed?
-ironSteelOccupation.error.required = Select yes if your job title is listed
-ironSteelOccupation.occupation1 = Day labourer
-ironSteelOccupation.occupation2 = General labourer
-ironSteelOccupation.occupation3 = Stockman
-ironSteelOccupation.occupation4 = Timekeeper
-ironSteelOccupation.occupation5 = Pourer
-ironSteelOccupation.occupation6 = Warehouse staff and weighmen
 
 policeOfficer.title = Are you a police officer with a rank of up to and including Chief Inspector?
 policeOfficer.heading = Are you a police officer with a rank of up to and including Chief Inspector?
@@ -571,6 +554,25 @@ updateEmployerInformation.title = You need to update your employer information
 updateEmployerInformation.heading = You need to update your employer information
 updateEmployerInformation.paragraph1 = You can still complete this claim but you must update your employer information with HMRC when you have finished.
 updateEmployerInformation.paragraph2 = We will give you the link to change your employer information after you have completed this claim.
+
+ironApprentice.title = Are you an apprentice in the iron and steel industry?
+ironApprentice.heading = Are you an apprentice in the iron and steel industry?
+ironApprentice.checkYourAnswersLabel = Are you an apprentice in the iron and steel industry?
+ironApprentice.error.required = Select yes if you are an apprentice in the iron and steel industry
+
+aluminiumApprentice.title = Are you an apprentice in the aluminium industry?
+aluminiumApprentice.heading = Are you an apprentice in the aluminium industry?
+aluminiumApprentice.checkYourAnswersLabel = Are you an apprentice in the aluminium industry?
+aluminiumApprentice.error.required = Select yes if you are an apprentice in the aluminium industry
+
+updateYourAddress.title = You need to update your address
+updateYourAddress.heading = You need to update your address
+updateYourAddress.guidance1 = You can still complete this claim but you must update your address with HMRC when you have finished.
+updateYourAddress.guidance2 = We will give you the link to change your address after you have completed this claim.
+
+noCodeChange.title = You do not need to do anything else
+noCodeChange.heading = You do not need to do anything else
+noCodeChange.guidance = You will continue to earn an extra £{0} a year before paying tax until you tell us that your employment circumstances have changed.
 
 yourAddress.title = Is this your address?
 yourAddress.heading = Is this your address?
