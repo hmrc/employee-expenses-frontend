@@ -302,4 +302,9 @@ GET         /update-your-address                                 controllers.aut
 
 GET         /no-code-change                                      controllers.authenticated.NoCodeChangeController.onPageLoad()
 
+GET         /tax-year-expense-end                                controllers.authenticated.RemoveFRECodeController.onPageLoad(mode: Mode = NormalMode)
+POST        /tax-year-expense-end                                controllers.authenticated.RemoveFRECodeController.onSubmit(mode: Mode = NormalMode)
+GET         /change-tax-year-expense-end                         controllers.authenticated.RemoveFRECodeController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-tax-year-expense-end                         controllers.authenticated.RemoveFRECodeController.onSubmit(mode: Mode = CheckMode)
+
 GET         /phone-us                                            controllers.authenticated.PhoneUsController.onPageLoad()

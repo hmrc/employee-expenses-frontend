@@ -574,6 +574,11 @@ noCodeChange.title = You do not need to do anything else
 noCodeChange.heading = You do not need to do anything else
 noCodeChange.guidance = You will continue to earn an extra £{0} a year before paying tax until you tell us that your employment circumstances have changed.
 
+removeFRECode.title = What tax year did this expense end?
+removeFRECode.heading = What tax year did this expense end?
+removeFRECode.checkYourAnswersLabel = What tax year did this expense end?
+removeFRECode.error.required = Select the year that your expense ended
+
 phoneUs.title = You cannot make this change online
 phoneUs.heading = You cannot make this change online
 phoneUs.para1.part1 = You need to
