@@ -19,6 +19,7 @@ package views.authenticated
 import controllers.authenticated.routes._
 import forms.authenticated.YourAddressFormProvider
 import models.NormalMode
+import org.jsoup.nodes.Element
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -49,6 +50,14 @@ class YourAddressViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(form, applyView, messageKeyPrefix, YourAddressController.onSubmit(NormalMode).url)
+
+    "behave like page with address" in {
+      val doc = asDocument(applyViewWithAuth(form))
+
+      val address: Element = doc.getElementById("citizenDetailsAddress")
+
+      address.text must include ("6 Howsell Road Llanddew Line 3 Line 4 Line 5 DN16 3FB GREAT BRITAIN")
+    }
   }
 
   application.stop()

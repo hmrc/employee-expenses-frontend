@@ -32,8 +32,7 @@ import controllers.construction.routes._
 import controllers.authenticated.routes._
 import models.{CheckMode, UserAnswers}
 import pages._
-import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
-import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated._
 import pages.clothing.ClothingPage
 import pages.construction._
 import pages.electrical.ElectricalPage
