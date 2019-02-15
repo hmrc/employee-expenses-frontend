@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,27 +12,34 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import controllers.authenticated.routes._
+package forms.authenticated
 
-@this(
-        main_template: MainTemplate
-)
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-@(mode: Mode)(implicit request: Request[_], messages: Messages)
+class YourAddressFormProviderSpec extends BooleanFieldBehaviours {
 
-@main_template(
-    title = messages("updateEmployerInformation.title")
-) {
+  val requiredKey = "yourAddress.error.required"
+  val invalidKey = "error.boolean"
 
-    @components.back_link()
+  val form = new YourAddressFormProvider()()
 
-    @components.heading("updateEmployerInformation.heading")
+  ".value" must {
 
-    <p>@messages("updateEmployerInformation.paragraph1")</p>
+    val fieldName = "value"
 
-    <p>@messages("updateEmployerInformation.paragraph2")</p>
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
 
-    @components.button_link("site.continue", YourAddressController.onPageLoad(mode).url)
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

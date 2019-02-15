@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,27 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import controllers.authenticated.routes._
+package pages.authenticated
 
-@this(
-        main_template: MainTemplate
-)
+import pages.behaviours.PageBehaviours
 
-@(mode: Mode)(implicit request: Request[_], messages: Messages)
+class YourAddressPageSpec extends PageBehaviours {
 
-@main_template(
-    title = messages("updateEmployerInformation.title")
-) {
+  "YourAddressPage" must {
 
-    @components.back_link()
+    beRetrievable[Boolean](YourAddressPage)
 
-    @components.heading("updateEmployerInformation.heading")
+    beSettable[Boolean](YourAddressPage)
 
-    <p>@messages("updateEmployerInformation.paragraph1")</p>
-
-    <p>@messages("updateEmployerInformation.paragraph2")</p>
-
-    @components.button_link("site.continue", YourAddressController.onPageLoad(mode).url)
+    beRemovable[Boolean](YourAddressPage)
+  }
 }

@@ -21,19 +21,19 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
-import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated._
 import pages.clothing.ClothingPage
 import pages.construction._
 import pages.electrical.ElectricalPage
 import pages.engineering._
+import pages.foodCatering._
 import pages.healthcare._
+import pages.heating._
 import pages.manufacturing._
 import pages.police._
-import pages.transport._
-import pages.foodCatering._
-import pages.heating._
 import pages.printing._
 import pages.security._
+import pages.transport._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends TryValues {
@@ -41,6 +41,7 @@ trait UserAnswersGenerator extends TryValues {
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
     arbitrary[(RemoveFRECodePage.type, JsValue)] ::
+    arbitrary[(YourAddressPage.type, JsValue)] ::
     arbitrary[(AluminiumApprenticePage.type, JsValue)] ::
     arbitrary[(IronApprenticePage.type, JsValue)] ::
     arbitrary[(ConstructionalEngineeringList3Page.type, JsValue)] ::

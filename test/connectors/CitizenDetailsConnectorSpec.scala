@@ -18,7 +18,7 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, urlEqualTo}
-import models.ETag
+import models.{Address, ETag}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -43,7 +43,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
   private lazy val citizenDetailsConnector: CitizenDetailsConnector = app.injector.instanceOf[CitizenDetailsConnector]
 
   private val etag = 123
-  private val validJson = Json.parse(
+  private val validEtagJson = Json.parse(
     s"""
        |{
        |   "etag":"$etag"
@@ -57,7 +57,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           .willReturn(
             aResponse()
               .withStatus(OK)
-              .withBody(validJson.toString)
+              .withBody(validEtagJson.toString)
           )
       )
 
@@ -96,6 +96,68 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
       )
 
       val result: Future[Int] = citizenDetailsConnector.getEtag(fakeNino)
+
+      whenReady(result.failed) {
+        result =>
+          result mustBe an[Exception]
+      }
+    }
+
+  }
+
+  "getAddress" must {
+    "return an address on success" in {
+      server.stubFor(
+        get(urlEqualTo(s"/citizen-details/$fakeNino/designatory-details"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withBody(validAddressJson.toString)
+          )
+      )
+
+      val result: Future[Address] = citizenDetailsConnector.getAddress(fakeNino)
+
+      whenReady(result) {
+        result =>
+          result.line1.value mustBe "6 Howsell Road"
+          result.line2.value mustBe "Llanddew"
+          result.line3.value mustBe "Line 3"
+          result.line4.value mustBe "Line 4"
+          result.line5.value mustBe "Line 5"
+          result.postcode.value mustBe "DN16 3FB"
+          result.country.value mustBe "GREAT BRITAIN"
+      }
+
+    }
+
+    "return 500 on failure" in {
+      server.stubFor(
+        get(urlEqualTo(s"/citizen-details/$fakeNino/designatory-details"))
+          .willReturn(
+            aResponse()
+              .withStatus(INTERNAL_SERVER_ERROR)
+          )
+      )
+
+      val result: Future[Address] = citizenDetailsConnector.getAddress(fakeNino)
+
+      whenReady(result.failed) {
+        result =>
+          result mustBe an[Exception]
+      }
+    }
+
+    "return 404 when record not found" in {
+      server.stubFor(
+        get(urlEqualTo(s"/citizen-details/$fakeNino/designatory-details"))
+          .willReturn(
+            aResponse()
+              .withStatus(NOT_FOUND)
+          )
+      )
+
+      val result: Future[Address] = citizenDetailsConnector.getAddress(fakeNino)
 
       whenReady(result.failed) {
         result =>

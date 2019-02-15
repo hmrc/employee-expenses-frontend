@@ -20,6 +20,7 @@ import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
+import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import pages.clothing.ClothingPage
 import pages.construction._
@@ -42,6 +43,14 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       for {
         page  <- arbitrary[RemoveFRECodePage.type]
         value <- arbitrary[TaxYearSelection].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryYourAddressUserAnswersEntry: Arbitrary[(YourAddressPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[YourAddressPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }
 

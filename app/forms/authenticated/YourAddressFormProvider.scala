@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,27 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import controllers.authenticated.routes._
+package forms.authenticated
 
-@this(
-        main_template: MainTemplate
-)
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-@(mode: Mode)(implicit request: Request[_], messages: Messages)
+class YourAddressFormProvider @Inject() extends Mappings {
 
-@main_template(
-    title = messages("updateEmployerInformation.title")
-) {
-
-    @components.back_link()
-
-    @components.heading("updateEmployerInformation.heading")
-
-    <p>@messages("updateEmployerInformation.paragraph1")</p>
-
-    <p>@messages("updateEmployerInformation.paragraph2")</p>
-
-    @components.button_link("site.continue", YourAddressController.onPageLoad(mode).url)
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("yourAddress.error.required")
+    )
 }

@@ -18,6 +18,7 @@ package controllers.authenticated
 
 import controllers.actions._
 import javax.inject.Inject
+import models.Mode
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -34,8 +35,8 @@ class UpdateEmployerInformationController @Inject()(
                                        view: UpdateEmployerInformationView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view())
+      Ok(view(mode))
   }
 }

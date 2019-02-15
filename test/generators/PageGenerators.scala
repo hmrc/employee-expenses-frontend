@@ -18,6 +18,7 @@ package generators
 
 import org.scalacheck.Arbitrary
 import pages._
+import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import pages.clothing._
 import pages.construction._
@@ -42,6 +43,9 @@ trait PageGenerators {
 
   implicit lazy val arbitraryIronApprenticePage: Arbitrary[IronApprenticePage.type] =
     Arbitrary(IronApprenticePage)
+
+  implicit lazy val arbitraryYourAddressPage: Arbitrary[YourAddressPage.type] =
+    Arbitrary(YourAddressPage)
 
   implicit lazy val arbitraryConstructionalEngineeringList3Page: Arbitrary[ConstructionalEngineeringList3Page.type] =
     Arbitrary(ConstructionalEngineeringList3Page)
