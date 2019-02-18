@@ -16,27 +16,31 @@
 
 package views.authenticated
 
-import models.NormalMode
+import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
-import views.html.authenticated.UpdateEmployerInformationView
+import views.html.authenticated.PhoneUsView
 
-class UpdateEmployerDetailsViewSpec extends ViewBehaviours {
+class PhoneUsViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "UpdateEmployerInformation view" must {
+  "PhoneUs view" must {
 
-    val view = application.injector.instanceOf[UpdateEmployerInformationView]
+    val view = application.injector.instanceOf[PhoneUsView]
 
-    val applyView = view.apply(NormalMode)(fakeRequest, messages)
+    val applyView = view.apply()(fakeRequest, messages)
 
-    val applyViewWithAuth = view.apply(NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView, "updateEmployerInformation")
+    behave like normalPage(applyView, "phoneUs")
 
     behave like pageWithAccountMenu(applyViewWithAuth)
 
-    behave like pageWithBackLink(applyView)
+    behave like pageWithBackLink(applyViewWithAuth)
+
+    val link: Html = Html(s"""<a href="${frontendAppConfig.phoneContact}">${messages("phoneUs.paragraph.linkText")}</a>""")
+
+    behave like pageWithBodyText(applyViewWithAuth, Html(messages("phoneUs.paragraph", link)).toString)
   }
 
   application.stop()

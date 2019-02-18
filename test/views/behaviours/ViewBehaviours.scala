@@ -70,7 +70,7 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
-  def normalPageWithAccountMenu(view: HtmlFormat.Appendable): Unit = {
+  def pageWithAccountMenu(view: HtmlFormat.Appendable): Unit = {
 
     "behave like a normal page with account menu" when {
 

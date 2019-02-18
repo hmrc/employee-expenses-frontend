@@ -584,3 +584,8 @@ removeFRECode.title = What tax year did this expense end?
 removeFRECode.heading = What tax year did this expense end?
 removeFRECode.checkYourAnswersLabel = What tax year did this expense end?
 removeFRECode.error.required = Select the year that your expense ended
+
+phoneUs.title = You cannot make this change online
+phoneUs.heading = You cannot make this change online
+phoneUs.paragraph = You need to {0} to provide more information so that we can complete this claim.
+phoneUs.paragraph.linkText = call HMRC
