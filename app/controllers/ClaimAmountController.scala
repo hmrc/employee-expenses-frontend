@@ -21,7 +21,7 @@ import controllers.actions._
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
-import pages.{ClaimAmount, EmployerContributionPage}
+import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -29,7 +29,7 @@ import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.ClaimAmountView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class ClaimAmountController @Inject()(
                                        appConfig: FrontendAppConfig,
@@ -46,20 +46,28 @@ class ClaimAmountController @Inject()(
 
   import claimAmountService._
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
 
     implicit request =>
       (request.userAnswers.get(EmployerContributionPage), request.userAnswers.get(ClaimAmount)) match {
         case (Some(_), Some(amount)) =>
-          val claimAmount: Int = actualClaimAmount(request.userAnswers, amount)
-          Ok(view(
-            claimAmount = claimAmount,
-            band1 = taxCalculation(appConfig.taxPercentageBand1, claimAmount),
-            band2 = taxCalculation(appConfig.taxPercentageBand2, claimAmount),
-            onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
-          ))
+          val claimAmount: Int = calculateClaimAmount(request.userAnswers, amount)
+
+          for {
+            saveClaimAmountAndAnyDeductions <- Future.fromTry(request.userAnswers.set(ClaimAmountAndAnyDeductions, claimAmount))
+            _ <- sessionRepository.set(saveClaimAmountAndAnyDeductions)
+          } yield {
+
+            Ok(view(
+              claimAmount = claimAmount,
+              band1 = calculateTax(appConfig.taxPercentageBand1, claimAmount),
+              band2 = calculateTax(appConfig.taxPercentageBand2, claimAmount),
+              onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
+            ))
+          }
+
         case _ =>
-          Redirect(routes.SessionExpiredController.onPageLoad())
+          Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
       }
   }
 }
