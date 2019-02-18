@@ -33,10 +33,7 @@ class PhoneUsViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyViewWithAuth)
 
-    "display page content" in {
-      val doc = asDocument(applyViewWithAuth)
-      assertContainsMessages(doc, "phoneUs.para1.part1","phoneUs.para1.linkText","phoneUs.para1.part2")
-    }
+    behave like pageWithBodyText(applyViewWithAuth, "phoneUs.para1.part1", "phoneUs.para1.linkText", "phoneUs.para1.part2")
   }
 
   application.stop()
