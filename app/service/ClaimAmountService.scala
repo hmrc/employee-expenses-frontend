@@ -18,7 +18,7 @@ package service
 
 import com.google.inject.Inject
 import models.UserAnswers
-import pages.{ClaimAmount, ExpensesEmployerPaidPage}
+import pages.ExpensesEmployerPaidPage
 
 import scala.concurrent.ExecutionContext
 import scala.math.BigDecimal.RoundingMode
