@@ -16,7 +16,7 @@
 
 package controllers.construction
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, IndustryType}
 import controllers.actions._
 import forms.construction.ConstructionOccupationList1FormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConstructionOccupationList1Controller @Inject()(
                                                        override val messagesApi: MessagesApi,
                                                        sessionRepository: SessionRepository,
-                                                       @Named("Construction") navigator: Navigator,
+                                                       @Named(IndustryType.construction) navigator: Navigator,
                                                        identify: UnauthenticatedIdentifierAction,
                                                        getData: DataRetrievalAction,
                                                        requireData: DataRequiredAction,

@@ -16,6 +16,7 @@
 
 package controllers.authenticated
 
+import config.IndustryType
 import controllers.actions._
 import javax.inject.{Inject, Named}
 import models.NormalMode
@@ -30,7 +31,7 @@ import scala.concurrent.ExecutionContext
 
 class UpdateYourAddressController @Inject()(
                                        override val messagesApi: MessagesApi,
-                                       @Named("Authenticated") navigator: Navigator,
+                                       @Named(IndustryType.authenticated) navigator: Navigator,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,

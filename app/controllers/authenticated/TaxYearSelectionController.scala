@@ -16,6 +16,7 @@
 
 package controllers.authenticated
 
+import config.IndustryType
 import controllers.actions._
 import forms.authenticated.TaxYearSelectionFormProvider
 import javax.inject.{Inject, Named}
@@ -32,15 +33,15 @@ import views.html.authenticated.TaxYearSelectionView
 import scala.concurrent.{ExecutionContext, Future}
 
 class TaxYearSelectionController @Inject()(
-                                    override val messagesApi: MessagesApi,
-                                    sessionRepository: SessionRepository,
-                                    @Named("Authenticated") navigator: Navigator,
-                                    identify: IdentifierAction,
-                                    getData: DataRetrievalAction,
-                                    requireData: DataRequiredAction,
-                                    formProvider: TaxYearSelectionFormProvider,
-                                    val controllerComponents: MessagesControllerComponents,
-                                    view: TaxYearSelectionView
+                                            override val messagesApi: MessagesApi,
+                                            sessionRepository: SessionRepository,
+                                            @Named(IndustryType.authenticated) navigator: Navigator,
+                                            identify: IdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            formProvider: TaxYearSelectionFormProvider,
+                                            val controllerComponents: MessagesControllerComponents,
+                                            view: TaxYearSelectionView
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()

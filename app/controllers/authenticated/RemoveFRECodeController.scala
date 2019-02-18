@@ -16,6 +16,7 @@
 
 package controllers.authenticated
 
+import config.IndustryType
 import controllers.actions._
 import forms.authenticated.RemoveFRECodeFormProvider
 import javax.inject.{Inject, Named}
@@ -34,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RemoveFRECodeController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: SessionRepository,
-                                       @Named("Authenticated") navigator: Navigator,
+                                       @Named(IndustryType.authenticated) navigator: Navigator,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,

@@ -16,6 +16,7 @@
 
 package controllers.authenticated
 
+import config.IndustryType
 import connectors.CitizenDetailsConnector
 import controllers.actions._
 import forms.authenticated.YourAddressFormProvider
@@ -36,7 +37,7 @@ class YourAddressController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        citizenDetailsConnector: CitizenDetailsConnector,
                                        sessionRepository: SessionRepository,
-                                       @Named("Authenticated") navigator: Navigator,
+                                       @Named(IndustryType.authenticated) navigator: Navigator,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,

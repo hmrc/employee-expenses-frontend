@@ -16,7 +16,7 @@
 
 package controllers.printing
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, IndustryType}
 import controllers.actions._
 import forms.printing.PrintingOccupationList2FormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class PrintingOccupationList2Controller @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    sessionRepository: SessionRepository,
-                                                   @Named("Printing") navigator: Navigator,
+                                                   @Named(IndustryType.printing) navigator: Navigator,
                                                    identify: UnauthenticatedIdentifierAction,
                                                    getData: DataRetrievalAction,
                                                    requireData: DataRequiredAction,

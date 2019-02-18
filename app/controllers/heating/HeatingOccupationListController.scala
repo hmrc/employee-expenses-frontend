@@ -16,7 +16,7 @@
 
 package controllers.heating
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, IndustryType}
 import controllers.actions._
 import forms.heating.HeatingOccupationListFormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class HeatingOccupationListController @Inject()(
                                                  override val messagesApi: MessagesApi,
                                                  sessionRepository: SessionRepository,
-                                                 @Named("Heating") navigator: Navigator,
+                                                 @Named(IndustryType.heating) navigator: Navigator,
                                                  identify: UnauthenticatedIdentifierAction,
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,

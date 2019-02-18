@@ -16,6 +16,7 @@
 
 package controllers.police
 
+import config.IndustryType
 import controllers.actions._
 import forms.police.MetropolitanPoliceFormProvider
 import javax.inject.{Inject, Named}
@@ -34,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class MetropolitanPoliceController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Police") navigator: Navigator,
+                                         @Named(IndustryType.police) navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,

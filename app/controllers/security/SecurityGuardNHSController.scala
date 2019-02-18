@@ -16,7 +16,7 @@
 
 package controllers.security
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, IndustryType}
 import controllers.actions._
 import forms.security.SecurityGuardNHSFormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SecurityGuardNHSController @Inject()(
                                             override val messagesApi: MessagesApi,
                                             sessionRepository: SessionRepository,
-                                            @Named("Security") navigator: Navigator,
+                                            @Named(IndustryType.security) navigator: Navigator,
                                             identify: UnauthenticatedIdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
