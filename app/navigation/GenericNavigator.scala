@@ -54,6 +54,9 @@ class GenericNavigator @Inject()() extends Navigator {
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case MultipleEmploymentsPage  => multipleEmployments(CheckMode)
     case FirstIndustryOptionsPage => firstIndustryOptions(CheckMode)
+    case SecondIndustryOptionsPage => secondIndustryOptions(CheckMode)
+    case ThirdIndustryOptionsPage => thirdIndustryOptions(CheckMode)
+    case FourthIndustryOptionsPage => fourthIndustryOptions(CheckMode)
     case EmployerContributionPage => employerContribution(CheckMode)
     case ExpensesEmployerPaidPage => expensesEmployerPaid(CheckMode)
     case _ =>                   _ => CheckYourAnswersController.onPageLoad()
@@ -73,7 +76,7 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Healthcare)               => AmbulanceStaffController.onPageLoad(mode)
       case Some(Retail)                   => EmployerContributionController.onPageLoad(mode)
       case Some(TransportAndDistribution) => TypeOfTransportController.onPageLoad(mode)
-      case Some(FirstIndustryOptions.NoneOfTheAbove)           => SecondIndustryOptionsController.onPageLoad(mode)
+      case Some(FirstIndustryOptions.NoneOfAbove)           => SecondIndustryOptionsController.onPageLoad(mode)
       case _                              => SessionExpiredController.onPageLoad()
     }
 
@@ -95,7 +98,7 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Heating)                              => HeatingOccupationListController.onPageLoad(mode)
       case Some(Leisure)                              => EmployerContributionController.onPageLoad(mode)
       case Some(Prisons)                              => EmployerContributionController.onPageLoad(mode)
-      case Some(FourthIndustryOptions.NoneOfTheAbove) => EmployerContributionController.onPageLoad(mode)
+      case Some(FourthIndustryOptions.NoneOfAbove) => EmployerContributionController.onPageLoad(mode)
       case _                                          => SessionExpiredController.onPageLoad()
 
     }
@@ -103,8 +106,8 @@ class GenericNavigator @Inject()() extends Navigator {
   private def employerContribution(mode: Mode)(userAnswers: UserAnswers): Call =
    userAnswers.get(EmployerContributionPage) match {
       case Some(EmployerContribution.All)             => CannotClaimController.onPageLoad()
-      case Some(EmployerContribution.None)            => ClaimAmountController.onPageLoad()
-      case Some(EmployerContribution.Some)            => ExpensesEmployerPaidController.onPageLoad(mode)
+      case Some(EmployerContribution.NoContribution)            => ClaimAmountController.onPageLoad()
+      case Some(EmployerContribution.SomeContribution)            => ExpensesEmployerPaidController.onPageLoad(mode)
       case _                                          => SessionExpiredController.onPageLoad()
     }
 

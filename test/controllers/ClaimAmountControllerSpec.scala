@@ -41,7 +41,7 @@ class ClaimAmountControllerSpec extends SpecBase {
         userAnswersId,
         Json.obj(
           ClaimAmount.toString -> claimAmount,
-          EmployerContributionPage.toString -> EmployerContribution.None.toString
+          EmployerContributionPage.toString -> EmployerContribution.NoContribution.toString
         )
       )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -88,7 +88,7 @@ class ClaimAmountControllerSpec extends SpecBase {
         userAnswersId,
         Json.obj(
           ClaimAmount.toString -> claimAmount,
-          EmployerContributionPage.toString -> EmployerContribution.None.toString
+          EmployerContributionPage.toString -> EmployerContribution.NoContribution.toString
         )
       )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -110,7 +110,7 @@ class ClaimAmountControllerSpec extends SpecBase {
           Json.obj(
             ClaimAmount.toString -> claimAmount,
             ExpensesEmployerPaidPage.toString -> employerContribution,
-            EmployerContributionPage.toString -> EmployerContribution.Some.toString
+            EmployerContributionPage.toString -> EmployerContribution.SomeContribution.toString
           )
         )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

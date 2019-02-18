@@ -24,12 +24,12 @@ sealed trait EmployerContribution
 object EmployerContribution extends Enumerable.Implicits {
 
   case object All extends WithName("all") with EmployerContribution
-  case object Some extends WithName("some") with EmployerContribution
-  case object None extends WithName("none") with EmployerContribution
+  case object SomeContribution extends WithName("some") with EmployerContribution
+  case object NoContribution extends WithName("none") with EmployerContribution
 
 
   val values: Seq[EmployerContribution] = Seq(
-    All, Some, None
+    All, SomeContribution, NoContribution
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {

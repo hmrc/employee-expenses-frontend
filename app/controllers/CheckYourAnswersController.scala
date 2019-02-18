@@ -36,9 +36,15 @@ class CheckYourAnswersController @Inject()(
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
+      val cyaHelper = new CheckYourAnswersHelper(request.userAnswers)
 
-      val sections = Seq(AnswerSection(None, Seq()))
+      val sections = Seq(AnswerSection(None, Seq(
+        cyaHelper.industryType(request.userAnswers),
+        cyaHelper.employerContribution,
+        cyaHelper.expensesEmployerPaid,
+        cyaHelper.taxYearSelection,
+        cyaHelper.yourAddress
+      ).flatten))
 
       Ok(view(sections))
   }

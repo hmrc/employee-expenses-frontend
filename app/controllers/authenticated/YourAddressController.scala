@@ -23,6 +23,7 @@ import forms.authenticated.YourAddressFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -78,9 +79,10 @@ class YourAddressController @Inject()(
 
             value => {
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(YourAddressPage, value))
-                _ <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(YourAddressPage, mode)(updatedAnswers))
+                uA1 <- Future.fromTry(request.userAnswers.set(YourAddressPage, value))
+                uA2 <- Future.fromTry(uA1.set(CitizenDetailsAddress, address))
+                _ <- sessionRepository.set(uA2)
+              } yield Redirect(navigator.nextPage(YourAddressPage, mode)(uA2))
             }
           )
       }.recoverWith {
