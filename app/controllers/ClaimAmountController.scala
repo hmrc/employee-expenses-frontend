@@ -51,7 +51,7 @@ class ClaimAmountController @Inject()(
     implicit request =>
       (request.userAnswers.get(EmployerContributionPage), request.userAnswers.get(ClaimAmount)) match {
         case (Some(_), Some(amount)) =>
-          val claimAmount: Int = actualClaimAmount(request.userAnswers, amount)
+          val claimAmount: Int = calculateClaimAmount(request.userAnswers, amount)
 
           for {
             saveClaimAmountAndAnyDeductions <- Future.fromTry(request.userAnswers.set(ClaimAmountAndAnyDeductions, claimAmount))
@@ -60,8 +60,8 @@ class ClaimAmountController @Inject()(
 
             Ok(view(
               claimAmount = claimAmount,
-              band1 = taxCalculation(appConfig.taxPercentageBand1, claimAmount),
-              band2 = taxCalculation(appConfig.taxPercentageBand2, claimAmount),
+              band1 = calculateTax(appConfig.taxPercentageBand1, claimAmount),
+              band2 = calculateTax(appConfig.taxPercentageBand2, claimAmount),
               onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
             ))
           }

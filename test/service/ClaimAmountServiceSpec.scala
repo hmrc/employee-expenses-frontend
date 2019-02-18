@@ -35,11 +35,11 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
     "band1" when {
       "return 20% of claim amount as a string with contribution from employer" in {
         val userAnswers = emptyUserAnswers.set(ExpensesEmployerPaidPage, 50).success.value
-        val actualClaimAmount = claimAmountService.actualClaimAmount(userAnswers, 100)
+        val actualClaimAmount = claimAmountService.calculateClaimAmount(userAnswers, 100)
 
         actualClaimAmount mustBe 50
 
-        claimAmountService.taxCalculation(
+        claimAmountService.calculateTax(
           percentage = frontendAppConfig.taxPercentageBand1,
           amount = actualClaimAmount
         ) mustBe "10.00"
@@ -47,11 +47,11 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
 
       "return 20% of claim amount as a string" in {
         val userAnswers = emptyUserAnswers
-        val actualClaimAmount = claimAmountService.actualClaimAmount(userAnswers, 100)
+        val actualClaimAmount = claimAmountService.calculateClaimAmount(userAnswers, 100)
 
         actualClaimAmount mustBe 100
 
-        claimAmountService.taxCalculation(
+        claimAmountService.calculateTax(
           percentage = frontendAppConfig.taxPercentageBand1,
           amount = actualClaimAmount
         ) mustBe "20.00"
@@ -60,7 +60,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
 
     "band2" when {
       "return 40% of claim amount as a string" in {
-        claimAmountService.taxCalculation(
+        claimAmountService.calculateTax(
           percentage = frontendAppConfig.taxPercentageBand2,
           amount = 180
         ) mustBe "72.00"

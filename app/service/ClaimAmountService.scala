@@ -25,7 +25,7 @@ import scala.math.BigDecimal.RoundingMode
 
 class ClaimAmountService @Inject()()(implicit ec: ExecutionContext) {
 
-  def actualClaimAmount(userAnswers: UserAnswers, claimAmount: Int): Int = {
+  def calculateClaimAmount(userAnswers: UserAnswers, claimAmount: Int): Int = {
     userAnswers.get(ExpensesEmployerPaidPage) match {
       case Some(expensesPaid) =>
         claimAmount - expensesPaid
@@ -34,7 +34,7 @@ class ClaimAmountService @Inject()()(implicit ec: ExecutionContext) {
     }
   }
 
-  def taxCalculation(percentage: Int, amount: Int): String = {
+  def calculateTax(percentage: Int, amount: Int): String = {
     BigDecimal((amount.toDouble / 100) * percentage).setScale(2, RoundingMode.DOWN).toString
   }
 
