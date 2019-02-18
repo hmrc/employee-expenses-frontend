@@ -577,7 +577,7 @@ noCodeChange.guidance = You will continue to earn an extra £{0} a year before p
 yourAddress.title = Is this your address?
 yourAddress.heading = Is this your address?
 yourAddress.checkYourAnswersLabel = Is this your address?
-yourAddress.error.required = Select yes if this is your address?
+yourAddress.error.required = Select yes if this is your address
 
 
 removeFRECode.title = What tax year did this expense end?
