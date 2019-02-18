@@ -33,7 +33,7 @@ class UpdateEmployerDetailsViewSpec extends ViewBehaviours {
 
     behave like normalPage(applyView, "updateEmployerInformation")
 
-    behave like normalPageWithAccountMenu(applyViewWithAuth)
+    behave like pageWithAccountMenu(applyViewWithAuth)
 
     behave like pageWithBackLink(applyView)
   }

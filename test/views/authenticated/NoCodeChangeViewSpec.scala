@@ -30,7 +30,7 @@ class NoCodeChangeViewSpec extends ViewBehaviours {
 
     val applyViewWithAuth = view.apply(amount)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPageWithAccountMenu(applyViewWithAuth)
+    behave like pageWithAccountMenu(applyViewWithAuth)
 
     behave like pageWithBackLink(applyViewWithAuth)
 

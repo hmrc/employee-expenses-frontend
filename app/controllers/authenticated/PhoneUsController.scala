@@ -38,6 +38,6 @@ class PhoneUsController @Inject()(
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view(frontendAppConfig.phoneContact))
+      Ok(view())
   }
 }

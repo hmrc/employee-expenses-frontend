@@ -30,7 +30,7 @@ class UpdateYourAddressViewSpec extends ViewBehaviours {
 
     val applyViewWithAuth = view.apply(nextPageURL)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPageWithAccountMenu(applyViewWithAuth)
+    behave like pageWithAccountMenu(applyViewWithAuth)
 
     behave like pageWithBackLink(applyViewWithAuth)
 

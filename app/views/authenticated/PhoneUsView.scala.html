@@ -14,21 +14,26 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
-    main_template: MainTemplate
+        main_template: MainTemplate,
+        frontendAppConfig: FrontendAppConfig
 )
 
-@(
-    contactURL: String
-)(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[_], messages: Messages)
+
+@link = {
+    <a href=@frontendAppConfig.phoneContact>@messages("phoneUs.paragraph.linkText")</a>
+}
 
 @main_template(
     title = messages("phoneUs.title")
-    ) {
+) {
 
     @components.back_link()
 
     @components.heading("phoneUs.heading")
 
-    <p>@messages("phoneUs.para1.part1") <a href="@contactURL" >@messages("phoneUs.para1.linkText")</a> @messages("phoneUs.para1.part2")</p>
+    <p>@Html(messages("phoneUs.paragraph", link))</p>
 }

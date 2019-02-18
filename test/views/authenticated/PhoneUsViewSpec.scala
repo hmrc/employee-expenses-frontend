@@ -16,6 +16,7 @@
 
 package views.authenticated
 
+import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.authenticated.PhoneUsView
 
@@ -27,13 +28,19 @@ class PhoneUsViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[PhoneUsView]
 
-    val applyViewWithAuth = view.apply("/foo")(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyView = view.apply()(fakeRequest, messages)
 
-    behave like normalPageWithAccountMenu(applyViewWithAuth)
+    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+
+    behave like normalPage(applyView, "phoneUs")
+
+    behave like pageWithAccountMenu(applyViewWithAuth)
 
     behave like pageWithBackLink(applyViewWithAuth)
 
-    behave like pageWithBodyText(applyViewWithAuth, "phoneUs.para1.part1", "phoneUs.para1.linkText", "phoneUs.para1.part2")
+    val link: Html = Html(s"""<a href="${frontendAppConfig.phoneContact}">${messages("phoneUs.paragraph.linkText")}</a>""")
+
+    behave like pageWithBodyText(applyViewWithAuth, Html(messages("phoneUs.paragraph", link)).toString)
   }
 
   application.stop()
