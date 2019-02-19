@@ -497,7 +497,7 @@ fourthIndustryOptions.fireService = fire service
 fourthIndustryOptions.heating = heating
 fourthIndustryOptions.leisure = leisure
 fourthIndustryOptions.prisons = prisons
-fourthIndustryOptions.none = show more industries
+fourthIndustryOptions.noneOfTheAbove = show more industries
 fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
 fourthIndustryOptions.error.required = Select the industry you work in
 
@@ -577,12 +577,18 @@ noCodeChange.guidance = You will continue to earn an extra £{0} a year before p
 yourAddress.title = Is this your address?
 yourAddress.heading = Is this your address?
 yourAddress.checkYourAnswersLabel = Is this your address? {0}
-yourAddress.error.required = Select yes if this is your address?
+yourAddress.error.required = Select yes if this is your address
+
 
 removeFRECode.title = What tax year did this expense end?
 removeFRECode.heading = What tax year did this expense end?
 removeFRECode.checkYourAnswersLabel = What tax year did this expense end?
 removeFRECode.error.required = Select the year that your expense ended
+
+phoneUs.title = You cannot make this change online
+phoneUs.heading = You cannot make this change online
+phoneUs.paragraph = You need to {0} to provide more information so that we can complete this claim.
+phoneUs.paragraph.linkText = call HMRC
 
 industryType.checkYourAnswersLabel = What industry do you work in?
 

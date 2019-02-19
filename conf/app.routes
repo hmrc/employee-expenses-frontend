@@ -311,3 +311,5 @@ GET         /tax-year-expense-end                                controllers.aut
 POST        /tax-year-expense-end                                controllers.authenticated.RemoveFRECodeController.onSubmit(mode: Mode = NormalMode)
 GET         /change-tax-year-expense-end                         controllers.authenticated.RemoveFRECodeController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-tax-year-expense-end                         controllers.authenticated.RemoveFRECodeController.onSubmit(mode: Mode = CheckMode)
+
+GET         /phone-us                                            controllers.authenticated.PhoneUsController.onPageLoad()

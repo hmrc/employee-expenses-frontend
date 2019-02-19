@@ -41,7 +41,7 @@ class ExpensesEmployerPaidController @Inject()(
                                                 formProvider: ExpensesEmployerPaidFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: ExpensesEmployerPaidView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
 
@@ -66,7 +66,7 @@ class ExpensesEmployerPaidController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ExpensesEmployerPaidPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(ExpensesEmployerPaidPage, mode)(updatedAnswers))
         }
       )
