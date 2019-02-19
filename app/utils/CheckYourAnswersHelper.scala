@@ -96,8 +96,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       }
   }
 
-  //Authenticated
-
   def taxYearSelection: Option[AnswerRow] = userAnswers.get(TaxYearSelectionPage) map {
     taxYears =>
       AnswerRow("taxYearSelection.checkYourAnswersLabel",
@@ -110,12 +108,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
         }.mkString("<br>"),
         false,
         TaxYearSelectionController.onPageLoad(CheckMode).url)
-  }
-
-  def removeFRECode: Option[AnswerRow] = userAnswers.get(RemoveFRECodePage) map {
-    x =>
-      AnswerRow("removeFRECode.checkYourAnswersLabel", s"removeFRECode.$x", true,
-        RemoveFRECodeController.onPageLoad(CheckMode).url)
   }
 
   def yourAddress: Option[AnswerRow] = (userAnswers.get(YourAddressPage), userAnswers.get(CitizenDetailsAddress)) match {
