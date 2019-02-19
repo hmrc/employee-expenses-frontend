@@ -79,10 +79,10 @@ class YourAddressController @Inject()(
 
             value => {
               for {
-                uA1 <- Future.fromTry(request.userAnswers.set(YourAddressPage, value))
-                uA2 <- Future.fromTry(uA1.set(CitizenDetailsAddress, address))
-                _ <- sessionRepository.set(uA2)
-              } yield Redirect(navigator.nextPage(YourAddressPage, mode)(uA2))
+                ua1 <- Future.fromTry(request.userAnswers.set(YourAddressPage, value))
+                ua2 <- Future.fromTry(ua1.set(CitizenDetailsAddress, address))
+                _ <- sessionRepository.set(ua2)
+              } yield Redirect(navigator.nextPage(YourAddressPage, mode)(ua2))
             }
           )
       }.recoverWith {

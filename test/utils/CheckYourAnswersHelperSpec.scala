@@ -137,7 +137,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
         val ua2 = ua.set(CitizenDetailsAddress, address).success.value
         helper(ua2).yourAddress.get.label mustBe "yourAddress.checkYourAnswersLabel"
         helper(ua2).yourAddress.get.answer mustBe "site.yes"
-        helper(ua2).yourAddress.get.messageArgs.head mustBe Address.asString(address)
+        helper(ua2).yourAddress.get.labelArgs.head mustBe Address.asString(address)
       }
     }
 
@@ -147,7 +147,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
         val ua2 = ua.set(CitizenDetailsAddress, address).success.value
         helper(ua2).yourAddress.get.label mustBe "yourAddress.checkYourAnswersLabel"
         helper(ua2).yourAddress.get.answer mustBe "site.no"
-        helper(ua2).yourAddress.get.messageArgs.head mustBe Address.asString(address)
+        helper(ua2).yourAddress.get.labelArgs.head mustBe Address.asString(address)
       }
     }
   }
