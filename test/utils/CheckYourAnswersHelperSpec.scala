@@ -35,8 +35,8 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
           industry =>
             if (industry != FirstIndustryOptions.NoneOfAbove) {
               val ua = emptyUserAnswers.set(FirstIndustryOptionsPage, industry).success.value
-              helper(ua).industryType(ua).get.label mustBe "industryType.checkYourAnswersLabel"
-              helper(ua).industryType(ua).get.answer mustBe s"firstIndustryOptions.${industry.toString}"
+              helper(ua).industryType.get.label mustBe "industryType.checkYourAnswersLabel"
+              helper(ua).industryType.get.answer mustBe s"firstIndustryOptions.${industry.toString}"
             }
         }
       }
@@ -48,8 +48,8 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
           industry =>
             if (industry != SecondIndustryOptions.NoneOfAbove) {
               val ua = emptyUserAnswers.set(SecondIndustryOptionsPage, industry).success.value
-              helper(ua).secondaryIndustryList(ua).get.label mustBe "industryType.checkYourAnswersLabel"
-              helper(ua).secondaryIndustryList(ua).get.answer mustBe s"secondIndustryOptions.${industry.toString}"
+              helper(ua).secondaryIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
+              helper(ua).secondaryIndustryList.get.answer mustBe s"secondIndustryOptions.${industry.toString}"
             }
         }
       }
@@ -61,8 +61,8 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
           industry =>
             if (industry != ThirdIndustryOptions.NoneOfAbove) {
               val ua = emptyUserAnswers.set(ThirdIndustryOptionsPage, industry).success.value
-              helper(ua).thirdIndustryList(ua).get.label mustBe "industryType.checkYourAnswersLabel"
-              helper(ua).thirdIndustryList(ua).get.answer mustBe s"thirdIndustryOptions.${industry.toString}"
+              helper(ua).thirdIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
+              helper(ua).thirdIndustryList.get.answer mustBe s"thirdIndustryOptions.${industry.toString}"
             }
         }
       }
@@ -74,8 +74,8 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
           industry =>
             if (industry != FourthIndustryOptions.NoneOfAbove) {
               val ua = emptyUserAnswers.set(FourthIndustryOptionsPage, industry).success.value
-              helper(ua).fourthIndustryList(ua).get.label mustBe "industryType.checkYourAnswersLabel"
-              helper(ua).fourthIndustryList(ua).get.answer mustBe s"fourthIndustryOptions.${industry.toString}"
+              helper(ua).fourthIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
+              helper(ua).fourthIndustryList.get.answer mustBe s"fourthIndustryOptions.${industry.toString}"
             }
         }
       }

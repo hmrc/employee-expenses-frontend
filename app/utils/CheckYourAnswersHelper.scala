@@ -37,40 +37,40 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     ))
   }
 
-  def industryType(userAnswers: UserAnswers): Option[AnswerRow] = {
+  def industryType: Option[AnswerRow] = {
     userAnswers.get(FirstIndustryOptionsPage) match {
       case Some(Healthcare) => industryAnswerRow(s"firstIndustryOptions.${Healthcare.toString}")
       case Some(FoodAndCatering) => industryAnswerRow(s"firstIndustryOptions.${FoodAndCatering.toString}")
       case Some(Retail) => industryAnswerRow(s"firstIndustryOptions.${Retail.toString}")
       case Some(Engineering) => industryAnswerRow(s"firstIndustryOptions.${Engineering.toString}")
       case Some(TransportAndDistribution) => industryAnswerRow(s"firstIndustryOptions.${TransportAndDistribution.toString}")
-      case Some(FirstIndustryOptions.NoneOfAbove) => secondaryIndustryList(userAnswers)
+      case Some(FirstIndustryOptions.NoneOfAbove) => secondaryIndustryList
     }
   }
 
-  def secondaryIndustryList(userAnswers: UserAnswers): Option[AnswerRow] = {
+  def secondaryIndustryList: Option[AnswerRow] = {
     userAnswers.get(SecondIndustryOptionsPage) match {
       case Some(ManufacturingWarehousing) => industryAnswerRow(s"secondIndustryOptions.${ManufacturingWarehousing.toString}")
       case Some(Council) => industryAnswerRow(s"secondIndustryOptions.${Council.toString}")
       case Some(Police) => industryAnswerRow(s"secondIndustryOptions.${Police.toString}")
       case Some(ClothingTextiles) => industryAnswerRow(s"secondIndustryOptions.${ClothingTextiles.toString}")
       case Some(Construction) => industryAnswerRow(s"secondIndustryOptions.${Construction.toString}")
-      case Some(SecondIndustryOptions.NoneOfAbove) => thirdIndustryList(userAnswers)
+      case Some(SecondIndustryOptions.NoneOfAbove) => thirdIndustryList
     }
   }
 
-  def thirdIndustryList(userAnswers: UserAnswers): Option[AnswerRow] = {
+  def thirdIndustryList: Option[AnswerRow] = {
     userAnswers.get(ThirdIndustryOptionsPage) match {
       case Some(Electrical) => industryAnswerRow(s"thirdIndustryOptions.${Electrical.toString}")
       case Some(Education) => industryAnswerRow(s"thirdIndustryOptions.${Education.toString}")
       case Some(BanksBuildingSocieties) => industryAnswerRow(s"thirdIndustryOptions.${BanksBuildingSocieties.toString}")
       case Some(Security) => industryAnswerRow(s"thirdIndustryOptions.${Security.toString}")
       case Some(Printing) => industryAnswerRow(s"thirdIndustryOptions.${Printing.toString}")
-      case Some(ThirdIndustryOptions.NoneOfAbove) => fourthIndustryList(userAnswers)
+      case Some(ThirdIndustryOptions.NoneOfAbove) => fourthIndustryList
     }
   }
 
-  def fourthIndustryList(userAnswers: UserAnswers): Option[AnswerRow] = {
+  def fourthIndustryList: Option[AnswerRow] = {
     userAnswers.get(FourthIndustryOptionsPage) match {
       case Some(Agriculture) => industryAnswerRow(s"fourthIndustryOptions.${Agriculture.toString}")
       case Some(FireService) => industryAnswerRow(s"fourthIndustryOptions.${FireService.toString}")

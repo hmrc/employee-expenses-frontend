@@ -19,10 +19,15 @@ package base
 import com.github.tototoshi.play2.scalate.Scalate
 import config.FrontendAppConfig
 import controllers.actions._
-import models.{Address, UserAnswers}
+import models.EmployerContribution.SomeContribution
+import models.FirstIndustryOptions.Healthcare
+import models.TaxYearSelection.CurrentYear
+import models.{Address, FirstIndustryOptions, TaxYearSelection, UserAnswers}
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
+import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
+import pages.{CitizenDetailsAddress, EmployerContributionPage, ExpensesEmployerPaidPage, FirstIndustryOptionsPage}
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -84,9 +89,17 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     None
   )
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  def minimumUserAnswers = emptyUserAnswers
+    .set(FirstIndustryOptionsPage, Healthcare).success.value
+    .set(EmployerContributionPage, SomeContribution).success.value
+    .set(ExpensesEmployerPaidPage, 123).success.value
+    .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
+    .set(YourAddressPage, true).success.value
+    .set(CitizenDetailsAddress, address).success.value
 
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
+
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   def injector: Injector = app.injector
 

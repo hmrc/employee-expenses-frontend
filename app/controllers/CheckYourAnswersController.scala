@@ -39,7 +39,7 @@ class CheckYourAnswersController @Inject()(
       val cyaHelper = new CheckYourAnswersHelper(request.userAnswers)
 
       val sections = Seq(AnswerSection(None, Seq(
-        cyaHelper.industryType(request.userAnswers),
+        cyaHelper.industryType,
         cyaHelper.employerContribution,
         cyaHelper.expensesEmployerPaid,
         cyaHelper.taxYearSelection,
