@@ -16,13 +16,12 @@
 
 package models
 
-sealed trait FRENavigatorOptions
+sealed trait FlatRateExpenseOptions
 
-object FRENavigatorOptions {
-
-  case object NoFRE extends FRENavigatorOptions
-  case object AllYearsSameAmounts extends FRENavigatorOptions
-  case object AllYearsDifferentAmounts extends FRENavigatorOptions
-  case object SomeYears extends FRENavigatorOptions
-
+object FlatRateExpenseOptions {
+  case object FRENoYears extends FlatRateExpenseOptions
+  case object FREAllYearsAllAmountsSameAsClaimAmount extends FlatRateExpenseOptions
+  case object FREAllYearsAllAmountsDifferentToClaimAmount extends FlatRateExpenseOptions
+  case object ComplexClaim extends FlatRateExpenseOptions
+  case object TechnicalDifficulties extends FlatRateExpenseOptions
 }

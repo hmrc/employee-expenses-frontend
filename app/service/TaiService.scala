@@ -18,7 +18,8 @@ package service
 
 import com.google.inject.Inject
 import connectors.{CitizenDetailsConnector, TaiConnector}
-import models.{FlatRateExpense, IabdUpdateData, TaxCodeRecord, TaxYear}
+import models.FlatRateExpenseOptions._
+import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaxCodeRecord, TaxYear}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,8 +33,13 @@ class TaiService @Inject()(taiConnector: TaiConnector,
     taiConnector.taiTaxCodeRecords(nino)
   }
 
-  def getFRE(nino: String, year: TaxYear)(implicit hc: HeaderCarrier): Future[FlatRateExpense] = {
-    taiConnector.getFlatRateExpense(nino, year)
+  def getAllFlatRateExpenses(nino: String, taxYears: Seq[TaxYear])(implicit hc: HeaderCarrier): Future[Seq[HttpResponse]] = {
+    val getAllFRE = taxYears map {
+      taxYear =>
+        taiConnector.getFlatRateExpense(nino, taxYear)
+    }
+
+    Future.sequence(getAllFRE)
   }
 
   def updateFRE(nino: String, year: TaxYear, expensesData: IabdUpdateData)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
@@ -42,4 +48,24 @@ class TaiService @Inject()(taiConnector: TaiConnector,
     }
   }
 
+  def freResponse(taxYears: Seq[TaxYear], nino: String, claimAmount: Int)
+               (implicit hc: HeaderCarrier): Future[FlatRateExpenseOptions] = {
+
+    getAllFlatRateExpenses(nino, taxYears).map {
+      case flatRateExpenses if flatRateExpenses.forall(_.status == 404) => FRENoYears
+      case flatRateExpenses if flatRateExpenses.forall(_.status == 200) =>
+        freResponseLogic(flatRateExpenses.map(_.json.as[FlatRateExpense]), claimAmount)
+      case _ => TechnicalDifficulties
+    }
+  }
+
+  def freResponseLogic(fre: Seq[FlatRateExpense], claimAmount: Int): FlatRateExpenseOptions ={
+    fre match {
+      case flatRateExpenses if flatRateExpenses.forall(_.grossAmount == claimAmount) =>
+        FREAllYearsAllAmountsSameAsClaimAmount
+      case flatRateExpenses if flatRateExpenses.forall(_.grossAmount != claimAmount) =>
+        FREAllYearsAllAmountsDifferentToClaimAmount
+      case _ => ComplexClaim
+    }
+  }
 }

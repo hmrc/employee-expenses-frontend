@@ -27,10 +27,9 @@ class FlatRateExpenseSpec extends SpecBase {
       val flatRateExpense = validFlatRateJson.as[FlatRateExpense]
 
       flatRateExpense mustBe FlatRateExpense(
-        nino = Some("EM329013"),
-        taxYear = Some(2016),
-        grossAmount = Some(60),
-        netAmount = None
+        nino = "EM329013",
+        taxYear = 2016,
+        grossAmount = 60
       )
     }
   }

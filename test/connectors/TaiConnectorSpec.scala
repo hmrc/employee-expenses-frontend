@@ -56,13 +56,6 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     primary = true
   ))
 
-  private val flatRateExpense = FlatRateExpense(
-    nino = Some("AB123456A"),
-    taxYear = Some(2018),
-    grossAmount = Some(120),
-    netAmount = None
-  )
-
   "taiTaxCode" must {
     "return a tax code record on success" in {
       server.stubFor(
@@ -113,11 +106,11 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[FlatRateExpense] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+      val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
 
       whenReady(result) {
         result =>
-          result mustBe flatRateExpense
+          result mustBe OK
       }
     }
 
@@ -132,7 +125,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[FlatRateExpense] = taiConnector.getFlatRateExpense(fakeNino, invalidTaxYear)
+      val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, invalidTaxYear)
 
       whenReady(result.failed) {
         result =>
@@ -149,7 +142,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[FlatRateExpense] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+      val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
 
       whenReady(result.failed) {
         result =>
@@ -166,7 +159,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[FlatRateExpense] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+      val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
 
       whenReady(result.failed) {
         result =>

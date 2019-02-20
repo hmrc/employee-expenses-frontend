@@ -19,18 +19,13 @@ package models
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
-case class FlatRateExpense(nino: Option[String],
-                           taxYear: Option[Int],
-                           grossAmount: Option[Int],
-                           netAmount: Option[Int])
-
+case class FlatRateExpense(nino: String, taxYear: Int, grossAmount: Int)
 
 object FlatRateExpense {
   implicit val reads: Reads[FlatRateExpense] = (
-    (JsPath \ "nino").readNullable[String] and
-      (JsPath \ "taxYear").readNullable[Int] and
-      (JsPath \ "grossAmount").readNullable[Int] and
-      (JsPath \ "netAmount").readNullable[Int]
+    (JsPath \ "nino").read[String] and
+      (JsPath \ "taxYear").read[Int] and
+      (JsPath \ "grossAmount").read[Int]
     )(FlatRateExpense.apply _)
 }
 
