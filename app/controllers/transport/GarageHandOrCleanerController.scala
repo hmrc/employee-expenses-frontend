@@ -16,7 +16,7 @@
 
 package controllers.transport
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.transport.GarageHandOrCleanerFormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class GarageHandOrCleanerController @Inject()(
                                                override val messagesApi: MessagesApi,
                                                sessionRepository: SessionRepository,
-                                               @Named("Transport") navigator: Navigator,
+                                               @Named(NavConstant.transport) navigator: Navigator,
                                                identify: UnauthenticatedIdentifierAction,
                                                getData: DataRetrievalAction,
                                                requireData: DataRequiredAction,

@@ -16,12 +16,14 @@
 
 package controllers.authenticated
 
+import config.NavConstant
 import connectors.CitizenDetailsConnector
 import controllers.actions._
 import forms.authenticated.YourAddressFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -36,7 +38,7 @@ class YourAddressController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        citizenDetailsConnector: CitizenDetailsConnector,
                                        sessionRepository: SessionRepository,
-                                       @Named("Authenticated") navigator: Navigator,
+                                       @Named(NavConstant.authenticated) navigator: Navigator,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
@@ -77,9 +79,10 @@ class YourAddressController @Inject()(
 
             value => {
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(YourAddressPage, value))
-                _ <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(YourAddressPage, mode)(updatedAnswers))
+                ua1 <- Future.fromTry(request.userAnswers.set(YourAddressPage, value))
+                ua2 <- Future.fromTry(ua1.set(CitizenDetailsAddress, address))
+                _ <- sessionRepository.set(ua2)
+              } yield Redirect(navigator.nextPage(YourAddressPage, mode)(ua2))
             }
           )
       }.recoverWith {

@@ -16,7 +16,7 @@
 
 package controllers.manufacturing
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.manufacturing.TypeOfManufacturingFormProvider
 import javax.inject.{Inject, Named}
@@ -37,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TypeOfManufacturingController @Inject()(
                                                override val messagesApi: MessagesApi,
                                                sessionRepository: SessionRepository,
-                                               @Named("Manufacturing") navigator: Navigator,
+                                               @Named(NavConstant.manufacturing) navigator: Navigator,
                                                identify: UnauthenticatedIdentifierAction,
                                                getData: DataRetrievalAction,
                                                requireData: DataRequiredAction,

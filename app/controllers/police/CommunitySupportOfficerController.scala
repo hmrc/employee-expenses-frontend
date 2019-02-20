@@ -16,7 +16,7 @@
 
 package controllers.police
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.police.CommunitySupportOfficerFormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CommunitySupportOfficerController @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    sessionRepository: SessionRepository,
-                                                   @Named("Police") navigator: Navigator,
+                                                   @Named(NavConstant.police) navigator: Navigator,
                                                    identify: UnauthenticatedIdentifierAction,
                                                    getData: DataRetrievalAction,
                                                    requireData: DataRequiredAction,

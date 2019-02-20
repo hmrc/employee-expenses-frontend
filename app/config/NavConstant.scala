@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-package pages
+package config
 
-import models.{EmployerContribution, UserAnswers}
-import play.api.libs.json.JsPath
+import javax.inject.Singleton
 
-import scala.util.{Success, Try}
+sealed trait NavConstant
 
-case object EmployerContributionPage extends QuestionPage[EmployerContribution] {
+@Singleton
+object NavConstant {
 
-  override def path: JsPath = JsPath \ toString
+  final val authenticated = "Authenticated"
+  final val clothing = "Clothing"
+  final val construction = "Construction"
+  final val electrical = "Electrical"
+  final val engineering = "Engineering"
+  final val foodCatering = "FoodCatering"
+  final val healthcare = "Healthcare"
+  final val heating = "Heating"
+  final val manufacturing = "Manufacturing"
+  final val police = "Police"
+  final val printing = "Printing"
+  final val security = "Security"
+  final val transport = "Transport"
 
-  override def toString: String = "employerContribution"
-
-  override def cleanup(value: Option[EmployerContribution], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match  {
-      case Some(EmployerContribution.SomeContribution) => Success(userAnswers)
-      case _ => userAnswers.remove(ExpensesEmployerPaidPage)
-  }
 }

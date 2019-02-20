@@ -19,16 +19,26 @@ package controllers
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.CheckYourAnswersView
 
 class CheckYourAnswersControllerSpec extends SpecBase {
 
+  private val cyaHelper = new CheckYourAnswersHelper(minimumUserAnswers)
+  private val minimumSections = Seq(AnswerSection(None, Seq(
+    cyaHelper.industryType,
+    cyaHelper.employerContribution,
+    cyaHelper.expensesEmployerPaid,
+    cyaHelper.taxYearSelection,
+    cyaHelper.yourAddress
+  ).flatten))
+
   "Check Your Answers Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
 
       val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
 
@@ -39,7 +49,7 @@ class CheckYourAnswersControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(Seq(AnswerSection(None, Seq())))(fakeRequest, messages).toString
+        view(minimumSections)(fakeRequest, messages).toString
 
       application.stop()
     }

@@ -16,6 +16,7 @@
 
 package controllers.manufacturing
 
+import config.NavConstant
 import controllers.actions._
 import forms.manufacturing.IronMiningFormProvider
 import javax.inject.{Inject, Named}
@@ -34,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class IronMiningController @Inject()(
                                       override val messagesApi: MessagesApi,
                                       sessionRepository: SessionRepository,
-                                      @Named("Manufacturing") navigator: Navigator,
+                                      @Named(NavConstant.manufacturing) navigator: Navigator,
                                       identify: UnauthenticatedIdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,

@@ -16,7 +16,7 @@
 
 package controllers.manufacturing
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.WoodFurnitureOccupationList3FormProvider
 import javax.inject.{Inject, Named}
@@ -34,15 +34,15 @@ import views.html.manufacturing.WoodFurnitureOccupationList3View
 import scala.concurrent.{ExecutionContext, Future}
 
 class WoodFurnitureOccupationList3Controller @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Manufacturing") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: WoodFurnitureOccupationList3FormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: WoodFurnitureOccupationList3View
+                                                        override val messagesApi: MessagesApi,
+                                                        sessionRepository: SessionRepository,
+                                                        @Named(NavConstant.manufacturing) navigator: Navigator,
+                                                        identify: UnauthenticatedIdentifierAction,
+                                                        getData: DataRetrievalAction,
+                                                        requireData: DataRequiredAction,
+                                                        formProvider: WoodFurnitureOccupationList3FormProvider,
+                                                        val controllerComponents: MessagesControllerComponents,
+                                                        view: WoodFurnitureOccupationList3View
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
