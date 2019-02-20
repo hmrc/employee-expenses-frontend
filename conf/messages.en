@@ -592,3 +592,10 @@ phoneUs.paragraph.linkText = call HMRC
 
 industryType.checkYourAnswersLabel = What industry do you work in?
 
+changeWhichTaxYears.title = Tell us which years you want to change the claim amount for
+changeWhichTaxYears.heading = Tell us which years you want to change the claim amount for
+changeWhichTaxYears.we = we
+changeWhichTaxYears.ew = ew
+changeWhichTaxYears.re = re
+changeWhichTaxYears.checkYourAnswersLabel = Tell us which years you want to change the claim amount for
+changeWhichTaxYears.error.required = Select changeWhichTaxYears

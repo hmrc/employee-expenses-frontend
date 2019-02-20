@@ -31,6 +31,15 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def changeWhichTaxYears: Option[AnswerRow] = userAnswers.get(ChangeWhichTaxYearsPage) map {
+    x => AnswerRow(
+        "changeWhichTaxYears.checkYourAnswersLabel",
+        x.map(value => messages(s"changeWhichTaxYears.$value")).mkString(", <br>"),
+        true,
+        ChangeWhichTaxYearsController.onPageLoad(CheckMode).url
+    )
+  }
+
   def industryAnswerRow(industry: String): Option[AnswerRow] = {
     Some(AnswerRow("industryType.checkYourAnswersLabel", industry, true,
       FirstIndustryOptionsController.onPageLoad(CheckMode).url
