@@ -16,7 +16,7 @@
 
 package controllers.authenticated
 
-import config.IndustryType
+import config.NavConstant
 import controllers.actions._
 import javax.inject.{Inject, Named}
 import models.NormalMode
@@ -30,13 +30,13 @@ import views.html.authenticated.UpdateYourAddressView
 import scala.concurrent.ExecutionContext
 
 class UpdateYourAddressController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       @Named(IndustryType.authenticated) navigator: Navigator,
-                                       identify: IdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: UpdateYourAddressView
+                                             override val messagesApi: MessagesApi,
+                                             @Named(NavConstant.authenticated) navigator: Navigator,
+                                             identify: IdentifierAction,
+                                             getData: DataRetrievalAction,
+                                             requireData: DataRequiredAction,
+                                             val controllerComponents: MessagesControllerComponents,
+                                             view: UpdateYourAddressView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {

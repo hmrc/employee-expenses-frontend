@@ -16,7 +16,7 @@
 
 package controllers.transport
 
-import config.IndustryType
+import config.NavConstant
 import controllers.actions._
 import forms.transport.TypeOfTransportFormProvider
 import javax.inject.{Inject, Named}
@@ -33,15 +33,15 @@ import views.html.transport.TypeOfTransportView
 import scala.concurrent.{ExecutionContext, Future}
 
 class TypeOfTransportController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       @Named(IndustryType.transport) navigator: Navigator,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: TypeOfTransportFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: TypeOfTransportView
+                                           override val messagesApi: MessagesApi,
+                                           sessionRepository: SessionRepository,
+                                           @Named(NavConstant.transport) navigator: Navigator,
+                                           identify: UnauthenticatedIdentifierAction,
+                                           getData: DataRetrievalAction,
+                                           requireData: DataRequiredAction,
+                                           formProvider: TypeOfTransportFormProvider,
+                                           val controllerComponents: MessagesControllerComponents,
+                                           view: TypeOfTransportView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()

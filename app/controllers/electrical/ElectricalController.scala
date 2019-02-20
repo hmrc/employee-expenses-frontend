@@ -16,7 +16,7 @@
 
 package controllers.electrical
 
-import config.{ClaimAmounts, IndustryType}
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.electrical.ElectricalFormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ElectricalController @Inject()(
                                       override val messagesApi: MessagesApi,
                                       sessionRepository: SessionRepository,
-                                      @Named(IndustryType.electrical) navigator: Navigator,
+                                      @Named(NavConstant.electrical) navigator: Navigator,
                                       identify: UnauthenticatedIdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,

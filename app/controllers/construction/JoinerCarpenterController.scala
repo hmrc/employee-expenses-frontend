@@ -16,7 +16,7 @@
 
 package controllers.construction
 
-import config.{ClaimAmounts, IndustryType}
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.construction.JoinerCarpenterFormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class JoinerCarpenterController @Inject()(
                                            override val messagesApi: MessagesApi,
                                            sessionRepository: SessionRepository,
-                                           @Named(IndustryType.construction) navigator: Navigator,
+                                           @Named(NavConstant.construction) navigator: Navigator,
                                            identify: UnauthenticatedIdentifierAction,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction,

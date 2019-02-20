@@ -16,7 +16,7 @@
 
 package controllers.transport
 
-import config.{ClaimAmounts, IndustryType}
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.transport.TransportCarpenterFormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TransportCarpenterController @Inject()(
                                               override val messagesApi: MessagesApi,
                                               sessionRepository: SessionRepository,
-                                              @Named(IndustryType.transport) navigator: Navigator,
+                                              @Named(NavConstant.transport) navigator: Navigator,
                                               identify: UnauthenticatedIdentifierAction,
                                               getData: DataRetrievalAction,
                                               requireData: DataRequiredAction,

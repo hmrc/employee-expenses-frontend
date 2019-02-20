@@ -16,7 +16,7 @@
 
 package controllers.manufacturing
 
-import config.{ClaimAmounts, IndustryType}
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.manufacturing.AluminiumOccupationList3FormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AluminiumOccupationList3Controller @Inject()(
                                                     override val messagesApi: MessagesApi,
                                                     sessionRepository: SessionRepository,
-                                                    @Named(IndustryType.manufacturing) navigator: Navigator,
+                                                    @Named(NavConstant.manufacturing) navigator: Navigator,
                                                     identify: UnauthenticatedIdentifierAction,
                                                     getData: DataRetrievalAction,
                                                     requireData: DataRequiredAction,

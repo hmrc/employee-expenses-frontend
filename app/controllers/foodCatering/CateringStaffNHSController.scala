@@ -16,7 +16,7 @@
 
 package controllers.foodCatering
 
-import config.{ClaimAmounts, IndustryType}
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.foodCatering.CateringStaffNHSFormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CateringStaffNHSController @Inject()(
                                             override val messagesApi: MessagesApi,
                                             sessionRepository: SessionRepository,
-                                            @Named(IndustryType.foodCatering) navigator: Navigator,
+                                            @Named(NavConstant.foodCatering) navigator: Navigator,
                                             identify: UnauthenticatedIdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,

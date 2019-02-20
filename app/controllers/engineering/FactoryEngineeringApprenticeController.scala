@@ -16,7 +16,7 @@
 
 package controllers.engineering
 
-import config.{ClaimAmounts, IndustryType}
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.FactoryEngineeringApprenticeFormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class FactoryEngineeringApprenticeController @Inject()(
                                                         override val messagesApi: MessagesApi,
                                                         sessionRepository: SessionRepository,
-                                                        @Named(IndustryType.engineering) navigator: Navigator,
+                                                        @Named(NavConstant.engineering) navigator: Navigator,
                                                         identify: UnauthenticatedIdentifierAction,
                                                         getData: DataRetrievalAction,
                                                         requireData: DataRequiredAction,

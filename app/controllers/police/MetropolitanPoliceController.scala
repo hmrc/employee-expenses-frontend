@@ -16,7 +16,7 @@
 
 package controllers.police
 
-import config.IndustryType
+import config.NavConstant
 import controllers.actions._
 import forms.police.MetropolitanPoliceFormProvider
 import javax.inject.{Inject, Named}
@@ -33,15 +33,15 @@ import views.html.police.MetropolitanPoliceView
 import scala.concurrent.{ExecutionContext, Future}
 
 class MetropolitanPoliceController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named(IndustryType.police) navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: MetropolitanPoliceFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: MetropolitanPoliceView
+                                              override val messagesApi: MessagesApi,
+                                              sessionRepository: SessionRepository,
+                                              @Named(NavConstant.police) navigator: Navigator,
+                                              identify: UnauthenticatedIdentifierAction,
+                                              getData: DataRetrievalAction,
+                                              requireData: DataRequiredAction,
+                                              formProvider: MetropolitanPoliceFormProvider,
+                                              val controllerComponents: MessagesControllerComponents,
+                                              view: MetropolitanPoliceView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()

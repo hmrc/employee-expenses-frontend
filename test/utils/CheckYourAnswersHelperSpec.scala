@@ -151,6 +151,4 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
       }
     }
   }
-
-
 }

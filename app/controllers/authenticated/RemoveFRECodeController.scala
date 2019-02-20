@@ -16,7 +16,7 @@
 
 package controllers.authenticated
 
-import config.IndustryType
+import config.NavConstant
 import controllers.actions._
 import forms.authenticated.RemoveFRECodeFormProvider
 import javax.inject.{Inject, Named}
@@ -33,15 +33,15 @@ import views.html.authenticated.RemoveFRECodeView
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveFRECodeController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       @Named(IndustryType.authenticated) navigator: Navigator,
-                                       identify: IdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: RemoveFRECodeFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: RemoveFRECodeView
+                                         override val messagesApi: MessagesApi,
+                                         sessionRepository: SessionRepository,
+                                         @Named(NavConstant.authenticated) navigator: Navigator,
+                                         identify: IdentifierAction,
+                                         getData: DataRetrievalAction,
+                                         requireData: DataRequiredAction,
+                                         formProvider: RemoveFRECodeFormProvider,
+                                         val controllerComponents: MessagesControllerComponents,
+                                         view: RemoveFRECodeView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()

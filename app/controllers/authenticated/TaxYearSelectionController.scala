@@ -16,7 +16,7 @@
 
 package controllers.authenticated
 
-import config.IndustryType
+import config.NavConstant
 import controllers.actions._
 import forms.authenticated.TaxYearSelectionFormProvider
 import javax.inject.{Inject, Named}
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class TaxYearSelectionController @Inject()(
                                             override val messagesApi: MessagesApi,
                                             sessionRepository: SessionRepository,
-                                            @Named(IndustryType.authenticated) navigator: Navigator,
+                                            @Named(NavConstant.authenticated) navigator: Navigator,
                                             identify: IdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,

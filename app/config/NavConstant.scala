@@ -18,10 +18,10 @@ package config
 
 import javax.inject.Singleton
 
-sealed trait IndustryType
+sealed trait NavConstant
 
 @Singleton
-object IndustryType {
+object NavConstant {
 
   final val authenticated = "Authenticated"
   final val clothing = "Clothing"
