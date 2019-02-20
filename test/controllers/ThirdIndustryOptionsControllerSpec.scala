@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import forms.ThirdIndustryOptionsFormProvider
 import generators.Generators
 import models.{NormalMode, ThirdIndustryOptions, UserAnswers}
@@ -87,7 +87,7 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val thirdIndustryOptions: Gen[ThirdIndustryOptions] = Gen.oneOf(ThirdIndustryOptions.values)

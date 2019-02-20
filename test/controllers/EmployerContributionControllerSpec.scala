@@ -17,8 +17,9 @@
 package controllers
 
 import base.SpecBase
+import config.NavConstant
 import forms.EmployerContributionFormProvider
-import models.{NormalMode, EmployerContribution, UserAnswers}
+import models.{EmployerContribution, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.EmployerContributionPage
 import play.api.inject.bind
@@ -81,7 +82,7 @@ class EmployerContributionControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

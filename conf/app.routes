@@ -314,7 +314,7 @@ POST        /change-tax-year-expense-end                         controllers.aut
 
 GET         /phone-us                                            controllers.authenticated.PhoneUsController.onPageLoad()
 
-GET        /sameEmployerContributionAllYears                        controllers.SameEmployerContributionAllYearsController.onPageLoad(mode: Mode = NormalMode)
-POST       /sameEmployerContributionAllYears                        controllers.SameEmployerContributionAllYearsController.onSubmit(mode: Mode = NormalMode)
-GET        /changeSameEmployerContributionAllYears                  controllers.SameEmployerContributionAllYearsController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeSameEmployerContributionAllYears                  controllers.SameEmployerContributionAllYearsController.onSubmit(mode: Mode = CheckMode)
+GET         /same-employer-contribution-all-years                controllers.SameEmployerContributionAllYearsController.onPageLoad(mode: Mode = NormalMode)
+POST        /same-employer-contribution-all-years                controllers.SameEmployerContributionAllYearsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-same-employer-contribution-all-years         controllers.SameEmployerContributionAllYearsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-same-employer-contribution-all-years         controllers.SameEmployerContributionAllYearsController.onSubmit(mode: Mode = CheckMode)

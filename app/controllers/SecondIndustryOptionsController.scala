@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import com.google.inject.name.Named
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.SecondIndustryOptionsFormProvider
 import models.{Enumerable, Mode, SecondIndustryOptions}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SecondIndustryOptionsController @Inject()(
                                                  override val messagesApi: MessagesApi,
                                                  sessionRepository: SessionRepository,
-                                                 @Named("Generic") navigator: Navigator,
+                                                 @Named(NavConstant.generic) navigator: Navigator,
                                                  identify: UnauthenticatedIdentifierAction,
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,

@@ -17,7 +17,7 @@
 package controllers
 
 import com.google.inject.Inject
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
 import forms.FirstIndustryOptionsFormProvider
 import javax.inject.Named
@@ -42,7 +42,7 @@ class FirstIndustryOptionsController @Inject()(
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: FirstIndustryOptionsView,
                                                 sessionRepository: SessionRepository,
-                                                @Named("Generic") navigator: Navigator
+                                                @Named(NavConstant.generic) navigator: Navigator
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form: Form[FirstIndustryOptions] = formProvider()

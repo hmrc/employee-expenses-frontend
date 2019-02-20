@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import forms.FourthIndustryOptionsFormProvider
 import models.{FourthIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -84,7 +84,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
