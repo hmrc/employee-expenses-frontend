@@ -592,3 +592,8 @@ phoneUs.paragraph.linkText = call HMRC
 
 industryType.checkYourAnswersLabel = What industry do you work in?
 
+
+alreadyClaimingFRE.title = alreadyClaimingFRE
+alreadyClaimingFRE.heading = alreadyClaimingFRE
+alreadyClaimingFRE.checkYourAnswersLabel = alreadyClaimingFRE
+alreadyClaimingFRE.error.required = Select yes if alreadyClaimingFRE

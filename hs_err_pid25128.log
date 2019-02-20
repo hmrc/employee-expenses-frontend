@@ -1,0 +1,1282 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 286785536 bytes for committing reserved memory.
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   In 32 bit mode, the process size limit was hit
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Use 64 bit Java on a 64 bit OS
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (os_linux.cpp:2640), pid=25128, tid=0x00007f17f5dbd700
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_171-b11) (build 1.8.0_171-b11)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.171-b11 mixed mode linux-amd64 compressed oops)
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007f180c08f000):  VMThread [stack: 0x00007f17f5cbd000,0x00007f17f5dbe000] [id=25142]
+
+Stack: [0x00007f17f5cbd000,0x00007f17f5dbe000],  sp=0x00007f17f5dbc2d0,  free space=1020k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [libjvm.so+0xacfffa]  VMError::report_and_die()+0x2ba
+V  [libjvm.so+0x5005cb]  report_vm_out_of_memory(char const*, int, unsigned long, VMErrorType, char const*)+0x8b
+V  [libjvm.so+0x92dd93]  os::Linux::commit_memory_impl(char*, unsigned long, bool)+0x123
+V  [libjvm.so+0x92dfb9]  os::pd_commit_memory(char*, unsigned long, unsigned long, bool)+0x29
+V  [libjvm.so+0x92527a]  os::commit_memory(char*, unsigned long, unsigned long, bool)+0x2a
+V  [libjvm.so+0x99b223]  PSVirtualSpace::expand_by(unsigned long)+0x53
+V  [libjvm.so+0x99c628]  PSYoungGen::resize_generation(unsigned long, unsigned long)+0xf8
+V  [libjvm.so+0x99b782]  PSYoungGen::resize(unsigned long, unsigned long)+0x22
+V  [libjvm.so+0x998a5b]  PSScavenge::invoke_no_policy()+0xf3b
+V  [libjvm.so+0x9991e1]  PSScavenge::invoke()+0x41
+V  [libjvm.so+0x94fcb0]  ParallelScavengeHeap::failed_mem_allocate(unsigned long)+0x70
+V  [libjvm.so+0xad1a77]  VM_ParallelGCFailedAllocation::doit()+0x97
+V  [libjvm.so+0xad9595]  VM_Operation::evaluate()+0x55
+V  [libjvm.so+0xad795a]  VMThread::evaluate_operation(VM_Operation*)+0xba
+V  [libjvm.so+0xad7cde]  VMThread::loop()+0x1ce
+V  [libjvm.so+0xad8150]  VMThread::run()+0x70
+V  [libjvm.so+0x92e0f8]  java_start(Thread*)+0x108
+
+VM_Operation (0x00007f17dcc73e60): ParallelGCFailedAllocation, mode: safepoint, requested by thread 0x00007f179841d800
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x00007f179920c000 JavaThread "application-akka.actor.default-dispatcher-6" [_thread_blocked, id=25290, stack(0x00007f16ee4f6000,0x00007f16ee5f7000)]
+  0x00007f1798c89000 JavaThread "pool-5-thread-1" [_thread_blocked, id=25289, stack(0x00007f16ee5f7000,0x00007f16ee6f8000)]
+  0x00007f1798c8a000 JavaThread "com.google.common.base.internal.Finalizer" daemon [_thread_blocked, id=25288, stack(0x00007f16ee6f8000,0x00007f16ee7f9000)]
+  0x00007f171400d800 JavaThread "nioEventLoopGroup-6-10" [_thread_in_native, id=25280, stack(0x00007f16ee7f9000,0x00007f16ee8fa000)]
+  0x00007f171400b800 JavaThread "nioEventLoopGroup-6-9" [_thread_in_native, id=25279, stack(0x00007f16ee8fa000,0x00007f16ee9fb000)]
+  0x00007f171400a000 JavaThread "nioEventLoopGroup-6-8" [_thread_in_native, id=25278, stack(0x00007f16ee9fb000,0x00007f16eeafc000)]
+  0x00007f1714008000 JavaThread "nioEventLoopGroup-6-7" [_thread_in_native, id=25277, stack(0x00007f17041ed000,0x00007f17042ee000)]
+  0x00007f1714007000 JavaThread "nioEventLoopGroup-6-6" [_thread_in_native, id=25276, stack(0x00007f17044f0000,0x00007f17045f1000)]
+  0x00007f1714005800 JavaThread "nioEventLoopGroup-6-5" [_thread_in_native, id=25275, stack(0x00007f17046f2000,0x00007f17047f3000)]
+  0x00007f1714004800 JavaThread "nioEventLoopGroup-6-4" [_thread_in_native, id=25273, stack(0x00007f17042ee000,0x00007f17043ef000)]
+  0x00007f1714003800 JavaThread "nioEventLoopGroup-6-3" [_thread_in_native, id=25271, stack(0x00007f17047f3000,0x00007f17048f4000)]
+  0x00007f1714002800 JavaThread "nioEventLoopGroup-6-2" [_thread_in_native, id=25270, stack(0x00007f17dde84000,0x00007f17ddf85000)]
+  0x00007f17181a4800 JavaThread "nioEventLoopGroup-6-1" [_thread_in_native, id=25268, stack(0x00007f17dc773000,0x00007f17dc874000)]
+  0x00007f171000f800 JavaThread "reactivemongo-akka.actor.default-dispatcher-6" [_thread_blocked, id=25267, stack(0x00007f17dc672000,0x00007f17dc773000)]
+  0x00007f171000d800 JavaThread "reactivemongo-akka.actor.default-dispatcher-5" [_thread_blocked, id=25266, stack(0x00007f17dc16d000,0x00007f17dc26e000)]
+  0x00007f17989e7000 JavaThread "reactivemongo-akka.actor.default-dispatcher-4" [_thread_blocked, id=25265, stack(0x00007f17dc470000,0x00007f17dc571000)]
+  0x00007f17989e6800 JavaThread "reactivemongo-akka.actor.default-dispatcher-3" [_thread_blocked, id=25264, stack(0x00007f17dc36f000,0x00007f17dc470000)]
+  0x00007f179841b800 JavaThread "reactivemongo-akka.actor.default-dispatcher-2" [_thread_blocked, id=25263, stack(0x00007f17dc571000,0x00007f17dc672000)]
+  0x00007f17994fa000 JavaThread "reactivemongo-scheduler-1" [_thread_blocked, id=25262, stack(0x00007f17dcc78000,0x00007f17dcd79000)]
+  0x00007f1728141000 JavaThread "application-akka.actor.default-dispatcher-5" [_thread_blocked, id=25261, stack(0x00007f17dca76000,0x00007f17dcb77000)]
+  0x00007f1734003000 JavaThread "application-akka.actor.default-dispatcher-4" [_thread_blocked, id=25260, stack(0x00007f17dc975000,0x00007f17dca76000)]
+  0x00007f179841d800 JavaThread "application-akka.actor.default-dispatcher-3" [_thread_blocked, id=25259, stack(0x00007f17dcb77000,0x00007f17dcc78000)]
+  0x00007f1798951800 JavaThread "application-akka.actor.default-dispatcher-2" [_thread_blocked, id=25258, stack(0x00007f17dc874000,0x00007f17dc975000)]
+  0x00007f17989cf000 JavaThread "application-scheduler-1" [_thread_blocked, id=25257, stack(0x00007f17063f7000,0x00007f17064f8000)]
+  0x00007f1700004800 JavaThread "ForkJoinPool-1-worker-5" daemon [_thread_blocked, id=25252, stack(0x00007f17068f8000,0x00007f17069f9000)]
+  0x00007f1750006800 JavaThread "nioEventLoopGroup-4-16" [_thread_in_native, id=25251, stack(0x00007f16efeff000,0x00007f16f0000000)]
+  0x00007f1750005800 JavaThread "nioEventLoopGroup-4-15" [_thread_in_native, id=25250, stack(0x00007f17040ec000,0x00007f17041ed000)]
+  0x00007f1700002800 JavaThread "ForkJoinPool-1-worker-9" daemon [_thread_blocked, id=25249, stack(0x00007f17043ef000,0x00007f17044f0000)]
+  0x00007f1750004800 JavaThread "nioEventLoopGroup-4-14" [_thread_in_native, id=25248, stack(0x00007f16efdfe000,0x00007f16efeff000)]
+  0x00007f1750003800 JavaThread "nioEventLoopGroup-4-13" [_thread_in_native, id=25247, stack(0x00007f17049f5000,0x00007f1704af6000)]
+  0x00007f1750002800 JavaThread "nioEventLoopGroup-4-12" [_thread_in_native, id=25246, stack(0x00007f17045f1000,0x00007f17046f2000)]
+  0x00007f1750001800 JavaThread "nioEventLoopGroup-4-11" [_thread_in_native, id=25245, stack(0x00007f17048f4000,0x00007f17049f5000)]
+  0x00007f17989d1000 JavaThread "globalEventExecutor-1-2" [_thread_blocked, id=25243, stack(0x00007f16efcfd000,0x00007f16efdfe000)]
+  0x00007f16f8006800 JavaThread "ForkJoinPool-1-worker-13" daemon [_thread_blocked, id=25223, stack(0x00007f17062f6000,0x00007f17063f7000)]
+  0x00007f1799500800 JavaThread "com.google.common.base.internal.Finalizer" daemon [_thread_blocked, id=25220, stack(0x00007f17069f9000,0x00007f1706afa000)]
+  0x00007f170c016000 JavaThread "nioEventLoopGroup-4-10" [_thread_in_native, id=25211, stack(0x00007f1706afa000,0x00007f1706bfb000)]
+  0x00007f170c014800 JavaThread "nioEventLoopGroup-4-9" [_thread_in_native, id=25210, stack(0x00007f1706bfb000,0x00007f1706cfc000)]
+  0x00007f170c012800 JavaThread "nioEventLoopGroup-4-8" [_thread_in_native, id=25209, stack(0x00007f1706cfc000,0x00007f1706dfd000)]
+  0x00007f170c011000 JavaThread "nioEventLoopGroup-4-7" [_thread_in_native, id=25208, stack(0x00007f1706dfd000,0x00007f1706efe000)]
+  0x00007f170c00f800 JavaThread "nioEventLoopGroup-4-6" [_thread_in_native, id=25207, stack(0x00007f1706efe000,0x00007f1706fff000)]
+  0x00007f170c007800 JavaThread "nioEventLoopGroup-4-5" [_thread_in_native, id=25206, stack(0x00007f17c80bd000,0x00007f17c81be000)]
+  0x00007f170c006000 JavaThread "nioEventLoopGroup-4-4" [_thread_in_native, id=25205, stack(0x00007f17c81be000,0x00007f17c82bf000)]
+  0x00007f170c004000 JavaThread "nioEventLoopGroup-4-3" [_thread_in_native, id=25204, stack(0x00007f17c82bf000,0x00007f17c83c0000)]
+  0x00007f170c002800 JavaThread "nioEventLoopGroup-4-2" [_thread_in_native, id=25202, stack(0x00007f17dc06c000,0x00007f17dc16d000)]
+  0x00007f171c1a1800 JavaThread "nioEventLoopGroup-4-1" [_thread_in_native, id=25199, stack(0x00007f17dc26e000,0x00007f17dc36f000)]
+  0x00007f1799416000 JavaThread "com.google.common.base.internal.Finalizer" daemon [_thread_blocked, id=25188, stack(0x00007f17dd179000,0x00007f17dd27a000)]
+  0x00007f177803a800 JavaThread "nioEventLoopGroup-2-10" [_thread_in_native, id=25181, stack(0x00007f17dd47a000,0x00007f17dd57b000)]
+  0x00007f1778038800 JavaThread "nioEventLoopGroup-2-9" [_thread_in_native, id=25179, stack(0x00007f17dd57b000,0x00007f17dd67c000)]
+  0x00007f1778037000 JavaThread "nioEventLoopGroup-2-8" [_thread_in_native, id=25178, stack(0x00007f17dd67c000,0x00007f17dd77d000)]
+  0x00007f1778035000 JavaThread "nioEventLoopGroup-2-7" [_thread_in_native, id=25177, stack(0x00007f17dd77d000,0x00007f17dd87e000)]
+  0x00007f1778033800 JavaThread "nioEventLoopGroup-2-6" [_thread_in_native, id=25176, stack(0x00007f17dd87e000,0x00007f17dd97f000)]
+  0x00007f1778031800 JavaThread "nioEventLoopGroup-2-5" [_thread_in_native, id=25174, stack(0x00007f17dd97f000,0x00007f17dda80000)]
+  0x00007f1778030000 JavaThread "nioEventLoopGroup-2-4" [_thread_in_native, id=25173, stack(0x00007f17dda80000,0x00007f17ddb81000)]
+  0x00007f177802e800 JavaThread "nioEventLoopGroup-2-3" [_thread_in_native, id=25171, stack(0x00007f17ddb81000,0x00007f17ddc82000)]
+  0x00007f177802d000 JavaThread "nioEventLoopGroup-2-2" [_thread_in_native, id=25170, stack(0x00007f17ddc82000,0x00007f17ddd83000)]
+  0x00007f1768001000 JavaThread "ForkJoinPool-1-worker-2" daemon [_thread_blocked, id=25169, stack(0x00007f17ddd83000,0x00007f17dde84000)]
+  0x00007f1799277800 JavaThread "pool-3-thread-1" [_thread_blocked, id=25167, stack(0x00007f17def86000,0x00007f17df087000)]
+  0x00007f176c53f800 JavaThread "nioEventLoopGroup-2-1" [_thread_in_native, id=25165, stack(0x00007f17df287000,0x00007f17df388000)]
+  0x00007f1780001000 JavaThread "reactivemongo-akka.actor.default-dispatcher-5" [_thread_blocked, id=25164, stack(0x00007f17e4262000,0x00007f17e4363000)]
+  0x00007f1799085800 JavaThread "reactivemongo-akka.actor.default-dispatcher-4" [_thread_blocked, id=25163, stack(0x00007f17e4363000,0x00007f17e4464000)]
+  0x00007f1799080800 JavaThread "reactivemongo-akka.actor.default-dispatcher-3" [_thread_blocked, id=25162, stack(0x00007f17e4464000,0x00007f17e4565000)]
+  0x00007f179907e800 JavaThread "reactivemongo-akka.actor.default-dispatcher-2" [_thread_blocked, id=25161, stack(0x00007f17e4565000,0x00007f17e4666000)]
+  0x00007f179907d000 JavaThread "reactivemongo-scheduler-1" [_thread_blocked, id=25160, stack(0x00007f17e4666000,0x00007f17e4767000)]
+  0x00007f1784001000 JavaThread "application-akka.actor.default-dispatcher-4" [_thread_blocked, id=25159, stack(0x00007f17e4967000,0x00007f17e4a68000)]
+  0x00007f17983a5800 JavaThread "application-akka.actor.default-dispatcher-3" [_thread_blocked, id=25158, stack(0x00007f17e4a68000,0x00007f17e4b69000)]
+  0x00007f1798ca9000 JavaThread "application-akka.actor.default-dispatcher-2" [_thread_blocked, id=25157, stack(0x00007f17e4b69000,0x00007f17e4c6a000)]
+  0x00007f1798cfe000 JavaThread "application-scheduler-1" [_thread_blocked, id=25156, stack(0x00007f17e4c6a000,0x00007f17e4d6b000)]
+  0x00007f180cd1d800 JavaThread "pool-1-thread-1-ScalaTest-running-CateringStaffNHSControllerSpec" [_thread_blocked, id=25155, stack(0x00007f17f405e000,0x00007f17f415f000)]
+  0x00007f180cbeb800 JavaThread "Timer-0" [_thread_blocked, id=25154, stack(0x00007f17f415f000,0x00007f17f4260000)]
+  0x00007f180cbe9800 JavaThread "ScalaTest-dispatcher" [_thread_blocked, id=25153, stack(0x00007f17f4260000,0x00007f17f4361000)]
+  0x00007f180c0e2000 JavaThread "Service Thread" daemon [_thread_blocked, id=25150, stack(0x00007f17f51d9000,0x00007f17f52da000)]
+  0x00007f180c0d7000 JavaThread "C1 CompilerThread3" daemon [_thread_blocked, id=25149, stack(0x00007f17f52da000,0x00007f17f53db000)]
+  0x00007f180c0d5000 JavaThread "C2 CompilerThread2" daemon [_thread_blocked, id=25148, stack(0x00007f17f53db000,0x00007f17f54dc000)]
+  0x00007f180c0d3000 JavaThread "C2 CompilerThread1" daemon [_thread_in_native, id=25147, stack(0x00007f17f54dc000,0x00007f17f55dd000)]
+  0x00007f180c0d0000 JavaThread "C2 CompilerThread0" daemon [_thread_in_native, id=25146, stack(0x00007f17f55dd000,0x00007f17f56de000)]
+  0x00007f180c0ce800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=25145, stack(0x00007f17f56de000,0x00007f17f57df000)]
+  0x00007f180c09b000 JavaThread "Finalizer" daemon [_thread_blocked, id=25144, stack(0x00007f17f5abb000,0x00007f17f5bbc000)]
+  0x00007f180c096800 JavaThread "Reference Handler" daemon [_thread_blocked, id=25143, stack(0x00007f17f5bbc000,0x00007f17f5cbd000)]
+  0x00007f180c018800 JavaThread "main" [_thread_blocked, id=25133, stack(0x00007f181445c000,0x00007f181455d000)]
+
+Other Threads:
+=>0x00007f180c08f000 VMThread [stack: 0x00007f17f5cbd000,0x00007f17f5dbe000] [id=25142]
+  0x00007f180c0e7000 WatcherThread [stack: 0x00007f17f50d8000,0x00007f17f51d9000] [id=25151]
+
+VM state:at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x00007f180c0152f0] Threads_lock - owner thread: 0x00007f180c08f000
+[0x00007f180c0157f0] Heap_lock - owner thread: 0x00007f179841d800
+
+Heap:
+ PSYoungGen      total 1025024K, used 207K [0x000000076d300000, 0x00000007aee80000, 0x00000007c0000000)
+  eden space 973312K, 0% used [0x000000076d300000,0x000000076d300000,0x00000007a8980000)
+  from space 51712K, 0% used [0x00000007a8980000,0x00000007a89b3eb0,0x00000007abc00000)
+  to   space 42496K, 0% used [0x00000007ac500000,0x00000007ac500000,0x00000007aee80000)
+ ParOldGen       total 335360K, used 130942K [0x00000006c7800000, 0x00000006dbf80000, 0x000000076d300000)
+  object space 335360K, 39% used [0x00000006c7800000,0x00000006cf7df920,0x00000006dbf80000)
+ Metaspace       used 120889K, capacity 121328K, committed 121944K, reserved 1157120K
+  class space    used 14204K, capacity 14331K, committed 14424K, reserved 1048576K
+
+Card table byte_map: [0x00007f18109c0000,0x00007f1811185000] byte_map_base: 0x00007f180d384000
+
+Marking Bits: (ParMarkBitMap*) 0x00007f181390b280
+ Begin Bits: [0x00007f17c83c0000, 0x00007f17cc1e0000)
+ End Bits:   [0x00007f17cc1e0000, 0x00007f17d0000000)
+
+Polling page: 0x00007f1814577000
+
+CodeCache: size=245760Kb used=40205Kb max_used=42054Kb free=205554Kb
+ bounds [0x00007f17fd000000, 0x00007f17ff940000, 0x00007f180c000000]
+ total_blobs=11298 nmethods=10695 adapters=514
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 22.977 Thread 0x00007f180c0d7000 12916       3       org.fusesource.scalate.mustache.MustacheCodeGenerator$SourceBuilder$$anonfun$generate$2$$anonfun$apply$mcV$sp$2::apply (12 bytes)
+Event: 22.978 Thread 0x00007f180c0d7000 nmethod 12916 0x00007f17fe63a2d0 code [0x00007f17fe63a460, 0x00007f17fe63a868]
+Event: 22.983 Thread 0x00007f180c0d7000 12917       3       java.lang.Boolean::toString (15 bytes)
+Event: 22.983 Thread 0x00007f180c0d7000 nmethod 12917 0x00007f17fe254b50 code [0x00007f17fe254cc0, 0x00007f17fe254e90]
+Event: 22.990 Thread 0x00007f180c0d5000 nmethod 12915 0x00007f17fd6a6e10 code [0x00007f17fd6a7460, 0x00007f17fd6a8420]
+Event: 23.030 Thread 0x00007f180c0d7000 12918       3       java.io.FileOutputStream::finalize (39 bytes)
+Event: 23.030 Thread 0x00007f180c0d7000 nmethod 12918 0x00007f17fead6910 code [0x00007f17fead6aa0, 0x00007f17fead6e68]
+Event: 23.035 Thread 0x00007f180c0d5000 12919       4       scala.collection.immutable.Range::<init> (269 bytes)
+Event: 23.042 Thread 0x00007f180c0d5000 nmethod 12919 0x00007f17fe71ffd0 code [0x00007f17fe720160, 0x00007f17fe720548]
+Event: 23.235 Thread 0x00007f180c0d5000 12920       4       scala.collection.immutable.HashMap$HashTrieMap::updated0 (240 bytes)
+
+GC Heap History (10 events):
+Event: 11.292 GC heap after
+Heap after GC invocations=22 (full 4):
+ PSYoungGen      total 555008K, used 0K [0x000000076d300000, 0x0000000791400000, 0x00000007c0000000)
+  eden space 530432K, 0% used [0x000000076d300000,0x000000076d300000,0x000000078d900000)
+  from space 24576K, 0% used [0x000000078fc00000,0x000000078fc00000,0x0000000791400000)
+  to   space 30208K, 0% used [0x000000078d900000,0x000000078d900000,0x000000078f680000)
+ ParOldGen       total 335360K, used 42534K [0x00000006c7800000, 0x00000006dbf80000, 0x000000076d300000)
+  object space 335360K, 12% used [0x00000006c7800000,0x00000006ca189b00,0x00000006dbf80000)
+ Metaspace       used 97561K, capacity 97914K, committed 98280K, reserved 1136640K
+  class space    used 11408K, capacity 11525K, committed 11608K, reserved 1048576K
+}
+Event: 16.488 GC heap before
+{Heap before GC invocations=23 (full 4):
+ PSYoungGen      total 555008K, used 530432K [0x000000076d300000, 0x0000000791400000, 0x00000007c0000000)
+  eden space 530432K, 100% used [0x000000076d300000,0x000000078d900000,0x000000078d900000)
+  from space 24576K, 0% used [0x000000078fc00000,0x000000078fc00000,0x0000000791400000)
+  to   space 30208K, 0% used [0x000000078d900000,0x000000078d900000,0x000000078f680000)
+ ParOldGen       total 335360K, used 42534K [0x00000006c7800000, 0x00000006dbf80000, 0x000000076d300000)
+  object space 335360K, 12% used [0x00000006c7800000,0x00000006ca189b00,0x00000006dbf80000)
+ Metaspace       used 116500K, capacity 116920K, committed 117336K, reserved 1153024K
+  class space    used 13719K, capacity 13869K, committed 13912K, reserved 1048576K
+Event: 19.246 GC heap after
+Heap after GC invocations=23 (full 4):
+ PSYoungGen      total 560640K, used 30193K [0x000000076d300000, 0x000000079f980000, 0x00000007c0000000)
+  eden space 530432K, 0% used [0x000000076d300000,0x000000076d300000,0x000000078d900000)
+  from space 30208K, 99% used [0x000000078d900000,0x000000078f67c7e0,0x000000078f680000)
+  to   space 52736K, 0% used [0x000000079c600000,0x000000079c600000,0x000000079f980000)
+ ParOldGen       total 335360K, used 91471K [0x00000006c7800000, 0x00000006dbf80000, 0x000000076d300000)
+  object space 335360K, 27% used [0x00000006c7800000,0x00000006cd153d88,0x00000006dbf80000)
+ Metaspace       used 116500K, capacity 116920K, committed 117336K, reserved 1153024K
+  class space    used 13719K, capacity 13869K, committed 13912K, reserved 1048576K
+}
+Event: 19.582 GC heap before
+{Heap before GC invocations=24 (full 4):
+ PSYoungGen      total 560640K, used 560625K [0x000000076d300000, 0x000000079f980000, 0x00000007c0000000)
+  eden space 530432K, 100% used [0x000000076d300000,0x000000078d900000,0x000000078d900000)
+  from space 30208K, 99% used [0x000000078d900000,0x000000078f67c7e0,0x000000078f680000)
+  to   space 52736K, 0% used [0x000000079c600000,0x000000079c600000,0x000000079f980000)
+ ParOldGen       total 335360K, used 91471K [0x00000006c7800000, 0x00000006dbf80000, 0x000000076d300000)
+  object space 335360K, 27% used [0x00000006c7800000,0x00000006cd153d88,0x00000006dbf80000)
+ Metaspace       used 116614K, capacity 116984K, committed 117592K, reserved 1153024K
+  class space    used 13731K, capacity 13869K, committed 13912K, reserved 1048576K
+Event: 19.655 GC heap after
+Heap after GC invocations=24 (full 4):
+ PSYoungGen      total 772096K, used 30574K [0x000000076d300000, 0x000000079f980000, 0x00000007c0000000)
+  eden space 719360K, 0% used [0x000000076d300000,0x000000076d300000,0x0000000799180000)
+  from space 52736K, 57% used [0x000000079c600000,0x000000079e3db998,0x000000079f980000)
+  to   space 53248K, 0% used [0x0000000799180000,0x0000000799180000,0x000000079c580000)
+ ParOldGen       total 335360K, used 91479K [0x00000006c7800000, 0x00000006dbf80000, 0x000000076d300000)
+  object space 335360K, 27% used [0x00000006c7800000,0x00000006cd155d88,0x00000006dbf80000)
+ Metaspace       used 116614K, capacity 116984K, committed 117592K, reserved 1153024K
+  class space    used 13731K, capacity 13869K, committed 13912K, reserved 1048576K
+}
+Event: 19.869 GC heap before
+{Heap before GC invocations=25 (full 4):
+ PSYoungGen      total 772096K, used 749934K [0x000000076d300000, 0x000000079f980000, 0x00000007c0000000)
+  eden space 719360K, 100% used [0x000000076d300000,0x0000000799180000,0x0000000799180000)
+  from space 52736K, 57% used [0x000000079c600000,0x000000079e3db998,0x000000079f980000)
+  to   space 53248K, 0% used [0x0000000799180000,0x0000000799180000,0x000000079c580000)
+ ParOldGen       total 335360K, used 91479K [0x00000006c7800000, 0x00000006dbf80000, 0x000000076d300000)
+  object space 335360K, 27% used [0x00000006c7800000,0x00000006cd155d88,0x00000006dbf80000)
+ Metaspace       used 117245K, capacity 117592K, committed 118104K, reserved 1153024K
+  class space    used 13780K, capacity 13901K, committed 13912K, reserved 1048576K
+Event: 19.952 GC heap after
+Heap after GC invocations=25 (full 4):
+ PSYoungGen      total 772608K, used 30880K [0x000000076d300000, 0x00000007af980000, 0x00000007c0000000)
+  eden space 719360K, 0% used [0x000000076d300000,0x000000076d300000,0x0000000799180000)
+  from space 53248K, 57% used [0x0000000799180000,0x000000079afa8208,0x000000079c580000)
+  to   space 53760K, 0% used [0x00000007ac500000,0x00000007ac500000,0x00000007af980000)
+ ParOldGen       total 335360K, used 91487K [0x00000006c7800000, 0x00000006dbf80000, 0x000000076d300000)
+  object space 335360K, 27% used [0x00000006c7800000,0x00000006cd157d88,0x00000006dbf80000)
+ Metaspace       used 117245K, capacity 117592K, committed 118104K, reserved 1153024K
+  class space    used 13780K, capacity 13901K, committed 13912K, reserved 1048576K
+}
+Event: 22.994 GC heap before
+{Heap before GC invocations=26 (full 4):
+ PSYoungGen      total 772608K, used 750170K [0x000000076d300000, 0x00000007af980000, 0x00000007c0000000)
+  eden space 719360K, 99% used [0x000000076d300000,0x000000079916e658,0x0000000799180000)
+  from space 53248K, 57% used [0x0000000799180000,0x000000079afa8208,0x000000079c580000)
+  to   space 53760K, 0% used [0x00000007ac500000,0x00000007ac500000,0x00000007af980000)
+ ParOldGen       total 335360K, used 91487K [0x00000006c7800000, 0x00000006dbf80000, 0x000000076d300000)
+  object space 335360K, 27% used [0x00000006c7800000,0x00000006cd157d88,0x00000006dbf80000)
+ Metaspace       used 120888K, capacity 121328K, committed 121944K, reserved 1157120K
+  class space    used 14204K, capacity 14331K, committed 14424K, reserved 1048576K
+Event: 23.028 GC heap after
+Heap after GC invocations=26 (full 4):
+ PSYoungGen      total 1015808K, used 14045K [0x000000076d300000, 0x00000007aee80000, 0x00000007c0000000)
+  eden space 973312K, 0% used [0x000000076d300000,0x000000076d300000,0x00000007a8980000)
+  from space 42496K, 33% used [0x00000007ac500000,0x00000007ad2b7750,0x00000007aee80000)
+  to   space 51712K, 0% used [0x00000007a8980000,0x00000007a8980000,0x00000007abc00000)
+ ParOldGen       total 335360K, used 120852K [0x00000006c7800000, 0x00000006dbf80000, 0x000000076d300000)
+  object space 335360K, 36% used [0x00000006c7800000,0x00000006cee05148,0x00000006dbf80000)
+ Metaspace       used 120888K, capacity 121328K, committed 121944K, reserved 1157120K
+  class space    used 14204K, capacity 14331K, committed 14424K, reserved 1048576K
+}
+Event: 23.243 GC heap before
+{Heap before GC invocations=27 (full 4):
+ PSYoungGen      total 1015808K, used 987337K [0x000000076d300000, 0x00000007aee80000, 0x00000007c0000000)
+  eden space 973312K, 99% used [0x000000076d300000,0x00000007a897afa0,0x00000007a8980000)
+  from space 42496K, 33% used [0x00000007ac500000,0x00000007ad2b7750,0x00000007aee80000)
+  to   space 51712K, 0% used [0x00000007a8980000,0x00000007a8980000,0x00000007abc00000)
+ ParOldGen       total 335360K, used 120852K [0x00000006c7800000, 0x00000006dbf80000, 0x000000076d300000)
+  object space 335360K, 36% used [0x00000006c7800000,0x00000006cee05148,0x00000006dbf80000)
+ Metaspace       used 120889K, capacity 121328K, committed 121944K, reserved 1157120K
+  class space    used 14204K, capacity 14331K, committed 14424K, reserved 1048576K
+
+Deoptimization events (10 events):
+Event: 22.789 Thread 0x00007f180cd1d800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0x00007f17fe10ce1c method=scala.collection.immutable.Nil$.equals(Ljava/lang/Object;)Z @ 13
+Event: 22.838 Thread 0x00007f180cd1d800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f17ff38e2b8 method=scala.util.parsing.combinator.Parsers$class.opt(Lscala/util/parsing/combinator/Parsers;Lscala/Function0;)Lscala/util/parsing/combinator/Parsers$Parser; @ 6
+Event: 22.839 Thread 0x00007f180cd1d800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f17fe936abc method=scala.util.parsing.combinator.Parsers$$anonfun$opt$2.apply()Lscala/util/parsing/combinator/Parsers$Parser; @ 7
+Event: 22.839 Thread 0x00007f180cd1d800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f17fe936abc method=scala.util.parsing.combinator.Parsers$$anonfun$opt$2.apply()Lscala/util/parsing/combinator/Parsers$Parser; @ 7
+Event: 22.854 Thread 0x00007f171000f800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00007f17fe3d0234 method=scala.collection.mutable.HashTable$class.elemEquals(Lscala/collection/mutable/HashTable;Ljava/lang/Object;Ljava/lang/Object;)Z @ 21
+Event: 22.874 Thread 0x00007f180cd1d800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f17ff38e2b8 method=scala.util.parsing.combinator.Parsers$class.opt(Lscala/util/parsing/combinator/Parsers;Lscala/Function0;)Lscala/util/parsing/combinator/Parsers$Parser; @ 6
+Event: 22.874 Thread 0x00007f180cd1d800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f17fe936abc method=scala.util.parsing.combinator.Parsers$$anonfun$opt$2.apply()Lscala/util/parsing/combinator/Parsers$Parser; @ 7
+Event: 22.874 Thread 0x00007f180cd1d800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f17fe936abc method=scala.util.parsing.combinator.Parsers$$anonfun$opt$2.apply()Lscala/util/parsing/combinator/Parsers$Parser; @ 7
+Event: 22.875 Thread 0x00007f180cd1d800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f17ff38e2b8 method=scala.util.parsing.combinator.Parsers$class.opt(Lscala/util/parsing/combinator/Parsers;Lscala/Function0;)Lscala/util/parsing/combinator/Parsers$Parser; @ 6
+Event: 22.876 Thread 0x00007f180cd1d800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f17ff38e2b8 method=scala.util.parsing.combinator.Parsers$class.opt(Lscala/util/parsing/combinator/Parsers;Lscala/Function0;)Lscala/util/parsing/combinator/Parsers$Parser; @ 6
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (10 events):
+Event: 9.198 Thread 0x00007f180cbe9800 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x000000076f384e80) thrown at [/HUDSON/workspace/8-2-build-linux-amd64/jdk8u171/10807/hotspot/src/share/vm/prims/jni.cpp, line 1613]
+Event: 9.211 Thread 0x00007f180cbe9800 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x000000076f39d1a8) thrown at [/HUDSON/workspace/8-2-build-linux-amd64/jdk8u171/10807/hotspot/src/share/vm/prims/jni.cpp, line 1613]
+Event: 9.212 Thread 0x00007f180cbe9800 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x000000076f3b4a18) thrown at [/HUDSON/workspace/8-2-build-linux-amd64/jdk8u171/10807/hotspot/src/share/vm/prims/jni.cpp, line 1613]
+Event: 16.285 Thread 0x00007f1734003000 Exception <a 'java/lang/ClassNotFoundException': java/lang/StringBeanInfo> (0x000000078322da60) thrown at [/HUDSON/workspace/8-2-build-linux-amd64/jdk8u171/10807/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 210]
+Event: 16.285 Thread 0x00007f1734003000 Exception <a 'java/lang/ClassNotFoundException': java/lang/ObjectBeanInfo> (0x000000078323cce0) thrown at [/HUDSON/workspace/8-2-build-linux-amd64/jdk8u171/10807/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 210]
+Event: 16.286 Thread 0x00007f1734003000 Exception <a 'java/lang/ClassNotFoundException': java/lang/ObjectCustomizer> (0x000000078324c0c8) thrown at [/HUDSON/workspace/8-2-build-linux-amd64/jdk8u171/10807/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 210]
+Event: 16.292 Thread 0x00007f1734003000 Exception <a 'java/lang/ClassNotFoundException': java/lang/StringCustomizer> (0x0000000783260c40) thrown at [/HUDSON/workspace/8-2-build-linux-amd64/jdk8u171/10807/hotspot/src/share/vm/classfile/systemDictionary.cpp, line 210]
+Event: 22.364 Thread 0x00007f17994ff800 Exception <a 'java/lang/InterruptedException': sleep interrupted> (0x00000007819f05b8) thrown at [/HUDSON/workspace/8-2-build-linux-amd64/jdk8u171/10807/hotspot/src/share/vm/prims/jvm.cpp, line 3273]
+Event: 22.490 Thread 0x00007f180cbe9800 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x00000007844b3708) thrown at [/HUDSON/workspace/8-2-build-linux-amd64/jdk8u171/10807/hotspot/src/share/vm/prims/jni.cpp, line 1613]
+Event: 22.503 Thread 0x00007f180cbe9800 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x0000000784578890) thrown at [/HUDSON/workspace/8-2-build-linux-amd64/jdk8u171/10807/hotspot/src/share/vm/prims/jni.cpp, line 1613]
+
+Events (10 events):
+Event: 23.029 Executing VM operation: RevokeBias done
+Event: 23.029 Executing VM operation: RevokeBias
+Event: 23.029 Executing VM operation: RevokeBias done
+Event: 23.029 Executing VM operation: RevokeBias
+Event: 23.029 Executing VM operation: RevokeBias done
+Event: 23.029 Executing VM operation: RevokeBias
+Event: 23.029 Executing VM operation: RevokeBias done
+Event: 23.029 Executing VM operation: RevokeBias
+Event: 23.030 Executing VM operation: RevokeBias done
+Event: 23.243 Executing VM operation: ParallelGCFailedAllocation
+
+
+Dynamic libraries:
+00400000-00401000 r-xp 00000000 fd:01 8653906                            /usr/lib/jvm/java-8-oracle/jre/bin/java
+00600000-00601000 rw-p 00000000 fd:01 8653906                            /usr/lib/jvm/java-8-oracle/jre/bin/java
+0081e000-0083f000 rw-p 00000000 00:00 0                                  [heap]
+6c7800000-6dbf80000 rw-p 00000000 00:00 0 
+6dbf80000-76d300000 ---p 00000000 00:00 0 
+76d300000-7aee80000 rw-p 00000000 00:00 0 
+7c0000000-7c0e16000 rw-p 00000000 00:00 0 
+7c0e16000-800000000 ---p 00000000 00:00 0 
+7f16e8000000-7f16e8021000 rw-p 00000000 00:00 0 
+7f16e8021000-7f16ec000000 ---p 00000000 00:00 0 
+7f16ee4f6000-7f16ee4f9000 ---p 00000000 00:00 0 
+7f16ee4f9000-7f16ee5f7000 rw-p 00000000 00:00 0 
+7f16ee5f7000-7f16ee5fa000 ---p 00000000 00:00 0 
+7f16ee5fa000-7f16ee6f8000 rw-p 00000000 00:00 0 
+7f16ee6f8000-7f16ee6fb000 ---p 00000000 00:00 0 
+7f16ee6fb000-7f16ee7f9000 rw-p 00000000 00:00 0 
+7f16ee7f9000-7f16ee7fc000 ---p 00000000 00:00 0 
+7f16ee7fc000-7f16ee8fa000 rw-p 00000000 00:00 0 
+7f16ee8fa000-7f16ee8fd000 ---p 00000000 00:00 0 
+7f16ee8fd000-7f16ee9fb000 rw-p 00000000 00:00 0 
+7f16ee9fb000-7f16ee9fe000 ---p 00000000 00:00 0 
+7f16ee9fe000-7f16efbfd000 rw-p 00000000 00:00 0 
+7f16efbfd000-7f16efcfd000 ---p 00000000 00:00 0 
+7f16efcfd000-7f16efd00000 ---p 00000000 00:00 0 
+7f16efd00000-7f16efdfe000 rw-p 00000000 00:00 0 
+7f16efdfe000-7f16efe01000 ---p 00000000 00:00 0 
+7f16efe01000-7f16efeff000 rw-p 00000000 00:00 0 
+7f16efeff000-7f16eff02000 ---p 00000000 00:00 0 
+7f16eff02000-7f16f0000000 rw-p 00000000 00:00 0 
+7f16f0000000-7f16f0021000 rw-p 00000000 00:00 0 
+7f16f0021000-7f16f4000000 ---p 00000000 00:00 0 
+7f16f4000000-7f16f4021000 rw-p 00000000 00:00 0 
+7f16f4021000-7f16f8000000 ---p 00000000 00:00 0 
+7f16f8000000-7f16f8021000 rw-p 00000000 00:00 0 
+7f16f8021000-7f16fc000000 ---p 00000000 00:00 0 
+7f16fc000000-7f16fc021000 rw-p 00000000 00:00 0 
+7f16fc021000-7f1700000000 ---p 00000000 00:00 0 
+7f1700000000-7f1700021000 rw-p 00000000 00:00 0 
+7f1700021000-7f1704000000 ---p 00000000 00:00 0 
+7f17040ec000-7f17040ef000 ---p 00000000 00:00 0 
+7f17040ef000-7f17041ed000 rw-p 00000000 00:00 0 
+7f17041ed000-7f17041f0000 ---p 00000000 00:00 0 
+7f17041f0000-7f17042ee000 rw-p 00000000 00:00 0 
+7f17042ee000-7f17042f1000 ---p 00000000 00:00 0 
+7f17042f1000-7f17043ef000 rw-p 00000000 00:00 0 
+7f17043ef000-7f17043f2000 ---p 00000000 00:00 0 
+7f17043f2000-7f17044f0000 rw-p 00000000 00:00 0 
+7f17044f0000-7f17044f3000 ---p 00000000 00:00 0 
+7f17044f3000-7f17045f1000 rw-p 00000000 00:00 0 
+7f17045f1000-7f17045f4000 ---p 00000000 00:00 0 
+7f17045f4000-7f17046f2000 rw-p 00000000 00:00 0 
+7f17046f2000-7f17046f5000 ---p 00000000 00:00 0 
+7f17046f5000-7f17047f3000 rw-p 00000000 00:00 0 
+7f17047f3000-7f17047f6000 ---p 00000000 00:00 0 
+7f17047f6000-7f17048f4000 rw-p 00000000 00:00 0 
+7f17048f4000-7f17048f7000 ---p 00000000 00:00 0 
+7f17048f7000-7f17049f5000 rw-p 00000000 00:00 0 
+7f17049f5000-7f17049f8000 ---p 00000000 00:00 0 
+7f17049f8000-7f1704cf6000 rw-p 00000000 00:00 0 
+7f1704cf6000-7f1704ef6000 rw-p 00000000 00:00 0 
+7f1704ef6000-7f17050f6000 rw-p 00000000 00:00 0 
+7f17050f6000-7f17052f6000 rw-p 00000000 00:00 0 
+7f17052f6000-7f17054f6000 rw-p 00000000 00:00 0 
+7f17054f6000-7f17056f6000 rw-p 00000000 00:00 0 
+7f17056f6000-7f17058f6000 rw-p 00000000 00:00 0 
+7f17058f6000-7f1705af6000 rw-p 00000000 00:00 0 
+7f1705af6000-7f1705cf6000 rw-p 00000000 00:00 0 
+7f1705cf6000-7f1705ef6000 rw-p 00000000 00:00 0 
+7f1705ef6000-7f17060f6000 rw-p 00000000 00:00 0 
+7f17060f6000-7f17062f6000 rw-p 00000000 00:00 0 
+7f17062f6000-7f17062f9000 ---p 00000000 00:00 0 
+7f17062f9000-7f17063f7000 rw-p 00000000 00:00 0 
+7f17063f7000-7f17063fa000 ---p 00000000 00:00 0 
+7f17063fa000-7f17066f8000 rw-p 00000000 00:00 0 
+7f17066f8000-7f17068f8000 rw-p 00000000 00:00 0 
+7f17068f8000-7f17068fb000 ---p 00000000 00:00 0 
+7f17068fb000-7f17069f9000 rw-p 00000000 00:00 0 
+7f17069f9000-7f17069fc000 ---p 00000000 00:00 0 
+7f17069fc000-7f1706afa000 rw-p 00000000 00:00 0 
+7f1706afa000-7f1706afd000 ---p 00000000 00:00 0 
+7f1706afd000-7f1706bfb000 rw-p 00000000 00:00 0 
+7f1706bfb000-7f1706bfe000 ---p 00000000 00:00 0 
+7f1706bfe000-7f1706cfc000 rw-p 00000000 00:00 0 
+7f1706cfc000-7f1706cff000 ---p 00000000 00:00 0 
+7f1706cff000-7f1706dfd000 rw-p 00000000 00:00 0 
+7f1706dfd000-7f1706e00000 ---p 00000000 00:00 0 
+7f1706e00000-7f1706efe000 rw-p 00000000 00:00 0 
+7f1706efe000-7f1706f01000 ---p 00000000 00:00 0 
+7f1706f01000-7f1708000000 rw-p 00000000 00:00 0 
+7f1708000000-7f1708021000 rw-p 00000000 00:00 0 
+7f1708021000-7f170c000000 ---p 00000000 00:00 0 
+7f170c000000-7f170c021000 rw-p 00000000 00:00 0 
+7f170c021000-7f1710000000 ---p 00000000 00:00 0 
+7f1710000000-7f1710021000 rw-p 00000000 00:00 0 
+7f1710021000-7f1714000000 ---p 00000000 00:00 0 
+7f1714000000-7f1714021000 rw-p 00000000 00:00 0 
+7f1714021000-7f1718000000 ---p 00000000 00:00 0 
+7f1718000000-7f17181a5000 rw-p 00000000 00:00 0 
+7f17181a5000-7f171c000000 ---p 00000000 00:00 0 
+7f171c000000-7f171c1ac000 rw-p 00000000 00:00 0 
+7f171c1ac000-7f1720000000 ---p 00000000 00:00 0 
+7f1720000000-7f17209e8000 rw-p 00000000 00:00 0 
+7f17209e8000-7f1724000000 ---p 00000000 00:00 0 
+7f1724000000-7f1724021000 rw-p 00000000 00:00 0 
+7f1724021000-7f1728000000 ---p 00000000 00:00 0 
+7f1728000000-7f172814a000 rw-p 00000000 00:00 0 
+7f172814a000-7f172c000000 ---p 00000000 00:00 0 
+7f172c000000-7f172c021000 rw-p 00000000 00:00 0 
+7f172c021000-7f1730000000 ---p 00000000 00:00 0 
+7f1730000000-7f1730021000 rw-p 00000000 00:00 0 
+7f1730021000-7f1734000000 ---p 00000000 00:00 0 
+7f1734000000-7f1734021000 rw-p 00000000 00:00 0 
+7f1734021000-7f1738000000 ---p 00000000 00:00 0 
+7f1738000000-7f1738021000 rw-p 00000000 00:00 0 
+7f1738021000-7f173c000000 ---p 00000000 00:00 0 
+7f173c000000-7f173c021000 rw-p 00000000 00:00 0 
+7f173c021000-7f1740000000 ---p 00000000 00:00 0 
+7f1740000000-7f1740021000 rw-p 00000000 00:00 0 
+7f1740021000-7f1744000000 ---p 00000000 00:00 0 
+7f1744000000-7f1744021000 rw-p 00000000 00:00 0 
+7f1744021000-7f1748000000 ---p 00000000 00:00 0 
+7f1748000000-7f1748021000 rw-p 00000000 00:00 0 
+7f1748021000-7f174c000000 ---p 00000000 00:00 0 
+7f174c000000-7f174c021000 rw-p 00000000 00:00 0 
+7f174c021000-7f1750000000 ---p 00000000 00:00 0 
+7f1750000000-7f1750021000 rw-p 00000000 00:00 0 
+7f1750021000-7f1754000000 ---p 00000000 00:00 0 
+7f1754000000-7f1754021000 rw-p 00000000 00:00 0 
+7f1754021000-7f1758000000 ---p 00000000 00:00 0 
+7f1758000000-7f1758021000 rw-p 00000000 00:00 0 
+7f1758021000-7f175c000000 ---p 00000000 00:00 0 
+7f175c000000-7f175c021000 rw-p 00000000 00:00 0 
+7f175c021000-7f1760000000 ---p 00000000 00:00 0 
+7f1760000000-7f1760021000 rw-p 00000000 00:00 0 
+7f1760021000-7f1764000000 ---p 00000000 00:00 0 
+7f1764000000-7f1764021000 rw-p 00000000 00:00 0 
+7f1764021000-7f1768000000 ---p 00000000 00:00 0 
+7f1768000000-7f1768021000 rw-p 00000000 00:00 0 
+7f1768021000-7f176c000000 ---p 00000000 00:00 0 
+7f176c000000-7f176c5a0000 rw-p 00000000 00:00 0 
+7f176c5a0000-7f1770000000 ---p 00000000 00:00 0 
+7f1770000000-7f177004a000 rw-p 00000000 00:00 0 
+7f177004a000-7f1774000000 ---p 00000000 00:00 0 
+7f1774000000-7f1774021000 rw-p 00000000 00:00 0 
+7f1774021000-7f1778000000 ---p 00000000 00:00 0 
+7f1778000000-7f1778047000 rw-p 00000000 00:00 0 
+7f1778047000-7f177c000000 ---p 00000000 00:00 0 
+7f177c000000-7f177c021000 rw-p 00000000 00:00 0 
+7f177c021000-7f1780000000 ---p 00000000 00:00 0 
+7f1780000000-7f1780021000 rw-p 00000000 00:00 0 
+7f1780021000-7f1784000000 ---p 00000000 00:00 0 
+7f1784000000-7f1784021000 rw-p 00000000 00:00 0 
+7f1784021000-7f1788000000 ---p 00000000 00:00 0 
+7f1788000000-7f1788021000 rw-p 00000000 00:00 0 
+7f1788021000-7f178c000000 ---p 00000000 00:00 0 
+7f178c000000-7f178c380000 rw-p 00000000 00:00 0 
+7f178c380000-7f1790000000 ---p 00000000 00:00 0 
+7f1790000000-7f1790090000 rw-p 00000000 00:00 0 
+7f1790090000-7f1794000000 ---p 00000000 00:00 0 
+7f1794000000-7f1794021000 rw-p 00000000 00:00 0 
+7f1794021000-7f1798000000 ---p 00000000 00:00 0 
+7f1798000000-7f17996c8000 rw-p 00000000 00:00 0 
+7f17996c8000-7f179c000000 ---p 00000000 00:00 0 
+7f179c000000-7f179c021000 rw-p 00000000 00:00 0 
+7f179c021000-7f17a0000000 ---p 00000000 00:00 0 
+7f17a0000000-7f17a0043000 rw-p 00000000 00:00 0 
+7f17a0043000-7f17a4000000 ---p 00000000 00:00 0 
+7f17a4000000-7f17a5929000 rw-p 00000000 00:00 0 
+7f17a5929000-7f17a8000000 ---p 00000000 00:00 0 
+7f17a8000000-7f17a8021000 rw-p 00000000 00:00 0 
+7f17a8021000-7f17ac000000 ---p 00000000 00:00 0 
+7f17ac000000-7f17ae496000 rw-p 00000000 00:00 0 
+7f17ae496000-7f17b0000000 ---p 00000000 00:00 0 
+7f17b0000000-7f17b14ab000 rw-p 00000000 00:00 0 
+7f17b14ab000-7f17b4000000 ---p 00000000 00:00 0 
+7f17b4000000-7f17b4021000 rw-p 00000000 00:00 0 
+7f17b4021000-7f17b8000000 ---p 00000000 00:00 0 
+7f17b8000000-7f17b9e6d000 rw-p 00000000 00:00 0 
+7f17b9e6d000-7f17bc000000 ---p 00000000 00:00 0 
+7f17bc000000-7f17bc021000 rw-p 00000000 00:00 0 
+7f17bc021000-7f17c0000000 ---p 00000000 00:00 0 
+7f17c0000000-7f17c0021000 rw-p 00000000 00:00 0 
+7f17c0021000-7f17c4000000 ---p 00000000 00:00 0 
+7f17c4000000-7f17c42c8000 rw-p 00000000 00:00 0 
+7f17c42c8000-7f17c8000000 ---p 00000000 00:00 0 
+7f17c80bd000-7f17c80c0000 ---p 00000000 00:00 0 
+7f17c80c0000-7f17c81be000 rw-p 00000000 00:00 0 
+7f17c81be000-7f17c81c1000 ---p 00000000 00:00 0 
+7f17c81c1000-7f17c82bf000 rw-p 00000000 00:00 0 
+7f17c82bf000-7f17c82c2000 ---p 00000000 00:00 0 
+7f17c82c2000-7f17d0000000 rw-p 00000000 00:00 0 
+7f17d0000000-7f17d0021000 rw-p 00000000 00:00 0 
+7f17d0021000-7f17d4000000 ---p 00000000 00:00 0 
+7f17d4000000-7f17d4021000 rw-p 00000000 00:00 0 
+7f17d4021000-7f17d8000000 ---p 00000000 00:00 0 
+7f17d8000000-7f17d8021000 rw-p 00000000 00:00 0 
+7f17d8021000-7f17dc000000 ---p 00000000 00:00 0 
+7f17dc06c000-7f17dc06f000 ---p 00000000 00:00 0 
+7f17dc06f000-7f17dc16d000 rw-p 00000000 00:00 0 
+7f17dc16d000-7f17dc170000 ---p 00000000 00:00 0 
+7f17dc170000-7f17dc26e000 rw-p 00000000 00:00 0 
+7f17dc26e000-7f17dc271000 ---p 00000000 00:00 0 
+7f17dc271000-7f17dc36f000 rw-p 00000000 00:00 0 
+7f17dc36f000-7f17dc372000 ---p 00000000 00:00 0 
+7f17dc372000-7f17dc470000 rw-p 00000000 00:00 0 
+7f17dc470000-7f17dc473000 ---p 00000000 00:00 0 
+7f17dc473000-7f17dc571000 rw-p 00000000 00:00 0 
+7f17dc571000-7f17dc574000 ---p 00000000 00:00 0 
+7f17dc574000-7f17dc672000 rw-p 00000000 00:00 0 
+7f17dc672000-7f17dc675000 ---p 00000000 00:00 0 
+7f17dc675000-7f17dc773000 rw-p 00000000 00:00 0 
+7f17dc773000-7f17dc776000 ---p 00000000 00:00 0 
+7f17dc776000-7f17dc874000 rw-p 00000000 00:00 0 
+7f17dc874000-7f17dc877000 ---p 00000000 00:00 0 
+7f17dc877000-7f17dc975000 rw-p 00000000 00:00 0 
+7f17dc975000-7f17dc978000 ---p 00000000 00:00 0 
+7f17dc978000-7f17dca76000 rw-p 00000000 00:00 0 
+7f17dca76000-7f17dca79000 ---p 00000000 00:00 0 
+7f17dca79000-7f17dcb77000 rw-p 00000000 00:00 0 
+7f17dcb77000-7f17dcb7a000 ---p 00000000 00:00 0 
+7f17dcb7a000-7f17dcc78000 rw-p 00000000 00:00 0 
+7f17dcc78000-7f17dcc7b000 ---p 00000000 00:00 0 
+7f17dcc7b000-7f17dcf79000 rw-p 00000000 00:00 0 
+7f17dcf79000-7f17dd179000 rw-p 00000000 00:00 0 
+7f17dd179000-7f17dd17c000 ---p 00000000 00:00 0 
+7f17dd17c000-7f17dd47a000 rw-p 00000000 00:00 0 
+7f17dd47a000-7f17dd47d000 ---p 00000000 00:00 0 
+7f17dd47d000-7f17dd57b000 rw-p 00000000 00:00 0 
+7f17dd57b000-7f17dd57e000 ---p 00000000 00:00 0 
+7f17dd57e000-7f17dd67c000 rw-p 00000000 00:00 0 
+7f17dd67c000-7f17dd67f000 ---p 00000000 00:00 0 
+7f17dd67f000-7f17dd77d000 rw-p 00000000 00:00 0 
+7f17dd77d000-7f17dd780000 ---p 00000000 00:00 0 
+7f17dd780000-7f17dd87e000 rw-p 00000000 00:00 0 
+7f17dd87e000-7f17dd881000 ---p 00000000 00:00 0 
+7f17dd881000-7f17dd97f000 rw-p 00000000 00:00 0 
+7f17dd97f000-7f17dd982000 ---p 00000000 00:00 0 
+7f17dd982000-7f17dda80000 rw-p 00000000 00:00 0 
+7f17dda80000-7f17dda83000 ---p 00000000 00:00 0 
+7f17dda83000-7f17ddb81000 rw-p 00000000 00:00 0 
+7f17ddb81000-7f17ddb84000 ---p 00000000 00:00 0 
+7f17ddb84000-7f17ddc82000 rw-p 00000000 00:00 0 
+7f17ddc82000-7f17ddc85000 ---p 00000000 00:00 0 
+7f17ddc85000-7f17ddd83000 rw-p 00000000 00:00 0 
+7f17ddd83000-7f17ddd86000 ---p 00000000 00:00 0 
+7f17ddd86000-7f17dde84000 rw-p 00000000 00:00 0 
+7f17dde84000-7f17dde87000 ---p 00000000 00:00 0 
+7f17dde87000-7f17def86000 rw-p 00000000 00:00 0 
+7f17def86000-7f17def89000 ---p 00000000 00:00 0 
+7f17def89000-7f17df287000 rw-p 00000000 00:00 0 
+7f17df287000-7f17df28a000 ---p 00000000 00:00 0 
+7f17df28a000-7f17df588000 rw-p 00000000 00:00 0 
+7f17df588000-7f17df591000 r-xp 00000000 fd:01 8655512                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libmanagement.so
+7f17df591000-7f17df790000 ---p 00009000 fd:01 8655512                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libmanagement.so
+7f17df790000-7f17df791000 rw-p 00008000 fd:01 8655512                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libmanagement.so
+7f17df791000-7f17df991000 rw-p 00000000 00:00 0 
+7f17df991000-7f17df9a7000 r-xp 00000000 fd:01 26738704                   /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f17df9a7000-7f17dfba6000 ---p 00016000 fd:01 26738704                   /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f17dfba6000-7f17dfba7000 r--p 00015000 fd:01 26738704                   /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f17dfba7000-7f17dfba8000 rw-p 00016000 fd:01 26738704                   /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f17dfba8000-7f17dfbda000 r-xp 00000000 fd:01 8655460                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libsunec.so
+7f17dfbda000-7f17dfdd9000 ---p 00032000 fd:01 8655460                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libsunec.so
+7f17dfdd9000-7f17dfddf000 rw-p 00031000 fd:01 8655460                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libsunec.so
+7f17dfddf000-7f17dfdef000 rw-p 00000000 00:00 0 
+7f17dfdef000-7f17dfe00000 r-xp 00000000 fd:01 8655507                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libnio.so
+7f17dfe00000-7f17dffff000 ---p 00011000 fd:01 8655507                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libnio.so
+7f17dffff000-7f17e0000000 rw-p 00010000 fd:01 8655507                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libnio.so
+7f17e0000000-7f17e0021000 rw-p 00000000 00:00 0 
+7f17e0021000-7f17e4000000 ---p 00000000 00:00 0 
+7f17e4047000-7f17e4062000 r--s 001d4000 fd:01 8917579                    /usr/lib/jvm/java-8-oracle/jre/lib/ext/nashorn.jar
+7f17e4062000-7f17e4262000 rw-p 00000000 00:00 0 
+7f17e4262000-7f17e4265000 ---p 00000000 00:00 0 
+7f17e4265000-7f17e4363000 rw-p 00000000 00:00 0 
+7f17e4363000-7f17e4366000 ---p 00000000 00:00 0 
+7f17e4366000-7f17e4464000 rw-p 00000000 00:00 0 
+7f17e4464000-7f17e4467000 ---p 00000000 00:00 0 
+7f17e4467000-7f17e4565000 rw-p 00000000 00:00 0 
+7f17e4565000-7f17e4568000 ---p 00000000 00:00 0 
+7f17e4568000-7f17e4666000 rw-p 00000000 00:00 0 
+7f17e4666000-7f17e4669000 ---p 00000000 00:00 0 
+7f17e4669000-7f17e4967000 rw-p 00000000 00:00 0 
+7f17e4967000-7f17e496a000 ---p 00000000 00:00 0 
+7f17e496a000-7f17e4a68000 rw-p 00000000 00:00 0 
+7f17e4a68000-7f17e4a6b000 ---p 00000000 00:00 0 
+7f17e4a6b000-7f17e4b69000 rw-p 00000000 00:00 0 
+7f17e4b69000-7f17e4b6c000 ---p 00000000 00:00 0 
+7f17e4b6c000-7f17e4c6a000 rw-p 00000000 00:00 0 
+7f17e4c6a000-7f17e4c6d000 ---p 00000000 00:00 0 
+7f17e4c6d000-7f17e4f6b000 rw-p 00000000 00:00 0 
+7f17e4f6b000-7f17e516b000 rw-p 00000000 00:00 0 
+7f17e516b000-7f17e536b000 rw-p 00000000 00:00 0 
+7f17e536b000-7f17e556b000 rw-p 00000000 00:00 0 
+7f17e556b000-7f17e576b000 rw-p 00000000 00:00 0 
+7f17e576b000-7f17e596b000 rw-p 00000000 00:00 0 
+7f17e596b000-7f17e5b6b000 rw-p 00000000 00:00 0 
+7f17e5b6b000-7f17e5c00000 r--s 0110b000 fd:01 8917577                    /usr/lib/jvm/java-8-oracle/jre/lib/ext/jfxrt.jar
+7f17e5c00000-7f17e5e00000 rw-p 00000000 00:00 0 
+7f17e5e00000-7f17e6000000 rw-p 00000000 00:00 0 
+7f17e6000000-7f17e6200000 rw-p 00000000 00:00 0 
+7f17e6200000-7f17e6400000 rw-p 00000000 00:00 0 
+7f17e6400000-7f17e6600000 rw-p 00000000 00:00 0 
+7f17e6600000-7f17e6800000 rw-p 00000000 00:00 0 
+7f17e6800000-7f17e6a00000 rw-p 00000000 00:00 0 
+7f17e6a00000-7f17e6c00000 rw-p 00000000 00:00 0 
+7f17e6c00000-7f17e6e00000 rw-p 00000000 00:00 0 
+7f17e6e00000-7f17e7000000 rw-p 00000000 00:00 0 
+7f17e7000000-7f17e7200000 rw-p 00000000 00:00 0 
+7f17e7200000-7f17e7400000 rw-p 00000000 00:00 0 
+7f17e7400000-7f17e7600000 rw-p 00000000 00:00 0 
+7f17e7600000-7f17e7800000 rw-p 00000000 00:00 0 
+7f17e7800000-7f17e7a00000 rw-p 00000000 00:00 0 
+7f17e7a00000-7f17e7c00000 rw-p 00000000 00:00 0 
+7f17e7c00000-7f17e7e00000 rw-p 00000000 00:00 0 
+7f17e7e00000-7f17e8000000 rw-p 00000000 00:00 0 
+7f17e8000000-7f17e8021000 rw-p 00000000 00:00 0 
+7f17e8021000-7f17ec000000 ---p 00000000 00:00 0 
+7f17ec000000-7f17ec021000 rw-p 00000000 00:00 0 
+7f17ec021000-7f17f0000000 ---p 00000000 00:00 0 
+7f17f0000000-7f17f0021000 rw-p 00000000 00:00 0 
+7f17f0021000-7f17f4000000 ---p 00000000 00:00 0 
+7f17f4006000-7f17f4007000 r--s 00010000 fd:01 8917580                    /usr/lib/jvm/java-8-oracle/jre/lib/ext/zipfs.jar
+7f17f4007000-7f17f4008000 r--s 0000a000 fd:01 8917578                    /usr/lib/jvm/java-8-oracle/jre/lib/ext/jaccess.jar
+7f17f4008000-7f17f4012000 r--s 00116000 fd:01 8917583                    /usr/lib/jvm/java-8-oracle/jre/lib/ext/localedata.jar
+7f17f4012000-7f17f4014000 r--s 00001000 fd:01 8917575                    /usr/lib/jvm/java-8-oracle/jre/lib/ext/dnsns.jar
+7f17f4014000-7f17f4030000 r--s 00393000 fd:01 8917576                    /usr/lib/jvm/java-8-oracle/jre/lib/ext/cldrdata.jar
+7f17f4030000-7f17f4035000 r--s 00084000 fd:01 8654848                    /usr/lib/jvm/java-8-oracle/jre/lib/jfr.jar
+7f17f4035000-7f17f403a000 r--s 002f9000 fd:01 8655389                    /usr/lib/jvm/java-8-oracle/jre/lib/charsets.jar
+7f17f403a000-7f17f404d000 r--s 00345000 fd:01 8655429                    /usr/lib/jvm/java-8-oracle/jre/lib/resources.jar
+7f17f404d000-7f17f4052000 r--s 0003f000 fd:01 8917584                    /usr/lib/jvm/java-8-oracle/jre/lib/ext/sunjce_provider.jar
+7f17f4052000-7f17f4054000 r--s 00009000 fd:01 8917574                    /usr/lib/jvm/java-8-oracle/jre/lib/ext/sunec.jar
+7f17f4054000-7f17f4058000 r--s 0003a000 fd:01 8917581                    /usr/lib/jvm/java-8-oracle/jre/lib/ext/sunpkcs11.jar
+7f17f4058000-7f17f405b000 r--s 0001a000 fd:01 8655520                    /usr/lib/jvm/java-8-oracle/jre/lib/jce.jar
+7f17f405b000-7f17f405c000 r--p 00000000 fd:01 10096400                   /usr/share/locale-langpack/en_GB/LC_MESSAGES/libc.mo
+7f17f405c000-7f17f405e000 r--s 00002000 fd:01 1573879                    /home/matthew/.sbt/boot/scala-2.10.7/org.scala-sbt/sbt/0.13.17/test-interface-1.0.jar
+7f17f405e000-7f17f4061000 ---p 00000000 00:00 0 
+7f17f4061000-7f17f415f000 rw-p 00000000 00:00 0 
+7f17f415f000-7f17f4162000 ---p 00000000 00:00 0 
+7f17f4162000-7f17f4260000 rw-p 00000000 00:00 0 
+7f17f4260000-7f17f4263000 ---p 00000000 00:00 0 
+7f17f4263000-7f17f4561000 rw-p 00000000 00:00 0 
+7f17f4561000-7f17f4566000 r--s 0009d000 fd:01 8655430                    /usr/lib/jvm/java-8-oracle/jre/lib/jsse.jar
+7f17f4566000-7f17f457c000 r-xp 00000000 fd:01 8655504                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libnet.so
+7f17f457c000-7f17f477c000 ---p 00016000 fd:01 8655504                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libnet.so
+7f17f477c000-7f17f477d000 rw-p 00016000 fd:01 8655504                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libnet.so
+7f17f477d000-7f17f477e000 r--s 00005000 fd:01 1573840                    /home/matthew/.sbt/boot/scala-2.10.7/org.scala-sbt/sbt/0.13.17/test-agent-0.13.17.jar
+7f17f477e000-7f17f483e000 r--s 00ae9000 fd:01 11668274                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.github.tomakehurst/wiremock-standalone/wiremock-standalone-2.19.0.jar
+7f17f483e000-7f17f4891000 r--s 002a1000 fd:01 11668637                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scalacheck/scalacheck_2.11/scalacheck_2.11-1.13.4.jar
+7f17f4891000-7f17f48af000 r--s 00110000 fd:01 11668790                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.mockito/mockito-all/mockito-all-1.10.19.jar
+7f17f48af000-7f17f48b5000 r--s 00051000 fd:01 11668281                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.jsoup/jsoup/jsoup-1.10.3.jar
+7f17f48b5000-7f17f48ba000 r--s 0005d000 fd:01 11668677                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.seleniumhq.selenium/selenium-leg-rc/selenium-leg-rc-2.53.1.jar
+7f17f48ba000-7f17f48d0000 r--s 000f9000 fd:01 10751625                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/io.netty/netty/netty-3.5.7.Final.jar
+7f17f48d0000-7f17f48d2000 r--s 00014000 fd:01 11668618                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.seleniumhq.selenium/selenium-safari-driver/selenium-safari-driver-2.53.1.jar
+7f17f48d2000-7f17f48d3000 r--s 00002000 fd:01 10617215                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.seleniumhq.selenium/selenium-ie-driver/selenium-ie-driver-2.53.1.jar
+7f17f48d3000-7f17f48d4000 r--s 00001000 fd:01 11668251                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.seleniumhq.selenium/selenium-edge-driver/selenium-edge-driver-2.53.1.jar
+7f17f48d4000-7f17f48d5000 r--s 00002000 fd:01 11668295                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.seleniumhq.selenium/selenium-chrome-driver/selenium-chrome-driver-2.53.1.jar
+7f17f48d5000-7f17f48d6000 r--s 00000000 fd:01 11668630                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.seleniumhq.selenium/selenium-java/selenium-java-2.53.1.jar
+7f17f48d6000-7f17f48da000 r--s 00030000 fd:01 11538988                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scalatestplus.play/scalatestplus-play_2.11/scalatestplus-play_2.11-2.0.1.jar
+7f17f48da000-7f17f48db000 r--s 0000a000 fd:01 10879778                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.ow2.asm/asm-util/asm-util-5.0.3.jar
+7f17f48db000-7f17f48dc000 r--s 00004000 fd:01 11668276                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.ow2.asm/asm-analysis/asm-analysis-5.0.3.jar
+7f17f48dc000-7f17f48de000 r--s 00006000 fd:01 11668781                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.ow2.asm/asm-tree/asm-tree-5.0.3.jar
+7f17f48de000-7f17f48df000 r--s 0000c000 fd:01 10879690                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.ow2.asm/asm/asm-5.0.3.jar
+7f17f48df000-7f17f48e4000 r--s 00029000 fd:01 10879862                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.parboiled/parboiled-core/parboiled-core-1.1.7.jar
+7f17f48e4000-7f17f48e6000 r--s 00010000 fd:01 10879738                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.parboiled/parboiled-java/parboiled-java-1.1.7.jar
+7f17f48e6000-7f17f48e9000 r--s 00011000 fd:01 11668787                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.pegdown/pegdown/pegdown-1.6.0.jar
+7f17f48e9000-7f17f48f3000 r--s 000ab000 fd:01 11668720                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/org.scalactic/scalactic_2.11/scalactic_2.11-3.0.4.jar
+7f17f48f3000-7f17f499e000 r--s 00946000 fd:01 11668695                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/org.scalatest/scalatest_2.11/scalatest_2.11-3.0.4.jar
+7f17f499e000-7f17f49a1000 r--s 00018000 fd:01 11668768                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/hmrctest_2.11/hmrctest_2.11-3.1.0.jar
+7f17f49a1000-7f17f49a3000 r--s 000c2000 fd:01 11668291                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.seleniumhq.selenium/selenium-firefox-driver/selenium-firefox-driver-3.5.3.jar
+7f17f49a3000-7f17f49a6000 r--s 00008000 fd:01 11668235                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.eclipse.jetty.websocket/websocket-api/websocket-api-9.4.5.v20170502.jar
+7f17f49a6000-7f17f49ab000 r--s 0002c000 fd:01 10879684                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.eclipse.jetty.websocket/websocket-common/websocket-common-9.4.5.v20170502.jar
+7f17f49ab000-7f17f49ae000 r--s 00025000 fd:01 11668675                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.eclipse.jetty/jetty-http/jetty-http-9.4.5.v20170502.jar
+7f17f49ae000-7f17f49b4000 r--s 0003c000 fd:01 10879869                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.eclipse.jetty/jetty-client/jetty-client-9.4.5.v20170502.jar
+7f17f49b4000-7f17f49b7000 r--s 0001d000 fd:01 11669009                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.eclipse.jetty/jetty-io/jetty-io-9.4.5.v20170502.jar
+7f17f49b7000-7f17f49bf000 r--s 00068000 fd:01 11668679                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.eclipse.jetty/jetty-util/jetty-util-9.4.5.v20170502.jar
+7f17f49bf000-7f17f49c0000 r--s 00007000 fd:01 11668714                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.eclipse.jetty.websocket/websocket-client/websocket-client-9.4.5.v20170502.jar
+7f17f49c0000-7f17f49c1000 r--s 00003000 fd:01 11538976                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.w3c.css/sac/sac-1.3.jar
+7f17f49c1000-7f17f49c5000 r--s 0005a000 fd:01 11668230                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/net.sourceforge.cssparser/cssparser/cssparser-0.9.23.jar
+7f17f49c5000-7f17f49ce000 r--s 0002d000 fd:01 11668657                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/xml-apis/xml-apis/xml-apis-1.4.01.jar
+7f17f49ce000-7f17f49e7000 r--s 00135000 fd:01 11668260                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/xerces/xercesImpl/xercesImpl-2.11.0.jar
+7f17f49e7000-7f17f49ea000 r--s 0001d000 fd:01 11668709                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/net.sourceforge.htmlunit/neko-htmlunit/neko-htmlunit-2.27.jar
+7f17f49ea000-7f17f49f8000 r--s 0011b000 fd:01 11668668                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/net.sourceforge.htmlunit/htmlunit-core-js/htmlunit-core-js-2.27.jar
+7f17f49f8000-7f17f49fa000 r--s 00009000 fd:01 11668641                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.apache.httpcomponents/httpmime/httpmime-4.5.3.jar
+7f17f49fa000-7f17f49fe000 r--s 00040000 fd:01 10879776                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/xalan/serializer/serializer-2.7.2.jar
+7f17f49fe000-7f17f4a23000 r--s 002de000 fd:01 11668727                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/xalan/xalan/xalan-2.7.2.jar
+7f17f4a23000-7f17f4a4a000 r--s 001c3000 fd:01 10879743                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/net.sourceforge.htmlunit/htmlunit/htmlunit-2.27.jar
+7f17f4a4a000-7f17f4a4c000 r--s 00010000 fd:01 11539014                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.seleniumhq.selenium/htmlunit-driver/htmlunit-driver-2.27.jar
+7f17f4a4c000-7f17f4a50000 r--s 0002f000 fd:01 10879878                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/commons-io/commons-io/commons-io-2.5.jar
+7f17f4a50000-7f17f4a51000 r--s 00007000 fd:01 11668673                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.atteo.classindex/classindex/classindex-3.4.jar
+7f17f4a51000-7f17f4a62000 r--s 00155000 fd:01 11669004                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/net.java.dev.jna/jna-platform/jna-platform-4.1.0.jar
+7f17f4a62000-7f17f4a66000 r--s 000dc000 fd:01 11668704                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/net.java.dev.jna/jna/jna-4.1.0.jar
+7f17f4a66000-7f17f4a6e000 r--s 00048000 fd:01 11538973                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.apache.httpcomponents/httpcore/httpcore-4.4.6.jar
+7f17f4a6e000-7f17f4a7b000 r--s 000aa000 fd:01 11668293                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.apache.httpcomponents/httpclient/httpclient-4.5.3.jar
+7f17f4a7b000-7f17f4a80000 r--s 00034000 fd:01 10617184                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.google.code.gson/gson/gson-2.8.0.jar
+7f17f4a80000-7f17f4a82000 r--s 0000e000 fd:01 11538993                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/commons-logging/commons-logging/commons-logging-1.2.jar
+7f17f4a82000-7f17f4a84000 r--s 0000c000 fd:01 11668800                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.apache.commons/commons-exec/commons-exec-1.3.jar
+7f17f4a84000-7f17f4a8b000 r--s 0004f000 fd:01 10879794                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/cglib/cglib-nodep/cglib-nodep-3.2.4.jar
+7f17f4a8b000-7f17f4a91000 r--s 00049000 fd:01 11668652                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.seleniumhq.selenium/selenium-remote-driver/selenium-remote-driver-3.5.3.jar
+7f17f4a91000-7f17f4a95000 r--s 00018000 fd:01 11668686                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.seleniumhq.selenium/selenium-api/selenium-api-3.5.3.jar
+7f17f4a95000-7f17f4a9a000 r--s 00020000 fd:01 11668725                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.seleniumhq.selenium/selenium-support/selenium-support-3.5.3.jar
+7f17f4a9a000-7f17f4aa4000 r--s 00052000 fd:01 11668779                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.fluentlenium/fluentlenium-core/fluentlenium-core-3.3.0.jar
+7f17f4aa4000-7f17f4aa6000 r--s 00003000 fd:01 11668764                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.google.code.findbugs/jsr305/jsr305-3.0.2.jar
+7f17f4aa6000-7f17f4aa8000 r--s 00002000 fd:01 11668691                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scala-sbt/test-interface/test-interface-1.0.jar
+7f17f4aa8000-7f17f4aaa000 r--s 00006000 fd:01 11668774                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.novocode/junit-interface/junit-interface-0.11.jar
+7f17f4aaa000-7f17f4aac000 r--s 00009000 fd:01 11539012                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.hamcrest/hamcrest-core/hamcrest-core-1.3.jar
+7f17f4aac000-7f17f4ab4000 r--s 00045000 fd:01 11668849                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/junit/junit/junit-4.12.jar
+7f17f4ab4000-7f17f4ab7000 r--s 00026000 fd:01 11668802                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-test_2.11/play-test_2.11-2.6.15.jar
+7f17f4ab7000-7f17f4abe000 r--s 00044000 fd:01 11668249                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scalatra.scalate/scalate-util_2.11/scalate-util_2.11-1.8.0.jar
+7f17f4abe000-7f17f4ae3000 rw-p 00000000 00:00 0 
+7f17f4ae3000-7f17f4bf0000 r--s 00dd4000 fd:01 11668650                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scala-lang/scala-compiler/scala-compiler-2.11.11.jar
+7f17f4bf0000-7f17f4c23000 r--s 001fd000 fd:01 10751646                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scalatra.scalate/scalate-core_2.11/scalate-core_2.11-1.8.0.jar
+7f17f4c23000-7f17f4c25000 r--s 00002000 fd:01 11668253                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scalatra.scalate/play-scalate_2.11/play-scalate_2.11-0.4.0.jar
+7f17f4c25000-7f17f4c27000 r--s 00006000 fd:01 10617235                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-json-joda_2.11/play-json-joda_2.11-2.6.10.jar
+7f17f4c27000-7f17f4c28000 r--s 00003000 fd:01 11669016                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/tax-year_2.11/tax-year_2.11-0.4.0.jar
+7f17f4c28000-7f17f4c29000 r--s 00002000 fd:01 11668639                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/play-whitelist-filter_2.11/play-whitelist-filter_2.11-2.0.0.jar
+7f17f4c29000-7f17f4c2c000 r--s 00016000 fd:01 10879834                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/jackson-datatype-jsr310-2.9.7.jar
+7f17f4c2c000-7f17f4c2e000 r--s 00007000 fd:01 11538970                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/jackson-datatype-jdk8-2.9.7.jar
+7f17f4c2e000-7f17f4c33000 r--s 0002e000 fd:01 11668739                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.github.nscala-time/nscala-time_2.11/nscala-time_2.11-2.16.0.jar
+7f17f4c33000-7f17f4c34000 r--s 00007000 fd:01 11668697                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/time_2.11/time_2.11-3.2.0.jar
+7f17f4c34000-7f17f4c38000 r--s 00028000 fd:01 11668632                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/play-auditing_2.11/play-auditing_2.11-3.15.0-play-26.jar
+7f17f4c38000-7f17f4c39000 r--s 00003000 fd:01 11669014                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/logback-json-logger_2.11/logback-json-logger_2.11-4.0.0.jar
+7f17f4c39000-7f17f4c3a000 r--s 00001000 fd:01 11668670                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/http-verbs-play-25_2.11/http-verbs-play-25_2.11-1.0.0.jar
+7f17f4c3a000-7f17f4c3b000 r--s 00001000 fd:01 10879710                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/http-core_2.11/http-core_2.11-2.0.0.jar
+7f17f4c3b000-7f17f4c43000 r--s 0004c000 fd:01 11668666                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/http-verbs_2.11/http-verbs_2.11-9.0.0-play-26.jar
+7f17f4c43000-7f17f4c9b000 r--s 003a7000 fd:01 10879750                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.bouncycastle/bcprov-jdk15on/bcprov-jdk15on-1.60.jar
+7f17f4c9b000-7f17f4c9d000 r--s 00006000 fd:01 10879864                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/secure_2.11/secure_2.11-7.4.0.jar
+7f17f4c9d000-7f17f4c9f000 r--s 00013000 fd:01 11668745                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/crypto_2.11/crypto_2.11-5.1.0.jar
+7f17f4c9f000-7f17f4ca3000 r--s 00018000 fd:01 11668707                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/net.ceedubs/ficus_2.11/ficus_2.11-1.1.2.jar
+7f17f4ca3000-7f17f4caa000 r--s 00052000 fd:01 10879727                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/auth-client_2.11/auth-client_2.11-2.11.0-play-26.jar
+7f17f4caa000-7f17f4cae000 r--s 0001e000 fd:01 11668288                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/io.dropwizard.metrics/metrics-core/metrics-core-3.2.5.jar
+7f17f4cae000-7f17f4cb0000 r--s 00004000 fd:01 11143922                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/io.dropwizard.metrics/metrics-graphite/metrics-graphite-3.2.5.jar
+7f17f4cb0000-7f17f4cb3000 r--s 00015000 fd:01 11668645                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/shaded-oauth/shaded-oauth-1.1.10.jar
+7f17f4cb3000-7f17f4cea000 r--s 0027f000 fd:01 11668736                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/shaded-asynchttpclient/shaded-asynchttpclient-1.1.10.jar
+7f17f4cea000-7f17f4cf1000 r--s 00055000 fd:01 11668241                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-ahc-ws-standalone_2.11/play-ahc-ws-standalone_2.11-1.1.10.jar
+7f17f4cf1000-7f17f4cf2000 r--s 00002000 fd:01 11669006                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-ws-standalone-json_2.11/play-ws-standalone-json_2.11-1.1.10.jar
+7f17f4cf2000-7f17f4cf3000 r--s 00003000 fd:01 11539016                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-ws-standalone-xml_2.11/play-ws-standalone-xml_2.11-1.1.10.jar
+7f17f4cf3000-7f17f4cf6000 r--s 00018000 fd:01 11538983                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-ws-standalone_2.11/play-ws-standalone_2.11-1.1.10.jar
+7f17f4cf6000-7f17f4cf8000 r--s 00005000 fd:01 10879813                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-ws_2.11/play-ws_2.11-2.6.20.jar
+7f17f4cf8000-7f17f4cfa000 r--s 00014000 fd:01 11668266                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-ahc-ws_2.11/play-ahc-ws_2.11-2.6.20.jar
+7f17f4cfa000-7f17f4cfc000 r--s 00009000 fd:01 11668730                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.google.inject.extensions/guice-assistedinject/guice-assistedinject-4.1.0.jar
+7f17f4cfc000-7f17f4cfe000 r--s 00000000 fd:01 11668763                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/aopalliance/aopalliance/aopalliance-1.0.jar
+7f17f4cfe000-7f17f4d0c000 r--s 00097000 fd:01 11538979                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.google.inject/guice/guice-4.1.0.jar
+7f17f4d0c000-7f17f4d0f000 r--s 00019000 fd:01 10879827                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-guice_2.11/play-guice_2.11-2.6.20.jar
+7f17f4d0f000-7f17f4d11000 r--s 00000000 fd:01 11668748                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/io.dropwizard.metrics/metrics-logback/metrics-logback-3.2.4.jar
+7f17f4d11000-7f17f4d13000 r--s 00008000 fd:01 11668804                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/io.dropwizard.metrics/metrics-jvm/metrics-jvm-3.2.4.jar
+7f17f4d13000-7f17f4d17000 r--s 0004c000 fd:01 11668731                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/com.fasterxml.jackson.core/jackson-core/jackson-core-2.9.7.jar
+7f17f4d17000-7f17f4d1a000 r--s 0000e000 fd:01 11668297                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/com.fasterxml.jackson.core/jackson-annotations/jackson-annotations-2.9.7.jar
+7f17f4d1a000-7f17f4d2d000 r--s 00137000 fd:01 11407616                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/com.fasterxml.jackson.core/jackson-databind/jackson-databind-2.9.7.jar
+7f17f4d2d000-7f17f4d2e000 r--s 00003000 fd:01 11538990                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/io.dropwizard.metrics/metrics-json/metrics-json-3.2.4.jar
+7f17f4d2e000-7f17f4d2f000 r--s 00005000 fd:01 11668624                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.kenshoo/metrics-play_2.11/metrics-play_2.11-2.6.6_0.6.2.jar
+7f17f4d2f000-7f17f4d3a000 r--s 0006a000 fd:01 11539005                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/bootstrap-play-26_2.11/bootstrap-play-26_2.11-0.36.0.jar
+7f17f4d3a000-7f17f4d3c000 r--s 0000f000 fd:01 11668760                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/play-conditional-form-mapping_2.11/play-conditional-form-mapping_2.11-0.2.0.jar
+7f17f4d3c000-7f17f4d40000 r--s 0001f000 fd:01 10879678                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.joda/joda-convert/joda-convert-2.0.2.jar
+7f17f4d40000-7f17f4d4a000 r--s 0006e000 fd:01 11668643                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/play-ui_2.11/play-ui_2.11-7.31.0-play-26.jar
+7f17f4d4a000-7f17f4d4b000 r--s 0000b000 fd:01 11668776                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/play-health_2.11/play-health_2.11-3.10.0-play-26.jar
+7f17f4d4b000-7f17f4d59000 r--s 000e5000 fd:01 11668746                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.akka/akka-parsing_2.11/akka-parsing_2.11-10.0.14.jar
+7f17f4d59000-7f17f4d9c000 r--s 00377000 fd:01 10879887                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.akka/akka-http-core_2.11/akka-http-core_2.11-10.0.14.jar
+7f17f4d9c000-7f17f4da0000 r--s 00023000 fd:01 10879906                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-akka-http-server_2.11/play-akka-http-server_2.11-2.6.20.jar
+7f17f4da0000-7f17f4da1000 r--s 00004000 fd:01 11668766                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-logback_2.11/play-logback_2.11-2.6.20.jar
+7f17f4da1000-7f17f4dab000 r--s 0005f000 fd:01 11668233                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/filters-helpers_2.11/filters-helpers_2.11-2.6.20.jar
+7f17f4dab000-7f17f4daf000 r--s 0001b000 fd:01 11668621                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/javax.xml.bind/jaxb-api/jaxb-api-2.3.0.jar
+7f17f4daf000-7f17f4db8000 r--s 0005c000 fd:01 10617225                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-functional_2.11/play-functional_2.11-2.6.10.jar
+7f17f4db8000-7f17f4dd7000 r--s 0013b000 fd:01 11668793                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-json_2.11/play-json_2.11-2.6.10.jar
+7f17f4dd7000-7f17f4dd9000 r--s 00004000 fd:01 11668782                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.akka/akka-slf4j_2.11/akka-slf4j_2.11-2.5.17.jar
+7f17f4dd9000-7f17f4de1000 r--s 00053000 fd:01 10487326                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/com.typesafe/ssl-config-core_2.11/ssl-config-core_2.11-0.2.4.jar
+7f17f4de1000-7f17f4de8000 r--s 00070000 fd:01 11539019                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.akka/akka-protobuf_2.11/akka-protobuf_2.11-2.5.17.jar
+7f17f4de8000-7f17f4ded000 r--s 00041000 fd:01 10487317                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/com.typesafe/config/config-1.3.3.jar
+7f17f4ded000-7f17f4e25000 r--s 00382000 fd:01 10879719                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.akka/akka-actor_2.11/akka-actor_2.11-2.5.17.jar
+7f17f4e25000-7f17f4e77000 r--s 0045c000 fd:01 11669007                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.akka/akka-stream_2.11/akka-stream_2.11-2.5.17.jar
+7f17f4e77000-7f17f4e7b000 r--s 00020000 fd:01 11668227                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-streams_2.11/play-streams_2.11-2.6.20.jar
+7f17f4e7b000-7f17f4e7d000 r--s 00000000 fd:01 10879879                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-exceptions/play-exceptions-2.6.20.jar
+7f17f4e7d000-7f17f4ed4000 r--s 003e1000 fd:01 11668237                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play_2.11/play_2.11-2.6.20.jar
+7f17f4ed4000-7f17f4edb000 r--s 00045000 fd:01 11668289                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-server_2.11/play-server_2.11-2.6.20.jar
+7f17f4edb000-7f17f4edd000 r--s 00011000 fd:01 11668701                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/twirl-api_2.11/twirl-api_2.11-1.3.15.jar
+7f17f4edd000-7f17f4ee0000 r--s 000c3000 fd:01 11668647                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/uk.gov.hmrc/govuk-template_2.11/govuk-template_2.11-5.27.0-play-26.jar
+7f17f4ee0000-7f17f4ee5000 r--s 00022000 fd:01 11668743                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-iteratees-reactive-streams_2.11/play-iteratees-reactive-streams_2.11-2.6.1.jar
+7f17f4ee5000-7f17f4eee000 r--s 00095000 fd:01 10751649                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scala-stm/scala-stm_2.11/scala-stm_2.11-0.8.jar
+7f17f4eee000-7f17f4f00000 r--s 000ad000 fd:01 11539003                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-iteratees_2.11/play-iteratees_2.11-2.6.1.jar
+7f17f4f00000-7f17f4f0c000 r--s 00071000 fd:01 11668634                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.reactivemongo/reactivemongo-play-json_2.11/reactivemongo-play-json_2.11-0.16.0-play26.jar
+7f17f4f0c000-7f17f4f0f000 r--s 00021000 fd:01 11668664                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.apache.logging.log4j/log4j-api/log4j-api-2.5.jar
+7f17f4f0f000-7f17f4f16000 r--s 0004b000 fd:01 10879551                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/commons-codec/commons-codec/commons-codec-1.11.jar
+7f17f4f16000-7f17f4f1b000 r--s 00048000 fd:01 11668723                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/dnsjava/dnsjava/dnsjava-2.1.8.jar
+7f17f4f1b000-7f17f4f74000 r--s 003e9000 fd:01 11668661                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.reactivemongo/reactivemongo-shaded/reactivemongo-shaded-0.16.1.jar
+7f17f4f74000-7f17f4f7e000 r--s 00073000 fd:01 11668784                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.reactivemongo/reactivemongo-bson_2.11/reactivemongo-bson_2.11-0.16.1.jar
+7f17f4f7e000-7f17f4f82000 r--s 00030000 fd:01 11668758                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.reactivemongo/reactivemongo-bson-macros_2.11/reactivemongo-bson-macros_2.11-0.16.1.jar
+7f17f4f82000-7f17f4fcc000 r--s 00338000 fd:01 10751618                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.reactivemongo/reactivemongo_2.11/reactivemongo_2.11-0.16.1.jar
+7f17f4fcc000-7f17f4fd8000 r--s 00068000 fd:01 10879881                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/org.scala-lang.modules/scala-parser-combinators_2.11/scala-parser-combinators_2.11-1.1.0.jar
+7f17f4fd8000-7f17f4fe1000 r--s 00046000 fd:01 11668741                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/cachecontrol_2.11/cachecontrol_2.11-1.1.3.jar
+7f17f4fe1000-7f17f4fec000 r--s 00069000 fd:01 11668247                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/ch.qos.logback/logback-core/logback-core-1.2.3.jar
+7f17f4fec000-7f17f4ff2000 r--s 00041000 fd:01 11668286                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/ch.qos.logback/logback-classic/logback-classic-1.2.3.jar
+7f17f4ff2000-7f17f5022000 r--s 00245000 fd:01 11668751                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/com.google.guava/guava/guava-22.0.jar
+7f17f5022000-7f17f5033000 r--s 0008a000 fd:01 11668798                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/joda-time/joda-time/joda-time-2.9.9.jar
+7f17f5033000-7f17f507f000 r--s 00418000 fd:01 11668654                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scala-lang/scala-reflect/scala-reflect-2.11.11.jar
+7f17f507f000-7f17f50d8000 r--s 00523000 fd:01 11668756                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scala-lang/scala-library/scala-library-2.11.11.jar
+7f17f50d8000-7f17f50d9000 ---p 00000000 00:00 0 
+7f17f50d9000-7f17f51d9000 rw-p 00000000 00:00 0 
+7f17f51d9000-7f17f51dc000 ---p 00000000 00:00 0 
+7f17f51dc000-7f17f52da000 rw-p 00000000 00:00 0 
+7f17f52da000-7f17f52dd000 ---p 00000000 00:00 0 
+7f17f52dd000-7f17f53db000 rw-p 00000000 00:00 0 
+7f17f53db000-7f17f53de000 ---p 00000000 00:00 0 
+7f17f53de000-7f17f54dc000 rw-p 00000000 00:00 0 
+7f17f54dc000-7f17f54df000 ---p 00000000 00:00 0 
+7f17f54df000-7f17f55dd000 rw-p 00000000 00:00 0 
+7f17f55dd000-7f17f55e0000 ---p 00000000 00:00 0 
+7f17f55e0000-7f17f56de000 rw-p 00000000 00:00 0 
+7f17f56de000-7f17f56e1000 ---p 00000000 00:00 0 
+7f17f56e1000-7f17f57df000 rw-p 00000000 00:00 0 
+7f17f57df000-7f17f5abb000 r--p 00000000 fd:01 8388673                    /usr/lib/locale/locale-archive
+7f17f5abb000-7f17f5abe000 ---p 00000000 00:00 0 
+7f17f5abe000-7f17f5bbc000 rw-p 00000000 00:00 0 
+7f17f5bbc000-7f17f5bbf000 ---p 00000000 00:00 0 
+7f17f5bbf000-7f17f5cbd000 rw-p 00000000 00:00 0 
+7f17f5cbd000-7f17f5cbe000 ---p 00000000 00:00 0 
+7f17f5cbe000-7f17f8000000 rw-p 00000000 00:00 0 
+7f17f8000000-7f17f8026000 rw-p 00000000 00:00 0 
+7f17f8026000-7f17fc000000 ---p 00000000 00:00 0 
+7f17fc000000-7f17fc005000 r--s 00024000 fd:01 10879725                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.reactivemongo/play2-reactivemongo_2.11/play2-reactivemongo_2.11-0.16.0-play26.jar
+7f17fc005000-7f17fc00d000 r--s 00071000 fd:01 10879877                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.apache.commons/commons-lang3/commons-lang3-3.6.jar
+7f17fc00d000-7f17fc25e000 rw-p 00000000 00:00 0 
+7f17fc25e000-7f17fc438000 r--s 03d68000 fd:01 8655391                    /usr/lib/jvm/java-8-oracle/jre/lib/rt.jar
+7f17fc438000-7f17fcbfc000 rw-p 00000000 00:00 0 
+7f17fcbfc000-7f17fcbfd000 ---p 00000000 00:00 0 
+7f17fcbfd000-7f17fccfd000 rw-p 00000000 00:00 0 
+7f17fccfd000-7f17fccfe000 ---p 00000000 00:00 0 
+7f17fccfe000-7f17fcdfe000 rw-p 00000000 00:00 0 
+7f17fcdfe000-7f17fcdff000 ---p 00000000 00:00 0 
+7f17fcdff000-7f17fceff000 rw-p 00000000 00:00 0 
+7f17fceff000-7f17fcf00000 ---p 00000000 00:00 0 
+7f17fcf00000-7f17fd000000 rw-p 00000000 00:00 0 
+7f17fd000000-7f17ff940000 rwxp 00000000 00:00 0 
+7f17ff940000-7f180c000000 ---p 00000000 00:00 0 
+7f180c000000-7f180ced6000 rw-p 00000000 00:00 0 
+7f180ced6000-7f1810000000 ---p 00000000 00:00 0 
+7f1810000000-7f1810001000 r--s 00004000 fd:01 11539009                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/play-netty-utils/play-netty-utils-2.6.20.jar
+7f1810001000-7f1810018000 r--s 00112000 fd:01 11538985                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/org.scala-lang.modules/scala-java8-compat_2.11/scala-java8-compat_2.11-0.8.0.jar
+7f1810018000-7f181008e000 rw-p 00000000 00:00 0 
+7f181008e000-7f181008f000 ---p 00000000 00:00 0 
+7f181008f000-7f181018f000 rw-p 00000000 00:00 0 
+7f181018f000-7f1810190000 ---p 00000000 00:00 0 
+7f1810190000-7f1810290000 rw-p 00000000 00:00 0 
+7f1810290000-7f1810291000 ---p 00000000 00:00 0 
+7f1810291000-7f1810391000 rw-p 00000000 00:00 0 
+7f1810391000-7f1810392000 ---p 00000000 00:00 0 
+7f1810392000-7f1810536000 rw-p 00000000 00:00 0 
+7f1810536000-7f18109c0000 ---p 00000000 00:00 0 
+7f18109c0000-7f1810a64000 rw-p 00000000 00:00 0 
+7f1810a64000-7f1810eed000 ---p 00000000 00:00 0 
+7f1810eed000-7f18110fc000 rw-p 00000000 00:00 0 
+7f18110fc000-7f1811184000 ---p 00000000 00:00 0 
+7f1811184000-7f181122a000 rw-p 00000000 00:00 0 
+7f181122a000-7f1811545000 ---p 00000000 00:00 0 
+7f1811545000-7f1811560000 r-xp 00000000 fd:01 8655500                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libzip.so
+7f1811560000-7f1811760000 ---p 0001b000 fd:01 8655500                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libzip.so
+7f1811760000-7f1811761000 rw-p 0001b000 fd:01 8655500                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libzip.so
+7f1811761000-7f181176c000 r-xp 00000000 fd:01 26744039                   /lib/x86_64-linux-gnu/libnss_files-2.26.so
+7f181176c000-7f181196b000 ---p 0000b000 fd:01 26744039                   /lib/x86_64-linux-gnu/libnss_files-2.26.so
+7f181196b000-7f181196c000 r--p 0000a000 fd:01 26744039                   /lib/x86_64-linux-gnu/libnss_files-2.26.so
+7f181196c000-7f181196d000 rw-p 0000b000 fd:01 26744039                   /lib/x86_64-linux-gnu/libnss_files-2.26.so
+7f181196d000-7f1811973000 rw-p 00000000 00:00 0 
+7f1811973000-7f181197e000 r-xp 00000000 fd:01 26744041                   /lib/x86_64-linux-gnu/libnss_nis-2.26.so
+7f181197e000-7f1811b7d000 ---p 0000b000 fd:01 26744041                   /lib/x86_64-linux-gnu/libnss_nis-2.26.so
+7f1811b7d000-7f1811b7e000 r--p 0000a000 fd:01 26744041                   /lib/x86_64-linux-gnu/libnss_nis-2.26.so
+7f1811b7e000-7f1811b7f000 rw-p 0000b000 fd:01 26744041                   /lib/x86_64-linux-gnu/libnss_nis-2.26.so
+7f1811b7f000-7f1811b96000 r-xp 00000000 fd:01 26744036                   /lib/x86_64-linux-gnu/libnsl-2.26.so
+7f1811b96000-7f1811d95000 ---p 00017000 fd:01 26744036                   /lib/x86_64-linux-gnu/libnsl-2.26.so
+7f1811d95000-7f1811d96000 r--p 00016000 fd:01 26744036                   /lib/x86_64-linux-gnu/libnsl-2.26.so
+7f1811d96000-7f1811d97000 rw-p 00017000 fd:01 26744036                   /lib/x86_64-linux-gnu/libnsl-2.26.so
+7f1811d97000-7f1811d99000 rw-p 00000000 00:00 0 
+7f1811d99000-7f1811da1000 r-xp 00000000 fd:01 26744037                   /lib/x86_64-linux-gnu/libnss_compat-2.26.so
+7f1811da1000-7f1811fa0000 ---p 00008000 fd:01 26744037                   /lib/x86_64-linux-gnu/libnss_compat-2.26.so
+7f1811fa0000-7f1811fa1000 r--p 00007000 fd:01 26744037                   /lib/x86_64-linux-gnu/libnss_compat-2.26.so
+7f1811fa1000-7f1811fa2000 rw-p 00008000 fd:01 26744037                   /lib/x86_64-linux-gnu/libnss_compat-2.26.so
+7f1811fa2000-7f1811fcd000 r-xp 00000000 fd:01 8655494                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libjava.so
+7f1811fcd000-7f18121cc000 ---p 0002b000 fd:01 8655494                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libjava.so
+7f18121cc000-7f18121ce000 rw-p 0002a000 fd:01 8655494                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libjava.so
+7f18121ce000-7f18121db000 r-xp 00000000 fd:01 8655499                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libverify.so
+7f18121db000-7f18123db000 ---p 0000d000 fd:01 8655499                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libverify.so
+7f18123db000-7f18123dd000 rw-p 0000d000 fd:01 8655499                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/libverify.so
+7f18123dd000-7f18123e4000 r-xp 00000000 fd:01 26744046                   /lib/x86_64-linux-gnu/librt-2.26.so
+7f18123e4000-7f18125e3000 ---p 00007000 fd:01 26744046                   /lib/x86_64-linux-gnu/librt-2.26.so
+7f18125e3000-7f18125e4000 r--p 00006000 fd:01 26744046                   /lib/x86_64-linux-gnu/librt-2.26.so
+7f18125e4000-7f18125e5000 rw-p 00007000 fd:01 26744046                   /lib/x86_64-linux-gnu/librt-2.26.so
+7f18125e5000-7f181273a000 r-xp 00000000 fd:01 26744033                   /lib/x86_64-linux-gnu/libm-2.26.so
+7f181273a000-7f1812939000 ---p 00155000 fd:01 26744033                   /lib/x86_64-linux-gnu/libm-2.26.so
+7f1812939000-7f181293a000 r--p 00154000 fd:01 26744033                   /lib/x86_64-linux-gnu/libm-2.26.so
+7f181293a000-7f181293b000 rw-p 00155000 fd:01 26744033                   /lib/x86_64-linux-gnu/libm-2.26.so
+7f181293b000-7f1813614000 r-xp 00000000 fd:01 8917588                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/server/libjvm.so
+7f1813614000-7f1813813000 ---p 00cd9000 fd:01 8917588                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/server/libjvm.so
+7f1813813000-7f18138ed000 rw-p 00cd8000 fd:01 8917588                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/server/libjvm.so
+7f18138ed000-7f1813938000 rw-p 00000000 00:00 0 
+7f1813938000-7f1813b0e000 r-xp 00000000 fd:01 26743152                   /lib/x86_64-linux-gnu/libc-2.26.so
+7f1813b0e000-7f1813d0e000 ---p 001d6000 fd:01 26743152                   /lib/x86_64-linux-gnu/libc-2.26.so
+7f1813d0e000-7f1813d12000 r--p 001d6000 fd:01 26743152                   /lib/x86_64-linux-gnu/libc-2.26.so
+7f1813d12000-7f1813d14000 rw-p 001da000 fd:01 26743152                   /lib/x86_64-linux-gnu/libc-2.26.so
+7f1813d14000-7f1813d18000 rw-p 00000000 00:00 0 
+7f1813d18000-7f1813d1b000 r-xp 00000000 fd:01 26744032                   /lib/x86_64-linux-gnu/libdl-2.26.so
+7f1813d1b000-7f1813f1a000 ---p 00003000 fd:01 26744032                   /lib/x86_64-linux-gnu/libdl-2.26.so
+7f1813f1a000-7f1813f1b000 r--p 00002000 fd:01 26744032                   /lib/x86_64-linux-gnu/libdl-2.26.so
+7f1813f1b000-7f1813f1c000 rw-p 00003000 fd:01 26744032                   /lib/x86_64-linux-gnu/libdl-2.26.so
+7f1813f1c000-7f1813f32000 r-xp 00000000 fd:01 8783724                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/jli/libjli.so
+7f1813f32000-7f1814131000 ---p 00016000 fd:01 8783724                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/jli/libjli.so
+7f1814131000-7f1814132000 rw-p 00015000 fd:01 8783724                    /usr/lib/jvm/java-8-oracle/jre/lib/amd64/jli/libjli.so
+7f1814132000-7f181414c000 r-xp 00000000 fd:01 26744044                   /lib/x86_64-linux-gnu/libpthread-2.26.so
+7f181414c000-7f181434b000 ---p 0001a000 fd:01 26744044                   /lib/x86_64-linux-gnu/libpthread-2.26.so
+7f181434b000-7f181434c000 r--p 00019000 fd:01 26744044                   /lib/x86_64-linux-gnu/libpthread-2.26.so
+7f181434c000-7f181434d000 rw-p 0001a000 fd:01 26744044                   /lib/x86_64-linux-gnu/libpthread-2.26.so
+7f181434d000-7f1814351000 rw-p 00000000 00:00 0 
+7f1814351000-7f1814378000 r-xp 00000000 fd:01 26738706                   /lib/x86_64-linux-gnu/ld-2.26.so
+7f1814378000-7f1814379000 r--s 00000000 fd:01 10487323                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.typesafe.play/build-link/build-link-2.6.20.jar
+7f1814379000-7f181437c000 r--s 0000a000 fd:01 11668684                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/javax.cache/cache-api/cache-api-1.0.0.jar
+7f181437c000-7f181437d000 r--s 00000000 fd:01 11669012                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/javax.inject/javax.inject/javax.inject-1.jar
+7f181437d000-7f181437e000 r--s 00003000 fd:01 11668734                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/javax.transaction/jta/jta-1.1.jar
+7f181437e000-7f1814382000 r--s 00018000 fd:01 11538999                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/io.jsonwebtoken/jjwt/jjwt-0.7.0.jar
+7f1814382000-7f1814383000 r--s 00000000 fd:01 11668700                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.codehaus.mojo/animal-sniffer-annotations/animal-sniffer-annotations-1.14.jar
+7f1814383000-7f1814385000 r--s 00001000 fd:01 11668712                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.google.j2objc/j2objc-annotations/j2objc-annotations-1.1.jar
+7f1814385000-7f1814386000 r--s 00002000 fd:01 11668771                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/com.google.errorprone/error_prone_annotations/error_prone_annotations-2.0.18.jar
+7f1814386000-7f1814387000 r--s 00000000 fd:01 11538996                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.typelevel/macro-compat_2.11/macro-compat_2.11-1.1.1.jar
+7f1814387000-7f1814389000 r--s 00003000 fd:01 11668626                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.slf4j/jcl-over-slf4j/jcl-over-slf4j-1.7.25.jar
+7f1814389000-7f181438b000 r--s 00000000 fd:01 11668628                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.slf4j/jul-to-slf4j/jul-to-slf4j-1.7.25.jar
+7f181438b000-7f181445c000 rw-p 00000000 00:00 0 
+7f181445c000-7f181445f000 ---p 00000000 00:00 0 
+7f181445f000-7f1814561000 rw-p 00000000 00:00 0 
+7f1814561000-7f1814562000 r--s 00000000 fd:01 11668284                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.reactivestreams/reactive-streams/reactive-streams-1.0.2.jar
+7f1814562000-7f1814564000 r--s 00009000 fd:01 11668244                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.slf4j/slf4j-api/slf4j-api-1.7.25.jar
+7f1814564000-7f181456e000 r--s 0009a000 fd:01 11668239                   /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/org.scala-lang.modules/scala-xml_2.11/scala-xml_2.11-1.0.6.jar
+7f181456e000-7f1814576000 rw-s 00000000 fd:01 15477573                   /tmp/hsperfdata_matthew/25128
+7f1814576000-7f1814577000 rw-p 00000000 00:00 0 
+7f1814577000-7f1814578000 ---p 00000000 00:00 0 
+7f1814578000-7f1814579000 r--p 00027000 fd:01 26738706                   /lib/x86_64-linux-gnu/ld-2.26.so
+7f1814579000-7f181457a000 rw-p 00028000 fd:01 26738706                   /lib/x86_64-linux-gnu/ld-2.26.so
+7f181457a000-7f181457b000 rw-p 00000000 00:00 0 
+7ffc26264000-7ffc2628c000 rw-p 00000000 00:00 0                          [stack]
+7ffc26359000-7ffc2635c000 r--p 00000000 00:00 0                          [vvar]
+7ffc2635c000-7ffc2635e000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+
+VM Arguments:
+jvm_args: -Djna.nosys=true -Dconfig.resource=test.application.conf 
+java_command: sbt.ForkMain 44161
+java_class_path (initial): /home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/target/scala-2.11/test-classes:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/target/web/classes/test:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/target/scala-2.11/classes:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/target/web/classes/main:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scala-lang/scala-library/scala-library-2.11.11.jar:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/org.scala-lang.modules/scala-xml_2.11/scala-xml_2.11-1.0.6.jar:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.slf4j/slf4j-api/slf4j-api-1.7.25.jar:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.slf4j/jul-to-slf4j/jul-to-slf4j-1.7.25.jar:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.slf4j/jcl-over-slf4j/jcl-over-slf4j-1.7.25.jar:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.reactivestreams/reactive-streams/reactive-streams-1.0.2.jar:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/bundles/org.scala-lang.modules/scala-java8-compat_2.11/scala-java8-compat_2.11-0.8.0.jar:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.scala-lang/scala-reflect/scala-reflect-2.11.11.jar:/home/matthew/Applications/hmrc-development-environment/hmrc/employee-expenses-frontend/lib_managed/jars/org.typelevel/macro-compat_2.11/macro-compat_2.11-1.1.1.jar:/home/matthew/Applications/hmrc-development-en
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=/usr/lib/jvm/java-8-oracle
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin
+USERNAME=matthew
+SHELL=/bin/bash
+DISPLAY=:0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0xad0890], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGBUS: [libjvm.so+0xad0890], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGFPE: [libjvm.so+0x928640], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGPIPE: [libjvm.so+0x928640], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGXFSZ: [libjvm.so+0x928640], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGILL: [libjvm.so+0x928640], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGUSR1: SIG_DFL, sa_mask[0]=00000000000000000000000000000000, sa_flags=none
+SIGUSR2: [libjvm.so+0x929ea0], sa_mask[0]=00100000000000000000000000000000, sa_flags=SA_RESTART|SA_SIGINFO
+SIGHUP: [libjvm.so+0x92b2a0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGINT: [libjvm.so+0x92b2a0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGTERM: [libjvm.so+0x92b2a0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+SIGQUIT: [libjvm.so+0x92b2a0], sa_mask[0]=11111111011111111101111111111110, sa_flags=SA_RESTART|SA_SIGINFO
+
+
+---------------  S Y S T E M  ---------------
+
+OS:DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=17.10
+DISTRIB_CODENAME=artful
+DISTRIB_DESCRIPTION="Ubuntu 17.10"
+
+uname:Linux 4.13.0-46-generic #51-Ubuntu SMP Tue Jun 12 12:36:29 UTC 2018 x86_64
+libc:glibc 2.26 NPTL 2.26 
+rlimit: STACK 8192k, CORE 0k, NPROC 63250, NOFILE 4096, AS infinity
+load average:5.93 3.69 2.05
+
+/proc/meminfo:
+MemTotal:       16283760 kB
+MemFree:          152152 kB
+MemAvailable:      81396 kB
+Buffers:           12184 kB
+Cached:           438608 kB
+SwapCached:         6984 kB
+Active:         14203292 kB
+Inactive:        1398372 kB
+Active(anon):   14129460 kB
+Inactive(anon):  1329380 kB
+Active(file):      73832 kB
+Inactive(file):    68992 kB
+Unevictable:         288 kB
+Mlocked:             288 kB
+SwapTotal:      16601084 kB
+SwapFree:           4196 kB
+Dirty:              1964 kB
+Writeback:           276 kB
+AnonPages:      15146632 kB
+Mapped:           294472 kB
+Shmem:            307180 kB
+Slab:             178896 kB
+SReclaimable:      70332 kB
+SUnreclaim:       108564 kB
+KernelStack:       52740 kB
+PageTables:       167208 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    24742964 kB
+Committed_AS:   49582232 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:           0 kB
+VmallocChunk:          0 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+CmaTotal:              0 kB
+CmaFree:               0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+DirectMap4k:      493096 kB
+DirectMap2M:    15095808 kB
+DirectMap1G:     1048576 kB
+
+
+CPU:total 8 (initial active 8) (4 cores per cpu, 2 threads per core) family 6 model 94 stepping 3, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, rtm, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+/proc/cpuinfo:
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 94
+model name	: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+stepping	: 3
+microcode	: 0xc6
+cpu MHz		: 2696.151
+cache size	: 6144 KB
+physical id	: 0
+siblings	: 8
+core id		: 0
+cpu cores	: 4
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti retpoline intel_pt rsb_ctxsw spec_ctrl ssbd tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.00
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 94
+model name	: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+stepping	: 3
+microcode	: 0xc6
+cpu MHz		: 2697.794
+cache size	: 6144 KB
+physical id	: 0
+siblings	: 8
+core id		: 1
+cpu cores	: 4
+apicid		: 2
+initial apicid	: 2
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti retpoline intel_pt rsb_ctxsw spec_ctrl ssbd tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.00
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 2
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 94
+model name	: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+stepping	: 3
+microcode	: 0xc6
+cpu MHz		: 2695.713
+cache size	: 6144 KB
+physical id	: 0
+siblings	: 8
+core id		: 2
+cpu cores	: 4
+apicid		: 4
+initial apicid	: 4
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti retpoline intel_pt rsb_ctxsw spec_ctrl ssbd tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.00
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 3
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 94
+model name	: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+stepping	: 3
+microcode	: 0xc6
+cpu MHz		: 2696.386
+cache size	: 6144 KB
+physical id	: 0
+siblings	: 8
+core id		: 3
+cpu cores	: 4
+apicid		: 6
+initial apicid	: 6
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti retpoline intel_pt rsb_ctxsw spec_ctrl ssbd tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.00
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 4
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 94
+model name	: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+stepping	: 3
+microcode	: 0xc6
+cpu MHz		: 2696.780
+cache size	: 6144 KB
+physical id	: 0
+siblings	: 8
+core id		: 0
+cpu cores	: 4
+apicid		: 1
+initial apicid	: 1
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti retpoline intel_pt rsb_ctxsw spec_ctrl ssbd tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.00
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 5
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 94
+model name	: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+stepping	: 3
+microcode	: 0xc6
+cpu MHz		: 2695.802
+cache size	: 6144 KB
+physical id	: 0
+siblings	: 8
+core id		: 1
+cpu cores	: 4
+apicid		: 3
+initial apicid	: 3
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti retpoline intel_pt rsb_ctxsw spec_ctrl ssbd tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.00
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 6
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 94
+model name	: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+stepping	: 3
+microcode	: 0xc6
+cpu MHz		: 2694.322
+cache size	: 6144 KB
+physical id	: 0
+siblings	: 8
+core id		: 2
+cpu cores	: 4
+apicid		: 5
+initial apicid	: 5
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti retpoline intel_pt rsb_ctxsw spec_ctrl ssbd tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.00
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+processor	: 7
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 94
+model name	: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+stepping	: 3
+microcode	: 0xc6
+cpu MHz		: 2695.854
+cache size	: 6144 KB
+physical id	: 0
+siblings	: 8
+core id		: 3
+cpu cores	: 4
+apicid		: 7
+initial apicid	: 7
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 22
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb invpcid_single pti retpoline intel_pt rsb_ctxsw spec_ctrl ssbd tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+bugs		: cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass
+bogomips	: 5184.00
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+
+
+Memory: 4k page, physical 16283760k(149132k free), swap 16601084k(156k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.171-b11) for linux-amd64 JRE (1.8.0_171-b11), built on Mar 28 2018 17:07:08 by "java_re" with gcc 4.3.0 20080428 (Red Hat 4.3.0-8)
+
+time: Wed Feb 20 12:15:18 2019
+elapsed time: 23 seconds (0d 0h 0m 23s)
+

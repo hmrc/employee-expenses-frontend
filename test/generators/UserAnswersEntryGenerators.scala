@@ -38,6 +38,14 @@ import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
+  implicit lazy val arbitraryAlreadyClaimingFREUserAnswersEntry: Arbitrary[(AlreadyClaimingFREPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[AlreadyClaimingFREPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
   implicit lazy val arbitraryRemoveFRECodeUserAnswersEntry: Arbitrary[(RemoveFRECodePage.type, JsValue)] =
     Arbitrary {
       for {

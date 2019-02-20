@@ -35,6 +35,9 @@ import pages.printing._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryAlreadyClaimingFREPage: Arbitrary[AlreadyClaimingFREPage.type] =
+    Arbitrary(AlreadyClaimingFREPage)
+
   implicit lazy val arbitraryRemoveFRECodePage: Arbitrary[RemoveFRECodePage.type] =
     Arbitrary(RemoveFRECodePage)
 

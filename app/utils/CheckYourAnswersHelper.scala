@@ -31,6 +31,11 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def alreadyClaimingFRE: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFREPage) map {
+    x => AnswerRow("alreadyClaimingFRE.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      AlreadyClaimingFREController.onPageLoad(CheckMode).url)
+  }
+
   def industryAnswerRow(industry: String): Option[AnswerRow] = {
     Some(AnswerRow("industryType.checkYourAnswersLabel", industry, true,
       FirstIndustryOptionsController.onPageLoad(CheckMode).url
