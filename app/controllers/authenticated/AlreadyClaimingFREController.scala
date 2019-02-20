@@ -22,6 +22,7 @@ import forms.authenticated.AlreadyClaimingFREFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.authenticated.AlreadyClaimingFREPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -54,22 +55,27 @@ class AlreadyClaimingFREController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode))
+      request.userAnswers.get(ClaimAmount) match {
+        case Some(amount) => Ok(view(preparedForm, mode, amount))
+        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+      }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AlreadyClaimingFREPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AlreadyClaimingFREPage, mode)(updatedAnswers))
-        }
-      )
+      request.userAnswers.get(ClaimAmount) match {
+        case Some(amount) =>
+          form.bindFromRequest().fold(
+            (formWithErrors: Form[_]) =>
+              Future.successful(BadRequest(view(formWithErrors, mode, amount))),
+            value => {
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(AlreadyClaimingFREPage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(AlreadyClaimingFREPage, mode)(updatedAnswers))
+            }
+          )
+        case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+      }
   }
 }

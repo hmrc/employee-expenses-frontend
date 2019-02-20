@@ -22,7 +22,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, amount: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("alreadyClaimingFRE.title")}"
@@ -36,10 +36,20 @@
 
         @components.heading("alreadyClaimingFRE.heading")
 
+        <p>@messages("alreadyClaimingFRE.bodyText", amount)</p>
+
+        @components.numeric_table(
+            Seq(Map("TaxYear" -> 123)),
+            messages("alreadyClaimingFRE.tableTaxYearHeading"),
+            messages("alreadyClaimingFRE.tableAmountHeading")
+        )
+
         @components.input_yes_no(
             field = form("value"),
-            label = messages("alreadyClaimingFRE.heading"),
-            labelClass = Some("visually-hidden")
+            label = messages("alreadyClaimingFRE.radioLabel"),
+            labelClass = Some("heading-medium"),
+            altNoText = Some(messages("alreadyClaimingFRE.altYesText")),
+            altYesText = Some(messages("alreadyClaimingFRE.altNoText"))
         )
 
         @components.submit_button()

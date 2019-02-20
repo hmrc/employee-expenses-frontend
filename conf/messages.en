@@ -592,8 +592,14 @@ phoneUs.paragraph.linkText = call HMRC
 
 industryType.checkYourAnswersLabel = What industry do you work in?
 
+alreadyClaimingFRE.title = You are already claiming this
+alreadyClaimingFRE.heading = You are already claiming this
+alreadyClaimingFRE.checkYourAnswersLabel = You are already claiming this
+alreadyClaimingFRE.error.required = Select yes if you want to keep claiming this amount
+alreadyClaimingFRE.bodyText = Based on the information HMRC holds, you are already earning an extra £{0} before you pay tax.
+alreadyClaimingFRE.radioLabel = What do you want to do?
+alreadyClaimingFRE.altYesText = Keep claiming this amount
+alreadyClaimingFRE.altNoText = Stop claiming this amount
+alreadyClaimingFRE.tableTaxYearHeading = Tax year
+alreadyClaimingFRE.tableAmountHeading = Amount you are earning
 
-alreadyClaimingFRE.title = alreadyClaimingFRE
-alreadyClaimingFRE.heading = alreadyClaimingFRE
-alreadyClaimingFRE.checkYourAnswersLabel = alreadyClaimingFRE
-alreadyClaimingFRE.error.required = Select yes if alreadyClaimingFRE
