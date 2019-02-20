@@ -31,6 +31,10 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def sameEmployerContributionAllYears: Option[AnswerRow] = userAnswers.get(SameEmployerContributionAllYearsPage) map {
+    x => AnswerRow("sameEmployerContributionAllYears.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, SameEmployerContributionAllYearsController.onPageLoad(CheckMode).url)
+  }
+
   def industryAnswerRow(industry: String): Option[AnswerRow] = {
     Some(AnswerRow("industryType.checkYourAnswersLabel", industry, true,
       FirstIndustryOptionsController.onPageLoad(CheckMode).url

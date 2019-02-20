@@ -592,3 +592,8 @@ phoneUs.paragraph.linkText = call HMRC
 
 industryType.checkYourAnswersLabel = What industry do you work in?
 
+
+sameEmployerContributionAllYears.title = sameEmployerContributionAllYears
+sameEmployerContributionAllYears.heading = sameEmployerContributionAllYears
+sameEmployerContributionAllYears.checkYourAnswersLabel = sameEmployerContributionAllYears
+sameEmployerContributionAllYears.error.required = Select yes if sameEmployerContributionAllYears
