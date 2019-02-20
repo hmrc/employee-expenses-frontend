@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package views
+package views.authenticated
 
-import controllers.routes
-import forms.AlreadyClaimingFREFormProvider
+import controllers.authenticated.routes
+import forms.authenticated.AlreadyClaimingFREFormProvider
 import models.NormalMode
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.AlreadyClaimingFREView
+import views.html.authenticated.AlreadyClaimingFREView
 
 class AlreadyClaimingFREViewSpec extends YesNoViewBehaviours {
 

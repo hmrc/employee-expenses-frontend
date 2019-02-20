@@ -18,8 +18,7 @@ package generators
 
 import org.scalacheck.Arbitrary
 import pages._
-import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
-import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated.{AlreadyClaimingFREPage, RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage}
 import pages.clothing._
 import pages.construction._
 import pages.electrical.ElectricalPage

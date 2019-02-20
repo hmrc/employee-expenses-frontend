@@ -20,8 +20,7 @@ import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
-import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
-import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated.{AlreadyClaimingFREPage, RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage}
 import pages.clothing.ClothingPage
 import pages.construction._
 import pages.electrical.ElectricalPage

@@ -314,7 +314,7 @@ POST        /change-tax-year-expense-end                         controllers.aut
 
 GET         /phone-us                                            controllers.authenticated.PhoneUsController.onPageLoad()
 
-GET        /alreadyClaimingFRE                        controllers.AlreadyClaimingFREController.onPageLoad(mode: Mode = NormalMode)
-POST       /alreadyClaimingFRE                        controllers.AlreadyClaimingFREController.onSubmit(mode: Mode = NormalMode)
-GET        /changeAlreadyClaimingFRE                  controllers.AlreadyClaimingFREController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeAlreadyClaimingFRE                  controllers.AlreadyClaimingFREController.onSubmit(mode: Mode = CheckMode)
+GET         /already-claiming-flat-rate-expense                  controllers.authenticated.AlreadyClaimingFREController.onPageLoad(mode: Mode = NormalMode)
+POST        /already-claiming-flat-rate-expense                  controllers.authenticated.AlreadyClaimingFREController.onSubmit(mode: Mode = NormalMode)
+GET         /change-already-claiming-flat-rate-expense           controllers.authenticated.AlreadyClaimingFREController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-already-claiming-flat-rate-expense           controllers.authenticated.AlreadyClaimingFREController.onSubmit(mode: Mode = CheckMode)

@@ -14,32 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package pages.authenticated
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class AlreadyClaimingFREFormProviderSpec extends BooleanFieldBehaviours {
+case object AlreadyClaimingFREPage extends QuestionPage[Boolean] {
 
-  val requiredKey = "alreadyClaimingFRE.error.required"
-  val invalidKey = "error.boolean"
+  override def path: JsPath = JsPath \ toString
 
-  val form = new AlreadyClaimingFREFormProvider()()
-
-  ".value" must {
-
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
+  override def toString: String = "alreadyClaimingFRE"
 }

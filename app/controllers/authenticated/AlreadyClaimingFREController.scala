@@ -14,33 +14,34 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.authenticated
 
+import config.NavConstant
 import controllers.actions._
-import forms.AlreadyClaimingFREFormProvider
+import forms.authenticated.AlreadyClaimingFREFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.AlreadyClaimingFREPage
+import pages.authenticated.AlreadyClaimingFREPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.AlreadyClaimingFREView
+import views.html.authenticated.AlreadyClaimingFREView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AlreadyClaimingFREController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
-                                         identify: IdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: AlreadyClaimingFREFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: AlreadyClaimingFREView
+                                              override val messagesApi: MessagesApi,
+                                              sessionRepository: SessionRepository,
+                                              @Named(NavConstant.authenticated) navigator: Navigator,
+                                              identify: IdentifierAction,
+                                              getData: DataRetrievalAction,
+                                              requireData: DataRequiredAction,
+                                              formProvider: AlreadyClaimingFREFormProvider,
+                                              val controllerComponents: MessagesControllerComponents,
+                                              view: AlreadyClaimingFREView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -56,7 +57,7 @@ class AlreadyClaimingFREController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(

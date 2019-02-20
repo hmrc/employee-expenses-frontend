@@ -14,17 +14,32 @@
  * limitations under the License.
  */
 
-package forms
+package forms.authenticated
 
-import javax.inject.Inject
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class AlreadyClaimingFREFormProviderSpec extends BooleanFieldBehaviours {
 
-class AlreadyClaimingFREFormProvider @Inject() extends Mappings {
+  val requiredKey = "alreadyClaimingFRE.error.required"
+  val invalidKey = "error.boolean"
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("alreadyClaimingFRE.error.required")
+  val form = new AlreadyClaimingFREFormProvider()()
+
+  ".value" must {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
     )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }
