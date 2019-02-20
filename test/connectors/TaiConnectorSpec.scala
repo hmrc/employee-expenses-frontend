@@ -115,7 +115,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     }
 
     "return a 400 when a invalid nino or tax year is submitted" in {
-      val invalidTaxYear = TaxYear(taxYear.year + 2)
+      val invalidTaxYear = TaiTaxYear(taxYear.year + 2)
 
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/tax-account/${invalidTaxYear.year}/expenses/flat-rate-expenses"))
