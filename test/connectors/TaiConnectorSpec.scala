@@ -110,7 +110,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
       whenReady(result) {
         result =>
-          result mustBe OK
+          result.status mustBe OK
       }
     }
 
