@@ -32,20 +32,20 @@ import views.html.MultipleEmploymentsView
 import scala.concurrent.{ExecutionContext, Future}
 
 class MultipleEmploymentsController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: MultipleEmploymentsFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: MultipleEmploymentsView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               override val messagesApi: MessagesApi,
+                                               sessionRepository: SessionRepository,
+                                               @Named("Generic") navigator: Navigator,
+                                               identify: UnauthenticatedIdentifierAction,
+                                               getData: DataRetrievalAction,
+                                               requireData: DataRequiredAction,
+                                               formProvider: MultipleEmploymentsFormProvider,
+                                               val controllerComponents: MessagesControllerComponents,
+                                               view: MultipleEmploymentsView
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(MultipleEmploymentsPage) match {
@@ -53,7 +53,7 @@ class MultipleEmploymentsController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode))
+      Future.successful(Ok(view(preparedForm, mode)))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -66,7 +66,7 @@ class MultipleEmploymentsController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(MultipleEmploymentsPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(MultipleEmploymentsPage, mode)(updatedAnswers))
         }
       )

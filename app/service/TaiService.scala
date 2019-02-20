@@ -18,7 +18,8 @@ package service
 
 import com.google.inject.Inject
 import connectors.{CitizenDetailsConnector, TaiConnector}
-import models.{IabdUpdateData, TaxCodeRecord, TaiTaxYear}
+import models.FlatRateExpenseOptions._
+import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaiTaxYear, TaxCodeRecord}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -32,10 +33,38 @@ class TaiService @Inject()(taiConnector: TaiConnector,
     taiConnector.taiTaxCodeRecords(nino)
   }
 
+  def getAllFlatRateExpenses(nino: String, taxYears: Seq[TaiTaxYear]): Future[Seq[HttpResponse]] = {
+    val getAllFRE = taxYears map {
+      taxYear =>
+        taiConnector.getFlatRateExpense(nino, taxYear)
+    }
+
+    Future.sequence(getAllFRE)
+  }
+
   def updateFRE(nino: String, year: TaiTaxYear, expensesData: IabdUpdateData): Future[HttpResponse] = {
     citizenDetailsConnector.getEtag(nino).flatMap {
       etag => taiConnector.taiFREUpdate(nino, year, etag, expensesData)
     }
   }
 
+  def freResponse(taxYears: Seq[TaiTaxYear], nino: String, claimAmount: Int): Future[FlatRateExpenseOptions] = {
+
+    getAllFlatRateExpenses(nino, taxYears).map {
+      case flatRateExpenses if flatRateExpenses.forall(_.status == 404) => FRENoYears
+      case flatRateExpenses if flatRateExpenses.forall(_.status == 200) =>
+        freResponseLogic(flatRateExpenses.map(_.json.as[FlatRateExpense]), claimAmount)
+      case _ => TechnicalDifficulties
+    }
+  }
+
+  def freResponseLogic(fre: Seq[FlatRateExpense], claimAmount: Int): FlatRateExpenseOptions = {
+    fre match {
+      case flatRateExpenses if flatRateExpenses.forall(_.grossAmount == claimAmount) =>
+        FREAllYearsAllAmountsSameAsClaimAmount
+      case flatRateExpenses if flatRateExpenses.forall(_.grossAmount != claimAmount) =>
+        FREAllYearsAllAmountsDifferentToClaimAmount
+      case _ => ComplexClaim
+    }
+  }
 }

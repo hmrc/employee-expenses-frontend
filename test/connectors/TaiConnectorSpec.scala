@@ -26,8 +26,8 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
-import uk.gov.hmrc.http.HttpResponse
+import play.api.libs.json.{JsValue, Json}
+import uk.gov.hmrc.http._
 import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -95,6 +95,79 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     }
   }
 
+  "getFlatRateExpense" must {
+    "return a flatRateExpense on a 200 response" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withBody(validFlatRateJson.toString)
+          )
+      )
+
+      val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result.status mustBe OK
+      }
+    }
+
+    "return a 400 when a invalid nino or tax year is submitted" in {
+      val invalidTaxYear = TaiTaxYear(taxYear.year + 2)
+
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${invalidTaxYear.year}/expenses/flat-rate-expenses"))
+          .willReturn(
+            aResponse()
+              .withStatus(BAD_REQUEST)
+          )
+      )
+
+      val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, invalidTaxYear)
+
+      whenReady(result.failed) {
+        result =>
+          result mustBe an[BadRequestException]
+      }
+    }
+
+    "return a 404 when no data is found" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
+          .willReturn(
+            aResponse()
+              .withStatus(NOT_FOUND)
+          )
+      )
+
+      val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+
+      whenReady(result.failed) {
+        result =>
+          result mustBe an[NotFoundException]
+      }
+    }
+
+    "return a 500 when DES is unavailable" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
+          .willReturn(
+            aResponse()
+              .withStatus(INTERNAL_SERVER_ERROR)
+          )
+      )
+
+      val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+
+      whenReady(result.failed) {
+        result =>
+          result mustBe an[Upstream5xxResponse]
+      }
+    }
+  }
+
   "taiFREUpdate" must {
     "return a 200 on success" in {
       server.stubFor(
@@ -133,7 +206,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     }
   }
 
-  val validJson = Json.parse(
+  val validJson: JsValue = Json.parse(
     """{
       															 |  "data" : {
       															 |    "current": [{
@@ -161,5 +234,21 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       															 |  },
       															 |  "links" : [ ]
       															 |}""".stripMargin)
+
+  val validFlatRateJson: JsValue = Json.parse(
+    """
+      |   {
+      |        "nino": "AB123456A",
+      |        "sequenceNumber": 201600003,
+      |        "taxYear": 2018,
+      |        "type": 56,
+      |        "source": 26,
+      |        "grossAmount": 120,
+      |        "receiptDate": null,
+      |        "captureDate": null,
+      |        "typeDescription": "Flat Rate Job Expenses",
+      |        "netAmount": null
+      |   }
+      |""".stripMargin)
 
 }
