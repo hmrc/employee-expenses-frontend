@@ -100,7 +100,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SecondIndustryOptionsController from FirstIndustryOptionsPage when NoneOfTheAbove is selected" in {
-        val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.NoneOfTheAbove).success.value
+        val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.NoneOfAbove).success.value
 
         navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
           controllers.routes.SecondIndustryOptionsController.onPageLoad(NormalMode)
@@ -255,7 +255,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go EmployerContributionController from FourthIndustryOptionsPage when 'NoneOfTheAbove' is selected" in {
-        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, FourthIndustryOptions.NoneOfTheAbove).success.value
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, FourthIndustryOptions.NoneOfAbove).success.value
 
         navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
           controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
@@ -277,14 +277,14 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to CannotClaimController from EmployerContributionPage when 'None' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, None).success.value
+        val answers = emptyUserAnswers.set(EmployerContributionPage, NoContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
           controllers.routes.ClaimAmountController.onPageLoad()
       }
 
       "go to CannotClaimController from EmployerContributionPage when 'Some' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, Some).success.value
+        val answers = emptyUserAnswers.set(EmployerContributionPage, SomeContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
           controllers.routes.ExpensesEmployerPaidController.onPageLoad(NormalMode)

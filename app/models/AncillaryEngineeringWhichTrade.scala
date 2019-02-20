@@ -28,7 +28,7 @@ object AncillaryEngineeringWhichTrade extends Enumerable.Implicits {
   case object NoneOfTheAbove extends WithName("noneOfTheAbove") with AncillaryEngineeringWhichTrade
 
   val values: Seq[AncillaryEngineeringWhichTrade] = Seq(
-    PatternMaker, LabourerSupervisorOrUnskilledWorker, ApprenticeOrStorekeeper, NoneOfTheAbove
+    ApprenticeOrStorekeeper, LabourerSupervisorOrUnskilledWorker, PatternMaker, NoneOfTheAbove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {

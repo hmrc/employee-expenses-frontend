@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.ClaimAmountsConfig
+import config.ClaimAmounts
 import controllers.actions._
 import forms.ThirdIndustryOptionsFormProvider
 import javax.inject.{Inject, Named}
@@ -41,8 +41,7 @@ class ThirdIndustryOptionsController @Inject()(
                                                 requireData: DataRequiredAction,
                                                 formProvider: ThirdIndustryOptionsFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
-                                                view: ThirdIndustryOptionsView,
-                                                claimAmounts: ClaimAmountsConfig
+                                                view: ThirdIndustryOptionsView
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -68,7 +67,7 @@ class ThirdIndustryOptionsController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value))
-            newAnswers <- if (value == ThirdIndustryOptions.Education) Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.defaultRate)) else Future.successful(updatedAnswers)
+            newAnswers <- if (value == ThirdIndustryOptions.Education) Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate)) else Future.successful(updatedAnswers)
             _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(ThirdIndustryOptionsPage, mode)(newAnswers))
         }

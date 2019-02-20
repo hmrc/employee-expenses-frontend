@@ -16,7 +16,7 @@
 
 package controllers.engineering
 
-import config.ClaimAmountsConfig
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.engineering.ConstructionalEngineeringApprenticeFormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.engineering.ConstructionalEngineeringApprenticeView
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConstructionalEngineeringApprenticeController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Engineering") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: ConstructionalEngineeringApprenticeFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: ConstructionalEngineeringApprenticeView,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                               override val messagesApi: MessagesApi,
+                                                               sessionRepository: SessionRepository,
+                                                               @Named(NavConstant.engineering) navigator: Navigator,
+                                                               identify: UnauthenticatedIdentifierAction,
+                                                               getData: DataRetrievalAction,
+                                                               requireData: DataRequiredAction,
+                                                               formProvider: ConstructionalEngineeringApprenticeFormProvider,
+                                                               val controllerComponents: MessagesControllerComponents,
+                                                               view: ConstructionalEngineeringApprenticeView
+                                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -69,7 +68,7 @@ class ConstructionalEngineeringApprenticeController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionalEngineeringApprenticePage, value))
-            amount: Int = if (value) claimAmounts.ConstructionalEngineering.apprentice else claimAmounts.ConstructionalEngineering.allOther
+            amount: Int = if (value) ClaimAmounts.ConstructionalEngineering.apprentice else ClaimAmounts.ConstructionalEngineering.allOther
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
             _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(ConstructionalEngineeringApprenticePage, mode)(updatedAnswers))

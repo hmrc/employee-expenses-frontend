@@ -16,11 +16,13 @@
 
 package controllers.manufacturing
 
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.manufacturing.WoodFurnitureOccupationList1FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.manufacturing.WoodFurnitureOccupationList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,15 +34,15 @@ import views.html.manufacturing.WoodFurnitureOccupationList1View
 import scala.concurrent.{ExecutionContext, Future}
 
 class WoodFurnitureOccupationList1Controller @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Manufacturing") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: WoodFurnitureOccupationList1FormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: WoodFurnitureOccupationList1View
+                                                        override val messagesApi: MessagesApi,
+                                                        sessionRepository: SessionRepository,
+                                                        @Named(NavConstant.manufacturing) navigator: Navigator,
+                                                        identify: UnauthenticatedIdentifierAction,
+                                                        getData: DataRetrievalAction,
+                                                        requireData: DataRequiredAction,
+                                                        formProvider: WoodFurnitureOccupationList1FormProvider,
+                                                        val controllerComponents: MessagesControllerComponents,
+                                                        view: WoodFurnitureOccupationList1View
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,8 +68,13 @@ class WoodFurnitureOccupationList1Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WoodFurnitureOccupationList1Page, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(WoodFurnitureOccupationList1Page, mode)(updatedAnswers))
+            newUserAnswers <- if (value) {
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.list1))
+            } else {
+              Future.successful(updatedAnswers)
+            }
+            _              <- sessionRepository.set(newUserAnswers)
+          } yield Redirect(navigator.nextPage(WoodFurnitureOccupationList1Page, mode)(newUserAnswers))
         }
       )
   }

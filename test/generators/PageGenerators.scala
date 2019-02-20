@@ -18,7 +18,8 @@ package generators
 
 import org.scalacheck.Arbitrary
 import pages._
-import pages.authenticated.TaxYearSelectionPage
+import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
+import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import pages.clothing._
 import pages.construction._
 import pages.electrical.ElectricalPage
@@ -33,6 +34,18 @@ import pages.security._
 import pages.printing._
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryRemoveFRECodePage: Arbitrary[RemoveFRECodePage.type] =
+    Arbitrary(RemoveFRECodePage)
+
+  implicit lazy val arbitraryAluminiumApprenticePage: Arbitrary[AluminiumApprenticePage.type] =
+    Arbitrary(AluminiumApprenticePage)
+
+  implicit lazy val arbitraryIronApprenticePage: Arbitrary[IronApprenticePage.type] =
+    Arbitrary(IronApprenticePage)
+
+  implicit lazy val arbitraryYourAddressPage: Arbitrary[YourAddressPage.type] =
+    Arbitrary(YourAddressPage)
 
   implicit lazy val arbitraryConstructionalEngineeringList3Page: Arbitrary[ConstructionalEngineeringList3Page.type] =
     Arbitrary(ConstructionalEngineeringList3Page)
@@ -111,12 +124,6 @@ trait PageGenerators {
 
   implicit lazy val arbitraryIronSteelOccupationListPage: Arbitrary[IronSteelOccupationListPage.type] =
     Arbitrary(IronSteelOccupationListPage)
-
-  implicit lazy val arbitraryIronSteelOccupationPage: Arbitrary[IronSteelOccupationPage.type] =
-    Arbitrary(IronSteelOccupationPage)
-
-  implicit lazy val arbitraryManufacturingApprenticePage: Arbitrary[ManufacturingApprenticePage.type] =
-    Arbitrary(ManufacturingApprenticePage)
 
   implicit lazy val arbitraryAluminiumOccupationList2Page: Arbitrary[AluminiumOccupationList2Page.type] =
     Arbitrary(AluminiumOccupationList2Page)

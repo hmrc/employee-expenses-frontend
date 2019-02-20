@@ -17,12 +17,14 @@
 package controllers
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.ThirdIndustryOptionsFormProvider
 import generators.Generators
 import models.{NormalMode, ThirdIndustryOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.prop.PropertyChecks
 import pages.{ClaimAmount, ThirdIndustryOptionsPage}
 import play.api.inject.bind
@@ -32,7 +34,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.ThirdIndustryOptionsView
 
-class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators {
+class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with PropertyChecks with Generators with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -172,8 +174,10 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.defaultRate))
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
+
+      application.stop()
     }
   }
 }

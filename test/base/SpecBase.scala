@@ -17,22 +17,25 @@
 package base
 
 import com.github.tototoshi.play2.scalate.Scalate
-import config.{ClaimAmountsConfig, FrontendAppConfig}
+import config.FrontendAppConfig
 import controllers.actions._
-import models.UserAnswers
+import models.EmployerContribution.SomeContribution
+import models.FirstIndustryOptions.Healthcare
+import models.TaxYearSelection.CurrentYear
+import models.{Address, FirstIndustryOptions, TaxYearSelection, UserAnswers}
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
+import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
+import pages.{CitizenDetailsAddress, EmployerContributionPage, ExpensesEmployerPaidPage, FirstIndustryOptionsPage}
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.MockScalate
-
-
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
@@ -46,25 +49,67 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
       ).build()
   }
 
-  val userAnswersId = "id"
+  lazy val userAnswersId = "id"
 
-  val fakeNino = "AB123456A"
+  lazy val fakeNino = "AB123456A"
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  lazy val address = Address(
+    Some("6 Howsell Road"),
+    Some("Llanddew"),
+    Some("Line 3"),
+    Some("Line 4"),
+    Some("Line 5"),
+    Some("DN16 3FB"),
+    Some("GREAT BRITAIN")
+  )
+
+  lazy val validAddressJson: JsValue = Json.parse(
+    s"""
+       |{
+       |  "address":{
+       |    "line1":"6 Howsell Road",
+       |    "line2":"Llanddew",
+       |    "line3":"Line 3",
+       |    "line4":"Line 4",
+       |    "line5":"Line 5",
+       |    "postcode":"DN16 3FB",
+       |    "country":"GREAT BRITAIN"
+       |  }
+       |}
+     """.stripMargin
+  )
+
+  lazy val emptyAddress = Address(
+    None,
+    None,
+    None,
+    None,
+    None,
+    None,
+    None
+  )
+
+  def minimumUserAnswers = emptyUserAnswers
+    .set(FirstIndustryOptionsPage, Healthcare).success.value
+    .set(EmployerContributionPage, SomeContribution).success.value
+    .set(ExpensesEmployerPaidPage, 123).success.value
+    .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
+    .set(YourAddressPage, true).success.value
+    .set(CitizenDetailsAddress, address).success.value
 
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
+
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   def injector: Injector = app.injector
 
   def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
 
-  def claimAmountsConfig: ClaimAmountsConfig = injector.instanceOf[ClaimAmountsConfig]
-
   def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
 
   def fakeRequest = FakeRequest("", "")
 
-  def messages: Messages = messagesApi.preferred(fakeRequest)
+  implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 
   protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()

@@ -43,11 +43,14 @@ class WhichRailwayTradeViewSpec extends OptionsViewBehaviours[WhichRailwayTrade]
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
-    behave like normalPageWithAccountMenu(applyViewWithAuth(form))
+    behave like pageWithAccountMenu(applyViewWithAuth(form))
 
     behave like pageWithBackLink(applyView(form))
 
     behave like optionsPage(form, applyView, WhichRailwayTrade.options)
+
+    behave like pageWithBodyText(applyView(form), "whichRailwayTrade.listText")
+
   }
 
   application.stop()

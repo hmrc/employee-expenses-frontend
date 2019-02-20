@@ -19,7 +19,7 @@ package service
 import com.google.inject.Inject
 import connectors.{CitizenDetailsConnector, TaiConnector}
 import models.FlatRateExpenseOptions._
-import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaxCodeRecord, TaxYear}
+import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaxCodeRecord, TaiTaxYear}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -33,7 +33,7 @@ class TaiService @Inject()(taiConnector: TaiConnector,
     taiConnector.taiTaxCodeRecords(nino)
   }
 
-  def getAllFlatRateExpenses(nino: String, taxYears: Seq[TaxYear])(implicit hc: HeaderCarrier): Future[Seq[HttpResponse]] = {
+  def getAllFlatRateExpenses(nino: String, taxYears: Seq[TaiTaxYear])(implicit hc: HeaderCarrier): Future[Seq[HttpResponse]] = {
     val getAllFRE = taxYears map {
       taxYear =>
         taiConnector.getFlatRateExpense(nino, taxYear)
@@ -42,13 +42,13 @@ class TaiService @Inject()(taiConnector: TaiConnector,
     Future.sequence(getAllFRE)
   }
 
-  def updateFRE(nino: String, year: TaxYear, expensesData: IabdUpdateData)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
+  def updateFRE(nino: String, year: TaiTaxYear, expensesData: IabdUpdateData)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     citizenDetailsConnector.getEtag(nino).flatMap {
       etag => taiConnector.taiFREUpdate(nino, year, etag, expensesData)
     }
   }
 
-  def freResponse(taxYears: Seq[TaxYear], nino: String, claimAmount: Int)
+  def freResponse(taxYears: Seq[TaiTaxYear], nino: String, claimAmount: Int)
                (implicit hc: HeaderCarrier): Future[FlatRateExpenseOptions] = {
 
     getAllFlatRateExpenses(nino, taxYears).map {

@@ -16,7 +16,7 @@
 
 package controllers.engineering
 
-import config.ClaimAmountsConfig
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.engineering.AncillaryEngineeringWhichTradeFormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.engineering.AncillaryEngineeringWhichTradeView
 import scala.concurrent.{ExecutionContext, Future}
 
 class AncillaryEngineeringWhichTradeController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       sessionRepository: SessionRepository,
-                                       @Named("Engineering") navigator: Navigator,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       formProvider: AncillaryEngineeringWhichTradeFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: AncillaryEngineeringWhichTradeView,
-                                       claimAmounts: ClaimAmountsConfig
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                                          override val messagesApi: MessagesApi,
+                                                          sessionRepository: SessionRepository,
+                                                          @Named(NavConstant.engineering) navigator: Navigator,
+                                                          identify: UnauthenticatedIdentifierAction,
+                                                          getData: DataRetrievalAction,
+                                                          requireData: DataRequiredAction,
+                                                          formProvider: AncillaryEngineeringWhichTradeFormProvider,
+                                                          val controllerComponents: MessagesControllerComponents,
+                                                          view: AncillaryEngineeringWhichTradeView
+                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
 
@@ -70,13 +69,13 @@ class AncillaryEngineeringWhichTradeController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AncillaryEngineeringWhichTradePage, value))
             amount: Int = value match {
-              case AncillaryEngineeringWhichTrade.PatternMaker => claimAmounts.AncillaryEngineering.patternMaker
-              case AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker => claimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
-              case AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper => claimAmounts.AncillaryEngineering.apprentice
-              case AncillaryEngineeringWhichTrade.NoneOfTheAbove => claimAmounts.AncillaryEngineering.allOther
+              case AncillaryEngineeringWhichTrade.PatternMaker => ClaimAmounts.AncillaryEngineering.patternMaker
+              case AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker => ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
+              case AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper => ClaimAmounts.AncillaryEngineering.apprentice
+              case AncillaryEngineeringWhichTrade.NoneOfTheAbove => ClaimAmounts.AncillaryEngineering.allOther
             }
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(updatedAnswers))
         }
       )

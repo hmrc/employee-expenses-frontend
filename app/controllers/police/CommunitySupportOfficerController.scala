@@ -16,7 +16,7 @@
 
 package controllers.police
 
-import config.ClaimAmountsConfig
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.police.CommunitySupportOfficerFormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.police.CommunitySupportOfficerView
 import scala.concurrent.{ExecutionContext, Future}
 
 class CommunitySupportOfficerController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Police") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: CommunitySupportOfficerFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: CommunitySupportOfficerView,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                   override val messagesApi: MessagesApi,
+                                                   sessionRepository: SessionRepository,
+                                                   @Named(NavConstant.police) navigator: Navigator,
+                                                   identify: UnauthenticatedIdentifierAction,
+                                                   getData: DataRetrievalAction,
+                                                   requireData: DataRequiredAction,
+                                                   formProvider: CommunitySupportOfficerFormProvider,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   view: CommunitySupportOfficerView
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -70,11 +69,11 @@ class CommunitySupportOfficerController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CommunitySupportOfficerPage, value))
             newUserAnswers <- if (value) {
-                                Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Police.communitySupportOfficer))
-                              } else {
-                                Future.successful(updatedAnswers)
-                              }
-            _              <- sessionRepository.set(newUserAnswers)
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Police.communitySupportOfficer))
+            } else {
+              Future.successful(updatedAnswers)
+            }
+            _ <- sessionRepository.set(newUserAnswers)
           } yield Redirect(navigator.nextPage(CommunitySupportOfficerPage, mode)(updatedAnswers))
         }
       )
