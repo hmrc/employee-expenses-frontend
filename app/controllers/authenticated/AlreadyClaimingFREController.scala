@@ -20,9 +20,10 @@ import config.NavConstant
 import controllers.actions._
 import forms.authenticated.AlreadyClaimingFREFormProvider
 import javax.inject.{Inject, Named}
-import models.Mode
+import models.{Mode, TaiTaxYear}
 import navigation.Navigator
-import pages.ClaimAmount
+import org.joda.time.LocalDate
+import pages.{AllFlatRateExpenses, ClaimAmount}
 import pages.authenticated.AlreadyClaimingFREPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -55,9 +56,11 @@ class AlreadyClaimingFREController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      request.userAnswers.get(ClaimAmount) match {
-        case Some(amount) => Ok(view(preparedForm, mode, amount))
-        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+      (request.userAnswers.get(ClaimAmount), request.userAnswers.get(AllFlatRateExpenses)) match {
+        case (Some(amount), Some(flatRateExpenses)) =>
+          Ok(view(preparedForm, mode, amount, flatRateExpenses))
+        case _ =>
+          Redirect(controllers.routes.SessionExpiredController.onPageLoad())
       }
   }
 

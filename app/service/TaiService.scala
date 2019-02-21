@@ -16,17 +16,22 @@
 
 package service
 
+import scala.util.{Success, Failure}
 import com.google.inject.Inject
 import connectors.{CitizenDetailsConnector, TaiConnector}
 import models.FlatRateExpenseOptions._
-import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaiTaxYear, TaxCodeRecord}
+import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaiTaxYear, TaxCodeRecord, UserAnswers}
+import pages.AllFlatRateExpenses
+import repositories.SessionRepository
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.Try
 
 class TaiService @Inject()(taiConnector: TaiConnector,
-                           citizenDetailsConnector: CitizenDetailsConnector
+                           citizenDetailsConnector: CitizenDetailsConnector,
+                           sessionRepository: SessionRepository
                           )(implicit hc: HeaderCarrier) {
 
   def taxCodeRecords(nino: String): Future[Seq[TaxCodeRecord]] = {
@@ -48,20 +53,28 @@ class TaiService @Inject()(taiConnector: TaiConnector,
     }
   }
 
-  def freResponse(taxYears: Seq[TaiTaxYear], nino: String, claimAmount: Int): Future[FlatRateExpenseOptions] = {
+  def freResponse(taxYears: Seq[TaiTaxYear], nino: String, claimAmount: Int, userAnswers: UserAnswers): Future[FlatRateExpenseOptions] = {
 
     getAllFlatRateExpenses(nino, taxYears).map {
       case flatRateExpenses if flatRateExpenses.forall(_.status == 404) => FRENoYears
       case flatRateExpenses if flatRateExpenses.forall(_.status == 200) =>
-        freResponseLogic(flatRateExpenses.map(_.json.as[FlatRateExpense]), claimAmount)
+        freResponseLogic(flatRateExpenses.map(_.json.as[FlatRateExpense]), claimAmount, userAnswers)
       case _ => TechnicalDifficulties
     }
   }
 
-  def freResponseLogic(fre: Seq[FlatRateExpense], claimAmount: Int): FlatRateExpenseOptions = {
+  def freResponseLogic(fre: Seq[FlatRateExpense], claimAmount: Int, userAnswers: UserAnswers): FlatRateExpenseOptions = {
     fre match {
       case flatRateExpenses if flatRateExpenses.forall(_.grossAmount == claimAmount) =>
-        FREAllYearsAllAmountsSameAsClaimAmount
+        val updatedUserAnswers: Try[UserAnswers] = userAnswers.set(AllFlatRateExpenses, fre)
+
+        updatedUserAnswers match {
+          case Success(value) =>
+            sessionRepository.set(value)
+            FREAllYearsAllAmountsSameAsClaimAmount
+          case Failure(_) =>
+            TechnicalDifficulties
+        }
       case flatRateExpenses if flatRateExpenses.forall(_.grossAmount != claimAmount) =>
         FREAllYearsAllAmountsDifferentToClaimAmount
       case _ => ComplexClaim

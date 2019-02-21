@@ -22,7 +22,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, amount: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, amount: Int, flatRateExpenses: Seq[FlatRateExpense])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("alreadyClaimingFRE.title")}"
@@ -39,7 +39,7 @@
         <p>@messages("alreadyClaimingFRE.bodyText", amount)</p>
 
         @components.numeric_table(
-            Seq(Map("TaxYear" -> 123)),
+            Seq("TaxYear" -> 123),
             messages("alreadyClaimingFRE.tableTaxYearHeading"),
             messages("alreadyClaimingFRE.tableAmountHeading")
         )
