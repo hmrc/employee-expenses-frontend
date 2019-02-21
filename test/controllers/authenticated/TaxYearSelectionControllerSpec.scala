@@ -17,25 +17,37 @@
 package controllers.authenticated
 
 import base.SpecBase
+import connectors.TaiConnector
 import controllers.routes._
 import forms.authenticated.TaxYearSelectionFormProvider
-import models.{NormalMode, TaxYearSelection, UserAnswers}
+import models.{FlatRateExpenseOptions, NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.mockito.MockitoSugar
+import pages.ClaimAmount
 import pages.authenticated.TaxYearSelectionPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import service.TaiService
 import views.html.authenticated.TaxYearSelectionView
 
-class TaxYearSelectionControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val taxYearSelectionRoute = routes.TaxYearSelectionController.onPageLoad(NormalMode).url
+  lazy val taxYearSelectionRoute: String = routes.TaxYearSelectionController.onPageLoad(NormalMode).url
 
   val formProvider = new TaxYearSelectionFormProvider()
-  val form = formProvider()
+  val form: Form[Seq[TaxYearSelection]] = formProvider()
+
+  val mockTaiService: TaiService = mock[TaiService]
 
   "TaxYearSelection Controller" must {
 
@@ -79,10 +91,15 @@ class TaxYearSelectionControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
+      val answers = emptyUserAnswers.set(ClaimAmount, 100).success.value
+
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(Some(answers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
+
+      when(mockTaiService.freResponse(any(), any(), any())(any(), any())) thenReturn Future.successful(FlatRateExpenseOptions.FRENoYears)
 
       val request =
         FakeRequest(POST, taxYearSelectionRoute)

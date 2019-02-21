@@ -18,10 +18,21 @@ package models
 
 sealed trait FlatRateExpenseOptions
 
-object FlatRateExpenseOptions {
-  case object FRENoYears extends FlatRateExpenseOptions
-  case object FREAllYearsAllAmountsSameAsClaimAmount extends FlatRateExpenseOptions
-  case object FREAllYearsAllAmountsDifferentToClaimAmount extends FlatRateExpenseOptions
-  case object ComplexClaim extends FlatRateExpenseOptions
-  case object TechnicalDifficulties extends FlatRateExpenseOptions
+object FlatRateExpenseOptions extends Enumerable.Implicits {
+  case object FRENoYears extends WithName("freNoYears") with FlatRateExpenseOptions
+  case object FREAllYearsAllAmountsSameAsClaimAmount extends WithName("freAllYearsAllAmountsSameAsClaimAmount") with FlatRateExpenseOptions
+  case object FREAllYearsAllAmountsDifferentToClaimAmount extends WithName("freAllYearsAllAmountsDifferentToClaimAmount") with FlatRateExpenseOptions
+  case object ComplexClaim extends WithName("complexClaim") with FlatRateExpenseOptions
+  case object TechnicalDifficulties extends WithName("technicalDifficulties") with FlatRateExpenseOptions
+
+  val values: Seq[FlatRateExpenseOptions] = Seq(
+    FRENoYears,
+    FREAllYearsAllAmountsSameAsClaimAmount,
+    FREAllYearsAllAmountsDifferentToClaimAmount,
+    ComplexClaim,
+    TechnicalDifficulties
+  )
+
+  implicit val enumerable: Enumerable[FlatRateExpenseOptions] =
+    Enumerable(values.map(v => v.toString -> v): _*)
 }
