@@ -16,20 +16,36 @@
 
 package navigation
 
-import javax.inject.Inject
-import models.{CheckMode, NormalMode, UserAnswers}
-import pages.Page
-import play.api.mvc.Call
 import controllers.authenticated.routes._
+import controllers.routes._
+import javax.inject.Inject
+import models.{CheckMode, FlatRateExpenseOptions, Mode, NormalMode, UserAnswers}
 import pages.authenticated._
+import pages.{FREResponse, Page}
+import play.api.mvc.Call
 
 class AuthenticatedNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => _ => TaxYearSelectionController.onPageLoad(NormalMode)
+    case TaxYearSelectionPage => taxYearSelection(NormalMode)
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => _ => TaxYearSelectionController.onPageLoad(CheckMode)
+    case TaxYearSelectionPage => taxYearSelection(CheckMode)
+  }
+
+  def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
+    case Some(FlatRateExpenseOptions.FRENoYears) =>
+      YourAddressController.onPageLoad(mode)
+    case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount) =>
+      NoCodeChangeController.onPageLoad()
+    case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferentToClaimAmount) =>
+      RemoveFRECodeController.onPageLoad(mode)
+    case Some(FlatRateExpenseOptions.ComplexClaim) =>
+      PhoneUsController.onPageLoad()
+    case Some(FlatRateExpenseOptions.TechnicalDifficulties) =>
+      SessionExpiredController.onPageLoad()
+    case _ =>
+      SessionExpiredController.onPageLoad()
   }
 
 }

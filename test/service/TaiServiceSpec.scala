@@ -19,7 +19,7 @@ package service
 import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
 import models.FlatRateExpenseOptions._
-import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaxCodeRecord, TaiTaxYear}
+import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaiTaxYear, TaxCodeRecord, TaxYearSelection}
 import org.joda.time.LocalDate
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
@@ -138,13 +138,13 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       }
     }
 
-    "freRouter" must {
+    "freResponse" must {
 
       "return FRENoYears when only 404 is returned for all tax years" in {
-        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear(2016)))
+        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
           .thenReturn(Future.successful(HttpResponse(NOT_FOUND)))
 
-        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaiTaxYear(2016)), fakeNino, claimAmount = 100)
+        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 100)
 
         whenReady(result) {
           result =>
@@ -153,10 +153,10 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       }
 
       "return FREAllYearsAllAmountsSameAsClaimAmount when only 200 is returned and the grossAmount is the same as claimAmount for all tax years" in {
-        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear(2016)))
+        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
           .thenReturn(Future.successful(HttpResponse(OK, Some(validFlatRateJson))))
 
-        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaiTaxYear(2016)), fakeNino, claimAmount = 100)
+        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 100)
 
         whenReady(result) {
           result =>
@@ -165,10 +165,10 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       }
 
       "return FREAllYearsAllAmountsDifferentToClaimAmount when only 200 is returned and the grossAmount is not the same as claimAmount for all tax years" in {
-        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear(2016)))
+        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
           .thenReturn(Future.successful(HttpResponse(OK, Some(validFlatRateJson))))
 
-        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaiTaxYear(2016)), fakeNino, claimAmount = 200)
+        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 200)
 
         whenReady(result) {
           result =>
@@ -177,10 +177,10 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       }
 
       "return TechnicalDifficulties when a 500 is returned" in {
-        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear(2016)))
+        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
           .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
 
-        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaiTaxYear(2016)), fakeNino, claimAmount = 200)
+        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 200)
 
         whenReady(result) {
           result =>

@@ -53,7 +53,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with OptionVa
 
       status(result) mustEqual OK
       contentAsString(result) mustEqual
-        view(claimAmount, "36.00", "72.00", "/employee-expenses")(fakeRequest, messages).toString
+        view(claimAmount, "36.00", "72.00", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
 
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmountAndAnyDeductions).value mustBe 180
@@ -109,7 +109,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with OptionVa
       val view = application.injector.instanceOf[ClaimAmountView]
 
       contentAsString(result) mustEqual
-        view(claimAmount, "20.00", "40.00", "/employee-expenses")(fakeRequest, messages).toString
+        view(claimAmount, "20.00", "40.00", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
 
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmountAndAnyDeductions).value mustBe 100
@@ -136,7 +136,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with OptionVa
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
       contentAsString(result) mustEqual
-        view(claimAmount - employerContribution, "19.00", "38.00", "/employee-expenses")(fakeRequest, messages).toString
+        view(claimAmount - employerContribution, "19.00", "38.00", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
 
       whenReady(sessionRepository.get(userAnswersId)) {
         _.value.get(ClaimAmountAndAnyDeductions).value mustBe 95
