@@ -45,6 +45,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       case Some(Engineering) => industryAnswerRow(s"firstIndustryOptions.${Engineering.toString}")
       case Some(TransportAndDistribution) => industryAnswerRow(s"firstIndustryOptions.${TransportAndDistribution.toString}")
       case Some(FirstIndustryOptions.NoneOfAbove) => secondaryIndustryList
+      case _ => None
     }
   }
 
@@ -56,6 +57,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       case Some(ClothingTextiles) => industryAnswerRow(s"secondIndustryOptions.${ClothingTextiles.toString}")
       case Some(Construction) => industryAnswerRow(s"secondIndustryOptions.${Construction.toString}")
       case Some(SecondIndustryOptions.NoneOfAbove) => thirdIndustryList
+      case _ => None
     }
   }
 
@@ -67,6 +69,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       case Some(Security) => industryAnswerRow(s"thirdIndustryOptions.${Security.toString}")
       case Some(Printing) => industryAnswerRow(s"thirdIndustryOptions.${Printing.toString}")
       case Some(ThirdIndustryOptions.NoneOfAbove) => fourthIndustryList
+      case _ => None
     }
   }
 
@@ -78,6 +81,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       case Some(Leisure) => industryAnswerRow(s"fourthIndustryOptions.${Leisure.toString}")
       case Some(Prisons) => industryAnswerRow(s"fourthIndustryOptions.${Prisons.toString}")
       case Some(FourthIndustryOptions.NoneOfAbove) => industryAnswerRow("default rate")
+      case _ => None
     }
   }
 
