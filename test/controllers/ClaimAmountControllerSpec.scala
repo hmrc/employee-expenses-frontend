@@ -21,7 +21,7 @@ import models.{EmployerContribution, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.OptionValues
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage, ExpensesEmployerPaidPage}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -30,7 +30,7 @@ import play.twirl.api.Html
 import repositories.SessionRepository
 import views.html.ClaimAmountView
 
-class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with OptionValues {
+class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def asDocument(html: Html): Document = Jsoup.parse(html.toString())
 

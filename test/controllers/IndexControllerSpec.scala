@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import controllers.actions.{DataRetrievalAction, UnauthenticatedIdentifierAction}
 import models.{NormalMode, UserAnswers}
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -29,7 +29,7 @@ import uk.gov.hmrc.http.SessionKeys
 import scala.concurrent.ExecutionContext
 
 
-class IndexControllerSpec extends SpecBase with ScalaFutures {
+class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
 
 
   "Index Controller" must {

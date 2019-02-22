@@ -20,12 +20,12 @@ import base.SpecBase
 import controllers.authenticated.routes._
 import controllers.routes._
 import models.{FlatRateExpenseOptions, NormalMode}
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.FREResponse
 import pages.authenticated.TaxYearSelectionPage
 
-class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFutures {
+class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
   val navigator = new AuthenticatedNavigator
 
