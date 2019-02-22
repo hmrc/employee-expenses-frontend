@@ -24,7 +24,7 @@ import models.{FlatRateExpenseOptions, NormalMode, TaxYearSelection, UserAnswers
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.authenticated.TaxYearSelectionPage
@@ -38,7 +38,7 @@ import views.html.authenticated.TaxYearSelectionView
 
 import scala.concurrent.Future
 
-class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
+class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 

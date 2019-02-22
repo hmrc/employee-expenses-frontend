@@ -22,7 +22,7 @@ import forms.TransportVehicleTradeFormProvider
 import models.{NormalMode, TransportVehicleTrade, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatest.OptionValues
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import pages.ClaimAmount
 import pages.transport.TransportVehicleTradePage
 import play.api.Application
@@ -33,7 +33,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.transport.TransportVehicleTradeView
 
-class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures with OptionValues {
+class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 

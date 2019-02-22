@@ -17,7 +17,7 @@
 package controllers.actions
 
 import base.SpecBase
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc._
 import play.api.test.Helpers._
@@ -26,7 +26,7 @@ import uk.gov.hmrc.http.SessionKeys
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures with MockitoSugar {
+class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
   class Harness(authAction: IdentifierAction) {
     def onPageLoad(): Action[AnyContent] = authAction { _ => Results.Ok }

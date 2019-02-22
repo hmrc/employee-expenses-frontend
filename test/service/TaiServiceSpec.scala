@@ -22,7 +22,7 @@ import models.FlatRateExpenseOptions._
 import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaiTaxYear, TaxCodeRecord, TaxYearSelection}
 import org.joda.time.LocalDate
 import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.http.HttpResponse
 import play.api.http.Status._
@@ -31,7 +31,7 @@ import play.api.libs.json.{JsValue, Json}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
+class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
   private val mockTaiConnector = mock[TaiConnector]
   private val mockCitizenDetailsConnector = mock[CitizenDetailsConnector]

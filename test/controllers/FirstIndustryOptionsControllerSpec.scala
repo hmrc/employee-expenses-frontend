@@ -24,7 +24,7 @@ import models.{FirstIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.prop.PropertyChecks
 import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.Application
@@ -36,7 +36,7 @@ import repositories.SessionRepository
 import views.html.FirstIndustryOptionsView
 
 
-class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with PropertyChecks with Generators with OptionValues {
+class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
 
   def onwardRoute = Call("GET", "/FOO")
 
