@@ -192,19 +192,19 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
     "freResponseLogic" must {
 
       "return FREAllYearsAllAmountsSameAsClaimAmount when claimAmount is the same as grossAmount" in {
-        val result = taiService.freResponseLogic(Seq(FlatRateExpense(fakeNino, 2016, 100)), claimAmount = 100)
+        val result = taiService.freResponseLogic(Seq(FlatRateExpense(100)), claimAmount = 100)
 
         result mustBe FREAllYearsAllAmountsSameAsClaimAmount
       }
 
       "return FREAllYearsAllAmountsDifferentToClaimAmount when claimAmount is not the same as grossAmount" in {
-        val result = taiService.freResponseLogic(Seq(FlatRateExpense(fakeNino, 2016, 100)), claimAmount = 200)
+        val result = taiService.freResponseLogic(Seq(FlatRateExpense(100)), claimAmount = 200)
 
         result mustBe FREAllYearsAllAmountsDifferentToClaimAmount
       }
 
       "return ComplexClaim when multiple grossAmounts are the same and different to claimAmount" in {
-        val result = taiService.freResponseLogic(Seq(FlatRateExpense(fakeNino, 2016, 100), FlatRateExpense(fakeNino, 2016, 200)), claimAmount = 200)
+        val result = taiService.freResponseLogic(Seq(FlatRateExpense(100), FlatRateExpense(200)), claimAmount = 200)
 
         result mustBe ComplexClaim
       }
