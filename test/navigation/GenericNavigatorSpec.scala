@@ -18,7 +18,8 @@ package navigation
 
 import base.SpecBase
 import controllers.foodCatering.routes._
-import controllers.routes
+import controllers.routes._
+import controllers.authenticated.routes._
 import models.EmployerContribution._
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions.{Agriculture, FireService, Heating, Leisure, Prisons}
@@ -38,7 +39,15 @@ class GenericNavigatorSpec extends SpecBase {
       "go to Index from a page that doesn't exist in the route map" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode)(UserAnswers(userAnswersId)) mustBe routes.IndexController.onPageLoad()
+        navigator.nextPage(UnknownPage, NormalMode)(UserAnswers(userAnswersId)) mustBe
+          IndexController.onPageLoad()
+      }
+
+      // Claim Amount
+
+      "go to TaxYearSelectionController from ClaimAmount" in {
+        navigator.nextPage(ClaimAmount, NormalMode)(emptyUserAnswers) mustBe
+          TaxYearSelectionController.onPageLoad(NormalMode)
       }
 
       //MultipleEmploymentsPage
@@ -47,19 +56,19 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(MultipleEmploymentsPage, true).success.value
 
         navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
-          controllers.routes.ClaimByAlternativeController.onPageLoad()
+          ClaimByAlternativeController.onPageLoad()
       }
 
       "go to ClaimByAlternativeController from MultipleEmploymentsPage when 'No' is selected" in {
         val answers = emptyUserAnswers.set(MultipleEmploymentsPage, false).success.value
 
         navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
-          controllers.routes.FirstIndustryOptionsController.onPageLoad(NormalMode)
+          FirstIndustryOptionsController.onPageLoad(NormalMode)
       }
 
       "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
         navigator.nextPage(MultipleEmploymentsPage, NormalMode)(emptyUserAnswers) mustBe
-          controllers.routes.SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad()
       }
 
       //FirstIndustryOptionsPage
@@ -89,7 +98,7 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, Retail).success.value
 
         navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          EmployerContributionController.onPageLoad(NormalMode)
       }
 
       "go to CateringStaffNHSController from FirstIndustryOptionsPage when FoodAndCatering is selected" in {
@@ -103,12 +112,12 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.NoneOfAbove).success.value
 
         navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.SecondIndustryOptionsController.onPageLoad(NormalMode)
+          SecondIndustryOptionsController.onPageLoad(NormalMode)
       }
 
       "go to SessionExpiredController from FirstIndustryOptionsPage when no data is available" in {
         navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
-          controllers.routes.SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad()
       }
 
       //SecondIndustryOptionsPage
@@ -124,7 +133,7 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, SecondIndustryOptions.NoneOfAbove).success.value
 
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
-        controllers.routes.ThirdIndustryOptionsController.onPageLoad(NormalMode)
+        ThirdIndustryOptionsController.onPageLoad(NormalMode)
 
       }
 
@@ -132,7 +141,7 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Council).success.value
 
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          EmployerContributionController.onPageLoad(NormalMode)
       }
 
       "go to TypeOfManufacturingController from SecondIndustryOptionsPage when 'ManufacturingWarehousing' is selected" in {
@@ -160,12 +169,12 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, SecondIndustryOptions.NoneOfAbove).success.value
 
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.ThirdIndustryOptionsController.onPageLoad(NormalMode)
+          ThirdIndustryOptionsController.onPageLoad(NormalMode)
       }
 
       "go to SessionExpiredController from SecondIndustryOptionsPage when no data is available" in {
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
-          controllers.routes.SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad()
       }
 
       //ThirdIndustryOptionsPage
@@ -174,14 +183,14 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, Education).success.value
 
         navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          EmployerContributionController.onPageLoad(NormalMode)
       }
 
       "go EmployerContributionController from ThirdIndustryOptionsPage when Banks and Building Societies is selected" in {
         val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, BanksBuildingSocieties).success.value
 
         navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          EmployerContributionController.onPageLoad(NormalMode)
       }
 
       "go ElectricalControllerPage from ThirdIndustryOptionsPage when Eletrical is selected" in {
@@ -209,12 +218,12 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, ThirdIndustryOptions.NoneOfAbove).success.value
 
         navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.FourthIndustryOptionsController.onPageLoad(NormalMode)
+          FourthIndustryOptionsController.onPageLoad(NormalMode)
       }
 
       "go to SessionExpiredController from ThirdIndustryOptionsPage when no data is available" in {
         navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
-          controllers.routes.SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad()
       }
 
       //FourthIndustryOptionsPage
@@ -223,14 +232,14 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Agriculture).success.value
 
         navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          EmployerContributionController.onPageLoad(NormalMode)
       }
 
       "go EmployerContributionController from FourthIndustryOptionsPage when 'fire service' is selected" in {
         val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, FireService).success.value
 
         navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          EmployerContributionController.onPageLoad(NormalMode)
       }
 
       "go HeatingController from FourthIndustryOptionsPage when 'heating' is selected" in {
@@ -244,26 +253,26 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Leisure).success.value
 
         navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          EmployerContributionController.onPageLoad(NormalMode)
       }
 
       "go EmployerContributionController from FourthIndustryOptionsPage when 'prison' is selected" in {
         val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Prisons).success.value
 
         navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          EmployerContributionController.onPageLoad(NormalMode)
       }
 
       "go EmployerContributionController from FourthIndustryOptionsPage when 'NoneOfTheAbove' is selected" in {
         val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, FourthIndustryOptions.NoneOfAbove).success.value
 
         navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          EmployerContributionController.onPageLoad(NormalMode)
       }
 
       "go to SessionExpiredController from FourthIndustryOptionsPage when no data is available" in {
         navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
-          controllers.routes.SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad()
 
       }
 
@@ -273,26 +282,26 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(EmployerContributionPage, All).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
-          controllers.routes.CannotClaimController.onPageLoad()
+          CannotClaimController.onPageLoad()
       }
 
       "go to CannotClaimController from EmployerContributionPage when 'None' is selected" in {
         val answers = emptyUserAnswers.set(EmployerContributionPage, NoContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
-          controllers.routes.ClaimAmountController.onPageLoad()
+          ClaimAmountController.onPageLoad()
       }
 
       "go to CannotClaimController from EmployerContributionPage when 'Some' is selected" in {
         val answers = emptyUserAnswers.set(EmployerContributionPage, SomeContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
-          controllers.routes.ExpensesEmployerPaidController.onPageLoad(NormalMode)
+          ExpensesEmployerPaidController.onPageLoad(NormalMode)
       }
 
       "go to SessionExpiredController from EmployerContributionPage when no data is available" in {
         navigator.nextPage(EmployerContributionPage, NormalMode)(emptyUserAnswers) mustBe
-          controllers.routes.SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad()
       }
 
       //ExpensesEmployerPaidPage
@@ -302,7 +311,7 @@ class GenericNavigatorSpec extends SpecBase {
         val updatedAnswers = answers.set(ClaimAmount, 100).success.value
 
         navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(updatedAnswers) mustBe
-          controllers.routes.CannotClaimController.onPageLoad()
+          CannotClaimController.onPageLoad()
       }
 
       "go to ClaimAmountController from ExpensesEmployerPaidPage if ClaimAmount is > ExpensesEmployerPaid" in {
@@ -310,12 +319,12 @@ class GenericNavigatorSpec extends SpecBase {
         val updatedAnswers = answers.set(ClaimAmount, 100).success.value
 
         navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(updatedAnswers) mustBe
-          controllers.routes.ClaimAmountController.onPageLoad()
+          ClaimAmountController.onPageLoad()
       }
 
       "go to SessionExpiredController from ExpensesEmployerPaidPage when no data is available" in {
         navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(emptyUserAnswers) mustBe
-          controllers.routes.SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad()
       }
     }
 
@@ -324,7 +333,7 @@ class GenericNavigatorSpec extends SpecBase {
       "go to CheckYourAnswers from a page that doesn't exist in the edit route map" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, CheckMode)(UserAnswers(userAnswersId)) mustBe routes.CheckYourAnswersController.onPageLoad()
+        navigator.nextPage(UnknownPage, CheckMode)(UserAnswers(userAnswersId)) mustBe CheckYourAnswersController.onPageLoad()
       }
     }
   }

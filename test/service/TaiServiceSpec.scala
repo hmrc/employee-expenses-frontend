@@ -18,18 +18,20 @@ package service
 
 import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
-import models.{IabdUpdateData, TaxCodeRecord, TaiTaxYear}
+import models.FlatRateExpenseOptions._
+import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaiTaxYear, TaxCodeRecord, TaxYearSelection}
 import org.joda.time.LocalDate
 import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.http.HttpResponse
 import play.api.http.Status._
+import play.api.libs.json.{JsValue, Json}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
+class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
   private val mockTaiConnector = mock[TaiConnector]
   private val mockCitizenDetailsConnector = mock[CitizenDetailsConnector]
@@ -46,6 +48,23 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       pensionIndicator = true,
       primary = true
     ))
+
+  private val validFlatRateJson: JsValue = Json.parse(
+    """
+      |   [{
+      |        "nino": "AB123456A",
+      |        "sequenceNumber": 201600003,
+      |        "taxYear": 2016,
+      |        "type": 56,
+      |        "source": 26,
+      |        "grossAmount": 100,
+      |        "receiptDate": null,
+      |        "captureDate": null,
+      |        "typeDescription": "Flat Rate Job Expenses",
+      |        "netAmount": null
+      |   }]
+      |""".stripMargin)
+
   private val iabdUpdateData = IabdUpdateData(sequenceNumber = 1, grossAmount = 100)
 
   "TaiService" must {
@@ -119,6 +138,77 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures {
       }
     }
 
+    "freResponse" must {
+
+      "return FRENoYears when only 404 is returned for all tax years" in {
+        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
+          .thenReturn(Future.successful(HttpResponse(NOT_FOUND)))
+
+        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 100)
+
+        whenReady(result) {
+          result =>
+            result mustBe FRENoYears
+        }
+      }
+
+      "return FREAllYearsAllAmountsSameAsClaimAmount when only 200 is returned and the grossAmount is the same as claimAmount for all tax years" in {
+        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
+          .thenReturn(Future.successful(HttpResponse(OK, Some(validFlatRateJson))))
+
+        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 100)
+
+        whenReady(result) {
+          result =>
+            result mustBe FREAllYearsAllAmountsSameAsClaimAmount
+        }
+      }
+
+      "return FREAllYearsAllAmountsDifferentToClaimAmount when only 200 is returned and the grossAmount is not the same as claimAmount for all tax years" in {
+        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
+          .thenReturn(Future.successful(HttpResponse(OK, Some(validFlatRateJson))))
+
+        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 200)
+
+        whenReady(result) {
+          result =>
+            result mustBe FREAllYearsAllAmountsDifferentToClaimAmount
+        }
+      }
+
+      "return TechnicalDifficulties when a 500 is returned" in {
+        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
+          .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
+
+        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 200)
+
+        whenReady(result) {
+          result =>
+            result mustBe TechnicalDifficulties
+        }
+      }
+    }
+
+    "freResponseLogic" must {
+
+      "return FREAllYearsAllAmountsSameAsClaimAmount when claimAmount is the same as grossAmount" in {
+        val result = taiService.freResponseLogic(Seq(FlatRateExpense(100)), claimAmount = 100)
+
+        result mustBe FREAllYearsAllAmountsSameAsClaimAmount
+      }
+
+      "return FREAllYearsAllAmountsDifferentToClaimAmount when claimAmount is not the same as grossAmount" in {
+        val result = taiService.freResponseLogic(Seq(FlatRateExpense(100)), claimAmount = 200)
+
+        result mustBe FREAllYearsAllAmountsDifferentToClaimAmount
+      }
+
+      "return ComplexClaim when multiple grossAmounts are the same and different to claimAmount" in {
+        val result = taiService.freResponseLogic(Seq(FlatRateExpense(100), FlatRateExpense(200)), claimAmount = 200)
+
+        result mustBe ComplexClaim
+      }
+    }
   }
 
 }

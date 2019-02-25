@@ -22,7 +22,7 @@ import forms.foodCatering.CateringStaffNHSFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatest.OptionValues
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import pages.foodCatering.CateringStaffNHSPage
 import pages.ClaimAmount
 import play.api.inject.bind
@@ -32,7 +32,7 @@ import play.api.test.Helpers._
 import views.html.foodCatering.CateringStaffNHSView
 import repositories.SessionRepository
 
-class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with OptionValues {
+class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
