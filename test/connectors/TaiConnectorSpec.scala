@@ -127,9 +127,9 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
       val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, invalidTaxYear)
 
-      whenReady(result.failed) {
+      whenReady(result) {
         result =>
-          result mustBe an[BadRequestException]
+          result.status mustBe BAD_REQUEST
       }
     }
 
@@ -144,9 +144,9 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
       val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
 
-      whenReady(result.failed) {
+      whenReady(result) {
         result =>
-          result mustBe an[NotFoundException]
+          result.status mustBe NOT_FOUND
       }
     }
 
@@ -161,9 +161,9 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
       val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
 
-      whenReady(result.failed) {
+      whenReady(result) {
         result =>
-          result mustBe an[Upstream5xxResponse]
+          result.status mustBe INTERNAL_SERVER_ERROR
       }
     }
   }
@@ -198,9 +198,9 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
       val result: Future[HttpResponse] = taiConnector.taiFREUpdate(fakeNino, taxYear, 1, IabdUpdateData(1, 100))
 
-      whenReady(result.failed) {
+      whenReady(result) {
         result =>
-          result mustBe an[Exception]
+          result.status mustBe INTERNAL_SERVER_ERROR
       }
 
     }
