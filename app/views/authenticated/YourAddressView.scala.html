@@ -38,13 +38,13 @@
         @components.heading("yourAddress.heading")
 
         <div class="form-group panel panel-border-wide" id="citizenDetailsAddress">
-            @address.line1.map(_.trim)<br>
-            @address.line2.map(_.trim)<br>
-            @address.line3.map(_.trim)<br>
-            @address.line4.map(_.trim)<br>
-            @address.line5.map(_.trim)<br>
-            @address.postcode.map(_.trim)<br>
-            @address.country.map(_.trim)<br>
+            @if(address.line1.exists(_.trim.nonEmpty)) {@address.line1<br>}
+            @if(address.line2.exists(_.trim.nonEmpty)) {@address.line2<br>}
+            @if(address.line3.exists(_.trim.nonEmpty)) {@address.line3<br>}
+            @if(address.line4.exists(_.trim.nonEmpty)) {@address.line4<br>}
+            @if(address.line5.exists(_.trim.nonEmpty)) {@address.line5<br>}
+            @if(address.postcode.exists(_.trim.nonEmpty)) {@address.postcode<br>}
+            @if(address.country.exists(_.trim.nonEmpty)) {@address.country<br>}
         </div>
 
         @components.input_yes_no(
