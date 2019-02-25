@@ -29,6 +29,7 @@ import controllers.heating.routes._
 import controllers.routes._
 import controllers.security.routes._
 import controllers.transport.routes._
+import controllers.authenticated.routes._
 import javax.inject.Inject
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions._
@@ -41,14 +42,16 @@ import play.api.mvc.Call
 class GenericNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case MultipleEmploymentsPage  => multipleEmployments(NormalMode)
-    case FirstIndustryOptionsPage => firstIndustryOptions(NormalMode)
+    case MultipleEmploymentsPage   => multipleEmployments(NormalMode)
+    case FirstIndustryOptionsPage  => firstIndustryOptions(NormalMode)
     case SecondIndustryOptionsPage => secondIndustryOptions(NormalMode)
-    case ThirdIndustryOptionsPage => thirdIndustryOptions(NormalMode)
+    case ThirdIndustryOptionsPage  => thirdIndustryOptions(NormalMode)
     case FourthIndustryOptionsPage => fourthIndustryOptions(NormalMode)
-    case EmployerContributionPage => employerContribution(NormalMode)
-    case ExpensesEmployerPaidPage => expensesEmployerPaid(NormalMode)
-    case _ =>                   _ => IndexController.onPageLoad()
+    case EmployerContributionPage  => employerContribution(NormalMode)
+    case ExpensesEmployerPaidPage  => expensesEmployerPaid(NormalMode)
+    case SameEmployerContributionAllYearsPage  => sameEmployerContributionAllYears(NormalMode)
+    case ClaimAmount               => _ => TaxYearSelectionController.onPageLoad(NormalMode)
+    case _ =>                    _ => IndexController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -58,37 +61,49 @@ class GenericNavigator @Inject()() extends Navigator {
     case ThirdIndustryOptionsPage => thirdIndustryOptions(CheckMode)
     case FourthIndustryOptionsPage => fourthIndustryOptions(CheckMode)
     case EmployerContributionPage => employerContribution(CheckMode)
-    case ExpensesEmployerPaidPage => expensesEmployerPaid(CheckMode)
+    case ExpensesEmployerPaidPage => expensesEmployerPaid(NormalMode)
+    case SameEmployerContributionAllYearsPage => sameEmployerContributionAllYears(CheckMode)
     case _ =>                   _ => CheckYourAnswersController.onPageLoad()
   }
 
   private def multipleEmployments(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(MultipleEmploymentsPage) match {
-      case Some(true)                                 => ClaimByAlternativeController.onPageLoad()
-      case Some(false)                                => FirstIndustryOptionsController.onPageLoad(mode)
-      case _                                          => SessionExpiredController.onPageLoad()
+      case Some(true)  => ClaimByAlternativeController.onPageLoad()
+      case Some(false) => FirstIndustryOptionsController.onPageLoad(mode)
+      case _           => SessionExpiredController.onPageLoad()
     }
 
   private def firstIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(FirstIndustryOptionsPage) match {
-      case Some(Engineering)              => TypeOfEngineeringController.onPageLoad(mode)
-      case Some(FoodAndCatering)          => CateringStaffNHSController.onPageLoad(mode)
-      case Some(Healthcare)               => AmbulanceStaffController.onPageLoad(mode)
-      case Some(Retail)                   => EmployerContributionController.onPageLoad(mode)
-      case Some(TransportAndDistribution) => TypeOfTransportController.onPageLoad(mode)
-      case Some(FirstIndustryOptions.NoneOfAbove)           => SecondIndustryOptionsController.onPageLoad(mode)
-      case _                              => SessionExpiredController.onPageLoad()
+      case Some(Engineering)                         => TypeOfEngineeringController.onPageLoad(mode)
+      case Some(FoodAndCatering)                     => CateringStaffNHSController.onPageLoad(mode)
+      case Some(Healthcare)                          => AmbulanceStaffController.onPageLoad(mode)
+      case Some(Retail)                              => EmployerContributionController.onPageLoad(mode)
+      case Some(TransportAndDistribution)            => TypeOfTransportController.onPageLoad(mode)
+      case Some(FirstIndustryOptions.NoneOfAbove) => SecondIndustryOptionsController.onPageLoad(mode)
+      case _                                         => SessionExpiredController.onPageLoad()
     }
 
   private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(SecondIndustryOptionsPage) match {
-      case Some(Construction)             => JoinerCarpenterController.onPageLoad(mode)
-      case Some(ManufacturingWarehousing) => TypeOfManufacturingController.onPageLoad(mode)
-      case Some(Council)                  => EmployerContributionController.onPageLoad(mode)
-      case Some(Police)                   => SpecialConstableController.onPageLoad(mode)
-      case Some(ClothingTextiles)         => ClothingController.onPageLoad(mode)
+      case Some(Construction)                      => JoinerCarpenterController.onPageLoad(mode)
+      case Some(ManufacturingWarehousing)          => TypeOfManufacturingController.onPageLoad(mode)
+      case Some(Council)                           => EmployerContributionController.onPageLoad(mode)
+      case Some(Police)                            => SpecialConstableController.onPageLoad(mode)
+      case Some(ClothingTextiles)                  => ClothingController.onPageLoad(mode)
       case Some(SecondIndustryOptions.NoneOfAbove) => ThirdIndustryOptionsController.onPageLoad(mode)
-      case _                              => SessionExpiredController.onPageLoad()
+      case _                                       => SessionExpiredController.onPageLoad()
+    }
+
+  private def thirdIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(ThirdIndustryOptionsPage) match {
+      case Some(Education)                        => EmployerContributionController.onPageLoad(mode)
+      case Some(BanksBuildingSocieties)           => EmployerContributionController.onPageLoad(NormalMode)
+      case Some(Electrical)                       => ElectricalController.onPageLoad(NormalMode)
+      case Some(Printing)                         => PrintingOccupationList1Controller.onPageLoad(NormalMode)
+      case Some(Security)                         => SecurityGuardNHSController.onPageLoad(NormalMode)
+      case Some(ThirdIndustryOptions.NoneOfAbove) => FourthIndustryOptionsController.onPageLoad(mode)
+      case _                                      => SessionExpiredController.onPageLoad()
     }
 
   private def fourthIndustryOptions(mode:Mode)(userAnswers: UserAnswers): Call =
@@ -105,30 +120,28 @@ class GenericNavigator @Inject()() extends Navigator {
 
   private def employerContribution(mode: Mode)(userAnswers: UserAnswers): Call =
    userAnswers.get(EmployerContributionPage) match {
-      case Some(EmployerContribution.All)             => CannotClaimController.onPageLoad()
-      case Some(EmployerContribution.NoContribution)            => ClaimAmountController.onPageLoad()
-      case Some(EmployerContribution.SomeContribution)            => ExpensesEmployerPaidController.onPageLoad(mode)
-      case _                                          => SessionExpiredController.onPageLoad()
+      case Some(EmployerContribution.All)  => CannotClaimController.onPageLoad()
+      case Some(EmployerContribution.NoContribution) => ClaimAmountController.onPageLoad()
+      case Some(EmployerContribution.SomeContribution) => ExpensesEmployerPaidController.onPageLoad(mode)
+      case _                               => SessionExpiredController.onPageLoad()
     }
 
   private def expensesEmployerPaid(mode: Mode)(userAnswers: UserAnswers): Call =
     (userAnswers.get(ClaimAmount), userAnswers.get(ExpensesEmployerPaidPage)) match {
       case (Some(claimAmount), Some(expensesPaid)) =>
-        if (claimAmount > expensesPaid) ClaimAmountController.onPageLoad() else CannotClaimController.onPageLoad()
+        if (claimAmount > expensesPaid) SameEmployerContributionAllYearsController.onPageLoad(mode) else CannotClaimController.onPageLoad()
       case _ =>
         SessionExpiredController.onPageLoad()
     }
 
-  private def thirdIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
-    userAnswers.get(ThirdIndustryOptionsPage) match {
-      case Some(Education) => EmployerContributionController.onPageLoad(mode)
-      case Some(BanksBuildingSocieties) => EmployerContributionController.onPageLoad(NormalMode)
-      case Some(Electrical) => ElectricalController.onPageLoad(NormalMode)
-      case Some(Printing) => PrintingOccupationList1Controller.onPageLoad(NormalMode)
-      case Some(Security) => SecurityGuardNHSController.onPageLoad(NormalMode)
-      case Some(ThirdIndustryOptions.NoneOfAbove) => FourthIndustryOptionsController.onPageLoad(mode)
-      case _ => SessionExpiredController.onPageLoad()
-    }
-
+  private def sameEmployerContributionAllYears(mode: Mode)(userAnswers: UserAnswers): Call =
+  userAnswers.get(SameEmployerContributionAllYearsPage) match {
+    case Some(true) =>
+      ClaimAmountController.onPageLoad()
+    case Some(false) =>
+      PhoneUsController.onPageLoad()
+    case _ =>
+      SessionExpiredController.onPageLoad()
+  }
 
 }

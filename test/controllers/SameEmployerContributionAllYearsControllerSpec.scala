@@ -18,62 +18,64 @@ package controllers
 
 import base.SpecBase
 import config.NavConstant
-import forms.EmployerContributionFormProvider
-import models.{EmployerContribution, NormalMode, UserAnswers}
+import forms.SameEmployerContributionAllYearsFormProvider
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.EmployerContributionPage
+import pages.{ExpensesEmployerPaidPage, SameEmployerContributionAllYearsPage}
 import play.api.inject.bind
-import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.EmployerContributionView
+import views.html.SameEmployerContributionAllYearsView
 
-class EmployerContributionControllerSpec extends SpecBase {
+class SameEmployerContributionAllYearsControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val employerContributionRoute = routes.EmployerContributionController.onPageLoad(NormalMode).url
-
-  val formProvider = new EmployerContributionFormProvider()
+  val formProvider = new SameEmployerContributionAllYearsFormProvider()
   val form = formProvider()
+  val contribution = 10
 
-  "EmployerContribution Controller" must {
+  lazy val sameEmployerContributionAllYearsRoute = routes.SameEmployerContributionAllYearsController.onPageLoad(NormalMode).url
+
+  "SameEmployerContributionAllYears Controller" must {
 
     "return OK and the correct view for a GET" in {
+      val userAnswers = UserAnswers(userAnswersId).set(ExpensesEmployerPaidPage, contribution).success.value
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, employerContributionRoute)
+      val request = FakeRequest(GET, sameEmployerContributionAllYearsRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[EmployerContributionView]
+      val view = application.injector.instanceOf[SameEmployerContributionAllYearsView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode)(fakeRequest, messages).toString
+        view(form, NormalMode, contribution)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(EmployerContributionPage, EmployerContribution.values.head).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(SameEmployerContributionAllYearsPage, true).success.value
+      val userAnswers2 = userAnswers.set(ExpensesEmployerPaidPage, contribution).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers2)).build()
 
-      val request = FakeRequest(GET, employerContributionRoute)
+      val request = FakeRequest(GET, sameEmployerContributionAllYearsRoute)
 
-      val view = application.injector.instanceOf[EmployerContributionView]
+      val view = application.injector.instanceOf[SameEmployerContributionAllYearsView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(EmployerContribution.values.head), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode, contribution)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -81,13 +83,13 @@ class EmployerContributionControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(minimumUserAnswers))
           .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
-        FakeRequest(POST, employerContributionRoute)
-          .withFormUrlEncodedBody(("value", EmployerContribution.options.head.value))
+        FakeRequest(POST, sameEmployerContributionAllYearsRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -99,23 +101,24 @@ class EmployerContributionControllerSpec extends SpecBase {
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
+      val userAnswers = UserAnswers(userAnswersId).set(ExpensesEmployerPaidPage, contribution).success.value
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, employerContributionRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
+        FakeRequest(POST, sameEmployerContributionAllYearsRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[EmployerContributionView]
+      val view = application.injector.instanceOf[SameEmployerContributionAllYearsView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, contribution)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -124,11 +127,12 @@ class EmployerContributionControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, employerContributionRoute)
+      val request = FakeRequest(GET, sameEmployerContributionAllYearsRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
@@ -139,8 +143,8 @@ class EmployerContributionControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, employerContributionRoute)
-          .withFormUrlEncodedBody(("value", EmployerContribution.values.head.toString))
+        FakeRequest(POST, sameEmployerContributionAllYearsRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 

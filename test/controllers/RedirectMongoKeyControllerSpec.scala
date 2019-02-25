@@ -20,11 +20,11 @@ import base.SpecBase
 import models.NormalMode
 import controllers.routes._
 import controllers.authenticated.routes._
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class RedirectMongoKeyControllerSpec extends SpecBase with ScalaFutures {
+class RedirectMongoKeyControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
 
   "RedirectMongoKey Controller" must {
 

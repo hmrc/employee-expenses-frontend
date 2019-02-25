@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json._
+import play.api.libs.json.JsPath
 
-case class FlatRateExpense(grossAmount: Int)
+case object SameEmployerContributionAllYearsPage extends QuestionPage[Boolean] {
 
-object FlatRateExpense {
-  implicit val reads: Reads[FlatRateExpense] = Json.format[FlatRateExpense]
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "sameEmployerContributionAllYears"
 }

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package controllers.authenticated
+package controllers
 
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.authenticated.PhoneUsView
+import views.html.PhoneUsView
 
 class PhoneUsControllerSpec extends SpecBase {
 

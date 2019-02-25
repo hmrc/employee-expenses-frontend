@@ -17,14 +17,14 @@
 package controllers
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import forms.FirstIndustryOptionsFormProvider
 import generators.Generators
 import models.{FirstIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.prop.PropertyChecks
 import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.Application
@@ -36,7 +36,7 @@ import repositories.SessionRepository
 import views.html.FirstIndustryOptionsView
 
 
-class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with PropertyChecks with Generators with OptionValues {
+class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
 
   def onwardRoute = Call("GET", "/FOO")
 
@@ -79,7 +79,7 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
     "redirect to next page when valid data is submitted" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+        .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
         .build()
 
       val firstIndustryOptions: Gen[FirstIndustryOptions] = Gen.oneOf(FirstIndustryOptions.values)

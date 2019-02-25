@@ -23,6 +23,7 @@ sealed trait NavConstant
 @Singleton
 object NavConstant {
 
+  final val generic = "Generic"
   final val authenticated = "Authenticated"
   final val clothing = "Clothing"
   final val construction = "Construction"

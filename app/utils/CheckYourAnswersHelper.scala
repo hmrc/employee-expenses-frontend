@@ -31,6 +31,10 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def sameEmployerContributionAllYears: Option[AnswerRow] = userAnswers.get(SameEmployerContributionAllYearsPage) map {
+    x => AnswerRow("sameEmployerContributionAllYears.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, SameEmployerContributionAllYearsController.onPageLoad(CheckMode).url)
+  }
+
   def changeWhichTaxYears: Option[AnswerRow] = userAnswers.get(ChangeWhichTaxYearsPage) map {
     x => AnswerRow(
         "changeWhichTaxYears.checkYourAnswersLabel",
@@ -53,7 +57,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       case Some(Retail) => industryAnswerRow(s"firstIndustryOptions.${Retail.toString}")
       case Some(Engineering) => industryAnswerRow(s"firstIndustryOptions.${Engineering.toString}")
       case Some(TransportAndDistribution) => industryAnswerRow(s"firstIndustryOptions.${TransportAndDistribution.toString}")
-      case Some(FirstIndustryOptions.NoneOfAbove) => secondaryIndustryList
+      case _ => secondaryIndustryList
     }
   }
 
@@ -64,7 +68,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       case Some(Police) => industryAnswerRow(s"secondIndustryOptions.${Police.toString}")
       case Some(ClothingTextiles) => industryAnswerRow(s"secondIndustryOptions.${ClothingTextiles.toString}")
       case Some(Construction) => industryAnswerRow(s"secondIndustryOptions.${Construction.toString}")
-      case Some(SecondIndustryOptions.NoneOfAbove) => thirdIndustryList
+      case _ => thirdIndustryList
     }
   }
 
@@ -75,7 +79,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       case Some(BanksBuildingSocieties) => industryAnswerRow(s"thirdIndustryOptions.${BanksBuildingSocieties.toString}")
       case Some(Security) => industryAnswerRow(s"thirdIndustryOptions.${Security.toString}")
       case Some(Printing) => industryAnswerRow(s"thirdIndustryOptions.${Printing.toString}")
-      case Some(ThirdIndustryOptions.NoneOfAbove) => fourthIndustryList
+      case _ => fourthIndustryList
     }
   }
 
@@ -86,7 +90,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       case Some(Heating) => industryAnswerRow(s"fourthIndustryOptions.${Heating.toString}")
       case Some(Leisure) => industryAnswerRow(s"fourthIndustryOptions.${Leisure.toString}")
       case Some(Prisons) => industryAnswerRow(s"fourthIndustryOptions.${Prisons.toString}")
-      case Some(FourthIndustryOptions.NoneOfAbove) => industryAnswerRow("default rate")
+      case _ => industryAnswerRow("default rate")
     }
   }
 
@@ -96,13 +100,14 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
         EmployerContributionController.onPageLoad(CheckMode).url)
   }
 
-  def expensesEmployerPaid: Option[AnswerRow] = userAnswers.get(ExpensesEmployerPaidPage) map {
-    x =>
-      userAnswers.get(EmployerContributionPage) match {
-        case Some(SomeContribution) =>
+  def expensesEmployerPaid: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) match {
+    case Some(SomeContribution) =>
+      userAnswers.get(ExpensesEmployerPaidPage) map {
+        x =>
           AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"$x", false,
             ExpensesEmployerPaidController.onPageLoad(CheckMode).url)
       }
+    case _ => None
   }
 
   def taxYearSelection: Option[AnswerRow] = userAnswers.get(TaxYearSelectionPage) map {
