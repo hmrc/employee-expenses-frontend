@@ -314,16 +314,36 @@ class GenericNavigatorSpec extends SpecBase {
           CannotClaimController.onPageLoad()
       }
 
-      "go to ClaimAmountController from ExpensesEmployerPaidPage if ClaimAmount is > ExpensesEmployerPaid" in {
+      "go to SameEmployerContributionAllYearsController from ExpensesEmployerPaidPage if ClaimAmount is > ExpensesEmployerPaid" in {
         val answers = emptyUserAnswers.set(ExpensesEmployerPaidPage, 50).success.value
         val updatedAnswers = answers.set(ClaimAmount, 100).success.value
 
         navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(updatedAnswers) mustBe
-          ClaimAmountController.onPageLoad()
+          SameEmployerContributionAllYearsController.onPageLoad(NormalMode)
       }
 
       "go to SessionExpiredController from ExpensesEmployerPaidPage when no data is available" in {
         navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      //SameEmployerContributionAllYearsPage
+      "go to ClaimAmountController from SameEmployerContributionAllYearsPage if true" in {
+        val answers = emptyUserAnswers.set(SameEmployerContributionAllYearsPage, true).success.value
+
+        navigator.nextPage(SameEmployerContributionAllYearsPage, NormalMode)(answers) mustBe
+          ClaimAmountController.onPageLoad()
+      }
+
+      "go to PhoneUsController from SameEmployerContributionAllYearsPage if false" in {
+        val answers = emptyUserAnswers.set(SameEmployerContributionAllYearsPage, false).success.value
+
+        navigator.nextPage(SameEmployerContributionAllYearsPage, NormalMode)(answers) mustBe
+          PhoneUsController.onPageLoad()
+      }
+
+      "go to SessionExpiredController from SameEmployerContributionAllYearsPage when no data is available" in {
+        navigator.nextPage(SameEmployerContributionAllYearsPage, NormalMode)(emptyUserAnswers) mustBe
           SessionExpiredController.onPageLoad()
       }
     }

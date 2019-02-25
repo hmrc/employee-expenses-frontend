@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.authenticated
+package controllers
 
 import config.FrontendAppConfig
 import controllers.actions._
@@ -22,19 +22,19 @@ import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.authenticated.PhoneUsView
+import views.html.PhoneUsView
 
 import scala.concurrent.ExecutionContext
 
 class PhoneUsController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       identify: IdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       frontendAppConfig: FrontendAppConfig,
-                                       view: PhoneUsView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                   override val messagesApi: MessagesApi,
+                                   identify: UnauthenticatedIdentifierAction,
+                                   getData: DataRetrievalAction,
+                                   requireData: DataRequiredAction,
+                                   val controllerComponents: MessagesControllerComponents,
+                                   frontendAppConfig: FrontendAppConfig,
+                                   view: PhoneUsView
+                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
