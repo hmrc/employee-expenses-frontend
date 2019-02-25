@@ -57,7 +57,7 @@ class TaiService @Inject()(taiConnector: TaiConnector,
     getAllFlatRateExpenses(nino, taxYears).map {
       case flatRateExpenses if flatRateExpenses.forall(_.status == 404) => FRENoYears
       case flatRateExpenses if flatRateExpenses.forall(_.status == 200) =>
-        freResponseLogic(flatRateExpenses.map(_.json.as[FlatRateExpense]), claimAmount)
+        freResponseLogic(flatRateExpenses.map(_.json.as[Seq[FlatRateExpense]].head), claimAmount)
       case _ => TechnicalDifficulties
     }
   }
