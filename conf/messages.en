@@ -572,7 +572,7 @@ updateYourAddress.guidance2 = We will give you the link to change your address a
 
 noCodeChange.title = You do not need to do anything else
 noCodeChange.heading = You do not need to do anything else
-noCodeChange.guidance = You will continue to earn an extra £{0} a year before paying tax until you tell us that your employment circumstances have changed.
+noCodeChange.guidance = This amount will stay in your tax code until you tell us that your employment circumstances have changed.
 
 yourAddress.title = Is this your address?
 yourAddress.heading = Is this your address?
