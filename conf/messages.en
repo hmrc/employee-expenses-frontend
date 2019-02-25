@@ -599,8 +599,5 @@ sameEmployerContributionAllYears.error.required = Select yes if your employer pa
 
 changeWhichTaxYears.title = Tell us which years you want to change the claim amount for
 changeWhichTaxYears.heading = Tell us which years you want to change the claim amount for
-changeWhichTaxYears.we = we
-changeWhichTaxYears.ew = ew
-changeWhichTaxYears.re = re
 changeWhichTaxYears.checkYourAnswersLabel = Tell us which years you want to change the claim amount for
-changeWhichTaxYears.error.required = Select changeWhichTaxYears
+changeWhichTaxYears.error.required = Select which years you want to change the claim amount for

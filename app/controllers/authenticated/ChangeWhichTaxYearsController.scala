@@ -18,7 +18,7 @@ package controllers.authenticated
 
 import config.NavConstant
 import controllers.actions._
-import forms.authenticated.TaxYearSelectionFormProvider
+import forms.authenticated.ChangeWhichTaxYearsFormProvider
 import javax.inject.{Inject, Named}
 import models.{Enumerable, Mode, TaxYearSelection}
 import navigation.Navigator
@@ -40,7 +40,7 @@ class ChangeWhichTaxYearsController @Inject()(
                                                identify: IdentifierAction,
                                                getData: DataRetrievalAction,
                                                requireData: DataRequiredAction,
-                                               formProvider: TaxYearSelectionFormProvider,
+                                               formProvider: ChangeWhichTaxYearsFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
                                                view: ChangeWhichTaxYearsView
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
@@ -55,34 +55,36 @@ class ChangeWhichTaxYearsController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      val selectedTaxYears: Seq[TaxYearSelection] = request.userAnswers.get(TaxYearSelectionPage).get
-
-      val taxYears: Seq[RadioCheckboxOption] = selectedTaxYears.flatMap(
-        taxYear => TaxYearSelection.options.filter(_.value == taxYear.toString)
-      )
-
-      Ok(view(preparedForm, mode, taxYears))
+      request.userAnswers.get(TaxYearSelectionPage) match {
+        case Some(selectedTaxYears) =>
+          val taxYears = selectedTaxYears.flatMap(
+            taxYear => TaxYearSelection.options.filter(_.value == taxYear.toString)
+          )
+          Ok(view(preparedForm, mode, taxYears))
+        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+      }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      val selectedTaxYears: Seq[TaxYearSelection] = request.userAnswers.get(TaxYearSelectionPage).get
+      request.userAnswers.get(TaxYearSelectionPage) match {
+        case Some(selectedTaxYears) =>
+          val taxYears = selectedTaxYears.flatMap(
+            taxYear => TaxYearSelection.options.filter(_.value == taxYear.toString)
+          )
+          form.bindFromRequest().fold(
+            (formWithErrors: Form[Seq[TaxYearSelection]]) =>
+              Future.successful(BadRequest(view(formWithErrors, mode, taxYears))),
 
-      val taxYears: Seq[RadioCheckboxOption] = selectedTaxYears.flatMap(
-        taxYear => TaxYearSelection.options.filter(_.value == taxYear.toString)
-      )
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[Seq[TaxYearSelection]]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, taxYears))),
-
-        value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeWhichTaxYearsPage, value))
-            _ <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ChangeWhichTaxYearsPage, mode)(updatedAnswers))
-        }
-      )
+            value => {
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeWhichTaxYearsPage, value))
+                _ <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(ChangeWhichTaxYearsPage, mode)(updatedAnswers))
+            }
+          )
+        case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+      }
   }
 }
