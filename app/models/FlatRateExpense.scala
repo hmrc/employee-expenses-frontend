@@ -21,6 +21,5 @@ import play.api.libs.json._
 case class FlatRateExpense(grossAmount: Int)
 
 object FlatRateExpense {
-  implicit val reads: Reads[FlatRateExpense] = (__ \ "grossAmount").read[Int].map(FlatRateExpense.apply)
+  implicit val reads: Reads[FlatRateExpense] = Json.format[FlatRateExpense]
 }
-

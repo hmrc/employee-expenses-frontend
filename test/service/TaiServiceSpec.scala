@@ -51,7 +51,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
   private val validFlatRateJson: JsValue = Json.parse(
     """
-      |   {
+      |   [{
       |        "nino": "AB123456A",
       |        "sequenceNumber": 201600003,
       |        "taxYear": 2016,
@@ -62,7 +62,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
       |        "captureDate": null,
       |        "typeDescription": "Flat Rate Job Expenses",
       |        "netAmount": null
-      |   }
+      |   }]
       |""".stripMargin)
 
   private val iabdUpdateData = IabdUpdateData(sequenceNumber = 1, grossAmount = 100)
