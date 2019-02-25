@@ -49,6 +49,7 @@ class GenericNavigator @Inject()() extends Navigator {
     case FourthIndustryOptionsPage => fourthIndustryOptions(NormalMode)
     case EmployerContributionPage  => employerContribution(NormalMode)
     case ExpensesEmployerPaidPage  => expensesEmployerPaid(NormalMode)
+    case SameEmployerContributionAllYearsPage  => sameEmployerContributionAllYears(NormalMode)
     case ClaimAmount               => _ => TaxYearSelectionController.onPageLoad(NormalMode)
     case _ =>                    _ => IndexController.onPageLoad()
   }
@@ -60,7 +61,8 @@ class GenericNavigator @Inject()() extends Navigator {
     case ThirdIndustryOptionsPage => thirdIndustryOptions(CheckMode)
     case FourthIndustryOptionsPage => fourthIndustryOptions(CheckMode)
     case EmployerContributionPage => employerContribution(CheckMode)
-    case ExpensesEmployerPaidPage => expensesEmployerPaid(CheckMode)
+    case ExpensesEmployerPaidPage => expensesEmployerPaid(NormalMode)
+    case SameEmployerContributionAllYearsPage => sameEmployerContributionAllYears(CheckMode)
     case _ =>                   _ => CheckYourAnswersController.onPageLoad()
   }
 
@@ -127,8 +129,19 @@ class GenericNavigator @Inject()() extends Navigator {
   private def expensesEmployerPaid(mode: Mode)(userAnswers: UserAnswers): Call =
     (userAnswers.get(ClaimAmount), userAnswers.get(ExpensesEmployerPaidPage)) match {
       case (Some(claimAmount), Some(expensesPaid)) =>
-        if (claimAmount > expensesPaid) ClaimAmountController.onPageLoad() else CannotClaimController.onPageLoad()
+        if (claimAmount > expensesPaid) SameEmployerContributionAllYearsController.onPageLoad(mode) else CannotClaimController.onPageLoad()
       case _ =>
         SessionExpiredController.onPageLoad()
     }
+
+  private def sameEmployerContributionAllYears(mode: Mode)(userAnswers: UserAnswers): Call =
+  userAnswers.get(SameEmployerContributionAllYearsPage) match {
+    case Some(true) =>
+      ClaimAmountController.onPageLoad()
+    case Some(false) =>
+      PhoneUsController.onPageLoad()
+    case _ =>
+      SessionExpiredController.onPageLoad()
+  }
+
 }

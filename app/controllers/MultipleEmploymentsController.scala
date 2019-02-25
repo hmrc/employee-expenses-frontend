@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.NavConstant
 import controllers.actions._
 import forms.MultipleEmploymentsFormProvider
 import javax.inject.{Inject, Named}
@@ -32,16 +33,16 @@ import views.html.MultipleEmploymentsView
 import scala.concurrent.{ExecutionContext, Future}
 
 class MultipleEmploymentsController @Inject()(
-                                               override val messagesApi: MessagesApi,
-                                               sessionRepository: SessionRepository,
-                                               @Named("Generic") navigator: Navigator,
-                                               identify: UnauthenticatedIdentifierAction,
-                                               getData: DataRetrievalAction,
-                                               requireData: DataRequiredAction,
-                                               formProvider: MultipleEmploymentsFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: MultipleEmploymentsView
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                         override val messagesApi: MessagesApi,
+                                         sessionRepository: SessionRepository,
+                                         @Named(NavConstant.generic) navigator: Navigator,
+                                         identify: UnauthenticatedIdentifierAction,
+                                         getData: DataRetrievalAction,
+                                         requireData: DataRequiredAction,
+                                         formProvider: MultipleEmploymentsFormProvider,
+                                         val controllerComponents: MessagesControllerComponents,
+                                         view: MultipleEmploymentsView
+                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 

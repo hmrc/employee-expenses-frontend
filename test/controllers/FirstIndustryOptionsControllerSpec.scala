@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import forms.FirstIndustryOptionsFormProvider
 import generators.Generators
 import models.{FirstIndustryOptions, NormalMode, UserAnswers}
@@ -79,7 +79,7 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
     "redirect to next page when valid data is submitted" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+        .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
         .build()
 
       val firstIndustryOptions: Gen[FirstIndustryOptions] = Gen.oneOf(FirstIndustryOptions.values)

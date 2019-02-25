@@ -312,4 +312,9 @@ POST        /tax-year-expense-end                                controllers.aut
 GET         /change-tax-year-expense-end                         controllers.authenticated.RemoveFRECodeController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-tax-year-expense-end                         controllers.authenticated.RemoveFRECodeController.onSubmit(mode: Mode = CheckMode)
 
-GET         /phone-us                                            controllers.authenticated.PhoneUsController.onPageLoad()
+GET         /phone-us                                            controllers.PhoneUsController.onPageLoad()
+
+GET         /same-employer-contribution-all-years                controllers.SameEmployerContributionAllYearsController.onPageLoad(mode: Mode = NormalMode)
+POST        /same-employer-contribution-all-years                controllers.SameEmployerContributionAllYearsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-same-employer-contribution-all-years         controllers.SameEmployerContributionAllYearsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-same-employer-contribution-all-years         controllers.SameEmployerContributionAllYearsController.onSubmit(mode: Mode = CheckMode)
