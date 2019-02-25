@@ -22,10 +22,10 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, contribution: Int)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("sameEmployerContributionAllYears.title")}"
+    title = s"${errorPrefix(form)} ${messages("sameEmployerContributionAllYears.title", contribution)}"
     ) {
 
     @formHelper(action = SameEmployerContributionAllYearsController.onSubmit(mode), 'autoComplete -> "off") {
@@ -34,11 +34,11 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("sameEmployerContributionAllYears.heading")
+        @components.heading(messages("sameEmployerContributionAllYears.heading", contribution))
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("sameEmployerContributionAllYears.heading"),
+            label = messages("sameEmployerContributionAllYears.heading", contribution),
             labelClass = Some("visually-hidden")
         )
 

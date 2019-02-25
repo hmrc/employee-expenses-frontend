@@ -16,7 +16,6 @@
 
 package views
 
-import controllers.routes
 import forms.SameEmployerContributionAllYearsFormProvider
 import models.NormalMode
 import play.api.data.Form
@@ -32,23 +31,131 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
+  val contribution = 10
+
   "SameEmployerContributionAllYears view" must {
 
     val view = application.injector.instanceOf[SameEmployerContributionAllYearsView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest, messages)
+      view.apply(form, NormalMode, contribution)(fakeRequest, messages)
 
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
-
-    behave like normalPage(applyView(form), messageKeyPrefix)
+      view.apply(form, NormalMode, contribution)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like pageWithAccountMenu(applyViewWithAuth(form))
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.SameEmployerContributionAllYearsController.onSubmit(NormalMode).url)
+    "behave like a normal page" when {
+
+      "rendered" must {
+
+        "have the correct banner title" in {
+
+          val doc = asDocument(applyView(form))
+          assertRenderedById(doc, "proposition-menu")
+          assertRenderedByCssSelector(doc, "span.header__menu__proposition-name")
+        }
+
+        "hide account menu when user not logged in" in {
+
+          val doc = asDocument(applyView(form))
+          assertNotRenderedById(doc, "secondary-nav")
+        }
+
+        "display the correct browser title" in {
+
+          val doc = asDocument(applyView(form))
+          assertEqualsMessage(doc, "title", messages(s"$messageKeyPrefix.title", contribution))
+        }
+
+        "display the correct page title" in {
+
+          val doc = asDocument(applyView(form))
+          assertPageTitleEqualsMessage(doc, messages(s"$messageKeyPrefix.heading", contribution))
+        }
+
+        "display language toggles" in {
+
+          val doc = asDocument(applyView(form))
+          assertRenderedById(doc, "switchToWelsh")
+        }
+      }
+    }
+
+    "behave like a page with a Yes/No question" when {
+      "rendered" must {
+        "contain an input for the value" in {
+
+          val doc = asDocument(applyView(form))
+          assertRenderedById(doc, "value-yes")
+          assertRenderedById(doc, "value-no")
+        }
+
+        "have no values checked when rendered with no form" in {
+
+          val doc = asDocument(applyView(form))
+          assert(!doc.getElementById("value-yes").hasAttr("checked"))
+          assert(!doc.getElementById("value-no").hasAttr("checked"))
+        }
+
+        "not render an error summary" in {
+
+          val doc = asDocument(applyView(form))
+          assertNotRenderedById(doc, "error-summary_header")
+        }
+      }
+
+      "rendered with a value of true" must {
+
+        behave like answeredYesNoPage(applyView, true)
+      }
+
+      "rendered with a value of false" must {
+
+        behave like answeredYesNoPage(applyView, false)
+      }
+
+      "rendered with an error" must {
+
+        "show an error summary" in {
+
+          val doc = asDocument(applyView(form.withError(error)))
+          assertRenderedById(doc, "error-summary-heading")
+        }
+
+        "show an error in the value field's label" in {
+
+          val doc = asDocument(applyView(form.withError(error)))
+          val errorSpan = doc.getElementsByClass("error-message").first
+          errorSpan.text mustBe messages(errorMessage)
+        }
+
+        "show an error prefix in the browser title" in {
+
+          val doc = asDocument(applyView(form.withError(error)))
+          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title", contribution)}""")
+        }
+      }
+    }
+  }
+
+
+  override def answeredYesNoPage(createView: Form[Boolean] => HtmlFormat.Appendable, answer: Boolean): Unit = {
+
+    "have only the correct value checked" in {
+
+      val doc = asDocument(createView(form.fill(answer)))
+      assert(doc.getElementById("value-yes").hasAttr("checked") == answer)
+      assert(doc.getElementById("value-no").hasAttr("checked") != answer)
+    }
+
+    "not render an error summary" in {
+
+      val doc = asDocument(createView(form.fill(answer)))
+      assertNotRenderedById(doc, "error-summary_header")
+    }
   }
 
   application.stop()
