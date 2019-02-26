@@ -19,31 +19,50 @@ package controllers.authenticated
 import base.SpecBase
 import connectors.TaiConnector
 import forms.authenticated.YourEmployerFormProvider
-import models.{NormalMode, TaxCodeRecord, UserAnswers}
-import navigation.{AuthenticatedNavigator, FakeNavigator, Navigator}
+import models.{IabdUpdateData, NormalMode, TaxCodeRecord, TaxYear, UserAnswers}
+import navigation.{FakeNavigator, Navigator}
+import org.joda.time.LocalDate
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
-import org.mockito.Mockito._
 import pages.authenticated.YourEmployerPage
+import play.api.http.Status.OK
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import views.html.authenticated.YourEmployerView
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class YourEmployerControllerSpec extends SpecBase with MockitoSugar {
+class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new YourEmployerFormProvider()
-  val mockTaiConnector = mock[TaiConnector]
   val form = formProvider()
   val employerName = "HMRC"
   val taxCodeRecord = TaxCodeRecord
+  private val taxCodeRecords = Seq(TaxCodeRecord(
+    taxCode = "830L",
+    employerName = employerName,
+    startDate = LocalDate.parse("2018-06-27"),
+    endDate = LocalDate.parse("2019-04-05"),
+    payrollNumber = Some("1"),
+    pensionIndicator = true,
+    primary = true
+  ))
+
+
+  val fakeConnector = new TaiConnector {
+    override def taiTaxCodeRecords(nino: String)
+                                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = Future.successful(taxCodeRecords)
+
+
+    override def taiFREUpdate(nino: String, year: TaxYear, version: Int, data: IabdUpdateData)
+                             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = Future.successful(HttpResponse(OK))
+  }
 
   lazy val yourEmployerRoute = routes.YourEmployerController.onPageLoad(NormalMode).url
 
@@ -51,15 +70,15 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TaiConnector].to(fakeConnector))
+        .build()
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[YourEmployerView]
-
-      when(mockTaiConnector.taiTaxCodeRecords(fakeNino)) thenReturn (Future.successful(validTaiJson))
 
       status(result) mustEqual OK
 
@@ -73,16 +92,15 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar {
 
       val userAnswers = UserAnswers(userAnswersId).set(YourEmployerPage, true).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TaiConnector].to(fakeConnector))
+        .build()
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
       val view = application.injector.instanceOf[YourEmployerView]
 
       val result = route(application, request).value
-
-      when(mockTaiConnector.taiTaxCodeRecords(fakeNino)) thenReturn (Future.successful(validTaiJson))
-
 
       status(result) mustEqual OK
 
@@ -97,6 +115,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[TaiConnector].to(fakeConnector))
           .build()
 
       val request =
@@ -114,7 +133,9 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TaiConnector].to(fakeConnector))
+        .build()
 
       val request =
         FakeRequest(POST, yourEmployerRoute)
