@@ -579,11 +579,10 @@ yourAddress.heading = Is this your address?
 yourAddress.checkYourAnswersLabel = Is this your address? {0}
 yourAddress.error.required = Select yes if this is your address
 
-
-removeFRECode.title = What tax year did this expense end?
-removeFRECode.heading = What tax year did this expense end?
-removeFRECode.checkYourAnswersLabel = What tax year did this expense end?
-removeFRECode.error.required = Select the year that your expense ended
+removeFRECode.title = Which tax year did this expense end?
+removeFRECode.heading = Which tax year did this expense end?
+removeFRECode.checkYourAnswersLabel = Which tax year did this expense end?
+removeFRECode.error.required = Select the tax year that your expense ended
 
 phoneUs.title = You cannot make this change online
 phoneUs.heading = You cannot make this change online
