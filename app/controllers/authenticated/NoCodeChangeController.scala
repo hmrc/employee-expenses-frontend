@@ -37,9 +37,6 @@ class NoCodeChangeController @Inject()(
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      request.userAnswers.get(ClaimAmount) match {
-        case Some(amount)  => Ok (view(amount.toString))
-        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
-      }
+        Ok(view())
   }
 }
