@@ -16,7 +16,6 @@
 
 package controllers.authenticated
 
-import connectors.TaiConnector
 import controllers.actions._
 import forms.authenticated.YourEmployerFormProvider
 import javax.inject.{Inject, Named}
@@ -27,6 +26,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import service.TaiService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.authenticated.YourEmployerView
 
@@ -41,7 +41,7 @@ class YourEmployerController @Inject()(
                                         requireData: DataRequiredAction,
                                         formProvider: YourEmployerFormProvider,
                                         val controllerComponents: MessagesControllerComponents,
-                                        taiConnector: TaiConnector,
+                                        taiService: TaiService,
                                         view: YourEmployerView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
@@ -52,16 +52,14 @@ class YourEmployerController @Inject()(
       val preparedForm = request.userAnswers.get(YourEmployerPage) match {
         case None => form
         case Some(value) => form.fill(value)
+
       }
 
       request.nino match {
         case Some(nino) =>
-          taiConnector.taiTaxCodeRecords(nino).map {
-            taxCodeRecords =>
-              taxCodeRecords.filter(_.primary).head.employerName match {
-                case employerName => Ok(view(preparedForm, mode, employerName))
-                case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
-              }
+          taiService.currentPrimaryEmployer(nino).map {
+            case employerName => Ok(view(preparedForm, mode, employerName))
+            case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
           }
         case _ =>
           Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
@@ -72,24 +70,21 @@ class YourEmployerController @Inject()(
     implicit request =>
       request.nino match {
         case Some(nino) =>
-          taiConnector.taiTaxCodeRecords(nino).flatMap {
-            taxCodeRecords =>
-              taxCodeRecords.filter(_.primary).head.employerName match {
-                case employerName =>
+          taiService.currentPrimaryEmployer(nino).flatMap {
+            case employerName =>
 
-                  form.bindFromRequest().fold(
-                    (formWithErrors: Form[_]) =>
-                      Future.successful(BadRequest(view(formWithErrors, mode, employerName))),
+              form.bindFromRequest().fold(
+                (formWithErrors: Form[_]) =>
+                  Future.successful(BadRequest(view(formWithErrors, mode, employerName))),
 
-                    value => {
-                      for {
-                        updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value))
-                        _ <- sessionRepository.set(updatedAnswers)
-                      } yield Redirect(navigator.nextPage(YourEmployerPage, mode)(updatedAnswers))
-                    }
-                  )
-                case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
-              }
+                value => {
+                  for {
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value))
+                    _ <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(YourEmployerPage, mode)(updatedAnswers))
+                }
+              )
+            case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
           }
         case _ =>
           Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))

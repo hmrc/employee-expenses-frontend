@@ -80,4 +80,14 @@ class TaiService @Inject()(taiConnector: TaiConnector,
       ComplexClaim
     }
   }
+
+  def currentPrimaryEmployer(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[String] = {
+    taxCodeRecords(nino).map {
+      taxCodeRecords =>
+        taxCodeRecords.filter(_.primary).head.employerName match {
+          case employerName => employerName
+          case _ => throw new RuntimeException("[TaiService][PrimaryEmployer] No Employer Found")
+        }
+    }
+  }
 }

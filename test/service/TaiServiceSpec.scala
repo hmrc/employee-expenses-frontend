@@ -50,6 +50,17 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
     primary = true
   ))
 
+  private val noPrimaryTaxCodeRecords = Seq(TaxCodeRecord(
+    taxCode = "830L",
+    employerName = "Employer Name",
+    startDate = LocalDate.parse("2018-06-27"),
+    endDate = LocalDate.parse("2019-04-05"),
+    payrollNumber = Some("1"),
+    pensionIndicator = true,
+    primary = false
+  ))
+
+
   private val validFlatRateJson: JsValue = Json.parse(
     """
       |   [{
@@ -231,6 +242,19 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.freResponseLogic(Seq(FlatRateExpense(100), FlatRateExpense(200)), claimAmount = 200)
 
         result mustBe ComplexClaim
+      }
+    }
+
+    "currentPrimaryEmployer" must {
+
+      "return an employer when available" in {
+        when(mockTaiConnector.taiTaxCodeRecords(fakeNino)).thenReturn(Future.successful(taxCodeRecords))
+        val result = taiService.currentPrimaryEmployer(fakeNino)
+
+        whenReady(result) {
+          result =>
+            result mustBe "Employer Name"
+        }
       }
     }
   }
