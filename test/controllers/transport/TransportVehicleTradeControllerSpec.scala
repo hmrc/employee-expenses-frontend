@@ -17,17 +17,23 @@
 package controllers.transport
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.TransportVehicleTradeFormProvider
 import models.{NormalMode, TransportVehicleTrade, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import pages.ClaimAmount
 import pages.transport.TransportVehicleTradePage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.transport.TransportVehicleTradeView
 
-class TransportVehicleTradeControllerSpec extends SpecBase {
+class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -147,6 +153,120 @@ class TransportVehicleTradeControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save ClaimAmount 'buildersRepairersWagonLifters' when 'Builder' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, transportVehicleTradeRoute)
+        .withFormUrlEncodedBody(("value", TransportVehicleTrade.Builder.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
+      }
+
+      application.stop()
+    }
+
+    "save ClaimAmount 'buildersRepairersWagonLifters' when 'VehicleRepairerWagonLifter' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, transportVehicleTradeRoute)
+        .withFormUrlEncodedBody(("value", TransportVehicleTrade.VehicleRepairerWagonLifter.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
+      }
+
+      application.stop()
+    }
+
+    "save ClaimAmount 'vehiclePainters' when 'RailwayVehiclePainter' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, transportVehicleTradeRoute)
+        .withFormUrlEncodedBody(("value", TransportVehicleTrade.RailwayVehiclePainter.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehiclePainters
+      }
+
+      application.stop()
+    }
+
+    "save ClaimAmount 'paintersLetterersAssistants' when 'Letterer' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, transportVehicleTradeRoute)
+        .withFormUrlEncodedBody(("value", TransportVehicleTrade.Letterer.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
+      }
+
+      application.stop()
+    }
+
+    "save ClaimAmount 'paintersLetterersAssistants' when 'BuildersAssistantOrRepairersAssistant' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, transportVehicleTradeRoute)
+        .withFormUrlEncodedBody(("value", TransportVehicleTrade.BuildersAssistantOrRepairersAssistant.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
+      }
+
+      application.stop()
+    }
+
+    "save ClaimAmount 'allOther' when 'NoneOfTheAbove' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, transportVehicleTradeRoute)
+        .withFormUrlEncodedBody(("value", TransportVehicleTrade.NoneOfTheAbove.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.allOther
+      }
 
       application.stop()
     }

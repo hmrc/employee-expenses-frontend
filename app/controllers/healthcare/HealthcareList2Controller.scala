@@ -16,7 +16,7 @@
 
 package controllers.healthcare
 
-import config.ClaimAmountsConfig
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.HealthcareList2FormProvider
 import javax.inject.{Inject, Named}
@@ -36,15 +36,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class HealthcareList2Controller @Inject()(
                                            override val messagesApi: MessagesApi,
                                            sessionRepository: SessionRepository,
-                                           @Named("Healthcare") navigator: Navigator,
+                                           @Named(NavConstant.healthcare) navigator: Navigator,
                                            identify: UnauthenticatedIdentifierAction,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction,
                                            formProvider: HealthcareList2FormProvider,
                                            val controllerComponents: MessagesControllerComponents,
-                                           view: HealthcareList2View,
-                                           claimAmounts: ClaimAmountsConfig
-
+                                           view: HealthcareList2View
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -70,7 +68,7 @@ class HealthcareList2Controller @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList2Page, value))
-            amount: Int = if (value) claimAmounts.Healthcare.list2 else claimAmounts.Healthcare.allOther
+            amount: Int = if (value) ClaimAmounts.Healthcare.list2 else ClaimAmounts.Healthcare.allOther
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
             _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(HealthcareList2Page, mode)(updatedAnswers))

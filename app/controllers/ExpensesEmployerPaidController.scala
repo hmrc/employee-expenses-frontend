@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.NavConstant
 import controllers.actions._
 import forms.ExpensesEmployerPaidFormProvider
 import javax.inject.{Inject, Named}
@@ -34,14 +35,14 @@ import scala.concurrent.{ExecutionContext, Future}
 class ExpensesEmployerPaidController @Inject()(
                                                 override val messagesApi: MessagesApi,
                                                 sessionRepository: SessionRepository,
-                                                @Named("Generic") navigator: Navigator,
+                                                @Named(NavConstant.generic) navigator: Navigator,
                                                 identify: UnauthenticatedIdentifierAction,
                                                 getData: DataRetrievalAction,
                                                 requireData: DataRequiredAction,
                                                 formProvider: ExpensesEmployerPaidFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: ExpensesEmployerPaidView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
 
@@ -66,7 +67,7 @@ class ExpensesEmployerPaidController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ExpensesEmployerPaidPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(ExpensesEmployerPaidPage, mode)(updatedAnswers))
         }
       )

@@ -17,11 +17,13 @@
 package controllers
 
 import base.SpecBase
+import config.{ClaimAmounts, NavConstant}
 import forms.SecondIndustryOptionsFormProvider
 import generators.Generators
 import models.{NormalMode, SecondIndustryOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalacheck.Gen
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.prop.PropertyChecks
 import pages.{ClaimAmount, SecondIndustryOptionsPage}
@@ -32,7 +34,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.SecondIndustryOptionsView
 
-class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators {
+class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -85,7 +87,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val secondIndustryOptions: Gen[SecondIndustryOptions] = Gen.oneOf(SecondIndustryOptions.values)
@@ -95,7 +97,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
         secondIndustryOption =>
 
           val request = FakeRequest(POST, secondIndustryOptionsRoute)
-              .withFormUrlEncodedBody(("value", secondIndustryOption.toString))
+            .withFormUrlEncodedBody(("value", secondIndustryOption.toString))
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
@@ -104,24 +106,6 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       }
 
       application.stop()
-    }
-
-    "save ClaimAmount when 'Council' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, secondIndustryOptionsRoute).withFormUrlEncodedBody(("value", SecondIndustryOptions.Council.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.defaultRate))
-      }
-
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
@@ -173,6 +157,24 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save ClaimAmount when 'Council' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, secondIndustryOptionsRoute).withFormUrlEncodedBody(("value", SecondIndustryOptions.Council.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+      }
 
       application.stop()
     }

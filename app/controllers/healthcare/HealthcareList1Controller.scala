@@ -16,7 +16,7 @@
 
 package controllers.healthcare
 
-import config.ClaimAmountsConfig
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.healthcare.HealthcareList1FormProvider
 import javax.inject.{Inject, Named}
@@ -34,16 +34,15 @@ import views.html.healthcare.HealthcareList1View
 import scala.concurrent.{ExecutionContext, Future}
 
 class HealthcareList1Controller @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Healthcare") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: HealthcareList1FormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: HealthcareList1View,
-                                         claimAmounts: ClaimAmountsConfig
+                                           override val messagesApi: MessagesApi,
+                                           sessionRepository: SessionRepository,
+                                           @Named(NavConstant.healthcare) navigator: Navigator,
+                                           identify: UnauthenticatedIdentifierAction,
+                                           getData: DataRetrievalAction,
+                                           requireData: DataRequiredAction,
+                                           formProvider: HealthcareList1FormProvider,
+                                           val controllerComponents: MessagesControllerComponents,
+                                           view: HealthcareList1View
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -69,8 +68,8 @@ class HealthcareList1Controller @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList1Page, value))
-            newAnswers     <- if (value) Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Healthcare.list1)) else Future.successful(updatedAnswers)
-            _              <- sessionRepository.set(newAnswers)
+            newAnswers <- if (value) Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Healthcare.list1)) else Future.successful(updatedAnswers)
+            _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(HealthcareList1Page, mode)(newAnswers))
         }
       )

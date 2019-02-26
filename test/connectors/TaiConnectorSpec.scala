@@ -26,8 +26,8 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
-import uk.gov.hmrc.http.HttpResponse
+import play.api.libs.json.{JsValue, Json}
+import uk.gov.hmrc.http._
 import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,7 +44,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
   private lazy val taiConnector: TaiConnector = app.injector.instanceOf[TaiConnector]
 
-  private val taxYear = TaxYear()
+  private val taxYear = TaiTaxYear()
 
   private val taxCodeRecords = Seq(TaxCodeRecord(
     taxCode = "830L",
@@ -73,25 +73,26 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
         result =>
           result mustBe taxCodeRecords
       }
-
     }
+  }
 
-    "return 500 on failure" in {
+  "getFlatRateExpense" must {
+    "return a flatRateExpense on a 200 response" in {
       server.stubFor(
-        get(urlEqualTo(s"/tai/$fakeNino/tax-account/tax-code-change"))
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
           .willReturn(
             aResponse()
-              .withStatus(INTERNAL_SERVER_ERROR)
+              .withStatus(OK)
+              .withBody(validFlatRateJson.toString)
           )
       )
 
-      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino)
+      val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
 
-      whenReady(result.failed) {
+      whenReady(result) {
         result =>
-          result mustBe an[Exception]
+          result.status mustBe OK
       }
-
     }
   }
 
@@ -111,55 +112,52 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
         result =>
           result.status mustBe OK
       }
-
-    }
-
-    "return 500 on failure" in {
-      server.stubFor(
-        post(urlEqualTo(s"/tai/$fakeNino/tax-account/$taxYear/expenses/flat-rate-expenses"))
-          .willReturn(
-            aResponse()
-              .withStatus(INTERNAL_SERVER_ERROR)
-          )
-      )
-
-      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(fakeNino, taxYear, 1, IabdUpdateData(1, 100))
-
-      whenReady(result.failed) {
-        result =>
-          result mustBe an[Exception]
-      }
-
     }
   }
 
-  val validJson = Json.parse(
+  val validJson: JsValue = Json.parse(
     """{
-      															 |  "data" : {
-      															 |    "current": [{
-      															 |      "taxCode": "830L",
-      															 |      "employerName": "Employer Name",
-      															 |      "operatedTaxCode": true,
-      															 |      "p2Issued": true,
-      															 |      "startDate": "2018-06-27",
-      															 |      "endDate": "2019-04-05",
-      															 |      "payrollNumber": "1",
-      															 |      "pensionIndicator": true,
-      															 |      "primary": true
-      															 |    }],
-      															 |    "previous": [{
-      															 |      "taxCode": "1150L",
-      															 |      "employerName": "Employer Name",
-      															 |      "operatedTaxCode": true,
-      															 |      "p2Issued": true,
-      															 |      "startDate": "2018-04-06",
-      															 |      "endDate": "2018-06-26",
-      															 |      "payrollNumber": "1",
-      															 |      "pensionIndicator": true,
-      															 |      "primary": true
-      															 |    }]
-      															 |  },
-      															 |  "links" : [ ]
-      															 |}""".stripMargin)
+     |  "data" : {
+     |    "current": [{
+     |      "taxCode": "830L",
+     |      "employerName": "Employer Name",
+     |      "operatedTaxCode": true,
+     |      "p2Issued": true,
+     |      "startDate": "2018-06-27",
+     |      "endDate": "2019-04-05",
+     |      "payrollNumber": "1",
+     |      "pensionIndicator": true,
+     |      "primary": true
+     |    }],
+     |    "previous": [{
+     |      "taxCode": "1150L",
+     |      "employerName": "Employer Name",
+     |      "operatedTaxCode": true,
+     |      "p2Issued": true,
+     |      "startDate": "2018-04-06",
+     |      "endDate": "2018-06-26",
+     |      "payrollNumber": "1",
+     |      "pensionIndicator": true,
+     |      "primary": true
+     |    }]
+     |  },
+     |  "links" : [ ]
+     |}""".stripMargin)
+
+  val validFlatRateJson: JsValue = Json.parse(
+    """
+      |   {
+      |        "nino": "AB123456A",
+      |        "sequenceNumber": 201600003,
+      |        "taxYear": 2018,
+      |        "type": 56,
+      |        "source": 26,
+      |        "grossAmount": 120,
+      |        "receiptDate": null,
+      |        "captureDate": null,
+      |        "typeDescription": "Flat Rate Job Expenses",
+      |        "netAmount": null
+      |   }
+      |""".stripMargin)
 
 }

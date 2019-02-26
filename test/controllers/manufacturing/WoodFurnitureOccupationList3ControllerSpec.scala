@@ -17,17 +17,21 @@
 package controllers.manufacturing
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.WoodFurnitureOccupationList3FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import pages.ClaimAmount
 import pages.manufacturing.WoodFurnitureOccupationList3Page
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.manufacturing.WoodFurnitureOccupationList3View
 
-class WoodFurnitureOccupationList3ControllerSpec extends SpecBase {
+class WoodFurnitureOccupationList3ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -146,6 +150,44 @@ class WoodFurnitureOccupationList3ControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save 'list3' to ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, woodFurnitureOccupationList3Route)
+        .withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.WoodFurniture.list3
+      }
+
+      application.stop()
+    }
+
+    "save 'allOther' to ClaimAmount when 'No' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, woodFurnitureOccupationList3Route)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.WoodFurniture.allOther
+      }
 
       application.stop()
     }

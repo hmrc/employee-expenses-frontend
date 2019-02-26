@@ -17,10 +17,12 @@
 package controllers.electrical
 
 import base.SpecBase
+import config.ClaimAmounts
 import controllers.electrical.routes._
 import forms.electrical.ElectricalFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import pages.ClaimAmount
 import pages.electrical.ElectricalPage
@@ -31,7 +33,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.electrical.ElectricalView
 
-class ElectricalControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
+class ElectricalControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -154,7 +156,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
       application.stop()
     }
 
-    "when true save only landry value to claim amount" in {
+    "save 'onlyLaundry' to ClaimAmount when 'Yes' is selected" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .build()
@@ -167,13 +169,13 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Electrical.onlyLaundry))
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Electrical.onlyLaundry
       }
 
       application.stop()
     }
 
-    "when false save all other workers value to claim amount" in {
+    "save 'allOther' to ClaimAmount when 'No' is selected" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .build()
@@ -186,7 +188,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
       route(application, request).value.futureValue
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Electrical.allOther))
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Electrical.allOther
       }
 
       application.stop()

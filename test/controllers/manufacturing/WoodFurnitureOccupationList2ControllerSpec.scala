@@ -18,17 +18,21 @@ package controllers.manufacturing
 
 import controllers.routes.SessionExpiredController
 import base.SpecBase
+import config.ClaimAmounts
 import forms.WoodFurnitureOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import pages.ClaimAmount
 import pages.manufacturing.WoodFurnitureOccupationList2Page
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.manufacturing.WoodFurnitureOccupationList2View
 
-class WoodFurnitureOccupationList2ControllerSpec extends SpecBase {
+class WoodFurnitureOccupationList2ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -147,6 +151,25 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save 'list2' to ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, woodFurnitureOccupationList2Route)
+        .withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.WoodFurniture.list2
+      }
 
       application.stop()
     }

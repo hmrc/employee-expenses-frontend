@@ -16,7 +16,7 @@
 
 package controllers.police
 
-import config.ClaimAmountsConfig
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.police.PoliceOfficerFormProvider
 import javax.inject.{Inject, Named}
@@ -36,15 +36,14 @@ import scala.concurrent.{ExecutionContext, Future}
 class PoliceOfficerController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Police") navigator: Navigator,
+                                         @Named(NavConstant.police) navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: PoliceOfficerFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: PoliceOfficerView,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                         view: PoliceOfficerView
+                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -69,9 +68,9 @@ class PoliceOfficerController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PoliceOfficerPage, value))
-            amount: Int = if(value) claimAmounts.Police.policeOfficer else claimAmounts.defaultRate
+            amount: Int = if (value) ClaimAmounts.Police.policeOfficer else ClaimAmounts.defaultRate
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PoliceOfficerPage, mode)(updatedAnswers))
         }
       )

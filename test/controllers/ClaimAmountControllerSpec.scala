@@ -17,21 +17,22 @@
 package controllers
 
 import base.SpecBase
-import models.{EmployerContribution, NormalMode, UserAnswers}
+import models.{EmployerContribution, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import pages.{ClaimAmount, EmployerContributionPage, ExpensesEmployerPaidPage}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage, ExpensesEmployerPaidPage}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import repositories.SessionRepository
 import views.html.ClaimAmountView
 
-class ClaimAmountControllerSpec extends SpecBase {
-
+class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def asDocument(html: Html): Document = Jsoup.parse(html.toString())
-
 
   "ClaimAmount Controller" must {
 
@@ -41,17 +42,22 @@ class ClaimAmountControllerSpec extends SpecBase {
         userAnswersId,
         Json.obj(
           ClaimAmount.toString -> claimAmount,
-          EmployerContributionPage.toString -> EmployerContribution.None.toString
+          EmployerContributionPage.toString -> EmployerContribution.NoContribution.toString
         )
       )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
 
       status(result) mustEqual OK
       contentAsString(result) mustEqual
-        view(claimAmount, "36.00", "72.00", "/employee-expenses")(fakeRequest, messages).toString
+        view(claimAmount, "36.00", "72.00", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 180
+      }
 
       application.stop()
     }
@@ -72,11 +78,16 @@ class ClaimAmountControllerSpec extends SpecBase {
         val claimAmount = 180
         val userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> claimAmount))
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
         val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+
+        whenReady(sessionRepository.get(userAnswersId)) {
+          _.value.get(ClaimAmountAndAnyDeductions).value mustBe 180
+        }
 
         application.stop()
       }
@@ -88,16 +99,22 @@ class ClaimAmountControllerSpec extends SpecBase {
         userAnswersId,
         Json.obj(
           ClaimAmount.toString -> claimAmount,
-          EmployerContributionPage.toString -> EmployerContribution.None.toString
+          EmployerContributionPage.toString -> EmployerContribution.NoContribution.toString
         )
       )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
 
       contentAsString(result) mustEqual
-        view(claimAmount, "20.00", "40.00", "/employee-expenses")(fakeRequest, messages).toString
+        view(claimAmount, "20.00", "40.00", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 100
+      }
+
       application.stop()
     }
 
@@ -110,15 +127,20 @@ class ClaimAmountControllerSpec extends SpecBase {
           Json.obj(
             ClaimAmount.toString -> claimAmount,
             ExpensesEmployerPaidPage.toString -> employerContribution,
-            EmployerContributionPage.toString -> EmployerContribution.Some.toString
+            EmployerContributionPage.toString -> EmployerContribution.SomeContribution.toString
           )
         )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
       contentAsString(result) mustEqual
-        view(claimAmount - employerContribution, "19.00", "38.00", "/employee-expenses")(fakeRequest, messages).toString
+        view(claimAmount - employerContribution, "19.00", "38.00", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 95
+      }
 
       application.stop()
     }

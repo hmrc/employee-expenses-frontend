@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import config.NavConstant
 import forms.MultipleEmploymentsFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -81,7 +82,7 @@ class MultipleEmploymentsControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

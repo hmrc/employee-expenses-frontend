@@ -16,32 +16,38 @@
 
 package controllers.authenticated
 
+import config.NavConstant
 import controllers.actions._
+import controllers.routes._
 import forms.authenticated.TaxYearSelectionFormProvider
 import javax.inject.{Inject, Named}
+import models.FlatRateExpenseOptions._
 import models.{Enumerable, Mode, TaxYearSelection}
 import navigation.Navigator
 import pages.authenticated.TaxYearSelectionPage
+import pages.{ClaimAmount, FREResponse}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import service.TaiService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.authenticated.TaxYearSelectionView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class TaxYearSelectionController @Inject()(
-                                    override val messagesApi: MessagesApi,
-                                    sessionRepository: SessionRepository,
-                                    @Named("Authenticated") navigator: Navigator,
-                                    identify: IdentifierAction,
-                                    getData: DataRetrievalAction,
-                                    requireData: DataRequiredAction,
-                                    formProvider: TaxYearSelectionFormProvider,
-                                    val controllerComponents: MessagesControllerComponents,
-                                    view: TaxYearSelectionView
-                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                            override val messagesApi: MessagesApi,
+                                            sessionRepository: SessionRepository,
+                                            @Named(NavConstant.authenticated) navigator: Navigator,
+                                            identify: IdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            formProvider: TaxYearSelectionFormProvider,
+                                            val controllerComponents: MessagesControllerComponents,
+                                            view: TaxYearSelectionView,
+                                            taiService: TaiService
+                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
 
@@ -64,10 +70,21 @@ class TaxYearSelectionController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TaxYearSelectionPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TaxYearSelectionPage, mode)(updatedAnswers))
+          (request.userAnswers.get(ClaimAmount), request.nino) match {
+            case (Some(claimAmount), Some(nino)) =>
+              taiService.freResponse(value, nino, claimAmount).flatMap {
+                freResponse => {
+                  for {
+                    ua  <- Future.fromTry(request.userAnswers.set(TaxYearSelectionPage, value))
+                    ua2 <- Future.fromTry(ua.set(FREResponse, freResponse))
+                    _   <- sessionRepository.set(ua2)
+                  } yield
+                    Redirect(navigator.nextPage(TaxYearSelectionPage, mode)(ua2))
+                }
+              }
+            case _ =>
+              Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+          }
         }
       )
   }

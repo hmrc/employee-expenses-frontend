@@ -17,17 +17,22 @@
 package controllers.construction
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.construction.StoneMasonFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import pages.ClaimAmount
 import pages.construction.StoneMasonPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.construction.StoneMasonView
 
-class StoneMasonControllerSpec extends SpecBase {
+class StoneMasonControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -149,5 +154,24 @@ class StoneMasonControllerSpec extends SpecBase {
 
       application.stop()
     }
+  }
+
+  "save 'stoneMasons' to ClaimAmount when 'Yes' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, stoneMasonRoute)
+      .withFormUrlEncodedBody(("value", "true"))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.stoneMasons
+    }
+
+    application.stop()
   }
 }

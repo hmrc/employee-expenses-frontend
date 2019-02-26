@@ -17,24 +17,29 @@
 package controllers.printing
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.printing.PrintingOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import pages.ClaimAmount
 import pages.printing.PrintingOccupationList1Page
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.printing.PrintingOccupationList1View
 
-class PrintingOccupationList1ControllerSpec extends SpecBase {
+class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new PrintingOccupationList1FormProvider()
   val form = formProvider()
 
-  lazy val printingOccupationList1Route = routes.PrintingOccupationList1Controller.onPageLoad(NormalMode).url
+  lazy val printingOccupationList1Route: String = routes.PrintingOccupationList1Controller.onPageLoad(NormalMode).url
 
   "PrintingOccupationList1 Controller" must {
 
@@ -76,7 +81,7 @@ class PrintingOccupationList1ControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "redirect to the next page when answer is true" in {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -86,6 +91,26 @@ class PrintingOccupationList1ControllerSpec extends SpecBase {
       val request =
         FakeRequest(POST, printingOccupationList1Route)
           .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
+
+    "redirect to the next page when answer is false" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Printing").toInstance(new FakeNavigator(onwardRoute)))
+          .build()
+
+      val request =
+        FakeRequest(POST, printingOccupationList1Route)
+          .withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
 
@@ -146,6 +171,24 @@ class PrintingOccupationList1ControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, printingOccupationList1Route).withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.list1
+      }
 
       application.stop()
     }

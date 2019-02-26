@@ -16,7 +16,7 @@
 
 package controllers.healthcare
 
-import config.ClaimAmountsConfig
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.healthcare.AmbulanceStaffFormProvider
 import javax.inject.{Inject, Named}
@@ -36,14 +36,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmbulanceStaffController @Inject()(
                                           override val messagesApi: MessagesApi,
                                           sessionRepository: SessionRepository,
-                                          @Named("Healthcare") navigator: Navigator,
+                                          @Named(NavConstant.healthcare) navigator: Navigator,
                                           identify: UnauthenticatedIdentifierAction,
                                           getData: DataRetrievalAction,
                                           requireData: DataRequiredAction,
                                           formProvider: AmbulanceStaffFormProvider,
                                           val controllerComponents: MessagesControllerComponents,
-                                          view: AmbulanceStaffView,
-                                          claimAmounts: ClaimAmountsConfig
+                                          view: AmbulanceStaffView
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -69,8 +68,8 @@ class AmbulanceStaffController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value))
-            newAnswers     <- if (value) Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Healthcare.ambulanceStaff)) else Future.successful(updatedAnswers)
-            _              <- sessionRepository.set(newAnswers)
+            newAnswers <- if (value) Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Healthcare.ambulanceStaff)) else Future.successful(updatedAnswers)
+            _ <- sessionRepository.set(newAnswers)
           } yield Redirect(navigator.nextPage(AmbulanceStaffPage, mode)(updatedAnswers))
         }
       )

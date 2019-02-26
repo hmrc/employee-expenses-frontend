@@ -17,17 +17,21 @@
 package controllers.manufacturing
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.manufacturing.AluminiumOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import pages.ClaimAmount
 import pages.manufacturing.AluminiumOccupationList1Page
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.manufacturing.AluminiumOccupationList1View
 
-class AluminiumOccupationList1ControllerSpec extends SpecBase {
+class AluminiumOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -146,6 +150,25 @@ class AluminiumOccupationList1ControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save 'list1' to ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, aluminiumOccupationList1Route)
+        .withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.Aluminium.list1
+      }
 
       application.stop()
     }

@@ -17,7 +17,7 @@ class $className$ViewSpec extends ViewBehaviours {
 
     behave like normalPage(applyView, "$className;format="decap"$")
 
-    behave like normalPageWithAccountMenu(applyViewWithAuth, "$className;format="decap"$")
+    behave like normalPageWithAccountMenu(applyViewWithAuth)
 
     behave like pageWithBackLink(applyView)
   }

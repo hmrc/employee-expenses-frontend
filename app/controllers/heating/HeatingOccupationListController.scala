@@ -16,7 +16,7 @@
 
 package controllers.heating
 
-import config.ClaimAmountsConfig
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.heating.HeatingOccupationListFormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.heating.HeatingOccupationListView
 import scala.concurrent.{ExecutionContext, Future}
 
 class HeatingOccupationListController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Heating") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: HeatingOccupationListFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: HeatingOccupationListView,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                 override val messagesApi: MessagesApi,
+                                                 sessionRepository: SessionRepository,
+                                                 @Named(NavConstant.heating) navigator: Navigator,
+                                                 identify: UnauthenticatedIdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 formProvider: HeatingOccupationListFormProvider,
+                                                 val controllerComponents: MessagesControllerComponents,
+                                                 view: HeatingOccupationListView
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -69,9 +68,9 @@ class HeatingOccupationListController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HeatingOccupationListPage, value))
-            amount = if (value) claimAmounts.Heating.list else claimAmounts.Heating.allOther
+            amount = if (value) ClaimAmounts.Heating.list else ClaimAmounts.Heating.allOther
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(HeatingOccupationListPage, mode)(updatedAnswers))
         }
       )

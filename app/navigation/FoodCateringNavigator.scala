@@ -16,19 +16,26 @@
 
 package navigation
 
-import controllers.routes
+import controllers.routes._
 import javax.inject.Inject
-import models.UserAnswers
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
+import pages.foodCatering.CateringStaffNHSPage
 import play.api.mvc.Call
 
 class FoodCateringNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case CateringStaffNHSPage => cateringStaffNHSNav(NormalMode)
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case CateringStaffNHSPage => cateringStaffNHSNav(CheckMode)
   }
+
+  def cateringStaffNHSNav(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(CateringStaffNHSPage) match {
+      case Some(_) => EmployerContributionController.onPageLoad(mode)
+      case _ => SessionExpiredController.onPageLoad()
+    }
 }

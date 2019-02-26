@@ -16,7 +16,7 @@
 
 package controllers.clothing
 
-import config.ClaimAmountsConfig
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.clothing.ClothingFormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.clothing.ClothingView
 import scala.concurrent.{ExecutionContext, Future}
 
 class ClothingController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Clothing") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: ClothingFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: ClothingView,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                    override val messagesApi: MessagesApi,
+                                    sessionRepository: SessionRepository,
+                                    @Named(NavConstant.clothing) navigator: Navigator,
+                                    identify: UnauthenticatedIdentifierAction,
+                                    getData: DataRetrievalAction,
+                                    requireData: DataRequiredAction,
+                                    formProvider: ClothingFormProvider,
+                                    val controllerComponents: MessagesControllerComponents,
+                                    view: ClothingView
+                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -69,9 +68,9 @@ class ClothingController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ClothingPage, value))
-            amount = if (value) claimAmounts.Clothing.clothingList else claimAmounts.defaultRate
+            amount = if (value) ClaimAmounts.Clothing.clothingList else ClaimAmounts.defaultRate
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(ClothingPage, mode)(updatedAnswers))
         }
       )

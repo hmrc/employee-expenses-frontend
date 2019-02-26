@@ -28,7 +28,7 @@ object WhichRailwayTrade extends Enumerable.Implicits {
   case object NoneOfTheAbove extends WithName("noneOfTheAbove") with WhichRailwayTrade
 
   val values: Seq[WhichRailwayTrade] = Seq(
-    VehicleRepairersWagonLifters, VehiclePainters, NoneOfTheAbove
+    VehiclePainters,VehicleRepairersWagonLifters, NoneOfTheAbove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {

@@ -17,17 +17,22 @@
 package controllers.healthcare
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.healthcare.HealthcareList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import pages.ClaimAmount
 import pages.healthcare.HealthcareList1Page
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.healthcare.HealthcareList1View
 
-class HealthcareList1ControllerSpec extends SpecBase {
+class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with OptionValues with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -165,6 +170,24 @@ class HealthcareList1ControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save 'list1' to ClaimAmount when 'Yes' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, healthcareList1Route).withFormUrlEncodedBody(("value", "true"))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.list1
+      }
 
       application.stop()
     }

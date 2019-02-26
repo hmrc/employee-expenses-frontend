@@ -17,10 +17,12 @@
 package controllers
 
 import base.SpecBase
+import config.{ClaimAmounts, NavConstant}
 import forms.FourthIndustryOptionsFormProvider
 import models.{FourthIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import pages.{ClaimAmount, FourthIndustryOptionsPage}
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -29,7 +31,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.FourthIndustryOptionsView
 
-class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures {
+class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -82,7 +84,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -96,75 +98,6 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures {
       redirectLocation(result).value mustEqual onwardRoute.url
 
       application.stop()
-    }
-
-
-    "save ClaimAmount when 'Agriculture' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.Agriculture.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Generic.agriculture))
-      }
-    }
-
-    "save ClaimAmount when 'FireService' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.FireService.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Generic.fireService))
-      }
-    }
-
-    "save ClaimAmount when 'Leisure' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.Leisure.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Generic.leisure))
-      }
-    }
-
-    "save ClaimAmount when 'Prisons' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.Prisons.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_.get(ClaimAmount) mustBe Some(claimAmountsConfig.Generic.prisons))
-      }
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
@@ -216,6 +149,79 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+
+    "save ClaimAmount when 'Agriculture' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.Agriculture.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.agriculture
+      }
+
+      application.stop()
+    }
+
+    "save ClaimAmount when 'FireService' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.FireService.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.fireService
+      }
+
+      application.stop()
+    }
+
+    "save ClaimAmount when 'Leisure' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.Leisure.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.leisure
+      }
+
+      application.stop()
+    }
+
+    "save ClaimAmount when 'Prisons' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.Prisons.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.prisons
+      }
 
       application.stop()
     }

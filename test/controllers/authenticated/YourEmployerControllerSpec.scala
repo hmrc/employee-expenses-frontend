@@ -19,7 +19,7 @@ package controllers.authenticated
 import base.SpecBase
 import connectors.TaiConnector
 import forms.authenticated.YourEmployerFormProvider
-import models.{IabdUpdateData, NormalMode, TaxCodeRecord, TaxYear, UserAnswers}
+import models.{IabdUpdateData, NormalMode, TaiTaxYear, TaxCodeRecord, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.joda.time.LocalDate
 import org.scalatest.concurrent.ScalaFutures
@@ -59,8 +59,10 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     override def taiTaxCodeRecords(nino: String)
                                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = Future.successful(taxCodeRecords)
 
+    override def getFlatRateExpense(nino: String, year: TaiTaxYear)
+                                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = Future.successful(HttpResponse(OK))
 
-    override def taiFREUpdate(nino: String, year: TaxYear, version: Int, data: IabdUpdateData)
+    override def taiFREUpdate(nino: String, year: TaiTaxYear, version: Int, data: IabdUpdateData)
                              (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = Future.successful(HttpResponse(OK))
   }
 

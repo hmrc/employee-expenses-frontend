@@ -16,7 +16,7 @@
 
 package controllers.construction
 
-import config.ClaimAmountsConfig
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.construction.ConstructionOccupationList2FormProvider
 import javax.inject.{Inject, Named}
@@ -34,17 +34,16 @@ import views.html.construction.ConstructionOccupationList2View
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConstructionOccupationList2Controller @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Construction") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: ConstructionOccupationList2FormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: ConstructionOccupationList2View,
-                                         claimAmounts: ClaimAmountsConfig
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                       override val messagesApi: MessagesApi,
+                                                       sessionRepository: SessionRepository,
+                                                       @Named(NavConstant.construction) navigator: Navigator,
+                                                       identify: UnauthenticatedIdentifierAction,
+                                                       getData: DataRetrievalAction,
+                                                       requireData: DataRequiredAction,
+                                                       formProvider: ConstructionOccupationList2FormProvider,
+                                                       val controllerComponents: MessagesControllerComponents,
+                                                       view: ConstructionOccupationList2View
+                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -70,11 +69,11 @@ class ConstructionOccupationList2Controller @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionOccupationList2Page, value))
             newUserAnswers <- if (value) {
-                                  Future.fromTry(updatedAnswers.set(ClaimAmount, claimAmounts.Construction.list2))
-                                } else {
-                                  Future.successful(updatedAnswers)
-                                }
-            _              <- sessionRepository.set(newUserAnswers)
+              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Construction.list2))
+            } else {
+              Future.successful(updatedAnswers)
+            }
+            _ <- sessionRepository.set(newUserAnswers)
           } yield Redirect(navigator.nextPage(ConstructionOccupationList2Page, mode)(newUserAnswers))
         }
       )

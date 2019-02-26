@@ -17,17 +17,22 @@
 package controllers.engineering
 
 import base.SpecBase
+import config.ClaimAmounts
 import forms.engineering.ConstructionalEngineeringList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import pages.ClaimAmount
 import pages.engineering.ConstructionalEngineeringList2Page
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.engineering.ConstructionalEngineeringList2View
 
-class ConstructionalEngineeringList2ControllerSpec extends SpecBase {
+class ConstructionalEngineeringList2ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -169,5 +174,24 @@ class ConstructionalEngineeringList2ControllerSpec extends SpecBase {
 
       application.stop()
     }
+  }
+
+  "save 'list2' to ClaimAmount when 'Yes' is selected" in {
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .build()
+
+    val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+    val request = FakeRequest(POST, constructionalEngineeringList2Route)
+      .withFormUrlEncodedBody(("value", "true"))
+
+    route(application, request).value.futureValue
+
+    whenReady(sessionRepository.get(userAnswersId)) {
+      _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.list2
+    }
+
+    application.stop()
   }
 }

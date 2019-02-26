@@ -29,7 +29,7 @@ case object EmployerContributionPage extends QuestionPage[EmployerContribution] 
 
   override def cleanup(value: Option[EmployerContribution], userAnswers: UserAnswers): Try[UserAnswers] =
     value match  {
-      case Some(EmployerContribution.Some) => Success(userAnswers)
+      case Some(EmployerContribution.SomeContribution) => Success(userAnswers)
       case _ => userAnswers.remove(ExpensesEmployerPaidPage)
   }
 }

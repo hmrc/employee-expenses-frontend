@@ -35,7 +35,7 @@ class EmployerContributionPageSpec extends PageBehaviours with Generators {
 
     "remove ExpensesPaid amount when EmployerContribution is None" in {
       val userAnswers: Try[UserAnswers] = emptyUserAnswers.set(ExpensesEmployerPaidPage, 100)
-      val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage, EmployerContribution.None).get
+      val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage, EmployerContribution.NoContribution).get
 
       updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe None
     }
@@ -49,7 +49,7 @@ class EmployerContributionPageSpec extends PageBehaviours with Generators {
 
     "keep ExpensesPaid amount when EmployerContribution is Some" in {
       val userAnswers: Try[UserAnswers] = emptyUserAnswers.set(ExpensesEmployerPaidPage, 100)
-      val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage, EmployerContribution.Some).get
+      val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage, EmployerContribution.SomeContribution).get
 
       updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe Some(100)
     }
