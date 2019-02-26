@@ -26,7 +26,7 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.http.HttpResponse
 import play.api.http.Status._
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsArray, JsValue, Json}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -63,6 +63,11 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
       |        "typeDescription": "Flat Rate Job Expenses",
       |        "netAmount": null
       |   }]
+      |""".stripMargin)
+
+  private val emptyJson: JsValue = Json.parse(
+    """
+      |   []
       |""".stripMargin)
 
   private val iabdUpdateData = IabdUpdateData(sequenceNumber = 1, grossAmount = 100)
@@ -138,11 +143,27 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
       }
     }
 
+    "getAllFlatRateExpenses" must {
+
+      "return a Future[Seq[Option[FlatRateExpense]]]" in {
+        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
+          .thenReturn(Future.successful(HttpResponse(OK, Some(validFlatRateJson))))
+
+        val result: Future[Seq[Option[FlatRateExpense]]] = taiService.getAllFlatRateExpenses(fakeNino, Seq(TaiTaxYear(2018)))
+
+
+        whenReady(result) {
+          result =>
+            result mustBe Seq(Some(FlatRateExpense(100)))
+        }
+      }
+    }
+
     "freResponse" must {
 
-      "return FRENoYears when only 404 is returned for all tax years" in {
+      "return FRENoYears when only 200 empty FRE array is returned for all tax years" in {
         when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
-          .thenReturn(Future.successful(HttpResponse(NOT_FOUND)))
+          .thenReturn(Future.successful(HttpResponse(OK, Some(emptyJson))))
 
         val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 100)
 
@@ -173,18 +194,6 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         whenReady(result) {
           result =>
             result mustBe FREAllYearsAllAmountsDifferentToClaimAmount
-        }
-      }
-
-      "return TechnicalDifficulties when a 500 is returned" in {
-        when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
-          .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR)))
-
-        val result: Future[FlatRateExpenseOptions] = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 200)
-
-        whenReady(result) {
-          result =>
-            result mustBe TechnicalDifficulties
         }
       }
     }
