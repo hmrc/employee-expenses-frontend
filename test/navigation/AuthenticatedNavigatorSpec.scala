@@ -17,11 +17,15 @@
 package navigation
 
 import base.SpecBase
-import models.{NormalMode, TaxYearSelection}
-import pages.authenticated.TaxYearSelectionPage
 import controllers.authenticated.routes._
+import controllers.routes._
+import models.{FlatRateExpenseOptions, NormalMode}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
+import pages.FREResponse
+import pages.authenticated.TaxYearSelectionPage
 
-class AuthenticatedNavigatorSpec extends SpecBase {
+class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
   val navigator = new AuthenticatedNavigator
 
@@ -30,20 +34,41 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "from TaxYearSelection" must {
 
-        "go to TaxYearSelection when unanswered" in {
-          val answers = emptyUserAnswers
+        "go to YourAddress when answered and freResponse returns FRENoYears" in {
 
-          navigator.nextPage(TaxYearSelectionPage, NormalMode)(answers) mustBe
-            TaxYearSelectionController.onPageLoad(NormalMode)
+          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FRENoYears).success.value
+
+          navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
+            YourAddressController.onPageLoad(NormalMode)
         }
 
-        "go to TaxYearSelection when answered" in {
-          val answers = emptyUserAnswers.set(TaxYearSelectionPage, Seq(TaxYearSelection.values.head)).success.value
+        "go to NoCodeChangeController when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
+          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount).success.value
 
-          navigator.nextPage(TaxYearSelectionPage, NormalMode)(answers) mustBe
-            TaxYearSelectionController.onPageLoad(NormalMode)
+          navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
+            NoCodeChangeController.onPageLoad()
         }
 
+        "go to RemoveFRECodeController when answered and freResponse returns FREAllYearsAllAmountsDifferentToClaimAmount" in {
+          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FREAllYearsAllAmountsDifferentToClaimAmount).success.value
+
+          navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
+            RemoveFRECodeController.onPageLoad(NormalMode)
+        }
+
+        "go to PhoneUsController when answered and freResponse returns ComplexClaim" in {
+          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.ComplexClaim).success.value
+
+          navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
+            PhoneUsController.onPageLoad()
+        }
+
+        "go to SessionExpiredController when answered and freResponse returns TechnicalDifficulties" in {
+          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.TechnicalDifficulties).success.value
+
+          navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
+            SessionExpiredController.onPageLoad()
+        }
       }
     }
   }

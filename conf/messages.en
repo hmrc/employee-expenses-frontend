@@ -43,11 +43,11 @@ site.textarea.char_limit = (Limit is {0} characters)
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
-expensesEmployerPaid.title = How much of your expenses has your employer paid back?
-expensesEmployerPaid.heading = How much of your expenses has your employer paid back?
-expensesEmployerPaid.checkYourAnswersLabel = How much of your expenses your employer paid back
+expensesEmployerPaid.title = What is the amount that your employer has paid back?
+expensesEmployerPaid.heading = What is the amount that your employer has paid back?
+expensesEmployerPaid.checkYourAnswersLabel = What is the amount that your employer has paid back?
 expensesEmployerPaid.error.nonNumeric = Enter a whole number using characters 0 to 9
-expensesEmployerPaid.error.required = Enter how much of your expenses your employer paid back
+expensesEmployerPaid.error.required = Enter the amount that your employer has paid back
 expensesEmployerPaid.error.wholeNumber = Enter a whole number
 expensesEmployerPaid.error.outOfRange = Enter an amount between {0} and {1}
 
@@ -572,18 +572,17 @@ updateYourAddress.guidance2 = We will give you the link to change your address a
 
 noCodeChange.title = You do not need to do anything else
 noCodeChange.heading = You do not need to do anything else
-noCodeChange.guidance = You will continue to earn an extra £{0} a year before paying tax until you tell us that your employment circumstances have changed.
+noCodeChange.guidance = This amount will stay in your tax code until you tell us that your employment circumstances have changed.
 
 yourAddress.title = Is this your address?
 yourAddress.heading = Is this your address?
 yourAddress.checkYourAnswersLabel = Is this your address? {0}
 yourAddress.error.required = Select yes if this is your address
 
-
-removeFRECode.title = What tax year did this expense end?
-removeFRECode.heading = What tax year did this expense end?
-removeFRECode.checkYourAnswersLabel = What tax year did this expense end?
-removeFRECode.error.required = Select the year that your expense ended
+removeFRECode.title = Which tax year did this expense end?
+removeFRECode.heading = Which tax year did this expense end?
+removeFRECode.checkYourAnswersLabel = Which tax year did this expense end?
+removeFRECode.error.required = Select the tax year that your expense ended
 
 phoneUs.title = You cannot make this change online
 phoneUs.heading = You cannot make this change online
@@ -591,6 +590,11 @@ phoneUs.paragraph = You need to {0} to provide more information so that we can c
 phoneUs.paragraph.linkText = call HMRC
 
 industryType.checkYourAnswersLabel = What industry do you work in?
+
+sameEmployerContributionAllYears.title = Did your employer pay £{0} for each tax year you are claiming for?
+sameEmployerContributionAllYears.heading = Did your employer pay £{0} for each tax year you are claiming for?
+sameEmployerContributionAllYears.checkYourAnswersLabel = Did your employer pay £{0} for each tax year you are claiming for?
+sameEmployerContributionAllYears.error.required = Select yes if your employer pays back the same amount in each tax year you are claiming for
 
 alreadyClaimingFRE.title = You are already claiming this
 alreadyClaimingFRE.heading = You are already claiming this

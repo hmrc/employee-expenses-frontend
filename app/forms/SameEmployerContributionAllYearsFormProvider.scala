@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json._
+import javax.inject.Inject
 
-case class FlatRateExpense(grossAmount: Int)
+import forms.mappings.Mappings
+import play.api.data.Form
 
-object FlatRateExpense {
-  implicit val reads: Reads[FlatRateExpense] = Json.format[FlatRateExpense]
+class SameEmployerContributionAllYearsFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("sameEmployerContributionAllYears.error.required")
+    )
 }

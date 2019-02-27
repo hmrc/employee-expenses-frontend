@@ -37,6 +37,9 @@ trait PageGenerators {
   implicit lazy val arbitraryAlreadyClaimingFREPage: Arbitrary[AlreadyClaimingFREPage.type] =
     Arbitrary(AlreadyClaimingFREPage)
 
+  implicit lazy val arbitrarySameEmployerContributionAllYearsPage: Arbitrary[SameEmployerContributionAllYearsPage.type] =
+    Arbitrary(SameEmployerContributionAllYearsPage)
+
   implicit lazy val arbitraryRemoveFRECodePage: Arbitrary[RemoveFRECodePage.type] =
     Arbitrary(RemoveFRECodePage)
 

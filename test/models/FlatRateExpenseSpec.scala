@@ -26,11 +26,7 @@ class FlatRateExpenseSpec extends SpecBase {
     "return a flatRateExpense when passed valid Json" in {
       val flatRateExpense = validFlatRateJson.as[FlatRateExpense]
 
-      flatRateExpense mustBe FlatRateExpense(
-        nino = "EM329013",
-        taxYear = 2016,
-        grossAmount = 60
-      )
+      flatRateExpense mustBe FlatRateExpense(grossAmount = 60)
     }
   }
 

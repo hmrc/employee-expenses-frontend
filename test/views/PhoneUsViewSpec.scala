@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package views.authenticated
+package views
 
 import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
-import views.html.authenticated.PhoneUsView
+import views.html.PhoneUsView
 
 class PhoneUsViewSpec extends ViewBehaviours {
 

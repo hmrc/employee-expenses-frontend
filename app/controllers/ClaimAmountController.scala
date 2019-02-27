@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.FrontendAppConfig
+import config.{FrontendAppConfig, NavConstant}
 import controllers.actions._
 import javax.inject.{Inject, Named}
 import models.Mode
@@ -35,7 +35,7 @@ class ClaimAmountController @Inject()(
                                        appConfig: FrontendAppConfig,
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: SessionRepository,
-                                       @Named("Generic") navigator: Navigator,
+                                       @Named(NavConstant.generic) navigator: Navigator,
                                        identify: UnauthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,

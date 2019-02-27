@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json._
+import models.FlatRateExpenseOptions
+import play.api.libs.json.JsPath
 
-case class FlatRateExpense(grossAmount: Int)
+object FREResponse extends QuestionPage[FlatRateExpenseOptions] {
 
-object FlatRateExpense {
-  implicit val reads: Reads[FlatRateExpense] = Json.format[FlatRateExpense]
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "freResponse"
 }

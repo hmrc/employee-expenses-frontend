@@ -30,10 +30,10 @@ object FirstIndustryOptions extends Enumerable.Implicits {
   case object NoneOfAbove extends WithName("none") with FirstIndustryOptions
 
   val values: Seq[FirstIndustryOptions] = Seq(
-    Healthcare,
-    FoodAndCatering,
-    Retail,
     Engineering,
+    FoodAndCatering,
+    Healthcare,
+    Retail,
     TransportAndDistribution,
     NoneOfAbove
   )

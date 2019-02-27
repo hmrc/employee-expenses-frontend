@@ -22,7 +22,7 @@ import forms.construction.BuildingMaterialsFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatest.OptionValues
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import pages.ClaimAmount
 import pages.construction.BuildingMaterialsPage
 import play.api.inject.bind
@@ -32,7 +32,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.construction.BuildingMaterialsView
 
-class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with OptionValues {
+class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 

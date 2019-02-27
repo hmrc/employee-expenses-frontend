@@ -22,7 +22,7 @@ import forms.engineering.ConstructionalEngineeringList3FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatest.OptionValues
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import pages.ClaimAmount
 import pages.engineering.ConstructionalEngineeringList3Page
 import play.api.inject.bind
@@ -33,7 +33,7 @@ import repositories.SessionRepository
 import views.html.engineering.ConstructionalEngineeringList3View
 
 
-class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFutures with OptionValues {
+class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 

@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json._
+import pages.behaviours.PageBehaviours
 
-case class FlatRateExpense(grossAmount: Int)
+class SameEmployerContributionAllYearsPageSpec extends PageBehaviours {
 
-object FlatRateExpense {
-  implicit val reads: Reads[FlatRateExpense] = Json.format[FlatRateExpense]
+  "SameEmployerContributionAllYearsPage" must {
+
+    beRetrievable[Boolean](SameEmployerContributionAllYearsPage)
+
+    beSettable[Boolean](SameEmployerContributionAllYearsPage)
+
+    beRemovable[Boolean](SameEmployerContributionAllYearsPage)
+  }
 }

@@ -20,64 +20,65 @@ import scala.util.{Success, Failure}
 import com.google.inject.Inject
 import connectors.{CitizenDetailsConnector, TaiConnector}
 import models.FlatRateExpenseOptions._
-import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaiTaxYear, TaxCodeRecord, UserAnswers}
-import pages.AllFlatRateExpenses
-import repositories.SessionRepository
+import models.{FlatRateExpense, FlatRateExpenseOptions, IabdUpdateData, TaiTaxYear, TaxCodeRecord, TaxYearSelection}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.util.Try
+import scala.concurrent.{ExecutionContext, Future}
 
 class TaiService @Inject()(taiConnector: TaiConnector,
-                           citizenDetailsConnector: CitizenDetailsConnector,
-                           sessionRepository: SessionRepository
-                          )(implicit hc: HeaderCarrier) {
+                           citizenDetailsConnector: CitizenDetailsConnector
+                          ) {
 
-  def taxCodeRecords(nino: String): Future[Seq[TaxCodeRecord]] = {
+  def taxCodeRecords(nino: String)
+                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
     taiConnector.taiTaxCodeRecords(nino)
   }
 
-  def getAllFlatRateExpenses(nino: String, taxYears: Seq[TaiTaxYear]): Future[Seq[HttpResponse]] = {
-    val getAllFRE = taxYears map {
-      taxYear =>
-        taiConnector.getFlatRateExpense(nino, taxYear)
-    }
-
-    Future.sequence(getAllFRE)
-  }
-
-  def updateFRE(nino: String, year: TaiTaxYear, expensesData: IabdUpdateData): Future[HttpResponse] = {
+  def updateFRE(nino: String, year: TaiTaxYear, expensesData: IabdUpdateData)
+               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     citizenDetailsConnector.getEtag(nino).flatMap {
       etag => taiConnector.taiFREUpdate(nino, year, etag, expensesData)
     }
   }
 
-  def freResponse(taxYears: Seq[TaiTaxYear], nino: String, claimAmount: Int, userAnswers: UserAnswers): Future[FlatRateExpenseOptions] = {
+  def getAllFlatRateExpenses(nino: String, taxYears: Seq[TaiTaxYear])
+                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Option[FlatRateExpense]]] = {
+    val getAllFRE = taxYears map {
+      taxYear =>
+        taiConnector.getFlatRateExpense(nino, taxYear)
+    }
 
-    getAllFlatRateExpenses(nino, taxYears).map {
-      case flatRateExpenses if flatRateExpenses.forall(_.status == 404) => FRENoYears
-      case flatRateExpenses if flatRateExpenses.forall(_.status == 200) =>
-        freResponseLogic(flatRateExpenses.map(_.json.as[FlatRateExpense]), claimAmount, userAnswers)
-      case _ => TechnicalDifficulties
+    Future.sequence(getAllFRE).map {
+      _.map(_.json.as[Seq[FlatRateExpense]].headOption)
     }
   }
 
-  def freResponseLogic(fre: Seq[FlatRateExpense], claimAmount: Int, userAnswers: UserAnswers): FlatRateExpenseOptions = {
-    fre match {
-      case flatRateExpenses if flatRateExpenses.forall(_.grossAmount == claimAmount) =>
-        val updatedUserAnswers: Try[UserAnswers] = userAnswers.set(AllFlatRateExpenses, fre)
+  def freResponse(taxYearSelection: Seq[TaxYearSelection], nino: String, claimAmount: Int)
+                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[FlatRateExpenseOptions] = {
 
-        updatedUserAnswers match {
-          case Success(value) =>
-            sessionRepository.set(value)
-            FREAllYearsAllAmountsSameAsClaimAmount
-          case Failure(_) =>
-            TechnicalDifficulties
-        }
-      case flatRateExpenses if flatRateExpenses.forall(_.grossAmount != claimAmount) =>
-        FREAllYearsAllAmountsDifferentToClaimAmount
-      case _ => ComplexClaim
+    val taxYears: Seq[TaiTaxYear] = taxYearSelection.map(x => TaiTaxYear(TaxYearSelection.getTaxYear(x)))
+
+    getAllFlatRateExpenses(nino, taxYears).map {
+      case freSequence: Seq[Option[FlatRateExpense]] if freSequence.forall(_.isEmpty) =>
+        FRENoYears
+      case freSequence: Seq[Option[FlatRateExpense]] if freSequence.forall(_.isDefined) =>
+        freResponseLogic(freSequence.flatten: Seq[FlatRateExpense], claimAmount: Int)
+      case freSequence: Seq[Option[FlatRateExpense]] if freSequence.exists(_.isDefined) && freSequence.exists(_.isEmpty) =>
+        ComplexClaim
+      case _ =>
+        TechnicalDifficulties
+    }
+  }
+
+  def freResponseLogic(flatRateExpenses: Seq[FlatRateExpense], claimAmount: Int)
+                      (implicit hc: HeaderCarrier, ec: ExecutionContext): FlatRateExpenseOptions = {
+
+    if (flatRateExpenses.forall(_.grossAmount == claimAmount)) {
+      FREAllYearsAllAmountsSameAsClaimAmount
+    } else if (flatRateExpenses.forall(_.grossAmount != claimAmount)) {
+      FREAllYearsAllAmountsDifferentToClaimAmount
+    } else {
+      ComplexClaim
     }
   }
 }

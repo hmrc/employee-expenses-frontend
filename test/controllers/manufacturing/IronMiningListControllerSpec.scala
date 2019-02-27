@@ -21,7 +21,7 @@ import config.ClaimAmounts
 import forms.manufacturing.IronMiningListFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import pages.ClaimAmount
 import pages.manufacturing.IronMiningListPage
 import play.api.inject.bind
@@ -31,7 +31,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.manufacturing.IronMiningListView
 
-class IronMiningListControllerSpec extends SpecBase with ScalaFutures {
+class IronMiningListControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
