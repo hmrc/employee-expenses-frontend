@@ -58,8 +58,6 @@ class AuthenticatedIdentifierAction @Inject()(
         unauthorised(request.session.get(config.mongoKey))
       case _: InsufficientConfidenceLevel =>
         insufficientConfidence(request.getQueryString("key"))
-      case _ =>
-        Redirect(routes.UnauthorisedController.onPageLoad())
     }
   }
 

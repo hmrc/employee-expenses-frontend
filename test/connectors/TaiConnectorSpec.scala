@@ -87,11 +87,11 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[HttpResponse] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+      val result: Future[Seq[FlatRateExpense]] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
 
       whenReady(result) {
         result =>
-          result.status mustBe OK
+          result mustBe Some(FlatRateExpense(120))
       }
     }
   }

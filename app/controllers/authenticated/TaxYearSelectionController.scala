@@ -22,12 +22,13 @@ import controllers.routes._
 import forms.authenticated.TaxYearSelectionFormProvider
 import javax.inject.{Inject, Named}
 import models.FlatRateExpenseOptions._
-import models.{Enumerable, Mode, TaxYearSelection}
+import models.{Enumerable, FlatRateExpenseAmounts, Mode, TaiTaxYear, TaxYearSelection}
 import navigation.Navigator
 import pages.authenticated.TaxYearSelectionPage
-import pages.{ClaimAmount, FREResponse}
+import pages.{ClaimAmount, FREAmounts, FREResponse}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.Writes
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import service.TaiService
@@ -72,16 +73,15 @@ class TaxYearSelectionController @Inject()(
         value => {
           (request.userAnswers.get(ClaimAmount), request.nino) match {
             case (Some(claimAmount), Some(nino)) =>
-              taiService.freResponse(value, nino, claimAmount).flatMap {
-                freResponse => {
                   for {
                     ua  <- Future.fromTry(request.userAnswers.set(TaxYearSelectionPage, value))
+                    freResponse <- taiService.freResponse(value, nino, claimAmount)
                     ua2 <- Future.fromTry(ua.set(FREResponse, freResponse))
-                    _   <- sessionRepository.set(ua2)
+                    freAmounts <- taiService.getFREAmount(value, nino)
+                    ua3 <- Future.fromTry(ua2.set(FREAmounts, freAmounts))
+                    _   <- sessionRepository.set(ua3)
                   } yield
-                    Redirect(navigator.nextPage(TaxYearSelectionPage, mode)(ua2))
-                }
-              }
+                    Redirect(navigator.nextPage(TaxYearSelectionPage, mode)(ua3))
             case _ =>
               Future.successful(Redirect(SessionExpiredController.onPageLoad()))
           }
