@@ -27,7 +27,7 @@ class $className$ViewSpec extends OptionsViewBehaviours[$className$] {
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
-    behave like normalPageWithAccountMenu(applyViewWithAuth(form))
+    behave like pageWithAccountMenu(applyViewWithAuth(form))
 
     behave like pageWithBackLink(applyView(form))
 
