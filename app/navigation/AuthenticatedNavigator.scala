@@ -55,6 +55,8 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       CheckYourAnswersController.onPageLoad()
     case Some(false) =>
       UpdateYourAddressController.onPageLoad()
+    case _ =>
+      SessionExpiredController.onPageLoad()
   }
 
 }
