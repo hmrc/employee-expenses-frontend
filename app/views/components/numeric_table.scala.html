@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(columnValues: Seq[(String, Int)], columnHeadings: String*)(implicit messages: Messages)
+@(columnValues: Seq[FlatRateExpenseAmounts], columnHeadings: String*)(implicit messages: Messages)
 
 <table>
     <thead>
@@ -25,15 +25,17 @@
             }
         </tr>
     </thead>
-
-    @for(columnValues <- columnValues) {
-        @for((heading, value) <- columnValues) {
-            <tbody>
-                <tr>
-                    <th scope="row">@heading</th>
-                    <td class="numeric">£@value</td>
-                </tr>
-            </tbody>
-        }
+    @for(columnValue <- columnValues) {
+        <tbody>
+            <tr>
+                <th scope="row">
+                @{messages(
+                    s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(columnValue.taxYear.year)}",
+                    columnValue.taxYear.year.toString,
+                    (columnValue.taxYear.year + 1).toString)}
+                </th>
+                <td class="numeric">£@{columnValue.freAmount.get.grossAmount}</td>
+            </tr>
+        </tbody>
     }
 </table>

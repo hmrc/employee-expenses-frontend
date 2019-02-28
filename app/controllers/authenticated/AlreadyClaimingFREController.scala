@@ -23,7 +23,7 @@ import javax.inject.{Inject, Named}
 import models.{Mode, TaiTaxYear}
 import navigation.Navigator
 import org.joda.time.LocalDate
-import pages.{AllFlatRateExpenses, ClaimAmount}
+import pages.{ClaimAmount, FREAmounts}
 import pages.authenticated.AlreadyClaimingFREPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -56,9 +56,9 @@ class AlreadyClaimingFREController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      (request.userAnswers.get(ClaimAmount), request.userAnswers.get(AllFlatRateExpenses)) match {
-        case (Some(amount), Some(flatRateExpenses)) =>
-          Ok(view(preparedForm, mode, amount, flatRateExpenses))
+      (request.userAnswers.get(ClaimAmount), request.userAnswers.get(FREAmounts)) match {
+        case (Some(claimAmount), Some(freAmounts)) =>
+          Ok(view(preparedForm, mode, claimAmount, freAmounts))
         case _ =>
           Redirect(controllers.routes.SessionExpiredController.onPageLoad())
       }
@@ -66,11 +66,11 @@ class AlreadyClaimingFREController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-      request.userAnswers.get(ClaimAmount) match {
-        case Some(amount) =>
+      (request.userAnswers.get(ClaimAmount), request.userAnswers.get(FREAmounts)) match {
+        case (Some(claimAmount), Some(freAmounts)) =>
           form.bindFromRequest().fold(
             (formWithErrors: Form[_]) =>
-              Future.successful(BadRequest(view(formWithErrors, mode, amount))),
+              Future.successful(BadRequest(view(formWithErrors, mode, claimAmount, freAmounts))),
             value => {
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AlreadyClaimingFREPage, value))
