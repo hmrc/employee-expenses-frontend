@@ -21,6 +21,8 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 
+
+
 index.title = Employee Expenses
 index.heading = Employee Expenses
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
@@ -42,6 +44,10 @@ site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+technicalDifficulties.pageTitle = Sorry, we're experiencing technical difficulties
+technicalDifficulties.heading = Sorry, we're experiencing technical difficulties
+technicalDifficulties.message = Please try again in a few minutes.
 
 expensesEmployerPaid.title = What is the amount that your employer has paid back?
 expensesEmployerPaid.heading = What is the amount that your employer has paid back?

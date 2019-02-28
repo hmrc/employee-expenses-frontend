@@ -12,6 +12,8 @@ GET         /check-your-answers                                  controllers.Che
 
 GET         /unauthorised                                        controllers.UnauthorisedController.onPageLoad
 
+GET         /technical-difficulties                              controllers.TechnicalDifficultiesController.onPageLoad
+
 GET         /session-key                                         controllers.authenticated.RedirectMongoKeyController.onPageLoad(key: String, journeyId: Option[String])
 
 GET         /expenses-employer-paid                              controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)
