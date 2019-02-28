@@ -137,6 +137,30 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
       application.stop()
     }
 
+    "redirect to session expired when no claim amount set" in {
+      val application =
+        applicationBuilder(Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[TaiService].toInstance(mockTaiService))
+          .build()
+
+      when(mockTaiService.freResponse(any(), any(), any())(any(), any())) thenReturn Future.successful(FlatRateExpenseOptions.FRENoYears)
+      when(mockTaiService.getFREAmount(any(), any())(any(), any())) thenReturn
+        Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019))))
+
+      val request =
+        FakeRequest(POST, taxYearSelectionRoute)
+          .withFormUrlEncodedBody(("value[0]", TaxYearSelection.values.head.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
     "redirect to Session Expired for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
