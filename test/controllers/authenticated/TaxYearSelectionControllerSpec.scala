@@ -17,10 +17,9 @@
 package controllers.authenticated
 
 import base.SpecBase
-import connectors.TaiConnector
 import controllers.routes._
 import forms.authenticated.TaxYearSelectionFormProvider
-import models.{FlatRateExpenseOptions, NormalMode, TaxYearSelection, UserAnswers}
+import models.{FlatRateExpense, FlatRateExpenseAmounts, FlatRateExpenseOptions, NormalMode, TaiTaxYear, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -100,6 +99,8 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
           .build()
 
       when(mockTaiService.freResponse(any(), any(), any())(any(), any())) thenReturn Future.successful(FlatRateExpenseOptions.FRENoYears)
+      when(mockTaiService.getFREAmount(any(), any())(any(), any())) thenReturn
+        Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019))))
 
       val request =
         FakeRequest(POST, taxYearSelectionRoute)
@@ -132,6 +133,30 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
       contentAsString(result) mustEqual
         view(boundForm, NormalMode)(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
+    "redirect to session expired when no claim amount set" in {
+      val application =
+        applicationBuilder(Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[TaiService].toInstance(mockTaiService))
+          .build()
+
+      when(mockTaiService.freResponse(any(), any(), any())(any(), any())) thenReturn Future.successful(FlatRateExpenseOptions.FRENoYears)
+      when(mockTaiService.getFREAmount(any(), any())(any(), any())) thenReturn
+        Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019))))
+
+      val request =
+        FakeRequest(POST, taxYearSelectionRoute)
+          .withFormUrlEncodedBody(("value[0]", TaxYearSelection.values.head.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.authenticated
 
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import controllers.authenticated.routes._
 import models.NormalMode
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.ExecutionContext
 

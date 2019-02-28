@@ -18,9 +18,7 @@
         main_template: MainTemplate
 )
 
-@(
-        amount: String
-)(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[_], messages: Messages)
 
   @main_template(
     title = messages("noCodeChange.title")
@@ -30,5 +28,5 @@
 
     @components.heading("noCodeChange.heading")
 
-    <p>@messages("noCodeChange.guidance", amount)</p>
+    <p>@messages("noCodeChange.guidance")</p>
   }

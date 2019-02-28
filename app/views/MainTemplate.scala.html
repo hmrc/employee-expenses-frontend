@@ -56,7 +56,8 @@
 
 @scriptElem = @{
     Seq(
-        Map("url" -> controllers.routes.Assets.versioned("javascripts/employeeexpensesfrontend.js"))
+        Map("url" -> controllers.routes.Assets.versioned("javascripts/employeeexpensesfrontend.js")),
+        Map("url" -> controllers.routes.Assets.versioned("javascripts/google-tag-manager-script.js"))
     )
 }
 
@@ -79,6 +80,7 @@
         "langSelector" -> {
             Map("enUrl" -> appConfig.routeToSwitchLanguage("english"),
                 "cyUrl" -> appConfig.routeToSwitchLanguage("cymraeg"))
-        }
+        },
+        "betaBanner" -> true
     )
 )

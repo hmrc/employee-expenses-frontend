@@ -36,7 +36,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
   override implicit lazy val app: Application =
     new GuiceApplicationBuilder()
       .configure(
-        conf = "microservice.services.citizenDetails.port" -> server.port
+        conf = "microservice.services.citizen-details.port" -> server.port
       )
       .build()
 
