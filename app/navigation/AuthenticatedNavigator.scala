@@ -28,6 +28,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case TaxYearSelectionPage => taxYearSelection(NormalMode)
     case YourAddressPage => yourAddress(NormalMode)
+    case UpdateYourAddressPage => _ => CheckYourAnswersController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
