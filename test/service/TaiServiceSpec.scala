@@ -253,7 +253,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
         whenReady(result) {
           result =>
-            result mustBe "Employer Name"
+            result mustBe Some("Employer Name")
         }
       }
     }

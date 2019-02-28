@@ -50,7 +50,10 @@ class YourEmployerViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(form, applyView, messageKeyPrefix, routes.YourEmployerController.onSubmit(NormalMode).url)
+
+    behave like pageWithBodyText(applyView(form), employerName)
   }
 
   application.stop()
 }
+

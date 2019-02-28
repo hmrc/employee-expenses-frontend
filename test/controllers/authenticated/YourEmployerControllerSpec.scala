@@ -17,54 +17,34 @@
 package controllers.authenticated
 
 import base.SpecBase
-import connectors.TaiConnector
 import forms.authenticated.YourEmployerFormProvider
-import models.{IabdUpdateData, NormalMode, TaiTaxYear, TaxCodeRecord, UserAnswers}
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.joda.time.LocalDate
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import pages.authenticated.YourEmployerPage
 import play.api.http.Status.OK
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import service.TaiService
 import views.html.authenticated.YourEmployerView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new YourEmployerFormProvider()
-  val form = formProvider()
-  val employerName = "HMRC"
-  val taxCodeRecord = TaxCodeRecord
-  private val taxCodeRecords = Seq(TaxCodeRecord(
-    taxCode = "830L",
-    employerName = employerName,
-    startDate = LocalDate.parse("2018-06-27"),
-    endDate = LocalDate.parse("2019-04-05"),
-    payrollNumber = Some("1"),
-    pensionIndicator = true,
-    primary = true
-  ))
+  private val formProvider = new YourEmployerFormProvider()
+  private val form = formProvider()
+  private val employerName = "HMRC"
 
+  private val mockTaiService = mock[TaiService]
 
-  val fakeConnector = new TaiConnector {
-    override def taiTaxCodeRecords(nino: String)
-                                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = Future.successful(taxCodeRecords)
-
-    override def getFlatRateExpense(nino: String, year: TaiTaxYear)
-                                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = Future.successful(HttpResponse(OK))
-
-    override def taiFREUpdate(nino: String, year: TaiTaxYear, version: Int, data: IabdUpdateData)
-                             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = Future.successful(HttpResponse(OK))
-  }
 
   lazy val yourEmployerRoute = routes.YourEmployerController.onPageLoad(NormalMode).url
 
@@ -73,8 +53,11 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[TaiConnector].to(fakeConnector))
+        .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
+
+      when(mockTaiService.currentPrimaryEmployer(any())(any(), any())).thenReturn(Future.successful(Some(employerName)))
+
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
@@ -95,8 +78,10 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val userAnswers = UserAnswers(userAnswersId).set(YourEmployerPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[TaiConnector].to(fakeConnector))
+        .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
+
+      when(mockTaiService.currentPrimaryEmployer(any())(any(), any())).thenReturn(Future.successful(Some(employerName)))
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
@@ -117,8 +102,11 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
-          .overrides(bind[TaiConnector].to(fakeConnector))
+          .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
+
+      when(mockTaiService.currentPrimaryEmployer(any())(any(), any())).thenReturn(Future.successful(Some(employerName)))
+
 
       val request =
         FakeRequest(POST, yourEmployerRoute)
@@ -136,7 +124,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[TaiConnector].to(fakeConnector))
+        .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
       val request =
@@ -188,36 +176,24 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       application.stop()
     }
+
+    "redirect to up Update your employer when no employer is located" in {
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[TaiService].toInstance(mockTaiService))
+        .build()
+
+      when(mockTaiService.currentPrimaryEmployer(any())(any(), any())).thenReturn(Future.successful(None))
+
+      val request = FakeRequest(GET, yourEmployerRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[YourEmployerView]
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.authenticated.routes.UpdateEmployerInformationController.onPageLoad().url
+
+    }
   }
-
-  val validTaiJson = Json.parse(
-    """{
-      															 |  "data" : {
-      															 |    "current": [{
-      															 |      "taxCode": "830L",
-      															 |      "employerName": "HMRC",
-      															 |      "operatedTaxCode": true,
-      															 |      "p2Issued": true,
-      															 |      "startDate": "2018-06-27",
-      															 |      "endDate": "2019-04-05",
-      															 |      "payrollNumber": "1",
-      															 |      "pensionIndicator": true,
-      															 |      "primary": true
-      															 |    }],
-      															 |    "previous": [{
-      															 |      "taxCode": "1150L",
-      															 |      "employerName": "DWP",
-      															 |      "operatedTaxCode": true,
-      															 |      "p2Issued": true,
-      															 |      "startDate": "2018-04-06",
-      															 |      "endDate": "2018-06-26",
-      															 |      "payrollNumber": "1",
-      															 |      "pensionIndicator": true,
-      															 |      "primary": true
-      															 |    }]
-      															 |  },
-      															 |  "links" : [ ]
-      															 |}""".stripMargin)
-
-
 }

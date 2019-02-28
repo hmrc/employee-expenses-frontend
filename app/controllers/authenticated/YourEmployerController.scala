@@ -58,8 +58,8 @@ class YourEmployerController @Inject()(
       request.nino match {
         case Some(nino) =>
           taiService.currentPrimaryEmployer(nino).map {
-            case employerName => Ok(view(preparedForm, mode, employerName))
-            case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+            case Some(employerName) => Ok(view(preparedForm, mode, employerName))
+            case _ => Redirect(controllers.authenticated.routes.UpdateEmployerInformationController.onPageLoad())
           }
         case _ =>
           Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
@@ -71,7 +71,7 @@ class YourEmployerController @Inject()(
       request.nino match {
         case Some(nino) =>
           taiService.currentPrimaryEmployer(nino).flatMap {
-            case employerName =>
+            case Some(employerName) =>
 
               form.bindFromRequest().fold(
                 (formWithErrors: Form[_]) =>
