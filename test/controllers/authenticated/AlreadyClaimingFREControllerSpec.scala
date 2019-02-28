@@ -18,8 +18,9 @@ package controllers.authenticated
 
 import base.SpecBase
 import forms.authenticated.AlreadyClaimingFREFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import pages.FREAmounts
 import pages.authenticated.AlreadyClaimingFREPage
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -36,11 +37,14 @@ class AlreadyClaimingFREControllerSpec extends SpecBase {
 
   lazy val alreadyClaimingFRERoute = routes.AlreadyClaimingFREController.onPageLoad(NormalMode).url
 
+  private val fakeClaimAmount = 100
+  private val fakeFreAmounts = Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))
+
   "AlreadyClaimingFRE Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
 
       val request = FakeRequest(GET, alreadyClaimingFRERoute)
 
@@ -51,14 +55,14 @@ class AlreadyClaimingFREControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode)(fakeRequest, messages).toString
+        view(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(AlreadyClaimingFREPage, true).success.value
+      val userAnswers = minimumUserAnswers.set(AlreadyClaimingFREPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -71,7 +75,7 @@ class AlreadyClaimingFREControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -79,8 +83,8 @@ class AlreadyClaimingFREControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+        applicationBuilder(userAnswers = Some(minimumUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -98,7 +102,7 @@ class AlreadyClaimingFREControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
 
       val request =
         FakeRequest(POST, alreadyClaimingFRERoute)
@@ -113,7 +117,24 @@ class AlreadyClaimingFREControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
+    "redirect to Session Expired if ClaimAmount is missing" in {
+
+      val userAnswers = emptyUserAnswers.set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(GET, alreadyClaimingFRERoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

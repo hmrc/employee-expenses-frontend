@@ -22,12 +22,12 @@ import controllers.actions._
 import models.EmployerContribution.SomeContribution
 import models.FirstIndustryOptions.Healthcare
 import models.TaxYearSelection.CurrentYear
-import models.{Address, FirstIndustryOptions, TaxYearSelection, UserAnswers}
+import models.{Address, FirstIndustryOptions, FlatRateExpense, FlatRateExpenseAmounts, TaiTaxYear, TaxYearSelection, UserAnswers}
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
 import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
-import pages.{CitizenDetailsAddress, EmployerContributionPage, ExpensesEmployerPaidPage, FirstIndustryOptionsPage}
+import pages._
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -96,6 +96,8 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
     .set(YourAddressPage, true).success.value
     .set(CitizenDetailsAddress, address).success.value
+    .set(ClaimAmount, 100).success.value
+    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 

@@ -18,7 +18,8 @@ package views.authenticated
 
 import controllers.authenticated.routes
 import forms.authenticated.AlreadyClaimingFREFormProvider
-import models.NormalMode
+import models.{FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, TaxYearSelection}
+import org.jsoup.select.Elements
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -33,15 +34,18 @@ class AlreadyClaimingFREViewSpec extends YesNoViewBehaviours {
 
   val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
+  private val fakeClaimAmount = 100
+  private val fakeFreAmounts = Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))
+
   "AlreadyClaimingFRE view" must {
 
     val view = application.injector.instanceOf[AlreadyClaimingFREView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest, messages)
+      view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest, messages)
 
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+      view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
@@ -49,7 +53,33 @@ class AlreadyClaimingFREViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.AlreadyClaimingFREController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form = form,
+      createView = applyView,
+      messageKeyPrefix = messageKeyPrefix,
+      expectedFormAction = routes.AlreadyClaimingFREController.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+    )
+
+    "contains correct headings for table" in {
+      val doc = asDocument(applyView(form))
+
+      doc.getElementById("tax-year-heading").text mustBe messages("alreadyClaimingFRE.tableTaxYearHeading")
+      doc.getElementById("amount-heading").text mustBe messages("alreadyClaimingFRE.tableAmountHeading")
+    }
+
+    "contains correct column values for table" in {
+      val doc = asDocument(applyView(form))
+
+      doc.getElementById(s"tax-year-${TaiTaxYear().year}").text mustBe messages(
+        s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(TaiTaxYear().year)}",
+        TaiTaxYear().year.toString,
+        (TaiTaxYear().year + 1).toString
+      )
+
+      doc.getElementById(s"fre-amount-${TaiTaxYear().year}").text mustBe "£100"
+    }
+
   }
 
   application.stop()
