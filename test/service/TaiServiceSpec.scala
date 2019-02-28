@@ -211,19 +211,6 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         result mustBe ComplexClaim
       }
     }
-
-    "currentPrimaryEmployer" must {
-
-      "return an employer when available" in {
-        when(mockTaiConnector.taiTaxCodeRecords(fakeNino)).thenReturn(Future.successful(taxCodeRecords))
-        val result = taiService.currentPrimaryEmployer(fakeNino)
-
-        whenReady(result) {
-          result =>
-            result mustBe Some("Employer Name")
-        }
-      }
-    }
   }
 
 }

@@ -101,11 +101,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     case _ => None
   }
 
-  def yourEmployer: Option[AnswerRow] = userAnswers.get(YourEmployerPage) map {
-    x => AnswerRow("yourEmployer.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      YourEmployerController.onPageLoad(CheckMode).url)
-  }
-
   def taxYearSelection: Option[AnswerRow] = userAnswers.get(TaxYearSelectionPage) map {
     taxYears =>
       AnswerRow("taxYearSelection.checkYourAnswersLabel",
