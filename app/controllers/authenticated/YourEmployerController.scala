@@ -16,10 +16,11 @@
 
 package controllers.authenticated
 
+import config.NavConstant
 import controllers.actions._
 import forms.authenticated.YourEmployerFormProvider
 import javax.inject.{Inject, Named}
-import models.Mode
+import models.{Mode, TaiTaxYear, TaxYearSelection}
 import navigation.Navigator
 import pages.authenticated.YourEmployerPage
 import play.api.data.Form
@@ -35,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class YourEmployerController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         sessionRepository: SessionRepository,
-                                        @Named("Authenticated") navigator: Navigator,
+                                        @Named(NavConstant.authenticated) navigator: Navigator,
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
@@ -57,8 +58,8 @@ class YourEmployerController @Inject()(
 
       request.nino match {
         case Some(nino) =>
-          taiService.currentPrimaryEmployer(nino).map {
-            case Some(employerName) => Ok(view(preparedForm, mode, employerName))
+          taiService.employments(nino, TaxYearSelection.CurrentYear).map {
+            case employments => Ok(view(preparedForm, mode, employments.head.name))
             case _ => Redirect(controllers.authenticated.routes.UpdateEmployerInformationController.onPageLoad())
           }
         case _ =>
@@ -70,12 +71,12 @@ class YourEmployerController @Inject()(
     implicit request =>
       request.nino match {
         case Some(nino) =>
-          taiService.currentPrimaryEmployer(nino).flatMap {
-            case Some(employerName) =>
+          taiService.employments(nino, TaxYearSelection.CurrentYear).flatMap {
+            case employments =>
 
               form.bindFromRequest().fold(
                 (formWithErrors: Form[_]) =>
-                  Future.successful(BadRequest(view(formWithErrors, mode, employerName))),
+                  Future.successful(BadRequest(view(formWithErrors, mode, employments.head.name))),
 
                 value => {
                   for {

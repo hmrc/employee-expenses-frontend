@@ -39,6 +39,14 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
     httpClient.GET[Seq[TaxCodeRecord]](taiUrl)
   }
 
+  override def taiEmployments(nino: String, year: TaiTaxYear)
+                             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Employment]] = {
+
+    val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/employments/years/${year.year}"
+
+    httpClient.GET[Seq[Employment]](taiUrl)
+  }
+
   override def getFlatRateExpense(nino: String, year: TaiTaxYear)
                                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[FlatRateExpense]] = {
 
@@ -62,6 +70,9 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
 trait TaiConnector {
   def taiTaxCodeRecords(nino: String)
                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]]
+
+  def taiEmployments(nino: String, year: TaiTaxYear)
+                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Employment]]
 
   def getFlatRateExpense(nino: String, year: TaiTaxYear)
                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[FlatRateExpense]]
