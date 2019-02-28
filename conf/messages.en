@@ -609,4 +609,4 @@ sameEmployerContributionAllYears.error.required = Select yes if your employer pa
 yourEmployer.title = Is this your employer?
 yourEmployer.heading = Is this your employer?
 yourEmployer.checkYourAnswersLabel = Is this your employer?
-yourEmployer.error.required = Confirm whether this is your employer
+yourEmployer.error.required = Select yes if this is your employer
