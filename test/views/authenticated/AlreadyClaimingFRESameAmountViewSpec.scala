@@ -17,29 +17,28 @@
 package views.authenticated
 
 import controllers.authenticated.routes
-import forms.authenticated.AlreadyClaimingFREFormProvider
+import forms.authenticated.AlreadyClaimingFRESameAmountFormProvider
 import models.{FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, TaxYearSelection}
-import org.jsoup.select.Elements
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.authenticated.AlreadyClaimingFREView
+import views.html.authenticated.AlreadyClaimingFRESameAmountView
 
-class AlreadyClaimingFREViewSpec extends YesNoViewBehaviours {
+class AlreadyClaimingFRESameAmountViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "alreadyClaimingFRE"
+  val messageKeyPrefix = "alreadyClaimingFRESameAmount"
 
-  val form = new AlreadyClaimingFREFormProvider()()
+  val form = new AlreadyClaimingFRESameAmountFormProvider()()
 
   val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   private val fakeClaimAmount = 100
   private val fakeFreAmounts = Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))
 
-  "AlreadyClaimingFRE view" must {
+  "AlreadyClaimingFRESameAmount view" must {
 
-    val view = application.injector.instanceOf[AlreadyClaimingFREView]
+    val view = application.injector.instanceOf[AlreadyClaimingFRESameAmountView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest, messages)
@@ -57,15 +56,15 @@ class AlreadyClaimingFREViewSpec extends YesNoViewBehaviours {
       form = form,
       createView = applyView,
       messageKeyPrefix = messageKeyPrefix,
-      expectedFormAction = routes.AlreadyClaimingFREController.onSubmit(NormalMode).url,
+      expectedFormAction = routes.AlreadyClaimingFRESameAmountController.onSubmit(NormalMode).url,
       legendLabel = Some(messageKeyPrefix + ".radioLabel")
     )
 
     "contains correct headings for table" in {
       val doc = asDocument(applyView(form))
 
-      doc.getElementById("tax-year-heading").text mustBe messages("alreadyClaimingFRE.tableTaxYearHeading")
-      doc.getElementById("amount-heading").text mustBe messages("alreadyClaimingFRE.tableAmountHeading")
+      doc.getElementById("tax-year-heading").text mustBe messages("alreadyClaimingFRESameAmount.tableTaxYearHeading")
+      doc.getElementById("amount-heading").text mustBe messages("alreadyClaimingFRESameAmount.tableAmountHeading")
     }
 
     "contains correct column values for table" in {

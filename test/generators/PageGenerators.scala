@@ -18,7 +18,7 @@ package generators
 
 import org.scalacheck.Arbitrary
 import pages._
-import pages.authenticated.{AlreadyClaimingFREPage, RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage}
+import pages.authenticated.{AlreadyClaimingFRESameAmountPage, RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage}
 import pages.clothing._
 import pages.construction._
 import pages.electrical.ElectricalPage
@@ -34,8 +34,8 @@ import pages.printing._
 
 trait PageGenerators {
 
-  implicit lazy val arbitraryAlreadyClaimingFREPage: Arbitrary[AlreadyClaimingFREPage.type] =
-    Arbitrary(AlreadyClaimingFREPage)
+  implicit lazy val arbitraryAlreadyClaimingFREPage: Arbitrary[AlreadyClaimingFRESameAmountPage.type] =
+    Arbitrary(AlreadyClaimingFRESameAmountPage)
 
   implicit lazy val arbitrarySameEmployerContributionAllYearsPage: Arbitrary[SameEmployerContributionAllYearsPage.type] =
     Arbitrary(SameEmployerContributionAllYearsPage)

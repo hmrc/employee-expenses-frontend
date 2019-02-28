@@ -20,7 +20,7 @@ import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import pages._
-import pages.authenticated.{AlreadyClaimingFREPage, RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage}
+import pages.authenticated.{AlreadyClaimingFRESameAmountPage, RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage}
 import pages.clothing.ClothingPage
 import pages.construction._
 import pages.electrical.ElectricalPage
@@ -37,10 +37,10 @@ import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
-  implicit lazy val arbitraryAlreadyClaimingFREUserAnswersEntry: Arbitrary[(AlreadyClaimingFREPage.type, JsValue)] =
+  implicit lazy val arbitraryAlreadyClaimingFREUserAnswersEntry: Arbitrary[(AlreadyClaimingFRESameAmountPage.type, JsValue)] =
     Arbitrary {
       for {
-        page  <- arbitrary[AlreadyClaimingFREPage.type]
+        page  <- arbitrary[AlreadyClaimingFRESameAmountPage.type]
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }

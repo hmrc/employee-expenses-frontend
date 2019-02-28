@@ -16,14 +16,30 @@
 
 package forms.authenticated
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-class AlreadyClaimingFREFormProvider @Inject() extends Mappings {
+class AlreadyClaimingFRESameAmountFormProviderSpec extends BooleanFieldBehaviours {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("alreadyClaimingFRE.error.required")
+  val requiredKey = "alreadyClaimingFRESameAmount.error.required"
+  val invalidKey = "error.boolean"
+
+  val form = new AlreadyClaimingFRESameAmountFormProvider()()
+
+  ".value" must {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
     )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

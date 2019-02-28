@@ -321,7 +321,7 @@ POST        /same-employer-contribution-all-years                controllers.Sam
 GET         /change-same-employer-contribution-all-years         controllers.SameEmployerContributionAllYearsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-same-employer-contribution-all-years         controllers.SameEmployerContributionAllYearsController.onSubmit(mode: Mode = CheckMode)
 
-GET         /already-claiming-flat-rate-expense                  controllers.authenticated.AlreadyClaimingFREController.onPageLoad(mode: Mode = NormalMode)
-POST        /already-claiming-flat-rate-expense                  controllers.authenticated.AlreadyClaimingFREController.onSubmit(mode: Mode = NormalMode)
-GET         /change-already-claiming-flat-rate-expense           controllers.authenticated.AlreadyClaimingFREController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-already-claiming-flat-rate-expense           controllers.authenticated.AlreadyClaimingFREController.onSubmit(mode: Mode = CheckMode)
+GET         /already-claiming-flat-rate-expense-same-amount                  controllers.authenticated.AlreadyClaimingFRESameAmountController.onPageLoad(mode: Mode = NormalMode)
+POST        /already-claiming-flat-rate-expense-same-amount                  controllers.authenticated.AlreadyClaimingFRESameAmountController.onSubmit(mode: Mode = NormalMode)
+GET         /change-already-claiming-flat-rate-expense-same-amount           controllers.authenticated.AlreadyClaimingFRESameAmountController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-already-claiming-flat-rate-expense-same-amount           controllers.authenticated.AlreadyClaimingFRESameAmountController.onSubmit(mode: Mode = CheckMode)

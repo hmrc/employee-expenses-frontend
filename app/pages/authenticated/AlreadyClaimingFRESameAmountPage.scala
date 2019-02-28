@@ -16,16 +16,12 @@
 
 package pages.authenticated
 
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class AlreadyClaimingFREPageSpec extends PageBehaviours {
+case object AlreadyClaimingFRESameAmountPage extends QuestionPage[Boolean] {
 
-  "AlreadyClaimingFREPage" must {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[Boolean](AlreadyClaimingFREPage)
-
-    beSettable[Boolean](AlreadyClaimingFREPage)
-
-    beRemovable[Boolean](AlreadyClaimingFREPage)
-  }
+  override def toString: String = "alreadyClaimingFRESameAmount"
 }

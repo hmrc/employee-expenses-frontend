@@ -31,9 +31,9 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
-  def alreadyClaimingFRE: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFREPage) map {
+  def alreadyClaimingFRE: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFRESameAmountPage) map {
     x => AnswerRow("alreadyClaimingFRE.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
-      AlreadyClaimingFREController.onPageLoad(CheckMode).url)
+      AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode).url)
   }
 
   def sameEmployerContributionAllYears: Option[AnswerRow] = userAnswers.get(SameEmployerContributionAllYearsPage) map {

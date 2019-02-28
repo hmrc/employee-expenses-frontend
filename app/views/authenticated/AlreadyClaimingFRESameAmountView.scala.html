@@ -25,31 +25,31 @@
 @(form: Form[_], mode: Mode, claimAmount: Int, freAmounts: Seq[FlatRateExpenseAmounts])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages("alreadyClaimingFRE.title")}"
+    title = s"${errorPrefix(form)} ${messages("alreadyClaimingFRESameAmount.title")}"
     ) {
 
-    @formHelper(action = AlreadyClaimingFREController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = AlreadyClaimingFRESameAmountController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading("alreadyClaimingFRE.heading")
+        @components.heading("alreadyClaimingFRESameAmount.heading")
 
-        <p>@messages("alreadyClaimingFRE.bodyText", claimAmount)</p>
+        <p>@messages("alreadyClaimingFRESameAmount.bodyText", claimAmount)</p>
 
         @components.numeric_table(
             freAmounts,
-            messages("alreadyClaimingFRE.tableTaxYearHeading"),
-            messages("alreadyClaimingFRE.tableAmountHeading")
+            messages("alreadyClaimingFRESameAmount.tableTaxYearHeading"),
+            messages("alreadyClaimingFRESameAmount.tableAmountHeading")
         )
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("alreadyClaimingFRE.radioLabel"),
+            label = messages("alreadyClaimingFRESameAmount.radioLabel"),
             labelClass = Some("heading-medium"),
-            altNoText = Some(messages("alreadyClaimingFRE.altYesText")),
-            altYesText = Some(messages("alreadyClaimingFRE.altNoText"))
+            altNoText = Some(messages("alreadyClaimingFRESameAmount.altYesText")),
+            altYesText = Some(messages("alreadyClaimingFRESameAmount.altNoText"))
         )
 
         @components.submit_button()

@@ -17,30 +17,30 @@
 package controllers.authenticated
 
 import base.SpecBase
-import forms.authenticated.AlreadyClaimingFREFormProvider
+import forms.authenticated.AlreadyClaimingFRESameAmountFormProvider
 import models.{FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.FREAmounts
-import pages.authenticated.AlreadyClaimingFREPage
+import pages.authenticated.AlreadyClaimingFRESameAmountPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.authenticated.AlreadyClaimingFREView
+import views.html.authenticated.AlreadyClaimingFRESameAmountView
 
-class AlreadyClaimingFREControllerSpec extends SpecBase {
+class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AlreadyClaimingFREFormProvider()
+  val formProvider = new AlreadyClaimingFRESameAmountFormProvider()
   val form = formProvider()
 
-  lazy val alreadyClaimingFRERoute = routes.AlreadyClaimingFREController.onPageLoad(NormalMode).url
+  lazy val alreadyClaimingFRERoute = routes.AlreadyClaimingFRESameAmountController.onPageLoad(NormalMode).url
 
   private val fakeClaimAmount = 100
   private val fakeFreAmounts = Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))
 
-  "AlreadyClaimingFRE Controller" must {
+  "AlreadyClaimingFRESameAmount Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -50,7 +50,7 @@ class AlreadyClaimingFREControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[AlreadyClaimingFREView]
+      val view = application.injector.instanceOf[AlreadyClaimingFRESameAmountView]
 
       status(result) mustEqual OK
 
@@ -62,13 +62,13 @@ class AlreadyClaimingFREControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = minimumUserAnswers.set(AlreadyClaimingFREPage, true).success.value
+      val userAnswers = minimumUserAnswers.set(AlreadyClaimingFRESameAmountPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, alreadyClaimingFRERoute)
 
-      val view = application.injector.instanceOf[AlreadyClaimingFREView]
+      val view = application.injector.instanceOf[AlreadyClaimingFRESameAmountView]
 
       val result = route(application, request).value
 
@@ -110,7 +110,7 @@ class AlreadyClaimingFREControllerSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[AlreadyClaimingFREView]
+      val view = application.injector.instanceOf[AlreadyClaimingFRESameAmountView]
 
       val result = route(application, request).value
 

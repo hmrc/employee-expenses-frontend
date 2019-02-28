@@ -572,7 +572,7 @@ ironApprentice.error.required = Select yes if you are an apprentice in the iron 
 
 aluminiumApprentice.title = Are you an apprentice in the aluminium industry?
 aluminiumApprentice.heading = Are you an apprentice in the aluminium industry?
-aluminiumApprentice.checkYourAnswersLabel = Are you an apprentice in the aluminium industry?
+aluminAlreadyClaimingFREFormProvideriumApprentice.checkYourAnswersLabel = Are you an apprentice in the aluminium industry?
 aluminiumApprentice.error.required = Select yes if you are an apprentice in the aluminium industry
 
 updateYourAddress.title = You need to update your address
@@ -606,14 +606,14 @@ sameEmployerContributionAllYears.heading = Did your employer pay £{0} for each 
 sameEmployerContributionAllYears.checkYourAnswersLabel = Did your employer pay £{0} for each tax year you are claiming for?
 sameEmployerContributionAllYears.error.required = Select yes if your employer pays back the same amount in each tax year you are claiming for
 
-alreadyClaimingFRE.title = You are already claiming this
-alreadyClaimingFRE.heading = You are already claiming this
-alreadyClaimingFRE.checkYourAnswersLabel = You are already claiming this
-alreadyClaimingFRE.error.required = Select yes if you want to keep claiming this amount
-alreadyClaimingFRE.bodyText = Based on the information HMRC holds, you are already earning an extra £{0} before you pay tax.
-alreadyClaimingFRE.radioLabel = What do you want to do?
-alreadyClaimingFRE.altYesText = Keep claiming this amount
-alreadyClaimingFRE.altNoText = Stop claiming this amount
-alreadyClaimingFRE.tableTaxYearHeading = Tax year
-alreadyClaimingFRE.tableAmountHeading = Amount you are earning
+alreadyClaimingFRESameAmount.title = You are already claiming this
+alreadyClaimingFRESameAmount.heading = You are already claiming this
+alreadyClaimingFRESameAmount.checkYourAnswersLabel = You are already claiming this
+alreadyClaimingFRESameAmount.error.required = Select yes if you want to keep claiming this amount
+alreadyClaimingFRESameAmount.bodyText = Based on the information HMRC holds, you are already earning an extra £{0} before you pay tax.
+alreadyClaimingFRESameAmount.radioLabel = What do you want to do?
+alreadyClaimingFRESameAmount.altYesText = Keep claiming this amount
+alreadyClaimingFRESameAmount.altNoText = Stop claiming this amount
+alreadyClaimingFRESameAmount.tableTaxYearHeading = Tax year
+alreadyClaimingFRESameAmount.tableAmountHeading = Amount you are earning
 

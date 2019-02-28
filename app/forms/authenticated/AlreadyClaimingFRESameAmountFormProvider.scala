@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package pages.authenticated
+package forms.authenticated
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-case object AlreadyClaimingFREPage extends QuestionPage[Boolean] {
+class AlreadyClaimingFRESameAmountFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "alreadyClaimingFRE"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("alreadyClaimingFRESameAmount.error.required")
+    )
 }

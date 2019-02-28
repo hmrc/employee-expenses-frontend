@@ -14,32 +14,18 @@
  * limitations under the License.
  */
 
-package forms.authenticated
+package pages.authenticated
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import pages.behaviours.PageBehaviours
 
-class AlreadyClaimingFREFormProviderSpec extends BooleanFieldBehaviours {
+class AlreadyClaimingFRESameAmountPageSpec extends PageBehaviours {
 
-  val requiredKey = "alreadyClaimingFRE.error.required"
-  val invalidKey = "error.boolean"
+  "AlreadyClaimingFREPage" must {
 
-  val form = new AlreadyClaimingFREFormProvider()()
+    beRetrievable[Boolean](AlreadyClaimingFRESameAmountPage)
 
-  ".value" must {
+    beSettable[Boolean](AlreadyClaimingFRESameAmountPage)
 
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    beRemovable[Boolean](AlreadyClaimingFRESameAmountPage)
   }
 }
