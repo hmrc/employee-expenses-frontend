@@ -19,11 +19,11 @@ package navigation
 import base.SpecBase
 import controllers.authenticated.routes._
 import controllers.routes._
-import models.{FlatRateExpenseOptions, NormalMode}
+import models.{CheckMode, FlatRateExpenseOptions, NormalMode}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.FREResponse
-import pages.authenticated.TaxYearSelectionPage
+import pages.authenticated._
 
 class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
@@ -69,6 +69,23 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
             SessionExpiredController.onPageLoad()
         }
+
+      }
+
+      "go to CheckYourAnswers from YourAddress" in {
+        val ua = emptyUserAnswers
+
+        navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
+          CheckYourAnswersController.onPageLoad()
+      }
+    }
+
+    "in CheckMode" must {
+      "go to CheckYourAnswers from YourAddress" in {
+        val ua = emptyUserAnswers
+
+        navigator.nextPage(YourAddressPage, CheckMode)(ua) mustBe
+          CheckYourAnswersController.onPageLoad()
       }
     }
   }

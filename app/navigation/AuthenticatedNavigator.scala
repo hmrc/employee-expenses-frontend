@@ -27,10 +27,12 @@ import play.api.mvc.Call
 class AuthenticatedNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case TaxYearSelectionPage => taxYearSelection(NormalMode)
+    case YourAddressPage => _ => CheckYourAnswersController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case TaxYearSelectionPage => taxYearSelection(CheckMode)
+    case YourAddressPage => _ => CheckYourAnswersController.onPageLoad()
   }
 
   def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
