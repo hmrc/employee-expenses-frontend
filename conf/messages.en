@@ -76,28 +76,53 @@ multipleEmployments.heading = Are you claiming for more than one job?
 multipleEmployments.checkYourAnswersLabel = Are you claiming for more than one job?
 multipleEmployments.error.required = Select yes if you are claiming for more than one job
 
-firstIndustryOptions.title = Industry list 1 of 3
-firstIndustryOptions.heading = Industry list 1 of 3
+firstIndustryOptions.title = Industry list 1 of 4
+firstIndustryOptions.heading = Industry list 1 of 4
+firstIndustryOptions.listText = Select your industry.
 firstIndustryOptions.healthcare = healthcare
 firstIndustryOptions.foodAndCatering = food and catering
 firstIndustryOptions.retail = retail
 firstIndustryOptions.engineering = engineering
 firstIndustryOptions.transportAndDistribution = transport and travel
 firstIndustryOptions.none = show more industries
-firstIndustryOptions.checkYourAnswersLabel = Industry list 1 of 3
-firstIndustryOptions.listText = Select your industry.
+firstIndustryOptions.checkYourAnswersLabel = Industry list 1 of 4
 firstIndustryOptions.error.required = Select the industry you work in
 
-secondIndustryOptions.title = What type of industry do you work in?
-secondIndustryOptions.heading = What type of industry do you work in?
+secondIndustryOptions.title = Industry list 2 of 4
+secondIndustryOptions.heading = Industry list 2 of 4
+secondIndustryOptions.listText = Select your industry.
 secondIndustryOptions.manufacturingWarehousing = Manufacturing and warehousing (including wood, furniture and metals)
 secondIndustryOptions.council = Council
 secondIndustryOptions.police = Police
 secondIndustryOptions.clothingTextiles = Clothing and textiles (including leather)
 secondIndustryOptions.construction = Construction (including building and building materials)
-secondIndustryOptions.none = None of the above
+secondIndustryOptions.none = show more industries
 secondIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
 secondIndustryOptions.error.required = Select the industry you work in
+
+thirdIndustryOptions.title = Industry list 3 of 4
+thirdIndustryOptions.heading = Industry list 3 of 4
+thirdIndustryOptions.listText = Select your industry.
+thirdIndustryOptions.electrical = Electrical
+thirdIndustryOptions.education = Education
+thirdIndustryOptions.banksBuildingSocieties = Banks and building societies
+thirdIndustryOptions.security = Security
+thirdIndustryOptions.printing = Printing
+thirdIndustryOptions.none = show more industries
+thirdIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
+thirdIndustryOptions.error.required = Select the industry you work in
+
+fourthIndustryOptions.title = Industry list 4 of 4
+fourthIndustryOptions.heading = Industry list 4 of 4
+fourthIndustryOptions.listText = Select your industry.
+fourthIndustryOptions.agriculture = agriculture
+fourthIndustryOptions.fireService = fire service
+fourthIndustryOptions.heating = heating
+fourthIndustryOptions.leisure = leisure
+fourthIndustryOptions.prisons = prisons
+fourthIndustryOptions.none = my industry was not listed
+fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
+fourthIndustryOptions.error.required = Select the industry you work in
 
 claimAmount.title = You can claim tax relief on £{0}
 claimAmount.heading = You can claim tax relief on £{0}
@@ -432,16 +457,7 @@ electrical.heading = Are you only claiming for laundry costs?
 electrical.checkYourAnswersLabel = Are you only claiming for laundry costs?
 electrical.error.required = Select yes if you are only claiming for laundry costs
 
-thirdIndustryOptions.title = What type of industry do you work in?
-thirdIndustryOptions.heading = What type of industry do you work in?
-thirdIndustryOptions.electrical = Electrical
-thirdIndustryOptions.education = Education
-thirdIndustryOptions.banksBuildingSocieties = Banks and building societies
-thirdIndustryOptions.security = Security
-thirdIndustryOptions.printing = Printing
-thirdIndustryOptions.none = None of the above
-thirdIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
-thirdIndustryOptions.error.required = Select the industry you work in
+
 
 metropolitanPolice.title = Do you work for the Metropolitan Police?
 metropolitanPolice.heading = Do you work for the Metropolitan Police?
@@ -493,17 +509,7 @@ constructionOccupationList2.occupation1 = labourer
 constructionOccupationList2.occupation2 = navvy
 constructionOccupationList2.occupation3 = tilemaker
 
-fourthIndustryOptions.title = Industry list 4 of 4
-fourthIndustryOptions.heading = Industry list 4 of 4
-fourthIndustryOptions.listText = Select your industry.
-fourthIndustryOptions.agriculture = agriculture
-fourthIndustryOptions.fireService = fire service
-fourthIndustryOptions.heating = heating
-fourthIndustryOptions.leisure = leisure
-fourthIndustryOptions.prisons = prisons
-fourthIndustryOptions.noneOfTheAbove = show more industries
-fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
-fourthIndustryOptions.error.required = Select the industry you work in
+
 
 heatingOccupationList.title = Heating occupation list
 heatingOccupationList.heading = Heating occupation list
