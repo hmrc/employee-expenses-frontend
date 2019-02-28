@@ -17,10 +17,9 @@
 package controllers.authenticated
 
 import base.SpecBase
-import connectors.TaiConnector
 import controllers.routes._
 import forms.authenticated.TaxYearSelectionFormProvider
-import models.{FlatRateExpenseOptions, NormalMode, TaxYearSelection, UserAnswers}
+import models.{FlatRateExpense, FlatRateExpenseAmounts, FlatRateExpenseOptions, NormalMode, TaiTaxYear, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -100,6 +99,8 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
           .build()
 
       when(mockTaiService.freResponse(any(), any(), any())(any(), any())) thenReturn Future.successful(FlatRateExpenseOptions.FRENoYears)
+      when(mockTaiService.getFREAmount(any(), any())(any(), any())) thenReturn
+        Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019))))
 
       val request =
         FakeRequest(POST, taxYearSelectionRoute)
