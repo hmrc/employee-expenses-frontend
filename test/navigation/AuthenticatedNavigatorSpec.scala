@@ -85,6 +85,18 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
           UpdateYourAddressController.onPageLoad()
       }
+
+      "go to CheckYourAnswers from UpdateYourAddressPage" in {
+        navigator.nextPage(UpdateYourAddressPage, NormalMode)(emptyUserAnswers) mustBe
+          CheckYourAnswersController.onPageLoad()
+      }
+    }
+
+    "in CheckMode" must {
+      "go to CheckYourAnswers from UpdateYourAddressPage" in {
+        navigator.nextPage(UpdateYourAddressPage, CheckMode)(emptyUserAnswers) mustBe
+          CheckYourAnswersController.onPageLoad()
+      }
     }
   }
 
