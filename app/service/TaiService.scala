@@ -81,4 +81,14 @@ class TaiService @Inject()(taiConnector: TaiConnector,
       ComplexClaim
     }
   }
+
+  def currentPrimaryEmployer(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] = {
+    taxCodeRecords(nino).map {
+      taxCodeRecords =>
+        taxCodeRecords.filter(_.primary).head.employerName match {
+          case employerName => Some(employerName)
+          case _ => None
+        }
+    }
+  }
 }

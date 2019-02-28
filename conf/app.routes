@@ -320,3 +320,8 @@ GET         /same-employer-contribution-all-years                controllers.Sam
 POST        /same-employer-contribution-all-years                controllers.SameEmployerContributionAllYearsController.onSubmit(mode: Mode = NormalMode)
 GET         /change-same-employer-contribution-all-years         controllers.SameEmployerContributionAllYearsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-same-employer-contribution-all-years         controllers.SameEmployerContributionAllYearsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /your-employer                                   controllers.authenticated.YourEmployerController.onPageLoad(mode: Mode = NormalMode)
+POST       /your-employer                                   controllers.authenticated.YourEmployerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-your-employer                            controllers.authenticated.YourEmployerController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-your-employer                            controllers.authenticated.YourEmployerController.onSubmit(mode: Mode = CheckMode)
