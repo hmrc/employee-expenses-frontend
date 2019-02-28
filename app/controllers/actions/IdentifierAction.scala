@@ -20,6 +20,7 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import controllers.routes
 import models.requests.IdentifierRequest
+import play.api.Logger
 import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
@@ -58,8 +59,11 @@ class AuthenticatedIdentifierAction @Inject()(
         unauthorised(request.session.get(config.mongoKey))
       case _: InsufficientConfidenceLevel =>
         insufficientConfidence(request.getQueryString("key"))
-      case _ =>
+      case _: InsufficientEnrolments | _: UnsupportedAuthProvider | _: UnsupportedAffinityGroup | _: UnsupportedCredentialRole =>
         Redirect(routes.UnauthorisedController.onPageLoad())
+      case e =>
+        Logger.error(s"Technical difficulties error: $e", e)
+        Redirect(routes.TechnicalDifficultiesController.onPageLoad())
     }
   }
 

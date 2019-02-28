@@ -43,6 +43,10 @@ site.textarea.char_limit = (Limit is {0} characters)
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
+technicalDifficulties.pageTitle = Sorry, there is a problem with the service
+technicalDifficulties.heading = Sorry, there is a problem with the service
+technicalDifficulties.message = Try again in a few minutes. We did not save your answers.
+
 expensesEmployerPaid.title = What is the amount that your employer has paid back?
 expensesEmployerPaid.heading = What is the amount that your employer has paid back?
 expensesEmployerPaid.checkYourAnswersLabel = What is the amount that your employer has paid back?
