@@ -18,6 +18,8 @@ package models
 
 import com.github.nscala_time.time.Imports._
 import org.joda.time.LocalDate
+import play.api.libs.json.{Format, Json}
+
 import scala.util.matching.Regex
 
 object TaxYearDates {
@@ -44,6 +46,9 @@ case class TaiTaxYear(year: Int) extends Ordered[TaiTaxYear] {
 }
 
 object TaiTaxYear {
+
+  implicit val format: Format[TaiTaxYear] = Json.format[TaiTaxYear]
+
   def apply(from: LocalDate = new LocalDate): TaiTaxYear = {
     val naiveYear = TaiTaxYear(from.year.get)
     if (from < naiveYear.start) {

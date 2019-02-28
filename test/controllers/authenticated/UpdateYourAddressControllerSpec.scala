@@ -22,7 +22,7 @@ import play.api.test.Helpers._
 import views.html.authenticated.UpdateYourAddressView
 
 class UpdateYourAddressControllerSpec extends SpecBase {
-  val nextPageURL = "/employee-expenses"
+  val nextPageURL = "/employee-expenses/check-your-answers"
 
   "UpdateYourAddress Controller" must {
 

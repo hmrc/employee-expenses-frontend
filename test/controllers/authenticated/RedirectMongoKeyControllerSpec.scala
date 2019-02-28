@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.authenticated
 
 import base.SpecBase
-import models.NormalMode
-import controllers.routes._
 import controllers.authenticated.routes._
+import models.NormalMode
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
