@@ -58,6 +58,10 @@ class AuthenticatedIdentifierAction @Inject()(
         unauthorised(request.session.get(config.mongoKey))
       case _: InsufficientConfidenceLevel =>
         insufficientConfidence(request.getQueryString("key"))
+      case _: InsufficientEnrolments | _: UnsupportedAuthProvider | _: UnsupportedAffinityGroup | _: UnsupportedCredentialRole =>
+        Redirect(routes.UnauthorisedController.onPageLoad())
+      case _: Exception =>
+        InternalServerError()
     }
   }
 

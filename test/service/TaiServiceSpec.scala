@@ -148,7 +148,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
       "return a Future[Seq[(Option[FlatRateExpenseAmounts], TaiTaxYear)]]" in {
         when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
-          .thenReturn(Future.successful(Seq(Some(FlatRateExpense(100)))))
+          .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
 
         val result: Future[Seq[FlatRateExpenseAmounts]] = taiService.getFREAmount(Seq(TaxYearSelection.CurrentYear), fakeNino)
 
@@ -162,7 +162,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
     "freResponse" must {
       "return FRENoYears when only 200 empty FRE array is returned for all tax years" in {
         when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
-          .thenReturn(Future.successful(Seq(None)))
+          .thenReturn(Future.successful(Seq.empty))
 
         val result = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 100)
 
@@ -174,7 +174,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
       "return FREAllYearsAllAmountsSameAsClaimAmount when only 200 is returned and the grossAmount is the same as claimAmount for all tax years" in {
         when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
-          .thenReturn(Future.successful(Seq(Some(FlatRateExpense(100)))))
+          .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
 
         val result = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 100)
 
@@ -186,7 +186,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
       "return FREAllYearsAllAmountsDifferentToClaimAmount when only 200 is returned and the grossAmount is not the same as claimAmount for all tax years" in {
         when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
-          .thenReturn(Future.successful(Seq(Some(FlatRateExpense(100)))))
+          .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
 
         val result = taiService.freResponse(Seq(TaxYearSelection.CurrentYear), fakeNino, claimAmount = 200)
 
@@ -198,9 +198,8 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
       "return ComplexClaim when only 200 is returned and some tax years are defined and some are empty" in {
         when(mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(any[HeaderCarrier](),any[ExecutionContext]()))
-          .thenReturn(Future.successful(Seq(Some(FlatRateExpense(100)))))
-          .thenReturn(Future.successful(Seq(None)))
-
+          .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
+          .thenReturn(Future.successful(Seq.empty))
 
         val result = taiService.freResponse(
           Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1), fakeNino, claimAmount = 200

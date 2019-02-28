@@ -50,7 +50,7 @@ class TaiService @Inject()(taiConnector: TaiConnector,
       taxYear =>
         taiConnector.getFlatRateExpense(nino, taxYear).map {
           freAmount =>
-            FlatRateExpenseAmounts(freAmount.head, taxYear)
+            FlatRateExpenseAmounts(freAmount.headOption, taxYear)
         }
     })
   }

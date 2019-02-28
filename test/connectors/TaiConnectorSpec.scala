@@ -91,7 +91,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
       whenReady(result) {
         result =>
-          result mustBe Some(FlatRateExpense(120))
+          result mustBe Seq(FlatRateExpense(120))
       }
     }
   }
@@ -146,6 +146,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
   val validFlatRateJson: JsValue = Json.parse(
     """
+      |[
       |   {
       |        "nino": "AB123456A",
       |        "sequenceNumber": 201600003,
@@ -158,6 +159,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       |        "typeDescription": "Flat Rate Job Expenses",
       |        "netAmount": null
       |   }
+      |]
       |""".stripMargin)
 
 }
