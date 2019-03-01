@@ -45,7 +45,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   private val form = formProvider()
   private val mockTaiService = mock[TaiService]
 
-  lazy val yourEmployerRoute: String = routes.YourEmployerController.onPageLoad(NormalMode).url
+  lazy val yourEmployerRoute: String = YourEmployerController.onPageLoad(NormalMode).url
 
   "YourEmployer Controller" must {
 
