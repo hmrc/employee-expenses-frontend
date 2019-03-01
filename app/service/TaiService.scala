@@ -16,7 +16,6 @@
 
 package service
 
-import scala.util.{Success, Failure}
 import com.google.inject.Inject
 import connectors.{CitizenDetailsConnector, TaiConnector}
 import models.FlatRateExpenseOptions._

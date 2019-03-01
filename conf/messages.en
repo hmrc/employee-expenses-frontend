@@ -509,8 +509,6 @@ constructionOccupationList2.occupation1 = labourer
 constructionOccupationList2.occupation2 = navvy
 constructionOccupationList2.occupation3 = tilemaker
 
-
-
 heatingOccupationList.title = Heating occupation list
 heatingOccupationList.heading = Heating occupation list
 heatingOccupationList.checkYourAnswersLabel = Heating Occupation List
@@ -572,7 +570,7 @@ ironApprentice.error.required = Select yes if you are an apprentice in the iron 
 
 aluminiumApprentice.title = Are you an apprentice in the aluminium industry?
 aluminiumApprentice.heading = Are you an apprentice in the aluminium industry?
-aluminAlreadyClaimingFREFormProvideriumApprentice.checkYourAnswersLabel = Are you an apprentice in the aluminium industry?
+aluminiumApprentice.checkYourAnswersLabel = Are you an apprentice in the aluminium industry?
 aluminiumApprentice.error.required = Select yes if you are an apprentice in the aluminium industry
 
 updateYourAddress.title = You need to update your address
@@ -616,4 +614,3 @@ alreadyClaimingFRESameAmount.altYesText = Keep claiming this amount
 alreadyClaimingFRESameAmount.altNoText = Stop claiming this amount
 alreadyClaimingFRESameAmount.tableTaxYearHeading = Tax year
 alreadyClaimingFRESameAmount.tableAmountHeading = Amount you are earning
-
