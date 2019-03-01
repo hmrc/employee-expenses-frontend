@@ -1,0 +1,57 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import controllers.authenticated.routes._
+@import models.{Mode, AlreadyClaimingFREDifferentAmounts}
+
+@this(
+    main_template: MainTemplate,
+    formHelper: FormWithCSRF
+)
+
+@(form: Form[_], mode: Mode, claimAmount: Int, freAmounts: Seq[FlatRateExpenseAmounts], freGreaterThanClaimAmount: Boolean)(implicit request: Request[_], messages: Messages)
+
+@moreLessKey = @{if(freGreaterThanClaimAmount)"More" else "Less"}
+
+@main_template(
+    title = s"${errorPrefix(form)} ${messages(s"alreadyClaimingFREDifferentAmounts.title$moreLessKey")}"
+    ) {
+    @formHelper(action = AlreadyClaimingFREDifferentAmountsController.onSubmit(mode), 'autoComplete -> "off") {
+
+        @components.back_link()
+
+        @components.error_summary(form.errors)
+
+        @components.heading(s"alreadyClaimingFREDifferentAmounts.heading$moreLessKey")
+
+        <p>@{messages(s"alreadyClaimingFREDifferentAmounts.bodyText$moreLessKey", freAmounts.head.freAmount.get.grossAmount, claimAmount)}</p>
+
+        @components.numeric_table(
+            freAmounts,
+            messages("alreadyClaimingFREDifferentAmounts.tableTaxYearHeading"),
+            messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading")
+        )
+
+        @components.input_radio(
+            field = form("value"),
+            legend = messages(s"alreadyClaimingFREDifferentAmounts.heading$moreLessKey"),
+            legendClass = Some("visually-hidden"),
+            inputs = AlreadyClaimingFREDifferentAmounts.options
+        )
+
+        @components.submit_button()
+    }
+}
