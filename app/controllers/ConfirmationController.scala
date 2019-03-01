@@ -16,12 +16,16 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
+import models.TaxYearSelection
+import pages.ClaimAmount
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
+import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.ConfirmationView
 
@@ -34,18 +38,27 @@ class ConfirmationController @Inject()(
                                        requireData: DataRequiredAction,
                                        sessionRepository: SessionRepository,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: ConfirmationView
+                                       view: ConfirmationView,
+                                       claimAmountService: ClaimAmountService,
+                                       appConfig: FrontendAppConfig
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      (request.userAnswers.get(TaxYearSelectionPage), request.userAnswers.get(RemoveFRECodePage)) match {
-        case (Some(taxYears), Some(freRemoveYear)) =>
-          Ok(view(taxYears, Some(freRemoveYear)))
-        case (Some(taxYears), _) =>
-          Ok(view(taxYears))
-        case (_, _) =>
-          Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+
+      val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmount)
+      val taxYearSelection: Option[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage)
+      val removeFre: Option[TaxYearSelection] = request.userAnswers.get(RemoveFRECodePage)
+
+
+
+      (taxYearSelection, removeFre, claimAmount) match {
+        case (Some(taxYears), removeFreOption, Some(fullClaimAmount)) =>
+          val basicRate = claimAmountService.calculateTax(appConfig.taxPercentageBand1, fullClaimAmount)
+          val higherRate = claimAmountService.calculateTax(appConfig.taxPercentageBand2, fullClaimAmount)
+
+          Ok(view(taxYears, removeFreOption, fullClaimAmount, basicRate, higherRate))
+        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
       }
   }
 }

@@ -18,7 +18,13 @@
     main_template: MainTemplate
 )
 
-@(taxYear: Seq[TaxYearSelection], stoppedClaim: Option[TaxYearSelection] = None)(implicit request: Request[_], messages: Messages)
+@(
+        taxYear: Seq[TaxYearSelection],
+        removeFreOption: Option[TaxYearSelection],
+        claimAmount: Int,
+        basicRate: String,
+        higherRate: String
+)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("confirmation.title")
@@ -28,19 +34,19 @@
 
     <div class="govuk-box-highlight">
         <h1 class="heading-xlarge">
-            @if(stoppedClaim){ @messages("confirmation.heading.stoppedClaim") } else { @messages("confirmation.heading") }
+            @if(removeFreOption){ @messages("confirmation.heading.stoppedClaim") } else { @messages("confirmation.heading") }
         </h1>
     </div>
 
-    @if(stoppedClaim) {
+    @if(removeFreOption) {
         <p>@messages("confirmation.noLongerGetAmount")</p>
     }else {
         @if(taxYear.contains(TaxYearSelection.CurrentYear)) {
-            <h2>@messages("confirmation.personalAllowanceIncrease")</h2>
+            <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
         }
         <p>@messages("confirmation.actualAmount")</p>
-        <p>@messages("confirmation.basicRate")</p>
-        <p>@messages("confirmation.higherRate")</p>
+        <p>@messages("confirmation.basicRate", basicRate)</p>
+        <p>@messages("confirmation.higherRate", higherRate)</p>
 
         <h2>@messages("confirmation.whatHappensNext")</h2>
 
