@@ -325,3 +325,5 @@ GET         /already-claiming-flat-rate-expense-same-amount                  con
 POST        /already-claiming-flat-rate-expense-same-amount                  controllers.authenticated.AlreadyClaimingFRESameAmountController.onSubmit(mode: Mode = NormalMode)
 GET         /change-already-claiming-flat-rate-expense-same-amount           controllers.authenticated.AlreadyClaimingFRESameAmountController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-already-claiming-flat-rate-expense-same-amount           controllers.authenticated.AlreadyClaimingFRESameAmountController.onSubmit(mode: Mode = CheckMode)
+
+GET        /confirmation                       controllers.ConfirmationController.onPageLoad()

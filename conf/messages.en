@@ -614,3 +614,6 @@ alreadyClaimingFRESameAmount.altYesText = Keep claiming this amount
 alreadyClaimingFRESameAmount.altNoText = Stop claiming this amount
 alreadyClaimingFRESameAmount.tableTaxYearHeading = Tax year
 alreadyClaimingFRESameAmount.tableAmountHeading = Amount you are earning
+
+confirmation.title = confirmation
+confirmation.heading = confirmation
