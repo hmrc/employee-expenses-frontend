@@ -26,8 +26,10 @@ import play.api.mvc.Call
 
 class AuthenticatedNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => taxYearSelection(NormalMode)
-    case YourAddressPage => yourAddress(NormalMode)
+    case TaxYearSelectionPage             => taxYearSelection(NormalMode)
+    case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(NormalMode)
+    case TaxYearSelectionPage             => taxYearSelection(NormalMode)
+    case YourAddressPage                  => yourAddress(NormalMode)
     case UpdateYourAddressPage => _ => CheckYourAnswersController.onPageLoad()
     case YourEmployerPage => yourEmployer(NormalMode)
     case UpdateYourEmployerInformationPage => _ => CheckYourAnswersController.onPageLoad()
@@ -43,7 +45,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case Some(FlatRateExpenseOptions.FRENoYears) =>
       YourAddressController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount) =>
-      NoCodeChangeController.onPageLoad()
+      AlreadyClaimingFRESameAmountController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferentToClaimAmount) =>
       RemoveFRECodeController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.ComplexClaim) =>
@@ -53,6 +55,16 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case _ =>
       SessionExpiredController.onPageLoad()
   }
+
+  def alreadyClaimingFRESameAmount(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(AlreadyClaimingFRESameAmountPage) match {
+      case Some(true) =>
+        NoCodeChangeController.onPageLoad()
+      case Some(false) =>
+        RemoveFRECodeController.onPageLoad(NormalMode)
+      case _ =>
+        SessionExpiredController.onPageLoad()
+    }
 
   def yourAddress(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(YourAddressPage) match {
     case Some(true) =>

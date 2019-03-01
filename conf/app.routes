@@ -325,3 +325,8 @@ GET        /your-employer                                   controllers.authenti
 POST       /your-employer                                   controllers.authenticated.YourEmployerController.onSubmit(mode: Mode = NormalMode)
 GET        /change-your-employer                            controllers.authenticated.YourEmployerController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-your-employer                            controllers.authenticated.YourEmployerController.onSubmit(mode: Mode = CheckMode)
+
+GET         /already-claiming-flat-rate-expense-same-amount                  controllers.authenticated.AlreadyClaimingFRESameAmountController.onPageLoad(mode: Mode = NormalMode)
+POST        /already-claiming-flat-rate-expense-same-amount                  controllers.authenticated.AlreadyClaimingFRESameAmountController.onSubmit(mode: Mode = NormalMode)
+GET         /change-already-claiming-flat-rate-expense-same-amount           controllers.authenticated.AlreadyClaimingFRESameAmountController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-already-claiming-flat-rate-expense-same-amount           controllers.authenticated.AlreadyClaimingFRESameAmountController.onSubmit(mode: Mode = CheckMode)

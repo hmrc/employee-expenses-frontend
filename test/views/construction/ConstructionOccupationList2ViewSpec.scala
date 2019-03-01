@@ -53,8 +53,8 @@ class ConstructionOccupationList2ViewSpec extends YesNoViewBehaviours {
       messageKeyPrefix = messageKeyPrefix,
       expectedFormAction = routes.ConstructionOccupationList2Controller.onSubmit(NormalMode).url,
       legendLabel = Some(messageKeyPrefix + ".radioLabel")
-
     )
+
     behave like pageWithList(applyView(form), messageKeyPrefix,
       Seq(
         "occupation1",
