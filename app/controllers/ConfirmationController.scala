@@ -18,8 +18,10 @@ package controllers
 
 import controllers.actions._
 import javax.inject.Inject
+import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.ConfirmationView
 
@@ -30,12 +32,20 @@ class ConfirmationController @Inject()(
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
+                                       sessionRepository: SessionRepository,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: ConfirmationView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view())
+      (request.userAnswers.get(TaxYearSelectionPage), request.userAnswers.get(RemoveFRECodePage)) match {
+        case (Some(taxYears), Some(freRemoveYear)) =>
+          Ok(view(taxYears, Some(freRemoveYear)))
+        case (Some(taxYears), _) =>
+          Ok(view(taxYears))
+        case (_, _) =>
+          Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+      }
   }
 }

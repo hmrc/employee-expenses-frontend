@@ -18,7 +18,7 @@
     main_template: MainTemplate
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(taxYear: Seq[TaxYearSelection], stoppedClaim: Option[TaxYearSelection] = None)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("confirmation.title")
@@ -26,5 +26,43 @@
 
     @components.back_link()
 
-    @components.heading("confirmation.heading")
+    <div class="govuk-box-highlight">
+        <h1 class="heading-xlarge">
+            @if(stoppedClaim){ @messages("confirmation.heading.stoppedClaim") } else { @messages("confirmation.heading") }
+        </h1>
+    </div>
+
+    @if(stoppedClaim) {
+        <p>@messages("confirmation.noLongerGetAmount")</p>
+    }else {
+        @if(taxYear.contains(TaxYearSelection.CurrentYear)) {
+            <h2>@messages("confirmation.personalAllowanceIncrease")</h2>
+        }
+        <p>@messages("confirmation.actualAmount")</p>
+        <p>@messages("confirmation.basicRate")</p>
+        <p>@messages("confirmation.higherRate")</p>
+
+        <h2>@messages("confirmation.whatHappensNext")</h2>
+
+        @if(!taxYear.contains(TaxYearSelection.CurrentYear)) {
+            <p>@messages("confirmation.letterConfirmation")</p>
+        } else {
+            @if(taxYear.size > 1) {
+                <h3>@messages("confirmation.currentTaxYear")</h3>
+            }
+
+            <p>@messages("confirmation.taxCodeChanged")</p>
+            <p>@messages("confirmation.continueToClaim")</p>
+
+            @if(taxYear.size > 1) {
+                <h3>@messages("confirmation.previousTaxYears")</h3>
+                <p>@messages("confirmation.letterConfirmation")</p>
+            }
+
+        }
+    }
+
+
+
+
 }
