@@ -20,7 +20,7 @@ import base.SpecBase
 import forms.authenticated.AlreadyClaimingFRESameAmountFormProvider
 import models.{FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.FREAmounts
+import pages.{ClaimAmount, FREAmounts}
 import pages.authenticated.AlreadyClaimingFRESameAmountPage
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -122,7 +122,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "redirect to Session Expired if ClaimAmount is missing" in {
+    "redirect to Session Expired on GET if ClaimAmount is missing" in {
 
       val userAnswers = emptyUserAnswers.set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
@@ -138,6 +138,68 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
 
       application.stop()
     }
+
+    "redirect to Session Expired on GET if FREAmount is missing" in {
+
+      val userAnswers = emptyUserAnswers.set(ClaimAmount, 100).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(GET, alreadyClaimingFRERoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to Session Expired on POST if ClaimAmount is missing" in {
+
+      val userAnswers = emptyUserAnswers.set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .build()
+
+      val request =
+        FakeRequest(POST, alreadyClaimingFRERoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to Session Expired on POST if FREAmount is missing" in {
+
+      val userAnswers = emptyUserAnswers.set(ClaimAmount, 100).success.value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .build()
+
+      val request =
+        FakeRequest(POST, alreadyClaimingFRERoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
 
     "redirect to Session Expired for a GET if no existing data is found" in {
 

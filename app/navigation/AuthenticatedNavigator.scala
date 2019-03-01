@@ -37,7 +37,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case Some(FlatRateExpenseOptions.FRENoYears) =>
       YourAddressController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount) =>
-      NoCodeChangeController.onPageLoad()
+      AlreadyClaimingFRESameAmountController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferentToClaimAmount) =>
       RemoveFRECodeController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.ComplexClaim) =>

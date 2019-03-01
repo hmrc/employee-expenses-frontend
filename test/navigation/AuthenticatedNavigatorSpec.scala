@@ -42,11 +42,11 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
             YourAddressController.onPageLoad(NormalMode)
         }
 
-        "go to NoCodeChangeController when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
+        "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
           val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount).success.value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
-            NoCodeChangeController.onPageLoad()
+            AlreadyClaimingFRESameAmountController.onPageLoad(NormalMode)
         }
 
         "go to RemoveFRECodeController when answered and freResponse returns FREAllYearsAllAmountsDifferentToClaimAmount" in {
