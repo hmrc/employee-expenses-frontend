@@ -72,11 +72,11 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
 
       }
 
-      "go to CheckYourAnswers from YourAddress when answered true" in {
+      "go to YourEmployer from YourAddress when answered true" in {
         val ua = emptyUserAnswers.set(YourAddressPage, true).success.value
 
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
-          CheckYourAnswersController.onPageLoad()
+          YourEmployerController.onPageLoad(NormalMode)
       }
 
       "go to UpdateYourAddress from YourAddress when answered false" in {
@@ -90,6 +90,22 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
         navigator.nextPage(UpdateYourAddressPage, NormalMode)(emptyUserAnswers) mustBe
           CheckYourAnswersController.onPageLoad()
       }
+
+      "go to UpdateEmployerInformation from YourEmployer when answered false" in {
+        val ua = emptyUserAnswers.set(YourEmployerPage, false).success.value
+
+        navigator.nextPage(YourEmployerPage, NormalMode)(ua) mustBe
+          UpdateEmployerInformationController.onPageLoad()
+      }
+
+      "go to CheckYourAnswers from YourEmployer when answered true" in {
+        val ua = emptyUserAnswers.set(YourEmployerPage, true).success.value
+
+        navigator.nextPage(YourEmployerPage, NormalMode)(ua) mustBe
+          CheckYourAnswersController.onPageLoad()
+      }
+
+
     }
 
     "in CheckMode" must {

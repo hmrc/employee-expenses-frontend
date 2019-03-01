@@ -22,7 +22,8 @@ import controllers.actions._
 import models.EmployerContribution.SomeContribution
 import models.FirstIndustryOptions.Healthcare
 import models.TaxYearSelection.CurrentYear
-import models.{Address, FirstIndustryOptions, TaxYearSelection, UserAnswers}
+import models.{Address, Employment, UserAnswers}
+import org.joda.time.LocalDate
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
@@ -79,6 +80,12 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
      """.stripMargin
   )
 
+  lazy val taiEmployment: Seq[Employment] = Seq(Employment(
+    name = "HMRC LongBenton",
+    startDate = LocalDate.parse("2018-06-27"),
+    endDate = None
+  ))
+
   lazy val emptyAddress = Address(
     None,
     None,
@@ -89,7 +96,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     None
   )
 
-  def minimumUserAnswers = emptyUserAnswers
+  def minimumUserAnswers: UserAnswers = emptyUserAnswers
     .set(FirstIndustryOptionsPage, Healthcare).success.value
     .set(EmployerContributionPage, SomeContribution).success.value
     .set(ExpensesEmployerPaidPage, 123).success.value

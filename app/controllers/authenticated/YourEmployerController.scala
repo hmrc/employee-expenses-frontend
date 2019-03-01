@@ -18,11 +18,14 @@ package controllers.authenticated
 
 import config.NavConstant
 import controllers.actions._
+import controllers.authenticated.routes._
+import controllers.routes._
 import forms.authenticated.YourEmployerFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, TaiTaxYear, TaxYearSelection}
+import models.Mode
 import navigation.Navigator
-import pages.authenticated.YourEmployerPage
+import pages.YourEmployerName
+import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -50,45 +53,50 @@ class YourEmployerController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
+
       val preparedForm = request.userAnswers.get(YourEmployerPage) match {
         case None => form
         case Some(value) => form.fill(value)
-
       }
 
-      request.nino match {
-        case Some(nino) =>
-          taiService.employments(nino, TaxYearSelection.CurrentYear).map {
-            case employments => Ok(view(preparedForm, mode, employments.head.name))
-            case _ => Redirect(controllers.authenticated.routes.UpdateEmployerInformationController.onPageLoad())
+      request.userAnswers.get(TaxYearSelectionPage) match {
+        case Some(taxYears) =>
+          taiService.employments(request.nino.get, taxYears.head).map {
+            employments =>
+              if (employments.headOption.nonEmpty) {
+                Ok(view(preparedForm, mode, employments.head.name))
+              } else {
+                Redirect(UpdateEmployerInformationController.onPageLoad())
+              }
           }
         case _ =>
-          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
+
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-      request.nino match {
-        case Some(nino) =>
-          taiService.employments(nino, TaxYearSelection.CurrentYear).flatMap {
-            case employments =>
 
+      request.userAnswers.get(TaxYearSelectionPage) match {
+        case Some(taxYears) =>
+          taiService.employments(request.nino.get, taxYears.head).flatMap {
+            employments =>
               form.bindFromRequest().fold(
                 (formWithErrors: Form[_]) =>
                   Future.successful(BadRequest(view(formWithErrors, mode, employments.head.name))),
 
                 value => {
                   for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value))
-                    _ <- sessionRepository.set(updatedAnswers)
-                  } yield Redirect(navigator.nextPage(YourEmployerPage, mode)(updatedAnswers))
+                    ua1 <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value))
+                    ua2 <- Future.fromTry(ua1.set(YourEmployerName, employments.head.name))
+                    _ <- sessionRepository.set(ua2)
+                  } yield Redirect(navigator.nextPage(YourEmployerPage, mode)(ua2))
                 }
               )
-            case _ => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
           }
         case _ =>
-          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
 
   }

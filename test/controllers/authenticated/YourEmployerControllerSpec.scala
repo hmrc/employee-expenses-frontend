@@ -17,14 +17,16 @@
 package controllers.authenticated
 
 import base.SpecBase
+import controllers.authenticated.routes._
+import controllers.routes._
 import forms.authenticated.YourEmployerFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
-import pages.authenticated.YourEmployerPage
+import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import play.api.http.Status.OK
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -41,23 +43,21 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   private val formProvider = new YourEmployerFormProvider()
   private val form = formProvider()
-  private val employerName = "HMRC"
-
   private val mockTaiService = mock[TaiService]
 
-
-  lazy val yourEmployerRoute = routes.YourEmployerController.onPageLoad(NormalMode).url
+  lazy val yourEmployerRoute: String = routes.YourEmployerController.onPageLoad(NormalMode).url
 
   "YourEmployer Controller" must {
 
     "return OK and the correct view for a GET" in {
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
-      when(mockTaiService.currentPrimaryEmployer(any())(any(), any())).thenReturn(Future.successful(Some(employerName)))
-
+      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmployment))
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
@@ -68,20 +68,22 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, employerName)(fakeRequest, messages).toString
+        view(form, NormalMode, taiEmployment.head.name)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(YourEmployerPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(YourEmployerPage, true).success.value
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
-      when(mockTaiService.currentPrimaryEmployer(any())(any(), any())).thenReturn(Future.successful(Some(employerName)))
+      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmployment))
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
@@ -92,21 +94,22 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, employerName)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode, taiEmployment.head.name)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
-      when(mockTaiService.currentPrimaryEmployer(any())(any(), any())).thenReturn(Future.successful(Some(employerName)))
-
+      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmployment))
 
       val request =
         FakeRequest(POST, yourEmployerRoute)
@@ -122,8 +125,10 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
@@ -140,7 +145,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, employerName)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, taiEmployment.head.name)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -155,7 +160,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -172,28 +177,70 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
 
     "redirect to up Update your employer when no employer is located" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
-      when(mockTaiService.currentPrimaryEmployer(any())(any(), any())).thenReturn(Future.successful(None))
+      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(Seq.empty))
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[YourEmployerView]
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual UpdateEmployerInformationController.onPageLoad().url
+
+    }
+
+    "redirect to Session Expired for a POST if no tax year selection in user answers" in {
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[TaiService].toInstance(mockTaiService))
+          .build()
+
+      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmployment))
+
+      val request = FakeRequest(POST, yourEmployerRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.authenticated.routes.UpdateEmployerInformationController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
 
+      application.stop()
+    }
+
+    "redirect to Session Expired for a GET if no tax year selection in user answers" in {
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[TaiService].toInstance(mockTaiService))
+          .build()
+
+      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmployment))
+
+      val request = FakeRequest(GET, yourEmployerRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+
+      application.stop()
     }
   }
 }
