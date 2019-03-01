@@ -26,7 +26,8 @@ import play.api.mvc.Call
 
 class AuthenticatedNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => taxYearSelection(NormalMode)
+    case TaxYearSelectionPage             => taxYearSelection(NormalMode)
+    case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(NormalMode)
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -47,5 +48,15 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case _ =>
       SessionExpiredController.onPageLoad()
   }
+
+  def alreadyClaimingFRESameAmount(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(AlreadyClaimingFRESameAmountPage) match {
+      case Some(true) =>
+        NoCodeChangeController.onPageLoad()
+      case Some(false) =>
+        RemoveFRECodeController.onPageLoad(NormalMode)
+      case _ =>
+        SessionExpiredController.onPageLoad()
+    }
 
 }

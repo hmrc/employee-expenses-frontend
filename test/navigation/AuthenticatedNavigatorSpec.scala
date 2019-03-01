@@ -23,7 +23,7 @@ import models.{FlatRateExpenseOptions, NormalMode}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.FREResponse
-import pages.authenticated.TaxYearSelectionPage
+import pages.authenticated.{AlreadyClaimingFRESameAmountPage, TaxYearSelectionPage}
 
 class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
@@ -67,6 +67,28 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.TechnicalDifficulties).success.value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
+            SessionExpiredController.onPageLoad()
+        }
+      }
+
+      "from AlreadyClaimingFRESameAmount" must {
+
+        "go to NoCodeChange when answer is true" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, true).success.value
+
+          navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(ua) mustBe
+            NoCodeChangeController.onPageLoad()
+        }
+
+        "go to RemoveFRECode when answer is false" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, false).success.value
+
+          navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(ua) mustBe
+            RemoveFRECodeController.onPageLoad(NormalMode)
+        }
+
+        "go to SessionExpired if no answer" in {
+          navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(emptyUserAnswers) mustBe
             SessionExpiredController.onPageLoad()
         }
       }
