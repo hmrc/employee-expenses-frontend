@@ -509,8 +509,6 @@ constructionOccupationList2.occupation1 = labourer
 constructionOccupationList2.occupation2 = navvy
 constructionOccupationList2.occupation3 = tilemaker
 
-
-
 heatingOccupationList.title = Heating occupation list
 heatingOccupationList.heading = Heating occupation list
 heatingOccupationList.checkYourAnswersLabel = Heating Occupation List
@@ -605,3 +603,14 @@ sameEmployerContributionAllYears.title = Did your employer pay £{0} for each ta
 sameEmployerContributionAllYears.heading = Did your employer pay £{0} for each tax year you are claiming for?
 sameEmployerContributionAllYears.checkYourAnswersLabel = Did your employer pay £{0} for each tax year you are claiming for?
 sameEmployerContributionAllYears.error.required = Select yes if your employer pays back the same amount in each tax year you are claiming for
+
+alreadyClaimingFRESameAmount.title = You are already claiming this
+alreadyClaimingFRESameAmount.heading = You are already claiming this
+alreadyClaimingFRESameAmount.checkYourAnswersLabel = You are already claiming this
+alreadyClaimingFRESameAmount.error.required = Select yes if you want to keep claiming this amount
+alreadyClaimingFRESameAmount.bodyText = Based on the information HMRC holds, you are already earning an extra £{0} before you pay tax.
+alreadyClaimingFRESameAmount.radioLabel = What do you want to do?
+alreadyClaimingFRESameAmount.altYesText = Keep claiming this amount
+alreadyClaimingFRESameAmount.altNoText = Stop claiming this amount
+alreadyClaimingFRESameAmount.tableTaxYearHeading = Tax year
+alreadyClaimingFRESameAmount.tableAmountHeading = Amount you are earning

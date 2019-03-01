@@ -42,11 +42,11 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
             YourAddressController.onPageLoad(NormalMode)
         }
 
-        "go to NoCodeChangeController when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
+        "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
           val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount).success.value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
-            NoCodeChangeController.onPageLoad()
+            AlreadyClaimingFRESameAmountController.onPageLoad(NormalMode)
         }
 
         "go to RemoveFRECodeController when answered and freResponse returns FREAllYearsAllAmountsDifferentToClaimAmount" in {
@@ -70,6 +70,28 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
             SessionExpiredController.onPageLoad()
         }
 
+      }
+
+      "from AlreadyClaimingFRESameAmount" must {
+
+        "go to NoCodeChange when answer is true" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, true).success.value
+
+          navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(ua) mustBe
+            NoCodeChangeController.onPageLoad()
+        }
+
+        "go to RemoveFRECode when answer is false" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, false).success.value
+
+          navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(ua) mustBe
+            RemoveFRECodeController.onPageLoad(NormalMode)
+        }
+
+        "go to SessionExpired if no answer" in {
+          navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(emptyUserAnswers) mustBe
+            SessionExpiredController.onPageLoad()
+        }
       }
 
       "go to CheckYourAnswers from YourAddress when answered true" in {
