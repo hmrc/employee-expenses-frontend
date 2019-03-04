@@ -26,7 +26,6 @@ class SubmissionService @Inject()(taiService: TaiService) {
 
   def submitFRENotInCode(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int)
                         (implicit hc: HeaderCarrier, ec: ExecutionContext) = {
-    println("\n\n\n\nARGH\n\n\n\n")
     val responses: Future[Seq[HttpResponse]] = Future.sequence(taxYears.map {
       taxYearSelection =>
         val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
@@ -35,10 +34,10 @@ class SubmissionService @Inject()(taiService: TaiService) {
     submissionResult(responses)
   }
 
-  def submissionResult(responses: Future[Seq[HttpResponse]])
+  def submissionResult(response: Future[Seq[HttpResponse]])
                       (implicit hc: HeaderCarrier, ec: ExecutionContext) = {
-    responses.map {
-      _.forall(_.status == 204)
+    response.map {
+      responses => responses.nonEmpty && responses.forall(_.status == 204)
     }.map {
       case true => controllers.routes.CheckYourAnswersController.onPageLoad()
       case _ => controllers.routes.TechnicalDifficultiesController.onPageLoad()

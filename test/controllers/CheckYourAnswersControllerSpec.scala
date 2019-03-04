@@ -17,14 +17,22 @@
 package controllers
 
 import base.SpecBase
+import org.scalatest.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import service.SubmissionService
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.CheckYourAnswersView
+import org.mockito.Mockito._
+import org.mockito.Matchers._
+import play.api.inject.bind
 
-class CheckYourAnswersControllerSpec extends SpecBase {
+import scala.concurrent.Future
 
+class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
+
+  private val mockSubmissionService = mock[SubmissionService]
   private val cyaHelper = new CheckYourAnswersHelper(minimumUserAnswers)
   private val minimumSections = Seq(AnswerSection(None, Seq(
     cyaHelper.industryType,
@@ -34,39 +42,78 @@ class CheckYourAnswersControllerSpec extends SpecBase {
     cyaHelper.yourAddress
   ).flatten))
 
-  "Check Your Answers Controller" must {
+  "Check Your Answers Controller" when {
+    "onPageLoad" must {
+      "return OK and the correct view for a GET" in {
 
-    "return OK and the correct view for a GET" in {
+        val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
 
-      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
+        val result = route(application, request).value
 
-      val result = route(application, request).value
+        val view = application.injector.instanceOf[CheckYourAnswersView]
 
-      val view = application.injector.instanceOf[CheckYourAnswersView]
+        status(result) mustEqual OK
 
-      status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(minimumSections)(fakeRequest, messages).toString
 
-      contentAsString(result) mustEqual
-        view(minimumSections)(fakeRequest, messages).toString
+        application.stop()
+      }
 
-      application.stop()
+      "redirect to Session Expired for a GET if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+
+        application.stop()
+      }
     }
 
-    "redirect to Session Expired for a GET if no existing data is found" in {
+    "onSubmit" must {
+      "redirect to CYA when given valid data" in {
+        when(mockSubmissionService.submitFRENotInCode(any(),any(),any())(any(),any()))
+          .thenReturn(Future.successful(routes.CheckYourAnswersController.onPageLoad()))
 
-      val application = applicationBuilder(userAnswers = None).build()
+        val application = applicationBuilder(Some(minimumUserAnswers))
+          .overrides(bind[SubmissionService].toInstance(mockSubmissionService))
+          .build()
 
-      val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
+        val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
 
-      val result = route(application, request).value
+        val result = route(application, request).value
 
-      status(result) mustEqual SEE_OTHER
+        status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
 
-      application.stop()
+        application.stop()
+
+      }
+
+      "redirect to tech difficulties when given no data" in {
+        val application = applicationBuilder(Some(emptyUserAnswers))
+          .build()
+
+        val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.TechnicalDifficultiesController.onPageLoad().url
+
+        application.stop()
+
+      }
     }
   }
 }
