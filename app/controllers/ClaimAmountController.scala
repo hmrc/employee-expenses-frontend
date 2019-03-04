@@ -21,7 +21,7 @@ import controllers.actions._
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
-import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage}
+import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage, ExpensesEmployerPaidPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -49,19 +49,25 @@ class ClaimAmountController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
 
     implicit request =>
-      (request.userAnswers.get(EmployerContributionPage), request.userAnswers.get(ClaimAmount)) match {
-        case (Some(_), Some(amount)) =>
-          val claimAmount: Int = calculateClaimAmount(request.userAnswers, amount)
+      (request.userAnswers.get(EmployerContributionPage), request.userAnswers.get(ClaimAmount), request.userAnswers.get(ExpensesEmployerPaidPage)) match {
+        case (Some(_), Some(claimAmount), employerContribution) =>
+          val claimAmountAndAnyDeductions: Int = calculateClaimAmount(request.userAnswers, claimAmount)
 
           for {
-            saveClaimAmountAndAnyDeductions <- Future.fromTry(request.userAnswers.set(ClaimAmountAndAnyDeductions, claimAmount))
+            saveClaimAmountAndAnyDeductions <- Future.fromTry(request.userAnswers.set(ClaimAmountAndAnyDeductions, claimAmountAndAnyDeductions))
             _ <- sessionRepository.set(saveClaimAmountAndAnyDeductions)
           } yield {
-
             Ok(view(
               claimAmount = claimAmount,
-              band1 = calculateTax(appConfig.taxPercentageBand1, claimAmount),
-              band2 = calculateTax(appConfig.taxPercentageBand2, claimAmount),
+              employerContribution = employerContribution,
+              band1 = appConfig.taxPercentageBand1,
+              calculatedBand1 = calculateTax(appConfig.taxPercentageBand1, claimAmountAndAnyDeductions),
+              band2 = appConfig.taxPercentageBand2,
+              calculatedBand2 = calculateTax(appConfig.taxPercentageBand2, claimAmountAndAnyDeductions),
+              scotlandBand1 = appConfig.taxPercentageScotlandBand1,
+              calculatedScotlandBand1 = calculateTax(appConfig.taxPercentageScotlandBand1, claimAmountAndAnyDeductions),
+              scotlandBand2 = appConfig.taxPercentageScotlandBand2,
+              calculatedScotlandBand2 = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmountAndAnyDeductions),
               onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
             ))
           }

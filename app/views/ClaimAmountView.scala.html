@@ -20,8 +20,15 @@
 
 @(
     claimAmount: Int,
-    band1: String,
-    band2: String,
+    employerContribution: Option[Int],
+    band1 : Int,
+    calculatedBand1 : String,
+    band2 : Int,
+    calculatedBand2 : String,
+    scotlandBand1 : Int,
+    calculatedScotlandBand1 : String,
+    scotlandBand2 : Int,
+    calculatedScotlandBand2 : String,
     onwardRoute: String
 )(implicit request: Request[_], messages: Messages)
 
@@ -33,11 +40,24 @@
 
     @components.heading(messages("claimAmount.heading", claimAmount))
 
+    @if(employerContribution){
+        <p>@messages("claimAmount.someContributionDescription", claimAmount - employerContribution.get)</p>
+        <p>@messages("claimAmount.employerContributionDescription")</p>
+    }else{
+        <p>@messages("claimAmount.noContributionDescription", claimAmount)</p>
+    }
+
     <p>@messages("claimAmount.description")</p>
 
-    <p id="band-1">Band 1 : £@band1</p>
+    <h2 class="heading-small">@messages("claimAmount.englandHeading")</h2>
 
-    <p id="band-2">Band 2 : £@band2</p>
+    <p>@messages("claimAmount.band1", calculatedBand1, band1)</p>
+    <p>@messages("claimAmount.band2", calculatedBand2, band2)</p>
+
+    <h2 class="heading-small">@messages("claimAmount.scotlandHeading")</h2>
+
+    <p>@messages("claimAmount.scotlandBand1", calculatedScotlandBand1, scotlandBand1)</p>
+    <p>@messages("claimAmount.scotlandBand2", calculatedScotlandBand2, scotlandBand2)</p>
 
     @components.button_link(messages("site.continue"), onwardRoute)
 }
