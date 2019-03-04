@@ -79,8 +79,28 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "onSubmit" must {
-      "redirect to CYA when given valid data" in {
+      "for submitFRENotInCode redirect to CYA when given valid data" in {
         when(mockSubmissionService.submitFRENotInCode(any(),any(),any())(any(),any()))
+          .thenReturn(Future.successful(routes.CheckYourAnswersController.onPageLoad()))
+
+        val application = applicationBuilder(Some(minimumUserAnswers))
+          .overrides(bind[SubmissionService].toInstance(mockSubmissionService))
+          .build()
+
+        val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+
+        application.stop()
+
+      }
+
+      "for submitRemoveFREFromCode redirect to CYA when given valid data" in {
+        when(mockSubmissionService.submitRemoveFREFromCode(any(),any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(routes.CheckYourAnswersController.onPageLoad()))
 
         val application = applicationBuilder(Some(minimumUserAnswers))

@@ -61,6 +61,30 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
       }
     }
 
+    "submitRemoveFREFromCode" must {
+      "return CYA call when give 204 response" in {
+        when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
+          .thenReturn(Future.successful(HttpResponse(204)))
+
+        val result = submissionService.submitRemoveFREFromCode(fakeNino, taxYears, claimAmount, TaxYearSelection.CurrentYear)
+
+        whenReady(result) {
+          _ mustBe CheckYourAnswersController.onPageLoad()
+        }
+      }
+
+      "return tech difficulties call when give 500 response" in {
+        when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
+          .thenReturn(Future.successful(HttpResponse(500)))
+
+        val result = submissionService.submitRemoveFREFromCode(fakeNino, taxYears, claimAmount, TaxYearSelection.CurrentYear)
+
+        whenReady(result) {
+          _ mustBe TechnicalDifficultiesController.onPageLoad()
+        }
+      }
+    }
+
     "submissionResult" must {
       "return CYA call when given 204 responses" in {
         val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(204), HttpResponse(204))))

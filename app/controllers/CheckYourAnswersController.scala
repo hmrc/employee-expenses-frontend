@@ -22,7 +22,7 @@ import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierA
 import javax.inject.Named
 import models.FlatRateExpenseOptions.FRENoYears
 import navigation.Navigator
-import pages.authenticated.TaxYearSelectionPage
+import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -32,8 +32,8 @@ import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.CheckYourAnswersView
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class CheckYourAnswersController @Inject()(
                                             override val messagesApi: MessagesApi,
@@ -63,9 +63,18 @@ class CheckYourAnswersController @Inject()(
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-      (request.userAnswers.get(FREResponse), request.userAnswers.get(TaxYearSelectionPage), request.userAnswers.get(ClaimAmountAndAnyDeductions)) match {
-        case (Some(FRENoYears), Some(taxYears), Some(claimAmount)) =>
-          submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map{
+      (
+        request.userAnswers.get(FREResponse),
+        request.userAnswers.get(TaxYearSelectionPage),
+        request.userAnswers.get(ClaimAmountAndAnyDeductions),
+        request.userAnswers.get(RemoveFRECodePage)
+      ) match {
+        case (Some(FRENoYears), Some(taxYears), Some(claimAmount), None) =>
+          submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map {
+            response => Redirect(response)
+          }
+        case (Some(_), Some(taxYears), Some(claimAmount), Some(removeYear)) =>
+          submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, claimAmount, removeYear).map {
             response => Redirect(response)
           }
         case _ => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
