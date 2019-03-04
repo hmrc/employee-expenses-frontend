@@ -17,19 +17,31 @@
 package controllers
 
 import com.google.inject.Inject
+import config.NavConstant
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import javax.inject.Named
+import models.FlatRateExpenseOptions.FRENoYears
+import navigation.Navigator
+import pages.authenticated.TaxYearSelectionPage
+import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import service.SubmissionService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.CheckYourAnswersView
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class CheckYourAnswersController @Inject()(
                                             override val messagesApi: MessagesApi,
                                             identify: IdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
+                                            @Named(NavConstant.authenticated) navigator: Navigator,
+                                            submissionService: SubmissionService,
                                             val controllerComponents: MessagesControllerComponents,
                                             view: CheckYourAnswersView
                                           ) extends FrontendBaseController with I18nSupport {
@@ -47,5 +59,16 @@ class CheckYourAnswersController @Inject()(
       ).flatten))
 
       Ok(view(sections))
+  }
+
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+    implicit request =>
+      (request.userAnswers.get(FREResponse), request.userAnswers.get(TaxYearSelectionPage), request.userAnswers.get(ClaimAmountAndAnyDeductions)) match {
+        case (Some(FRENoYears), Some(taxYears), Some(claimAmount)) =>
+          submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map{
+            response => Redirect(response)
+          }
+        case _ => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+      }
   }
 }
