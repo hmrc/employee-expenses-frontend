@@ -23,6 +23,7 @@ import play.api.test.Helpers._
 import views.html.authenticated.UpdateEmployerInformationView
 
 class UpdateEmployerInformationControllerSpec extends SpecBase {
+  val nextPageURL = "/employee-expenses/your-address"
 
   "UpdateEmployerDetails Controller" must {
 
@@ -39,7 +40,7 @@ class UpdateEmployerInformationControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(NormalMode)(fakeRequest, messages).toString
+        view(nextPageURL)(fakeRequest, messages).toString
 
       application.stop()
     }

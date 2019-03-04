@@ -20,7 +20,7 @@
         main_template: MainTemplate
 )
 
-@(mode: Mode)(implicit request: Request[_], messages: Messages)
+@(nextPageURL: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("updateEmployerInformation.title")
@@ -34,5 +34,5 @@
 
     <p>@messages("updateEmployerInformation.paragraph2")</p>
 
-    @components.button_link("site.continue", CheckYourAnswersController.onPageLoad().url)
+    @components.button_link("site.continue", nextPageURL)
 }

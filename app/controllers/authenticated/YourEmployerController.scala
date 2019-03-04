@@ -18,8 +18,8 @@ package controllers.authenticated
 
 import config.NavConstant
 import controllers.actions._
-import controllers.authenticated.routes._
 import controllers.routes._
+import controllers.authenticated.routes._
 import forms.authenticated.YourEmployerFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
@@ -59,12 +59,17 @@ class YourEmployerController @Inject()(
         case Some(value) => form.fill(value)
       }
 
+
       request.userAnswers.get(TaxYearSelectionPage) match {
         case Some(taxYears) =>
           taiService.employments(request.nino.get, taxYears.head).map {
             employments =>
-              if (employments.headOption.nonEmpty) {
-                Ok(view(preparedForm, mode, employments.head.name))
+              if (employments.nonEmpty) {
+                if (employments.forall(p => p.endDate.isDefined)) {
+                  Ok(view(preparedForm, mode, employments.head.name))
+                } else {
+                  Ok(view(preparedForm, mode, employments.filter(p => p.endDate.isEmpty).head.name))
+                }
               } else {
                 Redirect(UpdateEmployerInformationController.onPageLoad())
               }

@@ -20,8 +20,9 @@ import base.SpecBase
 import controllers.authenticated.routes._
 import controllers.routes._
 import forms.authenticated.YourEmployerFormProvider
-import models.{NormalMode, TaxYearSelection, UserAnswers}
+import models.{Employment, NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.joda.time.LocalDate
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
@@ -47,6 +48,42 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   lazy val yourEmployerRoute: String = YourEmployerController.onPageLoad(NormalMode).url
 
+  lazy val taiEmploymentsWithCurrent: Seq[Employment] = Seq(
+    Employment(
+      name = "ABC Co",
+      startDate = LocalDate.parse("2017-06-27"),
+      endDate = Some(LocalDate.parse("2018-06-27"))
+    ),
+    Employment(
+      name = "XYZ Co",
+      startDate = LocalDate.parse("2018-06-27"),
+      endDate = None
+    ),
+    Employment(
+      name = "123 Co",
+      startDate = LocalDate.parse("2014-06-27"),
+      endDate = None
+    )
+  )
+
+  lazy val taiEmploymentsWithoutCurrent: Seq[Employment] = Seq(
+    Employment(
+      name = "ABC Co",
+      startDate = LocalDate.parse("2017-06-27"),
+      endDate = Some(LocalDate.parse("2018-06-27"))
+    ),
+    Employment(
+      name = "XYZ Co",
+      startDate = LocalDate.parse("2017-06-27"),
+      endDate = Some(LocalDate.parse("2018-06-27"))
+    ),
+    Employment(
+      name = "123 Co",
+      startDate = LocalDate.parse("2014-06-27"),
+      endDate = Some(LocalDate.parse("2016-06-27"))
+    )
+  )
+
   "YourEmployer Controller" must {
 
     "return OK and the correct view for a GET" in {
@@ -69,6 +106,54 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       contentAsString(result) mustEqual
         view(form, NormalMode, taiEmployment.head.name)(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct view for a GET and show correct employer name for employments with current active employment" in {
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TaiService].toInstance(mockTaiService))
+        .build()
+
+      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmploymentsWithCurrent))
+
+      val request = FakeRequest(GET, yourEmployerRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[YourEmployerView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form, NormalMode, taiEmploymentsWithCurrent(1).name)(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct view for a GET and show first employer name for employments with no current active employment" in {
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TaiService].toInstance(mockTaiService))
+        .build()
+
+      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmploymentsWithoutCurrent))
+
+      val request = FakeRequest(GET, yourEmployerRoute)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[YourEmployerView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form, NormalMode, taiEmploymentsWithoutCurrent.head.name)(fakeRequest, messages).toString
 
       application.stop()
     }
