@@ -20,7 +20,6 @@ import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
 import javax.inject.Singleton
 import models._
-import play.api.libs.json.Json
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -34,14 +33,7 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
 
     val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/employments/years/${year.year}"
 
-    httpClient.GET(taiUrl).map(
-      response => {
-
-        println(s"\n\n\n\n${response.json}\n\n\n")
-        Json.parse(response.body).as[Seq[Employment]]
-      }
-
-    )
+    httpClient.GET[Seq[Employment]](taiUrl)
   }
 
   override def getFlatRateExpense(nino: String, year: TaiTaxYear)
