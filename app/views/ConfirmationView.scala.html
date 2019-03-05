@@ -21,6 +21,8 @@
 @(
         taxYearSelections: Seq[TaxYearSelection],
         removeFreOption: Option[TaxYearSelection],
+        updateEmployerInfo: Option[Boolean],
+        updateAddressInfo: Option[Boolean],
         claimAmount: Int,
         basicRate: String,
         higherRate: String
@@ -30,49 +32,68 @@
         title = messages("confirmation.title")
     ) {
 
-        @components.back_link()
+    @components.back_link()
 
-        <div class="govuk-box-highlight">
-            <h1 class="heading-xlarge">
-            @if(removeFreOption) {
-                @messages("confirmation.heading.stoppedClaim")
-            } else {
-                @messages("confirmation.heading")
-            }
-            </h1>
-        </div>
-
+    <div class="govuk-box-highlight">
+        <h1 class="heading-xlarge">
         @if(removeFreOption) {
-            <p>@messages("confirmation.noLongerGetAmount")</p>
+            @messages("confirmation.heading.stoppedClaim")
         } else {
-            @if(taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
-                <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
-            }
-            <p>@messages("confirmation.actualAmount")</p>
-            <p>@messages("confirmation.basicRate", basicRate)</p>
-            <p>@messages("confirmation.higherRate", higherRate)</p>
+            @messages("confirmation.heading")
+        }
+        </h1>
+    </div>
 
-            <h2>@messages("confirmation.whatHappensNext")</h2>
+    @if(removeFreOption) {
+        <p>@messages("confirmation.noLongerGetAmount")</p>
+    } else {
+        @if(taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
+            <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
+        }
+        <p>@messages("confirmation.actualAmount")</p>
+        <p>@messages("confirmation.basicRate", basicRate)</p>
+        <p>@messages("confirmation.higherRate", higherRate)</p>
 
-            @if(!taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
+        <h2>@messages("confirmation.whatHappensNext")</h2>
+
+        @if(!taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
+            <p>@messages("confirmation.letterConfirmation")</p>
+        } else {
+            @if(taxYearSelections.size > 1) {
+                <h3>@messages("confirmation.currentTaxYear")</h3>
+
+                <p>@messages("confirmation.taxCodeChanged")</p>
+                <p>@messages("confirmation.continueToClaim")</p>
+
+                <h3>@messages("confirmation.previousTaxYears")</h3>
+
                 <p>@messages("confirmation.letterConfirmation")</p>
+
             } else {
-                @if(taxYearSelections.size > 1) {
-                    <h3>@messages("confirmation.currentTaxYear")</h3>
 
-                    <p>@messages("confirmation.taxCodeChanged")</p>
-                    <p>@messages("confirmation.continueToClaim")</p>
-
-                    <h3>@messages("confirmation.previousTaxYears")</h3>
-
-                    <p>@messages("confirmation.letterConfirmation")</p>
-
-                } else {
-
-                    <p>@messages("confirmation.taxCodeChanged")</p>
-                    <p>@messages("confirmation.continueToClaim")</p>
-                }
-
+                <p>@messages("confirmation.taxCodeChanged")</p>
+                <p>@messages("confirmation.continueToClaim")</p>
             }
+
         }
     }
+
+    @if(updateEmployerInfo.contains(false)) {
+
+        <h2>@messages("confirmation.updateEmployerInfo")</h2>
+        <p>@messages("confirmation.employerChange")</p>
+
+        <a class="button" id="updateEmployerInfoBtn" href="https://www.tax.service.gov.uk/check-income-tax/income-summary" target="_blank">
+            @messages("confirmation.updateEmployerInfoNow")
+        </a>
+    }
+
+    @if(updateAddressInfo.contains(false)) {
+        <h2>@messages("confirmation.updateAddressInfo")</h2>
+        <p>@messages("confirmation.addressChange")</p>
+
+        <a class="button" id="updateAddressInfoBtn" href="https://www.tax.service.gov.uk/personal-account/personal-details" target="_blank">
+            @messages("confirmation.updateAddressInfoNow")
+        </a>
+    }
+}

@@ -19,9 +19,9 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
-import models.{TaxYearSelection, UserAnswers}
+import models.TaxYearSelection
 import pages.ClaimAmount
-import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -49,13 +49,15 @@ class ConfirmationController @Inject()(
       val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmount)
       val taxYearSelection: Option[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage)
       val removeFre: Option[TaxYearSelection] = request.userAnswers.get(RemoveFRECodePage)
+      val updateEmployerInfo: Option[Boolean] = request.userAnswers.get(YourEmployerPage)
+      val updateAddressInfo: Option[Boolean] = request.userAnswers.get(YourAddressPage)
 
       (taxYearSelection, removeFre, claimAmount) match {
         case (Some(taxYears), removeFreOption, Some(fullClaimAmount)) =>
           val basicRate = claimAmountService.calculateTax(appConfig.taxPercentageBand1, fullClaimAmount)
           val higherRate = claimAmountService.calculateTax(appConfig.taxPercentageBand2, fullClaimAmount)
 
-          Ok(view(taxYears, removeFreOption, fullClaimAmount, basicRate, higherRate))
+          Ok(view(taxYears, removeFreOption, updateEmployerInfo, updateAddressInfo, fullClaimAmount, basicRate, higherRate))
         case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
       }
   }

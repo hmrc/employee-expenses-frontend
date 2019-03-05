@@ -39,7 +39,7 @@ class ConfirmationControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(Seq(TaxYearSelection.CurrentYear), None, 100, "20", "40")(fakeRequest, messages).toString
+        view(Seq(TaxYearSelection.CurrentYear), None, None, None, 100, "20", "40")(fakeRequest, messages).toString
 
       application.stop()
     }

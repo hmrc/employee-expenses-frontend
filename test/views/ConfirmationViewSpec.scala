@@ -34,25 +34,19 @@ class ConfirmationViewSpec extends ViewBehaviours {
     val view = application.injector.instanceOf[ConfirmationView]
 
     def applyView(taxYearSelection: Seq[TaxYearSelection],
-                  removeFREOption: Option[TaxYearSelection],
-                  claimAmount: Int,
-                  basicRate: String,
-                  higherRate: String)(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(taxYearSelection, removeFREOption, claimAmount, basicRate, higherRate)(fakeRequest, messages)
+                  removeFREOption: Option[TaxYearSelection] = None,
+                  updateEmployer: Option[Boolean] = None,
+                  updateAddress: Option[Boolean] = None,
+                  claimAmount: Int = 100,
+                  basicRate: String = "20",
+                  higherRate: String = "40")(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
+      view.apply(taxYearSelection, removeFREOption, updateEmployer, updateAddress, claimAmount, basicRate, higherRate)(fakeRequest, messages)
 
     val viewWithAnswers = applyView(
-      taxYearSelection = Seq(TaxYearSelection.CurrentYear),
-      removeFREOption = None,
-      claimAmount = 100,
-      basicRate = "20",
-      higherRate = "40")(fakeRequest, messages)
+      taxYearSelection = Seq(TaxYearSelection.CurrentYear))(fakeRequest, messages)
 
     val applyViewWithAuth = applyView(
-      taxYearSelection = Seq(TaxYearSelection.CurrentYear),
-      removeFREOption = None,
-      claimAmount = 100,
-      basicRate = "20",
-      higherRate = "40")(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+      taxYearSelection = Seq(TaxYearSelection.CurrentYear))(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(viewWithAnswers, "confirmation")
 
@@ -63,7 +57,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
     "when only CY is selected" must {
 
       val viewWithAnswers =
-        applyView(Seq(TaxYearSelection.CurrentYear), None, 100, "20", "40")(fakeRequest, messages)
+        applyView(Seq(TaxYearSelection.CurrentYear))(fakeRequest, messages)
 
       val doc = asDocument(viewWithAnswers)
 
@@ -89,10 +83,9 @@ class ConfirmationViewSpec extends ViewBehaviours {
     "when CY and previous years have been selected" must {
 
       val viewWithAnswers =
-        applyView(Seq(TaxYearSelection.CurrentYear,TaxYearSelection.CurrentYearMinus1), None, 100, "20", "40")(fakeRequest, messages)
+        applyView(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))(fakeRequest, messages)
 
       val doc = asDocument(viewWithAnswers)
-
 
       "display correct static text" in {
 
@@ -118,7 +111,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
     "when only previous years have been selected" must {
 
       val viewWithAnswers =
-        applyView(Seq(TaxYearSelection.CurrentYearMinus1), None, 100, "20", "40")(fakeRequest, messages)
+        applyView(Seq(TaxYearSelection.CurrentYearMinus1))(fakeRequest, messages)
 
       val doc = asDocument(viewWithAnswers)
 
@@ -144,16 +137,47 @@ class ConfirmationViewSpec extends ViewBehaviours {
         val viewWithAnswers =
           applyView(
             taxYearSelection = Seq(TaxYearSelection.CurrentYearMinus1),
-            removeFREOption = Some(TaxYearSelection.CurrentYearMinus1),
-            claimAmount = 100,
-            basicRate = "20",
-            higherRate = "40")(fakeRequest, messages)
+            removeFREOption = Some(TaxYearSelection.CurrentYearMinus1))(fakeRequest, messages)
 
         val doc = asDocument(viewWithAnswers)
 
         assertContainsMessages(doc, "confirmation.heading.stoppedClaim", "confirmation.noLongerGetAmount")
       }
     }
+
+    "when YourAddress is false" must {
+
+      "display update address button and content" in {
+
+        val viewWithAnswers =
+          applyView(
+            taxYearSelection = Seq(TaxYearSelection.CurrentYearMinus1),
+            updateAddress = Some(false))(fakeRequest, messages)
+
+        val doc = asDocument(viewWithAnswers)
+
+        assertContainsMessages(doc, "confirmation.updateAddressInfo", "confirmation.addressChange")
+        doc.getElementById("updateAddressInfoBtn").text mustBe messages("confirmation.updateAddressInfoNow")
+      }
+    }
+
+    "when YourEmployer is false" must {
+
+      "display update employer button and content" in {
+
+        val viewWithAnswers =
+          applyView(
+            taxYearSelection = Seq(TaxYearSelection.CurrentYearMinus1),
+            updateEmployer = Some(false))(fakeRequest, messages)
+
+        val doc = asDocument(viewWithAnswers)
+
+        assertContainsMessages(doc, "confirmation.updateEmployerInfo", "confirmation.employerChange")
+        doc.getElementById("updateEmployerInfoBtn").text mustBe messages("confirmation.updateEmployerInfoNow")
+
+      }
+    }
+
 
 
   }

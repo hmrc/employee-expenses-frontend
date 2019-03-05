@@ -643,3 +643,11 @@ confirmation.continueToClaim = You will continue to claim this expense each year
 confirmation.previousTaxYears = Previous tax years
 confirmation.letterConfirmation = We will process your claim and send you another letter to confirm any amounts due. This can take up to 10 working days.
 confirmation.noLongerGetAmount = You will no longer get this amount. You will get a letter to confirm this change to your tax-free Personal Allowance.
+confirmation.updateEmployerInfo = Update your employer information
+confirmation.employerChange = You told us that your employer information has changed. You must update this with HMRC.
+confirmation.updateEmployerInfoNow = Update your employer information now
+confirmation.updateAddressInfoNow = Update your address now
+confirmation.updateAddressInfo = Update your address
+confirmation.addressChange = You told us that your address has changed. If you do not update it you may not receive any letters from HMRC.
+
+
