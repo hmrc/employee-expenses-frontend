@@ -43,7 +43,8 @@ class CheckYourAnswersController @Inject()(
         cyaHelper.employerContribution,
         cyaHelper.expensesEmployerPaid,
         cyaHelper.taxYearSelection,
-        cyaHelper.yourAddress
+        cyaHelper.yourAddress,
+        cyaHelper.yourEmployer
       ).flatten))
 
       Ok(view(sections))

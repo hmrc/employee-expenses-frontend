@@ -20,7 +20,6 @@ import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
 import javax.inject.Singleton
 import models._
-import play.api.libs.json.Reads
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -29,14 +28,12 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient) extends TaiConnector {
 
-  override def taiTaxCodeRecords(nino: String)
-                                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
+  override def taiEmployments(nino: String, year: TaiTaxYear)
+                             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Employment]] = {
 
-    val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/tax-code-change"
+    val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/employments/years/${year.year}"
 
-    implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.listReads
-
-    httpClient.GET[Seq[TaxCodeRecord]](taiUrl)
+    httpClient.GET[Seq[Employment]](taiUrl)
   }
 
   override def getFlatRateExpense(nino: String, year: TaiTaxYear)
@@ -60,8 +57,8 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
 
 @ImplementedBy(classOf[TaiConnectorImpl])
 trait TaiConnector {
-  def taiTaxCodeRecords(nino: String)
-                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]]
+  def taiEmployments(nino: String, year: TaiTaxYear)
+                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Employment]]
 
   def getFlatRateExpense(nino: String, year: TaiTaxYear)
                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[FlatRateExpense]]

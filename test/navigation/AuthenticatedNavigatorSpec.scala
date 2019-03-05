@@ -34,12 +34,12 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
 
       "from TaxYearSelection" must {
 
-        "go to YourAddress when answered and freResponse returns FRENoYears" in {
+        "go to YourEmployer when answered and freResponse returns FRENoYears" in {
 
           val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FRENoYears).success.value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
-            YourAddressController.onPageLoad(NormalMode)
+            YourEmployerController.onPageLoad(NormalMode)
         }
 
         "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
@@ -92,6 +92,25 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(emptyUserAnswers) mustBe
             SessionExpiredController.onPageLoad()
         }
+      }
+
+      "go to YourAddress from YourEmployer when answered true" in {
+        val ua = emptyUserAnswers.set(YourEmployerPage, true).success.value
+
+        navigator.nextPage(YourEmployerPage, NormalMode)(ua) mustBe
+          YourAddressController.onPageLoad(NormalMode)
+      }
+
+      "go to UpdateEmployerInformation from YourEmployer when answered false" in {
+        val ua = emptyUserAnswers.set(YourEmployerPage, false).success.value
+
+        navigator.nextPage(YourEmployerPage, NormalMode)(ua) mustBe
+          UpdateEmployerInformationController.onPageLoad()
+      }
+
+      "go to YourAddress from UpdateEmployerInformation" in {
+        navigator.nextPage(UpdateYourEmployerInformationPage, NormalMode)(emptyUserAnswers) mustBe
+          YourAddressController.onPageLoad(NormalMode)
       }
 
       "go to CheckYourAnswers from YourAddress when answered true" in {

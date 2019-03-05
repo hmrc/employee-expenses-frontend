@@ -28,19 +28,21 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case TaxYearSelectionPage             => taxYearSelection(NormalMode)
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(NormalMode)
-    case TaxYearSelectionPage             => taxYearSelection(NormalMode)
     case YourAddressPage                  => yourAddress(NormalMode)
     case UpdateYourAddressPage => _ => CheckYourAnswersController.onPageLoad()
+    case YourEmployerPage => yourEmployer(NormalMode)
+    case UpdateYourEmployerInformationPage => _ => YourAddressController.onPageLoad(NormalMode)
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case TaxYearSelectionPage => taxYearSelection(CheckMode)
-    case YourAddressPage => yourAddress(NormalMode)
+    case YourAddressPage => yourAddress(CheckMode)
+    case YourEmployerPage => yourEmployer(CheckMode)
   }
 
   def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
     case Some(FlatRateExpenseOptions.FRENoYears) =>
-      YourAddressController.onPageLoad(mode)
+      YourEmployerController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount) =>
       AlreadyClaimingFRESameAmountController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferentToClaimAmount) =>
@@ -68,6 +70,15 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       CheckYourAnswersController.onPageLoad()
     case Some(false) =>
       UpdateYourAddressController.onPageLoad()
+    case _ =>
+      SessionExpiredController.onPageLoad()
+  }
+
+  def yourEmployer(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(YourEmployerPage) match {
+    case Some(true) =>
+      YourAddressController.onPageLoad(mode)
+    case Some(false) =>
+      UpdateEmployerInformationController.onPageLoad()
     case _ =>
       SessionExpiredController.onPageLoad()
   }

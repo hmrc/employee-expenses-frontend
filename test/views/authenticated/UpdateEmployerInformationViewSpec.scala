@@ -20,17 +20,18 @@ import models.NormalMode
 import views.behaviours.ViewBehaviours
 import views.html.authenticated.UpdateEmployerInformationView
 
-class UpdateEmployerDetailsViewSpec extends ViewBehaviours {
+class UpdateEmployerInformationViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val nextPageURL = "/foo"
 
   "UpdateEmployerInformation view" must {
 
     val view = application.injector.instanceOf[UpdateEmployerInformationView]
 
-    val applyView = view.apply(NormalMode)(fakeRequest, messages)
+    val applyView = view.apply(nextPageURL)(fakeRequest, messages)
 
-    val applyViewWithAuth = view.apply(NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth = view.apply(nextPageURL)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(applyView, "updateEmployerInformation")
 

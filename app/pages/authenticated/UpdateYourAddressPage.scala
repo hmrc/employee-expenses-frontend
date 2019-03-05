@@ -20,5 +20,5 @@ import pages.Page
 
 object UpdateYourAddressPage extends Page {
 
-  override def toString:String = "updateYourAddress"
+  override def toString: String = "updateYourAddress"
 }
