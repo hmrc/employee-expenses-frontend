@@ -31,6 +31,10 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def alreadyClaimingFREDifferentAmounts: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) map {
+    x => AnswerRow("alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel", s"alreadyClaimingFREDifferentAmounts.$x", true, AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode).url)
+  }
+
   def alreadyClaimingFRE: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFRESameAmountPage) map {
     x => AnswerRow("alreadyClaimingFRE.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode).url)

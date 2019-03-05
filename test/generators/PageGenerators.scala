@@ -34,6 +34,9 @@ import pages.printing._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryAlreadyClaimingFREDifferentAmountsPage: Arbitrary[AlreadyClaimingFREDifferentAmountsPage.type] =
+    Arbitrary(AlreadyClaimingFREDifferentAmountsPage)
+
   implicit lazy val arbitraryAlreadyClaimingFREPage: Arbitrary[AlreadyClaimingFRESameAmountPage.type] =
     Arbitrary(AlreadyClaimingFRESameAmountPage)
 
