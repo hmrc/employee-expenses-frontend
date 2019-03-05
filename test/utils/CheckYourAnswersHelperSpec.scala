@@ -18,11 +18,11 @@ package utils
 
 import base.SpecBase
 import models.EmployerContribution.SomeContribution
-import models.{Address, EmployerContribution, FirstIndustryOptions, FourthIndustryOptions, SecondIndustryOptions, TaxYearSelection, ThirdIndustryOptions, UserAnswers}
+import models._
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks
 import pages._
-import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
+import pages.authenticated.{TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
 
 class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
 
@@ -150,5 +150,28 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
         helper(ua2).yourAddress.get.labelArgs.head mustBe Address.asString(address)
       }
     }
+  }
+
+  "yourEmployer" when {
+    "correct" must {
+      "display the correct label, answer, and message args" in {
+        val ua1 = emptyUserAnswers.set(YourEmployerPage, true).success.value
+        val ua2 = ua1.set(YourEmployerName, taiEmployment.head.name).success.value
+        helper(ua2).yourEmployer.get.label mustBe "yourEmployer.checkYourAnswersLabel"
+        helper(ua2).yourEmployer.get.answer mustBe "site.yes"
+        helper(ua2).yourEmployer.get.labelArgs.head mustBe s"<p>${taiEmployment.head.name}</p>"
+      }
+    }
+
+    "incorrect" must {
+      "display the correct label, answer, and message args" in {
+        val ua1 = emptyUserAnswers.set(YourEmployerPage, false).success.value
+        val ua2 = ua1.set(YourEmployerName, taiEmployment.head.name).success.value
+        helper(ua2).yourEmployer.get.label mustBe "yourEmployer.checkYourAnswersLabel"
+        helper(ua2).yourEmployer.get.answer mustBe "site.no"
+        helper(ua2).yourEmployer.get.labelArgs.head mustBe s"<p>${taiEmployment.head.name}</p>"
+      }
+    }
+
   }
 }

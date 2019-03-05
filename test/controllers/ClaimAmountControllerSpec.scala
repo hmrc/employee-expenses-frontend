@@ -37,7 +37,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
   "ClaimAmount Controller" must {
 
     "return OK and the correct view for a GET when all data is found" in {
-      val claimAmount = 180
+      val claimAmount = 60
       val userAnswers = UserAnswers(
         userAnswersId,
         Json.obj(
@@ -53,10 +53,10 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       status(result) mustEqual OK
       contentAsString(result) mustEqual
-        view(claimAmount, "36.00", "72.00", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
+        view(claimAmount, None, 20, "12.00", 40, "24.00", 19, "11.40", 41, "24.59", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 180
+        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 60
       }
 
       application.stop()
@@ -85,16 +85,12 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
 
-        whenReady(sessionRepository.get(userAnswersId)) {
-          _.value.get(ClaimAmountAndAnyDeductions).value mustBe 180
-        }
-
         application.stop()
       }
     }
 
-    "display correct figures of 20 and 40 when claimAmount = 100 when no employer contribution" in {
-      val claimAmount = 100
+    "display correct figures when no employer contribution" in {
+      val claimAmount = 60
       val userAnswers = UserAnswers(
         userAnswersId,
         Json.obj(
@@ -109,18 +105,18 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       val view = application.injector.instanceOf[ClaimAmountView]
 
       contentAsString(result) mustEqual
-        view(claimAmount, "20.00", "40.00", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
+        view(claimAmount, None, 20, "12.00", 40, "24.00", 19, "11.40", 41, "24.59", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 100
+        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 60
       }
 
       application.stop()
     }
 
-    "display correct figures of 19 and 38 when claimAmount = 100 when employer contribution is 5" in {
-      val claimAmount = 100
-      val employerContribution = 5
+    "display correct figures when employer contribution is 15" in {
+      val claimAmount = 60
+      val employerContribution = 15
       val userAnswers =
         UserAnswers(
           userAnswersId,
@@ -135,11 +131,12 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
+
       contentAsString(result) mustEqual
-        view(claimAmount - employerContribution, "19.00", "38.00", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
+        view(claimAmount, Some(employerContribution), 20, "9.00", 40, "18.00", 19, "8.55", 41, "18.45", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
 
       whenReady(sessionRepository.get(userAnswersId)) {
-        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 95
+        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 45
       }
 
       application.stop()

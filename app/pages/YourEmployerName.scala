@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import viewmodels.AnswerRow
+package pages
 
-@(row: AnswerRow)(implicit messages: Messages)
+import play.api.libs.json.JsPath
 
-<li>
-    <div class="cya-question">@Html(messages(row.label, row.labelArgs:_*))</div>
-    <div class="cya-answer">
-    @if(row.answerIsMessageKey){
-        @messages(row.answer).capitalize
-    } else {
-        @Html(row.answer)
-    }
-    </div>
-    <div class="cya-change">
-        <a href='@row.changeUrl'>
-            <span aria-hidden="true">@messages("site.edit")</span>
-            <span class="visually-hidden">@messages("site.hidden-edit", messages(row.label))</span>
-        </a>
-    </div>
-</li>
+object YourEmployerName extends QuestionPage[String] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "yourEmployerName"
+}
