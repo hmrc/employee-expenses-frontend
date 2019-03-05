@@ -28,61 +28,75 @@ class ClaimAmountViewSpec extends ViewBehaviours {
 
   "ClaimAmount view" must {
 
-    val claimAmount = 180
+    val claimAmount: Int = 180
+    val employerContribution: Option[Int] = None
+    val someEmployerContribution: Option[Int] = Some(10)
+    val band1 : Int = 20
+    val calculatedBand1 : String = "36.00"
+    val band2 : Int = 40
+    val calculatedBand2 : String = "72.00"
+    val scotlandBand1 : Int = 19
+    val calculatedScotlandBand1 : String = "36.00"
+    val scotlandBand2 : Int = 41
+    val calculatedScotlandBand2 : String = "72.00"
+    val onwardRoute: String = "/employee-expenses/which-tax-year"
 
-    def userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> 180))
+    val messageKeyPrefix = "claimAmount"
+
+    def userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> claimAmount))
 
     val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
     val view = application.injector.instanceOf[ClaimAmountView]
 
-    val applyView = view.apply(claimAmount, "20", "30", "/employee-expenses")(fakeRequest, messages)
+    val applyView = view.apply(
+      claimAmount, employerContribution, band1, calculatedBand1, band2, calculatedBand2,
+      scotlandBand1, calculatedScotlandBand1, scotlandBand2, calculatedScotlandBand2, onwardRoute
+    )(fakeRequest, messages)
 
-    "behave like a page with dynamic title" when {
-      val doc = asDocument(applyView)
-      "rendered" must {
+    val applyViewWithEmployerContribution = view.apply(
+      claimAmount, someEmployerContribution, band1, calculatedBand1, band2, calculatedBand2,
+      scotlandBand1, calculatedScotlandBand1, scotlandBand2, calculatedScotlandBand2, onwardRoute
+    )(fakeRequest, messages)
 
-        "have the correct banner title" in {
+    val applyViewWithAuth = view.apply(
+      claimAmount, employerContribution, band1, calculatedBand1, band2, calculatedBand2,
+      scotlandBand1, calculatedScotlandBand1, scotlandBand2, calculatedScotlandBand2, onwardRoute
+    )(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-          val nav = doc.getElementById("proposition-menu")
-          val span = nav.children.first
-        }
+    behave like normalPage(applyView, "claimAmount")
 
-        "display the correct browser title" in {
-
-          assertEqualsMessage(doc, "title", messages("claimAmount.title", claimAmount))
-        }
-
-        "display the correct page title" in {
-
-          assertPageTitleEqualsMessage(doc, messages("claimAmount.heading", claimAmount))
-        }
-
-        "display language toggles" in {
-
-          assertRenderedById(doc, "switchToWelsh")
-        }
-      }
-    }
+    behave like pageWithAccountMenu(applyViewWithAuth)
 
     behave like pageWithBackLink(applyView)
 
-    "display relevant data" must {
-      "claim amount from userAnswers" in {
-        val doc = asDocument(applyView)
-        assertContainsMessages(doc, "claimAmount.description")
-      }
-
-      "band 1 shows the correct amount of 20 when passed 20" in {
-        val doc = asDocument(applyView)
-        doc.getElementById("band-1").text mustBe "Band 1 : £20"
-      }
-
-      "band 2 shows the correct amount of 30 when passed 30" in {
-        val doc = asDocument(applyView)
-        doc.getElementById("band-2").text mustBe "Band 2 : £30"
-      }
+    "display correct text when some employer contribution" in {
+      val doc = asDocument(applyViewWithEmployerContribution)
+      assertContainsText(doc, messages("claimAmount.someContributionDescription", claimAmount - someEmployerContribution.get))
+      assertContainsText(doc, messages("claimAmount.employerContributionDescription"))
     }
+
+    "display correct text when no employer contribution" in {
+      val doc = asDocument(applyView)
+      assertContainsText(doc, messages("claimAmount.noContributionDescription", claimAmount))
+    }
+
+    behave like pageWithBodyText(
+      applyView,
+      "claimAmount.description",
+      "claimAmount.englandHeading",
+      "claimAmount.scotlandHeading"
+    )
+
+    "display relevant data" in {
+      val doc = asDocument(applyView)
+      assertContainsText(doc, messages("claimAmount.band1", calculatedBand1, band1))
+      assertContainsText(doc, messages("claimAmount.band2", calculatedBand2, band2))
+      assertContainsText(doc, messages("claimAmount.scotlandBand1", calculatedScotlandBand1, scotlandBand1))
+      assertContainsText(doc, messages("claimAmount.scotlandBand2", calculatedScotlandBand2, scotlandBand2))
+    }
+
+    behave like pageWithButtonLink(applyView, onwardRoute, "site.continue")
   }
 
   application.stop()

@@ -26,21 +26,25 @@ import play.api.mvc.Call
 
 class AuthenticatedNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => taxYearSelection(NormalMode)
-    case YourAddressPage => yourAddress(NormalMode)
+    case TaxYearSelectionPage             => taxYearSelection(NormalMode)
+    case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(NormalMode)
+    case YourAddressPage                  => yourAddress(NormalMode)
     case UpdateYourAddressPage => _ => CheckYourAnswersController.onPageLoad()
+    case YourEmployerPage => yourEmployer(NormalMode)
+    case UpdateYourEmployerInformationPage => _ => YourAddressController.onPageLoad(NormalMode)
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case TaxYearSelectionPage => taxYearSelection(CheckMode)
-    case YourAddressPage => yourAddress(NormalMode)
+    case YourAddressPage => yourAddress(CheckMode)
+    case YourEmployerPage => yourEmployer(CheckMode)
   }
 
   def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
     case Some(FlatRateExpenseOptions.FRENoYears) =>
-      YourAddressController.onPageLoad(mode)
+      YourEmployerController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount) =>
-      NoCodeChangeController.onPageLoad()
+      AlreadyClaimingFRESameAmountController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferentToClaimAmount) =>
       RemoveFRECodeController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.ComplexClaim) =>
@@ -51,11 +55,30 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       SessionExpiredController.onPageLoad()
   }
 
+  def alreadyClaimingFRESameAmount(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(AlreadyClaimingFRESameAmountPage) match {
+      case Some(true) =>
+        NoCodeChangeController.onPageLoad()
+      case Some(false) =>
+        RemoveFRECodeController.onPageLoad(NormalMode)
+      case _ =>
+        SessionExpiredController.onPageLoad()
+    }
+
   def yourAddress(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(YourAddressPage) match {
     case Some(true) =>
       CheckYourAnswersController.onPageLoad()
     case Some(false) =>
       UpdateYourAddressController.onPageLoad()
+    case _ =>
+      SessionExpiredController.onPageLoad()
+  }
+
+  def yourEmployer(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(YourEmployerPage) match {
+    case Some(true) =>
+      YourAddressController.onPageLoad(mode)
+    case Some(false) =>
+      UpdateEmployerInformationController.onPageLoad()
     case _ =>
       SessionExpiredController.onPageLoad()
   }

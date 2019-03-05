@@ -74,5 +74,13 @@ class TaxYearSelectionSpec extends SpecBase {
       taxYearValues(3) mustBe CurrentYearMinus3
       taxYearValues(4) mustBe CurrentYearMinus4
     }
+
+    "return correct taxYearPeriod" in {
+      TaxYearSelection.getTaxYearPeriod(TaxYear.current.startYear) mustBe CurrentYear
+      TaxYearSelection.getTaxYearPeriod(TaxYear.current.back(1).startYear) mustBe CurrentYearMinus1
+      TaxYearSelection.getTaxYearPeriod(TaxYear.current.back(2).startYear) mustBe CurrentYearMinus2
+      TaxYearSelection.getTaxYearPeriod(TaxYear.current.back(3).startYear) mustBe CurrentYearMinus3
+      TaxYearSelection.getTaxYearPeriod(TaxYear.current.back(4).startYear) mustBe CurrentYearMinus4
+    }
   }
 }

@@ -64,4 +64,22 @@ object TaxYearSelection extends Enumerable.Implicits {
     case CurrentYearMinus4 => TaxYear.current.back(4).startYear
     case _                 => throw new IllegalArgumentException("Invalid tax year selected")
   }
+
+  def getTaxYearPeriod(year: Int): TaxYearSelection = {
+
+    val currentYear = TaxYear.current.startYear
+    val currentYearMinus1 = TaxYear.current.back(1).startYear
+    val currentYearMinus2 = TaxYear.current.back(2).startYear
+    val currentYearMinus3 = TaxYear.current.back(3).startYear
+    val currentYearMinus4 = TaxYear.current.back(4).startYear
+
+    year match {
+      case `currentYear`        => CurrentYear
+      case `currentYearMinus1`  => CurrentYearMinus1
+      case `currentYearMinus2`  => CurrentYearMinus2
+      case `currentYearMinus3`  => CurrentYearMinus3
+      case `currentYearMinus4`  => CurrentYearMinus4
+      case _                    => throw new IllegalArgumentException("Invalid tax year selected")
+    }
+  }
 }

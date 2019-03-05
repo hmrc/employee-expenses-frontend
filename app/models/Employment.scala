@@ -18,21 +18,24 @@ package models
 
 import org.joda.time.LocalDate
 import play.api.libs.json._
-import play.api.libs.json.JodaWrites._
-import play.api.libs.json.JodaReads._
 
-case class TaxCodeRecord(taxCode: String,
-                         employerName: String,
-                         startDate: LocalDate,
-                         endDate: LocalDate,
-                         payrollNumber: Option[String],
-                         pensionIndicator: Boolean,
-                         primary: Boolean)
+case class Employment(name: String,
+                      startDate: LocalDate,
+                      endDate: Option[LocalDate])
 
+object Employment {
 
-object TaxCodeRecord {
-  implicit val reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
+  val dateFormat: String = "yyyy-MM-dd"
 
-  implicit val listReads: Reads[Seq[TaxCodeRecord]] =
-    (__ \ "data" \ "current").read(Reads.seq[TaxCodeRecord])
+  implicit val dateTimeWriter: Writes[LocalDate] =
+    JodaWrites.jodaLocalDateWrites(dateFormat)
+
+  implicit val dateTimeJsReader: Reads[LocalDate] =
+    JodaReads.jodaLocalDateReads(dateFormat)
+
+  implicit val reads: Reads[Employment] =
+    Json.format[Employment]
+
+  implicit val listReads: Reads[Seq[Employment]] =
+    (__ \ "data" \ "employments").read(Reads.seq[Employment])
 }

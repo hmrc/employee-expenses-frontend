@@ -16,9 +16,12 @@
 
 package controllers.authenticated
 
+import config.NavConstant
 import controllers.actions._
-import javax.inject.Inject
-import models.Mode
+import javax.inject.{Inject, Named}
+import models.{Mode, NormalMode}
+import navigation.Navigator
+import pages.authenticated.UpdateYourEmployerInformationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -28,6 +31,7 @@ import scala.concurrent.ExecutionContext
 
 class UpdateEmployerInformationController @Inject()(
                                        override val messagesApi: MessagesApi,
+                                       @Named(NavConstant.authenticated) navigator: Navigator,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
@@ -37,6 +41,6 @@ class UpdateEmployerInformationController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view(mode))
+      Ok(view(navigator.nextPage(UpdateYourEmployerInformationPage, NormalMode)(request.userAnswers).url))
   }
 }

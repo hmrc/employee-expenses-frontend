@@ -124,9 +124,18 @@ fourthIndustryOptions.none = my industry was not listed
 fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
 fourthIndustryOptions.error.required = Select the industry you work in
 
-claimAmount.title = You can claim tax relief on £{0}
-claimAmount.heading = You can claim tax relief on £{0}
-claimAmount.description = The amount of tax relief you can claim depends on the rate of tax you pay.
+claimAmount.title = You are eligible to claim this expense
+claimAmount.heading = You are eligible to claim this expense
+claimAmount.someContributionDescription = You can increase your tax-free Personal Allowance by £{0}.
+claimAmount.employerContributionDescription = This is based on the amount your employer has already paid back, and your industry and occupation.
+claimAmount.noContributionDescription = Based on your industry and occupation, you can increase your tax-free Personal Allowance by £{0}.
+claimAmount.description = The actual amount you will get depends on the rate of tax you pay, and where you live in the UK.
+claimAmount.englandHeading = Taxpayers in England, Northern Ireland and Wales
+claimAmount.scotlandHeading = Taxpayers in Scotland
+claimAmount.band1 = You will get £{0} per year if you are a basic rate ({1}%) taxpayer.
+claimAmount.band2 = You will get £{0} per year if you are a higher rate ({1}%) taxpayer.
+claimAmount.scotlandBand1 = You will get £{0} per year if you are a basic rate ({1}%) taxpayer.
+claimAmount.scotlandBand2 = You will get £{0} per year if you are a higher rate ({1}%) taxpayer.
 claimAmount.checkYourAnswersLabel = employerContributionClaimValue
 
 typeOfEngineering.title = Engineering industry list
@@ -509,8 +518,6 @@ constructionOccupationList2.occupation1 = labourer
 constructionOccupationList2.occupation2 = navvy
 constructionOccupationList2.occupation3 = tilemaker
 
-
-
 heatingOccupationList.title = Heating occupation list
 heatingOccupationList.heading = Heating occupation list
 heatingOccupationList.checkYourAnswersLabel = Heating Occupation List
@@ -605,6 +612,34 @@ sameEmployerContributionAllYears.title = Did your employer pay £{0} for each ta
 sameEmployerContributionAllYears.heading = Did your employer pay £{0} for each tax year you are claiming for?
 sameEmployerContributionAllYears.checkYourAnswersLabel = Did your employer pay £{0} for each tax year you are claiming for?
 sameEmployerContributionAllYears.error.required = Select yes if your employer pays back the same amount in each tax year you are claiming for
+
+yourEmployer.title = Is this your employer?
+yourEmployer.heading = Is this your employer?
+yourEmployer.checkYourAnswersLabel = Is this your employer? {0}
+yourEmployer.error.required = Select yes if this is your employer
+
+alreadyClaimingFRESameAmount.title = You are already claiming this
+alreadyClaimingFRESameAmount.heading = You are already claiming this
+alreadyClaimingFRESameAmount.checkYourAnswersLabel = You are already claiming this
+alreadyClaimingFRESameAmount.error.required = Select keep claiming this amount if you want to keep claiming this amount
+alreadyClaimingFRESameAmount.bodyText = Based on the information HMRC holds, you are already earning an extra £{0} before you pay tax.
+alreadyClaimingFRESameAmount.radioLabel = What do you want to do?
+alreadyClaimingFRESameAmount.altYesText = Keep claiming this amount
+alreadyClaimingFRESameAmount.altNoText = Stop claiming this amount
+alreadyClaimingFRESameAmount.tableTaxYearHeading = Tax year
+alreadyClaimingFRESameAmount.tableAmountHeading = Amount you are currently claiming
+
+alreadyClaimingFREDifferentAmounts.title = The amount you are claiming is different to the amount you are entitled to
+alreadyClaimingFREDifferentAmounts.heading = The amount you are claiming is different to the amount you are entitled to
+alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel = The amount you are claiming is different to the amount you are entitled to
+alreadyClaimingFREDifferentAmounts.change = Change the amount you are claiming
+alreadyClaimingFREDifferentAmounts.noChange = Keep claiming this amount
+alreadyClaimingFREDifferentAmounts.remove = Stop claiming this amount
+alreadyClaimingFREDifferentAmounts.error.required = Select keep claiming this amount if you want to keep claiming this amount
+alreadyClaimingFREDifferentAmounts.bodyText1 = Based on the information HMRC holds, you are eligible to claim £{0} based on your industry and occupation.
+alreadyClaimingFREDifferentAmounts.bodyText2 = The amount you are trying to claim for is different to the amount you are currently claiming.
+alreadyClaimingFREDifferentAmounts.tableTaxYearHeading = Tax year
+alreadyClaimingFREDifferentAmounts.tableAmountHeading = Amount you are currently claiming
 
 changeWhichTaxYears.title = Tell us which years you want to change the claim amount for
 changeWhichTaxYears.heading = Tell us which years you want to change the claim amount for
