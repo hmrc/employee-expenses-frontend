@@ -20,8 +20,9 @@ import config.NavConstant
 import controllers.actions._
 import forms.authenticated.ChangeWhichTaxYearsFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, Mode, TaxYearSelection}
+import models.{Enumerable, FlatRateExpense, Mode, TaxYearSelection}
 import navigation.Navigator
+import pages.FREAmounts
 import pages.authenticated.{ChangeWhichTaxYearsPage, TaxYearSelectionPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -55,12 +56,14 @@ class ChangeWhichTaxYearsController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      request.userAnswers.get(TaxYearSelectionPage) match {
-        case Some(selectedTaxYears) =>
-          val taxYears = selectedTaxYears.flatMap(
+      (request.userAnswers.get(TaxYearSelectionPage), request.userAnswers.get(FREAmounts)) match {
+        case (Some(selectedTaxYears), Some(flatRateExpenses)) =>
+          val taxYears: Seq[RadioCheckboxOption] = selectedTaxYears.flatMap(
             taxYear => TaxYearSelection.options.filter(_.value == taxYear.toString)
           )
-          Ok(view(preparedForm, mode, taxYears))
+          val freAmounts: Seq[Int] = flatRateExpenses.flatMap{_.freAmount.map{_.grossAmount}}
+          val yearsAndAmounts: Seq[(RadioCheckboxOption, Int)] = taxYears zip freAmounts
+          Ok(view(preparedForm, mode, yearsAndAmounts))
         case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
       }
   }
@@ -68,14 +71,16 @@ class ChangeWhichTaxYearsController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      request.userAnswers.get(TaxYearSelectionPage) match {
-        case Some(selectedTaxYears) =>
-          val taxYears = selectedTaxYears.flatMap(
+      (request.userAnswers.get(TaxYearSelectionPage), request.userAnswers.get(FREAmounts)) match {
+        case (Some(selectedTaxYears), Some(flatRateExpenses)) =>
+          val taxYears: Seq[RadioCheckboxOption] = selectedTaxYears.flatMap(
             taxYear => TaxYearSelection.options.filter(_.value == taxYear.toString)
           )
+          val freAmounts: Seq[Int] = flatRateExpenses.flatMap{_.freAmount.map{_.grossAmount}}
+          val yearsAndAmounts: Seq[(RadioCheckboxOption, Int)] = taxYears zip freAmounts
           form.bindFromRequest().fold(
             (formWithErrors: Form[Seq[TaxYearSelection]]) =>
-              Future.successful(BadRequest(view(formWithErrors, mode, taxYears))),
+              Future.successful(BadRequest(view(formWithErrors, mode, yearsAndAmounts))),
 
             value => {
               for {

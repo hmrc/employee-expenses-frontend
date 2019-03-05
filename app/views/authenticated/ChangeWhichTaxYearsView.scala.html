@@ -23,7 +23,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[Seq[TaxYearSelection]], mode: Mode, claimTaxYears: Seq[RadioCheckboxOption])(implicit request: Request[_], messages: Messages)
+@(form: Form[Seq[TaxYearSelection]], mode: Mode, yearsAndAmounts: Seq[(RadioCheckboxOption, Int)])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)} ${messages("changeWhichTaxYears.title")}"
@@ -41,7 +41,7 @@
             field = form("value"),
             legend = messages("changeWhichTaxYears.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = claimTaxYears,
+            inputs = yearsAndAmounts,
             columnHeading1 = messages("changeWhichTaxYears.columnHeading1"),
             columnHeading2 = messages("changeWhichTaxYears.columnHeading2")
         )

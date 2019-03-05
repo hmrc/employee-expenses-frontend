@@ -21,7 +21,7 @@
         legendClass: Option[String] = None,
         hint: Option[String] = None,
         trackGa: Boolean = false,
-        inputs: Seq[RadioCheckboxOption],
+        inputs: Seq[(RadioCheckboxOption, Int)],
         columnHeading1: String,
         columnHeading2: String
 )(implicit
@@ -72,16 +72,14 @@
                 @columnHeading2
                 </div>
             </li>
-
-
-            @for((RadioCheckboxOption(id, value, messageKey), index) <- inputs.zipWithIndex) {
+            @for(((RadioCheckboxOption(id, value, messageKey), amount), index) <- inputs.zipWithIndex) {
                 @defining(
                     inputs.indices.flatMap { i =>
                         field(s"[$i]").value
                     }
                 ) { answers =>
                     <li>
-                        <div id="tax-year" class="cya-question">
+                        <div class="cya-answer">
                             <div class="multiple-choice">
                                 <input
                                 id="@field(s"[$index]").id"
@@ -95,18 +93,16 @@
                                         data-journey-click="employee-expenses-frontend:click:@field(s"[$index]").id"}
                                 />
                                 <label for="@field(s"[$index]").id">
-                                @inputs(index).message.html
+                                @inputs(index)._1.message.html
                                 </label>
                             </div>
                         </div>
-                        <div id="fre-amount" class="cya-answer">
-                            £amount
+                        <div class="cya-change">
+                            £@inputs(index)._2
                         </div>
                     </li>
                 }
             }
-
-
         </ul>
     </fieldset>
 </div>
