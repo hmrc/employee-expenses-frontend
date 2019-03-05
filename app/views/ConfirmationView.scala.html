@@ -15,60 +15,64 @@
  *@
 
 @this(
-    main_template: MainTemplate
+        main_template: MainTemplate
 )
 
 @(
-        taxYear: Seq[TaxYearSelection],
+        taxYearSelections: Seq[TaxYearSelection],
         removeFreOption: Option[TaxYearSelection],
         claimAmount: Int,
         basicRate: String,
         higherRate: String
 )(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("confirmation.title")
+    @main_template(
+        title = messages("confirmation.title")
     ) {
 
-    @components.back_link()
+        @components.back_link()
 
-    <div class="govuk-box-highlight">
-        <h1 class="heading-xlarge">
-            @if(removeFreOption){ @messages("confirmation.heading.stoppedClaim") } else { @messages("confirmation.heading") }
-        </h1>
-    </div>
+        <div class="govuk-box-highlight">
+            <h1 class="heading-xlarge">
+            @if(removeFreOption) {
+                @messages("confirmation.heading.stoppedClaim")
+            } else {
+                @messages("confirmation.heading")
+            }
+            </h1>
+        </div>
 
-    @if(removeFreOption) {
-        <p>@messages("confirmation.noLongerGetAmount")</p>
-    }else {
-        @if(taxYear.contains(TaxYearSelection.CurrentYear)) {
-            <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
-        }
-        <p>@messages("confirmation.actualAmount")</p>
-        <p>@messages("confirmation.basicRate", basicRate)</p>
-        <p>@messages("confirmation.higherRate", higherRate)</p>
-
-        <h2>@messages("confirmation.whatHappensNext")</h2>
-
-        @if(!taxYear.contains(TaxYearSelection.CurrentYear)) {
-            <p>@messages("confirmation.letterConfirmation")</p>
+        @if(removeFreOption) {
+            <p>@messages("confirmation.noLongerGetAmount")</p>
         } else {
-            @if(taxYear.size > 1) {
-                <h3>@messages("confirmation.currentTaxYear")</h3>
+            @if(taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
+                <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
             }
+            <p>@messages("confirmation.actualAmount")</p>
+            <p>@messages("confirmation.basicRate", basicRate)</p>
+            <p>@messages("confirmation.higherRate", higherRate)</p>
 
-            <p>@messages("confirmation.taxCodeChanged")</p>
-            <p>@messages("confirmation.continueToClaim")</p>
+            <h2>@messages("confirmation.whatHappensNext")</h2>
 
-            @if(taxYear.size > 1) {
-                <h3>@messages("confirmation.previousTaxYears")</h3>
+            @if(!taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
                 <p>@messages("confirmation.letterConfirmation")</p>
-            }
+            } else {
+                @if(taxYearSelections.size > 1) {
+                    <h3>@messages("confirmation.currentTaxYear")</h3>
 
+                    <p>@messages("confirmation.taxCodeChanged")</p>
+                    <p>@messages("confirmation.continueToClaim")</p>
+
+                    <h3>@messages("confirmation.previousTaxYears")</h3>
+
+                    <p>@messages("confirmation.letterConfirmation")</p>
+
+                } else {
+
+                    <p>@messages("confirmation.taxCodeChanged")</p>
+                    <p>@messages("confirmation.continueToClaim")</p>
+                }
+
+            }
         }
     }
-
-
-
-
-}

@@ -19,11 +19,11 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
-import models.TaxYearSelection
+import models.{TaxYearSelection, UserAnswers}
 import pages.ClaimAmount
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -49,8 +49,6 @@ class ConfirmationController @Inject()(
       val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmount)
       val taxYearSelection: Option[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage)
       val removeFre: Option[TaxYearSelection] = request.userAnswers.get(RemoveFRECodePage)
-
-
 
       (taxYearSelection, removeFre, claimAmount) match {
         case (Some(taxYears), removeFreOption, Some(fullClaimAmount)) =>

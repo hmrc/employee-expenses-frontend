@@ -16,26 +16,146 @@
 
 package views
 
+import models.TaxYearSelection
+import play.api.Application
+import play.api.i18n.Messages
+import play.api.mvc.AnyContent
+import play.api.test.FakeRequest
+import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.ConfirmationView
 
 class ConfirmationViewSpec extends ViewBehaviours {
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "Confirmation view" must {
 
     val view = application.injector.instanceOf[ConfirmationView]
 
-    val applyView = view.apply()(fakeRequest, messages)
+    def applyView(taxYearSelection: Seq[TaxYearSelection],
+                  removeFREOption: Option[TaxYearSelection],
+                  claimAmount: Int,
+                  basicRate: String,
+                  higherRate: String)(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
+      view.apply(taxYearSelection, removeFREOption, claimAmount, basicRate, higherRate)(fakeRequest, messages)
 
-    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val viewWithAnswers = applyView(
+      taxYearSelection = Seq(TaxYearSelection.CurrentYear),
+      removeFREOption = None,
+      claimAmount = 100,
+      basicRate = "20",
+      higherRate = "40")(fakeRequest, messages)
 
-    behave like normalPage(applyView, "confirmation")
+    val applyViewWithAuth = applyView(
+      taxYearSelection = Seq(TaxYearSelection.CurrentYear),
+      removeFREOption = None,
+      claimAmount = 100,
+      basicRate = "20",
+      higherRate = "40")(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+
+    behave like normalPage(viewWithAnswers, "confirmation")
 
     behave like pageWithAccountMenu(applyViewWithAuth)
 
-    behave like pageWithBackLink(applyView)
+    behave like pageWithBackLink(viewWithAnswers)
+
+    "when only CY is selected" must {
+
+      val viewWithAnswers =
+        applyView(Seq(TaxYearSelection.CurrentYear), None, 100, "20", "40")(fakeRequest, messages)
+
+      val doc = asDocument(viewWithAnswers)
+
+      "display correct static text" in {
+
+        assertContainsMessages(doc,
+          "confirmation.heading",
+          "confirmation.actualAmount",
+          "confirmation.whatHappensNext",
+          "confirmation.taxCodeChanged",
+          "confirmation.continueToClaim")
+      }
+
+      "display correct dynamic text for title and tax rates" in {
+
+        assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", "100").toString)
+        assertContainsText(doc, messages("confirmation.basicRate", "20").toString)
+        assertContainsText(doc, messages("confirmation.higherRate", "40").toString)
+      }
+    }
+
+
+    "when CY and previous years have been selected" must {
+
+      val viewWithAnswers =
+        applyView(Seq(TaxYearSelection.CurrentYear,TaxYearSelection.CurrentYearMinus1), None, 100, "20", "40")(fakeRequest, messages)
+
+      val doc = asDocument(viewWithAnswers)
+
+
+      "display correct static text" in {
+
+        assertContainsMessages(doc,
+          "confirmation.heading",
+          "confirmation.actualAmount",
+          "confirmation.whatHappensNext",
+          "confirmation.currentTaxYear",
+          "confirmation.taxCodeChanged",
+          "confirmation.continueToClaim",
+          "confirmation.previousTaxYears",
+          "confirmation.letterConfirmation")
+      }
+
+      "display correct dynamic text for title and tax rates" in {
+
+        assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", "100").toString)
+        assertContainsText(doc, messages("confirmation.basicRate", "20").toString)
+        assertContainsText(doc, messages("confirmation.higherRate", "40").toString)
+      }
+    }
+
+    "when only previous years have been selected" must {
+
+      val viewWithAnswers =
+        applyView(Seq(TaxYearSelection.CurrentYearMinus1), None, 100, "20", "40")(fakeRequest, messages)
+
+      val doc = asDocument(viewWithAnswers)
+
+
+      "display correct static text" in {
+
+        assertContainsMessages(doc,
+          "confirmation.heading",
+          "confirmation.whatHappensNext",
+          "confirmation.letterConfirmation"
+         )
+      }
+
+      "display correct dynamic text for title and tax rates" in {
+        assertContainsText(doc, messages("confirmation.basicRate", "20").toString)
+        assertContainsText(doc, messages("confirmation.higherRate", "40").toString)
+      }
+    }
+
+    "when removeFREOption has been selected" must {
+
+      "display correct content" in {
+        val viewWithAnswers =
+          applyView(
+            taxYearSelection = Seq(TaxYearSelection.CurrentYearMinus1),
+            removeFREOption = Some(TaxYearSelection.CurrentYearMinus1),
+            claimAmount = 100,
+            basicRate = "20",
+            higherRate = "40")(fakeRequest, messages)
+
+        val doc = asDocument(viewWithAnswers)
+
+        assertContainsMessages(doc, "confirmation.heading.stoppedClaim", "confirmation.noLongerGetAmount")
+      }
+    }
+
+
   }
 
   application.stop()

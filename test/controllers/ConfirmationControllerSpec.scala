@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import models.TaxYearSelection
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.ConfirmationView
@@ -38,7 +39,7 @@ class ConfirmationControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view()(fakeRequest, messages).toString
+        view(Seq(TaxYearSelection.CurrentYear), None, 100, "20", "40")(fakeRequest, messages).toString
 
       application.stop()
     }
