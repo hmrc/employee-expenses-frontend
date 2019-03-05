@@ -22,12 +22,10 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, claimAmount: Int, freAmounts: Seq[FlatRateExpenseAmounts], freGreaterThanClaimAmount: Boolean)(implicit request: Request[_], messages: Messages)
-
-@moreLessKey = @{if(freGreaterThanClaimAmount)"More" else "Less"}
+@(form: Form[_], mode: Mode, claimAmount: Int, freAmounts: Seq[FlatRateExpenseAmounts])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages(s"alreadyClaimingFREDifferentAmounts.title$moreLessKey")}"
+    title = s"${errorPrefix(form)} ${messages(s"alreadyClaimingFREDifferentAmounts.title")}"
     ) {
     @formHelper(action = AlreadyClaimingFREDifferentAmountsController.onSubmit(mode), 'autoComplete -> "off") {
 
@@ -35,9 +33,10 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading(s"alreadyClaimingFREDifferentAmounts.heading$moreLessKey")
+        @components.heading(s"alreadyClaimingFREDifferentAmounts.heading")
 
-        <p>@{messages(s"alreadyClaimingFREDifferentAmounts.bodyText$moreLessKey", freAmounts.head.freAmount.get.grossAmount, claimAmount)}</p>
+        <p>@{messages(s"alreadyClaimingFREDifferentAmounts.bodyText1", claimAmount)}</p>
+        <p>@{messages(s"alreadyClaimingFREDifferentAmounts.bodyText2")}</p>
 
         @components.numeric_table(
             freAmounts,
@@ -47,7 +46,7 @@
 
         @components.input_radio(
             field = form("value"),
-            legend = messages(s"alreadyClaimingFREDifferentAmounts.heading$moreLessKey"),
+            legend = messages(s"alreadyClaimingFREDifferentAmounts.heading"),
             legendClass = Some("visually-hidden"),
             inputs = AlreadyClaimingFREDifferentAmounts.options
         )

@@ -21,8 +21,8 @@ import forms.authenticated.AlreadyClaimingFREDifferentAmountsFormProvider
 import javax.inject.{Inject, Named}
 import models.{Enumerable, Mode}
 import navigation.Navigator
-import pages.{ClaimAmount, FREAmounts}
 import pages.authenticated.AlreadyClaimingFREDifferentAmountsPage
+import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -54,13 +54,9 @@ class AlreadyClaimingFREDifferentAmountsController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      (request.userAnswers.get(ClaimAmount), request.userAnswers.get(FREAmounts)) match {
+      (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.userAnswers.get(FREAmounts)) match {
         case (Some(claimAmount), Some(freAmounts)) =>
-
-          val freGreaterThanClaimAmount = freAmounts.head.freAmount.get.grossAmount > claimAmount
-
-          Ok(view(preparedForm, mode, claimAmount, freAmounts, freGreaterThanClaimAmount))
-
+          Ok(view(preparedForm, mode, claimAmount, freAmounts))
         case _ =>
           Redirect(controllers.routes.SessionExpiredController.onPageLoad())
       }
@@ -68,14 +64,11 @@ class AlreadyClaimingFREDifferentAmountsController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-      (request.userAnswers.get(ClaimAmount), request.userAnswers.get(FREAmounts)) match {
+      (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.userAnswers.get(FREAmounts)) match {
         case (Some(claimAmount), Some(freAmounts)) =>
-
-          val freGreaterThanClaimAmount = freAmounts.head.freAmount.get.grossAmount > claimAmount
-
           form.bindFromRequest().fold(
             (formWithErrors: Form[_]) =>
-              Future.successful(BadRequest(view(formWithErrors, mode, claimAmount, freAmounts, freGreaterThanClaimAmount))),
+              Future.successful(BadRequest(view(formWithErrors, mode, claimAmount, freAmounts))),
 
             value => {
               for {
