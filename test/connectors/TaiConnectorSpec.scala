@@ -46,32 +46,22 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
   private val taxYear = TaiTaxYear()
 
-  private val taxCodeRecords = Seq(TaxCodeRecord(
-    taxCode = "830L",
-    employerName = "Employer Name",
-    startDate = LocalDate.parse("2018-06-27"),
-    endDate = LocalDate.parse("2019-04-05"),
-    payrollNumber = Some("1"),
-    pensionIndicator = true,
-    primary = true
-  ))
-
   "taiTaxCode" must {
     "return a tax code record on success" in {
       server.stubFor(
-        get(urlEqualTo(s"/tai/$fakeNino/tax-account/tax-code-change"))
+        get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
           .willReturn(
             aResponse()
               .withStatus(OK)
-              .withBody(validJson.toString)
+              .withBody(validEmploymentsJson.toString)
           )
       )
 
-      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino)
+      val result: Future[Seq[Employment]] = taiConnector.taiEmployments(fakeNino, TaiTaxYear(TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear)))
 
       whenReady(result) {
         result =>
-          result mustBe taxCodeRecords
+          result mustBe taiEmployment
       }
     }
   }
@@ -115,33 +105,14 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     }
   }
 
-  val validJson: JsValue = Json.parse(
+  val validEmploymentsJson: JsValue = Json.parse(
     """{
      |  "data" : {
-     |    "current": [{
-     |      "taxCode": "830L",
-     |      "employerName": "Employer Name",
-     |      "operatedTaxCode": true,
-     |      "p2Issued": true,
-     |      "startDate": "2018-06-27",
-     |      "endDate": "2019-04-05",
-     |      "payrollNumber": "1",
-     |      "pensionIndicator": true,
-     |      "primary": true
-     |    }],
-     |    "previous": [{
-     |      "taxCode": "1150L",
-     |      "employerName": "Employer Name",
-     |      "operatedTaxCode": true,
-     |      "p2Issued": true,
-     |      "startDate": "2018-04-06",
-     |      "endDate": "2018-06-26",
-     |      "payrollNumber": "1",
-     |      "pensionIndicator": true,
-     |      "primary": true
+     |    "employments": [{
+     |      "name": "HMRC LongBenton",
+     |      "startDate": "2018-06-27"
      |    }]
-     |  },
-     |  "links" : [ ]
+     |  }
      |}""".stripMargin)
 
   val validFlatRateJson: JsValue = Json.parse(

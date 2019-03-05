@@ -23,7 +23,7 @@ import models.FirstIndustryOptions.{Engineering, FoodAndCatering, Healthcare, Re
 import models.FourthIndustryOptions.{Agriculture, FireService, Heating, Leisure, Prisons}
 import models.SecondIndustryOptions.{ClothingTextiles, Construction, Council, ManufacturingWarehousing, Police}
 import models.ThirdIndustryOptions.{BanksBuildingSocieties, Education, Electrical, Printing, Security}
-import models.{Address, CheckMode, FirstIndustryOptions, FourthIndustryOptions, SecondIndustryOptions, TaxYearSelection, ThirdIndustryOptions, UserAnswers}
+import models.{Address, CheckMode, TaxYearSelection, UserAnswers}
 import pages._
 import pages.authenticated._
 import play.api.i18n.Messages
@@ -37,7 +37,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   }
 
   def sameEmployerContributionAllYears: Option[AnswerRow] = userAnswers.get(SameEmployerContributionAllYearsPage) map {
-    x => AnswerRow("sameEmployerContributionAllYears.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true, SameEmployerContributionAllYearsController.onPageLoad(CheckMode).url)
+    x => AnswerRow("sameEmployerContributionAllYears.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
+      SameEmployerContributionAllYearsController.onPageLoad(CheckMode).url)
   }
 
   def industryAnswerRow(industry: String): Option[AnswerRow] = {
@@ -106,6 +107,16 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     case _ => None
   }
 
+  def yourEmployer: Option[AnswerRow] = (userAnswers.get(YourEmployerPage), userAnswers.get(YourEmployerName)) match {
+    case (Some(x), Some(employer)) =>
+      Some(AnswerRow("yourEmployer.checkYourAnswersLabel",
+        if(x) "site.yes" else "site.no", true,
+        YourEmployerController.onPageLoad(CheckMode).url,
+        s"<p>$employer</p>"
+      ))
+    case _ => None
+  }
+
   def taxYearSelection: Option[AnswerRow] = userAnswers.get(TaxYearSelectionPage) map {
     taxYears =>
       AnswerRow("taxYearSelection.checkYourAnswersLabel",
@@ -125,7 +136,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       Some(AnswerRow("yourAddress.checkYourAnswersLabel",
         if (x) "site.yes" else "site.no", true,
         YourAddressController.onPageLoad(CheckMode).url,
-        Address.asString(address)))
+        Address.asString(address)
+      ))
     case _ => None
   }
 }
