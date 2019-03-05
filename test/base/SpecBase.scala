@@ -21,6 +21,7 @@ import config.FrontendAppConfig
 import controllers.actions._
 import models.EmployerContribution.SomeContribution
 import models.FirstIndustryOptions.Healthcare
+import models.FlatRateExpenseOptions.FRENoYears
 import models.TaxYearSelection.CurrentYear
 import models._
 import org.joda.time.LocalDate
@@ -104,6 +105,8 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     .set(YourAddressPage, true).success.value
     .set(CitizenDetailsAddress, address).success.value
     .set(ClaimAmount, 100).success.value
+    .set(ClaimAmountAndAnyDeductions, 80).success.value
+    .set(FREResponse, FRENoYears).success.value
     .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())

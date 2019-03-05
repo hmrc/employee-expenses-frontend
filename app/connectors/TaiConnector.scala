@@ -47,7 +47,7 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
   override def taiFREUpdate(nino: String, year: TaiTaxYear, version: Int, expensesData: IabdUpdateData)
                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
-    val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/$year/expenses/flat-rate-expenses"
+    val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/${year.year}/expenses/flat-rate-expenses"
 
     val body: IabdEditDataRequest = IabdEditDataRequest(version, expensesData)
 
