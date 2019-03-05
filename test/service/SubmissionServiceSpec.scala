@@ -66,7 +66,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(204)))
 
-        val result = submissionService.submitRemoveFREFromCode(fakeNino, taxYears, claimAmount, TaxYearSelection.CurrentYear)
+        val result = submissionService.submitRemoveFREFromCode(fakeNino, taxYears, TaxYearSelection.CurrentYear)
 
         whenReady(result) {
           _ mustBe true
@@ -77,7 +77,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(500)))
 
-        val result = submissionService.submitRemoveFREFromCode(fakeNino, taxYears, claimAmount, TaxYearSelection.CurrentYear)
+        val result = submissionService.submitRemoveFREFromCode(fakeNino, taxYears, TaxYearSelection.CurrentYear)
 
         whenReady(result) {
           _ mustBe false

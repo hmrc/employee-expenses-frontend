@@ -100,7 +100,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
       }
 
       "for submitRemoveFREFromCode redirect to CYA when submission success" in {
-        when(mockSubmissionService.submitRemoveFREFromCode(any(),any(),any(),any())(any(),any()))
+        when(mockSubmissionService.submitRemoveFREFromCode(any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(true))
 
         val application = applicationBuilder(Some(minimumUserAnswers))
@@ -140,7 +140,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
       }
 
       "for submitRemoveFREFromCode redirect to tech difficulties when submission fail" in {
-        when(mockSubmissionService.submitRemoveFREFromCode(any(),any(),any(),any())(any(),any()))
+        when(mockSubmissionService.submitRemoveFREFromCode(any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(false))
 
         val application = applicationBuilder(Some(minimumUserAnswers))
