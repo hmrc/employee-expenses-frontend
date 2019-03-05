@@ -25,7 +25,7 @@ import navigation.Navigator
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc._
 import service.SubmissionService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.CheckYourAnswersHelper
@@ -70,14 +70,19 @@ class CheckYourAnswersController @Inject()(
         request.userAnswers.get(RemoveFRECodePage)
       ) match {
         case (Some(FRENoYears), Some(taxYears), Some(claimAmount), None) =>
-          submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map {
-            response => Redirect(response)
-          }
+          submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map(
+            submissionResult
+          )
         case (Some(_), Some(taxYears), Some(claimAmount), Some(removeYear)) =>
-          submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, claimAmount, removeYear).map {
-            response => Redirect(response)
-          }
+          submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, claimAmount, removeYear).map(
+            submissionResult
+          )
         case _ => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
       }
   }
+
+  def submissionResult(result: Boolean): Result = {
+    if (result) Redirect(routes.CheckYourAnswersController.onPageLoad()) else Redirect(routes.TechnicalDifficultiesController.onPageLoad())
+  }
+
 }

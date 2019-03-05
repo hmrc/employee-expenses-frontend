@@ -45,7 +45,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         val result = submissionService.submitFRENotInCode(fakeNino, taxYears, claimAmount)
 
         whenReady(result) {
-          _ mustBe CheckYourAnswersController.onPageLoad()
+          _ mustBe true
         }
       }
 
@@ -56,7 +56,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         val result = submissionService.submitFRENotInCode(fakeNino, taxYears, claimAmount)
 
         whenReady(result) {
-          _ mustBe TechnicalDifficultiesController.onPageLoad()
+          _ mustBe false
         }
       }
     }
@@ -69,7 +69,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         val result = submissionService.submitRemoveFREFromCode(fakeNino, taxYears, claimAmount, TaxYearSelection.CurrentYear)
 
         whenReady(result) {
-          _ mustBe CheckYourAnswersController.onPageLoad()
+          _ mustBe true
         }
       }
 
@@ -80,7 +80,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         val result = submissionService.submitRemoveFREFromCode(fakeNino, taxYears, claimAmount, TaxYearSelection.CurrentYear)
 
         whenReady(result) {
-          _ mustBe TechnicalDifficultiesController.onPageLoad()
+          _ mustBe false
         }
       }
     }
@@ -90,7 +90,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(204), HttpResponse(204))))
 
         whenReady(result) {
-          _ mustBe CheckYourAnswersController.onPageLoad()
+          _ mustBe true
         }
       }
 
@@ -98,7 +98,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         val result = submissionService.submissionResult(Future.successful(Seq()))
 
         whenReady(result) {
-          _ mustBe TechnicalDifficultiesController.onPageLoad()
+          _ mustBe false
         }
       }
 
@@ -106,7 +106,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(500))))
 
         whenReady(result) {
-          _ mustBe TechnicalDifficultiesController.onPageLoad()
+          _ mustBe false
         }
       }
     }

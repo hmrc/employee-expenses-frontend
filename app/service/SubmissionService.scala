@@ -56,9 +56,6 @@ class SubmissionService @Inject()(taiService: TaiService) {
                       (implicit hc: HeaderCarrier, ec: ExecutionContext) = {
     response.map {
       responses => responses.nonEmpty && responses.forall(_.status == 204)
-    }.map {
-      case true => controllers.routes.CheckYourAnswersController.onPageLoad()
-      case _ => controllers.routes.TechnicalDifficultiesController.onPageLoad()
     }
   }
 }

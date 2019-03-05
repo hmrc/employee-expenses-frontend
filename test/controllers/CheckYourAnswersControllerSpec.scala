@@ -79,9 +79,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "onSubmit" must {
-      "for submitFRENotInCode redirect to CYA when given valid data" in {
+      "for submitFRENotInCode redirect to CYA when submission success" in {
         when(mockSubmissionService.submitFRENotInCode(any(),any(),any())(any(),any()))
-          .thenReturn(Future.successful(routes.CheckYourAnswersController.onPageLoad()))
+          .thenReturn(Future.successful(true))
 
         val application = applicationBuilder(Some(minimumUserAnswers))
           .overrides(bind[SubmissionService].toInstance(mockSubmissionService))
@@ -99,9 +99,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
 
       }
 
-      "for submitRemoveFREFromCode redirect to CYA when given valid data" in {
+      "for submitRemoveFREFromCode redirect to CYA when submission success" in {
         when(mockSubmissionService.submitRemoveFREFromCode(any(),any(),any(),any())(any(),any()))
-          .thenReturn(Future.successful(routes.CheckYourAnswersController.onPageLoad()))
+          .thenReturn(Future.successful(true))
 
         val application = applicationBuilder(Some(minimumUserAnswers))
           .overrides(bind[SubmissionService].toInstance(mockSubmissionService))
@@ -114,6 +114,46 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+
+        application.stop()
+
+      }
+
+      "for submitFRENotInCode redirect to tech difficulties when submission fail" in {
+        when(mockSubmissionService.submitFRENotInCode(any(),any(),any())(any(),any()))
+          .thenReturn(Future.successful(false))
+
+        val application = applicationBuilder(Some(minimumUserAnswers))
+          .overrides(bind[SubmissionService].toInstance(mockSubmissionService))
+          .build()
+
+        val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.TechnicalDifficultiesController.onPageLoad().url
+
+        application.stop()
+
+      }
+
+      "for submitRemoveFREFromCode redirect to tech difficulties when submission fail" in {
+        when(mockSubmissionService.submitRemoveFREFromCode(any(),any(),any(),any())(any(),any()))
+          .thenReturn(Future.successful(false))
+
+        val application = applicationBuilder(Some(minimumUserAnswers))
+          .overrides(bind[SubmissionService].toInstance(mockSubmissionService))
+          .build()
+
+        val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.TechnicalDifficultiesController.onPageLoad().url
 
         application.stop()
 
