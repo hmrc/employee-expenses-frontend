@@ -643,5 +643,7 @@ alreadyClaimingFREDifferentAmounts.tableAmountHeading = Amount you are currently
 
 changeWhichTaxYears.title = Tell us which years you want to change the claim amount for
 changeWhichTaxYears.heading = Tell us which years you want to change the claim amount for
+changeWhichTaxYears.columnHeading1 = Tax year you want to claim for
+changeWhichTaxYears.columnHeading2 = Amount you were claiming
 changeWhichTaxYears.checkYourAnswersLabel = Tell us which years you want to change the claim amount for
 changeWhichTaxYears.error.required = Select which years you want to change the claim amount for

@@ -37,11 +37,13 @@
 
         @components.heading("changeWhichTaxYears.heading")
 
-        @components.input_checkbox(
+        @components.input_checkbox_table(
             field = form("value"),
             legend = messages("changeWhichTaxYears.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = claimTaxYears
+            inputs = claimTaxYears,
+            columnHeading1 = messages("changeWhichTaxYears.columnHeading1"),
+            columnHeading2 = messages("changeWhichTaxYears.columnHeading2")
         )
 
         @components.submit_button()

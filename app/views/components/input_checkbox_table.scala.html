@@ -1,0 +1,112 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.RadioCheckboxOption
+@(
+        field: Field,
+        legend: String,
+        legendClass: Option[String] = None,
+        hint: Option[String] = None,
+        trackGa: Boolean = false,
+        inputs: Seq[RadioCheckboxOption],
+        columnHeading1: String,
+        columnHeading2: String
+)(implicit
+        messages: Messages
+)
+
+@hintBlock = {
+@hint.map { hint =>
+    <span class="form-hint">
+        @hint
+    </span>
+}
+}
+
+@errorBlock = {
+@field.errors.map { error =>
+    <span class="error-notification" id="error-message-@field.id-input">
+    @messages(error.message, error.args: _*)
+    </span>
+}
+}
+
+@divClass = @{
+    if(field.hasErrors) "form-group form-field--error" else "form-group"
+}
+
+@lgndClass = @{
+    legendClass match {
+        case Some(str) => s"bold-small $str"
+        case None => "bold-small"
+    }
+}
+
+<div class="@divClass">
+    <fieldset id="@{
+        field.id
+    }">
+        <legend class="@lgndClass">@legend</legend>
+        @hintBlock
+        @errorBlock
+
+        <ul role="list" id="change-table" class="govuk-check-your-answers cya-questions-long section">
+            <li>
+                <div id="tax-year-heading" class="tabular-data__data tabular-data__data--9-12 heading-small">
+                @columnHeading1
+                </div>
+                <div id="amount-heading" class="tabular-data__data tabular-data__data--3-12 heading-small u-align--tablet-right">
+                @columnHeading2
+                </div>
+            </li>
+
+
+            @for((RadioCheckboxOption(id, value, messageKey), index) <- inputs.zipWithIndex) {
+                @defining(
+                    inputs.indices.flatMap { i =>
+                        field(s"[$i]").value
+                    }
+                ) { answers =>
+                    <li>
+                        <div id="tax-year" class="cya-question">
+                            <div class="multiple-choice">
+                                <input
+                                id="@field(s"[$index]").id"
+                                type="checkbox"
+                                name="@field(s"[$index]").name"
+                                value="@value"
+                                    @if(answers.contains(value)) {
+                                        checked="checked"
+                                    }
+                                    @if(true) {
+                                        data-journey-click="employee-expenses-frontend:click:@field(s"[$index]").id"}
+                                />
+                                <label for="@field(s"[$index]").id">
+                                @inputs(index).message.html
+                                </label>
+                            </div>
+                        </div>
+                        <div id="fre-amount" class="cya-answer">
+                            £amount
+                        </div>
+                    </li>
+                }
+            }
+
+
+        </ul>
+    </fieldset>
+</div>
