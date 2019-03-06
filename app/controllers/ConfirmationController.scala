@@ -47,6 +47,7 @@ class ConfirmationController @Inject()(
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
+
       val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmountAndAnyDeductions)
       val taxYearSelection: Option[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage)
       val updateEmployerInfo: Option[Boolean] = request.userAnswers.get(YourEmployerPage)
@@ -59,40 +60,32 @@ class ConfirmationController @Inject()(
 
           taiConnector.taiTaxCodeRecords(validNino).map {
             result =>
-              if (result.head.taxCode(0).toString.equalsIgnoreCase("s")) {
-                val scottishBasicRate = appConfig.taxPercentageScotlandBand1
-                val scottishHigherRate = appConfig.taxPercentageScotlandBand2
-                val claimAmountBasicRate =  claimAmountService.calculateTax(scottishBasicRate, fullClaimAmount)
-                val claimAmountHigherRate =  claimAmountService.calculateTax(scottishHigherRate, fullClaimAmount)
-
-                Ok(view(
-                  taxYearSelections = validTaxYearSelection,
-                  removeFreOption = removeFreOption,
-                  updateEmployerInfo = updateEmployerInfo,
-                  updateAddressInfo = updateAddressInfo,
-                  claimAmount = fullClaimAmount,
-                  basicRate = scottishBasicRate,
-                  higherRate = scottishHigherRate,
-                  claimAmountBasicRate = claimAmountBasicRate,
-                  claimAmountHigherRate = claimAmountHigherRate)).withNewSession
-
+              val basicRate: Int = if (result.head.taxCode(0).toString.equalsIgnoreCase("s")) {
+                appConfig.taxPercentageScotlandBand1
               } else {
-                val basicRate = appConfig.taxPercentageBand1
-                val higherRate = appConfig.taxPercentageBand2
-                val claimAmountBasicRate =  claimAmountService.calculateTax(basicRate, fullClaimAmount)
-                val claimAmountHigherRate =  claimAmountService.calculateTax(higherRate, fullClaimAmount)
-
-                Ok(view(
-                  taxYearSelections = validTaxYearSelection,
-                  removeFreOption = removeFreOption,
-                  updateEmployerInfo = updateEmployerInfo,
-                  updateAddressInfo = updateAddressInfo,
-                  claimAmount = fullClaimAmount,
-                  basicRate = basicRate,
-                  higherRate = higherRate,
-                  claimAmountBasicRate = claimAmountBasicRate,
-                  claimAmountHigherRate = claimAmountHigherRate)).withNewSession
+                appConfig.taxPercentageBand1
               }
+
+              val higherRate: Int = if (result.head.taxCode(0).toString.equalsIgnoreCase("s")) {
+                appConfig.taxPercentageScotlandBand2
+              } else {
+                appConfig.taxPercentageBand2
+              }
+
+              val claimAmountBasicRate = claimAmountService.calculateTax(basicRate, fullClaimAmount)
+              val claimAmountHigherRate = claimAmountService.calculateTax(higherRate, fullClaimAmount)
+
+              Ok(view(
+                taxYearSelections = validTaxYearSelection,
+                removeFreOption = removeFreOption,
+                updateEmployerInfo = updateEmployerInfo,
+                updateAddressInfo = updateAddressInfo,
+                claimAmount = fullClaimAmount,
+                basicRate = basicRate,
+                higherRate = higherRate,
+                claimAmountBasicRate = claimAmountBasicRate,
+                claimAmountHigherRate = claimAmountHigherRate)).withNewSession
+
           }.recoverWith {
             case _ =>
               Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))

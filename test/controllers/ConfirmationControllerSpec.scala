@@ -25,9 +25,11 @@ import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmountAndAnyDeductions
+import pages.authenticated.TaxYearSelectionPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import service.ClaimAmountService
 import views.html.ConfirmationView
 
@@ -43,7 +45,7 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   "Confirmation Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK and the correct view for a GET and remove userAnswers" in {
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
@@ -150,6 +152,23 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "Remove session on page load" in {
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+        .build()
+
+      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("s850L"))))
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+          _.isDefined mustBe false
+      }
 
       application.stop()
     }
