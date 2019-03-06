@@ -15,7 +15,7 @@
  *@
 
 @this(
-main_template: MainTemplate
+        main_template: MainTemplate
 )
 
 @(
@@ -28,31 +28,37 @@ main_template: MainTemplate
         higherRate: Int,
         claimAmountBasicRate: String,
         claimAmountHigherRate: String
-
 )(implicit request: Request[_], messages: Messages)
 
-    @main_template(
-        title = messages("confirmation.title")
-    ) {
+@main_template(
+    title = messages("confirmation.title")
+) {
 
     @components.back_link()
 
-    <div class="govuk-box-highlight">
-        <h1 class="heading-xlarge">
-        @if(removeFreOption) {
-            @messages("confirmation.heading.stoppedClaim")
-        } else {
-            @messages("confirmation.heading")
-        }
-        </h1>
-    </div>
-
     @if(removeFreOption) {
+
+        <div class="govuk-box-highlight">
+            <h1 class="heading-xlarge">
+                @messages("confirmation.heading.stoppedClaim")
+            </h1>
+        </div>
+
         <p>@messages("confirmation.noLongerGetAmount")</p>
-    } else {
+    }
+
+    @if(!removeFreOption) {
+
+        <div class="govuk-box-highlight">
+            <h1 class="heading-xlarge">
+                @messages("confirmation.heading")
+            </h1>
+        </div>
+
         @if(taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
             <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
         }
+
         <p>@messages("confirmation.actualAmount")</p>
         <p>@messages("confirmation.basicRate", claimAmountBasicRate, basicRate)</p>
         <p>@messages("confirmation.higherRate", claimAmountHigherRate, higherRate)</p>
@@ -61,7 +67,9 @@ main_template: MainTemplate
 
         @if(!taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
             <p>@messages("confirmation.letterConfirmation")</p>
-        } else {
+        }
+
+        @if(taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
             @if(taxYearSelections.size > 1) {
                 <h3>@messages("confirmation.currentTaxYear")</h3>
 
@@ -71,9 +79,9 @@ main_template: MainTemplate
                 <h3>@messages("confirmation.previousTaxYears")</h3>
 
                 <p>@messages("confirmation.letterConfirmation")</p>
+            }
 
-            } else {
-
+            @if(taxYearSelections.size == 1) {
                 <p>@messages("confirmation.taxCodeChanged")</p>
                 <p>@messages("confirmation.continueToClaim")</p>
             }
@@ -87,7 +95,7 @@ main_template: MainTemplate
         <p>@messages("confirmation.employerChange")</p>
 
         <a class="button" id="updateEmployerInfoBtn" href="https://www.tax.service.gov.uk/check-income-tax/income-summary" target="_blank">
-            @messages("confirmation.updateEmployerInfoNow")
+        @messages("confirmation.updateEmployerInfoNow")
         </a>
     }
 
@@ -96,7 +104,7 @@ main_template: MainTemplate
         <p>@messages("confirmation.addressChange")</p>
 
         <a class="button" id="updateAddressInfoBtn" href="https://www.tax.service.gov.uk/personal-account/personal-details" target="_blank">
-            @messages("confirmation.updateAddressInfoNow")
+        @messages("confirmation.updateAddressInfoNow")
         </a>
     }
 }

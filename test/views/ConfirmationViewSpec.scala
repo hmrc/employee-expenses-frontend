@@ -76,8 +76,8 @@ class ConfirmationViewSpec extends ViewBehaviours {
       "display correct dynamic text for title and tax rates" in {
 
         assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", "100").toString)
-        assertContainsText(doc, messages("confirmation.basicRate", "20").toString)
-        assertContainsText(doc, messages("confirmation.higherRate", "40").toString)
+        assertContainsText(doc, messages("confirmation.basicRate", "20", 20).toString)
+        assertContainsText(doc, messages("confirmation.higherRate", "40", 40).toString)
       }
     }
 
@@ -105,8 +105,8 @@ class ConfirmationViewSpec extends ViewBehaviours {
       "display correct dynamic text for title and tax rates" in {
 
         assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", "100").toString)
-        assertContainsText(doc, messages("confirmation.basicRate", "20").toString)
-        assertContainsText(doc, messages("confirmation.higherRate", "40").toString)
+        assertContainsText(doc, messages("confirmation.basicRate", "20", 20).toString)
+        assertContainsText(doc, messages("confirmation.higherRate", "40", 40).toString)
       }
     }
 
@@ -128,8 +128,8 @@ class ConfirmationViewSpec extends ViewBehaviours {
       }
 
       "display correct dynamic text for title and tax rates" in {
-        assertContainsText(doc, messages("confirmation.basicRate", "20").toString)
-        assertContainsText(doc, messages("confirmation.higherRate", "40").toString)
+        assertContainsText(doc, messages("confirmation.basicRate", "20", 20).toString)
+        assertContainsText(doc, messages("confirmation.higherRate", "40", 40).toString)
       }
     }
 
