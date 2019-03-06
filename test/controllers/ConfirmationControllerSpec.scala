@@ -17,15 +17,13 @@
 package controllers
 
 import base.SpecBase
-import config.FrontendAppConfig
 import connectors.TaiConnector
 import models.{TaxCodeRecord, TaxYearSelection}
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmountAndAnyDeductions
-import pages.authenticated.TaxYearSelectionPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -35,7 +33,7 @@ import views.html.ConfirmationView
 
 import scala.concurrent.Future
 
-class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
+class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
   val mockTaiConnector: TaiConnector = mock[TaiConnector]
   val mockClaimAmountService: ClaimAmountService = mock[ClaimAmountService]
@@ -162,12 +160,16 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("s850L"))))
-
       val sessionRepository = application.injector.instanceOf[SessionRepository]
 
+      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("s850L"))))
+
+      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+
+      route(application, request).value
+
       whenReady(sessionRepository.get(userAnswersId)) {
-          _.isDefined mustBe false
+        _.map(_ mustBe None)
       }
 
       application.stop()
