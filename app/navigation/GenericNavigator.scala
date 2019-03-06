@@ -98,10 +98,10 @@ class GenericNavigator @Inject()() extends Navigator {
   private def thirdIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(ThirdIndustryOptionsPage) match {
       case Some(Education)                        => EmployerContributionController.onPageLoad(mode)
-      case Some(BanksBuildingSocieties)           => EmployerContributionController.onPageLoad(NormalMode)
-      case Some(Electrical)                       => ElectricalController.onPageLoad(NormalMode)
-      case Some(Printing)                         => PrintingOccupationList1Controller.onPageLoad(NormalMode)
-      case Some(Security)                         => SecurityGuardNHSController.onPageLoad(NormalMode)
+      case Some(BanksBuildingSocieties)           => EmployerContributionController.onPageLoad(mode)
+      case Some(Electrical)                       => ElectricalController.onPageLoad(mode)
+      case Some(Printing)                         => PrintingOccupationList1Controller.onPageLoad(mode)
+      case Some(Security)                         => SecurityGuardNHSController.onPageLoad(mode)
       case Some(ThirdIndustryOptions.NoneOfAbove) => FourthIndustryOptionsController.onPageLoad(mode)
       case _                                      => SessionExpiredController.onPageLoad()
     }
