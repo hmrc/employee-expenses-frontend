@@ -38,9 +38,11 @@ class ConfirmationViewSpec extends ViewBehaviours {
                   updateEmployer: Option[Boolean] = None,
                   updateAddress: Option[Boolean] = None,
                   claimAmount: Int = 100,
-                  basicRate: String = "20",
-                  higherRate: String = "40")(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(taxYearSelection, removeFREOption, updateEmployer, updateAddress, claimAmount, basicRate, higherRate)(fakeRequest, messages)
+                  basicRate: Int = 20,
+                  higherRate: Int = 40,
+                  claimAmountBasicRate: String = "20",
+                  claimAmountHigherRate: String = "40")(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
+      view.apply(taxYearSelection, removeFREOption, updateEmployer, updateAddress, claimAmount, basicRate, higherRate, claimAmountBasicRate, claimAmountHigherRate)(fakeRequest, messages)
 
     val viewWithAnswers = applyView(
       taxYearSelection = Seq(TaxYearSelection.CurrentYear))(fakeRequest, messages)
@@ -177,9 +179,6 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       }
     }
-
-
-
   }
 
   application.stop()

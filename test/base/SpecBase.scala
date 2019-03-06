@@ -104,6 +104,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     .set(YourAddressPage, true).success.value
     .set(CitizenDetailsAddress, address).success.value
     .set(ClaimAmount, 100).success.value
+    .set(ClaimAmountAndAnyDeductions, 100).success.value
     .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())

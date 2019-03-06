@@ -16,18 +16,17 @@
 
 package controllers
 
-import akka.actor.Status.Success
 import config.FrontendAppConfig
 import connectors.TaiConnector
 import controllers.actions._
 import javax.inject.Inject
-import models.{TaxCodeRecord, TaxYearSelection}
-import pages.{ClaimAmount, ClaimAmountAndAnyDeductions}
+import models.TaxYearSelection
+import pages.ClaimAmountAndAnyDeductions
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import service.{ClaimAmountService, TaiService}
+import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.ConfirmationView
 
@@ -63,13 +62,36 @@ class ConfirmationController @Inject()(
               if (result.head.taxCode(0).toString.equalsIgnoreCase("s")) {
                 val scottishBasicRate = appConfig.taxPercentageScotlandBand1
                 val scottishHigherRate = appConfig.taxPercentageScotlandBand2
+                val claimAmountBasicRate =  claimAmountService.calculateTax(scottishBasicRate, fullClaimAmount)
+                val claimAmountHigherRate =  claimAmountService.calculateTax(scottishHigherRate, fullClaimAmount)
 
-                Ok(view(validTaxYearSelection, removeFreOption, updateEmployerInfo, updateAddressInfo, fullClaimAmount, scottishBasicRate, scottishHigherRate)).withNewSession
+                Ok(view(
+                  taxYearSelections = validTaxYearSelection,
+                  removeFreOption = removeFreOption,
+                  updateEmployerInfo = updateEmployerInfo,
+                  updateAddressInfo = updateAddressInfo,
+                  claimAmount = fullClaimAmount,
+                  basicRate = scottishBasicRate,
+                  higherRate = scottishHigherRate,
+                  claimAmountBasicRate = claimAmountBasicRate,
+                  claimAmountHigherRate = claimAmountHigherRate)).withNewSession
+
               } else {
                 val basicRate = appConfig.taxPercentageBand1
                 val higherRate = appConfig.taxPercentageBand2
+                val claimAmountBasicRate =  claimAmountService.calculateTax(basicRate, fullClaimAmount)
+                val claimAmountHigherRate =  claimAmountService.calculateTax(higherRate, fullClaimAmount)
 
-                Ok(view(validTaxYearSelection, removeFreOption, updateEmployerInfo, updateAddressInfo, fullClaimAmount, basicRate, higherRate)).withNewSession
+                Ok(view(
+                  taxYearSelections = validTaxYearSelection,
+                  removeFreOption = removeFreOption,
+                  updateEmployerInfo = updateEmployerInfo,
+                  updateAddressInfo = updateAddressInfo,
+                  claimAmount = fullClaimAmount,
+                  basicRate = basicRate,
+                  higherRate = higherRate,
+                  claimAmountBasicRate = claimAmountBasicRate,
+                  claimAmountHigherRate = claimAmountHigherRate)).withNewSession
               }
           }.recoverWith {
             case _ =>

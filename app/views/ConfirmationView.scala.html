@@ -14,11 +14,8 @@
  * limitations under the License.
  *@
 
-@import service.ClaimAmountService
-
 @this(
-main_template: MainTemplate,
-claimAmountService: ClaimAmountService
+main_template: MainTemplate
 )
 
 @(
@@ -28,7 +25,10 @@ claimAmountService: ClaimAmountService
         updateAddressInfo: Option[Boolean],
         claimAmount: Int,
         basicRate: Int,
-        higherRate: Int
+        higherRate: Int,
+        claimAmountBasicRate: String,
+        claimAmountHigherRate: String
+
 )(implicit request: Request[_], messages: Messages)
 
     @main_template(
@@ -54,8 +54,8 @@ claimAmountService: ClaimAmountService
             <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
         }
         <p>@messages("confirmation.actualAmount")</p>
-        <p>@messages("confirmation.basicRate", claimAmountService.calculateTax(basicRate, claimAmount), basicRate)</p>
-        <p>@messages("confirmation.higherRate", claimAmountService.calculateTax(higherRate, claimAmount), higherRate)</p>
+        <p>@messages("confirmation.basicRate", claimAmountBasicRate, basicRate)</p>
+        <p>@messages("confirmation.higherRate", claimAmountHigherRate, higherRate)</p>
 
         <h2>@messages("confirmation.whatHappensNext")</h2>
 
