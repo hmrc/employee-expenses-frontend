@@ -34,11 +34,17 @@ import pages.printing._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryAlreadyClaimingFREDifferentAmountsPage: Arbitrary[AlreadyClaimingFREDifferentAmountsPage.type] =
+    Arbitrary(AlreadyClaimingFREDifferentAmountsPage)
+
   implicit lazy val arbitraryAlreadyClaimingFREPage: Arbitrary[AlreadyClaimingFRESameAmountPage.type] =
     Arbitrary(AlreadyClaimingFRESameAmountPage)
 
   implicit lazy val arbitrarySameEmployerContributionAllYearsPage: Arbitrary[SameEmployerContributionAllYearsPage.type] =
     Arbitrary(SameEmployerContributionAllYearsPage)
+
+  implicit lazy val arbitraryChangeWhichTaxYearsPage: Arbitrary[ChangeWhichTaxYearsPage.type] =
+    Arbitrary(ChangeWhichTaxYearsPage)
 
   implicit lazy val arbitraryRemoveFRECodePage: Arbitrary[RemoveFRECodePage.type] =
     Arbitrary(RemoveFRECodePage)

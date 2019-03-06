@@ -152,7 +152,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         }
       }
 
-      "return FREAllYearsAllAmountsDifferentToClaimAmount when only 200 is returned and the grossAmount is not the same as claimAmount for all tax years" in {
+      "return FREAllYearsAllAmountsDifferent when only 200 is returned and the grossAmount is not the same as claimAmount for all tax years" in {
         when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
           .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
 
@@ -160,7 +160,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
         whenReady(result) {
           result =>
-            result mustBe FREAllYearsAllAmountsDifferentToClaimAmount
+            result mustBe FREAllYearsAllAmountsDifferent
         }
       }
 
@@ -188,16 +188,10 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         result mustBe FREAllYearsAllAmountsSameAsClaimAmount
       }
 
-      "return FREAllYearsAllAmountsDifferentToClaimAmount when claimAmount is not the same as grossAmount" in {
+      "return FREAllYearsAllAmountsDifferent when claimAmount is not the same as grossAmount" in {
         val result = taiService.freResponseLogic(Seq(FlatRateExpense(100)), claimAmount = 200)
 
-        result mustBe FREAllYearsAllAmountsDifferentToClaimAmount
-      }
-
-      "return ComplexClaim when multiple grossAmounts are the same and different to claimAmount" in {
-        val result = taiService.freResponseLogic(Seq(FlatRateExpense(100), FlatRateExpense(200)), claimAmount = 200)
-
-        result mustBe ComplexClaim
+        result mustBe FREAllYearsAllAmountsDifferent
       }
     }
 

@@ -31,6 +31,10 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def alreadyClaimingFREDifferentAmounts: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) map {
+    x => AnswerRow("alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel", s"alreadyClaimingFREDifferentAmounts.$x", true, AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode).url)
+  }
+
   def alreadyClaimingFRE: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFRESameAmountPage) map {
     x => AnswerRow("alreadyClaimingFRE.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode).url)
@@ -39,6 +43,15 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def sameEmployerContributionAllYears: Option[AnswerRow] = userAnswers.get(SameEmployerContributionAllYearsPage) map {
     x => AnswerRow("sameEmployerContributionAllYears.checkYourAnswersLabel", if(x) "site.yes" else "site.no", true,
       SameEmployerContributionAllYearsController.onPageLoad(CheckMode).url)
+  }
+
+  def changeWhichTaxYears: Option[AnswerRow] = userAnswers.get(ChangeWhichTaxYearsPage) map {
+    x => AnswerRow(
+        "changeWhichTaxYears.checkYourAnswersLabel",
+        x.map(value => messages(s"changeWhichTaxYears.$value")).mkString(", <br>"),
+        true,
+        ChangeWhichTaxYearsController.onPageLoad(CheckMode).url
+    )
   }
 
   def industryAnswerRow(industry: String): Option[AnswerRow] = {

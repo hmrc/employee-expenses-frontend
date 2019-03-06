@@ -109,7 +109,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   "taiFREUpdate" must {
     "return a 200 on success" in {
       server.stubFor(
-        post(urlEqualTo(s"/tai/$fakeNino/tax-account/$taxYear/expenses/flat-rate-expenses"))
+        post(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
           .willReturn(
             aResponse()
               .withStatus(OK)
