@@ -28,7 +28,7 @@ object AlreadyClaimingFREDifferentAmounts extends Enumerable.Implicits {
   case object Remove extends WithName("remove") with AlreadyClaimingFREDifferentAmounts
 
   val values: Seq[AlreadyClaimingFREDifferentAmounts] = Seq(
-    Change, NoChange, Remove
+    NoChange, Change, Remove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {

@@ -15,39 +15,35 @@
  *@
 
 @import controllers.authenticated.routes._
-@import models.{Mode, AlreadyClaimingFREDifferentAmounts}
+@import models.Mode
+@import viewmodels.RadioCheckboxOption
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, claimAmount: Int, freAmounts: Seq[FlatRateExpenseAmounts])(implicit request: Request[_], messages: Messages)
+@(form: Form[Seq[TaxYearSelection]], mode: Mode, yearsAndAmounts: Seq[(RadioCheckboxOption, Int)])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)} ${messages(s"alreadyClaimingFREDifferentAmounts.title")}"
+    title = s"${errorPrefix(form)} ${messages("changeWhichTaxYears.title")}"
     ) {
-    @formHelper(action = AlreadyClaimingFREDifferentAmountsController.onSubmit(mode), 'autoComplete -> "off") {
+
+    @formHelper(action = ChangeWhichTaxYearsController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
 
         @components.error_summary(form.errors)
 
-        @components.heading(s"alreadyClaimingFREDifferentAmounts.heading")
+        @components.heading("changeWhichTaxYears.heading")
 
-        <p>@{messages(s"alreadyClaimingFREDifferentAmounts.bodyText1", claimAmount)}</p>
-
-        @components.numeric_table(
-            freAmounts,
-            messages("alreadyClaimingFREDifferentAmounts.tableTaxYearHeading"),
-            messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading")
-        )
-
-        @components.input_radio(
+        @components.input_checkbox_table(
             field = form("value"),
-            legend = messages(s"alreadyClaimingFREDifferentAmounts.heading"),
+            legend = messages("changeWhichTaxYears.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = AlreadyClaimingFREDifferentAmounts.options
+            inputs = yearsAndAmounts,
+            columnHeading1 = messages("changeWhichTaxYears.columnHeading1"),
+            columnHeading2 = messages("changeWhichTaxYears.columnHeading2")
         )
 
         @components.submit_button()

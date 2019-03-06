@@ -63,7 +63,6 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
     "display correct body text" in {
       val doc = asDocument(applyView(form))
       assertContainsText(doc, messages("alreadyClaimingFREDifferentAmounts.bodyText1", minimumUserAnswers.get(ClaimAmountAndAnyDeductions).get))
-      assertContainsText(doc, messages("alreadyClaimingFREDifferentAmounts.bodyText2"))
     }
 
     "contains correct headings for table" in {

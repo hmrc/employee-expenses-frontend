@@ -27,7 +27,6 @@ import navigation.Navigator
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.{JsObject, Json}
 import play.api.mvc._
 import service.SubmissionService
 import uk.gov.hmrc.http.HeaderCarrier

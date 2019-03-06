@@ -25,7 +25,7 @@ import models.FlatRateExpenseOptions._
 import models.{Enumerable, FlatRateExpenseAmounts, Mode, TaiTaxYear, TaxYearSelection}
 import navigation.Navigator
 import pages.authenticated.TaxYearSelectionPage
-import pages.{ClaimAmount, FREAmounts, FREResponse}
+import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Writes
@@ -71,7 +71,7 @@ class TaxYearSelectionController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
-          (request.userAnswers.get(ClaimAmount), request.nino) match {
+          (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.nino) match {
             case (Some(claimAmount), Some(nino)) =>
                   for {
                     ua  <- Future.fromTry(request.userAnswers.set(TaxYearSelectionPage, value))
