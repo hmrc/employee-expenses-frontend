@@ -61,7 +61,7 @@ class GenericNavigator @Inject()() extends Navigator {
     case ThirdIndustryOptionsPage => thirdIndustryOptions(CheckMode)
     case FourthIndustryOptionsPage => fourthIndustryOptions(CheckMode)
     case EmployerContributionPage => employerContribution(CheckMode)
-    case ExpensesEmployerPaidPage => expensesEmployerPaid(NormalMode)
+    case ExpensesEmployerPaidPage => expensesEmployerPaid(CheckMode)
     case SameEmployerContributionAllYearsPage => sameEmployerContributionAllYears(CheckMode)
     case _ =>                   _ => CheckYourAnswersController.onPageLoad()
   }
@@ -121,7 +121,7 @@ class GenericNavigator @Inject()() extends Navigator {
   private def employerContribution(mode: Mode)(userAnswers: UserAnswers): Call =
    userAnswers.get(EmployerContributionPage) match {
       case Some(EmployerContribution.All)  => CannotClaimController.onPageLoad()
-      case Some(EmployerContribution.NoContribution) => ClaimAmountController.onPageLoad()
+      case Some(EmployerContribution.NoContribution) => ClaimAmountController.onPageLoad(mode)
       case Some(EmployerContribution.SomeContribution) => ExpensesEmployerPaidController.onPageLoad(mode)
       case _                               => SessionExpiredController.onPageLoad()
     }
@@ -137,7 +137,7 @@ class GenericNavigator @Inject()() extends Navigator {
   private def sameEmployerContributionAllYears(mode: Mode)(userAnswers: UserAnswers): Call =
   userAnswers.get(SameEmployerContributionAllYearsPage) match {
     case Some(true) =>
-      ClaimAmountController.onPageLoad()
+      ClaimAmountController.onPageLoad(mode)
     case Some(false) =>
       PhoneUsController.onPageLoad()
     case _ =>
