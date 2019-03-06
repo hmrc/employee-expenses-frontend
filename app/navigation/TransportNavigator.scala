@@ -37,7 +37,7 @@ class TransportNavigator @Inject()() extends Navigator {
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.CheckYourAnswersController.onPageLoad()
   }
 
   private def typeOfTransportOptions(mode: Mode)(userAnswers: UserAnswers): Call = {

@@ -16,12 +16,27 @@
 
 package pages
 
-import models.FirstIndustryOptions
-import play.api.libs.json.JsPath
+import java.time.LocalDateTime
+
+import models.{FirstIndustryOptions, UserAnswers}
+import play.api.libs.json._
+
+import scala.util.Try
 
 case object FirstIndustryOptionsPage extends QuestionPage[FirstIndustryOptions] {
 
-  override def path:JsPath = JsPath \ toString
-  override def toString:String = "firstIndustryOptions"
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "firstIndustryOptions"
+
+  override def cleanup(value: Option[FirstIndustryOptions], userAnswers: UserAnswers): Try[UserAnswers] = {
+
+    Try(UserAnswers(
+      id = userAnswers.id,
+      data = userAnswers.data - "industry",
+      lastUpdated = LocalDateTime.now
+    ))
+
+  }
 
 }
