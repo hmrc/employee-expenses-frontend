@@ -19,9 +19,10 @@ package controllers.authenticated
 import controllers.actions._
 import forms.authenticated.AlreadyClaimingFREDifferentAmountsFormProvider
 import javax.inject.{Inject, Named}
+import models.AlreadyClaimingFREDifferentAmounts.{Change, Remove}
 import models.{Enumerable, Mode}
 import navigation.Navigator
-import pages.authenticated.AlreadyClaimingFREDifferentAmountsPage
+import pages.authenticated.{AlreadyClaimingFREDifferentAmountsPage, ChangeWhichTaxYearsPage, RemoveFRECodePage}
 import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -77,7 +78,6 @@ class AlreadyClaimingFREDifferentAmountsController @Inject()(
               } yield Redirect(navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, mode)(updatedAnswers))
             }
           )
-
         case _ =>
           Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }
