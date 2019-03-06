@@ -78,10 +78,8 @@ class TaiService @Inject()(taiConnector: TaiConnector,
 
     if (flatRateExpenses.forall(_.grossAmount == claimAmount)) {
       FREAllYearsAllAmountsSameAsClaimAmount
-    } else if (flatRateExpenses.forall(_.grossAmount != claimAmount)) {
-      FREAllYearsAllAmountsDifferentToClaimAmount
     } else {
-      ComplexClaim
+      FREAllYearsAllAmountsDifferent
     }
   }
 }
