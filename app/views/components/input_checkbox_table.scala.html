@@ -79,7 +79,7 @@
                     }
                 ) { answers =>
                     <li>
-                        <div class="cya-answer">
+                        <div id="tax-year-@{value}" class="cya-answer">
                             <div class="multiple-choice">
                                 <input
                                 id="@field(s"[$index]").id"
@@ -97,7 +97,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="cya-change align--middle">
+                        <div id="fre-amount-@{value}" class="cya-change align--middle">
                             £@inputs(index)._2
                         </div>
                     </li>

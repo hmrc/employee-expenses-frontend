@@ -18,13 +18,14 @@ package controllers.authenticated
 
 import base.SpecBase
 import forms.authenticated.ChangeWhichTaxYearsFormProvider
-import models.{NormalMode, TaxYearSelection, UserAnswers}
+import models.{NormalMode, TaxYearSelection}
 import navigation.{FakeNavigator, Navigator}
-import pages.authenticated.{ChangeWhichTaxYearsPage, TaxYearSelectionPage}
+import pages.authenticated.ChangeWhichTaxYearsPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewmodels.RadioCheckboxOption
 import views.html.authenticated.ChangeWhichTaxYearsView
 
 class ChangeWhichTaxYearsControllerSpec extends SpecBase {
@@ -35,14 +36,12 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase {
 
   val formProvider = new ChangeWhichTaxYearsFormProvider()
   val form = formProvider()
-  val taxYears = TaxYearSelection.options
+  val taxYearsAndAmounts: Seq[(RadioCheckboxOption, Int)] = Seq((TaxYearSelection.options.head, 100))
 
   "ChangeWhichTaxYears Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val userAnswers = UserAnswers(userAnswersId).set(TaxYearSelectionPage, TaxYearSelection.values).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
 
       val request = FakeRequest(GET, changeWhichTaxYearsRoute)
 
@@ -53,17 +52,15 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, taxYears)(fakeRequest, messages).toString
+        view(form, NormalMode, taxYearsAndAmounts)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
+      val userAnswers = minimumUserAnswers.set(ChangeWhichTaxYearsPage, TaxYearSelection.values).success.value
 
-      val userAnswers = UserAnswers(userAnswersId).set(TaxYearSelectionPage, TaxYearSelection.values).success.value
-      val finalUserAnswers = userAnswers.set(ChangeWhichTaxYearsPage, TaxYearSelection.values).success.value
-
-      val application = applicationBuilder(userAnswers = Some(finalUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, changeWhichTaxYearsRoute)
 
@@ -74,16 +71,14 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(TaxYearSelection.values), NormalMode, taxYears)(fakeRequest, messages).toString
+        view(form.fill(TaxYearSelection.values), NormalMode, taxYearsAndAmounts)(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val userAnswers = UserAnswers(userAnswersId).set(TaxYearSelectionPage, TaxYearSelection.values).success.value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(minimumUserAnswers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -101,9 +96,7 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase {
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = UserAnswers(userAnswersId).set(TaxYearSelectionPage, TaxYearSelection.values).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
 
       val request =
         FakeRequest(POST, changeWhichTaxYearsRoute)
@@ -118,7 +111,7 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, taxYears)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, taxYearsAndAmounts)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -140,37 +133,6 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase {
     "redirect to Session Expired for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
-
-      val request =
-        FakeRequest(POST, changeWhichTaxYearsRoute)
-          .withFormUrlEncodedBody(("value", TaxYearSelection.values.head.toString))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to Session Expired for a GET if no tax year selection is found" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val request = FakeRequest(GET, changeWhichTaxYearsRoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to Session Expired for a POST if no tax year selection is found" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, changeWhichTaxYearsRoute)
