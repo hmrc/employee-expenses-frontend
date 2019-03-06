@@ -16,7 +16,6 @@
 
 package pages
 
-import base.SpecBase
 import generators.Generators
 import models.{EmployerContribution, UserAnswers}
 import pages.behaviours.PageBehaviours
@@ -24,6 +23,10 @@ import pages.behaviours.PageBehaviours
 import scala.util.Try
 
 class EmployerContributionPageSpec extends PageBehaviours with Generators {
+
+  private val userAnswers: Try[UserAnswers] = emptyUserAnswers
+    .set(ExpensesEmployerPaidPage, 100)
+    .flatMap(_.set(SameEmployerContributionAllYearsPage, true))
 
   "EmployerContributionPage" must {
 
@@ -33,25 +36,27 @@ class EmployerContributionPageSpec extends PageBehaviours with Generators {
 
     beRemovable[EmployerContribution](EmployerContributionPage)
 
-    "remove ExpensesPaid amount when EmployerContribution is None" in {
-      val userAnswers: Try[UserAnswers] = emptyUserAnswers.set(ExpensesEmployerPaidPage, 100)
-      val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage, EmployerContribution.NoContribution).get
+    "remove ExpensesPaid and SameEmployerContributionAllYears when EmployerContribution is None" in {
+
+      val updatedUserAnswers = userAnswers.flatMap(_.set(EmployerContributionPage, EmployerContribution.NoContribution)).get
 
       updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe None
+      updatedUserAnswers.get(SameEmployerContributionAllYearsPage) mustBe None
     }
 
     "remove ExpensesPaid amount when EmployerContribution is All" in {
-      val userAnswers: Try[UserAnswers] = emptyUserAnswers.set(ExpensesEmployerPaidPage, 180)
       val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage, EmployerContribution.All).get
 
       updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe None
+      updatedUserAnswers.get(SameEmployerContributionAllYearsPage) mustBe None
     }
 
     "keep ExpensesPaid amount when EmployerContribution is Some" in {
-      val userAnswers: Try[UserAnswers] = emptyUserAnswers.set(ExpensesEmployerPaidPage, 100)
       val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage, EmployerContribution.SomeContribution).get
 
       updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe Some(100)
+      updatedUserAnswers.get(SameEmployerContributionAllYearsPage) mustBe Some(true)
+
     }
   }
 }
