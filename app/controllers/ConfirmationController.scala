@@ -16,49 +16,67 @@
 
 package controllers
 
+import akka.actor.Status.Success
 import config.FrontendAppConfig
+import connectors.TaiConnector
 import controllers.actions._
 import javax.inject.Inject
-import models.TaxYearSelection
-import pages.ClaimAmount
+import models.{TaxCodeRecord, TaxYearSelection}
+import pages.{ClaimAmount, ClaimAmountAndAnyDeductions}
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import service.ClaimAmountService
+import service.{ClaimAmountService, TaiService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.ConfirmationView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmationController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       identify: IdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       sessionRepository: SessionRepository,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: ConfirmationView,
-                                       claimAmountService: ClaimAmountService,
-                                       appConfig: FrontendAppConfig
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                        override val messagesApi: MessagesApi,
+                                        identify: IdentifierAction,
+                                        getData: DataRetrievalAction,
+                                        requireData: DataRequiredAction,
+                                        sessionRepository: SessionRepository,
+                                        val controllerComponents: MessagesControllerComponents,
+                                        view: ConfirmationView,
+                                        claimAmountService: ClaimAmountService,
+                                        appConfig: FrontendAppConfig,
+                                        taiConnector: TaiConnector
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-
-      val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmount)
+      val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmountAndAnyDeductions)
       val taxYearSelection: Option[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage)
-      val removeFre: Option[TaxYearSelection] = request.userAnswers.get(RemoveFRECodePage)
       val updateEmployerInfo: Option[Boolean] = request.userAnswers.get(YourEmployerPage)
       val updateAddressInfo: Option[Boolean] = request.userAnswers.get(YourAddressPage)
+      val removeFreOption: Option[TaxYearSelection] = request.userAnswers.get(RemoveFRECodePage)
+      val nino = request.nino
 
-      (taxYearSelection, removeFre, claimAmount) match {
-        case (Some(taxYears), removeFreOption, Some(fullClaimAmount)) =>
-          val basicRate = claimAmountService.calculateTax(appConfig.taxPercentageBand1, fullClaimAmount)
-          val higherRate = claimAmountService.calculateTax(appConfig.taxPercentageBand2, fullClaimAmount)
+      (claimAmount, taxYearSelection, nino) match {
+        case (Some(fullClaimAmount), Some(validTaxYearSelection), Some(validNino)) =>
 
-          Ok(view(taxYears, removeFreOption, updateEmployerInfo, updateAddressInfo, fullClaimAmount, basicRate, higherRate))
-        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+          taiConnector.taiTaxCodeRecords(validNino).map {
+            result =>
+              if (result.head.taxCode(0).toString.equalsIgnoreCase("s")) {
+                val scottishBasicRate = appConfig.taxPercentageScotlandBand1
+                val scottishHigherRate = appConfig.taxPercentageScotlandBand2
+
+                Ok(view(validTaxYearSelection, removeFreOption, updateEmployerInfo, updateAddressInfo, fullClaimAmount, scottishBasicRate, scottishHigherRate)).withNewSession
+              } else {
+                val basicRate = appConfig.taxPercentageBand1
+                val higherRate = appConfig.taxPercentageBand2
+
+                Ok(view(validTaxYearSelection, removeFreOption, updateEmployerInfo, updateAddressInfo, fullClaimAmount, basicRate, higherRate)).withNewSession
+              }
+          }.recoverWith {
+            case _ =>
+              Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+          }
+        case _ =>
+          Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
       }
   }
 }

@@ -634,8 +634,8 @@ confirmation.heading = Claim completed
 confirmation.heading.stoppedClaim = Your claim has been stopped
 confirmation.personalAllowanceIncrease = Your tax-free Personal Allowance has been increased by £{0} per year based on your industry and occupation
 confirmation.actualAmount = The actual amount you will get depends on the rate of tax you pay.
-confirmation.basicRate = You will get £{0} per year if you are a basic rate (20%) taxpayer.
-confirmation.higherRate = You will get £{0} per year if you are a higher rate (40%) taxpayer.
+confirmation.basicRate = You will get £{0} per year if you are a basic rate ({1}%) taxpayer.
+confirmation.higherRate = You will get £{0} per year if you are a higher rate ({1}%) taxpayer.
 confirmation.whatHappensNext = What happens next
 confirmation.currentTaxYear = Current tax year
 confirmation.taxCodeChanged = We have already increased your tax-free Personal Allowance by changing your tax code. You will get a letter to confirm this.
@@ -649,5 +649,3 @@ confirmation.updateEmployerInfoNow = Update your employer information now
 confirmation.updateAddressInfoNow = Update your address now
 confirmation.updateAddressInfo = Update your address
 confirmation.addressChange = You told us that your address has changed. If you do not update it you may not receive any letters from HMRC.
-
-
