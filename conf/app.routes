@@ -336,3 +336,8 @@ GET         /already-claiming-different-amounts                  controllers.aut
 POST        /already-claiming-different-amounts                  controllers.authenticated.AlreadyClaimingFREDifferentAmountsController.onSubmit(mode: Mode = NormalMode)
 GET         /change-already-claiming-different-amounts           controllers.authenticated.AlreadyClaimingFREDifferentAmountsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-already-claiming-different-amounts           controllers.authenticated.AlreadyClaimingFREDifferentAmountsController.onSubmit(mode: Mode = CheckMode)
+
+GET         /which-years-change-claim                            controllers.authenticated.ChangeWhichTaxYearsController.onPageLoad(mode: Mode = NormalMode)
+POST        /which-years-change-claim                            controllers.authenticated.ChangeWhichTaxYearsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-which-years-change-claim                     controllers.authenticated.ChangeWhichTaxYearsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-which-years-change-claim                     controllers.authenticated.ChangeWhichTaxYearsController.onSubmit(mode: Mode = CheckMode)
