@@ -97,7 +97,7 @@ class CheckYourAnswersController @Inject()(
                       (implicit hc: HeaderCarrier): Result = {
     if (result) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
-      Redirect(routes.CheckYourAnswersController.onPageLoad())
+      Redirect(routes.ConfirmationController.onPageLoad())
     } else {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, auditData)
       Redirect(routes.TechnicalDifficultiesController.onPageLoad())
