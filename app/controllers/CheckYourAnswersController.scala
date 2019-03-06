@@ -21,13 +21,13 @@ import config.NavConstant
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import javax.inject.Named
 import models.FlatRateExpenseOptions.FRENoYears
+import models.auditing.AuditData
 import models.auditing.AuditEventType._
-import models.requests.DataRequest
 import navigation.Navigator
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.JsObject
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc._
 import service.SubmissionService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -70,6 +70,9 @@ class CheckYourAnswersController @Inject()(
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
+      val dataToAudit: AuditData =
+        AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
+
       (
         request.userAnswers.get(FREResponse),
         request.userAnswers.get(TaxYearSelectionPage),
@@ -79,25 +82,25 @@ class CheckYourAnswersController @Inject()(
         case (Some(FRENoYears), Some(taxYears), Some(claimAmount), None) =>
           submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map(
             result =>
-              submissionResult(result, request.userAnswers.data)
+              auditAndRedirect(result, dataToAudit)
           )
         case (Some(_), Some(taxYears), Some(_), Some(removeYear)) =>
           submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, removeYear).map(
             result =>
-              submissionResult(result, request.userAnswers.data)
+              auditAndRedirect(result, dataToAudit)
           )
         case _ =>
           Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
       }
   }
 
-  def submissionResult(result: Boolean, data: JsObject)
+  def auditAndRedirect(result: Boolean, auditData: AuditData)
                       (implicit hc: HeaderCarrier): Result = {
     if (result) {
-      auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, data)
+      auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
       Redirect(routes.CheckYourAnswersController.onPageLoad())
     } else {
-      auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, data)
+      auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, auditData)
       Redirect(routes.TechnicalDifficultiesController.onPageLoad())
     }
   }
