@@ -18,9 +18,7 @@
     main_template: MainTemplate
 )
 
-@(
-        nextPageURL: String
-)(implicit request: Request[_], messages: Messages)
+@(nextPageURL: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("updateYourAddress.title")

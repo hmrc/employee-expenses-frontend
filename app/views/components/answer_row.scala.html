@@ -22,8 +22,8 @@
     <div class="cya-question">@Html(messages(row.label, row.labelArgs:_*))</div>
     <div class="cya-answer">
     @if(row.answerIsMessageKey){
-        @messages(row.answer)
-    } else{
+        @messages(row.answer).capitalize
+    } else {
         @Html(row.answer)
     }
     </div>

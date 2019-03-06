@@ -285,14 +285,14 @@ class GenericNavigatorSpec extends SpecBase {
           CannotClaimController.onPageLoad()
       }
 
-      "go to CannotClaimController from EmployerContributionPage when 'None' is selected" in {
+      "go to ClaimAmount from EmployerContributionPage when 'None' is selected" in {
         val answers = emptyUserAnswers.set(EmployerContributionPage, NoContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
-          ClaimAmountController.onPageLoad()
+          ClaimAmountController.onPageLoad(NormalMode)
       }
 
-      "go to CannotClaimController from EmployerContributionPage when 'Some' is selected" in {
+      "go to ExpensesEmployerPaidController from EmployerContributionPage when 'Some' is selected" in {
         val answers = emptyUserAnswers.set(EmployerContributionPage, SomeContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
@@ -332,7 +332,7 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(SameEmployerContributionAllYearsPage, true).success.value
 
         navigator.nextPage(SameEmployerContributionAllYearsPage, NormalMode)(answers) mustBe
-          ClaimAmountController.onPageLoad()
+          ClaimAmountController.onPageLoad(NormalMode)
       }
 
       "go to PhoneUsController from SameEmployerContributionAllYearsPage if false" in {
@@ -346,6 +346,10 @@ class GenericNavigatorSpec extends SpecBase {
         navigator.nextPage(SameEmployerContributionAllYearsPage, NormalMode)(emptyUserAnswers) mustBe
           SessionExpiredController.onPageLoad()
       }
+
+      "go to TaxYearSelectionController from ClaimAmountPage" in {
+        navigator.nextPage(ClaimAmount, NormalMode)(emptyUserAnswers) mustBe TaxYearSelectionController.onPageLoad(NormalMode)
+      }
     }
 
     "in Check mode" must {
@@ -354,6 +358,81 @@ class GenericNavigatorSpec extends SpecBase {
 
         case object UnknownPage extends Page
         navigator.nextPage(UnknownPage, CheckMode)(UserAnswers(userAnswersId)) mustBe CheckYourAnswersController.onPageLoad()
+      }
+
+      //EmployerContributionPage
+
+      "go to CannotClaimController from EmployerContributionPage when 'All' is selected" in {
+        val answers = emptyUserAnswers.set(EmployerContributionPage, All).success.value
+
+        navigator.nextPage(EmployerContributionPage, CheckMode)(answers) mustBe
+          CannotClaimController.onPageLoad()
+      }
+
+      "go to ClaimAmount from EmployerContributionPage when 'None' is selected" in {
+        val answers = emptyUserAnswers.set(EmployerContributionPage, NoContribution).success.value
+
+        navigator.nextPage(EmployerContributionPage, CheckMode)(answers) mustBe
+          ClaimAmountController.onPageLoad(CheckMode)
+      }
+
+      "go to ExpensesEmployerPaidController from EmployerContributionPage when 'Some' is selected" in {
+        val answers = emptyUserAnswers.set(EmployerContributionPage, SomeContribution).success.value
+
+        navigator.nextPage(EmployerContributionPage, CheckMode)(answers) mustBe
+          ExpensesEmployerPaidController.onPageLoad(CheckMode)
+      }
+
+      "go to SessionExpiredController from EmployerContributionPage when no data is available" in {
+        navigator.nextPage(EmployerContributionPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      //ExpensesEmployerPaidPage
+
+      "go to CannotClaimController from ExpensesEmployerPaidPage if ClaimAmount is <= ExpensesEmployerPaid" in {
+        val answers = emptyUserAnswers.set(ExpensesEmployerPaidPage, 100).success.value
+        val updatedAnswers = answers.set(ClaimAmount, 100).success.value
+
+        navigator.nextPage(ExpensesEmployerPaidPage, CheckMode)(updatedAnswers) mustBe
+          CannotClaimController.onPageLoad()
+      }
+
+      "go to SameEmployerContributionAllYearsController from ExpensesEmployerPaidPage if ClaimAmount is > ExpensesEmployerPaid" in {
+        val answers = emptyUserAnswers.set(ExpensesEmployerPaidPage, 50).success.value
+        val updatedAnswers = answers.set(ClaimAmount, 100).success.value
+
+        navigator.nextPage(ExpensesEmployerPaidPage, CheckMode)(updatedAnswers) mustBe
+          SameEmployerContributionAllYearsController.onPageLoad(CheckMode)
+      }
+
+      "go to SessionExpiredController from ExpensesEmployerPaidPage when no data is available" in {
+        navigator.nextPage(ExpensesEmployerPaidPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      //SameEmployerContributionAllYearsPage
+      "go to ClaimAmountController from SameEmployerContributionAllYearsPage if true" in {
+        val answers = emptyUserAnswers.set(SameEmployerContributionAllYearsPage, true).success.value
+
+        navigator.nextPage(SameEmployerContributionAllYearsPage, CheckMode)(answers) mustBe
+          ClaimAmountController.onPageLoad(CheckMode)
+      }
+
+      "go to PhoneUsController from SameEmployerContributionAllYearsPage if false" in {
+        val answers = emptyUserAnswers.set(SameEmployerContributionAllYearsPage, false).success.value
+
+        navigator.nextPage(SameEmployerContributionAllYearsPage, CheckMode)(answers) mustBe
+          PhoneUsController.onPageLoad()
+      }
+
+      "go to SessionExpiredController from SameEmployerContributionAllYearsPage when no data is available" in {
+        navigator.nextPage(SameEmployerContributionAllYearsPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      "go to TaxYearSelectionController from ClaimAmountPage" in {
+        navigator.nextPage(ClaimAmount, CheckMode)(emptyUserAnswers) mustBe CheckYourAnswersController.onPageLoad()
       }
     }
   }

@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import models.{EmployerContribution, UserAnswers}
+import models.{EmployerContribution, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.OptionValues
@@ -47,7 +47,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
       val sessionRepository = application.injector.instanceOf[SessionRepository]
-      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
+      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
 
@@ -65,7 +65,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
     "redirect to Session Expired for a GET" when {
       "no existing data is found" in {
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-        val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
@@ -79,7 +79,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         val userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> claimAmount))
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
         val sessionRepository = application.injector.instanceOf[SessionRepository]
-        val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
@@ -100,7 +100,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
       val sessionRepository = application.injector.instanceOf[SessionRepository]
-      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
+      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
 
@@ -128,7 +128,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
       val sessionRepository = application.injector.instanceOf[SessionRepository]
-      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad().url)
+      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
 

@@ -19,7 +19,8 @@ package navigation
 import base.SpecBase
 import controllers.authenticated.routes._
 import controllers.routes._
-import models.{CheckMode, FlatRateExpenseOptions, NormalMode}
+import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove}
+import models.{CheckMode, FlatRateExpenseOptions, NormalMode, TaxYearSelection}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.FREResponse
@@ -34,12 +35,12 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
 
       "from TaxYearSelection" must {
 
-        "go to YourAddress when answered and freResponse returns FRENoYears" in {
+        "go to YourEmployer when answered and freResponse returns FRENoYears" in {
 
           val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FRENoYears).success.value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
-            YourAddressController.onPageLoad(NormalMode)
+            YourEmployerController.onPageLoad(NormalMode)
         }
 
         "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
@@ -49,11 +50,11 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
             AlreadyClaimingFRESameAmountController.onPageLoad(NormalMode)
         }
 
-        "go to RemoveFRECodeController when answered and freResponse returns FREAllYearsAllAmountsDifferentToClaimAmount" in {
-          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FREAllYearsAllAmountsDifferentToClaimAmount).success.value
+        "go to AlreadyClaimingFREDifferentAmountsController when answered and freResponse returns FREAllYearsAllAmountsDifferent" in {
+          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent).success.value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
-            RemoveFRECodeController.onPageLoad(NormalMode)
+            AlreadyClaimingFREDifferentAmountsController.onPageLoad(NormalMode)
         }
 
         "go to PhoneUsController when answered and freResponse returns ComplexClaim" in {
@@ -67,7 +68,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.TechnicalDifficulties).success.value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
-            SessionExpiredController.onPageLoad()
+            TechnicalDifficultiesController.onPageLoad()
         }
 
       }
@@ -92,6 +93,68 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(emptyUserAnswers) mustBe
             SessionExpiredController.onPageLoad()
         }
+      }
+
+      "from AlreadyClaimingFREDifferentAmounts" must {
+
+        "go to NoCodeChange when answer is true" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, NoChange).success.value
+
+          navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, NormalMode)(ua) mustBe
+            NoCodeChangeController.onPageLoad()
+        }
+
+        "go to ChangeWhichTaxYears when answer is false" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
+
+          navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, NormalMode)(ua) mustBe
+            ChangeWhichTaxYearsController.onPageLoad(NormalMode)
+        }
+
+        "go to RemoveFRECode when answer is false" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Remove).success.value
+
+          navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, NormalMode)(ua) mustBe
+            RemoveFRECodeController.onPageLoad(NormalMode)
+        }
+
+        "go to SessionExpired if no answer" in {
+          navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, NormalMode)(emptyUserAnswers) mustBe
+            SessionExpiredController.onPageLoad()
+        }
+      }
+
+      "go to YourEmployer from RemoveFRE page" in {
+        val ua = emptyUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
+
+        navigator.nextPage(RemoveFRECodePage, NormalMode)(ua) mustBe
+          CheckYourAnswersController.onPageLoad()
+      }
+
+      "go to YourEmployer from ChangeWhichTaxYearsPage" in {
+        val ua = emptyUserAnswers.set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
+
+        navigator.nextPage(ChangeWhichTaxYearsPage, NormalMode)(ua) mustBe
+          YourEmployerController.onPageLoad(NormalMode)
+      }
+
+      "go to YourAddress from YourEmployer when answered true" in {
+        val ua = emptyUserAnswers.set(YourEmployerPage, true).success.value
+
+        navigator.nextPage(YourEmployerPage, NormalMode)(ua) mustBe
+          YourAddressController.onPageLoad(NormalMode)
+      }
+
+      "go to UpdateEmployerInformation from YourEmployer when answered false" in {
+        val ua = emptyUserAnswers.set(YourEmployerPage, false).success.value
+
+        navigator.nextPage(YourEmployerPage, NormalMode)(ua) mustBe
+          UpdateEmployerInformationController.onPageLoad()
+      }
+
+      "go to YourAddress from UpdateEmployerInformation" in {
+        navigator.nextPage(UpdateYourEmployerInformationPage, NormalMode)(emptyUserAnswers) mustBe
+          YourAddressController.onPageLoad(NormalMode)
       }
 
       "go to CheckYourAnswers from YourAddress when answered true" in {

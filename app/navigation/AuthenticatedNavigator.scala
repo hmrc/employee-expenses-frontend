@@ -19,6 +19,7 @@ package navigation
 import controllers.authenticated.routes._
 import controllers.routes._
 import javax.inject.Inject
+import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove}
 import models.{CheckMode, FlatRateExpenseOptions, Mode, NormalMode, UserAnswers}
 import pages.authenticated._
 import pages.{FREResponse, Page}
@@ -26,29 +27,34 @@ import play.api.mvc.Call
 
 class AuthenticatedNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage             => taxYearSelection(NormalMode)
+    case TaxYearSelectionPage => taxYearSelection(NormalMode)
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(NormalMode)
-    case TaxYearSelectionPage             => taxYearSelection(NormalMode)
-    case YourAddressPage                  => yourAddress(NormalMode)
+    case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(NormalMode)
+    case YourAddressPage => yourAddress(NormalMode)
     case UpdateYourAddressPage => _ => CheckYourAnswersController.onPageLoad()
+    case YourEmployerPage => yourEmployer(NormalMode)
+    case UpdateYourEmployerInformationPage => _ => YourAddressController.onPageLoad(NormalMode)
+    case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad()
+    case ChangeWhichTaxYearsPage => _ => YourEmployerController.onPageLoad(NormalMode)
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case TaxYearSelectionPage => taxYearSelection(CheckMode)
-    case YourAddressPage => yourAddress(NormalMode)
+    case YourAddressPage => yourAddress(CheckMode)
+    case YourEmployerPage => yourEmployer(CheckMode)
   }
 
   def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
     case Some(FlatRateExpenseOptions.FRENoYears) =>
-      YourAddressController.onPageLoad(mode)
+      YourEmployerController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount) =>
       AlreadyClaimingFRESameAmountController.onPageLoad(mode)
-    case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferentToClaimAmount) =>
-      RemoveFRECodeController.onPageLoad(mode)
+    case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) =>
+      AlreadyClaimingFREDifferentAmountsController.onPageLoad(mode)
     case Some(FlatRateExpenseOptions.ComplexClaim) =>
       PhoneUsController.onPageLoad()
     case Some(FlatRateExpenseOptions.TechnicalDifficulties) =>
-      SessionExpiredController.onPageLoad()
+      controllers.routes.TechnicalDifficultiesController.onPageLoad()
     case _ =>
       SessionExpiredController.onPageLoad()
   }
@@ -63,6 +69,18 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
         SessionExpiredController.onPageLoad()
     }
 
+  def alreadyClaimingFREDifferentAmount(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) match {
+      case Some(NoChange) =>
+        NoCodeChangeController.onPageLoad()
+      case Some(Change) =>
+        ChangeWhichTaxYearsController.onPageLoad(NormalMode)
+      case Some(Remove) =>
+        RemoveFRECodeController.onPageLoad(NormalMode)
+      case _ =>
+        SessionExpiredController.onPageLoad()
+    }
+
   def yourAddress(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(YourAddressPage) match {
     case Some(true) =>
       CheckYourAnswersController.onPageLoad()
@@ -72,4 +90,12 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       SessionExpiredController.onPageLoad()
   }
 
+  def yourEmployer(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(YourEmployerPage) match {
+    case Some(true) =>
+      YourAddressController.onPageLoad(mode)
+    case Some(false) =>
+      UpdateEmployerInformationController.onPageLoad()
+    case _ =>
+      SessionExpiredController.onPageLoad()
+  }
 }

@@ -19,15 +19,13 @@ package service
 import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
 import models.FlatRateExpenseOptions._
-import models.{FlatRateExpense, FlatRateExpenseAmounts, FlatRateExpenseOptions, IabdUpdateData, TaiTaxYear, TaxCodeRecord, TaxYearSelection}
-import org.joda.time.LocalDate
+import models.{FlatRateExpense, FlatRateExpenseAmounts, IabdUpdateData, TaiTaxYear, TaxYearSelection}
+import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status._
-import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import org.mockito.Matchers._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,37 +38,28 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
   private val taxYear = TaiTaxYear()
   private val etag = 1
-  private val taxCodeRecords = Seq(TaxCodeRecord(
-    taxCode = "830L",
-    employerName = "Employer Name",
-    startDate = LocalDate.parse("2018-06-27"),
-    endDate = LocalDate.parse("2019-04-05"),
-    payrollNumber = Some("1"),
-    pensionIndicator = true,
-    primary = true
-  ))
 
   private val iabdUpdateData = IabdUpdateData(sequenceNumber = 1, grossAmount = 100)
 
   "TaiService" must {
-    "taiTaxCodeRecords" when {
-      "must return a sequence of tax code records" in {
-        when(mockTaiConnector.taiTaxCodeRecords(fakeNino))
-          .thenReturn(Future.successful(taxCodeRecords))
+    "taiEmployments" when {
+      "must return a sequence of employment" in {
+        when(mockTaiConnector.taiEmployments(fakeNino, TaiTaxYear(TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear))))
+          .thenReturn(Future.successful(taiEmployment))
 
-        val result = taiService.taxCodeRecords(fakeNino)
+        val result = taiService.employments(fakeNino, TaxYearSelection.CurrentYear)
 
         whenReady(result) {
           result =>
-            result mustBe taxCodeRecords
+            result mustBe taiEmployment
         }
       }
 
       "must exception on future failed" in {
-        when(mockTaiConnector.taiTaxCodeRecords(fakeNino))
+        when(mockTaiConnector.taiEmployments(fakeNino, TaiTaxYear(TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear))))
           .thenReturn(Future.failed(new RuntimeException))
 
-        val result = taiService.taxCodeRecords(fakeNino)
+        val result = taiService.employments(fakeNino, TaxYearSelection.CurrentYear)
 
         whenReady(result.failed) {
           result =>
@@ -163,7 +152,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         }
       }
 
-      "return FREAllYearsAllAmountsDifferentToClaimAmount when only 200 is returned and the grossAmount is not the same as claimAmount for all tax years" in {
+      "return FREAllYearsAllAmountsDifferent when only 200 is returned and the grossAmount is not the same as claimAmount for all tax years" in {
         when(mockTaiConnector.getFlatRateExpense(fakeNino, TaiTaxYear()))
           .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
 
@@ -171,7 +160,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
         whenReady(result) {
           result =>
-            result mustBe FREAllYearsAllAmountsDifferentToClaimAmount
+            result mustBe FREAllYearsAllAmountsDifferent
         }
       }
 
@@ -199,16 +188,25 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         result mustBe FREAllYearsAllAmountsSameAsClaimAmount
       }
 
-      "return FREAllYearsAllAmountsDifferentToClaimAmount when claimAmount is not the same as grossAmount" in {
+      "return FREAllYearsAllAmountsDifferent when claimAmount is not the same as grossAmount" in {
         val result = taiService.freResponseLogic(Seq(FlatRateExpense(100)), claimAmount = 200)
 
-        result mustBe FREAllYearsAllAmountsDifferentToClaimAmount
+        result mustBe FREAllYearsAllAmountsDifferent
       }
+    }
 
-      "return ComplexClaim when multiple grossAmounts are the same and different to claimAmount" in {
-        val result = taiService.freResponseLogic(Seq(FlatRateExpense(100), FlatRateExpense(200)), claimAmount = 200)
+    "currentPrimaryEmployer" must {
 
-        result mustBe ComplexClaim
+      "return an employer when available" in {
+        when(mockTaiConnector.taiEmployments(fakeNino, TaiTaxYear(TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear))))
+          .thenReturn(Future.successful(taiEmployment))
+
+        val result = taiService.employments(fakeNino, TaxYearSelection.CurrentYear)
+
+        whenReady(result) {
+          result =>
+            result.head.name mustBe "HMRC LongBenton"
+        }
       }
     }
   }

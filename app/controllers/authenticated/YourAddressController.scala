@@ -19,6 +19,8 @@ package controllers.authenticated
 import config.NavConstant
 import connectors.CitizenDetailsConnector
 import controllers.actions._
+import controllers.authenticated.routes._
+import controllers.routes._
 import forms.authenticated.YourAddressFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
@@ -63,7 +65,7 @@ class YourAddressController @Inject()(
         if (address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)) {
           Ok(view(preparedForm, mode, address))
         } else {
-          Redirect(controllers.authenticated.routes.UpdateYourAddressController.onPageLoad())
+          Redirect(UpdateYourAddressController.onPageLoad())
         }
       }
   }
@@ -87,7 +89,7 @@ class YourAddressController @Inject()(
           )
       }.recoverWith {
         case _ =>
-          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
   }
 }

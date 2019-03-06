@@ -37,12 +37,25 @@ class SubmissionService @Inject()(taiService: TaiService) {
 
   }
 
-  def submitRemoveFREFromCode(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int, removeYear: TaxYearSelection)
+  def submitRemoveFREFromCode(nino: String, taxYears: Seq[TaxYearSelection], removeYear: TaxYearSelection)
                              (implicit hc: HeaderCarrier, ec: ExecutionContext) = {
 
     val removeTaxYears = taxYears.take(TaxYearSelection.values.indexOf(removeYear) + 1)
 
     val responses: Future[Seq[HttpResponse]] = Future.sequence(removeTaxYears.map {
+      taxYearSelection =>
+        val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
+        taiService.updateFRE(nino, taiTaxYear, IabdUpdateData(1, 0))
+    })
+
+    submissionResult(responses)
+
+  }
+
+  def submitChangeFREFromCode(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int, changeYears: Seq[TaxYearSelection])
+                             (implicit hc: HeaderCarrier, ec: ExecutionContext) = {
+
+    val responses: Future[Seq[HttpResponse]] = Future.sequence(changeYears.map {
       taxYearSelection =>
         val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
         taiService.updateFRE(nino, taiTaxYear, IabdUpdateData(1, claimAmount))

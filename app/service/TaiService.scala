@@ -19,7 +19,7 @@ package service
 import com.google.inject.Inject
 import connectors.{CitizenDetailsConnector, TaiConnector}
 import models.FlatRateExpenseOptions._
-import models.{FlatRateExpense, FlatRateExpenseAmounts, FlatRateExpenseOptions, IabdUpdateData, TaiTaxYear, TaxCodeRecord, TaxYearSelection}
+import models._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,9 +28,12 @@ class TaiService @Inject()(taiConnector: TaiConnector,
                            citizenDetailsConnector: CitizenDetailsConnector
                           ) {
 
-  def taxCodeRecords(nino: String)
-                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
-    taiConnector.taiTaxCodeRecords(nino)
+  def employments(nino: String, taxYearSelection: TaxYearSelection)
+                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Employment]] = {
+
+    val taxYear: TaiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
+
+    taiConnector.taiEmployments(nino, taxYear)
   }
 
   def updateFRE(nino: String, year: TaiTaxYear, expensesData: IabdUpdateData)
@@ -75,10 +78,8 @@ class TaiService @Inject()(taiConnector: TaiConnector,
 
     if (flatRateExpenses.forall(_.grossAmount == claimAmount)) {
       FREAllYearsAllAmountsSameAsClaimAmount
-    } else if (flatRateExpenses.forall(_.grossAmount != claimAmount)) {
-      FREAllYearsAllAmountsDifferentToClaimAmount
     } else {
-      ComplexClaim
+      FREAllYearsAllAmountsDifferent
     }
   }
 }

@@ -25,7 +25,7 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.ClaimAmount
+import pages.ClaimAmountAndAnyDeductions
 import pages.authenticated.TaxYearSelectionPage
 import play.api.data.Form
 import play.api.inject.bind
@@ -90,7 +90,7 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
     "redirect to the next page when valid data is submitted" in {
 
-      val answers = emptyUserAnswers.set(ClaimAmount, 100).success.value
+      val answers = emptyUserAnswers.set(ClaimAmountAndAnyDeductions, 100).success.value
 
       val application =
         applicationBuilder(Some(answers))
