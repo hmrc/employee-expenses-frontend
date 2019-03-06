@@ -34,7 +34,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case UpdateYourAddressPage => _ => CheckYourAnswersController.onPageLoad()
     case YourEmployerPage => yourEmployer(NormalMode)
     case UpdateYourEmployerInformationPage => _ => YourAddressController.onPageLoad(NormalMode)
-    case RemoveFRECodePage => _ => YourEmployerController.onPageLoad(NormalMode)
+    case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => YourEmployerController.onPageLoad(NormalMode)
   }
 
