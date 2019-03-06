@@ -128,7 +128,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
         val ua = emptyUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
 
         navigator.nextPage(RemoveFRECodePage, NormalMode)(ua) mustBe
-          YourEmployerController.onPageLoad(NormalMode)
+          CheckYourAnswersController.onPageLoad()
       }
 
       "go to YourEmployer from ChangeWhichTaxYearsPage" in {
