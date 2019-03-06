@@ -21,12 +21,17 @@ import config.NavConstant
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import javax.inject.Named
 import models.FlatRateExpenseOptions.FRENoYears
+import models.auditing.AuditEventType._
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.JsObject
 import play.api.mvc._
 import service.SubmissionService
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
@@ -43,7 +48,8 @@ class CheckYourAnswersController @Inject()(
                                             @Named(NavConstant.authenticated) navigator: Navigator,
                                             submissionService: SubmissionService,
                                             val controllerComponents: MessagesControllerComponents,
-                                            view: CheckYourAnswersView
+                                            view: CheckYourAnswersView,
+                                            auditConnector: AuditConnector
                                           ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
@@ -72,18 +78,27 @@ class CheckYourAnswersController @Inject()(
       ) match {
         case (Some(FRENoYears), Some(taxYears), Some(claimAmount), None) =>
           submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map(
-            submissionResult
+            result =>
+              submissionResult(result, request.userAnswers.data)
           )
-        case (Some(_), Some(taxYears), Some(claimAmount), Some(removeYear)) =>
-          submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, claimAmount, removeYear).map(
-            submissionResult
+        case (Some(_), Some(taxYears), Some(_), Some(removeYear)) =>
+          submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, removeYear).map(
+            result =>
+              submissionResult(result, request.userAnswers.data)
           )
-        case _ => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+        case _ =>
+          Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
       }
   }
 
-  def submissionResult(result: Boolean): Result = {
-    if (result) Redirect(routes.CheckYourAnswersController.onPageLoad()) else Redirect(routes.TechnicalDifficultiesController.onPageLoad())
+  def submissionResult(result: Boolean, data: JsObject)
+                      (implicit hc: HeaderCarrier): Result = {
+    if (result) {
+      auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, data)
+      Redirect(routes.CheckYourAnswersController.onPageLoad())
+    } else {
+      auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, data)
+      Redirect(routes.TechnicalDifficultiesController.onPageLoad())
+    }
   }
-
 }
