@@ -17,22 +17,29 @@
 package controllers
 
 import base.SpecBase
+import models.auditing._
+import org.mockito.ArgumentCaptor
+import org.mockito.Matchers.{eq => eqTo, _}
+import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
+import play.api.inject.bind
+import play.api.libs.json.JsObject
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.SubmissionService
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.CheckYourAnswersView
-import org.mockito.Mockito._
-import org.mockito.Matchers._
-import play.api.inject.bind
 
 import scala.concurrent.Future
 
-class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
+class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with BeforeAndAfterEach {
 
   private val mockSubmissionService = mock[SubmissionService]
+  private val mockAuditConnector = mock[AuditConnector]
   private val cyaHelper = new CheckYourAnswersHelper(minimumUserAnswers)
   private val minimumSections = Seq(AnswerSection(None, Seq(
     cyaHelper.industryType,
@@ -41,6 +48,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
     cyaHelper.taxYearSelection,
     cyaHelper.yourAddress
   ).flatten))
+
+  override def beforeEach(): Unit = reset(mockAuditConnector)
 
   "Check Your Answers Controller" when {
     "onPageLoad" must {
@@ -80,80 +89,148 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
 
     "onSubmit" must {
       "for submitFRENotInCode redirect to CYA when submission success" in {
-        when(mockSubmissionService.submitFRENotInCode(any(),any(),any())(any(),any()))
+        when(mockSubmissionService.submitFRENotInCode(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(true))
 
         val application = applicationBuilder(Some(minimumUserAnswers))
-          .overrides(bind[SubmissionService].toInstance(mockSubmissionService))
-          .build()
+          .overrides(
+            bind[SubmissionService].toInstance(mockSubmissionService),
+            bind[AuditConnector].toInstance(mockAuditConnector),
+            bind[AuditData].toInstance(AuditData(fakeNino, minimumUserAnswers.data))
+          ).build()
 
         val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+        whenReady(result) {
+          _ =>
 
-        redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+
+            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseSuccess"), captor.capture())(any(), any(), any())
+
+            val auditData = captor.getValue
+
+            auditData.nino mustEqual fakeNino
+            auditData.userAnswers mustEqual minimumUserAnswers.data
+            auditData.userAnswers mustBe a[JsObject]
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+        }
 
         application.stop()
 
       }
 
       "for submitRemoveFREFromCode redirect to CYA when submission success" in {
-        when(mockSubmissionService.submitRemoveFREFromCode(any(),any(),any())(any(),any()))
+        when(mockSubmissionService.submitRemoveFREFromCode(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(true))
 
         val application = applicationBuilder(Some(minimumUserAnswers))
-          .overrides(bind[SubmissionService].toInstance(mockSubmissionService))
-          .build()
+          .overrides(
+            bind[SubmissionService].toInstance(mockSubmissionService),
+            bind[AuditConnector].toInstance(mockAuditConnector),
+            bind[AuditData].toInstance(AuditData(fakeNino, minimumUserAnswers.data))
+          ).build()
 
         val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+        whenReady(result) {
+          _ =>
 
-        redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+
+            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseSuccess"), captor.capture())(any(), any(), any())
+
+            val auditData = captor.getValue
+
+            auditData.nino mustEqual fakeNino
+            auditData.userAnswers mustEqual minimumUserAnswers.data
+            auditData.userAnswers mustBe a[JsObject]
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+        }
 
         application.stop()
 
       }
 
       "for submitFRENotInCode redirect to tech difficulties when submission fail" in {
-        when(mockSubmissionService.submitFRENotInCode(any(),any(),any())(any(),any()))
+        when(mockSubmissionService.submitFRENotInCode(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(false))
 
         val application = applicationBuilder(Some(minimumUserAnswers))
-          .overrides(bind[SubmissionService].toInstance(mockSubmissionService))
-          .build()
+          .overrides(
+            bind[SubmissionService].toInstance(mockSubmissionService),
+            bind[AuditConnector].toInstance(mockAuditConnector),
+            bind[AuditData].toInstance(AuditData(fakeNino, minimumUserAnswers.data))
+          ).build()
 
         val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+        whenReady(result) {
+          _ =>
 
-        redirectLocation(result).value mustEqual routes.TechnicalDifficultiesController.onPageLoad().url
+            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+
+            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseFailure"), captor.capture())(any(), any(), any())
+
+            val auditData = captor.getValue
+
+            auditData.nino mustEqual fakeNino
+            auditData.userAnswers mustEqual minimumUserAnswers.data
+            auditData.userAnswers mustBe a[JsObject]
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual routes.TechnicalDifficultiesController.onPageLoad().url
+        }
 
         application.stop()
 
       }
 
       "for submitRemoveFREFromCode redirect to tech difficulties when submission fail" in {
-        when(mockSubmissionService.submitRemoveFREFromCode(any(),any(),any())(any(),any()))
+        when(mockSubmissionService.submitRemoveFREFromCode(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(false))
 
         val application = applicationBuilder(Some(minimumUserAnswers))
-          .overrides(bind[SubmissionService].toInstance(mockSubmissionService))
-          .build()
+          .overrides(
+            bind[SubmissionService].toInstance(mockSubmissionService),
+            bind[AuditConnector].toInstance(mockAuditConnector),
+            bind[AuditData].toInstance(AuditData(fakeNino, minimumUserAnswers.data))
+          ).build()
 
         val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+        whenReady(result) {
+          _ =>
 
-        redirectLocation(result).value mustEqual routes.TechnicalDifficultiesController.onPageLoad().url
+            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+
+            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseFailure"), captor.capture())(any(), any(), any())
+
+            val auditData = captor.getValue
+
+            auditData.nino mustEqual fakeNino
+            auditData.userAnswers mustEqual minimumUserAnswers.data
+            auditData.userAnswers mustBe a[JsObject]
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual routes.TechnicalDifficultiesController.onPageLoad().url
+        }
 
         application.stop()
 
