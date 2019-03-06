@@ -60,13 +60,13 @@ class ConfirmationController @Inject()(
 
           taiConnector.taiTaxCodeRecords(validNino).map {
             result =>
-              val basicRate: Int = if (result.head.taxCode(0).toString.equalsIgnoreCase("s")) {
+              val basicRate: Int = if (result.head.taxCode(0) equals 'S') {
                 appConfig.taxPercentageScotlandBand1
               } else {
                 appConfig.taxPercentageBand1
               }
 
-              val higherRate: Int = if (result.head.taxCode(0).toString.equalsIgnoreCase("s")) {
+              val higherRate: Int = if (result.head.taxCode(0) equals 'S') {
                 appConfig.taxPercentageScotlandBand2
               } else {
                 appConfig.taxPercentageBand2

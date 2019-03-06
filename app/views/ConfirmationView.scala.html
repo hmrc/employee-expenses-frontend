@@ -40,7 +40,7 @@
 
         <div class="govuk-box-highlight">
             <h1 class="heading-xlarge">
-                @messages("confirmation.heading.stoppedClaim")
+            @messages("confirmation.heading.stoppedClaim")
             </h1>
         </div>
 
@@ -51,7 +51,7 @@
 
         <div class="govuk-box-highlight">
             <h1 class="heading-xlarge">
-                @messages("confirmation.heading")
+            @messages("confirmation.heading")
             </h1>
         </div>
 
@@ -79,13 +79,10 @@
                 <h3>@messages("confirmation.previousTaxYears")</h3>
 
                 <p>@messages("confirmation.letterConfirmation")</p>
-            }
-
-            @if(taxYearSelections.size == 1) {
+            } else {
                 <p>@messages("confirmation.taxCodeChanged")</p>
                 <p>@messages("confirmation.continueToClaim")</p>
             }
-
         }
     }
 

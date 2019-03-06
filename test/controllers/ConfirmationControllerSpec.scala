@@ -30,6 +30,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import service.ClaimAmountService
 import views.html.ConfirmationView
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
@@ -37,9 +38,6 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   val mockTaiConnector: TaiConnector = mock[TaiConnector]
   val mockClaimAmountService: ClaimAmountService = mock[ClaimAmountService]
-
-  val scottishBasicRate: Int = frontendAppConfig.taxPercentageScotlandBand1
-  val scottishHigherRate: Int = frontendAppConfig.taxPercentageScotlandBand2
 
   "Confirmation Controller" must {
 
@@ -94,7 +92,7 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val claimAmountBasicRate = mockClaimAmountService.calculateTax(scottishBasicRate, claimAmount)
       val claimAmountHigherRate = mockClaimAmountService.calculateTax(scottishHigherRate, claimAmount)
 
-      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("s850L"))))
+      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("S850L"))))
 
       val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
 
@@ -155,21 +153,24 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     }
 
     "Remove session on page load" in {
+
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("s850L"))))
+      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
 
       val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
 
-      route(application, request).value
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(userAnswersId)) {
-        _.map(_ mustBe None)
+      whenReady(result) {
+        _ =>
+          val sessionRepository = application.injector.instanceOf[SessionRepository]
+          sessionRepository.get(userAnswersId).map(
+            _.map(_ mustBe emptyUserAnswers)
+          )
       }
 
       application.stop()
