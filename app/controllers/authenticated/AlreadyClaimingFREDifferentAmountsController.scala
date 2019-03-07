@@ -77,7 +77,6 @@ class AlreadyClaimingFREDifferentAmountsController @Inject()(
               } yield Redirect(navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, mode)(updatedAnswers))
             }
           )
-
         case _ =>
           Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       }

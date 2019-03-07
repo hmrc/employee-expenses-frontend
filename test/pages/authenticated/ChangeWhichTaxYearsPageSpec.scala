@@ -28,5 +28,14 @@ class ChangeWhichTaxYearsPageSpec extends PageBehaviours {
     beSettable[Seq[TaxYearSelection]](ChangeWhichTaxYearsPage)
 
     beRemovable[Seq[TaxYearSelection]](ChangeWhichTaxYearsPage)
+
+    "remove RemoveFRECode when ChangeWhichTaxYears is set" in {
+
+      val userAnswers = emptyUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
+
+      val result = userAnswers.set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
+
+      result.get(RemoveFRECodePage) mustNot be(defined)
+    }
   }
 }
