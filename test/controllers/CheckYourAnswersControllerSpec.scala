@@ -122,7 +122,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
             status(result) mustEqual SEE_OTHER
 
-            redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+            redirectLocation(result).value mustEqual routes.ConfirmationController.onPageLoad().url
         }
 
         application.stop()
@@ -204,7 +204,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
             status(result) mustEqual SEE_OTHER
 
-            redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+            redirectLocation(result).value mustEqual routes.ConfirmationController.onPageLoad().url
         }
 
         application.stop()
