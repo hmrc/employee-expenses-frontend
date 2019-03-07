@@ -22,51 +22,31 @@ import pages.foodCatering.CateringStaffNHSPage
 import controllers.routes._
 
 class FoodCateringNavigatorSpec extends SpecBase {
-
-  val navigator = new FoodCateringNavigator
+  private val modes = Seq(NormalMode, CheckMode)
+  private val navigator = new FoodCateringNavigator
 
   "FoodCateringNavigator" when {
-    "in Normal mode" must {
-      "go to EmployerContributionController from CateringStaffNHSController when answered 'yes' " in {
-        val userAnswers = emptyUserAnswers.set(CateringStaffNHSPage, true).success.value
+    for (mode <- modes) {
+      s"in $mode" must {
+        "go to EmployerContributionController from CateringStaffNHSController when answered 'yes' " in {
+          val userAnswers = emptyUserAnswers.set(CateringStaffNHSPage, true).success.value
 
-        navigator.nextPage(CateringStaffNHSPage, NormalMode)(userAnswers) mustBe
-          EmployerContributionController.onPageLoad(NormalMode)
-      }
+          navigator.nextPage(CateringStaffNHSPage, mode)(userAnswers) mustBe
+            EmployerContributionController.onPageLoad(mode)
+        }
 
-      "go to EmployerContributionController from CateringStaffNHSController when answered 'no' " in {
-        val userAnswers = emptyUserAnswers.set(CateringStaffNHSPage, false).success.value
+        "go to EmployerContributionController from CateringStaffNHSController when answered 'no' " in {
+          val userAnswers = emptyUserAnswers.set(CateringStaffNHSPage, false).success.value
 
-        navigator.nextPage(CateringStaffNHSPage, NormalMode)(userAnswers) mustBe
-          EmployerContributionController.onPageLoad(NormalMode)
-      }
+          navigator.nextPage(CateringStaffNHSPage, mode)(userAnswers) mustBe
+            EmployerContributionController.onPageLoad(mode)
+        }
 
-      "go to session expired page if no data" in {
-        navigator.nextPage(CateringStaffNHSPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
-      }
-    }
-
-    "in Check mode" must {
-      "go to EmployerContributionController from CateringStaffNHSController when answered 'yes' " in {
-        val userAnswers = emptyUserAnswers.set(CateringStaffNHSPage, true).success.value
-
-        navigator.nextPage(CateringStaffNHSPage, CheckMode)(userAnswers) mustBe
-          EmployerContributionController.onPageLoad(CheckMode)
-      }
-
-      "go to EmployerContributionController from CateringStaffNHSController when answered 'no' " in {
-        val userAnswers = emptyUserAnswers.set(CateringStaffNHSPage, false).success.value
-
-        navigator.nextPage(CateringStaffNHSPage, CheckMode)(userAnswers) mustBe
-          EmployerContributionController.onPageLoad(CheckMode)
-      }
-
-      "go to session expired page if no data" in {
-        navigator.nextPage(CateringStaffNHSPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+        "go to session expired page if no data" in {
+          navigator.nextPage(CateringStaffNHSPage, mode)(emptyUserAnswers) mustBe
+            SessionExpiredController.onPageLoad()
+        }
       }
     }
   }
-
 }

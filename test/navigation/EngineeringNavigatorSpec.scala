@@ -20,191 +20,187 @@ import base.SpecBase
 import models.AncillaryEngineeringWhichTrade._
 import models.TypeOfEngineering._
 import models._
-import org.scalatest.prop.PropertyChecks
-import pages._
 import pages.engineering._
 
-class EngineeringNavigatorSpec extends SpecBase with PropertyChecks {
+class EngineeringNavigatorSpec extends SpecBase {
+  private val modes = Seq(NormalMode, CheckMode)
+  private val navigator = new EngineeringNavigator
 
-  val navigator = new EngineeringNavigator
+  "EngineeringNavigator" when {
+    for (mode <- modes) {
+      s"in $mode" must {
 
-  "Engineering Navigator" when {
-    "in Normal mode" must {
+        "from TypeOfEngineering" must {
 
-      "from TypeOfEngineering" must {
+          "go to ConstructionalEngineeringList1 when ConstructionalEngineering is selected" in {
+            val answers = emptyUserAnswers.set(TypeOfEngineeringPage, ConstructionalEngineering).success.value
 
-        "go to ConstructionalEngineeringList1 when ConstructionalEngineering is selected" in {
-          val answers = emptyUserAnswers.set(TypeOfEngineeringPage, ConstructionalEngineering).success.value
+            navigator.nextPage(TypeOfEngineeringPage, mode)(answers) mustBe
+              controllers.engineering.routes.ConstructionalEngineeringList1Controller.onPageLoad(mode)
+          }
 
-          navigator.nextPage(TypeOfEngineeringPage, NormalMode)(answers) mustBe
-            controllers.engineering.routes.ConstructionalEngineeringList1Controller.onPageLoad(NormalMode)
+          "go to AncillaryEngineeringWhichTrade when AncillaryEngineering is selected " in {
+            val answers = emptyUserAnswers.set(TypeOfEngineeringPage, TradesRelatingToEngineering).success.value
+
+            navigator.nextPage(TypeOfEngineeringPage, mode)(answers) mustBe
+              controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(mode)
+          }
+
+          "go to FactoryEngineeringList1 when FactoryOrWorkshopEngineering is selected " in {
+            val answers = emptyUserAnswers.set(TypeOfEngineeringPage, FactoryOrWorkshopEngineering).success.value
+
+            navigator.nextPage(TypeOfEngineeringPage, mode)(answers) mustBe
+              controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(mode)
+          }
+
+          "go to EmployerContribution when NoneOfTheAbove is selected " in {
+            val answers = emptyUserAnswers.set(TypeOfEngineeringPage, TypeOfEngineering.NoneOfTheAbove).success.value
+
+            navigator.nextPage(TypeOfEngineeringPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
         }
 
-        "go to AncillaryEngineeringWhichTrade when AncillaryEngineering is selected " in {
-          val answers = emptyUserAnswers.set(TypeOfEngineeringPage, TradesRelatingToEngineering).success.value
+        //Constructional Engineering
 
-          navigator.nextPage(TypeOfEngineeringPage, NormalMode)(answers) mustBe
-            controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(NormalMode)
+        "from ConstructionalEngineeringList1" must {
+
+          "go to EmployerContribution when Yes is selected" in {
+            val answers = emptyUserAnswers.set(ConstructionalEngineeringList1Page, true).success.value
+
+            navigator.nextPage(ConstructionalEngineeringList1Page, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
+
+          "go to ConstructionalEngineeringList2 when No is selected" in {
+            val answers = emptyUserAnswers.set(ConstructionalEngineeringList1Page, false).success.value
+
+            navigator.nextPage(ConstructionalEngineeringList1Page, mode)(answers) mustBe
+              controllers.engineering.routes.ConstructionalEngineeringList2Controller.onPageLoad(mode)
+          }
         }
 
-        "go to FactoryEngineeringList1 when FactoryOrWorkshopEngineering is selected " in {
-          val answers = emptyUserAnswers.set(TypeOfEngineeringPage, FactoryOrWorkshopEngineering).success.value
+        "from ConstructionalEngineeringList2" must {
 
-          navigator.nextPage(TypeOfEngineeringPage, NormalMode)(answers) mustBe
-            controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(NormalMode)
+          "go to EmployerContribution when Yes is selected" in {
+            val answers = emptyUserAnswers.set(ConstructionalEngineeringList2Page, true).success.value
+
+            navigator.nextPage(ConstructionalEngineeringList2Page, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
+
+          "go to ConstructionalEngineeringList3 when No is selected" in {
+            val answers = emptyUserAnswers.set(ConstructionalEngineeringList2Page, false).success.value
+
+            navigator.nextPage(ConstructionalEngineeringList2Page, mode)(answers) mustBe
+              controllers.engineering.routes.ConstructionalEngineeringList3Controller.onPageLoad(mode)
+          }
         }
 
-        "go to EmployerContribution when NoneOfTheAbove is selected " in {
-          val answers = emptyUserAnswers.set(TypeOfEngineeringPage, TypeOfEngineering.NoneOfTheAbove).success.value
+        "from ConstructionalEngineeringList3" must {
 
-          navigator.nextPage(TypeOfEngineeringPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-      }
+          "go to EmployerContribution when Yes is selected" in {
+            val answers = emptyUserAnswers.set(ConstructionalEngineeringList3Page, true).success.value
 
-      //Constructional Engineering
+            navigator.nextPage(ConstructionalEngineeringList3Page, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
 
-      "from ConstructionalEngineeringList1" must {
+          "go to ConstructionalEngineeringApprentice when No is selected" in {
+            val answers = emptyUserAnswers.set(ConstructionalEngineeringList3Page, false).success.value
 
-        "go to EmployerContribution when Yes is selected" in {
-          val answers = emptyUserAnswers.set(ConstructionalEngineeringList1Page, true).success.value
+            navigator.nextPage(ConstructionalEngineeringList3Page, mode)(answers) mustBe
+              controllers.engineering.routes.ConstructionalEngineeringApprenticeController.onPageLoad(mode)
+          }
 
-          navigator.nextPage(ConstructionalEngineeringList1Page, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "go to ConstructionalEngineeringList2 when No is selected" in {
-          val answers = emptyUserAnswers.set(ConstructionalEngineeringList1Page, false).success.value
-
-          navigator.nextPage(ConstructionalEngineeringList1Page, NormalMode)(answers) mustBe
-            controllers.engineering.routes.ConstructionalEngineeringList2Controller.onPageLoad(NormalMode)
-        }
-      }
-
-      "from ConstructionalEngineeringList2" must {
-
-        "go to EmployerContribution when Yes is selected" in {
-          val answers = emptyUserAnswers.set(ConstructionalEngineeringList2Page, true).success.value
-
-          navigator.nextPage(ConstructionalEngineeringList2Page, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          "go to SessionExpired when no data is available" in {
+            navigator.nextPage(ConstructionalEngineeringList3Page, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
+          }
         }
 
-        "go to ConstructionalEngineeringList3 when No is selected" in {
-          val answers = emptyUserAnswers.set(ConstructionalEngineeringList2Page, false).success.value
+        "from ConstructionalEngineeringApprentice" must {
 
-          navigator.nextPage(ConstructionalEngineeringList2Page, NormalMode)(answers) mustBe
-            controllers.engineering.routes.ConstructionalEngineeringList3Controller.onPageLoad(NormalMode)
-        }
-      }
+          "go to EmployerContribution when Yes is selected" in {
+            val answers = emptyUserAnswers.set(ConstructionalEngineeringApprenticePage, true).success.value
 
-      "from ConstructionalEngineeringList3" must {
+            navigator.nextPage(ConstructionalEngineeringApprenticePage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
 
-        "go to EmployerContribution when Yes is selected" in {
-          val answers = emptyUserAnswers.set(ConstructionalEngineeringList3Page, true).success.value
+          "go to EmployerContribution when No is selected" in {
+            val answers = emptyUserAnswers.set(ConstructionalEngineeringApprenticePage, false).success.value
 
-          navigator.nextPage(ConstructionalEngineeringList3Page, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "go to ConstructionalEngineeringApprentice when No is selected" in {
-          val answers = emptyUserAnswers.set(ConstructionalEngineeringList3Page, false).success.value
-
-          navigator.nextPage(ConstructionalEngineeringList3Page, NormalMode)(answers) mustBe
-            controllers.engineering.routes.ConstructionalEngineeringApprenticeController.onPageLoad(NormalMode)
+            navigator.nextPage(ConstructionalEngineeringApprenticePage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
         }
 
-        "go to SessionExpired when no data is available" in {
-          navigator.nextPage(ConstructionalEngineeringList3Page, NormalMode)(emptyUserAnswers) mustBe
-            controllers.routes.SessionExpiredController.onPageLoad()
-        }
-      }
+        //Ancillary Engineering
 
-      "from ConstructionalEngineeringApprentice" must {
-
-        "go to EmployerContribution when Yes is selected" in {
-          val answers = emptyUserAnswers.set(ConstructionalEngineeringApprenticePage, true).success.value
-
-          navigator.nextPage(ConstructionalEngineeringApprenticePage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "go to EmployerContribution when No is selected" in {
-          val answers = emptyUserAnswers.set(ConstructionalEngineeringApprenticePage, false).success.value
-
-          navigator.nextPage(ConstructionalEngineeringApprenticePage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-      }
-
-      //Ancillary Engineering
-
-      "from AncillaryEngineeringWhichTrade" must {
+        "from AncillaryEngineeringWhichTrade" must {
           for (trade <- AncillaryEngineeringWhichTrade.values) {
             s"goto EmployerContribution when '$trade' selected" in {
               val answers = emptyUserAnswers.set(AncillaryEngineeringWhichTradePage, trade).success.value
-              navigator.nextPage(AncillaryEngineeringWhichTradePage, NormalMode)(answers) mustBe
-                controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+              navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(answers) mustBe
+                controllers.routes.EmployerContributionController.onPageLoad(mode)
             }
           }
         }
 
-      //Factory Engineering
+        //Factory Engineering
 
-      "from FactoryEngineeringList1" must {
+        "from FactoryEngineeringList1" must {
 
-        "go to EmployerContribution when yes is selected" in {
-          val answers = emptyUserAnswers.set(FactoryEngineeringList1Page, true).success.value
+          "go to EmployerContribution when yes is selected" in {
+            val answers = emptyUserAnswers.set(FactoryEngineeringList1Page, true).success.value
 
-          navigator.nextPage(FactoryEngineeringList1Page, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+            navigator.nextPage(FactoryEngineeringList1Page, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
+
+          "go to FactoryEngineeringList2 when no is selected" in {
+            val answers = emptyUserAnswers.set(FactoryEngineeringList1Page, false).success.value
+
+            navigator.nextPage(FactoryEngineeringList1Page, mode)(answers) mustBe
+              controllers.engineering.routes.FactoryEngineeringList2Controller.onPageLoad(mode)
+          }
         }
 
-        "go to FactoryEngineeringList2 when no is selected" in {
-          val answers = emptyUserAnswers.set(FactoryEngineeringList1Page, false).success.value
+        "from FactoryEngineeringList2" must {
 
-          navigator.nextPage(FactoryEngineeringList1Page, NormalMode)(answers) mustBe
-            controllers.engineering.routes.FactoryEngineeringList2Controller.onPageLoad(NormalMode)
-        }
-      }
+          "go to EmployerContribution when yes is selected" in {
+            val answers = emptyUserAnswers.set(FactoryEngineeringList2Page, true).success.value
 
-      "from FactoryEngineeringList2" must {
+            navigator.nextPage(FactoryEngineeringList2Page, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
 
-        "go to EmployerContribution when yes is selected" in {
-          val answers = emptyUserAnswers.set(FactoryEngineeringList2Page, true).success.value
+          "go to FactoryEngineeringApprentice when no is selected" in {
+            val answers = emptyUserAnswers.set(FactoryEngineeringList2Page, false).success.value
 
-          navigator.nextPage(FactoryEngineeringList2Page, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "go to FactoryEngineeringApprentice when no is selected" in {
-          val answers = emptyUserAnswers.set(FactoryEngineeringList2Page, false).success.value
-
-          navigator.nextPage(FactoryEngineeringList2Page, NormalMode)(answers) mustBe
-            controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(NormalMode)
-        }
-      }
-
-      "from FactoryEngineeringApprentice" must {
-
-        "go to EmployerContribution when yes is selected" in {
-          val answers = emptyUserAnswers.set(FactoryEngineeringApprenticePage, true).success.value
-
-          navigator.nextPage(FactoryEngineeringApprenticePage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+            navigator.nextPage(FactoryEngineeringList2Page, mode)(answers) mustBe
+              controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(mode)
+          }
         }
 
-        "go to EmployerContribution when no is selected" in {
-          val answers = emptyUserAnswers.set(FactoryEngineeringApprenticePage, false).success.value
+        "from FactoryEngineeringApprentice" must {
 
-          navigator.nextPage(FactoryEngineeringApprenticePage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          "go to EmployerContribution when yes is selected" in {
+            val answers = emptyUserAnswers.set(FactoryEngineeringApprenticePage, true).success.value
+
+            navigator.nextPage(FactoryEngineeringApprenticePage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
+
+          "go to EmployerContribution when no is selected" in {
+            val answers = emptyUserAnswers.set(FactoryEngineeringApprenticePage, false).success.value
+
+            navigator.nextPage(FactoryEngineeringApprenticePage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
         }
       }
     }
-
-    /*    "in Check mode" must {
-
-        }*/
   }
 }

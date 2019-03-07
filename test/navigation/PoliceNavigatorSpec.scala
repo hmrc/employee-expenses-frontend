@@ -18,74 +18,77 @@ package navigation
 
 import base.SpecBase
 import controllers.police.routes
-import models.NormalMode
+import models.{CheckMode, NormalMode}
 import pages.police._
 
 class PoliceNavigatorSpec extends SpecBase {
-  val navigator = new PoliceNavigator
+  private val navigator = new PoliceNavigator
+  private val modes = Seq(NormalMode, CheckMode)
 
-  "Navigator" when {
+  "PoliceNavigator" when {
 
-    "in Normal mode" must {
+    for (mode <- modes) {
+      s"in $mode" must {
 
-      "on SpecialConstableController" must {
+        "on SpecialConstableController" must {
 
-        "go to CannotClaimExpense when 'Yes' is selected" in {
-          val answers = emptyUserAnswers.set(SpecialConstablePage, true).success.value
-          navigator.nextPage(SpecialConstablePage, NormalMode)(answers) mustBe
-            controllers.routes.CannotClaimExpenseController.onPageLoad()
+          "go to CannotClaimExpense when 'Yes' is selected" in {
+            val answers = emptyUserAnswers.set(SpecialConstablePage, true).success.value
+            navigator.nextPage(SpecialConstablePage, mode)(answers) mustBe
+              controllers.routes.CannotClaimExpenseController.onPageLoad()
+          }
+
+          "go to CommunitySupportOfficer when 'No' is selected" in {
+            val answers = emptyUserAnswers.set(SpecialConstablePage, false).success.value
+            navigator.nextPage(SpecialConstablePage, mode)(answers) mustBe
+              routes.CommunitySupportOfficerController.onPageLoad(mode)
+          }
         }
 
-        "go to CommunitySupportOfficer when 'No' is selected" in {
-          val answers = emptyUserAnswers.set(SpecialConstablePage, false).success.value
-          navigator.nextPage(SpecialConstablePage, NormalMode)(answers) mustBe
-            routes.CommunitySupportOfficerController.onPageLoad(NormalMode)
-        }
-      }
+        "on CommunitySupportOfficer" must {
 
-      "on CommunitySupportOfficer" must {
+          "go to EmployerContribution when 'Yes' is selected" in {
+            val answers = emptyUserAnswers.set(CommunitySupportOfficerPage, true).success.value
+            navigator.nextPage(CommunitySupportOfficerPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
 
-        "go to EmployerContribution when 'Yes' is selected" in {
-          val answers = emptyUserAnswers.set(CommunitySupportOfficerPage, true).success.value
-          navigator.nextPage(CommunitySupportOfficerPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "go to MetropolitanPolice when 'No' is selected" in {
-          val answers = emptyUserAnswers.set(CommunitySupportOfficerPage, false).success.value
-          navigator.nextPage(CommunitySupportOfficerPage, NormalMode)(answers) mustBe
-            routes.MetropolitanPoliceController.onPageLoad(NormalMode)
-        }
-      }
-
-      "on MetropolitanPolice" must {
-
-        "go to CannotClaimExpense when 'yes' is selected" in {
-          val answers = emptyUserAnswers.set(MetropolitanPolicePage, true).success.value
-          navigator.nextPage(MetropolitanPolicePage, NormalMode)(answers) mustBe
-            controllers.routes.CannotClaimExpenseController.onPageLoad()
-
+          "go to MetropolitanPolice when 'No' is selected" in {
+            val answers = emptyUserAnswers.set(CommunitySupportOfficerPage, false).success.value
+            navigator.nextPage(CommunitySupportOfficerPage, mode)(answers) mustBe
+              routes.MetropolitanPoliceController.onPageLoad(mode)
+          }
         }
 
-        "go to PoliceOfficer when 'No' is selected" in {
-          val answers = emptyUserAnswers.set(MetropolitanPolicePage, false).success.value
-          navigator.nextPage(MetropolitanPolicePage, NormalMode)(answers) mustBe
-            routes.PoliceOfficerController.onPageLoad(NormalMode)
+        "on MetropolitanPolice" must {
+
+          "go to CannotClaimExpense when 'yes' is selected" in {
+            val answers = emptyUserAnswers.set(MetropolitanPolicePage, true).success.value
+            navigator.nextPage(MetropolitanPolicePage, mode)(answers) mustBe
+              controllers.routes.CannotClaimExpenseController.onPageLoad()
+
+          }
+
+          "go to PoliceOfficer when 'No' is selected" in {
+            val answers = emptyUserAnswers.set(MetropolitanPolicePage, false).success.value
+            navigator.nextPage(MetropolitanPolicePage, mode)(answers) mustBe
+              routes.PoliceOfficerController.onPageLoad(mode)
+          }
         }
-      }
 
-      "on PoliceOfficer" must {
+        "on PoliceOfficer" must {
 
-        "go to EmployerContribution when 'Yes' is selected" in {
-          val answers = emptyUserAnswers.set(PoliceOfficerPage, true).success.value
-          navigator.nextPage(PoliceOfficerPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
+          "go to EmployerContribution when 'Yes' is selected" in {
+            val answers = emptyUserAnswers.set(PoliceOfficerPage, true).success.value
+            navigator.nextPage(PoliceOfficerPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
 
-        "go to EmployerContribution when 'No' is selected" in {
-          val answers = emptyUserAnswers.set(PoliceOfficerPage, false).success.value
-          navigator.nextPage(PoliceOfficerPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          "go to EmployerContribution when 'No' is selected" in {
+            val answers = emptyUserAnswers.set(PoliceOfficerPage, false).success.value
+            navigator.nextPage(PoliceOfficerPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
         }
       }
     }

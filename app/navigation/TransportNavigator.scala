@@ -37,6 +37,12 @@ class TransportNavigator @Inject()() extends Navigator {
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case TypeOfTransportPage => userAnswers => typeOfTransportOptions(CheckMode)(userAnswers)
+    case AirlineJobListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case GarageHandOrCleanerPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case WhichRailwayTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case TransportCarpenterPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case TransportVehicleTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case _ => _ => controllers.routes.CheckYourAnswersController.onPageLoad()
   }
 
@@ -47,7 +53,7 @@ class TransportNavigator @Inject()() extends Navigator {
       case Some(Railways) => routes.WhichRailwayTradeController.onPageLoad(mode)
       case Some(SeamanCarpenter) => routes.TransportCarpenterController.onPageLoad(mode)
       case Some(Vehicles) => routes.TransportVehicleTradeController.onPageLoad(mode)
-      case Some(NoneOfTheAbove) => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+      case Some(NoneOfTheAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
