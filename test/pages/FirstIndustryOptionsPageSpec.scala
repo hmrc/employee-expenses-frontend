@@ -16,8 +16,11 @@
 
 package pages
 
-import models.FirstIndustryOptions
+import models.{EmployerContribution, FirstIndustryOptions, SecondIndustryOptions, UserAnswers}
 import pages.behaviours.PageBehaviours
+import pages.construction._
+
+import scala.util.Try
 
 class FirstIndustryOptionsPageSpec extends PageBehaviours {
 
@@ -26,6 +29,26 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
     beRetrievable[FirstIndustryOptions](FirstIndustryOptionsPage)
     beSettable[FirstIndustryOptions](FirstIndustryOptionsPage)
     beRemovable[FirstIndustryOptions](FirstIndustryOptionsPage)
+
+    "remove answers stored in the industry group when updated" in {
+      val userAnswers = new UserAnswers(userAnswersId)
+        .set(FirstIndustryOptionsPage, FirstIndustryOptions.NoneOfAbove).success.value
+        .set(SecondIndustryOptionsPage, SecondIndustryOptions.Construction).success.value
+        .set(JoinerCarpenterPage, false).success.value
+        .set(StoneMasonPage, false).success.value
+        .set(ConstructionOccupationList1Page, false).success.value
+        .set(ConstructionOccupationList2Page, true).success.value
+        .set(EmployerContributionPage, EmployerContribution.SomeContribution).success.value
+        .set(ExpensesEmployerPaidPage, 20).success.value
+
+      val updatedUserAnswers = userAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.Retail).get
+
+
+      updatedUserAnswers.data.keys.contains("industry") mustBe false
+      updatedUserAnswers.data.keys.contains(ExpensesEmployerPaidPage) mustBe false
+      updatedUserAnswers.data.keys.contains(EmployerContributionPage) mustBe false
+
+    }
   }
 
 }

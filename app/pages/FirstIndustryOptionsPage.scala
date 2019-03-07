@@ -31,12 +31,13 @@ case object FirstIndustryOptionsPage extends QuestionPage[FirstIndustryOptions] 
 
   override def cleanup(value: Option[FirstIndustryOptions], userAnswers: UserAnswers): Try[UserAnswers] = {
 
-    Try(UserAnswers(
-      id = userAnswers.id,
-      data = userAnswers.data - "industry",
-      lastUpdated = LocalDateTime.now
-    ))
-
+    Try(
+      UserAnswers(
+        id = userAnswers.id,
+        data = userAnswers.data - "industry" - EmployerContributionPage - ExpensesEmployerPaidPage,
+        lastUpdated = LocalDateTime.now
+      )
+    )
   }
 
 }
