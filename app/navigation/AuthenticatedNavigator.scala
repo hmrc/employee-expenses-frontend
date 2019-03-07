@@ -42,6 +42,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case TaxYearSelectionPage => taxYearSelection(CheckMode)
     case YourAddressPage => yourAddress(CheckMode)
     case YourEmployerPage => yourEmployer(CheckMode)
+    case _ => _ => CheckYourAnswersController.onPageLoad()
   }
 
   def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
@@ -92,9 +93,13 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
 
   def yourEmployer(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(YourEmployerPage) match {
     case Some(true) =>
-      YourAddressController.onPageLoad(mode)
+      if (mode == NormalMode) {
+        YourAddressController.onPageLoad(mode)
+      } else {
+        CheckYourAnswersController.onPageLoad()
+      }
     case Some(false) =>
-      UpdateEmployerInformationController.onPageLoad()
+      UpdateEmployerInformationController.onPageLoad(mode)
     case _ =>
       SessionExpiredController.onPageLoad()
   }

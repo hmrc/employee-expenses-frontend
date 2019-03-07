@@ -19,7 +19,7 @@ package controllers.authenticated
 import config.NavConstant
 import controllers.actions._
 import javax.inject.{Inject, Named}
-import models.{Mode, NormalMode}
+import models.Mode
 import navigation.Navigator
 import pages.authenticated.UpdateYourEmployerInformationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -41,6 +41,6 @@ class UpdateEmployerInformationController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view(navigator.nextPage(UpdateYourEmployerInformationPage, NormalMode)(request.userAnswers).url))
+      Ok(view(navigator.nextPage(UpdateYourEmployerInformationPage, mode)(request.userAnswers).url))
   }
 }
