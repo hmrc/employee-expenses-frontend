@@ -24,7 +24,7 @@ import models.FlatRateExpenseOptions.FRENoYears
 import models.auditing.AuditData
 import models.auditing.AuditEventType._
 import navigation.Navigator
-import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage, TaxYearSelectionPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -81,15 +81,21 @@ class CheckYourAnswersController @Inject()(
         request.userAnswers.get(FREResponse),
         request.userAnswers.get(TaxYearSelectionPage),
         request.userAnswers.get(ClaimAmountAndAnyDeductions),
-        request.userAnswers.get(RemoveFRECodePage)
+        request.userAnswers.get(RemoveFRECodePage),
+        request.userAnswers.get(ChangeWhichTaxYearsPage)
       ) match {
-        case (Some(FRENoYears), Some(taxYears), Some(claimAmount), None) =>
+        case (Some(FRENoYears), Some(taxYears), Some(claimAmount), None, None) =>
           submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map(
             result =>
               auditAndRedirect(result, dataToAudit)
           )
-        case (Some(_), Some(taxYears), Some(_), Some(removeYear)) =>
+        case (Some(_), Some(taxYears), Some(_), Some(removeYear), None) =>
           submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, removeYear).map(
+            result =>
+              auditAndRedirect(result, dataToAudit)
+          )
+        case (Some(_), Some(taxYears), Some(claimAmount), None, Some(changeYears)) =>
+          submissionService.submitChangeFREFromCode(request.nino.get, taxYears, claimAmount, changeYears).map(
             result =>
               auditAndRedirect(result, dataToAudit)
           )

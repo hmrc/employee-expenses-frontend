@@ -23,6 +23,7 @@ import javax.inject.Inject
 import models.TaxYearSelection
 import pages.ClaimAmountAndAnyDeductions
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -87,7 +88,8 @@ class ConfirmationController @Inject()(
                 claimAmountHigherRate = claimAmountHigherRate)).withNewSession
 
           }.recoverWith {
-            case _ =>
+            case e =>
+              Logger.error(s"[ConfirmationController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
               Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
           }
         case _ =>

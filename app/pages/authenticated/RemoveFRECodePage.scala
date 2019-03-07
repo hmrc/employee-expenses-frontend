@@ -16,13 +16,23 @@
 
 package pages.authenticated
 
-import models.TaxYearSelection
+import models.{TaxYearSelection, UserAnswers}
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object RemoveFRECodePage extends QuestionPage[TaxYearSelection] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "removeFRECode"
+
+  override def cleanup(value: Option[TaxYearSelection], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(_) =>
+        userAnswers.remove(ChangeWhichTaxYearsPage)
+      case _ => super.cleanup(value, userAnswers)
+    }
+  }
 }

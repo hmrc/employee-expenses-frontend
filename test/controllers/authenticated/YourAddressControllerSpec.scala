@@ -218,7 +218,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual UpdateYourAddressController.onPageLoad().url
 
       application.stop()
     }

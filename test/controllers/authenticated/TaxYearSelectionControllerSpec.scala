@@ -25,7 +25,7 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.{ClaimAmount, ClaimAmountAndAnyDeductions}
+import pages.ClaimAmountAndAnyDeductions
 import pages.authenticated.TaxYearSelectionPage
 import play.api.data.Form
 import play.api.inject.bind
