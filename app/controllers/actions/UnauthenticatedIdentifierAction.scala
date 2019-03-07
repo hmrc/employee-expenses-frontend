@@ -21,35 +21,35 @@ import config.FrontendAppConfig
 import javax.inject.Singleton
 import models.requests.IdentifierRequest
 import play.api.mvc._
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.retrieve.Retrievals
+import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class UnauthenticatedIdentifierAction @Inject()(
+                                                 override val authConnector: AuthConnector,
                                                  config: FrontendAppConfig,
                                                  val parser: BodyParsers.Default
                                                )
-                                               (implicit val executionContext: ExecutionContext) extends IdentifierAction {
+                                               (implicit val executionContext: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    val existingMongoKey = request.session.get(config.mongoKey)
+    authorised().retrieve(Retrievals.nino and Retrievals.internalId) {
+      x =>
+        val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
+        val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
 
-    val mongoKey: String = existingMongoKey
-      .orElse(hc.sessionId.map(_.value))
-      .getOrElse(throw new Exception("[UnauthenticatedIdentifierAction] No mongoKey created"))
-
-    block(IdentifierRequest(request, mongoKey)).map {
-      result =>
-        if (existingMongoKey.isEmpty) {
-          result.addingToSession(config.mongoKey -> mongoKey)(request)
-        } else {
-          result
-        }
+        block(IdentifierRequest(request, internalId, Some(nino)))
+    }.recover {
+      case _: AuthorisationException =>
+        val sessionId: String = hc.sessionId.map(_.value).getOrElse(throw new Exception("no sessionId"))
+        block(IdentifierRequest(request, sessionId))
     }
   }
 }

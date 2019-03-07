@@ -41,19 +41,12 @@ class AuthenticatedIdentifierAction @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.nino) {
+    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.nino and Retrievals.internalId) {
       x =>
-        val nino = x.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
+        val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
+        val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
 
-        request.session.get(config.mongoKey) match {
-          case Some(key) => block(IdentifierRequest(request, key, Some(nino)))
-          case _ =>
-            if (request.uri.contains("/employee-expenses/session-key")) {
-              block(IdentifierRequest(request, ""))
-            } else {
-              Future.successful(Redirect(SessionExpiredController.onPageLoad()))
-            }
-        }
+        block(IdentifierRequest(request, internalId, Some(nino)))
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
         unauthorised(request.session.get(config.mongoKey))

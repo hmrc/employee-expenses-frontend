@@ -20,8 +20,10 @@ import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
 import controllers.authenticated.routes._
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.ExecutionContext
@@ -31,12 +33,19 @@ class RedirectMongoKeyController @Inject()(
                                             config: FrontendAppConfig,
                                             identify: IdentifierAction,
                                             val controllerComponents: MessagesControllerComponents,
-                                            appConfig: FrontendAppConfig
+                                            appConfig: FrontendAppConfig,
+                                            sessionRepository: SessionRepository
                                           )(implicit ec: ExecutionContext) extends FrontendBaseController {
 
   def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify {
     implicit request =>
+      sessionRepository.get(key).map {
+        case Some(userAnswers) =>
+          sessionRepository.set(UserAnswers(request.identifier, userAnswers.data))
+          sessionRepository.set(UserAnswers(key, Json.obj()))
+        case _ =>
+          Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+      }
       Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
-        .addingToSession(appConfig.mongoKey -> key)(request)
   }
 }
