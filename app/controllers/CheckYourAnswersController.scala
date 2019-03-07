@@ -59,7 +59,12 @@ class CheckYourAnswersController @Inject()(
         cyaHelper.industryType,
         cyaHelper.employerContribution,
         cyaHelper.expensesEmployerPaid,
+        cyaHelper.claimAmountAndDeductions,
         cyaHelper.taxYearSelection,
+        cyaHelper.alreadyClaimingFRE,
+        cyaHelper.alreadyClaimingFREDifferentAmounts,
+        cyaHelper.changeWhichTaxYears,
+        cyaHelper.removeFRECode,
         cyaHelper.yourAddress,
         cyaHelper.yourEmployer
       ).flatten))
