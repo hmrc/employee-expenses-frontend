@@ -24,7 +24,7 @@ import models.FlatRateExpenseOptions.FRENoYears
 import models.auditing.AuditData
 import models.auditing.AuditEventType._
 import navigation.Navigator
-import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated.{AlreadyClaimingFRESameAmountPage, ChangeWhichTaxYearsPage, RemoveFRECodePage, TaxYearSelectionPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -54,6 +54,7 @@ class CheckYourAnswersController @Inject()(
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
       val cyaHelper = new CheckYourAnswersHelper(request.userAnswers)
+      val removeFre = request.userAnswers.get(RemoveFRECodePage).isDefined
 
       val sections = Seq(AnswerSection(None, Seq(
         cyaHelper.industryType,
@@ -69,7 +70,7 @@ class CheckYourAnswersController @Inject()(
         cyaHelper.yourEmployer
       ).flatten))
 
-      Ok(view(sections))
+      Ok(view(sections, removeFre))
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {

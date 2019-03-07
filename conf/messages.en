@@ -1,6 +1,11 @@
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
+checkYourAnswers.title.claimExpenses = Check your answers before claiming your expenses
+checkYourAnswers.heading.claimExpenses = Check your answers before claiming your expenses
 checkYourAnswers.guidance = Guidance for check your answers
+checkYourAnswers.claimExpenses = Claim your expenses
+checkYourAnswers.confirmInformation = By claiming these expenses, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
+checkYourAnswers.prosecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
 
 date.day = Day
 date.month = Month
@@ -37,6 +42,8 @@ site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
 site.continue = Continue
+site.accept = Accept and claim expenses
+site.save = Save and continue
 site.service_name = Employee Expenses
 site.textarea.char_limit = (Limit is {0} characters)
 

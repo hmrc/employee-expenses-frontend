@@ -21,7 +21,7 @@
     formHelper: FormWithCSRF
 )
 
-@(answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(answerSections: Seq[Section], removeFRE: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("checkYourAnswers.title")
@@ -29,9 +29,11 @@
 
     @components.back_link()
 
-    @components.heading("checkYourAnswers.heading")
-
-    <p>@messages("checkYourAnswers.guidance")</p>
+    @if(removeFRE) {
+        @components.heading("checkYourAnswers.heading")
+    } else {
+        @components.heading("checkYourAnswers.title.claimExpenses")
+    }
 
     @for(section <- answerSections){
         @{
@@ -43,6 +45,11 @@
     }
 
     @formHelper(action = CheckYourAnswersController.onSubmit, 'autoComplete -> "off") {
-        @components.submit_button()
+
+        @if(removeFRE) {
+            @components.submit_button(Some("site.save"))
+        } else {
+            @components.submit_button(Some("site.accept"))
+        }
     }
 }
