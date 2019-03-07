@@ -30,7 +30,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[CheckYourAnswersView]
 
-    val cyaHelper = new CheckYourAnswersHelper(minimumUserAnswers)
+    val cyaHelper = new CheckYourAnswersHelper(fullUserAnswers)
 
     val sections = Seq(AnswerSection(None, Seq(
       cyaHelper.industryType,

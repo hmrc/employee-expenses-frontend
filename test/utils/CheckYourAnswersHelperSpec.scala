@@ -17,12 +17,13 @@
 package utils
 
 import base.SpecBase
+import models.AlreadyClaimingFREDifferentAmounts._
 import models.EmployerContribution.SomeContribution
 import models._
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks
 import pages._
-import pages.authenticated.{TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
+import pages.authenticated._
 
 class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
 
@@ -100,7 +101,91 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
           val ua = emptyUserAnswers.set(EmployerContributionPage, SomeContribution).success.value
           val ua2 = ua.set(ExpensesEmployerPaidPage, amount).success.value
           helper(ua2).expensesEmployerPaid.get.label mustBe "expensesEmployerPaid.checkYourAnswersLabel"
-          helper(ua2).expensesEmployerPaid.get.answer mustBe s"$amount"
+          helper(ua2).expensesEmployerPaid.get.answer mustBe s"£$amount"
+      }
+    }
+  }
+
+  "claimAmountAndDeductions" must {
+    "display the correct label and answers" in {
+      forAll(Gen.posNum[Int]) {
+        amount =>
+          val ua = emptyUserAnswers.set(ClaimAmountAndAnyDeductions, amount).success.value
+          helper(ua).claimAmountAndDeductions.get.label mustBe "claimAmount.checkYourAnswersLabel"
+          helper(ua).claimAmountAndDeductions.get.answer mustBe s"£$amount"
+      }
+    }
+  }
+
+  "alreadyClaimingFRESameAmount" must {
+    "display the correct label and answer" in {
+      val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, false).success.value
+      helper(ua).alreadyClaimingFRESameAmount.get.label mustBe "alreadyClaimingFRESameAmount.checkYourAnswersLabel"
+      helper(ua).alreadyClaimingFRESameAmount.get.answer mustBe s"alreadyClaimingFRESameAmount.altNoText"
+    }
+  }
+
+  "alreadyClaimingFREDifferentAmounts" when {
+    "Answered as 'change'" must {
+      "display the correct label and answer" in {
+        val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
+        helper(ua).alreadyClaimingFREDifferentAmounts.get.label mustBe "alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel"
+        helper(ua).alreadyClaimingFREDifferentAmounts.get.answer mustBe s"alreadyClaimingFREDifferentAmounts.change"
+      }
+    }
+
+    "Answered as 'noChange'" must {
+      "display the correct label and answer" in {
+        val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, NoChange).success.value
+        helper(ua).alreadyClaimingFREDifferentAmounts.get.label mustBe "alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel"
+        helper(ua).alreadyClaimingFREDifferentAmounts.get.answer mustBe s"alreadyClaimingFREDifferentAmounts.noChange"
+      }
+    }
+
+    "Answered as 'remove'" must {
+      "display the correct label and answer" in {
+        val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Remove).success.value
+        helper(ua).alreadyClaimingFREDifferentAmounts.get.label mustBe "alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel"
+        helper(ua).alreadyClaimingFREDifferentAmounts.get.answer mustBe s"alreadyClaimingFREDifferentAmounts.remove"
+      }
+    }
+  }
+
+  "changeWhichTaxYears" must {
+    "display the correct label and answer" in {
+      val taxYears = Gen.nonEmptyContainerOf[Seq, TaxYearSelection](Gen.oneOf(
+        TaxYearSelection.CurrentYear,
+        TaxYearSelection.CurrentYearMinus1,
+        TaxYearSelection.CurrentYearMinus2,
+        TaxYearSelection.CurrentYearMinus3,
+        TaxYearSelection.CurrentYearMinus4
+      ))
+
+      forAll(taxYears) {
+        taxYearSeq =>
+          val ua = emptyUserAnswers.set(ChangeWhichTaxYearsPage, taxYearSeq).success.value
+          helper(ua).changeWhichTaxYears.get.label mustBe "changeWhichTaxYears.checkYourAnswersLabel"
+          helper(ua).changeWhichTaxYears.get.answer mustBe taxYearSeq.map {
+            taxYear =>
+              messages(s"taxYearSelection.$taxYear",
+                TaxYearSelection.getTaxYear(taxYear).toString,
+                (TaxYearSelection.getTaxYear(taxYear) + 1).toString
+              )
+          }.mkString("<br>")
+      }
+    }
+  }
+
+  "removeFRECode" must {
+    "display the correct label and answer" in {
+      forAll(Gen.oneOf(TaxYearSelection.values)) {
+        taxYear =>
+          val ua = emptyUserAnswers.set(RemoveFRECodePage, taxYear).success.value
+          helper(ua).removeFRECode.get.label mustBe "removeFRECode.checkYourAnswersLabel"
+          helper(ua).removeFRECode.get.answer mustBe messages(s"taxYearSelection.$taxYear",
+            TaxYearSelection.getTaxYear(taxYear).toString,
+            (TaxYearSelection.getTaxYear(taxYear) + 1).toString
+          )
       }
     }
   }
@@ -172,6 +257,5 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
         helper(ua2).yourEmployer.get.labelArgs.head mustBe s"<p>${taiEmployment.head.name}</p>"
       }
     }
-
   }
 }
