@@ -18,8 +18,11 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
+import controllers.routes.TechnicalDifficultiesController
 import javax.inject.Singleton
 import models.requests.IdentifierRequest
+import play.api.Logger
+import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
@@ -40,16 +43,28 @@ class UnauthenticatedIdentifierAction @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
+    val existingMongoKey = request.session.get(config.mongoKey)
+
     authorised().retrieve(Retrievals.nino and Retrievals.internalId) {
       x =>
         val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
         val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
 
         block(IdentifierRequest(request, internalId, Some(nino)))
-    }.recover {
+    }.recoverWith {
       case _: AuthorisationException =>
         val sessionId: String = hc.sessionId.map(_.value).getOrElse(throw new Exception("no sessionId"))
-        block(IdentifierRequest(request, sessionId))
+        block(IdentifierRequest(request, sessionId)).map {
+          result =>
+            if (existingMongoKey.isEmpty) {
+              result.addingToSession(config.mongoKey -> sessionId)(request)
+            } else {
+              result
+            }
+        }
+      case e =>
+        Logger.error(s"[UnauthenticatedIdentifierAction][authorised] failed $e", e)
+        Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
     }
   }
 }

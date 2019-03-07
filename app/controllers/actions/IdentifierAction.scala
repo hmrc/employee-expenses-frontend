@@ -55,7 +55,7 @@ class AuthenticatedIdentifierAction @Inject()(
       case _: InsufficientEnrolments | _: UnsupportedAuthProvider | _: UnsupportedAffinityGroup | _: UnsupportedCredentialRole =>
         Redirect(UnauthorisedController.onPageLoad())
       case e =>
-        Logger.error(s"Technical difficulties error: $e", e)
+        Logger.error(s"[AuthenticatedIdentifierAction][authorised] failed $e", e)
         Redirect(TechnicalDifficultiesController.onPageLoad())
     }
   }
@@ -65,7 +65,7 @@ class AuthenticatedIdentifierAction @Inject()(
       case Some(key) =>
         Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + key}")))
       case _ =>
-        Redirect(SessionExpiredController.onPageLoad())
+        Redirect(UnauthorisedController.onPageLoad())
     }
   }
 
@@ -76,7 +76,7 @@ class AuthenticatedIdentifierAction @Inject()(
           s"&completionURL=${config.authorisedCallback + key}" +
           s"&failureURL=${config.unauthorisedCallback}")
       case _ =>
-        Redirect(SessionExpiredController.onPageLoad())
+        Redirect(UnauthorisedController.onPageLoad())
     }
   }
 
