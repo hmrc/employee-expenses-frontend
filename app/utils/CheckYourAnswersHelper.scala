@@ -40,7 +40,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
 
   def claimAmountAndDeductions: Option[AnswerRow] = userAnswers.get(ClaimAmountAndAnyDeductions) map {
     x =>
-      AnswerRow("claimAmount.checkYourAnswersLabel", s"£$x", true, None)
+      AnswerRow("claimAmount.checkYourAnswersLabel", s"£$x", true, changeUrl = None)
   }
 
   def alreadyClaimingFREDifferentAmounts: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) map {
@@ -49,10 +49,9 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
         Some(AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode).url))
   }
 
-  def alreadyClaimingFRE: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFRESameAmountPage) map {
-    x =>
-      AnswerRow("alreadyClaimingFRESameAmount.checkYourAnswersLabel", "alreadyClaimingFRESameAmount.altNoText", true,
-        Some(AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode).url))
+  def alreadyClaimingFRESameAmount: Option[AnswerRow] = {
+      Some(AnswerRow("alreadyClaimingFRESameAmount.checkYourAnswersLabel", "alreadyClaimingFRESameAmount.altNoText", true,
+        Some(AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode).url)))
   }
 
   def sameEmployerContributionAllYears: Option[AnswerRow] = userAnswers.get(SameEmployerContributionAllYearsPage) map {

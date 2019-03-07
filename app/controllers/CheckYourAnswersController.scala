@@ -61,7 +61,7 @@ class CheckYourAnswersController @Inject()(
         cyaHelper.expensesEmployerPaid,
         cyaHelper.claimAmountAndDeductions,
         cyaHelper.taxYearSelection,
-        cyaHelper.alreadyClaimingFRE,
+        cyaHelper.alreadyClaimingFRESameAmount,
         cyaHelper.alreadyClaimingFREDifferentAmounts,
         cyaHelper.changeWhichTaxYears,
         cyaHelper.removeFRECode,

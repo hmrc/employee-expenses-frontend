@@ -30,7 +30,7 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
 
   val form = new AlreadyClaimingFREDifferentAmountsFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
+  val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
 
   val view = application.injector.instanceOf[AlreadyClaimingFREDifferentAmountsView]
 
@@ -38,16 +38,16 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
     view.apply(
       form,
       NormalMode,
-      minimumUserAnswers.get(ClaimAmountAndAnyDeductions).get,
-      minimumUserAnswers.get(FREAmounts).get
+      fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+      fullUserAnswers.get(FREAmounts).get
     )(fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
     view.apply(
       form,
       NormalMode,
-      minimumUserAnswers.get(ClaimAmountAndAnyDeductions).get,
-      minimumUserAnswers.get(FREAmounts).get
+      fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+      fullUserAnswers.get(FREAmounts).get
     )(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "AlreadyClaimingFREDifferentAmountsView" must {
@@ -62,7 +62,7 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
 
     "display correct body text" in {
       val doc = asDocument(applyView(form))
-      assertContainsText(doc, messages("alreadyClaimingFREDifferentAmounts.bodyText1", minimumUserAnswers.get(ClaimAmountAndAnyDeductions).get))
+      assertContainsText(doc, messages("alreadyClaimingFREDifferentAmounts.bodyText1", fullUserAnswers.get(ClaimAmountAndAnyDeductions).get))
     }
 
     "contains correct headings for table" in {

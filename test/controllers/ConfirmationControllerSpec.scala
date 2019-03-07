@@ -43,12 +43,12 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "return OK and the correct view for a GET and remove userAnswers" in {
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      val claimAmount = minimumUserAnswers.get(ClaimAmountAndAnyDeductions).get
+      val claimAmount = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
       val basicRate: Int = frontendAppConfig.taxPercentageBand1
       val higherRate: Int = frontendAppConfig.taxPercentageBand2
       val claimAmountBasicRate = mockClaimAmountService.calculateTax(basicRate, claimAmount)
@@ -81,12 +81,12 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "return OK and the correct view for a GET for a Scottish taxCode" in {
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      val claimAmount = minimumUserAnswers.get(ClaimAmountAndAnyDeductions).get
+      val claimAmount = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
       val scottishBasicRate: Int = frontendAppConfig.taxPercentageScotlandBand1
       val scottishHigherRate: Int = frontendAppConfig.taxPercentageScotlandBand2
       val claimAmountBasicRate = mockClaimAmountService.calculateTax(scottishBasicRate, claimAmount)
@@ -119,7 +119,7 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "Redirect to TechnicalDifficulties when call to Tai fails" in {
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
@@ -154,7 +154,7 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "Remove session on page load" in {
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()

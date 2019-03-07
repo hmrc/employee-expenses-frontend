@@ -44,7 +44,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
 
       val request = FakeRequest(GET, alreadyClaimingFRERoute)
 
@@ -62,7 +62,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = minimumUserAnswers.set(AlreadyClaimingFRESameAmountPage, true).success.value
+      val userAnswers = fullUserAnswers.set(AlreadyClaimingFRESameAmountPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -83,7 +83,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(minimumUserAnswers))
+        applicationBuilder(userAnswers = Some(fullUserAnswers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -102,7 +102,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
 
       val request =
         FakeRequest(POST, alreadyClaimingFRERoute)
