@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package pages.authenticated
+package models
 
-import models.{TaxYearSelection, UserAnswers}
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import play.api.libs.json._
 
-import scala.util.Try
+case class TaxCodeRecord(taxCode: String)
 
-case object ChangeWhichTaxYearsPage extends QuestionPage[Seq[TaxYearSelection]] {
+object TaxCodeRecord {
+  implicit val reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "changeWhichTaxYears"
-
-  override def cleanup(value: Option[Seq[TaxYearSelection]], userAnswers: UserAnswers): Try[UserAnswers] = {
-    value match {
-      case Some(_) =>
-        userAnswers.remove(RemoveFRECodePage)
-      case _ => super.cleanup(value, userAnswers)
-    }
-  }
+  implicit val listReads: Reads[Seq[TaxCodeRecord]] =
+    (__ \ "data" \ "current").read(Reads.seq[TaxCodeRecord])
 }

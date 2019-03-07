@@ -46,8 +46,8 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
   private val taxYear = TaiTaxYear()
 
-  "taiTaxCode" must {
-    "return a tax code record on success" in {
+  "taiEmployments" must {
+    "return a taiEmployment on success" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
           .willReturn(
@@ -62,6 +62,26 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       whenReady(result) {
         result =>
           result mustBe taiEmployment
+      }
+    }
+  }
+
+  "taiTaxCodeRecords" must {
+    "return a taxCodeRecord on success" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/tax-code-change"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withBody(validTaxCodeJson.toString)
+          )
+      )
+
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq(TaxCodeRecord(taxCode = "830L"))
       }
     }
   }
@@ -133,4 +153,35 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       |]
       |""".stripMargin)
 
+  val validTaxCodeJson: JsValue = Json.parse(
+    """
+      | {
+      |   "data" : {
+      |     "current": [{
+      |       "taxCode": "830L",
+      |       "employerName": "Employer Name",
+      |       "operatedTaxCode": true,
+      |       "p2Issued": true,
+      |       "startDate": "2018-06-27",
+      |       "endDate": "2019-04-05",
+      |       "payrollNumber": "1",
+      |       "pensionIndicator": true,
+      |       "primary": true
+      |     }],
+      |     "previous": [{
+      |       "taxCode": "1150L",
+      |       "employerName": "Employer Name",
+      |       "operatedTaxCode": true,
+      |       "p2Issued": true,
+      |       "startDate": "2018-04-06",
+      |       "endDate": "2018-06-26",
+      |       "payrollNumber": "1",
+      |       "pensionIndicator": true,
+      |       "primary": true
+      |     }]
+      |   },
+      |   "links" : [ ]
+      | }
+    """.stripMargin
+  )
 }

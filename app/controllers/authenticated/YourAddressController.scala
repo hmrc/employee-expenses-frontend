@@ -27,6 +27,7 @@ import models.Mode
 import navigation.Navigator
 import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -59,14 +60,17 @@ class YourAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      for {
-        address <- citizenDetailsConnector.getAddress(request.nino.get)
-      } yield {
-        if (address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)) {
-          Ok(view(preparedForm, mode, address))
-        } else {
-          Redirect(UpdateYourAddressController.onPageLoad())
-        }
+      citizenDetailsConnector.getAddress(request.nino.get).flatMap {
+        address =>
+          if (address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)) {
+            Future.successful(Ok(view(preparedForm, mode, address)))
+          } else {
+            Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+          }
+      }.recoverWith{
+        case e =>
+        Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
+        Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
       }
   }
 
@@ -88,8 +92,9 @@ class YourAddressController @Inject()(
             }
           )
       }.recoverWith {
-        case _ =>
-          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+        case e =>
+          Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
+          Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
       }
   }
 }
