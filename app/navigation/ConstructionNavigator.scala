@@ -18,7 +18,7 @@ package navigation
 
 import controllers.construction.routes
 import javax.inject.Inject
-import models.{Mode, NormalMode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import pages.construction._
 import play.api.mvc.Call
@@ -35,6 +35,11 @@ class ConstructionNavigator @Inject()() extends Navigator {
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case JoinerCarpenterPage              => joinerCarpenter(CheckMode)
+    case StoneMasonPage                   => stoneMason(CheckMode)
+    case ConstructionOccupationList1Page  => constructionOccupationList1(CheckMode)
+    case ConstructionOccupationList2Page  => constructionOccupationList2(CheckMode)
+    case BuildingMaterialsPage            => buildingMaterials(CheckMode)
     case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 

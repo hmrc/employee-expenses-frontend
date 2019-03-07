@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import javax.inject.Inject
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import pages.Page
 import pages.security.SecurityGuardNHSPage
 import play.api.mvc.Call
@@ -31,6 +31,7 @@ class SecurityNavigator @Inject()() extends Navigator {
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case SecurityGuardNHSPage => _ => routes.EmployerContributionController.onPageLoad(CheckMode)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
 }

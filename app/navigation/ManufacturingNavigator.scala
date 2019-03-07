@@ -19,7 +19,7 @@ package navigation
 import controllers.manufacturing.routes
 import javax.inject.Inject
 import models.TypeOfManufacturing._
-import models.{Mode, NormalMode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import pages.manufacturing._
 import play.api.mvc.Call
@@ -43,6 +43,18 @@ class ManufacturingNavigator @Inject()() extends Navigator {
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case TypeOfManufacturingPage => typeOfManufacturing(CheckMode)
+    case AluminiumOccupationList1Page => aluminiumOccupationList1(CheckMode)
+    case AluminiumOccupationList2Page => aluminiumOccupationList2(CheckMode)
+    case AluminiumOccupationList3Page => aluminiumOccupationList3(CheckMode)
+    case AluminiumApprenticePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case IronApprenticePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case IronMiningPage => ironMining(CheckMode)
+    case IronMiningListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case IronSteelOccupationListPage => ironSteelOccupationList(CheckMode)
+    case WoodFurnitureOccupationList1Page => woodFurnitureOccupationList1(CheckMode)
+    case WoodFurnitureOccupationList2Page => woodFurnitureOccupationList2(CheckMode)
+    case WoodFurnitureOccupationList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
