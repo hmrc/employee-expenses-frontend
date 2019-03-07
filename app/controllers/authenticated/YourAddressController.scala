@@ -27,6 +27,7 @@ import models.Mode
 import navigation.Navigator
 import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -88,7 +89,8 @@ class YourAddressController @Inject()(
             }
           )
       }.recoverWith {
-        case _ =>
+        case e =>
+          Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
           Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
   }
