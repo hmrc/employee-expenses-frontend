@@ -60,14 +60,17 @@ class YourAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      for {
-        address <- citizenDetailsConnector.getAddress(request.nino.get)
-      } yield {
-        if (address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)) {
-          Ok(view(preparedForm, mode, address))
-        } else {
-          Redirect(UpdateYourAddressController.onPageLoad())
-        }
+      citizenDetailsConnector.getAddress(request.nino.get).flatMap {
+        address =>
+          if (address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)) {
+            Future.successful(Ok(view(preparedForm, mode, address)))
+          } else {
+            Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+          }
+      }.recoverWith{
+        case e =>
+        Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
+        Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
       }
   }
 
@@ -91,7 +94,7 @@ class YourAddressController @Inject()(
       }.recoverWith {
         case e =>
           Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
-          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+          Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
       }
   }
 }
