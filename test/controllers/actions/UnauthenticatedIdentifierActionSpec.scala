@@ -19,9 +19,11 @@ package controllers.actions
 import base.SpecBase
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import play.api.mvc._
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.http.SessionKeys
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -45,7 +47,7 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
 
       val unAuthAction = new UnauthenticatedIdentifierAction(authConnector, frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
-      val result = controller.onPageLoad()(fakeRequest.withSession(frontendAppConfig.mongoKey -> "key"))
+      val result = controller.onPageLoad()(fakeRequest.withSession(SessionKeys.sessionId -> "sessionId", frontendAppConfig.mongoKey -> "key"))
 
       status(result) mustBe OK
 
@@ -62,7 +64,7 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
 
       val unAuthAction = new UnauthenticatedIdentifierAction(authConnector, frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
-      val request = fakeRequest.withSession(frontendAppConfig.mongoKey -> "key")
+      val request = fakeRequest.withSession(SessionKeys.sessionId -> "sessionId", frontendAppConfig.mongoKey -> "key")
       val result: Future[Result] = controller.onPageLoad()(request)
 
       whenReady(result) {
@@ -120,12 +122,13 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
 
       val unAuthAction = new UnauthenticatedIdentifierAction(authConnector, frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
+      val result = controller.onPageLoad()(fakeRequest)
 
-      val exception = intercept[Exception] {
-        controller.onPageLoad()(fakeRequest)
+      whenReady(result.failed) {
+        e =>
+          e mustBe a[Exception]
+          e.getMessage mustBe "no sessionId"
       }
-
-      exception.getMessage mustBe "[UnauthenticatedIdentifierAction] No mongoKey created"
 
       application.stop()
     }

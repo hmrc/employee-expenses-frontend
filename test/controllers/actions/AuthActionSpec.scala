@@ -80,7 +80,7 @@ class AuthActionSpec extends SpecBase {
 
     "the user's session has expired" must {
 
-      "redirect to session expired" in {
+      "redirect to unauthenticated" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
@@ -92,7 +92,7 @@ class AuthActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
 
         application.stop()
       }
@@ -146,7 +146,7 @@ class AuthActionSpec extends SpecBase {
 
     "url mongoKey query string absent: the user doesn't have sufficient confidence level" must {
 
-      "redirect the user to session expired" in {
+      "redirect the user to unauthenticated" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
@@ -158,7 +158,7 @@ class AuthActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
 
         application.stop()
       }
@@ -238,12 +238,12 @@ class AuthActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result).get mustBe routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).get mustBe routes.TechnicalDifficultiesController.onPageLoad().url
 
         application.stop()
       }
 
-      "return 200 when there is no mongoKey and on RedirectMongoKey" in {
+      "return 303 when there is no mongoKey and on RedirectMongoKey" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
@@ -253,12 +253,12 @@ class AuthActionSpec extends SpecBase {
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(FakeRequest("", "/employee-expenses/session-key"))
 
-        status(result) mustBe OK
+        status(result) mustBe SEE_OTHER
 
         application.stop()
       }
 
-      "return 200 when there is a mongoKey" in {
+      "return 303 when there is a mongoKey" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
@@ -268,7 +268,7 @@ class AuthActionSpec extends SpecBase {
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(fakeRequest.withSession(frontendAppConfig.mongoKey -> "key"))
 
-        status(result) mustBe OK
+        status(result) mustBe SEE_OTHER
 
         application.stop()
       }

@@ -39,14 +39,28 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
 
     "there is no data in the cache" must {
 
-      "set userAnswers to 'None' in the request" in {
+      "set userAnswers in unauthed to 'None' in the request" in {
 
         val sessionRepository = mock[SessionRepository]
         val authedSessionRepository = mock[AuthedSessionRepository]
-        when(sessionRepository.get("id")) thenReturn Future(None)
+        when(sessionRepository.get(userAnswersId)) thenReturn Future(None)
         val action = new Harness(sessionRepository, authedSessionRepository)
 
-        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, UnAuthed(""), Some(fakeNino)))
+        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, UnAuthed(userAnswersId), Some(fakeNino)))
+
+        whenReady(futureResult) { result =>
+          result.userAnswers.isEmpty mustBe true
+        }
+      }
+
+      "set userAnswers in authed to 'None' in the request" in {
+
+        val sessionRepository = mock[SessionRepository]
+        val authedSessionRepository = mock[AuthedSessionRepository]
+        when(authedSessionRepository.get(userAnswersId)) thenReturn Future(None)
+        val action = new Harness(sessionRepository, authedSessionRepository)
+
+        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, Authed(userAnswersId), Some(fakeNino)))
 
         whenReady(futureResult) { result =>
           result.userAnswers.isEmpty mustBe true
@@ -56,14 +70,28 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
 
     "there is data in the cache" must {
 
-      "build a userAnswers object and add it to the request" in {
+      "build a userAnswers in unathed object and add it to the request" in {
 
         val sessionRepository = mock[SessionRepository]
         val authedSessionRepository = mock[AuthedSessionRepository]
-        when(sessionRepository.get("id")) thenReturn Future(Some(new UserAnswers("id", Json.obj())))
+        when(sessionRepository.get(userAnswersId)) thenReturn Future(Some(new UserAnswers("id", Json.obj())))
         val action = new Harness(sessionRepository, authedSessionRepository)
 
-        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, UnAuthed(""), Some(fakeNino)))
+        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, UnAuthed(userAnswersId), Some(fakeNino)))
+
+        whenReady(futureResult) { result =>
+          result.userAnswers.isDefined mustBe true
+        }
+      }
+
+      "build a userAnswers in authed object and add it to the request" in {
+
+        val sessionRepository = mock[SessionRepository]
+        val authedSessionRepository = mock[AuthedSessionRepository]
+        when(authedSessionRepository.get(userAnswersId)) thenReturn Future(Some(new UserAnswers("id", Json.obj())))
+        val action = new Harness(sessionRepository, authedSessionRepository)
+
+        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, Authed(userAnswersId), Some(fakeNino)))
 
         whenReady(futureResult) { result =>
           result.userAnswers.isDefined mustBe true
