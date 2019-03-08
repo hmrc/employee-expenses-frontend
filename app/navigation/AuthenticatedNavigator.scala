@@ -112,23 +112,12 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
           YourAddressController.onPageLoad(mode)
         case (Some(true), Some(_)) =>
           CheckYourAnswersController.onPageLoad()
-        case (Some(false), _ ) =>
+        case (Some(false), _) =>
           UpdateEmployerInformationController.onPageLoad(mode)
         case _ =>
           SessionExpiredController.onPageLoad()
       }
     }
-  def yourEmployer(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(YourEmployerPage) match {
-    case Some(true) =>
-      if (mode == NormalMode) {
-        YourAddressController.onPageLoad(mode)
-      } else {
-        CheckYourAnswersController.onPageLoad()
-      }
-    case Some(false) =>
-      UpdateEmployerInformationController.onPageLoad(mode)
-    case _ =>
-      SessionExpiredController.onPageLoad()
   }
 
   def updateEmployerInformation(mode: Mode)(userAnswers: UserAnswers): Call = {
