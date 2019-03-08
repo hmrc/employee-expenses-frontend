@@ -27,22 +27,22 @@ import pages.transport.TransportCarpenterPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.transport.TransportCarpenterView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransportCarpenterController @Inject()(
                                               override val messagesApi: MessagesApi,
-                                              sessionRepository: SessionRepository,
                                               @Named(NavConstant.transport) navigator: Navigator,
                                               identify: UnauthenticatedIdentifierAction,
                                               getData: DataRetrievalAction,
                                               requireData: DataRequiredAction,
                                               formProvider: TransportCarpenterFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
-                                              view: TransportCarpenterView
+                                              view: TransportCarpenterView,
+                                              save: SaveToSession
                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -67,14 +67,17 @@ class TransportCarpenterController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportCarpenterPage, value))
-            newAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.Seamen.passengerLiners))
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(TransportCarpenterPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Seamen.passengerLiners))
+              )
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries))
+              Future.fromTry(request.userAnswers.set(TransportCarpenterPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries))
+              )
             }
-            _ <- sessionRepository.set(newAnswers)
-          } yield Redirect(navigator.nextPage(TransportCarpenterPage, mode)(newAnswers))
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(TransportCarpenterPage, mode)(updatedAnswers))
         }
       )
   }

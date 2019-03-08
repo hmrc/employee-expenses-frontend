@@ -27,22 +27,22 @@ import pages.manufacturing.IronApprenticePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.manufacturing.IronApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class IronApprenticeController @Inject()(
                                           override val messagesApi: MessagesApi,
-                                          sessionRepository: SessionRepository,
                                           @Named(NavConstant.manufacturing) navigator: Navigator,
                                           identify: UnauthenticatedIdentifierAction,
                                           getData: DataRetrievalAction,
                                           requireData: DataRequiredAction,
                                           formProvider: IronApprenticeFormProvider,
                                           val controllerComponents: MessagesControllerComponents,
-                                          view: IronApprenticeView
+                                          view: IronApprenticeView,
+                                          save: SaveToSession
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -67,14 +67,17 @@ class IronApprenticeController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IronApprenticePage, value))
-            newUserAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.apprentice))
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(IronApprenticePage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.apprentice))
+              )
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.allOther))
+              Future.fromTry(request.userAnswers.set(IronApprenticePage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.allOther))
+              )
             }
-            _ <- sessionRepository.set(newUserAnswers)
-          } yield Redirect(navigator.nextPage(IronApprenticePage, mode)(newUserAnswers))
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(IronApprenticePage, mode)(updatedAnswers))
         }
       )
   }

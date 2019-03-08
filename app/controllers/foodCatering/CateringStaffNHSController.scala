@@ -27,22 +27,22 @@ import pages.foodCatering.CateringStaffNHSPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.foodCatering.CateringStaffNHSView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class CateringStaffNHSController @Inject()(
                                             override val messagesApi: MessagesApi,
-                                            sessionRepository: SessionRepository,
                                             @Named(NavConstant.foodCatering) navigator: Navigator,
                                             identify: UnauthenticatedIdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
                                             formProvider: CateringStaffNHSFormProvider,
                                             val controllerComponents: MessagesControllerComponents,
-                                            view: CateringStaffNHSView
+                                            view: CateringStaffNHSView,
+                                            save: SaveToSession
                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,12 +66,13 @@ class CateringStaffNHSController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount = if (value) ClaimAmounts.Healthcare.catering else ClaimAmounts.defaultRate
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CateringStaffNHSPage, value))
-            amount: Int = if (value) ClaimAmounts.Healthcare.catering else ClaimAmounts.defaultRate
-            newAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(newAnswers)
-          } yield Redirect(navigator.nextPage(CateringStaffNHSPage, mode)(newAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CateringStaffNHSPage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(CateringStaffNHSPage, mode)(updatedAnswers))
         }
       )
   }

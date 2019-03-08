@@ -27,22 +27,22 @@ import pages.transport.GarageHandOrCleanerPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.transport.GarageHandOrCleanerView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class GarageHandOrCleanerController @Inject()(
                                                override val messagesApi: MessagesApi,
-                                               sessionRepository: SessionRepository,
                                                @Named(NavConstant.transport) navigator: Navigator,
                                                identify: UnauthenticatedIdentifierAction,
                                                getData: DataRetrievalAction,
                                                requireData: DataRequiredAction,
                                                formProvider: GarageHandOrCleanerFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
-                                               view: GarageHandOrCleanerView
+                                               view: GarageHandOrCleanerView,
+                                               save: SaveToSession
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -67,14 +67,17 @@ class GarageHandOrCleanerController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(GarageHandOrCleanerPage, value))
-            newAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.garageHands))
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(GarageHandOrCleanerPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.garageHands))
+              )
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.conductorsDrivers))
+              Future.fromTry(request.userAnswers.set(GarageHandOrCleanerPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.conductorsDrivers))
+              )
             }
-            _ <- sessionRepository.set(newAnswers)
-          } yield Redirect(navigator.nextPage(GarageHandOrCleanerPage, mode)(newAnswers))
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(GarageHandOrCleanerPage, mode)(updatedAnswers))
         }
       )
   }

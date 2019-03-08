@@ -27,22 +27,22 @@ import pages.clothing.ClothingPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.clothing.ClothingView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ClothingController @Inject()(
                                     override val messagesApi: MessagesApi,
-                                    sessionRepository: SessionRepository,
                                     @Named(NavConstant.clothing) navigator: Navigator,
                                     identify: UnauthenticatedIdentifierAction,
                                     getData: DataRetrievalAction,
                                     requireData: DataRequiredAction,
                                     formProvider: ClothingFormProvider,
                                     val controllerComponents: MessagesControllerComponents,
-                                    view: ClothingView
+                                    view: ClothingView,
+                                    save: SaveToSession
                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,11 +66,12 @@ class ClothingController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount = if (value) ClaimAmounts.Clothing.clothingList else ClaimAmounts.defaultRate
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ClothingPage, value))
-            amount = if (value) ClaimAmounts.Clothing.clothingList else ClaimAmounts.defaultRate
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ClothingPage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(ClothingPage, mode)(updatedAnswers))
         }
       )

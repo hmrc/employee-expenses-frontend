@@ -26,9 +26,9 @@ import repositories.{AuthedSessionRepository, SessionRepository}
 import scala.concurrent.Future
 
 class Save @Inject()(sessionRepository: SessionRepository,
-                            authedSessionRepository: AuthedSessionRepository,
-                            config: FrontendAppConfig
-                           ) extends SaveToSession {
+                     authedSessionRepository: AuthedSessionRepository,
+                     config: FrontendAppConfig
+                    ) extends SaveToSession {
 
   def toSession(request: DataRequest[AnyContent], userAnswers: UserAnswers): Future[Boolean] = {
     if (request.session.get(config.mongoKey).isDefined) sessionRepository.set(userAnswers) else authedSessionRepository.set(userAnswers)

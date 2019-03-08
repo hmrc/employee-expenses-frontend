@@ -26,22 +26,22 @@ import pages.{ExpensesEmployerPaidPage, SameEmployerContributionAllYearsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.SameEmployerContributionAllYearsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class SameEmployerContributionAllYearsController @Inject()(
                                                             override val messagesApi: MessagesApi,
-                                                            sessionRepository: SessionRepository,
                                                             @Named(NavConstant.generic) navigator: Navigator,
                                                             identify: UnauthenticatedIdentifierAction,
                                                             getData: DataRetrievalAction,
                                                             requireData: DataRequiredAction,
                                                             formProvider: SameEmployerContributionAllYearsFormProvider,
                                                             val controllerComponents: MessagesControllerComponents,
-                                                            view: SameEmployerContributionAllYearsView
+                                                            view: SameEmployerContributionAllYearsView,
+                                                            save: SaveToSession
                                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -72,7 +72,7 @@ class SameEmployerContributionAllYearsController @Inject()(
             value => {
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(SameEmployerContributionAllYearsPage, value))
-                _ <- sessionRepository.set(updatedAnswers)
+                _ <- save.toSession(request, updatedAnswers)
               } yield Redirect(navigator.nextPage(SameEmployerContributionAllYearsPage, mode)(updatedAnswers))
             }
           )

@@ -26,23 +26,23 @@ import pages.transport.TypeOfTransportPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.transport.TypeOfTransportView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class TypeOfTransportController @Inject()(
                                            override val messagesApi: MessagesApi,
-                                           sessionRepository: SessionRepository,
                                            @Named(NavConstant.transport) navigator: Navigator,
                                            identify: UnauthenticatedIdentifierAction,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction,
                                            formProvider: TypeOfTransportFormProvider,
                                            val controllerComponents: MessagesControllerComponents,
-                                           view: TypeOfTransportView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                           view: TypeOfTransportView,
+                                           save: SaveToSession
+                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
 
@@ -67,7 +67,7 @@ class TypeOfTransportController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfTransportPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(TypeOfTransportPage, mode)(updatedAnswers))
         }
       )

@@ -27,22 +27,22 @@ import pages.transport.WhichRailwayTradePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.transport.WhichRailwayTradeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class WhichRailwayTradeController @Inject()(
                                              override val messagesApi: MessagesApi,
-                                             sessionRepository: SessionRepository,
                                              @Named(NavConstant.transport) navigator: Navigator,
                                              identify: UnauthenticatedIdentifierAction,
                                              getData: DataRetrievalAction,
                                              requireData: DataRequiredAction,
                                              formProvider: WhichRailwayTradeFormProvider,
                                              val controllerComponents: MessagesControllerComponents,
-                                             view: WhichRailwayTradeView
+                                             view: WhichRailwayTradeView,
+                                             save: SaveToSession
                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -66,16 +66,18 @@ class WhichRailwayTradeController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount = value match {
+            case WhichRailwayTrade.VehiclePainters => ClaimAmounts.Transport.Railways.vehiclePainters
+            case WhichRailwayTrade.VehicleRepairersWagonLifters => ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
+            case WhichRailwayTrade.NoneOfTheAbove => ClaimAmounts.Transport.Railways.allOther
+          }
+
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(WhichRailwayTradePage, value))
-            amount: Int = value match {
-              case WhichRailwayTrade.VehiclePainters => ClaimAmounts.Transport.Railways.vehiclePainters
-              case WhichRailwayTrade.VehicleRepairersWagonLifters => ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
-              case WhichRailwayTrade.NoneOfTheAbove => ClaimAmounts.Transport.Railways.allOther
-            }
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(updatedAnswers)}
-            yield Redirect(navigator.nextPage(WhichRailwayTradePage, mode)(updatedAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(WhichRailwayTradePage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(WhichRailwayTradePage, mode)(updatedAnswers))
         }
       )
   }

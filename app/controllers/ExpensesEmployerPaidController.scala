@@ -26,7 +26,6 @@ import pages.ExpensesEmployerPaidPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.{AuthedSessionRepository, SessionRepository}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.SaveToSession
 import views.html.ExpensesEmployerPaidView
@@ -35,8 +34,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ExpensesEmployerPaidController @Inject()(
                                                 override val messagesApi: MessagesApi,
-                                                sessionRepository: SessionRepository,
-                                                authedSessionRepository: AuthedSessionRepository,
                                                 @Named(NavConstant.generic) navigator: Navigator,
                                                 identify: UnauthenticatedIdentifierAction,
                                                 getData: DataRetrievalAction,

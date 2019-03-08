@@ -27,22 +27,22 @@ import pages.construction.ConstructionOccupationList2Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.construction.ConstructionOccupationList2View
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConstructionOccupationList2Controller @Inject()(
                                                        override val messagesApi: MessagesApi,
-                                                       sessionRepository: SessionRepository,
                                                        @Named(NavConstant.construction) navigator: Navigator,
                                                        identify: UnauthenticatedIdentifierAction,
                                                        getData: DataRetrievalAction,
                                                        requireData: DataRequiredAction,
                                                        formProvider: ConstructionOccupationList2FormProvider,
                                                        val controllerComponents: MessagesControllerComponents,
-                                                       view: ConstructionOccupationList2View
+                                                       view: ConstructionOccupationList2View,
+                                                       save: SaveToSession
                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -67,14 +67,15 @@ class ConstructionOccupationList2Controller @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionOccupationList2Page, value))
-            newUserAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Construction.list2))
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(ConstructionOccupationList2Page, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Construction.list2))
+              )
             } else {
-              Future.successful(updatedAnswers)
+              Future.fromTry(request.userAnswers.set(ConstructionOccupationList2Page, value))
             }
-            _ <- sessionRepository.set(newUserAnswers)
-          } yield Redirect(navigator.nextPage(ConstructionOccupationList2Page, mode)(newUserAnswers))
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(ConstructionOccupationList2Page, mode)(updatedAnswers))
         }
       )
   }

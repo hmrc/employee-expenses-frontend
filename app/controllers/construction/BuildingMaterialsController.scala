@@ -27,22 +27,22 @@ import pages.construction.BuildingMaterialsPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.construction.BuildingMaterialsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class BuildingMaterialsController @Inject()(
                                              override val messagesApi: MessagesApi,
-                                             sessionRepository: SessionRepository,
                                              @Named(NavConstant.construction) navigator: Navigator,
                                              identify: UnauthenticatedIdentifierAction,
                                              getData: DataRetrievalAction,
                                              requireData: DataRequiredAction,
                                              formProvider: BuildingMaterialsFormProvider,
                                              val controllerComponents: MessagesControllerComponents,
-                                             view: BuildingMaterialsView
+                                             view: BuildingMaterialsView,
+                                             save: SaveToSession
                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,11 +66,12 @@ class BuildingMaterialsController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount = if (value) ClaimAmounts.Construction.buildingMaterials else ClaimAmounts.Construction.allOther
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BuildingMaterialsPage, value))
-            amount: Int = if (value) ClaimAmounts.Construction.buildingMaterials else ClaimAmounts.Construction.allOther
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(BuildingMaterialsPage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(BuildingMaterialsPage, mode)(updatedAnswers))
         }
       )
