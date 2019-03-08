@@ -16,6 +16,7 @@
 
 package views
 
+import play.api.Application
 import play.twirl.api.HtmlFormat
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
@@ -24,11 +25,9 @@ import views.html.CheckYourAnswersView
 
 class CheckYourAnswersViewSpec extends ViewBehaviours {
 
-  val application = applicationBuilder().build()
+  val application: Application = applicationBuilder().build()
 
   "Index view" must {
-
-    val view = application.injector.instanceOf[CheckYourAnswersView]
 
     val cyaHelper = new CheckYourAnswersHelper(fullUserAnswers)
 
@@ -40,15 +39,38 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       cyaHelper.yourAddress
     ).flatten))
 
-    def applyView(): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections)(fakeRequest, messages)
+    def applyView(removeFRE: Boolean): HtmlFormat.Appendable =
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, removeFRE)(fakeRequest, messages)
 
-    def applyViewWithAuth(): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    def applyViewWithAuth(removeFRE: Boolean): HtmlFormat.Appendable =
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, removeFRE)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView(), "checkYourAnswers")
+    behave like normalPage(applyView(true), "checkYourAnswers")
 
-    behave like pageWithAccountMenu(applyViewWithAuth())
+    behave like pageWithAccountMenu(applyViewWithAuth(true))
+
+    "display correct content" when {
+      "removeFRE is false" in {
+        val doc = asDocument(applyView(false))
+
+        assertContainsMessages(doc,
+          "checkYourAnswers.heading.claimExpenses",
+          "checkYourAnswers.claimExpenses",
+          "checkYourAnswers.confirmInformation",
+          "checkYourAnswers.prosecuted"
+        )
+
+        doc.getElementById("submit").text mustBe messages("site.accept")
+      }
+
+      "removeFRE is true" in {
+        val doc = asDocument(applyView(true))
+
+        assertContainsMessages(doc, "checkYourAnswers.heading")
+
+        doc.getElementById("submit").text mustBe messages("site.save")
+      }
+    }
   }
 
   application.stop()

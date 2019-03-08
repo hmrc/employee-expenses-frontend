@@ -49,6 +49,19 @@
         @if(removeFRE) {
             @components.submit_button(Some("site.save"))
         } else {
+
+            <h2>@messages("checkYourAnswers.claimExpenses")</h2>
+            <p>@messages("checkYourAnswers.confirmInformation")</p>
+
+            <div class="notice">
+                <i class="icon icon-important">
+                    <span class="visually-hidden">Warning</span>
+                </i>
+                <strong class="bold-small">
+                    @messages("checkYourAnswers.prosecuted")
+                </strong>
+            </div>
+
             @components.submit_button(Some("site.accept"))
         }
     }
