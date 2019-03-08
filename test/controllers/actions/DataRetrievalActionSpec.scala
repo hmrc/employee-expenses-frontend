@@ -23,14 +23,15 @@ import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import play.api.libs.json.Json
-import repositories.SessionRepository
+import repositories.{AuthedSessionRepository, SessionRepository}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
-  class Harness(sessionRepository: SessionRepository) extends DataRetrievalActionImpl(sessionRepository) {
+  class Harness(sessionRepository: SessionRepository, authedSessionRepository: AuthedSessionRepository)
+    extends DataRetrievalActionImpl(sessionRepository, authedSessionRepository) {
     def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = transform(request)
   }
 
@@ -41,10 +42,11 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
       "set userAnswers to 'None' in the request" in {
 
         val sessionRepository = mock[SessionRepository]
+        val authedSessionRepository = mock[AuthedSessionRepository]
         when(sessionRepository.get("id")) thenReturn Future(None)
-        val action = new Harness(sessionRepository)
+        val action = new Harness(sessionRepository, authedSessionRepository)
 
-        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, userAnswersId, Some(fakeNino)))
+        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, UnAuthed(""), Some(fakeNino)))
 
         whenReady(futureResult) { result =>
           result.userAnswers.isEmpty mustBe true
@@ -57,10 +59,11 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
       "build a userAnswers object and add it to the request" in {
 
         val sessionRepository = mock[SessionRepository]
+        val authedSessionRepository = mock[AuthedSessionRepository]
         when(sessionRepository.get("id")) thenReturn Future(Some(new UserAnswers("id", Json.obj())))
-        val action = new Harness(sessionRepository)
+        val action = new Harness(sessionRepository, authedSessionRepository)
 
-        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, userAnswersId, Some(fakeNino)))
+        val futureResult = action.callTransform(IdentifierRequest(fakeRequest, UnAuthed(""), Some(fakeNino)))
 
         whenReady(futureResult) { result =>
           result.userAnswers.isDefined mustBe true
