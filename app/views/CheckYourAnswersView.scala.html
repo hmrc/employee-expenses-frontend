@@ -21,7 +21,7 @@
     formHelper: FormWithCSRF
 )
 
-@(answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(answerSections: Seq[Section], freResponse: FlatRateExpenseOptions, removeFre: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("checkYourAnswers.title")
@@ -29,9 +29,11 @@
 
     @components.back_link()
 
-    @components.heading("checkYourAnswers.heading")
-
-    <p>@messages("checkYourAnswers.guidance")</p>
+    @if(removeFre) {
+        @components.heading("checkYourAnswers.heading")
+    } else {
+        @components.heading("checkYourAnswers.title.claimExpenses")
+    }
 
     @for(section <- answerSections){
         @{
@@ -43,6 +45,35 @@
     }
 
     @formHelper(action = CheckYourAnswersController.onSubmit, 'autoComplete -> "off") {
-        @components.submit_button()
+
+        <h2>@messages("checkYourAnswers.claimExpenses")</h2>
+
+        @if(freResponse == FlatRateExpenseOptions.FRENoYears && !removeFre) {
+            <p>@messages("checkYourAnswers.confirmInformationNoFre")</p>
+        } else {
+            <p>@messages("checkYourAnswers.confirmInformationChangeFre")</p>
+        }
+
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Warning</span>
+            </i>
+            <strong class="bold-small">
+            @messages("checkYourAnswers.prosecuted")
+            </strong>
+        </div>
+
+        @if(freResponse == FlatRateExpenseOptions.FRENoYears && !removeFre) {
+            @components.submit_button(messages("site.acceptClaimExpenses"))
+        }
+
+        @if((freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
+                freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) && !removeFre) {
+            @components.submit_button(messages("site.acceptChangeClaim"))
+        }
+
+        @if(removeFre) {
+            @components.submit_button(messages("site.acceptStopClaim"))
+        }
     }
 }

@@ -41,7 +41,7 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
 
       val request = FakeRequest(GET, alreadyClaimingFREDifferentAmountsRoute)
 
@@ -55,8 +55,8 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase {
         view(
           form,
           NormalMode,
-          minimumUserAnswers.get(ClaimAmountAndAnyDeductions).get,
-          minimumUserAnswers.get(FREAmounts).get
+          fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+          fullUserAnswers.get(FREAmounts).get
         )(fakeRequest, messages).toString
 
       application.stop()
@@ -64,7 +64,7 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = minimumUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.values.head).success.value
+      val userAnswers = fullUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -80,8 +80,8 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase {
         view(
           form.fill(AlreadyClaimingFREDifferentAmounts.values.head),
           NormalMode,
-          minimumUserAnswers.get(ClaimAmountAndAnyDeductions).get,
-          minimumUserAnswers.get(FREAmounts).get
+          fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+          fullUserAnswers.get(FREAmounts).get
         )(fakeRequest, messages).toString
 
       application.stop()
@@ -90,7 +90,7 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(minimumUserAnswers))
+        applicationBuilder(userAnswers = Some(fullUserAnswers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -109,7 +109,7 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
 
       val request =
         FakeRequest(POST, alreadyClaimingFREDifferentAmountsRoute)
@@ -127,8 +127,8 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase {
         view(
           boundForm,
           NormalMode,
-          minimumUserAnswers.get(ClaimAmountAndAnyDeductions).get,
-          minimumUserAnswers.get(FREAmounts).get
+          fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+          fullUserAnswers.get(FREAmounts).get
         )(fakeRequest, messages).toString
 
       application.stop()

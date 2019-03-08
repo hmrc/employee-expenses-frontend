@@ -24,7 +24,7 @@ import models.FlatRateExpenseOptions.FRENoYears
 import models.auditing.AuditData
 import models.auditing.AuditEventType._
 import navigation.Navigator
-import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated._
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -54,17 +54,28 @@ class CheckYourAnswersController @Inject()(
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
       val cyaHelper = new CheckYourAnswersHelper(request.userAnswers)
+      val removeFre: Boolean = request.userAnswers.get(RemoveFRECodePage).isDefined
 
-      val sections = Seq(AnswerSection(None, Seq(
-        cyaHelper.industryType,
-        cyaHelper.employerContribution,
-        cyaHelper.expensesEmployerPaid,
-        cyaHelper.taxYearSelection,
-        cyaHelper.yourAddress,
-        cyaHelper.yourEmployer
-      ).flatten))
+      request.userAnswers.get(FREResponse) match {
+        case Some(freResponse) =>
+          val sections = Seq(AnswerSection(None, Seq(
+            cyaHelper.industryType,
+            cyaHelper.employerContribution,
+            cyaHelper.expensesEmployerPaid,
+            cyaHelper.claimAmountAndDeductions,
+            cyaHelper.taxYearSelection,
+            cyaHelper.alreadyClaimingFRESameAmount,
+            cyaHelper.alreadyClaimingFREDifferentAmounts,
+            cyaHelper.changeWhichTaxYears,
+            cyaHelper.removeFRECode,
+            cyaHelper.yourAddress,
+            cyaHelper.yourEmployer
+          ).flatten))
 
-      Ok(view(sections))
+          Ok(view(sections, freResponse, removeFre))
+        case _ =>
+          Redirect(routes.SessionExpiredController.onPageLoad())
+      }
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -76,15 +87,21 @@ class CheckYourAnswersController @Inject()(
         request.userAnswers.get(FREResponse),
         request.userAnswers.get(TaxYearSelectionPage),
         request.userAnswers.get(ClaimAmountAndAnyDeductions),
-        request.userAnswers.get(RemoveFRECodePage)
+        request.userAnswers.get(RemoveFRECodePage),
+        request.userAnswers.get(ChangeWhichTaxYearsPage)
       ) match {
-        case (Some(FRENoYears), Some(taxYears), Some(claimAmount), None) =>
+        case (Some(FRENoYears), Some(taxYears), Some(claimAmount), None, None) =>
           submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map(
             result =>
               auditAndRedirect(result, dataToAudit)
           )
-        case (Some(_), Some(taxYears), Some(_), Some(removeYear)) =>
+        case (Some(_), Some(taxYears), Some(_), Some(removeYear), None) =>
           submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, removeYear).map(
+            result =>
+              auditAndRedirect(result, dataToAudit)
+          )
+        case (Some(_), Some(taxYears), Some(claimAmount), None, Some(changeYears)) =>
+          submissionService.submitChangeFREFromCode(request.nino.get, taxYears, claimAmount, changeYears).map(
             result =>
               auditAndRedirect(result, dataToAudit)
           )

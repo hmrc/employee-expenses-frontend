@@ -17,6 +17,8 @@
 package controllers
 
 import base.SpecBase
+import models.FlatRateExpenseOptions.{FREAllYearsAllAmountsDifferent, FREAllYearsAllAmountsSameAsClaimAmount, FRENoYears}
+import models.{FlatRateExpenseOptions, TaxYearSelection}
 import models.auditing._
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.{eq => eqTo, _}
@@ -24,6 +26,8 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
+import pages.FREResponse
+import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage}
 import play.api.inject.bind
 import play.api.libs.json.JsObject
 import play.api.test.FakeRequest
@@ -41,12 +45,15 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
   private val mockSubmissionService = mock[SubmissionService]
   private val mockAuditConnector = mock[AuditConnector]
   private val cyaHelper = new CheckYourAnswersHelper(minimumUserAnswers)
+
   private val minimumSections = Seq(AnswerSection(None, Seq(
     cyaHelper.industryType,
     cyaHelper.employerContribution,
     cyaHelper.expensesEmployerPaid,
+    cyaHelper.claimAmountAndDeductions,
     cyaHelper.taxYearSelection,
-    cyaHelper.yourAddress
+    cyaHelper.alreadyClaimingFRESameAmount,
+    cyaHelper.removeFRECode
   ).flatten))
 
   override def beforeEach(): Unit = reset(mockAuditConnector)
@@ -55,7 +62,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     "onPageLoad" must {
       "return OK and the correct view for a GET" in {
 
-        val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
+        val userAnswers = minimumUserAnswers.set(FREResponse, FRENoYears).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
 
@@ -66,7 +75,20 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(minimumSections)(fakeRequest, messages).toString
+          view(minimumSections, FlatRateExpenseOptions.FRENoYears, removeFre = true)(fakeRequest, messages).toString
+
+        application.stop()
+      }
+
+      "redirect to session expired when no freResponse is found" in {
+
+        val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
+
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
 
         application.stop()
       }
@@ -92,11 +114,11 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         when(mockSubmissionService.submitFRENotInCode(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(true))
 
-        val application = applicationBuilder(Some(minimumUserAnswers))
+        val application = applicationBuilder(Some(fullUserAnswers))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, minimumUserAnswers.data))
+            bind[AuditData].toInstance(AuditData(fakeNino, fullUserAnswers.data))
           ).build()
 
         val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
@@ -113,7 +135,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
             val auditData = captor.getValue
 
             auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual minimumUserAnswers.data
+            auditData.userAnswers mustEqual fullUserAnswers.data
             auditData.userAnswers mustBe a[JsObject]
 
             status(result) mustEqual SEE_OTHER
@@ -129,11 +151,15 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         when(mockSubmissionService.submitRemoveFREFromCode(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(true))
 
-        val application = applicationBuilder(Some(minimumUserAnswers))
+        val userAnswers = minimumUserAnswers
+          .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
+          .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
+
+        val application = applicationBuilder(Some(userAnswers))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, minimumUserAnswers.data))
+            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
           ).build()
 
         val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
@@ -150,7 +176,48 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
             val auditData = captor.getValue
 
             auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual minimumUserAnswers.data
+            auditData.userAnswers mustEqual userAnswers.data
+            auditData.userAnswers mustBe a[JsObject]
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual routes.ConfirmationController.onPageLoad().url
+        }
+
+        application.stop()
+
+      }
+
+      "for submitChangeFREFromCode redirect to CYA when submission success" in {
+        when(mockSubmissionService.submitChangeFREFromCode(any(), any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(true))
+
+        val userAnswers = minimumUserAnswers
+          .set(FREResponse, FREAllYearsAllAmountsDifferent).success.value
+          .set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
+
+        val application = applicationBuilder(Some(userAnswers))
+          .overrides(
+            bind[SubmissionService].toInstance(mockSubmissionService),
+            bind[AuditConnector].toInstance(mockAuditConnector),
+            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
+          ).build()
+
+        val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
+
+        val result = route(application, request).value
+
+        whenReady(result) {
+          _ =>
+
+            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+
+            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseSuccess"), captor.capture())(any(), any(), any())
+
+            val auditData = captor.getValue
+
+            auditData.nino mustEqual fakeNino
+            auditData.userAnswers mustEqual userAnswers.data
             auditData.userAnswers mustBe a[JsObject]
 
             status(result) mustEqual SEE_OTHER
@@ -166,11 +233,11 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         when(mockSubmissionService.submitFRENotInCode(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(false))
 
-        val application = applicationBuilder(Some(minimumUserAnswers))
+        val application = applicationBuilder(Some(fullUserAnswers))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, minimumUserAnswers.data))
+            bind[AuditData].toInstance(AuditData(fakeNino, fullUserAnswers.data))
           ).build()
 
         val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
@@ -187,7 +254,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
             val auditData = captor.getValue
 
             auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual minimumUserAnswers.data
+            auditData.userAnswers mustEqual fullUserAnswers.data
             auditData.userAnswers mustBe a[JsObject]
 
             status(result) mustEqual SEE_OTHER
@@ -203,11 +270,15 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         when(mockSubmissionService.submitRemoveFREFromCode(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(false))
 
-        val application = applicationBuilder(Some(minimumUserAnswers))
+        val userAnswers = minimumUserAnswers
+          .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
+          .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
+
+        val application = applicationBuilder(Some(userAnswers))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, minimumUserAnswers.data))
+            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
           ).build()
 
         val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
@@ -224,7 +295,48 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
             val auditData = captor.getValue
 
             auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual minimumUserAnswers.data
+            auditData.userAnswers mustEqual userAnswers.data
+            auditData.userAnswers mustBe a[JsObject]
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual routes.TechnicalDifficultiesController.onPageLoad().url
+        }
+
+        application.stop()
+
+      }
+
+      "for submitChangeFREFromCode redirect to tech difficulties when submission fail" in {
+        when(mockSubmissionService.submitChangeFREFromCode(any(), any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(false))
+
+        val userAnswers = minimumUserAnswers
+          .set(FREResponse, FREAllYearsAllAmountsDifferent).success.value
+          .set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
+
+        val application = applicationBuilder(Some(userAnswers))
+          .overrides(
+            bind[SubmissionService].toInstance(mockSubmissionService),
+            bind[AuditConnector].toInstance(mockAuditConnector),
+            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
+          ).build()
+
+        val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
+
+        val result = route(application, request).value
+
+        whenReady(result) {
+          _ =>
+
+            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+
+            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseFailure"), captor.capture())(any(), any(), any())
+
+            val auditData = captor.getValue
+
+            auditData.nino mustEqual fakeNino
+            auditData.userAnswers mustEqual userAnswers.data
             auditData.userAnswers mustBe a[JsObject]
 
             status(result) mustEqual SEE_OTHER

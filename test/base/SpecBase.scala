@@ -19,8 +19,8 @@ package base
 import com.github.tototoshi.play2.scalate.Scalate
 import config.FrontendAppConfig
 import controllers.actions._
-import models.EmployerContribution.SomeContribution
-import models.FirstIndustryOptions.Healthcare
+import models.EmployerContribution.{NoContribution, SomeContribution}
+import models.FirstIndustryOptions.{Healthcare, Retail}
 import models.FlatRateExpenseOptions.FRENoYears
 import models.TaxYearSelection.CurrentYear
 import models._
@@ -28,7 +28,7 @@ import org.joda.time.LocalDate
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
-import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
+import pages.authenticated.{AlreadyClaimingFRESameAmountPage, RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage}
 import pages._
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
@@ -97,7 +97,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     None
   )
 
-  def minimumUserAnswers: UserAnswers = emptyUserAnswers
+  def fullUserAnswers: UserAnswers = emptyUserAnswers
     .set(FirstIndustryOptionsPage, Healthcare).success.value
     .set(EmployerContributionPage, SomeContribution).success.value
     .set(ExpensesEmployerPaidPage, 123).success.value
@@ -108,6 +108,14 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     .set(ClaimAmountAndAnyDeductions, 80).success.value
     .set(FREResponse, FRENoYears).success.value
     .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
+  def minimumUserAnswers: UserAnswers = emptyUserAnswers
+    .set(FirstIndustryOptionsPage, Retail).success.value
+    .set(EmployerContributionPage, NoContribution).success.value
+    .set(ClaimAmountAndAnyDeductions, 60).success.value
+    .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
+    .set(AlreadyClaimingFRESameAmountPage, false).success.value
+    .set(RemoveFRECodePage, CurrentYear).success.value
 
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
 

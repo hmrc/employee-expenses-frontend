@@ -38,7 +38,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
   "SubmissionService" when {
     "submitFRENotInCode" must {
-      "return CYA call when give 204 response" in {
+      "return true when give 204 response" in {
         when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(204)))
 
@@ -49,7 +49,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         }
       }
 
-      "return tech difficulties call when give 500 response" in {
+      "return false when give 500 response" in {
         when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(500)))
 
@@ -62,7 +62,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
     }
 
     "submitRemoveFREFromCode" must {
-      "return CYA call when give 204 response" in {
+      "return true when give 204 response" in {
         when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(204)))
 
@@ -73,7 +73,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         }
       }
 
-      "return tech difficulties call when give 500 response" in {
+      "return false when give 500 response" in {
         when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(500)))
 
@@ -85,8 +85,32 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
       }
     }
 
+    "submitChangeFREFromCode" must {
+      "return true when give 204 response" in {
+        when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
+          .thenReturn(Future.successful(HttpResponse(204)))
+
+        val result = submissionService.submitChangeFREFromCode(fakeNino, taxYears, claimAmount, Seq(TaxYearSelection.CurrentYear))
+
+        whenReady(result) {
+          _ mustBe true
+        }
+      }
+
+      "return false when give 500 response" in {
+        when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
+          .thenReturn(Future.successful(HttpResponse(500)))
+
+        val result = submissionService.submitChangeFREFromCode(fakeNino, taxYears, claimAmount, Seq(TaxYearSelection.CurrentYear))
+
+        whenReady(result) {
+          _ mustBe false
+        }
+      }
+    }
+
     "submissionResult" must {
-      "return CYA call when given 204 responses" in {
+      "return true when given 204 responses" in {
         val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(204), HttpResponse(204))))
 
         whenReady(result) {
@@ -94,7 +118,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         }
       }
 
-      "return tech difficulties call when given empty responses" in {
+      "return false when given empty responses" in {
         val result = submissionService.submissionResult(Future.successful(Seq()))
 
         whenReady(result) {
@@ -102,7 +126,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         }
       }
 
-      "return tech difficulties call when not given 204 responses" in {
+      "return false when not given 204 responses" in {
         val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(500))))
 
         whenReady(result) {

@@ -16,6 +16,8 @@
 
 package views
 
+import models.FlatRateExpenseOptions
+import play.api.Application
 import play.twirl.api.HtmlFormat
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
@@ -24,13 +26,11 @@ import views.html.CheckYourAnswersView
 
 class CheckYourAnswersViewSpec extends ViewBehaviours {
 
-  val application = applicationBuilder().build()
+  val application: Application = applicationBuilder().build()
 
   "Index view" must {
 
-    val view = application.injector.instanceOf[CheckYourAnswersView]
-
-    val cyaHelper = new CheckYourAnswersHelper(minimumUserAnswers)
+    val cyaHelper = new CheckYourAnswersHelper(fullUserAnswers)
 
     val sections = Seq(AnswerSection(None, Seq(
       cyaHelper.industryType,
@@ -40,15 +40,51 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       cyaHelper.yourAddress
     ).flatten))
 
-    def applyView(): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections)(fakeRequest, messages)
+    def applyView(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, freOption, removeFRE)(fakeRequest, messages)
 
-    def applyViewWithAuth(): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    def applyViewWithAuth(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, freOption, removeFRE)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView(), "checkYourAnswers")
+    behave like normalPage(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true), "checkYourAnswers")
 
-    behave like pageWithAccountMenu(applyViewWithAuth())
+    behave like pageWithAccountMenu(applyViewWithAuth(FlatRateExpenseOptions.FRENoYears, removeFRE = true))
+
+    "display correct content" when {
+
+      "new claim has been made" in {
+        val doc = asDocument(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = false))
+
+        assertContainsMessages(doc,
+          "checkYourAnswers.heading.claimExpenses",
+          "checkYourAnswers.confirmInformationNoFre"
+        )
+
+        doc.getElementById("submit").text mustBe messages("site.acceptClaimExpenses")
+      }
+
+      "claim has been changed" in {
+        val doc = asDocument(applyView(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent, removeFRE = false))
+
+        assertContainsMessages(doc,
+          "checkYourAnswers.heading.claimExpenses",
+          "checkYourAnswers.confirmInformationChangeFre"
+        )
+
+        doc.getElementById("submit").text mustBe messages("site.acceptChangeClaim")
+      }
+
+      "claim has been stopped" in {
+        val doc = asDocument(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true))
+
+        assertContainsMessages(doc,
+          "checkYourAnswers.heading",
+          "checkYourAnswers.confirmInformationChangeFre"
+        )
+
+        doc.getElementById("submit").text mustBe messages("site.acceptStopClaim")
+      }
+    }
   }
 
   application.stop()
