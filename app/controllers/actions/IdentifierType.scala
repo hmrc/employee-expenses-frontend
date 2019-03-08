@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package models.requests
+package controllers.actions
 
-import controllers.actions.IdentifierType
-import play.api.mvc.{Request, WrappedRequest}
+sealed trait IdentifierType
 
-case class IdentifierRequest[A] (request: Request[A], identifier: IdentifierType, nino: Option[String] = None) extends WrappedRequest[A](request)
+case class Authed(internalId: String) extends IdentifierType
+
+case class UnAuthed(sessionId: String) extends IdentifierType

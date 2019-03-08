@@ -37,7 +37,7 @@ class IndexController @Inject()(
     implicit request =>
 
       val updateSession = if (request.userAnswers.isEmpty) {
-        sessionRepository.set(UserAnswers(request.mongoKey)).map(_ => ())
+        sessionRepository.set(UserAnswers(request.identifier)).map(_ => ())
       } else {
         Future.successful(())
       }

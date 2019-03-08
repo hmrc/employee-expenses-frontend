@@ -19,24 +19,35 @@ package controllers.actions
 import javax.inject.Inject
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import play.api.mvc.ActionTransformer
-import repositories.SessionRepository
+import repositories.{AuthedSessionRepository, SessionRepository}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class DataRetrievalActionImpl @Inject()(
-                                         val sessionRepository: SessionRepository
+                                         val sessionRepository: SessionRepository,
+                                         val authedSessionRepository: AuthedSessionRepository
                                        )(implicit val executionContext: ExecutionContext) extends DataRetrievalAction {
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
 
     implicit val hc = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    sessionRepository.get(request.identifier).map {
-      case None =>
-        OptionalDataRequest(request.request, request.identifier, request.nino, None)
-      case Some(userAnswers) =>
-        OptionalDataRequest(request.request, request.identifier, request.nino, Some(userAnswers))
+    request.identifier match {
+      case id: Authed =>
+        authedSessionRepository.get(id.internalId).map {
+          case None =>
+            OptionalDataRequest(request.request, id.internalId, request.nino, None)
+          case Some(userAnswers) =>
+            OptionalDataRequest(request.request, id.internalId, request.nino, Some(userAnswers))
+        }
+      case id: UnAuthed =>
+        sessionRepository.get(id.sessionId).map {
+          case None =>
+            OptionalDataRequest(request.request, id.sessionId, request.nino, None)
+          case Some(userAnswers) =>
+            OptionalDataRequest(request.request, id.sessionId, request.nino, Some(userAnswers))
+        }
     }
   }
 }

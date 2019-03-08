@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.NavConstant
+import config.{FrontendAppConfig, NavConstant}
 import controllers.actions._
 import forms.ExpensesEmployerPaidFormProvider
 import javax.inject.{Inject, Named}
@@ -26,8 +26,9 @@ import pages.ExpensesEmployerPaidPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
+import repositories.{AuthedSessionRepository, SessionRepository}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.ExpensesEmployerPaidView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,13 +36,16 @@ import scala.concurrent.{ExecutionContext, Future}
 class ExpensesEmployerPaidController @Inject()(
                                                 override val messagesApi: MessagesApi,
                                                 sessionRepository: SessionRepository,
+                                                authedSessionRepository: AuthedSessionRepository,
                                                 @Named(NavConstant.generic) navigator: Navigator,
                                                 identify: UnauthenticatedIdentifierAction,
                                                 getData: DataRetrievalAction,
                                                 requireData: DataRequiredAction,
                                                 formProvider: ExpensesEmployerPaidFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
-                                                view: ExpensesEmployerPaidView
+                                                view: ExpensesEmployerPaidView,
+                                                config: FrontendAppConfig,
+                                                save: SaveToSession
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
@@ -67,7 +71,7 @@ class ExpensesEmployerPaidController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ExpensesEmployerPaidPage, value))
-            _ <- sessionRepository.set(updatedAnswers)
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(ExpensesEmployerPaidPage, mode)(updatedAnswers))
         }
       )

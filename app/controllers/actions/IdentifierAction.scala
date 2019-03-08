@@ -46,7 +46,7 @@ class AuthenticatedIdentifierAction @Inject()(
         val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
         val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
 
-        block(IdentifierRequest(request, internalId, Some(nino)))
+        block(IdentifierRequest(request, Authed(internalId), Some(nino)))
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
         unauthorised(request.session.get(config.mongoKey))

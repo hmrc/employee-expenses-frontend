@@ -24,9 +24,10 @@ import navigation.Navigator
 import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage, ExpensesEmployerPaidPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
+import repositories.{AuthedSessionRepository, SessionRepository}
 import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.{Save, SaveToSession}
 import views.html.ClaimAmountView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,13 +36,16 @@ class ClaimAmountController @Inject()(
                                        appConfig: FrontendAppConfig,
                                        override val messagesApi: MessagesApi,
                                        sessionRepository: SessionRepository,
+                                       authedSessionRepository: AuthedSessionRepository,
                                        @Named(NavConstant.generic) navigator: Navigator,
                                        identify: UnauthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: ClaimAmountView,
-                                       claimAmountService: ClaimAmountService
+                                       claimAmountService: ClaimAmountService,
+                                       config: FrontendAppConfig,
+                                       save: SaveToSession
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   import claimAmountService._
@@ -55,7 +59,7 @@ class ClaimAmountController @Inject()(
 
           for {
             saveClaimAmountAndAnyDeductions <- Future.fromTry(request.userAnswers.set(ClaimAmountAndAnyDeductions, claimAmountAndAnyDeductions))
-            _ <- sessionRepository.set(saveClaimAmountAndAnyDeductions)
+            _ <- save.toSession(request, saveClaimAmountAndAnyDeductions)
           } yield {
             Ok(view(
               claimAmount = claimAmount,
@@ -73,7 +77,7 @@ class ClaimAmountController @Inject()(
           }
 
         case _ =>
-          Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+          Future.successful(Redirect(routes.IndexController.onPageLoad()))
       }
   }
 }

@@ -20,7 +20,7 @@ import com.google.inject.AbstractModule
 import com.google.inject.name.Names
 import controllers.actions._
 import navigation._
-import repositories.{DefaultSessionRepository, SessionRepository}
+import repositories.{AuthedSessionRepository, AuthenticatedSessionRepository, DefaultSessionRepository, SessionRepository}
 import scalate.ScalateEngineBoot
 
 class Module extends AbstractModule {
@@ -34,6 +34,7 @@ class Module extends AbstractModule {
     bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction]).asEagerSingleton()
 
     bind(classOf[SessionRepository]).to(classOf[DefaultSessionRepository]).asEagerSingleton()
+    bind(classOf[AuthedSessionRepository]).to(classOf[AuthenticatedSessionRepository]).asEagerSingleton()
     bind(classOf[ScalateEngineBoot]).asEagerSingleton()
 
     bind(classOf[Navigator]).annotatedWith(Names.named("Generic")).to(classOf[GenericNavigator])

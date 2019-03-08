@@ -50,11 +50,11 @@ class UnauthenticatedIdentifierAction @Inject()(
         val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
         val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
 
-        block(IdentifierRequest(request, internalId, Some(nino)))
+        block(IdentifierRequest(request, Authed(internalId), Some(nino)))
     }.recoverWith {
       case _: AuthorisationException =>
         val sessionId: String = hc.sessionId.map(_.value).getOrElse(throw new Exception("no sessionId"))
-        block(IdentifierRequest(request, sessionId)).map {
+        block(IdentifierRequest(request, UnAuthed(sessionId))).map {
           result =>
             if (existingMongoKey.isEmpty) {
               result.addingToSession(config.mongoKey -> sessionId)(request)

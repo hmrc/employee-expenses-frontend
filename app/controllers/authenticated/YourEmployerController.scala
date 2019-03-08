@@ -18,8 +18,8 @@ package controllers.authenticated
 
 import config.NavConstant
 import controllers.actions._
-import controllers.routes._
 import controllers.authenticated.routes._
+import controllers.routes._
 import forms.authenticated.YourEmployerFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
@@ -29,7 +29,7 @@ import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
+import repositories.AuthedSessionRepository
 import service.TaiService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.authenticated.YourEmployerView
@@ -38,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class YourEmployerController @Inject()(
                                         override val messagesApi: MessagesApi,
-                                        sessionRepository: SessionRepository,
+                                        sessionRepository: AuthedSessionRepository,
                                         @Named(NavConstant.authenticated) navigator: Navigator,
                                         identify: IdentifierAction,
                                         getData: DataRetrievalAction,

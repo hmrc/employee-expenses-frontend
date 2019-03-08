@@ -20,7 +20,6 @@ import config.NavConstant
 import connectors.CitizenDetailsConnector
 import controllers.actions._
 import controllers.authenticated.routes._
-import controllers.routes._
 import forms.authenticated.YourAddressFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
@@ -31,7 +30,7 @@ import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
+import repositories.AuthedSessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.authenticated.YourAddressView
 
@@ -40,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class YourAddressController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        citizenDetailsConnector: CitizenDetailsConnector,
-                                       sessionRepository: SessionRepository,
+                                       sessionRepository: AuthedSessionRepository,
                                        @Named(NavConstant.authenticated) navigator: Navigator,
                                        identify: IdentifierAction,
                                        getData: DataRetrievalAction,

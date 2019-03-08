@@ -18,12 +18,12 @@ package controllers.authenticated
 
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
-import controllers.actions.IdentifierAction
+import controllers.actions.{Authed, IdentifierAction}
 import controllers.authenticated.routes._
 import models.{NormalMode, UserAnswers}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
+import repositories.{AuthedSessionRepository, SessionRepository}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.ExecutionContext
@@ -34,18 +34,34 @@ class RedirectMongoKeyController @Inject()(
                                             identify: IdentifierAction,
                                             val controllerComponents: MessagesControllerComponents,
                                             appConfig: FrontendAppConfig,
-                                            sessionRepository: SessionRepository
+                                            sessionRepository: SessionRepository,
+                                            authedSessionRepository: AuthedSessionRepository
                                           )(implicit ec: ExecutionContext) extends FrontendBaseController {
 
-  def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify {
+  def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify.async {
     implicit request =>
-      sessionRepository.get(key).map {
-        case Some(userAnswers) =>
-          sessionRepository.set(UserAnswers(request.identifier, userAnswers.data))
-          sessionRepository.set(UserAnswers(key, Json.obj()))
-        case _ =>
-          Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+      for {
+        ua <- sessionRepository.get(key).map{_.get}
+        id = request.identifier.asInstanceOf[Authed]
+        _ <- authedSessionRepository.set(UserAnswers(id.internalId, ua.data))
+        _ <- sessionRepository.set(UserAnswers(key, Json.obj()))
+      } yield {
+        Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
       }
-      Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
   }
 }
+
+/*
+implicit request =>
+sessionRepository.get(key).map {
+  userAnswers =>
+  (userAnswers, request.identifier) match {
+  case (Some(ua), id: Authed) =>
+  authedSessionRepository.set(UserAnswers(id.internalId, ua.data))
+  sessionRepository.set(UserAnswers(key, Json.obj()))
+  case _ =>
+  Redirect(TechnicalDifficultiesController.onPageLoad())
+}
+}
+  Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
+}*/
