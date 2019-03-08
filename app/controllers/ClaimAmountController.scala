@@ -27,7 +27,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.{AuthedSessionRepository, SessionRepository}
 import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.{Save, SaveToSession}
+import utils.SaveToSession
 import views.html.ClaimAmountView
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -22,6 +22,7 @@ import controllers.actions._
 import navigation._
 import repositories.{AuthedSessionRepository, AuthenticatedSessionRepository, DefaultSessionRepository, SessionRepository}
 import scalate.ScalateEngineBoot
+import utils.{Save, SaveToSession}
 
 class Module extends AbstractModule {
 
@@ -36,6 +37,8 @@ class Module extends AbstractModule {
     bind(classOf[SessionRepository]).to(classOf[DefaultSessionRepository]).asEagerSingleton()
     bind(classOf[AuthedSessionRepository]).to(classOf[AuthenticatedSessionRepository]).asEagerSingleton()
     bind(classOf[ScalateEngineBoot]).asEagerSingleton()
+
+    bind(classOf[SaveToSession]).to(classOf[Save]).asEagerSingleton()
 
     bind(classOf[Navigator]).annotatedWith(Names.named("Generic")).to(classOf[GenericNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named("Engineering")).to(classOf[EngineeringNavigator])
