@@ -14,8 +14,10 @@
  * limitations under the License.
  *@
 
-@()(implicit messages: Messages)
+@(buttonTextKey: String = "site.continue")(implicit messages: Messages)
 
 <div class="section">
-    <button id="submit" class="button">@messages("site.continue")</button>
+ <button id="submit" class="button">
+  @messages(buttonTextKey)
+ </button>
 </div>

@@ -49,9 +49,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
         Some(AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode).url))
   }
 
-  def alreadyClaimingFRESameAmount: Option[AnswerRow] = {
-      Some(AnswerRow("alreadyClaimingFRESameAmount.checkYourAnswersLabel", "alreadyClaimingFRESameAmount.altNoText", true,
-        Some(AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode).url)))
+  def alreadyClaimingFRESameAmount: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFRESameAmountPage) map {
+    _ =>
+      AnswerRow("alreadyClaimingFRESameAmount.checkYourAnswersLabel", "alreadyClaimingFRESameAmount.altNoText", true,
+        Some(AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode).url))
   }
 
   def sameEmployerContributionAllYears: Option[AnswerRow] = userAnswers.get(SameEmployerContributionAllYearsPage) map {
