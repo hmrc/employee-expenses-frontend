@@ -41,6 +41,6 @@ class UpdateEmployerInformationController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view(navigator.nextPage(UpdateYourEmployerInformationPage, NormalMode)(request.userAnswers).url))
+      Ok(view(navigator.nextPage(UpdateYourEmployerInformationPage, mode)(request.userAnswers).url))
   }
 }

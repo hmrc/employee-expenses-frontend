@@ -71,7 +71,7 @@ class YourEmployerController @Inject()(
                   Ok(view(preparedForm, mode, employments.filter(p => p.endDate.isEmpty).head.name))
                 }
               } else {
-                Redirect(UpdateEmployerInformationController.onPageLoad())
+                Redirect(UpdateEmployerInformationController.onPageLoad(mode))
               }
           }
         case _ =>
