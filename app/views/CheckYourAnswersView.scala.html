@@ -64,16 +64,16 @@
         </div>
 
         @if(freResponse == FlatRateExpenseOptions.FRENoYears && !removeFre) {
-            @components.submit_button(Some(messages("site.acceptClaimExpenses")))
+            @components.submit_button(messages("site.acceptClaimExpenses"))
         }
 
         @if((freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
                 freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) && !removeFre) {
-            @components.submit_button(Some(messages("site.acceptChangeClaim")))
+            @components.submit_button(messages("site.acceptChangeClaim"))
         }
 
         @if(removeFre) {
-            @components.submit_button(Some(messages("site.acceptStopClaim")))
+            @components.submit_button(messages("site.acceptStopClaim"))
         }
     }
 }

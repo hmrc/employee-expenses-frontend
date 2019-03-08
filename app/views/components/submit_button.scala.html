@@ -14,14 +14,10 @@
  * limitations under the License.
  *@
 
-@(altTextKey: Option[String] = None)(implicit messages: Messages)
+@(buttonTextKey: String = "site.continue")(implicit messages: Messages)
 
 <div class="section">
-    <button id="submit" class="button">
-     @if(altTextKey) {
-      @messages(altTextKey.get)
-     } else {
-      @messages("site.continue")
-     }
-    </button>
+ <button id="submit" class="button">
+  @messages(buttonTextKey)
+ </button>
 </div>
