@@ -21,7 +21,7 @@
     formHelper: FormWithCSRF
 )
 
-@(answerSections: Seq[Section], removeFRE: Boolean)(implicit request: Request[_], messages: Messages)
+@(answerSections: Seq[Section], freResponse: FlatRateExpenseOptions, removeFre: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("checkYourAnswers.title")
@@ -29,7 +29,7 @@
 
     @components.back_link()
 
-    @if(removeFRE) {
+    @if(removeFre) {
         @components.heading("checkYourAnswers.heading")
     } else {
         @components.heading("checkYourAnswers.title.claimExpenses")
@@ -46,23 +46,34 @@
 
     @formHelper(action = CheckYourAnswersController.onSubmit, 'autoComplete -> "off") {
 
-        @if(removeFRE) {
-            @components.submit_button(Some("site.save"))
+        <h2>@messages("checkYourAnswers.claimExpenses")</h2>
+
+        @if(freResponse == FlatRateExpenseOptions.FRENoYears && !removeFre) {
+            <p>@messages("checkYourAnswers.confirmInformationNoFre")</p>
         } else {
+            <p>@messages("checkYourAnswers.confirmInformationChangeFre")</p>
+        }
 
-            <h2>@messages("checkYourAnswers.claimExpenses")</h2>
-            <p>@messages("checkYourAnswers.confirmInformation")</p>
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Warning</span>
+            </i>
+            <strong class="bold-small">
+            @messages("checkYourAnswers.prosecuted")
+            </strong>
+        </div>
 
-            <div class="notice">
-                <i class="icon icon-important">
-                    <span class="visually-hidden">Warning</span>
-                </i>
-                <strong class="bold-small">
-                    @messages("checkYourAnswers.prosecuted")
-                </strong>
-            </div>
+        @if(freResponse == FlatRateExpenseOptions.FRENoYears && !removeFre) {
+            @components.submit_button(Some(messages("site.acceptClaimExpenses")))
+        }
 
-            @components.submit_button(Some("site.accept"))
+        @if((freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
+                freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) && !removeFre) {
+            @components.submit_button(Some(messages("site.acceptChangeClaim")))
+        }
+
+        @if(removeFre) {
+            @components.submit_button(Some(messages("site.acceptStopClaim")))
         }
     }
 }
