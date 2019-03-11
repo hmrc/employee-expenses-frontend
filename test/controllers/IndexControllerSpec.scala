@@ -87,7 +87,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
           authedSessionRepository = injector.instanceOf[AuthedSessionRepository]
         )(ec = injector.instanceOf[ExecutionContext])
 
-      val request = IdentifierRequest(FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key"), Authed(userAnswersId), Some(fakeNino))
+      val request = IdentifierRequest(FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url), Authed(userAnswersId), Some(fakeNino))
 
       val result = controller.onPageLoad(request)
 
