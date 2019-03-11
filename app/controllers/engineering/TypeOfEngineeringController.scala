@@ -27,22 +27,22 @@ import pages.engineering.TypeOfEngineeringPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.engineering.TypeOfEngineeringView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class TypeOfEngineeringController @Inject()(
                                              override val messagesApi: MessagesApi,
-                                             sessionRepository: SessionRepository,
                                              @Named(NavConstant.engineering) navigator: Navigator,
                                              identify: UnauthenticatedIdentifierAction,
                                              getData: DataRetrievalAction,
                                              requireData: DataRequiredAction,
                                              formProvider: TypeOfEngineeringFormProvider,
                                              val controllerComponents: MessagesControllerComponents,
-                                             view: TypeOfEngineeringView
+                                             view: TypeOfEngineeringView,
+                                             save: SaveToSession
                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -67,13 +67,15 @@ class TypeOfEngineeringController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfEngineeringPage, value))
-            newAnswers <- value match {
-              case TypeOfEngineering.NoneOfTheAbove => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate))
-              case _ => Future.successful(updatedAnswers)
+            updatedAnswers <- if (value == TypeOfEngineering.NoneOfTheAbove) {
+              Future.fromTry(request.userAnswers.set(TypeOfEngineeringPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
+              )
+            } else {
+              Future.fromTry(request.userAnswers.set(TypeOfEngineeringPage, value))
             }
-            _ <- sessionRepository.set(newAnswers)
-          } yield Redirect(navigator.nextPage(TypeOfEngineeringPage, mode)(newAnswers))
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(TypeOfEngineeringPage, mode)(updatedAnswers))
         }
       )
   }

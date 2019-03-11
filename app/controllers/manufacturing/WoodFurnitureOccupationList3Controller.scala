@@ -27,23 +27,23 @@ import pages.manufacturing.WoodFurnitureOccupationList3Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.manufacturing.WoodFurnitureOccupationList3View
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class WoodFurnitureOccupationList3Controller @Inject()(
                                                         override val messagesApi: MessagesApi,
-                                                        sessionRepository: SessionRepository,
                                                         @Named(NavConstant.manufacturing) navigator: Navigator,
                                                         identify: UnauthenticatedIdentifierAction,
                                                         getData: DataRetrievalAction,
                                                         requireData: DataRequiredAction,
                                                         formProvider: WoodFurnitureOccupationList3FormProvider,
                                                         val controllerComponents: MessagesControllerComponents,
-                                                        view: WoodFurnitureOccupationList3View
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                        view: WoodFurnitureOccupationList3View,
+                                                        save: SaveToSession
+                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -67,14 +67,17 @@ class WoodFurnitureOccupationList3Controller @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(WoodFurnitureOccupationList3Page, value))
-            newUserAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.list3))
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(WoodFurnitureOccupationList3Page, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.list3))
+              )
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.allOther))
+              Future.fromTry(request.userAnswers.set(WoodFurnitureOccupationList3Page, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.allOther))
+              )
             }
-            _              <- sessionRepository.set(newUserAnswers)
-          } yield Redirect(navigator.nextPage(WoodFurnitureOccupationList3Page, mode)(newUserAnswers))
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(WoodFurnitureOccupationList3Page, mode)(updatedAnswers))
         }
       )
   }

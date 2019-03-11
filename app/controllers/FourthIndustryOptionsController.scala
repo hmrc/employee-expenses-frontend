@@ -27,22 +27,22 @@ import pages.{ClaimAmount, FourthIndustryOptionsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.FourthIndustryOptionsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class FourthIndustryOptionsController @Inject()(
                                                  override val messagesApi: MessagesApi,
-                                                 sessionRepository: SessionRepository,
                                                  @Named(NavConstant.generic) navigator: Navigator,
                                                  identify: UnauthenticatedIdentifierAction,
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
                                                  formProvider: FourthIndustryOptionsFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 view: FourthIndustryOptionsView
+                                                 view: FourthIndustryOptionsView,
+                                                 save: SaveToSession
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -75,7 +75,7 @@ class FourthIndustryOptionsController @Inject()(
               case Prisons => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.prisons))
               case _ => Future.successful(updatedAnswers)
             }
-            _ <- sessionRepository.set(newAnswers)
+            _ <- save.toSession(request, newAnswers)
           } yield Redirect(navigator.nextPage(FourthIndustryOptionsPage, mode)(newAnswers))
         }
       )

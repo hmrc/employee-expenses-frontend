@@ -27,22 +27,22 @@ import pages.transport.TransportVehicleTradePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.transport.TransportVehicleTradeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class TransportVehicleTradeController @Inject()(
                                                  override val messagesApi: MessagesApi,
-                                                 sessionRepository: SessionRepository,
                                                  @Named(NavConstant.transport) navigator: Navigator,
                                                  identify: UnauthenticatedIdentifierAction,
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
                                                  formProvider: TransportVehicleTradeFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 view: TransportVehicleTradeView
+                                                 view: TransportVehicleTradeView,
+                                                 save: SaveToSession
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -66,19 +66,21 @@ class TransportVehicleTradeController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount = value match {
+            case TransportVehicleTrade.Builder => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
+            case TransportVehicleTrade.VehicleRepairerWagonLifter => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
+            case TransportVehicleTrade.RailwayVehiclePainter => ClaimAmounts.Transport.Railways.vehiclePainters
+            case TransportVehicleTrade.Letterer => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
+            case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
+            case TransportVehicleTrade.NoneOfTheAbove => ClaimAmounts.Transport.VehicleTrade.allOther
+          }
+
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportVehicleTradePage, value))
-            amount: Int = value match {
-              case TransportVehicleTrade.Builder => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
-              case TransportVehicleTrade.VehicleRepairerWagonLifter => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
-              case TransportVehicleTrade.RailwayVehiclePainter => ClaimAmounts.Transport.Railways.vehiclePainters
-              case TransportVehicleTrade.Letterer => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
-              case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
-              case TransportVehicleTrade.NoneOfTheAbove => ClaimAmounts.Transport.VehicleTrade.allOther
-            }
-            newAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(newAnswers)
-          } yield Redirect(navigator.nextPage(TransportVehicleTradePage, mode)(newAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportVehicleTradePage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(TransportVehicleTradePage, mode)(updatedAnswers))
         }
       )
   }

@@ -27,22 +27,22 @@ import pages.construction.JoinerCarpenterPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.construction.JoinerCarpenterView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class JoinerCarpenterController @Inject()(
                                            override val messagesApi: MessagesApi,
-                                           sessionRepository: SessionRepository,
                                            @Named(NavConstant.construction) navigator: Navigator,
                                            identify: UnauthenticatedIdentifierAction,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction,
                                            formProvider: JoinerCarpenterFormProvider,
                                            val controllerComponents: MessagesControllerComponents,
-                                           view: JoinerCarpenterView
+                                           view: JoinerCarpenterView,
+                                           save: SaveToSession
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -67,14 +67,15 @@ class JoinerCarpenterController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(JoinerCarpenterPage, value))
-            newUserAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Construction.joinersCarpenters))
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(JoinerCarpenterPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Construction.joinersCarpenters))
+              )
             } else {
-              Future.successful(updatedAnswers)
+              Future.fromTry(request.userAnswers.set(JoinerCarpenterPage, value))
             }
-            _ <- sessionRepository.set(newUserAnswers)
-          } yield Redirect(navigator.nextPage(JoinerCarpenterPage, mode)(newUserAnswers))
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(JoinerCarpenterPage, mode)(updatedAnswers))
         }
       )
   }

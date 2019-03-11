@@ -27,22 +27,22 @@ import pages.healthcare.AmbulanceStaffPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.healthcare.AmbulanceStaffView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AmbulanceStaffController @Inject()(
                                           override val messagesApi: MessagesApi,
-                                          sessionRepository: SessionRepository,
                                           @Named(NavConstant.healthcare) navigator: Navigator,
                                           identify: UnauthenticatedIdentifierAction,
                                           getData: DataRetrievalAction,
                                           requireData: DataRequiredAction,
                                           formProvider: AmbulanceStaffFormProvider,
                                           val controllerComponents: MessagesControllerComponents,
-                                          view: AmbulanceStaffView
+                                          view: AmbulanceStaffView,
+                                          save: SaveToSession
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -67,9 +67,14 @@ class AmbulanceStaffController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value))
-            newAnswers <- if (value) Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Healthcare.ambulanceStaff)) else Future.successful(updatedAnswers)
-            _ <- sessionRepository.set(newAnswers)
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Healthcare.ambulanceStaff))
+              )
+            } else {
+              Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value))
+            }
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(AmbulanceStaffPage, mode)(updatedAnswers))
         }
       )

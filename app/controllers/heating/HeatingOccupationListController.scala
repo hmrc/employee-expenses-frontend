@@ -27,22 +27,22 @@ import pages.heating.HeatingOccupationListPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.heating.HeatingOccupationListView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class HeatingOccupationListController @Inject()(
                                                  override val messagesApi: MessagesApi,
-                                                 sessionRepository: SessionRepository,
                                                  @Named(NavConstant.heating) navigator: Navigator,
                                                  identify: UnauthenticatedIdentifierAction,
                                                  getData: DataRetrievalAction,
                                                  requireData: DataRequiredAction,
                                                  formProvider: HeatingOccupationListFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 view: HeatingOccupationListView
+                                                 view: HeatingOccupationListView,
+                                                 save: SaveToSession
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,11 +66,12 @@ class HeatingOccupationListController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount = if (value) ClaimAmounts.Heating.list else ClaimAmounts.Heating.allOther
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(HeatingOccupationListPage, value))
-            amount = if (value) ClaimAmounts.Heating.list else ClaimAmounts.Heating.allOther
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(HeatingOccupationListPage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(HeatingOccupationListPage, mode)(updatedAnswers))
         }
       )

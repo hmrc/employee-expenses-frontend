@@ -26,23 +26,23 @@ import pages.police.MetropolitanPolicePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.police.MetropolitanPoliceView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class MetropolitanPoliceController @Inject()(
                                               override val messagesApi: MessagesApi,
-                                              sessionRepository: SessionRepository,
                                               @Named(NavConstant.police) navigator: Navigator,
                                               identify: UnauthenticatedIdentifierAction,
                                               getData: DataRetrievalAction,
                                               requireData: DataRequiredAction,
                                               formProvider: MetropolitanPoliceFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
-                                              view: MetropolitanPoliceView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                              view: MetropolitanPoliceView,
+                                              save: SaveToSession
+                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -67,7 +67,7 @@ class MetropolitanPoliceController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(MetropolitanPolicePage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(MetropolitanPolicePage, mode)(updatedAnswers))
         }
       )

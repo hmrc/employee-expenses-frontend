@@ -27,22 +27,22 @@ import pages.engineering.ConstructionalEngineeringList3Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.engineering.ConstructionalEngineeringList3View
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConstructionalEngineeringList3Controller @Inject()(
                                                           override val messagesApi: MessagesApi,
-                                                          sessionRepository: SessionRepository,
                                                           @Named(NavConstant.engineering) navigator: Navigator,
                                                           identify: UnauthenticatedIdentifierAction,
                                                           getData: DataRetrievalAction,
                                                           requireData: DataRequiredAction,
                                                           formProvider: ConstructionalEngineeringList3FormProvider,
                                                           val controllerComponents: MessagesControllerComponents,
-                                                          view: ConstructionalEngineeringList3View
+                                                          view: ConstructionalEngineeringList3View,
+                                                          save: SaveToSession
                                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -67,14 +67,15 @@ class ConstructionalEngineeringList3Controller @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionalEngineeringList3Page, value))
-            newAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.ConstructionalEngineering.list3))
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(ConstructionalEngineeringList3Page, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.ConstructionalEngineering.list3))
+              )
             } else {
-              Future.successful(updatedAnswers)
+              Future.fromTry(request.userAnswers.set(ConstructionalEngineeringList3Page, value))
             }
-            _ <- sessionRepository.set(newAnswers)
-          } yield Redirect(navigator.nextPage(ConstructionalEngineeringList3Page, mode)(newAnswers))
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(ConstructionalEngineeringList3Page, mode)(updatedAnswers))
         }
       )
   }

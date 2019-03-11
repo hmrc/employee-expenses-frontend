@@ -27,22 +27,22 @@ import pages.engineering.FactoryEngineeringApprenticePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.engineering.FactoryEngineeringApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class FactoryEngineeringApprenticeController @Inject()(
                                                         override val messagesApi: MessagesApi,
-                                                        sessionRepository: SessionRepository,
                                                         @Named(NavConstant.engineering) navigator: Navigator,
                                                         identify: UnauthenticatedIdentifierAction,
                                                         getData: DataRetrievalAction,
                                                         requireData: DataRequiredAction,
                                                         formProvider: FactoryEngineeringApprenticeFormProvider,
                                                         val controllerComponents: MessagesControllerComponents,
-                                                        view: FactoryEngineeringApprenticeView
+                                                        view: FactoryEngineeringApprenticeView,
+                                                        save: SaveToSession
                                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,11 +66,12 @@ class FactoryEngineeringApprenticeController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount: Int = if (value) ClaimAmounts.FactoryEngineering.apprentice else ClaimAmounts.FactoryEngineering.allOther
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(FactoryEngineeringApprenticePage, value))
-            amount: Int = if (value) ClaimAmounts.FactoryEngineering.apprentice else ClaimAmounts.FactoryEngineering.allOther
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(FactoryEngineeringApprenticePage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(FactoryEngineeringApprenticePage, mode)(updatedAnswers))
         }
       )

@@ -27,22 +27,22 @@ import pages.transport.AirlineJobListPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.transport.AirlineJobListView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AirlineJobListController @Inject()(
                                           override val messagesApi: MessagesApi,
-                                          sessionRepository: SessionRepository,
                                           @Named(NavConstant.transport) navigator: Navigator,
                                           identify: UnauthenticatedIdentifierAction,
                                           getData: DataRetrievalAction,
                                           requireData: DataRequiredAction,
                                           formProvider: AirlineJobListFormProvider,
                                           val controllerComponents: MessagesControllerComponents,
-                                          view: AirlineJobListView
+                                          view: AirlineJobListView,
+                                          save: SaveToSession
                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -67,14 +67,17 @@ class AirlineJobListController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AirlineJobListPage, value))
-            newAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.Airlines.pilotsFlightDeck))
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(AirlineJobListPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Airlines.pilotsFlightDeck))
+              )
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew))
+              Future.fromTry(request.userAnswers.set(AirlineJobListPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew))
+              )
             }
-            _ <- sessionRepository.set(newAnswers)
-          } yield Redirect(navigator.nextPage(AirlineJobListPage, mode)(newAnswers))
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(AirlineJobListPage, mode)(updatedAnswers))
         }
       )
   }
