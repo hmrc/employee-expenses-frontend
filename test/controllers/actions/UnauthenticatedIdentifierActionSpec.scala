@@ -25,7 +25,7 @@ import play.api.mvc._
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.auth.core.retrieve.~
-import uk.gov.hmrc.http.{SessionKeys, UnauthorizedException}
+import uk.gov.hmrc.http.SessionKeys
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

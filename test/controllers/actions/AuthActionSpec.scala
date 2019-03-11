@@ -19,6 +19,9 @@ package controllers.actions
 import base.SpecBase
 import com.google.inject.Inject
 import controllers.routes
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.{BodyParsers, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -30,13 +33,36 @@ import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys, UnauthorizedException}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuthActionSpec extends SpecBase {
+class AuthActionSpec extends SpecBase with MockitoSugar {
 
   class Harness(authAction: AuthenticatedIdentifierAction) {
     def onPageLoad() = authAction { _ => Results.Ok }
   }
 
   "Auth Action" when {
+
+    "the user is logged in " must {
+
+      "return an IdentifierRequest with an Authed(internalId) when user passes auth checks" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        val authConnector = mock[AuthConnector]
+
+        when(authConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
+          .thenReturn(Future.successful(new ~(Some(fakeNino), Some(userAnswersId))))
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+
+        val authAction = new AuthenticatedIdentifierActionImpl(authConnector, frontendAppConfig, bodyParsers)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(fakeRequest)
+
+        status(result) mustBe OK
+
+        application.stop()
+      }
+    }
 
     "the user hasn't logged in" must {
 
@@ -46,7 +72,14 @@ class AuthActionSpec extends SpecBase {
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-        val authAction = new AuthenticatedIdentifierActionImpl(new FakeFailingAuthConnector(new MissingBearerToken), frontendAppConfig, bodyParsers)
+        val authConnector = mock[AuthConnector]
+
+        when(authConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
+          .thenReturn(Future.successful(new ~(None, None)))
+
+        val authAction =
+          new AuthenticatedIdentifierActionImpl(new FakeFailingAuthConnector(new MissingBearerToken), frontendAppConfig, bodyParsers)
+
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(fakeRequest.withSession(SessionKeys.sessionId -> "key"))
 
@@ -66,7 +99,14 @@ class AuthActionSpec extends SpecBase {
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-        val authAction = new AuthenticatedIdentifierActionImpl(new FakeFailingAuthConnector(new UnauthorizedException("unAuth")), frontendAppConfig, bodyParsers)
+        val authConnector = mock[AuthConnector]
+
+        when(authConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
+          .thenReturn(Future.successful(new ~(None, None)))
+
+        val authAction =
+          new AuthenticatedIdentifierActionImpl(new FakeFailingAuthConnector(new UnauthorizedException("unAuth")), frontendAppConfig, bodyParsers)
+
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(fakeRequest.withSession(SessionKeys.sessionId -> "key"))
 
@@ -92,7 +132,7 @@ class AuthActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
+        redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
 
         application.stop()
       }
@@ -118,7 +158,7 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
-    "url mongoKey query string present: the user doesn't have sufficient confidence level" must {
+    "session Id present: the user doesn't have sufficient confidence level" must {
 
       "redirect the user to IV" in {
 
@@ -144,7 +184,7 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
-    "url mongoKey query string absent: the user doesn't have sufficient confidence level" must {
+    "session Id absent: the user doesn't have sufficient confidence level" must {
 
       "redirect the user to unauthenticated" in {
 
@@ -219,56 +259,6 @@ class AuthActionSpec extends SpecBase {
         status(result) mustBe SEE_OTHER
 
         redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
-
-        application.stop()
-      }
-    }
-
-    "the user has logged in" must {
-
-      "redirect to session expired when there is no mongoKey and not on RedirectMongoKey" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-
-        val authAction = new AuthenticatedIdentifierActionImpl(new FakePassingAuthConnector(Future.successful(Some("nino"))), frontendAppConfig, bodyParsers)
-        val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest)
-
-        status(result) mustBe SEE_OTHER
-
-        redirectLocation(result).get mustBe routes.TechnicalDifficultiesController.onPageLoad().url
-
-        application.stop()
-      }
-
-      "return 303 when there is no mongoKey and on RedirectMongoKey" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-
-        val authAction = new AuthenticatedIdentifierActionImpl(new FakePassingAuthConnector(Future.successful(Some("nino"))), frontendAppConfig, bodyParsers)
-        val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(FakeRequest("", "/employee-expenses/session-key"))
-
-        status(result) mustBe SEE_OTHER
-
-        application.stop()
-      }
-
-      "return 303 when there is a mongoKey" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-
-        val authAction = new AuthenticatedIdentifierActionImpl(new FakePassingAuthConnector(Future.successful(Some("nino"))), frontendAppConfig, bodyParsers)
-        val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(fakeRequest.withSession(SessionKeys.sessionId -> "key"))
-
-        status(result) mustBe SEE_OTHER
 
         application.stop()
       }

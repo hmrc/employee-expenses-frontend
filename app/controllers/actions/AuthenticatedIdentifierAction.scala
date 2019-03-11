@@ -59,10 +59,10 @@ class AuthenticatedIdentifierActionImpl @Inject()(
     }
   }
 
-  def unauthorised(mongoKey: Option[String]): Result = {
-    mongoKey match {
-      case Some(key) =>
-        Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + key}")))
+  def unauthorised(sessionId: Option[String]): Result = {
+    sessionId match {
+      case Some(id) =>
+        Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + id}")))
       case _ =>
         Redirect(SessionExpiredController.onPageLoad())
     }
