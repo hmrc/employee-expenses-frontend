@@ -218,6 +218,18 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           YourAddressController.onPageLoad(CheckMode)
       }
 
+      "go to YourEmployer from ChangeWhichTaxYear when YourEmployer is not defined" in {
+        navigator.nextPage(ChangeWhichTaxYearsPage, CheckMode)(emptyUserAnswers) mustBe
+          YourEmployerController.onPageLoad(CheckMode)
+      }
+
+      "go to CheckYourAnswers from ChangeWhichTaxYear when YourEmployer is defined" in {
+        val userAnswers = emptyUserAnswers.set(YourEmployerPage, true).success.value
+
+        navigator.nextPage(ChangeWhichTaxYearsPage, CheckMode)(userAnswers) mustBe
+          CheckYourAnswersController.onPageLoad()
+      }
+
 
       "from TaxYearSelection" must {
 
