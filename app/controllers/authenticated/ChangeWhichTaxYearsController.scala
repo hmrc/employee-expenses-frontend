@@ -20,14 +20,14 @@ import config.NavConstant
 import controllers.actions._
 import forms.authenticated.ChangeWhichTaxYearsFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, FlatRateExpense, Mode, TaxYearSelection}
+import models.{Enumerable, Mode, TaxYearSelection}
 import navigation.Navigator
 import pages.FREAmounts
 import pages.authenticated.{ChangeWhichTaxYearsPage, TaxYearSelectionPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
+import repositories.AuthedSessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewmodels.RadioCheckboxOption
 import views.html.authenticated.ChangeWhichTaxYearsView
@@ -36,9 +36,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ChangeWhichTaxYearsController @Inject()(
                                                override val messagesApi: MessagesApi,
-                                               sessionRepository: SessionRepository,
+                                               sessionRepository: AuthedSessionRepository,
                                                @Named(NavConstant.authenticated) navigator: Navigator,
-                                               identify: IdentifierAction,
+                                               identify: AuthenticatedIdentifierAction,
                                                getData: DataRetrievalAction,
                                                requireData: DataRequiredAction,
                                                formProvider: ChangeWhichTaxYearsFormProvider,

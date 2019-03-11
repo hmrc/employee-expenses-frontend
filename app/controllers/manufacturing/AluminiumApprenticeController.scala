@@ -27,22 +27,22 @@ import pages.manufacturing.AluminiumApprenticePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.manufacturing.AluminiumApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AluminiumApprenticeController @Inject()(
                                                override val messagesApi: MessagesApi,
-                                               sessionRepository: SessionRepository,
                                                @Named(NavConstant.manufacturing) navigator: Navigator,
                                                identify: UnauthenticatedIdentifierAction,
                                                getData: DataRetrievalAction,
                                                requireData: DataRequiredAction,
                                                formProvider: AluminiumApprenticeFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
-                                               view: AluminiumApprenticeView
+                                               view: AluminiumApprenticeView,
+                                               save: SaveToSession
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -67,14 +67,17 @@ class AluminiumApprenticeController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AluminiumApprenticePage, value))
-            newUserAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.apprentice))
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(AluminiumApprenticePage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.apprentice))
+              )
             } else {
-              Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.allOther))
+              Future.fromTry(request.userAnswers.set(AluminiumApprenticePage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.allOther))
+              )
             }
-            _ <- sessionRepository.set(newUserAnswers)
-          } yield Redirect(navigator.nextPage(AluminiumApprenticePage, mode)(newUserAnswers))
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(AluminiumApprenticePage, mode)(updatedAnswers))
         }
       )
   }

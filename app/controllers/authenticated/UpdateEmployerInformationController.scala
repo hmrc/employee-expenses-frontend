@@ -30,13 +30,13 @@ import views.html.authenticated.UpdateEmployerInformationView
 import scala.concurrent.ExecutionContext
 
 class UpdateEmployerInformationController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       @Named(NavConstant.authenticated) navigator: Navigator,
-                                       identify: IdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: UpdateEmployerInformationView
+                                                     override val messagesApi: MessagesApi,
+                                                     @Named(NavConstant.authenticated) navigator: Navigator,
+                                                     identify: AuthenticatedIdentifierAction,
+                                                     getData: DataRetrievalAction,
+                                                     requireData: DataRequiredAction,
+                                                     val controllerComponents: MessagesControllerComponents,
+                                                     view: UpdateEmployerInformationView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {

@@ -18,10 +18,10 @@ package controllers.authenticated
 
 import base.SpecBase
 import forms.authenticated.AlreadyClaimingFRESameAmountFormProvider
-import models.{FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, UserAnswers}
+import models.{FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear}
 import navigation.{FakeNavigator, Navigator}
-import pages.{ClaimAmount, FREAmounts}
 import pages.authenticated.AlreadyClaimingFRESameAmountPage
+import pages.{ClaimAmount, FREAmounts}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest

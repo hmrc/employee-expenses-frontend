@@ -27,22 +27,22 @@ import pages.healthcare.HealthcareList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.healthcare.HealthcareList1View
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class HealthcareList1Controller @Inject()(
                                            override val messagesApi: MessagesApi,
-                                           sessionRepository: SessionRepository,
                                            @Named(NavConstant.healthcare) navigator: Navigator,
                                            identify: UnauthenticatedIdentifierAction,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction,
                                            formProvider: HealthcareList1FormProvider,
                                            val controllerComponents: MessagesControllerComponents,
-                                           view: HealthcareList1View
+                                           view: HealthcareList1View,
+                                           save: SaveToSession
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -67,10 +67,15 @@ class HealthcareList1Controller @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList1Page, value))
-            newAnswers <- if (value) Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Healthcare.list1)) else Future.successful(updatedAnswers)
-            _ <- sessionRepository.set(newAnswers)
-          } yield Redirect(navigator.nextPage(HealthcareList1Page, mode)(newAnswers))
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(HealthcareList1Page, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Healthcare.list1))
+              )
+            } else {
+              Future.fromTry(request.userAnswers.set(HealthcareList1Page, value))
+            }
+            _ <- save.toSession(request, updatedAnswers)
+          } yield Redirect(navigator.nextPage(HealthcareList1Page, mode)(updatedAnswers))
         }
       )
   }

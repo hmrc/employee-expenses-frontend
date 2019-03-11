@@ -20,8 +20,9 @@ import com.google.inject.AbstractModule
 import com.google.inject.name.Names
 import controllers.actions._
 import navigation._
-import repositories.{DefaultSessionRepository, SessionRepository}
+import repositories._
 import scalate.ScalateEngineBoot
+import utils.{Save, SaveToSession}
 
 class Module extends AbstractModule {
 
@@ -31,25 +32,29 @@ class Module extends AbstractModule {
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl]).asEagerSingleton()
 
     // For session based storage instead of cred based, change to SessionIdentifierAction
-    bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction]).asEagerSingleton()
+    bind(classOf[AuthenticatedIdentifierAction]).to(classOf[AuthenticatedIdentifierActionImpl]).asEagerSingleton()
+    bind(classOf[UnauthenticatedIdentifierAction]).to(classOf[UnauthenticatedIdentifierActionImpl]).asEagerSingleton()
 
     bind(classOf[SessionRepository]).to(classOf[DefaultSessionRepository]).asEagerSingleton()
+    bind(classOf[AuthedSessionRepository]).to(classOf[AuthenticatedSessionRepository]).asEagerSingleton()
     bind(classOf[ScalateEngineBoot]).asEagerSingleton()
 
-    bind(classOf[Navigator]).annotatedWith(Names.named("Generic")).to(classOf[GenericNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Engineering")).to(classOf[EngineeringNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Healthcare")).to(classOf[HealthcareNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Transport")).to(classOf[TransportNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Manufacturing")).to(classOf[ManufacturingNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Police")).to(classOf[PoliceNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("FoodCatering")).to(classOf[FoodCateringNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Clothing")).to(classOf[ClothingNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Security")).to(classOf[SecurityNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Printing")).to(classOf[PrintingNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Electrical")).to(classOf[ElectricalNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Construction")).to(classOf[ConstructionNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Authenticated")).to(classOf[AuthenticatedNavigator])
-    bind(classOf[Navigator]).annotatedWith(Names.named("Heating")).to(classOf[HeatingNavigator])
+    bind(classOf[SaveToSession]).to(classOf[Save]).asEagerSingleton()
+
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.generic)).to(classOf[GenericNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.engineering)).to(classOf[EngineeringNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.healthcare)).to(classOf[HealthcareNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.transport)).to(classOf[TransportNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.manufacturing)).to(classOf[ManufacturingNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.police)).to(classOf[PoliceNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.foodCatering)).to(classOf[FoodCateringNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.clothing)).to(classOf[ClothingNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.security)).to(classOf[SecurityNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.printing)).to(classOf[PrintingNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.electrical)).to(classOf[ElectricalNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.construction)).to(classOf[ConstructionNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.authenticated)).to(classOf[AuthenticatedNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.heating)).to(classOf[HeatingNavigator])
 
   }
 }

@@ -22,15 +22,14 @@ import controllers.routes._
 import forms.authenticated.TaxYearSelectionFormProvider
 import javax.inject.{Inject, Named}
 import models.FlatRateExpenseOptions._
-import models.{Enumerable, FlatRateExpenseAmounts, Mode, TaiTaxYear, TaxYearSelection}
+import models.{Enumerable, Mode, TaxYearSelection}
 import navigation.Navigator
 import pages.authenticated.TaxYearSelectionPage
-import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
+import pages.{ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Writes
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
+import repositories.AuthedSessionRepository
 import service.TaiService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.authenticated.TaxYearSelectionView
@@ -39,9 +38,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TaxYearSelectionController @Inject()(
                                             override val messagesApi: MessagesApi,
-                                            sessionRepository: SessionRepository,
+                                            sessionRepository: AuthedSessionRepository,
                                             @Named(NavConstant.authenticated) navigator: Navigator,
-                                            identify: IdentifierAction,
+                                            identify: AuthenticatedIdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
                                             formProvider: TaxYearSelectionFormProvider,

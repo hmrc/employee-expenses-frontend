@@ -18,10 +18,10 @@ package controllers.authenticated
 
 import base.SpecBase
 import forms.authenticated.AlreadyClaimingFREDifferentAmountsFormProvider
-import models.{AlreadyClaimingFREDifferentAmounts, NormalMode, UserAnswers}
+import models.{AlreadyClaimingFREDifferentAmounts, NormalMode}
 import navigation.{FakeNavigator, Navigator}
-import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import pages.authenticated.AlreadyClaimingFREDifferentAmountsPage
+import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest

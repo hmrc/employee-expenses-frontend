@@ -27,22 +27,22 @@ import pages.engineering.ConstructionalEngineeringApprenticePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.engineering.ConstructionalEngineeringApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConstructionalEngineeringApprenticeController @Inject()(
                                                                override val messagesApi: MessagesApi,
-                                                               sessionRepository: SessionRepository,
                                                                @Named(NavConstant.engineering) navigator: Navigator,
                                                                identify: UnauthenticatedIdentifierAction,
                                                                getData: DataRetrievalAction,
                                                                requireData: DataRequiredAction,
                                                                formProvider: ConstructionalEngineeringApprenticeFormProvider,
                                                                val controllerComponents: MessagesControllerComponents,
-                                                               view: ConstructionalEngineeringApprenticeView
+                                                               view: ConstructionalEngineeringApprenticeView,
+                                                               save: SaveToSession
                                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,11 +66,12 @@ class ConstructionalEngineeringApprenticeController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount = if (value) ClaimAmounts.ConstructionalEngineering.apprentice else ClaimAmounts.ConstructionalEngineering.allOther
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionalEngineeringApprenticePage, value))
-            amount: Int = if (value) ClaimAmounts.ConstructionalEngineering.apprentice else ClaimAmounts.ConstructionalEngineering.allOther
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionalEngineeringApprenticePage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(ConstructionalEngineeringApprenticePage, mode)(updatedAnswers))
         }
       )

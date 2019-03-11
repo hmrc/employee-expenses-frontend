@@ -27,22 +27,22 @@ import pages.security.SecurityGuardNHSPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.security.SecurityGuardNHSView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class SecurityGuardNHSController @Inject()(
                                             override val messagesApi: MessagesApi,
-                                            sessionRepository: SessionRepository,
                                             @Named(NavConstant.security) navigator: Navigator,
                                             identify: UnauthenticatedIdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
                                             formProvider: SecurityGuardNHSFormProvider,
                                             val controllerComponents: MessagesControllerComponents,
-                                            view: SecurityGuardNHSView
+                                            view: SecurityGuardNHSView,
+                                            save: SaveToSession
                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -66,11 +66,12 @@ class SecurityGuardNHSController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount = if (value) ClaimAmounts.Security.nhsSecurity else ClaimAmounts.defaultRate
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityGuardNHSPage, value))
-            amount: Int = if (value) ClaimAmounts.Security.nhsSecurity else ClaimAmounts.defaultRate
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityGuardNHSPage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(SecurityGuardNHSPage, mode)(updatedAnswers))
         }
       )

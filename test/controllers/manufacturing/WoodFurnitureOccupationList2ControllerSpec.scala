@@ -16,9 +16,9 @@
 
 package controllers.manufacturing
 
-import controllers.routes.SessionExpiredController
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.routes.SessionExpiredController
 import forms.WoodFurnitureOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}

@@ -26,7 +26,6 @@ import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage, YourAddress
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.ConfirmationView
@@ -35,10 +34,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmationController @Inject()(
                                         override val messagesApi: MessagesApi,
-                                        identify: IdentifierAction,
+                                        identify: AuthenticatedIdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
-                                        sessionRepository: SessionRepository,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: ConfirmationView,
                                         claimAmountService: ClaimAmountService,

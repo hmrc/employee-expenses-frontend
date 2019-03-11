@@ -26,7 +26,7 @@ import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
+import repositories.AuthedSessionRepository
 import views.html.authenticated.RemoveFRECodeView
 
 class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
@@ -156,7 +156,7 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .build()
 
-        val sessionRepository = application.injector.instanceOf[SessionRepository]
+        val sessionRepository = application.injector.instanceOf[AuthedSessionRepository]
 
         val request = FakeRequest(POST, removeFRECodeRoute)
           .withFormUrlEncodedBody(("value", option.toString))

@@ -22,6 +22,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage, ExpensesEmployerPaidPage}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -30,13 +31,14 @@ import play.twirl.api.Html
 import repositories.SessionRepository
 import views.html.ClaimAmountView
 
-class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
   def asDocument(html: Html): Document = Jsoup.parse(html.toString())
 
   "ClaimAmount Controller" must {
 
     "return OK and the correct view for a GET when all data is found" in {
+
       val claimAmount = 60
       val userAnswers = UserAnswers(
         userAnswersId,
@@ -46,6 +48,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         )
       )
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
       val sessionRepository = application.injector.instanceOf[SessionRepository]
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
       val result = route(application, request).value
@@ -78,7 +81,6 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         val claimAmount = 180
         val userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> claimAmount))
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-        val sessionRepository = application.injector.instanceOf[SessionRepository]
         val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
         val result = route(application, request).value
 

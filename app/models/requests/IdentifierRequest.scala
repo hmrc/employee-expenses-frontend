@@ -16,6 +16,7 @@
 
 package models.requests
 
+import controllers.actions.IdentifierType
 import play.api.mvc.{Request, WrappedRequest}
 
-case class IdentifierRequest[A] (request: Request[A], identifier: String, nino: Option[String] = None) extends WrappedRequest[A](request)
+case class IdentifierRequest[A] (request: Request[A], identifier: IdentifierType, nino: Option[String] = None) extends WrappedRequest[A](request)

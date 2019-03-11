@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package models.requests
+package controllers.actions
 
-import controllers.actions.IdentifierType
-import models.UserAnswers
-import play.api.mvc.{Request, WrappedRequest}
+sealed trait IdentifierType
 
-case class OptionalDataRequest[A](request: Request[A], identifier: IdentifierType, nino: Option[String] = None, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
+case class Authed(internalId: String) extends IdentifierType
 
-case class DataRequest[A](request: Request[A], identifier: IdentifierType, nino: Option[String] = None, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+case class UnAuthed(sessionId: String) extends IdentifierType

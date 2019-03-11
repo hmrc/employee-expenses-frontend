@@ -27,22 +27,22 @@ import pages.{ClaimAmount, FREAmounts}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
+import repositories.AuthedSessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.authenticated.AlreadyClaimingFRESameAmountView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AlreadyClaimingFRESameAmountController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              sessionRepository: SessionRepository,
-                                              @Named(NavConstant.authenticated) navigator: Navigator,
-                                              identify: IdentifierAction,
-                                              getData: DataRetrievalAction,
-                                              requireData: DataRequiredAction,
-                                              formProvider: AlreadyClaimingFRESameAmountFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: AlreadyClaimingFRESameAmountView
+                                                        override val messagesApi: MessagesApi,
+                                                        sessionRepository: AuthedSessionRepository,
+                                                        @Named(NavConstant.authenticated) navigator: Navigator,
+                                                        identify: AuthenticatedIdentifierAction,
+                                                        getData: DataRetrievalAction,
+                                                        requireData: DataRequiredAction,
+                                                        formProvider: AlreadyClaimingFRESameAmountFormProvider,
+                                                        val controllerComponents: MessagesControllerComponents,
+                                                        view: AlreadyClaimingFRESameAmountView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()

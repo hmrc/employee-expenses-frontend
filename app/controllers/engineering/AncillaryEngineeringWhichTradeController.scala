@@ -27,22 +27,22 @@ import pages.engineering.AncillaryEngineeringWhichTradePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.engineering.AncillaryEngineeringWhichTradeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AncillaryEngineeringWhichTradeController @Inject()(
                                                           override val messagesApi: MessagesApi,
-                                                          sessionRepository: SessionRepository,
                                                           @Named(NavConstant.engineering) navigator: Navigator,
                                                           identify: UnauthenticatedIdentifierAction,
                                                           getData: DataRetrievalAction,
                                                           requireData: DataRequiredAction,
                                                           formProvider: AncillaryEngineeringWhichTradeFormProvider,
                                                           val controllerComponents: MessagesControllerComponents,
-                                                          view: AncillaryEngineeringWhichTradeView
+                                                          view: AncillaryEngineeringWhichTradeView,
+                                                          save: SaveToSession
                                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -66,16 +66,18 @@ class AncillaryEngineeringWhichTradeController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount = value match {
+            case AncillaryEngineeringWhichTrade.PatternMaker => ClaimAmounts.AncillaryEngineering.patternMaker
+            case AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker => ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
+            case AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper => ClaimAmounts.AncillaryEngineering.apprentice
+            case AncillaryEngineeringWhichTrade.NoneOfTheAbove => ClaimAmounts.AncillaryEngineering.allOther
+          }
+
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AncillaryEngineeringWhichTradePage, value))
-            amount: Int = value match {
-              case AncillaryEngineeringWhichTrade.PatternMaker => ClaimAmounts.AncillaryEngineering.patternMaker
-              case AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker => ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
-              case AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper => ClaimAmounts.AncillaryEngineering.apprentice
-              case AncillaryEngineeringWhichTrade.NoneOfTheAbove => ClaimAmounts.AncillaryEngineering.allOther
-            }
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AncillaryEngineeringWhichTradePage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(updatedAnswers))
         }
       )

@@ -30,47 +30,39 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuthenticatedIdentifierAction @Inject()(
+class AuthenticatedIdentifierActionImpl @Inject()(
                                                override val authConnector: AuthConnector,
                                                config: FrontendAppConfig,
                                                val parser: BodyParsers.Default
-                                             )
-                                             (implicit val executionContext: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
+                                             )(implicit val executionContext: ExecutionContext) extends AuthenticatedIdentifierAction with AuthorisedFunctions {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.nino) {
+    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.nino and Retrievals.internalId) {
       x =>
-        val nino = x.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
+        val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
+        val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
 
-        request.session.get(config.mongoKey) match {
-          case Some(key) => block(IdentifierRequest(request, key, Some(nino)))
-          case _ =>
-            if (request.uri.contains("/employee-expenses/session-key")) {
-              block(IdentifierRequest(request, ""))
-            } else {
-              Future.successful(Redirect(SessionExpiredController.onPageLoad()))
-            }
-        }
+        block(IdentifierRequest(request, Authed(internalId), Some(nino)))
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
-        unauthorised(request.session.get(config.mongoKey))
+        unauthorised(hc.sessionId.map(_.value))
       case _: InsufficientConfidenceLevel =>
         insufficientConfidence(request.getQueryString("key"))
       case _: InsufficientEnrolments | _: UnsupportedAuthProvider | _: UnsupportedAffinityGroup | _: UnsupportedCredentialRole =>
         Redirect(UnauthorisedController.onPageLoad())
       case e =>
-        Logger.error(s"Technical difficulties error: $e", e)
+        Logger.error(s"[AuthenticatedIdentifierAction][authorised] failed $e", e)
         Redirect(TechnicalDifficultiesController.onPageLoad())
     }
   }
 
-  def unauthorised(mongoKey: Option[String]): Result = {
-    mongoKey match {
-      case Some(key) =>
-        Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + key}")))
+  def unauthorised(sessionId: Option[String]): Result = {
+    sessionId match {
+      case Some(id) =>
+        Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + id}")))
       case _ =>
         Redirect(SessionExpiredController.onPageLoad())
     }
@@ -83,10 +75,10 @@ class AuthenticatedIdentifierAction @Inject()(
           s"&completionURL=${config.authorisedCallback + key}" +
           s"&failureURL=${config.unauthorisedCallback}")
       case _ =>
-        Redirect(SessionExpiredController.onPageLoad())
+        Redirect(UnauthorisedController.onPageLoad())
     }
   }
 
 }
 
-trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]
+trait AuthenticatedIdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]

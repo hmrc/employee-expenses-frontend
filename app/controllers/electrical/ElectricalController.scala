@@ -27,22 +27,22 @@ import pages.electrical.ElectricalPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.electrical.ElectricalView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ElectricalController @Inject()(
                                       override val messagesApi: MessagesApi,
-                                      sessionRepository: SessionRepository,
                                       @Named(NavConstant.electrical) navigator: Navigator,
                                       identify: UnauthenticatedIdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
                                       formProvider: ElectricalFormProvider,
                                       val controllerComponents: MessagesControllerComponents,
-                                      view: ElectricalView
+                                      view: ElectricalView,
+                                      save: SaveToSession
                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -65,11 +65,12 @@ class ElectricalController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount = if (value) ClaimAmounts.Electrical.onlyLaundry else ClaimAmounts.Electrical.allOther
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ElectricalPage, value))
-            amount = if (value) ClaimAmounts.Electrical.onlyLaundry else ClaimAmounts.Electrical.allOther
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ClaimAmount, amount))
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ElectricalPage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
+            _ <- save.toSession(request, updatedAnswers)
           } yield {
             Redirect(navigator.nextPage(ElectricalPage, mode)(updatedAnswers))
           }

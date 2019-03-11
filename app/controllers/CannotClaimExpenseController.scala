@@ -27,13 +27,13 @@ import views.html.CannotClaimExpenseView
 import scala.concurrent.ExecutionContext
 
 class CannotClaimExpenseController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: CannotClaimExpenseView,
-                                       frontendAppConfig: FrontendAppConfig
+                                              override val messagesApi: MessagesApi,
+                                              identify: UnauthenticatedIdentifierAction,
+                                              getData: DataRetrievalAction,
+                                              requireData: DataRequiredAction,
+                                              val controllerComponents: MessagesControllerComponents,
+                                              view: CannotClaimExpenseView,
+                                              frontendAppConfig: FrontendAppConfig
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {

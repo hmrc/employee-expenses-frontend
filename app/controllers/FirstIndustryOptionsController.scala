@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import config.{ClaimAmounts, NavConstant}
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
+import controllers.actions._
 import forms.FirstIndustryOptionsFormProvider
 import javax.inject.Named
 import models.{Enumerable, FirstIndustryOptions, Mode}
@@ -27,8 +27,8 @@ import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import utils.SaveToSession
 import views.html.FirstIndustryOptionsView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,8 +41,8 @@ class FirstIndustryOptionsController @Inject()(
                                                 formProvider: FirstIndustryOptionsFormProvider,
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: FirstIndustryOptionsView,
-                                                sessionRepository: SessionRepository,
-                                                @Named(NavConstant.generic) navigator: Navigator
+                                                @Named(NavConstant.generic) navigator: Navigator,
+                                                save: SaveToSession
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form: Form[FirstIndustryOptions] = formProvider()
@@ -67,9 +67,14 @@ class FirstIndustryOptionsController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value))
-            newAnswers <- if (value == FirstIndustryOptions.Retail) Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate)) else Future.successful(updatedAnswers)
-            _ <- sessionRepository.set(newAnswers)
+            updatedAnswers <- if (value == FirstIndustryOptions.Retail) {
+              Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
+              )
+            } else {
+              Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value))
+            }
+            _ <- save.toSession(request, updatedAnswers)
           } yield Redirect(navigator.nextPage(FirstIndustryOptionsPage, mode)(updatedAnswers))
         }
       )
