@@ -29,7 +29,7 @@ class AlreadyClaimingFRESameAmountPageSpec extends PageBehaviours {
     beRemovable[Boolean](AlreadyClaimingFRESameAmountPage)
   }
 
-  "remove YourEmployer and YourAddress when answer is Remove" in {
+  "remove YourEmployer and YourAddress when answer is false" in {
 
     val userAnswers = emptyUserAnswers
       .set(AlreadyClaimingFRESameAmountPage, true).success.value

@@ -35,7 +35,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     x =>
       AnswerRow("removeFRECode.checkYourAnswersLabel",
         messages(s"taxYearSelection.$x", TaxYearSelection.getTaxYear(x).toString, (TaxYearSelection.getTaxYear(x) + 1).toString),
-        true, Some(AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode).url))
+        true, Some(RemoveFRECodeController.onPageLoad(CheckMode).url))
   }
 
   def claimAmountAndDeductions: Option[AnswerRow] = userAnswers.get(ClaimAmountAndAnyDeductions) map {

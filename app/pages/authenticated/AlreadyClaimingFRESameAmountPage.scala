@@ -34,6 +34,7 @@ case object AlreadyClaimingFRESameAmountPage extends QuestionPage[Boolean] {
       case Some(false) =>
         userAnswers.remove(YourEmployerPage)
           .flatMap(_.remove(YourAddressPage))
+
       case _ =>
         super.cleanup(value, userAnswers)
     }
