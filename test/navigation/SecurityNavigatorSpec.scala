@@ -17,35 +17,36 @@
 package navigation
 
 import base.SpecBase
-import models.NormalMode
+import models.{CheckMode, NormalMode}
 import pages.security.SecurityGuardNHSPage
 
 class SecurityNavigatorSpec extends SpecBase {
 
-  val navigator = new SecurityNavigator
+  private val modes = Seq(NormalMode, CheckMode)
+  private val navigator = new SecurityNavigator
 
-  "Security Navigator" when {
-    "in Normal mode" must {
+  "SecurityNavigator" when {
+    for (mode <- modes) {
+      s"in $mode" must {
 
-      "from SecurityGuardNHS" must {
+        "from SecurityGuardNHS" must {
 
-        "go to EmployerContribution when 'Yes' is selected" in {
-          val answers = emptyUserAnswers.set(SecurityGuardNHSPage, true).success.value
+          "go to EmployerContribution when 'Yes' is selected" in {
+            val answers = emptyUserAnswers.set(SecurityGuardNHSPage, true).success.value
 
-          navigator.nextPage(SecurityGuardNHSPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
+            navigator.nextPage(SecurityGuardNHSPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
 
-        "go to EmployerContribution when 'No' is selected" in {
-          val answers = emptyUserAnswers.set(SecurityGuardNHSPage, false).success.value
+          "go to EmployerContribution when 'No' is selected" in {
+            val answers = emptyUserAnswers.set(SecurityGuardNHSPage, false).success.value
 
-          navigator.nextPage(SecurityGuardNHSPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+            navigator.nextPage(SecurityGuardNHSPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
 
+          }
         }
       }
-
     }
   }
-
 }

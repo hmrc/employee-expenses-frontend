@@ -16,7 +16,9 @@
 
 package pages.authenticated
 
-import models.TaxYearSelection
+import models.AlreadyClaimingFREDifferentAmounts.Change
+import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
+import models.{TaxYearSelection, UserAnswers}
 import pages.behaviours.PageBehaviours
 
 class TaxYearSelectionPageSpec extends PageBehaviours {
@@ -28,5 +30,25 @@ class TaxYearSelectionPageSpec extends PageBehaviours {
     beSettable[Seq[TaxYearSelection]](TaxYearSelectionPage)
 
     beRemovable[Seq[TaxYearSelection]](TaxYearSelectionPage)
+
+    "remove authenticated userAnswers when TaxYearSelectionPage is updated" in {
+
+      val userAnswers = new UserAnswers(userAnswersId)
+        .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
+        .set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
+        .set(AlreadyClaimingFRESameAmountPage, true).success.value
+        .set(ChangeWhichTaxYearsPage, Seq(CurrentYear)).success.value
+        .set(RemoveFRECodePage, CurrentYear).success.value
+        .set(YourEmployerPage, true).success.value
+
+      val updatedUserAnswers = userAnswers.set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).get
+
+      updatedUserAnswers.get(AlreadyClaimingFREDifferentAmountsPage) mustBe None
+      updatedUserAnswers.get(AlreadyClaimingFRESameAmountPage) mustBe None
+      updatedUserAnswers.get(ChangeWhichTaxYearsPage) mustBe None
+      updatedUserAnswers.get(RemoveFRECodePage) mustBe None
+      updatedUserAnswers.get(YourEmployerPage) mustBe None
+    }
+
   }
 }

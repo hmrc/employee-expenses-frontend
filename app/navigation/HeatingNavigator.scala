@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import javax.inject.Inject
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import pages.Page
 import pages.heating.HeatingOccupationListPage
 import play.api.mvc.Call
@@ -31,6 +31,7 @@ class HeatingNavigator @Inject()() extends Navigator {
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case HeatingOccupationListPage => _ => routes.EmployerContributionController.onPageLoad(CheckMode)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
 }

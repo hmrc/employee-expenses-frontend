@@ -17,36 +17,32 @@
 package navigation
 
 import base.SpecBase
-import models.NormalMode
+import models.{CheckMode, NormalMode}
 import pages.heating.HeatingOccupationListPage
 
 class HeatingNavigatorSpec extends SpecBase {
+  private val modes = Seq(NormalMode, CheckMode)
+  private val navigator = new HeatingNavigator
 
-  val navigator = new HeatingNavigator
+  "HeatingNavigator" when {
+    for (mode <- modes) {
+      s"in $mode" must {
+        "from Heating" must {
+          "go to EmployerContribution when 'Yes' is selected" in {
+            val answers = emptyUserAnswers.set(HeatingOccupationListPage, true).success.value
 
+            navigator.nextPage(HeatingOccupationListPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
 
-  "Heating Navigator" when {
-    "in Normal mode" must {
+          "go to EmployerContribution when 'No' is selected" in {
+            val answers = emptyUserAnswers.set(HeatingOccupationListPage, false).success.value
 
-      "from Heating" must {
-
-        "go to EmployerContribution when 'Yes' is selected" in {
-          val answers = emptyUserAnswers.set(HeatingOccupationListPage, true).success.value
-
-          navigator.nextPage(HeatingOccupationListPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "go to EmployerContribution when 'No' is selected" in {
-          val answers = emptyUserAnswers.set(HeatingOccupationListPage, false).success.value
-
-          navigator.nextPage(HeatingOccupationListPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-
+            navigator.nextPage(HeatingOccupationListPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
         }
       }
-
     }
   }
-
 }

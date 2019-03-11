@@ -73,7 +73,7 @@ class FourthIndustryOptionsController @Inject()(
               case FireService => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.fireService))
               case Leisure => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.leisure))
               case Prisons => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.prisons))
-              case _ => Future.successful(updatedAnswers)
+              case _ => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate))
             }
             _ <- save.toSession(request, newAnswers)
           } yield Redirect(navigator.nextPage(FourthIndustryOptionsPage, mode)(newAnswers))

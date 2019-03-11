@@ -25,121 +25,120 @@ import pages.transport._
 
 class TransportNavigatorSpec extends SpecBase {
 
-  val navigator = new TransportNavigator
+  private val navigator = new TransportNavigator
+  private val modes = Seq(NormalMode, CheckMode)
 
-  "Navigator" when {
 
-    "in Normal mode" must {
+  "TransportNavigator" when {
 
-      "on TypeOfTransportController" must {
-        "go to AirlineJobList when 'Airlines' is selected" in {
-          val answers = emptyUserAnswers.set(TypeOfTransportPage, Airlines).success.value
-          navigator.nextPage(TypeOfTransportPage, NormalMode)(answers) mustBe
-            routes.AirlineJobListController.onPageLoad(NormalMode)
+    for (mode <- modes) {
+      s"in $mode" must {
+
+        "on TypeOfTransportController" must {
+          "go to AirlineJobList when 'Airlines' is selected" in {
+            val answers = emptyUserAnswers.set(TypeOfTransportPage, Airlines).success.value
+            navigator.nextPage(TypeOfTransportPage, mode)(answers) mustBe
+              routes.AirlineJobListController.onPageLoad(mode)
+          }
+
+          "go to GarageHandOrCleanerController when 'Public Transport' is selected" in {
+            val answers = emptyUserAnswers.set(TypeOfTransportPage, PublicTransport).success.value
+            navigator.nextPage(TypeOfTransportPage, mode)(answers) mustBe
+              routes.GarageHandOrCleanerController.onPageLoad(mode)
+          }
+
+          "go to WhichRailwayTrade when 'Railways' is selected" in {
+            val answers = emptyUserAnswers.set(TypeOfTransportPage, Railways).success.value
+            navigator.nextPage(TypeOfTransportPage, mode)(answers) mustBe
+              routes.WhichRailwayTradeController.onPageLoad(mode)
+          }
+
+          "go to TransportCarpenter when 'SeamanCarpenter' is selected" in {
+            val answers = emptyUserAnswers.set(TypeOfTransportPage, SeamanCarpenter).success.value
+            navigator.nextPage(TypeOfTransportPage, mode)(answers) mustBe
+              routes.TransportCarpenterController.onPageLoad(mode)
+          }
+
+          "go to TransportVehicleTrade when 'Vehicles' is selected" in {
+            val answers = emptyUserAnswers.set(TypeOfTransportPage, Vehicles).success.value
+            navigator.nextPage(TypeOfTransportPage, mode)(answers) mustBe
+              routes.TransportVehicleTradeController.onPageLoad(mode)
+          }
+
+          "go to EmployerContributionController when 'None of the above' is selected" in {
+            val answers = emptyUserAnswers.set(TypeOfTransportPage, NoneOfTheAbove).success.value
+            navigator.nextPage(TypeOfTransportPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
+
+          "go to Session Expired when no option available" in {
+            navigator.nextPage(TypeOfTransportPage, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
+          }
         }
 
-        "go to GarageHandOrCleanerController when 'Public Transport' is selected" in {
-          val answers = emptyUserAnswers.set(TypeOfTransportPage, PublicTransport).success.value
-          navigator.nextPage(TypeOfTransportPage, NormalMode)(answers) mustBe
-            routes.GarageHandOrCleanerController.onPageLoad(NormalMode)
+        "on AirlineJobListController" must {
+          "goto EmployerContributionController when 'Yes' selected" in {
+            val answers = emptyUserAnswers.set(AirlineJobListPage, true).success.value
+            navigator.nextPage(AirlineJobListPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
+
+          "goto EmployerContributionController when 'No' selected" in {
+            val answers = emptyUserAnswers.set(AirlineJobListPage, false).success.value
+            navigator.nextPage(AirlineJobListPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
         }
 
-        "go to WhichRailwayTrade when 'Railways' is selected" in {
-          val answers = emptyUserAnswers.set(TypeOfTransportPage, Railways).success.value
-          navigator.nextPage(TypeOfTransportPage, NormalMode)(answers) mustBe
-            routes.WhichRailwayTradeController.onPageLoad(NormalMode)
+        "on GarageHandOrCleanerController" must {
+          "goto EmployerContributionController when 'Yes' selected" in {
+            val answers = emptyUserAnswers.set(GarageHandOrCleanerPage, true).success.value
+            navigator.nextPage(GarageHandOrCleanerPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
+
+          "goto EmployerContributionController when 'No' selected" in {
+            val answers = emptyUserAnswers.set(GarageHandOrCleanerPage, false).success.value
+            navigator.nextPage(GarageHandOrCleanerPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
         }
 
-        "go to TransportCarpenter when 'SeamanCarpenter' is selected" in {
-          val answers = emptyUserAnswers.set(TypeOfTransportPage, SeamanCarpenter).success.value
-          navigator.nextPage(TypeOfTransportPage, NormalMode)(answers) mustBe
-            routes.TransportCarpenterController.onPageLoad(NormalMode)
+        "on WhichRailwayTrade" must {
+          for (trade <- WhichRailwayTrade.values) {
+            s"goto EmployerContributionController when '$trade' selected" in {
+              val answers = emptyUserAnswers.set(WhichRailwayTradePage, trade).success.value
+              navigator.nextPage(WhichRailwayTradePage, mode)(answers) mustBe
+                controllers.routes.EmployerContributionController.onPageLoad(mode)
+            }
+          }
         }
 
-        "go to TransportVehicleTrade when 'Vehicles' is selected" in {
-          val answers = emptyUserAnswers.set(TypeOfTransportPage, Vehicles).success.value
-          navigator.nextPage(TypeOfTransportPage, NormalMode)(answers) mustBe
-            routes.TransportVehicleTradeController.onPageLoad(NormalMode)
+        "on TransportCarpenterController" must {
+          "goto EmployerContributionController when 'Yes' selected" in {
+            val answers = emptyUserAnswers.set(TransportCarpenterPage, true).success.value
+            navigator.nextPage(TransportCarpenterPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
+
+          "goto EmployerContributionController when 'No' selected" in {
+            val answers = emptyUserAnswers.set(TransportCarpenterPage, false).success.value
+            navigator.nextPage(TransportCarpenterPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
         }
 
-        "go to EmployerContributionController when 'None of the above' is selected" in {
-          val answers = emptyUserAnswers.set(TypeOfTransportPage, NoneOfTheAbove).success.value
-          navigator.nextPage(TypeOfTransportPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "go to Session Expired when no option available" in {
-          navigator.nextPage(TypeOfTransportPage, NormalMode)(emptyUserAnswers) mustBe
-            controllers.routes.SessionExpiredController.onPageLoad()
-        }
-      }
-
-      "on AirlineJobListController" must {
-        "goto EmployerContributionController when 'Yes' selected" in {
-          val answers = emptyUserAnswers.set(AirlineJobListPage, true).success.value
-          navigator.nextPage(AirlineJobListPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "goto EmployerContributionController when 'No' selected" in {
-          val answers = emptyUserAnswers.set(AirlineJobListPage, false).success.value
-          navigator.nextPage(AirlineJobListPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-      }
-
-      "on GarageHandOrCleanerController" must {
-        "goto EmployerContributionController when 'Yes' selected" in {
-          val answers = emptyUserAnswers.set(GarageHandOrCleanerPage, true).success.value
-          navigator.nextPage(GarageHandOrCleanerPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "goto EmployerContributionController when 'No' selected" in {
-          val answers = emptyUserAnswers.set(GarageHandOrCleanerPage, false).success.value
-          navigator.nextPage(GarageHandOrCleanerPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-      }
-
-      "on WhichRailwayTrade" must {
-        for (trade <- WhichRailwayTrade.values) {
-          s"goto EmployerContributionController when '$trade' selected" in {
-            val answers = emptyUserAnswers.set(WhichRailwayTradePage, trade).success.value
-            navigator.nextPage(WhichRailwayTradePage, NormalMode)(answers) mustBe
-              controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+        "on TransportVehicleTrade" must {
+          for (trade <- TransportVehicleTrade.values) {
+            s"goto EmployerContributionController when '$trade' selected" in {
+              val answers = emptyUserAnswers.set(TransportVehicleTradePage, trade).success.value
+              navigator.nextPage(TransportVehicleTradePage, mode)(answers) mustBe
+                controllers.routes.EmployerContributionController.onPageLoad(mode)
+            }
           }
         }
       }
-
-      "on TransportCarpenterController" must {
-        "goto EmployerContributionController when 'Yes' selected" in {
-          val answers = emptyUserAnswers.set(TransportCarpenterPage, true).success.value
-          navigator.nextPage(TransportCarpenterPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-
-        "goto EmployerContributionController when 'No' selected" in {
-          val answers = emptyUserAnswers.set(TransportCarpenterPage, false).success.value
-          navigator.nextPage(TransportCarpenterPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-      }
-
-      "on TransportVehicleTrade" must {
-        for (trade <- TransportVehicleTrade.values) {
-          s"goto EmployerContributionController when '$trade' selected" in {
-            val answers = emptyUserAnswers.set(TransportVehicleTradePage, trade).success.value
-            navigator.nextPage(TransportVehicleTradePage, NormalMode)(answers) mustBe
-              controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-          }
-        }
-      }
-    }
-
-    "in Check mode" must {
-
-
     }
   }
 }

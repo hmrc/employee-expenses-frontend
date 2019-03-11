@@ -33,15 +33,19 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case YourAddressPage => yourAddress(NormalMode)
     case UpdateYourAddressPage => _ => CheckYourAnswersController.onPageLoad()
     case YourEmployerPage => yourEmployer(NormalMode)
-    case UpdateYourEmployerInformationPage => _ => YourAddressController.onPageLoad(NormalMode)
+    case UpdateYourEmployerInformationPage => updateEmployerInformation(NormalMode)
     case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => YourEmployerController.onPageLoad(NormalMode)
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case TaxYearSelectionPage => taxYearSelection(CheckMode)
+    case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(CheckMode)
+    case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(CheckMode)
     case YourAddressPage => yourAddress(CheckMode)
     case YourEmployerPage => yourEmployer(CheckMode)
+    case UpdateYourEmployerInformationPage => updateEmployerInformation(CheckMode)
+    case ChangeWhichTaxYearsPage => _ => YourEmployerController.onPageLoad(CheckMode)
     case _ => _ => CheckYourAnswersController.onPageLoad()
   }
 
@@ -65,7 +69,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       case Some(true) =>
         NoCodeChangeController.onPageLoad()
       case Some(false) =>
-        RemoveFRECodeController.onPageLoad(NormalMode)
+        RemoveFRECodeController.onPageLoad(mode)
       case _ =>
         SessionExpiredController.onPageLoad()
     }
@@ -75,9 +79,9 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       case Some(NoChange) =>
         NoCodeChangeController.onPageLoad()
       case Some(Change) =>
-        ChangeWhichTaxYearsController.onPageLoad(NormalMode)
+        ChangeWhichTaxYearsController.onPageLoad(mode)
       case Some(Remove) =>
-        RemoveFRECodeController.onPageLoad(NormalMode)
+        RemoveFRECodeController.onPageLoad(mode)
       case _ =>
         SessionExpiredController.onPageLoad()
     }
@@ -91,16 +95,44 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       SessionExpiredController.onPageLoad()
   }
 
-  def yourEmployer(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(YourEmployerPage) match {
-    case Some(true) =>
-      if (mode == NormalMode) {
-        YourAddressController.onPageLoad(mode)
-      } else {
-        CheckYourAnswersController.onPageLoad()
+  def yourEmployer(mode: Mode)(userAnswers: UserAnswers): Call = {
+
+    if (mode == NormalMode) {
+      userAnswers.get(YourEmployerPage) match {
+        case Some(true) =>
+          YourAddressController.onPageLoad(mode)
+        case Some(false) =>
+          UpdateEmployerInformationController.onPageLoad(mode)
+        case _ =>
+          SessionExpiredController.onPageLoad()
       }
-    case Some(false) =>
-      UpdateEmployerInformationController.onPageLoad(mode)
-    case _ =>
-      SessionExpiredController.onPageLoad()
+    } else {
+      (userAnswers.get(YourEmployerPage), userAnswers.get(YourAddressPage)) match {
+        case (Some(true), None) =>
+          YourAddressController.onPageLoad(mode)
+        case (Some(true), Some(_)) =>
+          CheckYourAnswersController.onPageLoad()
+        case (Some(false), _) =>
+          UpdateEmployerInformationController.onPageLoad(mode)
+        case _ =>
+          SessionExpiredController.onPageLoad()
+      }
+    }
   }
+
+  def updateEmployerInformation(mode: Mode)(userAnswers: UserAnswers): Call = {
+    if (mode == CheckMode) {
+      userAnswers.get(YourAddressPage) match {
+        case Some(_) =>
+          CheckYourAnswersController.onPageLoad()
+        case None =>
+          YourAddressController.onPageLoad(mode)
+        case _ =>
+          SessionExpiredController.onPageLoad()
+      }
+    } else {
+      YourAddressController.onPageLoad(mode)
+    }
+  }
+
 }

@@ -160,9 +160,8 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId)
+      val userAnswers = fullUserAnswers
         .set(YourEmployerPage, true).success.value
-        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TaiService].toInstance(mockTaiService))

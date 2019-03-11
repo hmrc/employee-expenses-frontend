@@ -18,87 +18,84 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
-import models.NormalMode
+import models.{CheckMode, NormalMode}
 import pages.healthcare._
 
 class HealthcareNavigatorSpec extends SpecBase {
-
-  val navigator = new HealthcareNavigator
+  private val modes = Seq(NormalMode, CheckMode)
+  private val navigator = new HealthcareNavigator
 
   "HealthcareNavigator" when {
 
-    "in Normal mode" must {
+    for (mode <- modes) {
+      s"in $mode" must {
 
-      "ambulance staff page" must {
+        "ambulance staff page" must {
 
-        "go to healthcare list 1 page if answered no" in {
+          "go to healthcare list 1 page if answered no" in {
 
-          val userAnswers = emptyUserAnswers.set(AmbulanceStaffPage, false).success.value
+            val userAnswers = emptyUserAnswers.set(AmbulanceStaffPage, false).success.value
 
-          navigator.nextPage(AmbulanceStaffPage, NormalMode)(userAnswers) mustBe
-            controllers.healthcare.routes.HealthcareList1Controller.onPageLoad(NormalMode)
-        }
-        "go to claim amount page if answered yes" in {
+            navigator.nextPage(AmbulanceStaffPage, mode)(userAnswers) mustBe
+              controllers.healthcare.routes.HealthcareList1Controller.onPageLoad(mode)
+          }
+          "go to claim amount page if answered yes" in {
 
-          val userAnswers = emptyUserAnswers.set(AmbulanceStaffPage, true).success.value
+            val userAnswers = emptyUserAnswers.set(AmbulanceStaffPage, true).success.value
 
-          navigator.nextPage(AmbulanceStaffPage, NormalMode)(userAnswers) mustBe
-            routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-        "go to session expired page if no data" in {
-          navigator.nextPage(AmbulanceStaffPage, NormalMode)(emptyUserAnswers) mustBe
-            routes.SessionExpiredController.onPageLoad()
-        }
-      }
-
-      "Healthcare list 1 page" must {
-        "go to healthcare list 2 page if answered no" in {
-
-          val userAnswers = emptyUserAnswers.set(HealthcareList1Page, false).success.value
-
-          navigator.nextPage(HealthcareList1Page, NormalMode)(userAnswers) mustBe
-            controllers.healthcare.routes.HealthcareList2Controller.onPageLoad(NormalMode)
-        }
-        "go to claim amount page if answered yes" in {
-
-          val userAnswers = emptyUserAnswers.set(HealthcareList1Page, true).success.value
-
-          navigator.nextPage(HealthcareList1Page, NormalMode)(userAnswers) mustBe
-            routes.EmployerContributionController.onPageLoad(NormalMode)
+            navigator.nextPage(AmbulanceStaffPage, mode)(userAnswers) mustBe
+              routes.EmployerContributionController.onPageLoad(mode)
+          }
+          "go to session expired page if no data" in {
+            navigator.nextPage(AmbulanceStaffPage, mode)(emptyUserAnswers) mustBe
+              routes.SessionExpiredController.onPageLoad()
+          }
         }
 
-        "go to session expired page if no data" in {
-          navigator.nextPage(HealthcareList1Page, NormalMode)(emptyUserAnswers) mustBe
-            routes.SessionExpiredController.onPageLoad()
+        "Healthcare list 1 page" must {
+          "go to healthcare list 2 page if answered no" in {
+
+            val userAnswers = emptyUserAnswers.set(HealthcareList1Page, false).success.value
+
+            navigator.nextPage(HealthcareList1Page, mode)(userAnswers) mustBe
+              controllers.healthcare.routes.HealthcareList2Controller.onPageLoad(mode)
+          }
+          "go to claim amount page if answered yes" in {
+
+            val userAnswers = emptyUserAnswers.set(HealthcareList1Page, true).success.value
+
+            navigator.nextPage(HealthcareList1Page, mode)(userAnswers) mustBe
+              routes.EmployerContributionController.onPageLoad(mode)
+          }
+
+          "go to session expired page if no data" in {
+            navigator.nextPage(HealthcareList1Page, mode)(emptyUserAnswers) mustBe
+              routes.SessionExpiredController.onPageLoad()
+          }
         }
-      }
 
-      "Healthcare list 2 page" must {
-        "go to claim amount page if answered yes" in {
+        "Healthcare list 2 page" must {
+          "go to claim amount page if answered yes" in {
 
-          val userAnswers = emptyUserAnswers.set(HealthcareList2Page, true).success.value
+            val userAnswers = emptyUserAnswers.set(HealthcareList2Page, true).success.value
 
-          navigator.nextPage(HealthcareList2Page, NormalMode)(userAnswers) mustBe
-            routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
-        "go to claim amount page if answered no" in {
+            navigator.nextPage(HealthcareList2Page, mode)(userAnswers) mustBe
+              routes.EmployerContributionController.onPageLoad(mode)
+          }
+          "go to claim amount page if answered no" in {
 
-          val userAnswers = emptyUserAnswers.set(HealthcareList2Page, false).success.value
+            val userAnswers = emptyUserAnswers.set(HealthcareList2Page, false).success.value
 
-          navigator.nextPage(HealthcareList2Page, NormalMode)(userAnswers) mustBe
-            routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
+            navigator.nextPage(HealthcareList2Page, mode)(userAnswers) mustBe
+              routes.EmployerContributionController.onPageLoad(mode)
+          }
 
-        "go to session expired page if no data" in {
-          navigator.nextPage(HealthcareList2Page, NormalMode)(emptyUserAnswers) mustBe
-            routes.SessionExpiredController.onPageLoad()
+          "go to session expired page if no data" in {
+            navigator.nextPage(HealthcareList2Page, mode)(emptyUserAnswers) mustBe
+              routes.SessionExpiredController.onPageLoad()
+          }
         }
       }
     }
-
-//    "in Check mode" must {
-//
-//    }
-
   }
 }

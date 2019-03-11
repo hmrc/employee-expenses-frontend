@@ -24,7 +24,7 @@ import models.FlatRateExpenseOptions.FRENoYears
 import models.auditing.AuditData
 import models.auditing.AuditEventType._
 import navigation.Navigator
-import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated._
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -54,22 +54,28 @@ class CheckYourAnswersController @Inject()(
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
       val cyaHelper = new CheckYourAnswersHelper(request.userAnswers)
+      val removeFre: Boolean = request.userAnswers.get(RemoveFRECodePage).isDefined
 
-      val sections = Seq(AnswerSection(None, Seq(
-        cyaHelper.industryType,
-        cyaHelper.employerContribution,
-        cyaHelper.expensesEmployerPaid,
-        cyaHelper.claimAmountAndDeductions,
-        cyaHelper.taxYearSelection,
-        cyaHelper.alreadyClaimingFRESameAmount,
-        cyaHelper.alreadyClaimingFREDifferentAmounts,
-        cyaHelper.changeWhichTaxYears,
-        cyaHelper.removeFRECode,
-        cyaHelper.yourAddress,
-        cyaHelper.yourEmployer
-      ).flatten))
+      request.userAnswers.get(FREResponse) match {
+        case Some(freResponse) =>
+          val sections = Seq(AnswerSection(None, Seq(
+            cyaHelper.industryType,
+            cyaHelper.employerContribution,
+            cyaHelper.expensesEmployerPaid,
+            cyaHelper.claimAmountAndDeductions,
+            cyaHelper.taxYearSelection,
+            cyaHelper.alreadyClaimingFRESameAmount,
+            cyaHelper.alreadyClaimingFREDifferentAmounts,
+            cyaHelper.changeWhichTaxYears,
+            cyaHelper.removeFRECode,
+            cyaHelper.yourEmployer,
+            cyaHelper.yourAddress
+          ).flatten))
 
-      Ok(view(sections))
+          Ok(view(sections, freResponse, removeFre))
+        case _ =>
+          Redirect(routes.SessionExpiredController.onPageLoad())
+      }
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {

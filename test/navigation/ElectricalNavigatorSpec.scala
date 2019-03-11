@@ -17,35 +17,33 @@
 package navigation
 
 import base.SpecBase
-import models.NormalMode
+import models.{CheckMode, NormalMode}
 import pages.electrical.ElectricalPage
 
 class ElectricalNavigatorSpec extends SpecBase {
-
-  val navigator = new ElectricalNavigator
+  private val modes = Seq(NormalMode, CheckMode)
+  private val navigator = new ElectricalNavigator
 
   "Electrical Navigator" when {
-    "in Normal mode" must {
+    for (mode <- modes) {
+      s"in $mode" must {
 
-      "from Electrical" must {
+        "from Electrical" must {
+          "go to EmployerContribution when 'Yes' is selected" in {
+            val answers = emptyUserAnswers.set(ElectricalPage, true).success.value
 
-        "go to EmployerContribution when 'Yes' is selected" in {
-          val answers = emptyUserAnswers.set(ElectricalPage, true).success.value
+            navigator.nextPage(ElectricalPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
 
-          navigator.nextPage(ElectricalPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-        }
+          "go to EmployerContribution when 'No' is selected" in {
+            val answers = emptyUserAnswers.set(ElectricalPage, false).success.value
 
-        "go to EmployerContribution when 'No' is selected" in {
-          val answers = emptyUserAnswers.set(ElectricalPage, false).success.value
-
-          navigator.nextPage(ElectricalPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-
+            navigator.nextPage(ElectricalPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
         }
       }
-
     }
   }
-
 }

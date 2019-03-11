@@ -17,8 +17,8 @@
 package controllers
 
 import base.SpecBase
-import models.FlatRateExpenseOptions.{FREAllYearsAllAmountsDifferent, FREAllYearsAllAmountsSameAsClaimAmount}
-import models.TaxYearSelection
+import models.FlatRateExpenseOptions.{FREAllYearsAllAmountsDifferent, FREAllYearsAllAmountsSameAsClaimAmount, FRENoYears}
+import models.{FlatRateExpenseOptions, TaxYearSelection}
 import models.auditing._
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.{eq => eqTo, _}
@@ -62,7 +62,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     "onPageLoad" must {
       "return OK and the correct view for a GET" in {
 
-        val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
+        val userAnswers = minimumUserAnswers.set(FREResponse, FRENoYears).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
 
@@ -73,7 +75,20 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(minimumSections)(fakeRequest, messages).toString
+          view(minimumSections, FlatRateExpenseOptions.FRENoYears, removeFre = true)(fakeRequest, messages).toString
+
+        application.stop()
+      }
+
+      "redirect to session expired when no freResponse is found" in {
+
+        val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
+
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
 
         application.stop()
       }
