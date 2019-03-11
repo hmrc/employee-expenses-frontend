@@ -77,7 +77,7 @@ class ClaimAmountController @Inject()(
           }
 
         case _ =>
-          Future.successful(Redirect(routes.IndexController.onPageLoad()))
+          Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
       }
   }
 }
