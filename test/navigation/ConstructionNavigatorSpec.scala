@@ -17,126 +17,124 @@
 package navigation
 
 import base.SpecBase
-import models.NormalMode
-import pages.construction._
 import controllers.construction.routes
-import play.api.mvc.Call
+import models.{CheckMode, NormalMode}
+import pages.construction._
 
 class ConstructionNavigatorSpec extends SpecBase {
-
-  val navigator = new ConstructionNavigator
-
+  private val modes = Seq(NormalMode, CheckMode)
+  private val navigator = new ConstructionNavigator
 
   "Construction Navigator" when {
-    "in Normal mode" must {
+    for (mode <- modes) {
+      s"in $mode" must {
 
-      "from JoinerCarpenter" must {
+        //from JoinerCarpenter
 
-        "go to EmployerContribution when 'Yes' is selected" in {
+        "go to EmployerContribution from JoinerCarpenter when 'Yes' is selected" in {
           val answers = emptyUserAnswers.set(JoinerCarpenterPage, true).success.value
 
-          navigator.nextPage(JoinerCarpenterPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          navigator.nextPage(JoinerCarpenterPage, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
 
-        "go to StoneMason when 'no' is selected" in {
+        "go to StoneMason from JoinerCarpenter when 'no' is selected" in {
           val answers = emptyUserAnswers.set(JoinerCarpenterPage, false).success.value
 
-          navigator.nextPage(JoinerCarpenterPage, NormalMode)(answers) mustBe
-            routes.StoneMasonController.onPageLoad(NormalMode)
+          navigator.nextPage(JoinerCarpenterPage, mode)(answers) mustBe
+            routes.StoneMasonController.onPageLoad(mode)
         }
 
-        "go to SessionExpired when no data is available" in {
-          navigator.nextPage(JoinerCarpenterPage, NormalMode)(emptyUserAnswers) mustBe
+        "go to SessionExpired from JoinerCarpenter when no data is available" in {
+          navigator.nextPage(JoinerCarpenterPage, mode)(emptyUserAnswers) mustBe
             controllers.routes.SessionExpiredController.onPageLoad()
         }
-      }
 
-      "from StoneMason" must {
 
-        "go to EmployerContribution when 'Yes' is selected" in {
+        //from StoneMason
+
+        "go to EmployerContribution from StoneMason when 'Yes' is selected" in {
           val answers = emptyUserAnswers.set(StoneMasonPage, true).success.value
 
-          navigator.nextPage(StoneMasonPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          navigator.nextPage(StoneMasonPage, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
 
-        "go to ConstructionOccupationList1 when 'No' is selected" in {
+        "go to ConstructionOccupationList1 from StoneMason  when 'No' is selected" in {
           val answers = emptyUserAnswers.set(StoneMasonPage, false).success.value
 
-          navigator.nextPage(StoneMasonPage, NormalMode)(answers) mustBe
-            routes.ConstructionOccupationList1Controller.onPageLoad(NormalMode)
+          navigator.nextPage(StoneMasonPage, mode)(answers) mustBe
+            routes.ConstructionOccupationList1Controller.onPageLoad(mode)
         }
 
-        "go to SessionExpired when no data is available" in {
-          navigator.nextPage(StoneMasonPage, NormalMode)(emptyUserAnswers) mustBe
+        "go to SessionExpired from StoneMason  when no data is available" in {
+          navigator.nextPage(StoneMasonPage, mode)(emptyUserAnswers) mustBe
             controllers.routes.SessionExpiredController.onPageLoad()
         }
-      }
 
-      "from ConstructionOccupationList1" must {
 
-        "go to EmployerContribution when 'Yes' is selected" in {
+        //from ConstructionOccupationList1
+
+        "go to EmployerContribution from ConstructionOccupationList1 when 'Yes' is selected" in {
           val answers = emptyUserAnswers.set(ConstructionOccupationList1Page, true).success.value
 
-          navigator.nextPage(ConstructionOccupationList1Page, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          navigator.nextPage(ConstructionOccupationList1Page, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
 
-        "go to ConstructionOccupationList2 when 'No' is selected" in {
+        "go to ConstructionOccupationList2 from ConstructionOccupationList1 when 'No' is selected" in {
           val answers = emptyUserAnswers.set(ConstructionOccupationList1Page, false).success.value
 
-          navigator.nextPage(ConstructionOccupationList1Page, NormalMode)(answers) mustBe
-            routes.ConstructionOccupationList2Controller.onPageLoad(NormalMode)
+          navigator.nextPage(ConstructionOccupationList1Page, mode)(answers) mustBe
+            routes.ConstructionOccupationList2Controller.onPageLoad(mode)
 
         }
 
-        "go to SessionExpired when no data is available" in {
-          navigator.nextPage(ConstructionOccupationList1Page, NormalMode)(emptyUserAnswers) mustBe
+        "go to SessionExpired  from ConstructionOccupationList1when no data is available" in {
+          navigator.nextPage(ConstructionOccupationList1Page, mode)(emptyUserAnswers) mustBe
             controllers.routes.SessionExpiredController.onPageLoad()
         }
 
-      }
+        //from ConstructionOccupationList2
 
-      "from ConstructionOccupationList2" must {
-
-        "go to EmployerContribution when 'Yes' is selected" in {
+        "go to EmployerContribution from ConstructionOccupationList2 when 'Yes' is selected" in {
           val answers = emptyUserAnswers.set(ConstructionOccupationList2Page, true).success.value
 
-          navigator.nextPage(ConstructionOccupationList2Page, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          navigator.nextPage(ConstructionOccupationList2Page, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
 
-        "go to BuildingMaterials when 'No' is selected" in {
+        "go to BuildingMaterials from ConstructionOccupationList2 when 'No' is selected" in {
           val answers = emptyUserAnswers.set(ConstructionOccupationList2Page, false).success.value
 
-          navigator.nextPage(ConstructionOccupationList2Page, NormalMode)(answers) mustBe
-            routes.BuildingMaterialsController.onPageLoad(NormalMode)
+          navigator.nextPage(ConstructionOccupationList2Page, mode)(answers) mustBe
+            routes.BuildingMaterialsController.onPageLoad(mode)
 
         }
 
-        "go to SessionExpired when no data is available" in {
-          navigator.nextPage(ConstructionOccupationList2Page, NormalMode)(emptyUserAnswers) mustBe
+        "go to SessionExpired from ConstructionOccupationList2 when no data is available" in {
+          navigator.nextPage(ConstructionOccupationList2Page, mode)(emptyUserAnswers) mustBe
             controllers.routes.SessionExpiredController.onPageLoad()
         }
 
-      }
-      "from BuildingMaterials" must {
+        //from BuildingMaterials
 
-        "go to EmployerContributions when 'Yes' is Selected" in {
-        val answers = emptyUserAnswers.set(BuildingMaterialsPage, true).success.value
+        "go to EmployerContributions from BuildingMaterials when 'Yes' is Selected" in {
+          val answers = emptyUserAnswers.set(BuildingMaterialsPage, true).success.value
 
-        navigator.nextPage(BuildingMaterialsPage, NormalMode)(answers) mustBe
-          controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-      }
-        "go to EmployerContributions when 'No' is Selected" in {
+          navigator.nextPage(BuildingMaterialsPage, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
+        }
+
+        "go to EmployerContributions from BuildingMaterials when 'No' is Selected" in {
           val answers = emptyUserAnswers.set(BuildingMaterialsPage, false).success.value
 
-          navigator.nextPage(BuildingMaterialsPage, NormalMode)(answers) mustBe
-            controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+          navigator.nextPage(BuildingMaterialsPage, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
-        "go to SessionExpired when no data is available" in {
-          navigator.nextPage(BuildingMaterialsPage, NormalMode)(emptyUserAnswers) mustBe
+
+        "go to SessionExpired from BuildingMaterials when no data is available" in {
+          navigator.nextPage(BuildingMaterialsPage, mode)(emptyUserAnswers) mustBe
             controllers.routes.SessionExpiredController.onPageLoad()
         }
       }

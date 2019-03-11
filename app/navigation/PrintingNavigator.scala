@@ -18,7 +18,7 @@ package navigation
 
 import controllers.printing.routes
 import javax.inject.Inject
-import models.{Mode, NormalMode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import pages.printing._
 import play.api.mvc.Call
@@ -32,6 +32,8 @@ class PrintingNavigator @Inject()() extends Navigator {
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
+    case PrintingOccupationList1Page => printingOccupationList1(CheckMode)
+    case PrintingOccupationList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
