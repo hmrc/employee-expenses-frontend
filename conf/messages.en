@@ -1,12 +1,16 @@
-checkYourAnswers.title = Check Your Answers
-checkYourAnswers.heading = Check Your Answers
+checkYourAnswers.title = Check your answers
+checkYourAnswers.heading = Check your answers
 checkYourAnswers.title.claimExpenses = Check your answers before claiming your expenses
 checkYourAnswers.heading.claimExpenses = Check your answers before claiming your expenses
 checkYourAnswers.guidance = Guidance for check your answers
 checkYourAnswers.claimExpenses = Claim your expenses
+checkYourAnswers.changeClaim = Change this claim
+checkYourAnswers.stopClaim = Stop this claim
 checkYourAnswers.confirmInformationNoFre = By claiming these expenses, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
 checkYourAnswers.confirmInformationChangeFre = By making this change, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
 checkYourAnswers.prosecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
+checkYourAnswers.editText = Change your answer
+checkYourAnswers.editTextHidden = Change your answer to {0}
 
 date.day = Day
 date.month = Month
