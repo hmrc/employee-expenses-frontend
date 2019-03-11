@@ -20,20 +20,20 @@ import base.SpecBase
 import controllers.actions._
 import models.requests.IdentifierRequest
 import models.{NormalMode, UserAnswers}
+import org.mockito.Matchers.any
+import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import org.mockito.Mockito._
-import org.mockito.Matchers._
-import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents, Request, Result}
+import play.api.inject.bind
+import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.{AuthedSessionRepository, SessionRepository}
-import uk.gov.hmrc.auth.core.AuthorisedFunctions
-import uk.gov.hmrc.auth.core.retrieve.Retrievals
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.SessionKeys
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
@@ -44,16 +44,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val injector = application.injector
-
-      val controller =
-        new IndexController(
-          controllerComponents = injector.instanceOf[MessagesControllerComponents],
-          identify = injector.instanceOf[UnauthenticatedIdentifierActionImpl],
-          getData = injector.instanceOf[DataRetrievalAction],
-          sessionRepository = injector.instanceOf[SessionRepository],
-          authedSessionRepository = injector.instanceOf[AuthedSessionRepository]
-        )(ec = injector.instanceOf[ExecutionContext])
+      val controller = application.injector.instanceOf[IndexController]
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
 
@@ -68,24 +59,18 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
 
     "redirect to the first page of the application and the correct view for a GET when user answers is empty when authed" in {
 
-      val mockUnauthenticatedIdentifierAction = mock[UnauthenticatedIdentifierActionImpl]
+      val mockAuthConnector = mock[AuthConnector]
 
-      when(mockUnauthenticatedIdentifierAction.authConnector) thenReturn new FakePassingAuthConnector(Future.successful(Some("nino"), Some("id")))
+      val application = applicationBuilder(None)
+        .overrides(bind[AuthConnector].toInstance(mockAuthConnector))
+        .build()
 
-      val application = applicationBuilder(userAnswers = None).build()
+      when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
+        .thenReturn(Future.successful(new ~(Some(fakeNino), Some(userAnswersId))))
 
-      val injector = application.injector
+      val controller = application.injector.instanceOf[IndexController]
 
-      val controller =
-        new IndexController(
-          controllerComponents = injector.instanceOf[MessagesControllerComponents],
-          identify = injector.instanceOf[UnauthenticatedIdentifierActionImpl],
-          getData = injector.instanceOf[DataRetrievalAction],
-          sessionRepository = injector.instanceOf[SessionRepository],
-          authedSessionRepository = injector.instanceOf[AuthedSessionRepository]
-        )(ec = injector.instanceOf[ExecutionContext])
-
-      val request = IdentifierRequest(FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url), Authed(userAnswersId), Some(fakeNino))
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
 
       val result = controller.onPageLoad(request)
 
@@ -98,18 +83,9 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
 
     "redirect to the first page of the application and the correct view for a GET when user answers is not empty when unauthed" in {
 
-      val application = applicationBuilder(userAnswers = Some(UserAnswers("testId"))).build()
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
 
-      val injector = application.injector
-
-      val controller =
-        new IndexController(
-          controllerComponents = injector.instanceOf[MessagesControllerComponents],
-          identify = injector.instanceOf[UnauthenticatedIdentifierActionImpl],
-          getData = injector.instanceOf[DataRetrievalAction],
-          sessionRepository = injector.instanceOf[SessionRepository],
-          authedSessionRepository = injector.instanceOf[AuthedSessionRepository]
-        )(ec = injector.instanceOf[ExecutionContext])
+      val controller = application.injector.instanceOf[IndexController]
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
 
@@ -124,20 +100,18 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
 
     "redirect to the first page of the application and the correct view for a GET when user answers is not empty when authed" in {
 
-      val application = applicationBuilder(userAnswers = Some(UserAnswers("testId"))).build()
+      val mockAuthConnector = mock[AuthConnector]
 
-      val injector = application.injector
+      val application = applicationBuilder(Some(minimumUserAnswers))
+        .overrides(bind[AuthConnector].toInstance(mockAuthConnector))
+        .build()
 
-      val controller =
-        new IndexController(
-          controllerComponents = injector.instanceOf[MessagesControllerComponents],
-          identify = injector.instanceOf[UnauthenticatedIdentifierActionImpl],
-          getData = injector.instanceOf[DataRetrievalAction],
-          sessionRepository = injector.instanceOf[SessionRepository],
-          authedSessionRepository = injector.instanceOf[AuthedSessionRepository]
-        )(ec = injector.instanceOf[ExecutionContext])
+      when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
+        .thenReturn(Future.successful(new ~(Some(fakeNino), Some(userAnswersId))))
 
-      val request = IdentifierRequest(FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url), Authed(userAnswersId), Some(fakeNino))
+      val controller = application.injector.instanceOf[IndexController]
+
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
 
       val result = controller.onPageLoad(request)
 
