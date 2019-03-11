@@ -178,17 +178,27 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
     }
 
     "in CheckMode" must {
+
       "go to CheckYourAnswers from UpdateYourAddressPage" in {
         navigator.nextPage(UpdateYourAddressPage, CheckMode)(emptyUserAnswers) mustBe
           CheckYourAnswersController.onPageLoad()
       }
 
-      "go to CYA from YourEmployerController when 'true'" in {
+      "go to CheckYourAnswers from YourEmployerController when 'true' and when YourAddress is defined" in {
+        val ua = emptyUserAnswers.set(YourEmployerPage, true).success.value
+          .set(YourAddressPage, true).success.value
+
+        navigator.nextPage(YourEmployerPage, CheckMode)(ua) mustBe
+          CheckYourAnswersController.onPageLoad()
+      }
+
+      "go to YourAddress from YourEmployerController when 'true' and when YourAddress is not defined" in {
         val userAnswers = emptyUserAnswers.set(YourEmployerPage, true).success.value
 
         navigator.nextPage(YourEmployerPage, CheckMode)(userAnswers) mustBe
-          CheckYourAnswersController.onPageLoad()
+          YourAddressController.onPageLoad(CheckMode)
       }
+
       "go to UpdateEmployerInformationController from YourEmployerController when 'false'" in {
         val userAnswers = emptyUserAnswers.set(YourEmployerPage, false).success.value
 
@@ -196,9 +206,57 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           UpdateEmployerInformationController.onPageLoad(CheckMode)
       }
 
-      "go to CheckYourAnswersController from UpdateEmployerInformation" in {
-        navigator.nextPage(UpdateYourEmployerInformationPage, CheckMode)(emptyUserAnswers) mustBe
+      "go to CheckYourAnswersController from UpdateEmployerInformation when YourAddress is defined" in {
+        val userAnswers = emptyUserAnswers.set(YourAddressPage, true).success.value
+
+        navigator.nextPage(UpdateYourEmployerInformationPage, CheckMode)(userAnswers) mustBe
           CheckYourAnswersController.onPageLoad()
+      }
+
+      "go to YourAddress from UpdateEmployerInformation when YourAddress is not defined" in {
+        navigator.nextPage(UpdateYourEmployerInformationPage, CheckMode)(emptyUserAnswers) mustBe
+          YourAddressController.onPageLoad(CheckMode)
+      }
+
+
+      "from TaxYearSelection" must {
+
+        "go to YourEmployer when answered and freResponse returns FRENoYears" in {
+
+          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FRENoYears).success.value
+
+          navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
+            YourEmployerController.onPageLoad(CheckMode)
+        }
+
+        "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
+          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount).success.value
+
+          navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
+            AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode)
+        }
+
+        "go to AlreadyClaimingFREDifferentAmountsController when answered and freResponse returns FREAllYearsAllAmountsDifferent" in {
+          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent).success.value
+
+          navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
+            AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode)
+        }
+
+        "go to PhoneUsController when answered and freResponse returns ComplexClaim" in {
+          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.ComplexClaim).success.value
+
+          navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
+            PhoneUsController.onPageLoad()
+        }
+
+        "go to SessionExpiredController when answered and freResponse returns TechnicalDifficulties" in {
+          val ua = emptyUserAnswers.set(FREResponse, FlatRateExpenseOptions.TechnicalDifficulties).success.value
+
+          navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
+            TechnicalDifficultiesController.onPageLoad()
+        }
+
       }
     }
   }

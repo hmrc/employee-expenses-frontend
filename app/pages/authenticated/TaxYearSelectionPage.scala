@@ -16,13 +16,31 @@
 
 package pages.authenticated
 
-import models.TaxYearSelection
+import models.{TaxYearSelection, UserAnswers}
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 object TaxYearSelectionPage extends QuestionPage[Seq[TaxYearSelection]] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString:String = "taxYearSelection"
+
+  override def cleanup(value: Option[Seq[TaxYearSelection]], userAnswers: UserAnswers): Try[UserAnswers] = {
+
+    value match {
+      case Some(_) =>
+        userAnswers
+          .remove(AlreadyClaimingFREDifferentAmountsPage)
+          .flatMap(_.remove(AlreadyClaimingFRESameAmountPage))
+          .flatMap(_.remove(ChangeWhichTaxYearsPage))
+          .flatMap(_.remove(RemoveFRECodePage))
+          .flatMap(_.remove(YourEmployerPage))
+
+      case _ =>
+        super.cleanup(value, userAnswers)
+    }
+  }
 }
