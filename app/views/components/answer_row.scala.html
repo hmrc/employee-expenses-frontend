@@ -15,8 +15,16 @@
  *@
 
 @import viewmodels.AnswerRow
+@import org.jsoup.Jsoup
 
 @(row: AnswerRow)(implicit messages: Messages)
+
+@cleanHtml = @{
+    row.labelArgs.map {
+        arg =>
+            Jsoup.parse(arg).text() + ""
+    }.toString.toLowerCase
+}
 
 <li>
     <div class="cya-question">@Html(messages(row.label, row.labelArgs: _*))</div>
@@ -33,12 +41,12 @@
         @if(row.editText && row.editTextHidden) {
             <span aria-hidden="true"> @messages(row.editText.get)</span>
             <span class="visually-hidden">
-                @messages(row.editTextHidden.get, messages(row.label, row.labelArgs: _*).toLowerCase))
+                @Jsoup.parse(messages(row.editTextHidden.get, messages(row.label, cleanHtml))).text().toLowerCase
             </span>
         } else {
             <span aria-hidden="true">@messages("site.edit")</span>
             <span class="visually-hidden">
-                @messages("site.hidden-edit", messages(row.label, row.labelArgs: _*).toLowerCase)
+                @messages("site.hidden-edit", messages(row.label, row.labelArgs: _*))
             </span>
         }
         </a>
