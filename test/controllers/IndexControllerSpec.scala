@@ -17,13 +17,14 @@
 package controllers
 
 import base.SpecBase
+import config.FrontendAppConfig
 import controllers.actions.{DataRetrievalAction, UnauthenticatedIdentifierAction}
 import models.{NormalMode, UserAnswers}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
+import repositories.{AuthenticatedSessionRepository, SessionRepository}
 import uk.gov.hmrc.http.SessionKeys
 
 import scala.concurrent.ExecutionContext
@@ -45,7 +46,9 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
           controllerComponents = injector.instanceOf[MessagesControllerComponents],
           identify = injector.instanceOf[UnauthenticatedIdentifierAction],
           getData = injector.instanceOf[DataRetrievalAction],
-          sessionRepository = injector.instanceOf[SessionRepository]
+          sessionRepository = injector.instanceOf[SessionRepository],
+          authedSessionRepository = injector.instanceOf[AuthenticatedSessionRepository],
+          config = injector.instanceOf[FrontendAppConfig]
         )(ec = injector.instanceOf[ExecutionContext])
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
@@ -75,7 +78,9 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
           controllerComponents = injector.instanceOf[MessagesControllerComponents],
           identify = injector.instanceOf[UnauthenticatedIdentifierAction],
           getData = injector.instanceOf[DataRetrievalAction],
-          sessionRepository = injector.instanceOf[SessionRepository]
+          sessionRepository = injector.instanceOf[SessionRepository],
+          authedSessionRepository = injector.instanceOf[AuthenticatedSessionRepository],
+          config = injector.instanceOf[FrontendAppConfig]
         )(ec = injector.instanceOf[ExecutionContext])
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")

@@ -16,12 +16,13 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import controllers.actions.{DataRetrievalAction, UnauthenticatedIdentifierAction}
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
+import repositories.{AuthedSessionRepository, SessionRepository}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,14 +31,20 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  identify: UnauthenticatedIdentifierAction,
                                  getData: DataRetrievalAction,
-                                 sessionRepository: SessionRepository
+                                 sessionRepository: SessionRepository,
+                                 authedSessionRepository: AuthedSessionRepository,
+                                 config: FrontendAppConfig
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData).async {
     implicit request =>
 
       val updateSession = if (request.userAnswers.isEmpty) {
-        sessionRepository.set(UserAnswers(request.identifier)).map(_ => ())
+        if (request.session.get(config.mongoKey).isDefined) {
+          sessionRepository.set(UserAnswers(request.identifier)).map(_ => ())
+        } else {
+          authedSessionRepository.set(UserAnswers(request.identifier)).map(_ => ())
+        }
       } else {
         Future.successful(())
       }
