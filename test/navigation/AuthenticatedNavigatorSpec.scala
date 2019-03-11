@@ -186,9 +186,9 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
 
       "go to CheckYourAnswers from YourEmployerController when 'true' and when YourAddress is defined" in {
         val ua = emptyUserAnswers.set(YourEmployerPage, true).success.value
-        val ua2 = ua.set(YourAddressPage, true).success.value
+          .set(YourAddressPage, true).success.value
 
-        navigator.nextPage(YourEmployerPage, CheckMode)(ua2) mustBe
+        navigator.nextPage(YourEmployerPage, CheckMode)(ua) mustBe
           CheckYourAnswersController.onPageLoad()
       }
 
