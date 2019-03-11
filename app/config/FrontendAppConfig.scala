@@ -52,8 +52,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val govUkUrl: String = configuration.get[String]("govUk.url")
   lazy val phoneContact: String = configuration.get[String]("phoneContact.url")
 
-  lazy val mongoKey: String = "mongoKey"
-
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")
 

@@ -28,16 +28,16 @@ class FakeDataRetrievalAction(dataToReturn: Option[UserAnswers]) extends DataRet
       case id: Authed =>
         dataToReturn match {
           case None =>
-            Future(OptionalDataRequest(request.request, id.internalId, request.nino, None))
+            Future(OptionalDataRequest(request.request, id, request.nino, None))
           case Some(userAnswers) =>
-            Future(OptionalDataRequest(request.request, id.internalId, request.nino, Some(userAnswers)))
+            Future(OptionalDataRequest(request.request, id, request.nino, Some(userAnswers)))
         }
       case id: UnAuthed =>
         dataToReturn match {
           case None =>
-            Future(OptionalDataRequest(request.request, id.sessionId, request.nino, None))
+            Future(OptionalDataRequest(request.request, id, request.nino, None))
           case Some(userAnswers) =>
-            Future(OptionalDataRequest(request.request, id.sessionId, request.nino, Some(userAnswers)))
+            Future(OptionalDataRequest(request.request, id, request.nino, Some(userAnswers)))
         }
     }
 

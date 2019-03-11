@@ -19,15 +19,12 @@ package controllers.actions
 import base.SpecBase
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import org.mockito.Matchers._
-import org.mockito.Mockito._
 import play.api.mvc._
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
+import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.http.SessionKeys
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
@@ -47,33 +44,33 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
 
       val unAuthAction = new UnauthenticatedIdentifierAction(authConnector, frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
-      val result = controller.onPageLoad()(fakeRequest.withSession(SessionKeys.sessionId -> "sessionId", frontendAppConfig.mongoKey -> "key"))
+      val result = controller.onPageLoad()(fakeRequest.withSession(SessionKeys.sessionId -> "sessionId"))
 
       status(result) mustBe OK
 
       application.stop()
     }
 
-    "update session with mongoKey" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-
-      val authConnector = application.injector.instanceOf[AuthConnector]
-
-      val unAuthAction = new UnauthenticatedIdentifierAction(authConnector, frontendAppConfig, bodyParsers)
-      val controller = new Harness(unAuthAction)
-      val request = fakeRequest.withSession(SessionKeys.sessionId -> "sessionId", frontendAppConfig.mongoKey -> "key")
-      val result: Future[Result] = controller.onPageLoad()(request)
-
-      whenReady(result) {
-        result =>
-          result.session(request).data.get(frontendAppConfig.mongoKey) must contain("key")
-      }
-
-      application.stop()
-    }
+//    "update session with mongoKey" in {
+//
+//      val application = applicationBuilder(userAnswers = None).build()
+//
+//      val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+//
+//      val authConnector = application.injector.instanceOf[AuthConnector]
+//
+//      val unAuthAction = new UnauthenticatedIdentifierAction(authConnector, frontendAppConfig, bodyParsers)
+//      val controller = new Harness(unAuthAction)
+//      val request = fakeRequest.withSession(SessionKeys.sessionId -> "sessionId")
+//      val result: Future[Result] = controller.onPageLoad()(request)
+//
+//      whenReady(result) {
+//        result =>
+//          result.session(request).data.get(frontendAppConfig.mongoKey) must contain("key")
+//      }
+//
+//      application.stop()
+//    }
 
     "return 200 when there is no mongoKey but a sessionId is present" in {
 
@@ -92,25 +89,25 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
       application.stop()
     }
 
-    "update session with mongoKey when there is no mongoKey but a sessionId is present" in {
-      val application = applicationBuilder(userAnswers = None).build()
-
-      val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-
-      val authConnector = application.injector.instanceOf[AuthConnector]
-
-      val unAuthAction = new UnauthenticatedIdentifierAction(authConnector, frontendAppConfig, bodyParsers)
-      val controller = new Harness(unAuthAction)
-      val request = fakeRequest.withSession(SessionKeys.sessionId -> "key")
-      val result = controller.onPageLoad()(request)
-
-      whenReady(result) {
-        result =>
-          result.session(request).data.get(frontendAppConfig.mongoKey) must contain("key")
-      }
-
-      application.stop()
-    }
+//    "update session with mongoKey when there is no mongoKey but a sessionId is present" in {
+//      val application = applicationBuilder(userAnswers = None).build()
+//
+//      val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+//
+//      val authConnector = application.injector.instanceOf[AuthConnector]
+//
+//      val unAuthAction = new UnauthenticatedIdentifierAction(authConnector, frontendAppConfig, bodyParsers)
+//      val controller = new Harness(unAuthAction)
+//      val request = fakeRequest.withSession(SessionKeys.sessionId -> "key")
+//      val result = controller.onPageLoad()(request)
+//
+//      whenReady(result) {
+//        result =>
+//          result.session(request).data.get(frontendAppConfig.mongoKey) must contain("key")
+//      }
+//
+//      application.stop()
+//    }
 
     "return exception when there is no mongoKey and no session" in {
 

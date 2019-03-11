@@ -49,7 +49,7 @@ class AuthenticatedIdentifierAction @Inject()(
         block(IdentifierRequest(request, Authed(internalId), Some(nino)))
     } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
-        unauthorised(request.session.get(config.mongoKey))
+        unauthorised(hc.sessionId.map(_.value))
       case _: InsufficientConfidenceLevel =>
         insufficientConfidence(request.getQueryString("key"))
       case _: InsufficientEnrolments | _: UnsupportedAuthProvider | _: UnsupportedAffinityGroup | _: UnsupportedCredentialRole =>
@@ -65,7 +65,7 @@ class AuthenticatedIdentifierAction @Inject()(
       case Some(key) =>
         Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + key}")))
       case _ =>
-        Redirect(UnauthorisedController.onPageLoad())
+        Redirect(SessionExpiredController.onPageLoad())
     }
   }
 

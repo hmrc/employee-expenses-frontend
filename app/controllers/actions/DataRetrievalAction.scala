@@ -37,16 +37,16 @@ class DataRetrievalActionImpl @Inject()(
       case id: Authed =>
         authedSessionRepository.get(id.internalId).map {
           case None =>
-            OptionalDataRequest(request.request, id.internalId, request.nino, None)
+            OptionalDataRequest(request.request, id, request.nino, None)
           case Some(userAnswers) =>
-            OptionalDataRequest(request.request, id.internalId, request.nino, Some(userAnswers))
+            OptionalDataRequest(request.request, id, request.nino, Some(userAnswers))
         }
       case id: UnAuthed =>
         sessionRepository.get(id.sessionId).map {
           case None =>
-            OptionalDataRequest(request.request, id.sessionId, request.nino, None)
+            OptionalDataRequest(request.request, id, request.nino, None)
           case Some(userAnswers) =>
-            OptionalDataRequest(request.request, id.sessionId, request.nino, Some(userAnswers))
+            OptionalDataRequest(request.request, id, request.nino, Some(userAnswers))
         }
     }
   }

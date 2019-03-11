@@ -20,13 +20,14 @@ import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
 import controllers.actions.{Authed, IdentifierAction}
 import controllers.authenticated.routes._
+import controllers.routes._
 import models.{NormalMode, UserAnswers}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.{AuthedSessionRepository, SessionRepository}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RedirectMongoKeyController @Inject()(
@@ -40,28 +41,18 @@ class RedirectMongoKeyController @Inject()(
 
   def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify.async {
     implicit request =>
-      for {
-        ua <- sessionRepository.get(key).map{_.get}
-        id = request.identifier.asInstanceOf[Authed]
-        _ <- authedSessionRepository.set(UserAnswers(id.internalId, ua.data))
-        _ <- sessionRepository.set(UserAnswers(key, Json.obj()))
-      } yield {
-        Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
+      val id: Authed = request.identifier.asInstanceOf[Authed]
+
+      sessionRepository.get(key).flatMap {
+        case Some(ua) =>
+          for {
+            _ <- authedSessionRepository.set(UserAnswers(id.internalId, ua.data))
+            _ <- sessionRepository.set(UserAnswers(key, Json.obj()))
+          } yield {
+            Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
+          }
+        case _ =>
+          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
   }
 }
-
-/*
-implicit request =>
-sessionRepository.get(key).map {
-  userAnswers =>
-  (userAnswers, request.identifier) match {
-  case (Some(ua), id: Authed) =>
-  authedSessionRepository.set(UserAnswers(id.internalId, ua.data))
-  sessionRepository.set(UserAnswers(key, Json.obj()))
-  case _ =>
-  Redirect(TechnicalDifficultiesController.onPageLoad())
-}
-}
-  Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
-}*/

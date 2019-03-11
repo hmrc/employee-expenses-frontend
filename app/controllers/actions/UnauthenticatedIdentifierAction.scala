@@ -43,8 +43,6 @@ class UnauthenticatedIdentifierAction @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    val existingMongoKey = request.session.get(config.mongoKey)
-
     authorised().retrieve(Retrievals.nino and Retrievals.internalId) {
       x =>
         val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
@@ -56,11 +54,7 @@ class UnauthenticatedIdentifierAction @Inject()(
         val sessionId: String = hc.sessionId.map(_.value).getOrElse(throw new Exception("no sessionId"))
         block(IdentifierRequest(request, UnAuthed(sessionId))).map {
           result =>
-            if (existingMongoKey.isEmpty) {
-              result.addingToSession(config.mongoKey -> sessionId)(request)
-            } else {
-              result
-            }
+            result
         }
       case e =>
         Logger.error(s"[UnauthenticatedIdentifierAction][authorised] failed $e", e)

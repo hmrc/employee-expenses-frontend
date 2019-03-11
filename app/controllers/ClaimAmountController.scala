@@ -61,19 +61,19 @@ class ClaimAmountController @Inject()(
             saveClaimAmountAndAnyDeductions <- Future.fromTry(request.userAnswers.set(ClaimAmountAndAnyDeductions, claimAmountAndAnyDeductions))
             _ <- save.toSession(request, saveClaimAmountAndAnyDeductions)
           } yield {
-            Ok(view(
-              claimAmount = claimAmount,
-              employerContribution = employerContribution,
-              band1 = appConfig.taxPercentageBand1,
-              calculatedBand1 = calculateTax(appConfig.taxPercentageBand1, claimAmountAndAnyDeductions),
-              band2 = appConfig.taxPercentageBand2,
-              calculatedBand2 = calculateTax(appConfig.taxPercentageBand2, claimAmountAndAnyDeductions),
-              scotlandBand1 = appConfig.taxPercentageScotlandBand1,
-              calculatedScotlandBand1 = calculateTax(appConfig.taxPercentageScotlandBand1, claimAmountAndAnyDeductions),
-              scotlandBand2 = appConfig.taxPercentageScotlandBand2,
-              calculatedScotlandBand2 = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmountAndAnyDeductions),
-              onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
-            ))
+              Ok(view(
+                claimAmount = claimAmount,
+                employerContribution = employerContribution,
+                band1 = appConfig.taxPercentageBand1,
+                calculatedBand1 = calculateTax(appConfig.taxPercentageBand1, claimAmountAndAnyDeductions),
+                band2 = appConfig.taxPercentageBand2,
+                calculatedBand2 = calculateTax(appConfig.taxPercentageBand2, claimAmountAndAnyDeductions),
+                scotlandBand1 = appConfig.taxPercentageScotlandBand1,
+                calculatedScotlandBand1 = calculateTax(appConfig.taxPercentageScotlandBand1, claimAmountAndAnyDeductions),
+                scotlandBand2 = appConfig.taxPercentageScotlandBand2,
+                calculatedScotlandBand2 = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmountAndAnyDeductions),
+                onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
+              ))
           }
 
         case _ =>

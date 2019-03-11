@@ -17,7 +17,7 @@
 package utils
 
 import com.google.inject.Inject
-import config.FrontendAppConfig
+import controllers.actions.{Authed, UnAuthed}
 import models.UserAnswers
 import models.requests.DataRequest
 import play.api.mvc.AnyContent
@@ -26,12 +26,16 @@ import repositories.{AuthedSessionRepository, SessionRepository}
 import scala.concurrent.Future
 
 class Save @Inject()(sessionRepository: SessionRepository,
-                            authedSessionRepository: AuthedSessionRepository,
-                            config: FrontendAppConfig
-                           ) extends SaveToSession {
+                     authedSessionRepository: AuthedSessionRepository
+                    ) extends SaveToSession {
 
   def toSession(request: DataRequest[AnyContent], userAnswers: UserAnswers): Future[Boolean] = {
-    if (request.session.get(config.mongoKey).isDefined) sessionRepository.set(userAnswers) else authedSessionRepository.set(userAnswers)
+    request.identifier match {
+      case _: Authed =>
+        authedSessionRepository.set(userAnswers)
+      case _: UnAuthed =>
+        sessionRepository.set(userAnswers)
+    }
   }
 }
 
