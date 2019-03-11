@@ -225,5 +225,23 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
       application.stop()
     }
+
+    "save ClaimAmount when 'My industry was not listed' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .build()
+
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.NoneOfAbove.toString))
+
+      route(application, request).value.futureValue
+
+      whenReady(sessionRepository.get(userAnswersId)) {
+        _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+      }
+
+      application.stop()
+    }
   }
 }
