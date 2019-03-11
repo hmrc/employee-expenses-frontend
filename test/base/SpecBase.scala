@@ -135,7 +135,8 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     new GuiceApplicationBuilder()
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
-        bind[IdentifierAction].to[FakeIdentifierAction],
+        bind[AuthenticatedIdentifierAction].to[FakeAuthedIdentifierAction],
+        bind[UnauthenticatedIdentifierAction].to[FakeUnauthenticatedIdentifierAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
 }

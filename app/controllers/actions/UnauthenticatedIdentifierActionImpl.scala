@@ -32,12 +32,11 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UnauthenticatedIdentifierAction @Inject()(
-                                                 override val authConnector: AuthConnector,
-                                                 config: FrontendAppConfig,
-                                                 val parser: BodyParsers.Default
-                                               )
-                                               (implicit val executionContext: ExecutionContext) extends IdentifierAction with AuthorisedFunctions {
+class UnauthenticatedIdentifierActionImpl @Inject()(
+                                                     override val authConnector: AuthConnector,
+                                                     config: FrontendAppConfig,
+                                                     val parser: BodyParsers.Default
+                                                   )(implicit val executionContext: ExecutionContext) extends UnauthenticatedIdentifierAction with AuthorisedFunctions {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
@@ -62,3 +61,6 @@ class UnauthenticatedIdentifierAction @Inject()(
     }
   }
 }
+
+trait UnauthenticatedIdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]
+

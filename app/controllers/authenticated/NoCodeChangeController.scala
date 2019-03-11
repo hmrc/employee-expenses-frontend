@@ -27,12 +27,12 @@ import views.html.authenticated.NoCodeChangeView
 import scala.concurrent.ExecutionContext
 
 class NoCodeChangeController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       identify: IdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: NoCodeChangeView
+                                        override val messagesApi: MessagesApi,
+                                        identify: AuthenticatedIdentifierAction,
+                                        getData: DataRetrievalAction,
+                                        requireData: DataRequiredAction,
+                                        val controllerComponents: MessagesControllerComponents,
+                                        view: NoCodeChangeView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {

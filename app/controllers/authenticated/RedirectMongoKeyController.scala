@@ -18,7 +18,7 @@ package controllers.authenticated
 
 import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
-import controllers.actions.{Authed, IdentifierAction}
+import controllers.actions._
 import controllers.authenticated.routes._
 import controllers.routes._
 import models.{NormalMode, UserAnswers}
@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RedirectMongoKeyController @Inject()(
                                             config: FrontendAppConfig,
-                                            identify: IdentifierAction,
+                                            identify: AuthenticatedIdentifierAction,
                                             val controllerComponents: MessagesControllerComponents,
                                             appConfig: FrontendAppConfig,
                                             sessionRepository: SessionRepository,

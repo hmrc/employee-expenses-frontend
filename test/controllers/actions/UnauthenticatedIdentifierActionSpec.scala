@@ -28,7 +28,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
-  class Harness(authAction: IdentifierAction) {
+  class Harness(authAction: UnauthenticatedIdentifierAction) {
     def onPageLoad(): Action[AnyContent] = authAction { _ => Results.Ok }
   }
 
@@ -42,7 +42,7 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
 
       val authConnector = application.injector.instanceOf[AuthConnector]
 
-      val unAuthAction = new UnauthenticatedIdentifierAction(authConnector, frontendAppConfig, bodyParsers)
+      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
       val result = controller.onPageLoad()(fakeRequest.withSession(SessionKeys.sessionId -> "sessionId"))
 
@@ -80,7 +80,7 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
 
       val authConnector = application.injector.instanceOf[AuthConnector]
 
-      val unAuthAction = new UnauthenticatedIdentifierAction(authConnector, frontendAppConfig, bodyParsers)
+      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
       val result = controller.onPageLoad()(fakeRequest.withSession(SessionKeys.sessionId -> "key"))
 
@@ -117,7 +117,7 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
 
       val authConnector = application.injector.instanceOf[AuthConnector]
 
-      val unAuthAction = new UnauthenticatedIdentifierAction(authConnector, frontendAppConfig, bodyParsers)
+      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, frontendAppConfig, bodyParsers)
       val controller = new Harness(unAuthAction)
       val result = controller.onPageLoad()(fakeRequest)
 

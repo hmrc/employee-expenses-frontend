@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import config.{ClaimAmounts, NavConstant}
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, UnauthenticatedIdentifierAction}
+import controllers.actions._
 import forms.FirstIndustryOptionsFormProvider
 import javax.inject.Named
 import models.{Enumerable, FirstIndustryOptions, Mode}

@@ -41,7 +41,7 @@ class YourAddressController @Inject()(
                                        citizenDetailsConnector: CitizenDetailsConnector,
                                        sessionRepository: AuthedSessionRepository,
                                        @Named(NavConstant.authenticated) navigator: Navigator,
-                                       identify: IdentifierAction,
+                                       identify: AuthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
                                        formProvider: YourAddressFormProvider,

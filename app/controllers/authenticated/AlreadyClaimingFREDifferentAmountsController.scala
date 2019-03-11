@@ -36,7 +36,7 @@ class AlreadyClaimingFREDifferentAmountsController @Inject()(
                                                               override val messagesApi: MessagesApi,
                                                               sessionRepository: AuthedSessionRepository,
                                                               @Named("Authenticated") navigator: Navigator,
-                                                              identify: IdentifierAction,
+                                                              identify: AuthenticatedIdentifierAction,
                                                               getData: DataRetrievalAction,
                                                               requireData: DataRequiredAction,
                                                               formProvider: AlreadyClaimingFREDifferentAmountsFormProvider,

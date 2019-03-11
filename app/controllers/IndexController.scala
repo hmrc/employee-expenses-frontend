@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.{Authed, DataRetrievalAction, UnAuthed, UnauthenticatedIdentifierAction}
+import controllers.actions._
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
 import play.api.i18n.I18nSupport

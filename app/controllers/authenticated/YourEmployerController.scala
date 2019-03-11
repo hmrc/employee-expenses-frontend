@@ -40,7 +40,7 @@ class YourEmployerController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         sessionRepository: AuthedSessionRepository,
                                         @Named(NavConstant.authenticated) navigator: Navigator,
-                                        identify: IdentifierAction,
+                                        identify: AuthenticatedIdentifierAction,
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
                                         formProvider: YourEmployerFormProvider,

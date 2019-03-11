@@ -32,7 +32,7 @@ import scala.concurrent.ExecutionContext
 class UpdateYourAddressController @Inject()(
                                              override val messagesApi: MessagesApi,
                                              @Named(NavConstant.authenticated) navigator: Navigator,
-                                             identify: IdentifierAction,
+                                             identify: AuthenticatedIdentifierAction,
                                              getData: DataRetrievalAction,
                                              requireData: DataRequiredAction,
                                              val controllerComponents: MessagesControllerComponents,

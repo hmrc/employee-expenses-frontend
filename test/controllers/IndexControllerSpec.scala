@@ -49,7 +49,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
       val controller =
         new IndexController(
           controllerComponents = injector.instanceOf[MessagesControllerComponents],
-          identify = injector.instanceOf[UnauthenticatedIdentifierAction],
+          identify = injector.instanceOf[UnauthenticatedIdentifierActionImpl],
           getData = injector.instanceOf[DataRetrievalAction],
           sessionRepository = injector.instanceOf[SessionRepository],
           authedSessionRepository = injector.instanceOf[AuthedSessionRepository]
@@ -68,11 +68,9 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
 
     "redirect to the first page of the application and the correct view for a GET when user answers is empty when authed" in {
 
-      val mockUnauthenticatedIdentifierAction = mock[UnauthenticatedIdentifierAction]
+      val mockUnauthenticatedIdentifierAction = mock[UnauthenticatedIdentifierActionImpl]
 
-      def x = IdentifierRequest(fakeRequest, Authed(userAnswersId), Some(fakeNino)) => Future[Result]
-
-      when(mockUnauthenticatedIdentifierAction.invokeBlock(any(), any())) thenReturn
+      when(mockUnauthenticatedIdentifierAction.authConnector) thenReturn new FakePassingAuthConnector(Future.successful(Some("nino"), Some("id")))
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -81,7 +79,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
       val controller =
         new IndexController(
           controllerComponents = injector.instanceOf[MessagesControllerComponents],
-          identify = injector.instanceOf[UnauthenticatedIdentifierAction],
+          identify = injector.instanceOf[UnauthenticatedIdentifierActionImpl],
           getData = injector.instanceOf[DataRetrievalAction],
           sessionRepository = injector.instanceOf[SessionRepository],
           authedSessionRepository = injector.instanceOf[AuthedSessionRepository]
@@ -107,7 +105,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
       val controller =
         new IndexController(
           controllerComponents = injector.instanceOf[MessagesControllerComponents],
-          identify = injector.instanceOf[UnauthenticatedIdentifierAction],
+          identify = injector.instanceOf[UnauthenticatedIdentifierActionImpl],
           getData = injector.instanceOf[DataRetrievalAction],
           sessionRepository = injector.instanceOf[SessionRepository],
           authedSessionRepository = injector.instanceOf[AuthedSessionRepository]
@@ -133,7 +131,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
       val controller =
         new IndexController(
           controllerComponents = injector.instanceOf[MessagesControllerComponents],
-          identify = injector.instanceOf[UnauthenticatedIdentifierAction],
+          identify = injector.instanceOf[UnauthenticatedIdentifierActionImpl],
           getData = injector.instanceOf[DataRetrievalAction],
           sessionRepository = injector.instanceOf[SessionRepository],
           authedSessionRepository = injector.instanceOf[AuthedSessionRepository]

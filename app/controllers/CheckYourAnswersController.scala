@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import config.NavConstant
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions._
 import javax.inject.Named
 import models.FlatRateExpenseOptions.FRENoYears
 import models.auditing.AuditData
@@ -41,7 +41,7 @@ import scala.concurrent.Future
 
 class CheckYourAnswersController @Inject()(
                                             override val messagesApi: MessagesApi,
-                                            identify: IdentifierAction,
+                                            identify: AuthenticatedIdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
                                             @Named(NavConstant.authenticated) navigator: Navigator,
