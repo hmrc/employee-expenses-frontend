@@ -19,6 +19,7 @@ package pages
 import java.time.LocalDateTime
 
 import models.{FirstIndustryOptions, UserAnswers}
+import pages.authenticated._
 import play.api.libs.json._
 
 import scala.util.Try
@@ -34,7 +35,17 @@ case object FirstIndustryOptionsPage extends QuestionPage[FirstIndustryOptions] 
     Try(
       UserAnswers(
         id = userAnswers.id,
-        data = userAnswers.data - "industry" - EmployerContributionPage - ExpensesEmployerPaidPage,
+        data =
+          userAnswers.data -
+            "industry" -
+            EmployerContributionPage -
+            ExpensesEmployerPaidPage -
+            AlreadyClaimingFREDifferentAmountsPage -
+            AlreadyClaimingFRESameAmountPage -
+            ChangeWhichTaxYearsPage -
+            RemoveFRECodePage -
+            TaxYearSelectionPage -
+            YourEmployerPage,
         lastUpdated = LocalDateTime.now
       )
     )
