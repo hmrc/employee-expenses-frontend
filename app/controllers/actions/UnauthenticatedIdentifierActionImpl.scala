@@ -26,7 +26,7 @@ import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
-import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException, UnauthorizedException}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -49,7 +49,7 @@ class UnauthenticatedIdentifierActionImpl @Inject()(
 
         block(IdentifierRequest(request, Authed(internalId), Some(nino)))
     }.recoverWith {
-      case _: AuthorisationException =>
+      case _: AuthorisationException | _: HttpException =>
         val sessionId: String = hc.sessionId.map(_.value).getOrElse(throw new Exception("no sessionId"))
         block(IdentifierRequest(request, UnAuthed(sessionId))).map {
           result =>
