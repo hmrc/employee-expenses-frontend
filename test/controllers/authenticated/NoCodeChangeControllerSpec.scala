@@ -17,7 +17,6 @@
 package controllers.authenticated
 
 import base.SpecBase
-import pages.ClaimAmount
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.authenticated.NoCodeChangeView

@@ -18,8 +18,8 @@ package controllers
 
 import base.SpecBase
 import models.FlatRateExpenseOptions.{FREAllYearsAllAmountsDifferent, FREAllYearsAllAmountsSameAsClaimAmount, FRENoYears}
-import models.{FlatRateExpenseOptions, TaxYearSelection}
 import models.auditing._
+import models.{FlatRateExpenseOptions, TaxYearSelection}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.{eq => eqTo, _}
 import org.mockito.Mockito._

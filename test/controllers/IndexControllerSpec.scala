@@ -17,23 +17,19 @@
 package controllers
 
 import base.SpecBase
-import controllers.actions._
-import models.requests.IdentifierRequest
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import play.api.inject.bind
-import play.api.mvc.MessagesControllerComponents
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.{AuthedSessionRepository, SessionRepository}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.SessionKeys
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 

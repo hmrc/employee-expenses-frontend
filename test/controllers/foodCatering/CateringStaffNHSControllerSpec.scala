@@ -23,14 +23,14 @@ import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import pages.foodCatering.CateringStaffNHSPage
 import pages.ClaimAmount
+import pages.foodCatering.CateringStaffNHSPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.foodCatering.CateringStaffNHSView
 import repositories.SessionRepository
+import views.html.foodCatering.CateringStaffNHSView
 
 class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
 

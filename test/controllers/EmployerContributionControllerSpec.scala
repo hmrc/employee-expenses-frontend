@@ -23,7 +23,6 @@ import models.{EmployerContribution, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.EmployerContributionPage
 import play.api.inject.bind
-import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

@@ -51,10 +51,7 @@ class UnauthenticatedIdentifierActionImpl @Inject()(
     }.recoverWith {
       case _: AuthorisationException | _: HttpException =>
         val sessionId: String = hc.sessionId.map(_.value).getOrElse(throw new Exception("no sessionId"))
-        block(IdentifierRequest(request, UnAuthed(sessionId))).map {
-          result =>
-            result
-        }
+        block(IdentifierRequest(request, UnAuthed(sessionId)))
       case e =>
         Logger.error(s"[UnauthenticatedIdentifierAction][authorised] failed $e", e)
         Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))

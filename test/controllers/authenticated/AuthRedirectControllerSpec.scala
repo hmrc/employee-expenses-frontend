@@ -24,10 +24,10 @@ import models.requests.IdentifierRequest
 import models.{FirstIndustryOptions, NormalMode}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
-import play.api.inject.bind
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.FirstIndustryOptionsPage
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.{AuthedSessionRepository, SessionRepository}

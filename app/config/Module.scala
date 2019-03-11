@@ -20,7 +20,7 @@ import com.google.inject.AbstractModule
 import com.google.inject.name.Names
 import controllers.actions._
 import navigation._
-import repositories.{AuthedSessionRepository, AuthenticatedSessionRepository, DefaultSessionRepository, SessionRepository}
+import repositories._
 import scalate.ScalateEngineBoot
 import utils.{Save, SaveToSession}
 

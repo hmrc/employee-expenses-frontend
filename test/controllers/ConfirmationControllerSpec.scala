@@ -30,8 +30,8 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import service.ClaimAmountService
 import views.html.ConfirmationView
-import scala.concurrent.ExecutionContext.Implicits.global
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
