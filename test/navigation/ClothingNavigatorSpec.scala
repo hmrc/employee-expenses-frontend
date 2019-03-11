@@ -27,20 +27,18 @@ class ClothingNavigatorSpec extends SpecBase {
   "ClothingNavigator" when {
     for (mode <- modes) {
       s"in $mode" must {
-        "from Clothing" must {
-          "go to EmployerContribution when 'Yes' is selected" in {
-            val answers = emptyUserAnswers.set(ClothingPage, true).success.value
+        "go to EmployerContribution from Clothing when 'Yes' is selected" in {
+          val answers = emptyUserAnswers.set(ClothingPage, true).success.value
 
-            navigator.nextPage(ClothingPage, mode)(answers) mustBe
-              controllers.routes.EmployerContributionController.onPageLoad(mode)
-          }
+          navigator.nextPage(ClothingPage, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
+        }
 
-          "go to EmployerContribution when 'No' is selected" in {
-            val answers = emptyUserAnswers.set(ClothingPage, false).success.value
+        "go to EmployerContribution from Clothing when 'No' is selected" in {
+          val answers = emptyUserAnswers.set(ClothingPage, false).success.value
 
-            navigator.nextPage(ClothingPage, mode)(answers) mustBe
-              controllers.routes.EmployerContributionController.onPageLoad(mode)
-          }
+          navigator.nextPage(ClothingPage, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
       }
     }
