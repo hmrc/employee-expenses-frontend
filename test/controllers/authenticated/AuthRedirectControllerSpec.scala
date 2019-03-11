@@ -52,7 +52,7 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
 
       val authedSessionRepository = application.injector.instanceOf[AuthedSessionRepository]
 
-      val request = IdentifierRequest(FakeRequest(GET, RedirectMongoKeyController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
+      val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
 
       val result = route(application, request).value
 
@@ -77,7 +77,7 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = IdentifierRequest(FakeRequest(GET, RedirectMongoKeyController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
+      val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
 
       val result = route(application, request).value
 
