@@ -30,14 +30,14 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RedirectMongoKeyController @Inject()(
-                                            config: FrontendAppConfig,
-                                            identify: AuthenticatedIdentifierAction,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            appConfig: FrontendAppConfig,
-                                            sessionRepository: SessionRepository,
-                                            authedSessionRepository: AuthedSessionRepository
-                                          )(implicit ec: ExecutionContext) extends FrontendBaseController {
+class AuthRedirectController @Inject()(
+                                        config: FrontendAppConfig,
+                                        identify: AuthenticatedIdentifierAction,
+                                        val controllerComponents: MessagesControllerComponents,
+                                        appConfig: FrontendAppConfig,
+                                        sessionRepository: SessionRepository,
+                                        authedSessionRepository: AuthedSessionRepository
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController {
 
   def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify.async {
     implicit request =>

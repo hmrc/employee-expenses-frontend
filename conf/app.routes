@@ -15,7 +15,7 @@ GET         /unauthorised                                        controllers.Una
 
 GET         /technical-difficulties                              controllers.TechnicalDifficultiesController.onPageLoad
 
-GET         /session-key                                         controllers.authenticated.RedirectMongoKeyController.onPageLoad(key: String, journeyId: Option[String])
+GET         /session-key                                         controllers.authenticated.AuthRedirectController.onPageLoad(key: String, journeyId: Option[String])
 
 GET         /expenses-employer-paid                              controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)
 POST        /expenses-employer-paid                              controllers.ExpensesEmployerPaidController.onSubmit(mode: Mode = NormalMode)
