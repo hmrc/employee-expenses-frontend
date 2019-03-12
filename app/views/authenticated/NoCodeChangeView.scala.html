@@ -14,19 +14,28 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
-        main_template: MainTemplate
+        main_template: MainTemplate,
+        frontendAppConfig: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
-  @main_template(
+@link = {
+    <a href=@frontendAppConfig.incomeTaxSummary>@messages("noCodeChange.link")</a>
+}
+
+@main_template(
     title = messages("noCodeChange.title")
-  ) {
+) {
 
     @components.back_link()
 
     @components.heading("noCodeChange.heading")
 
-    <p>@messages("noCodeChange.guidance")</p>
-  }
+    <p>@messages("noCodeChange.guidance1")</p>
+
+    <p>@Html(messages("noCodeChange.guidance2", link))</p>
+}
