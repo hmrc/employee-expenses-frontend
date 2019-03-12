@@ -28,7 +28,6 @@ class IabdEditDataRequestSpec extends SpecBase {
           |{
           |  "version": 1,
           |  "expensesData": {
-          |     "sequenceNumber": 1,
           |     "grossAmount": 100
           |  }
           |}
@@ -37,7 +36,7 @@ class IabdEditDataRequestSpec extends SpecBase {
       val iabdEditDataRequest = iabdEditDataRequestJson.as[IabdEditDataRequest]
 
       iabdEditDataRequest.version mustBe 1
-      iabdEditDataRequest.expensesData mustBe IabdUpdateData(1, 100)
+      iabdEditDataRequest.expensesData mustBe IabdUpdateData(100)
     }
 
     "fail to bind when given invalid json" in {

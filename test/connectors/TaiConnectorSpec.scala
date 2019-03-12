@@ -116,7 +116,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(fakeNino, taxYear, 1, IabdUpdateData(1, 100))
+      val result: Future[HttpResponse] = taiConnector.taiFREUpdate(fakeNino, taxYear, 1, IabdUpdateData(100))
 
       whenReady(result) {
         result =>
