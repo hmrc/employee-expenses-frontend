@@ -44,7 +44,7 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
 
       when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(minimumUserAnswers))
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.remove(any())) thenReturn Future.successful(None)
 
       val application = applicationBuilder(Some(minimumUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

@@ -75,6 +75,10 @@ class AuthenticatedSessionRepository @Inject()(
       }
     }
   }
+
+  override def remove(id: String): Future[Option[UserAnswers]] =
+    collection.flatMap(_.findAndRemove(Json.obj("_id" -> id)).map(_.result[UserAnswers]))
+
 }
 
 trait AuthedSessionRepository {
@@ -84,4 +88,6 @@ trait AuthedSessionRepository {
   def get(id: String): Future[Option[UserAnswers]]
 
   def set(userAnswers: UserAnswers): Future[Boolean]
+
+  def remove(id: String): Future[Option[UserAnswers]]
 }
