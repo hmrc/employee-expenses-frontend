@@ -26,7 +26,7 @@ import play.api.mvc.Call
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   private val contactHost = configuration.get[String]("contact-frontend.host")
-  private val contactFormServiceIdentifier = "play26frontend"
+  private val contactFormServiceIdentifier = "employeeExpensesFrontend"
 
   val assetsPath: String = configuration.get[String]("assets.url") + configuration.get[String]("assets.version") + "/"
   val govukTemplatePath: String = "/templates/mustache/production/"
@@ -39,7 +39,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val taiUrl: String = configuration.get[Service]("microservice.services.tai").baseUrl
   lazy val citizenDetailsUrl: String = configuration.get[Service]("microservice.services.citizen-details").baseUrl
-  lazy val employeeExpensesUrl: String = configuration.get[Service]("microservice.services.employee-expenses-frontend").baseUrl
+  lazy val employeeExpensesFrontendUrl: String = configuration.get[String]("employee-expenses.url")
 
   lazy val authUrl: String = configuration.get[Service]("microservice.services.auth").baseUrl
   lazy val loginUrl: String = configuration.get[String]("urls.login")
