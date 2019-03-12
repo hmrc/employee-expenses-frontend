@@ -16,6 +16,7 @@
 
 package views.authenticated
 
+import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.authenticated.NoCodeChangeView
 
@@ -27,13 +28,19 @@ class NoCodeChangeViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[NoCodeChangeView]
 
+    val applyView = view.apply()(fakeRequest, messages)
+
     val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+
+    behave like normalPage(applyView, "noCodeChange")
 
     behave like pageWithAccountMenu(applyViewWithAuth)
 
     behave like pageWithBackLink(applyViewWithAuth)
 
-    behave like pageWithBodyText(applyViewWithAuth, messages("noCodeChange.guidance"))
+    val link: Html = Html(s"""<a href="${frontendAppConfig.incomeTaxSummary}">${messages("noCodeChange.link")}</a>""")
+
+    behave like pageWithBodyText(applyViewWithAuth, Html(messages("noCodeChange.guidance2", link)).toString)
 
   }
 

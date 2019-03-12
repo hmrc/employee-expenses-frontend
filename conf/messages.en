@@ -51,6 +51,7 @@ site.acceptChangeClaim = Accept and change claim
 site.acceptStopClaim = Accept and stop claim
 site.service_name = Employee Expenses
 site.textarea.char_limit = (Limit is {0} characters)
+site.startAgain = Restart your expenses claim
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
@@ -601,7 +602,9 @@ updateYourAddress.guidance2 = We will give you the link to change your address a
 
 noCodeChange.title = You do not need to do anything else
 noCodeChange.heading = You do not need to do anything else
-noCodeChange.guidance = This amount will stay in your tax code until you tell us that your employment circumstances have changed.
+noCodeChange.guidance1 = This amount will stay in your tax code until you tell us that your employment circumstances have changed.
+noCodeChange.guidance2 = You can see this in your {0}
+noCodeChange.link = PAYE Income Tax summary.
 
 yourAddress.title = Is this your address?
 yourAddress.heading = Is this your address?

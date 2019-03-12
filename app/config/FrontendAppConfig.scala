@@ -39,6 +39,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val taiUrl: String = configuration.get[Service]("microservice.services.tai").baseUrl
   lazy val citizenDetailsUrl: String = configuration.get[Service]("microservice.services.citizen-details").baseUrl
+  lazy val employeeExpensesUrl: String = configuration.get[Service]("microservice.services.employee-expenses-frontend").baseUrl
 
   lazy val authUrl: String = configuration.get[Service]("microservice.services.auth").baseUrl
   lazy val loginUrl: String = configuration.get[String]("urls.login")
@@ -51,6 +52,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val p87Url: String = configuration.get[String]("p87.url")
   lazy val govUkUrl: String = configuration.get[String]("govUk.url")
   lazy val phoneContact: String = configuration.get[String]("phoneContact.url")
+  lazy val incomeTaxSummary: String = configuration.get[String]("incomeTaxSummary.url")
 
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")
