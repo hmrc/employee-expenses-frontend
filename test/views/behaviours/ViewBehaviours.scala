@@ -33,14 +33,13 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "proposition-menu")
-          assertRenderedByCssSelector(doc, "span.header__menu__proposition-name")
+          assertRenderedById(doc, "pageTitle")
         }
 
         "hide account menu when user not logged in" in {
 
           val doc = asDocument(view)
-          assertNotRenderedById(doc, "secondary-nav")
+          doc.getElementById("hideAccountMenu").text mustBe "true"
         }
 
         "display the correct browser title" in {
@@ -64,7 +63,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "switchToWelsh")
+          assertRenderedById(doc, "langSelector")
         }
       }
     }
@@ -79,7 +78,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "show account menu when user logged in" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "secondary-nav")
+          doc.getElementById("hideAccountMenu").text mustBe "false"
         }
       }
     }
