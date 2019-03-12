@@ -18,6 +18,7 @@ package controllers.healthcare
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.HealthcareList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -184,7 +185,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.list2
       }
 
@@ -202,7 +203,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.allOther
       }
 

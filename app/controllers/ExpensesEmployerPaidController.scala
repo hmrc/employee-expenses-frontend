@@ -26,8 +26,9 @@ import pages.ExpensesEmployerPaidPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.ExpensesEmployerPaidView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +43,7 @@ class ExpensesEmployerPaidController @Inject()(
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: ExpensesEmployerPaidView,
                                                 config: FrontendAppConfig,
-                                                save: SaveToSession
+                                                sessionRepository: SessionRepository
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
@@ -68,7 +69,7 @@ class ExpensesEmployerPaidController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ExpensesEmployerPaidPage, value))
-            _ <- save.toSession(request, updatedAnswers)
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(ExpensesEmployerPaidPage, mode)(updatedAnswers))
         }
       )

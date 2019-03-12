@@ -18,6 +18,7 @@ package controllers.foodCatering
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.foodCatering.CateringStaffNHSFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -167,7 +168,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
     route(application, request).value.futureValue
 
-    whenReady(sessionRepository.get(userAnswersId)) {
+    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.catering
     }
 
@@ -185,7 +186,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
     route(application, request).value.futureValue
 
-    whenReady(sessionRepository.get(userAnswersId)) {
+    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
     }
 

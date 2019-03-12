@@ -18,6 +18,7 @@ package controllers.transport
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.transport.TransportCarpenterFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -188,7 +189,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with I
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Seamen.passengerLiners
       }
 
@@ -206,7 +207,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with I
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries
       }
 

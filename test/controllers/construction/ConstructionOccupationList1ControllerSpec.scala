@@ -18,6 +18,7 @@ package controllers.construction
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.construction.ConstructionOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -168,7 +169,7 @@ class ConstructionOccupationList1ControllerSpec extends SpecBase with ScalaFutur
 
     route(application, request).value.futureValue
 
-    whenReady(sessionRepository.get(userAnswersId)) {
+    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.list1
     }
 

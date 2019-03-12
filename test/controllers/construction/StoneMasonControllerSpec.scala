@@ -18,6 +18,7 @@ package controllers.construction
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.construction.StoneMasonFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -168,7 +169,7 @@ class StoneMasonControllerSpec extends SpecBase with ScalaFutures with Integrati
 
     route(application, request).value.futureValue
 
-    whenReady(sessionRepository.get(userAnswersId)) {
+    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.stoneMasons
     }
 

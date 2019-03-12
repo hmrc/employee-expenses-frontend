@@ -18,6 +18,7 @@ package controllers.electrical
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import controllers.electrical.routes._
 import forms.electrical.ElectricalFormProvider
 import models.{NormalMode, UserAnswers}
@@ -168,7 +169,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Electrical.onlyLaundry
       }
 
@@ -187,7 +188,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Electrical.allOther
       }
 

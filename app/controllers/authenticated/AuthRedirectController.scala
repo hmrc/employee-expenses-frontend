@@ -22,9 +22,8 @@ import controllers.actions._
 import controllers.authenticated.routes._
 import controllers.routes._
 import models.{NormalMode, UserAnswers}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.{AuthedSessionRepository, SessionRepository}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,19 +34,18 @@ class AuthRedirectController @Inject()(
                                         identify: AuthenticatedIdentifierAction,
                                         val controllerComponents: MessagesControllerComponents,
                                         appConfig: FrontendAppConfig,
-                                        sessionRepository: SessionRepository,
-                                        authedSessionRepository: AuthedSessionRepository
+                                        sessionRepository: SessionRepository
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController {
 
   def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify.async {
     implicit request =>
       val id: Authed = request.identifier.asInstanceOf[Authed]
 
-      sessionRepository.get(key).flatMap {
+      sessionRepository.get(UnAuthed(key)).flatMap {
         case Some(ua) =>
           for {
-            _ <- authedSessionRepository.set(UserAnswers(id.internalId, ua.data))
-            _ <- sessionRepository.remove(key)
+            _ <- sessionRepository.set(request.identifier, UserAnswers(id.internalId, ua.data))
+            _ <- sessionRepository.remove(UnAuthed(key))
           } yield {
             Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
           }

@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import controllers.actions.UnAuthed
 import models.{EmployerContribution, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -58,7 +59,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       contentAsString(result) mustEqual
         view(claimAmount, None, 20, "12.00", 40, "24.00", 19, "11.40", 41, "24.59", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmountAndAnyDeductions).value mustBe 60
       }
 
@@ -109,7 +110,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       contentAsString(result) mustEqual
         view(claimAmount, None, 20, "12.00", 40, "24.00", 19, "11.40", 41, "24.59", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmountAndAnyDeductions).value mustBe 60
       }
 
@@ -137,7 +138,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       contentAsString(result) mustEqual
         view(claimAmount, Some(employerContribution), 20, "9.00", 40, "18.00", 19, "8.55", 41, "18.45", "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmountAndAnyDeductions).value mustBe 45
       }
 

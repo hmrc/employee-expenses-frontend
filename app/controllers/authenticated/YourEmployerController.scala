@@ -29,7 +29,7 @@ import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.AuthedSessionRepository
+import repositories.SessionRepository
 import service.TaiService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.authenticated.YourEmployerView
@@ -38,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class YourEmployerController @Inject()(
                                         override val messagesApi: MessagesApi,
-                                        sessionRepository: AuthedSessionRepository,
+                                        sessionRepository: SessionRepository,
                                         @Named(NavConstant.authenticated) navigator: Navigator,
                                         identify: AuthenticatedIdentifierAction,
                                         getData: DataRetrievalAction,
@@ -93,10 +93,10 @@ class YourEmployerController @Inject()(
 
                 value => {
                   for {
-                    ua1 <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value))
-                    ua2 <- Future.fromTry(ua1.set(YourEmployerName, employments.head.name))
-                    _ <- sessionRepository.set(ua2)
-                  } yield Redirect(navigator.nextPage(YourEmployerPage, mode)(ua2))
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value)
+                      .flatMap(_.set(YourEmployerName, employments.head.name)))
+                    _ <- sessionRepository.set(request.identifier, updatedAnswers)
+                  } yield Redirect(navigator.nextPage(YourEmployerPage, mode)(updatedAnswers))
                 }
               )
           }

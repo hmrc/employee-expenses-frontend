@@ -18,6 +18,7 @@ package controllers
 
 import base.SpecBase
 import connectors.TaiConnector
+import controllers.actions.Authed
 import models.{TaxCodeRecord, TaxYearSelection}
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
@@ -168,7 +169,7 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       whenReady(result) {
         _ =>
           val sessionRepository = application.injector.instanceOf[SessionRepository]
-          sessionRepository.get(userAnswersId).map(_ mustBe None)
+          sessionRepository.get(Authed(userAnswersId)).map(_ mustBe None)
       }
 
       application.stop()

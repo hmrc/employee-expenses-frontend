@@ -18,6 +18,7 @@ package controllers.engineering
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.engineering.AncillaryEngineeringWhichTradeFormProvider
 import models.{AncillaryEngineeringWhichTrade, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -166,7 +167,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.patternMaker
       }
 
@@ -185,7 +186,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
       }
 
@@ -204,7 +205,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.apprentice
       }
 
@@ -223,7 +224,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.allOther
       }
 

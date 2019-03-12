@@ -19,6 +19,7 @@ package repositories
 import java.time.LocalDateTime
 
 import akka.stream.Materializer
+import controllers.actions.{Authed, IdentifierType, UnAuthed}
 import javax.inject.Inject
 import models.UserAnswers
 import play.api.Configuration
@@ -37,11 +38,12 @@ class DefaultSessionRepository @Inject()(
                                         )(implicit ec: ExecutionContext, m: Materializer) extends SessionRepository {
 
 
-  private val collectionName: String = "user-answers"
+  private val unauthCollectionName: String = "unauth-user-answers"
+  private val authCollectionName: String = "auth-user-answers"
 
   private val cacheTtl = config.get[Int]("mongodb.timeToLiveInSeconds")
 
-  private def collection: Future[JSONCollection] =
+  private def collection(collectionName: String): Future[JSONCollection] =
     mongo.database.map(_.collection[JSONCollection](collectionName))
 
   private val lastUpdatedIndex = Index(
@@ -51,14 +53,23 @@ class DefaultSessionRepository @Inject()(
   )
 
   val started: Future[Unit] =
-    collection.flatMap {
+    collection(unauthCollectionName).flatMap {
       _.indexesManager.ensure(lastUpdatedIndex)
+    }.flatMap {
+      _ =>
+        collection(authCollectionName).flatMap {
+          _.indexesManager.ensure(lastUpdatedIndex)
+        }
     }.map(_ => ())
 
-  override def get(id: String): Future[Option[UserAnswers]] =
-    collection.flatMap(_.find(Json.obj("_id" -> id), None).one[UserAnswers])
+  override def get(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
+    identifierType match {
+      case id: Authed => collection(authCollectionName).flatMap(_.find(Json.obj("_id" -> id.internalId), None).one[UserAnswers])
+      case id: UnAuthed => collection(unauthCollectionName).flatMap(_.find(Json.obj("_id" -> id.sessionId), None).one[UserAnswers])
+    }
+  }
 
-  override def set(userAnswers: UserAnswers): Future[Boolean] = {
+  override def set(identifierType: IdentifierType, userAnswers: UserAnswers): Future[Boolean] = {
 
     val selector = Json.obj(
       "_id" -> userAnswers.id
@@ -68,20 +79,41 @@ class DefaultSessionRepository @Inject()(
       "$set" -> (userAnswers copy (lastUpdated = LocalDateTime.now))
     )
 
-    collection.flatMap {
-      _.update(selector, modifier, upsert = true).map {
-        lastError =>
-          lastError.ok
-      }
+    identifierType match {
+      case _: Authed =>
+        collection(authCollectionName).flatMap {
+          _.update(selector, modifier, upsert = true).map {
+            lastError =>
+              lastError.ok
+          }
+        }
+      case _: UnAuthed =>
+        collection(unauthCollectionName).flatMap {
+          _.update(selector, modifier, upsert = true).map {
+            lastError =>
+              lastError.ok
+          }
+        }
     }
   }
+
+  override def remove(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
+    identifierType match {
+      case id: Authed => collection(authCollectionName).flatMap(_.findAndRemove(Json.obj("_id" -> id.internalId)).map(_.result[UserAnswers]))
+      case id: UnAuthed => collection(unauthCollectionName).flatMap(_.findAndRemove(Json.obj("_id" -> id.sessionId)).map(_.result[UserAnswers]))
+    }
+  }
+
 }
 
 trait SessionRepository {
 
   val started: Future[Unit]
 
-  def get(id: String): Future[Option[UserAnswers]]
+  def get(identifierType: IdentifierType): Future[Option[UserAnswers]]
 
-  def set(userAnswers: UserAnswers): Future[Boolean]
+  def set(identifierType: IdentifierType, userAnswers: UserAnswers): Future[Boolean]
+
+  def remove(identifierType: IdentifierType): Future[Option[UserAnswers]]
+
 }

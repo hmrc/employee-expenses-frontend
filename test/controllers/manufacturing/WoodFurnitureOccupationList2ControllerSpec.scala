@@ -18,6 +18,7 @@ package controllers.manufacturing
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import controllers.routes.SessionExpiredController
 import forms.WoodFurnitureOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
@@ -167,7 +168,7 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase with ScalaFutu
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.WoodFurniture.list2
       }
 

@@ -18,6 +18,7 @@ package controllers.engineering
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.engineering.ConstructionalEngineeringApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -187,7 +188,7 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.apprentice
       }
 
@@ -206,7 +207,7 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.allOther
       }
 

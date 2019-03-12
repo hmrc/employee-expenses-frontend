@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.heating.HeatingOccupationListView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,7 @@ class HeatingOccupationListController @Inject()(
                                                  formProvider: HeatingOccupationListFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: HeatingOccupationListView,
-                                                 save: SaveToSession
+                                                 sessionRepository: SessionRepository
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -71,7 +71,7 @@ class HeatingOccupationListController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HeatingOccupationListPage, value)
               .flatMap(_.set(ClaimAmount, claimAmount))
             )
-            _ <- save.toSession(request, updatedAnswers)
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(HeatingOccupationListPage, mode)(updatedAnswers))
         }
       )

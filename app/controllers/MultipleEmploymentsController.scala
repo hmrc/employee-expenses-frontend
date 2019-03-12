@@ -27,7 +27,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.MultipleEmploymentsView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,7 +41,7 @@ class MultipleEmploymentsController @Inject()(
                                                formProvider: MultipleEmploymentsFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
                                                view: MultipleEmploymentsView,
-                                               save: SaveToSession
+                                               sessionRepository: SessionRepository
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -67,7 +67,7 @@ class MultipleEmploymentsController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(MultipleEmploymentsPage, value))
-            _ <- save.toSession(request, updatedAnswers)
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(MultipleEmploymentsPage, mode)(updatedAnswers))
         }
       )

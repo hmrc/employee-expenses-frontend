@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.FirstIndustryOptionsView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,7 @@ class FirstIndustryOptionsController @Inject()(
                                                 val controllerComponents: MessagesControllerComponents,
                                                 view: FirstIndustryOptionsView,
                                                 @Named(NavConstant.generic) navigator: Navigator,
-                                                save: SaveToSession
+                                                sessionRepository: SessionRepository
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form: Form[FirstIndustryOptions] = formProvider()
@@ -74,7 +74,7 @@ class FirstIndustryOptionsController @Inject()(
             } else {
               Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value))
             }
-            _ <- save.toSession(request, updatedAnswers)
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(FirstIndustryOptionsPage, mode)(updatedAnswers))
         }
       )

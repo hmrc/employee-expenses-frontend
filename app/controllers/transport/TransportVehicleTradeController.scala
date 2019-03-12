@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.transport.TransportVehicleTradeView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,7 @@ class TransportVehicleTradeController @Inject()(
                                                  formProvider: TransportVehicleTradeFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: TransportVehicleTradeView,
-                                                 save: SaveToSession
+                                                 sessionRepository: SessionRepository
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -79,7 +79,7 @@ class TransportVehicleTradeController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportVehicleTradePage, value)
               .flatMap(_.set(ClaimAmount, claimAmount))
             )
-            _ <- save.toSession(request, updatedAnswers)
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(TransportVehicleTradePage, mode)(updatedAnswers))
         }
       )

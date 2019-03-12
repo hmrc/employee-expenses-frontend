@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.transport.TransportCarpenterView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,7 @@ class TransportCarpenterController @Inject()(
                                               formProvider: TransportCarpenterFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
                                               view: TransportCarpenterView,
-                                              save: SaveToSession
+                                              sessionRepository: SessionRepository
                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -76,7 +76,7 @@ class TransportCarpenterController @Inject()(
                 .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries))
               )
             }
-            _ <- save.toSession(request, updatedAnswers)
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(TransportCarpenterPage, mode)(updatedAnswers))
         }
       )

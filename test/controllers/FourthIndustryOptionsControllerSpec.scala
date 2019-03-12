@@ -18,6 +18,7 @@ package controllers
 
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
+import controllers.actions.UnAuthed
 import forms.FourthIndustryOptionsFormProvider
 import models.{FourthIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -165,7 +166,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.agriculture
       }
 
@@ -183,7 +184,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.fireService
       }
 
@@ -201,7 +202,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.leisure
       }
 
@@ -219,7 +220,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.prisons
       }
 
@@ -237,7 +238,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
 

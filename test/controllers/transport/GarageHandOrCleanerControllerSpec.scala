@@ -18,6 +18,7 @@ package controllers.transport
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.transport.GarageHandOrCleanerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -187,7 +188,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.PublicTransport.garageHands
       }
 
@@ -205,7 +206,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.PublicTransport.conductorsDrivers
       }
 

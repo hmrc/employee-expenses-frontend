@@ -17,6 +17,7 @@
 package controllers.authenticated
 
 import base.SpecBase
+import controllers.actions.Authed
 import forms.authenticated.RemoveFRECodeFormProvider
 import models.{NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -26,7 +27,7 @@ import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.AuthedSessionRepository
+import repositories.SessionRepository
 import views.html.authenticated.RemoveFRECodeView
 
 class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
@@ -156,14 +157,14 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .build()
 
-        val sessionRepository = application.injector.instanceOf[AuthedSessionRepository]
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
 
         val request = FakeRequest(POST, removeFRECodeRoute)
           .withFormUrlEncodedBody(("value", option.toString))
 
         route(application, request).value.futureValue
 
-        whenReady(sessionRepository.get(userAnswersId)) {
+        whenReady(sessionRepository.get(Authed(userAnswersId))) {
           _.value.get(RemoveFRECodePage).value mustBe option
         }
 

@@ -18,6 +18,7 @@ package controllers.police
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.police.CommunitySupportOfficerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -167,7 +168,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Police.communitySupportOfficer
       }
 

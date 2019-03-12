@@ -17,7 +17,7 @@
 package controllers.authenticated
 
 import base.SpecBase
-import controllers.actions.Authed
+import controllers.actions.{Authed, UnAuthed}
 import controllers.authenticated.routes._
 import controllers.routes._
 import models.requests.IdentifierRequest
@@ -30,7 +30,7 @@ import pages.FirstIndustryOptionsPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.{AuthedSessionRepository, SessionRepository}
+import repositories.SessionRepository
 
 import scala.concurrent.Future
 
@@ -40,28 +40,24 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
 
     "redirect to TaxYearSelection on success" in {
 
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(minimumUserAnswers))
-
-      when(mockSessionRepository.remove(any())) thenReturn Future.successful(None)
-
       val application = applicationBuilder(Some(minimumUserAnswers))
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val authedSessionRepository = application.injector.instanceOf[AuthedSessionRepository]
+      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
-      val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
+      whenReady(sessionRepository.set(UnAuthed(userAnswersId), minimumUserAnswers)) {
+        _ =>
+          val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
 
-      val result = route(application, request).value
+          val result = route(application, request).value
 
-      status(result) mustEqual 303
+          status(result) mustEqual 303
 
-      redirectLocation(result).get mustBe TaxYearSelectionController.onPageLoad(NormalMode).url
+          redirectLocation(result).get mustBe TaxYearSelectionController.onPageLoad(NormalMode).url
 
-      whenReady(authedSessionRepository.get(userAnswersId)) {
-        _.value.get(FirstIndustryOptionsPage).value mustBe FirstIndustryOptions.Retail
+          whenReady(sessionRepository.get(Authed(userAnswersId))) {
+            _.value.get(FirstIndustryOptionsPage).value mustBe FirstIndustryOptions.Retail
+          }
       }
 
       application.stop()

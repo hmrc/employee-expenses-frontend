@@ -30,7 +30,7 @@ import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.AuthedSessionRepository
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.authenticated.YourAddressView
 
@@ -39,7 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class YourAddressController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        citizenDetailsConnector: CitizenDetailsConnector,
-                                       sessionRepository: AuthedSessionRepository,
+                                       sessionRepository: SessionRepository,
                                        @Named(NavConstant.authenticated) navigator: Navigator,
                                        identify: AuthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
@@ -84,10 +84,10 @@ class YourAddressController @Inject()(
 
             value => {
               for {
-                ua1 <- Future.fromTry(request.userAnswers.set(YourAddressPage, value))
-                ua2 <- Future.fromTry(ua1.set(CitizenDetailsAddress, address))
-                _ <- sessionRepository.set(ua2)
-              } yield Redirect(navigator.nextPage(YourAddressPage, mode)(ua2))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(YourAddressPage, value)
+                  .flatMap(_.set(CitizenDetailsAddress, address)))
+                _ <- sessionRepository.set(request.identifier, updatedAnswers)
+              } yield Redirect(navigator.nextPage(YourAddressPage, mode)(updatedAnswers))
             }
           )
       }.recoverWith {
