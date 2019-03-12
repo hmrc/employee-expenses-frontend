@@ -1,12 +1,15 @@
-checkYourAnswers.title = Check Your Answers
-checkYourAnswers.heading = Check Your Answers
+checkYourAnswers.title = Check your answers
+checkYourAnswers.heading = Check your answers
 checkYourAnswers.title.claimExpenses = Check your answers before claiming your expenses
 checkYourAnswers.heading.claimExpenses = Check your answers before claiming your expenses
 checkYourAnswers.guidance = Guidance for check your answers
 checkYourAnswers.claimExpenses = Claim your expenses
+checkYourAnswers.changeClaim = Change this claim
+checkYourAnswers.stopClaim = Stop this claim
 checkYourAnswers.confirmInformationNoFre = By claiming these expenses, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
 checkYourAnswers.confirmInformationChangeFre = By making this change, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
 checkYourAnswers.prosecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
+checkYourAnswers.editText = Change your answer
 
 date.day = Day
 date.month = Month
@@ -603,6 +606,7 @@ noCodeChange.guidance = This amount will stay in your tax code until you tell us
 yourAddress.title = Is this your address?
 yourAddress.heading = Is this your address?
 yourAddress.checkYourAnswersLabel = Is this your address? {0}
+yourAddress.checkYourAnswersLabel.hidden = Change is this your address
 yourAddress.error.required = Select yes if this is your address
 
 removeFRECode.title = Which tax year did this expense end?
@@ -625,6 +629,7 @@ sameEmployerContributionAllYears.error.required = Select yes if your employer pa
 yourEmployer.title = Is this your employer?
 yourEmployer.heading = Is this your employer?
 yourEmployer.checkYourAnswersLabel = Is this your employer? {0}
+yourEmployer.checkYourAnswersLabel.hidden = Change is this your employer
 yourEmployer.error.required = Select yes if this is your employer
 
 alreadyClaimingFRESameAmount.title = You are already claiming this

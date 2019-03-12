@@ -35,7 +35,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case YourEmployerPage => yourEmployer(NormalMode)
     case UpdateYourEmployerInformationPage => updateEmployerInformation(NormalMode)
     case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad()
-    case ChangeWhichTaxYearsPage => _ => YourEmployerController.onPageLoad(NormalMode)
+    case ChangeWhichTaxYearsPage => changeWhichTaxYears(NormalMode)
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -45,7 +45,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case YourAddressPage => yourAddress(CheckMode)
     case YourEmployerPage => yourEmployer(CheckMode)
     case UpdateYourEmployerInformationPage => updateEmployerInformation(CheckMode)
-    case ChangeWhichTaxYearsPage => _ => YourEmployerController.onPageLoad(CheckMode)
+    case ChangeWhichTaxYearsPage => changeWhichTaxYears(CheckMode)
     case _ => _ => CheckYourAnswersController.onPageLoad()
   }
 
@@ -132,6 +132,19 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       }
     } else {
       YourAddressController.onPageLoad(mode)
+    }
+  }
+
+  def changeWhichTaxYears(mode: Mode)(userAnswers: UserAnswers): Call = {
+    if (mode == CheckMode) {
+      userAnswers.get(YourEmployerPage) match {
+        case Some(_) =>
+          CheckYourAnswersController.onPageLoad()
+        case _ =>
+          YourEmployerController.onPageLoad(CheckMode)
+      }
+    } else {
+      YourEmployerController.onPageLoad(NormalMode)
     }
   }
 

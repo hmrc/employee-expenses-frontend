@@ -57,7 +57,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
         assertContainsMessages(doc,
           "checkYourAnswers.heading.claimExpenses",
-          "checkYourAnswers.confirmInformationNoFre"
+          "checkYourAnswers.confirmInformationNoFre",
+          "checkYourAnswers.claimExpenses"
         )
 
         doc.getElementById("submit").text mustBe messages("site.acceptClaimExpenses")
@@ -68,7 +69,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
         assertContainsMessages(doc,
           "checkYourAnswers.heading.claimExpenses",
-          "checkYourAnswers.confirmInformationChangeFre"
+          "checkYourAnswers.confirmInformationChangeFre",
+          "checkYourAnswers.changeClaim"
         )
 
         doc.getElementById("submit").text mustBe messages("site.acceptChangeClaim")
@@ -79,7 +81,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
         assertContainsMessages(doc,
           "checkYourAnswers.heading",
-          "checkYourAnswers.confirmInformationChangeFre"
+          "checkYourAnswers.confirmInformationChangeFre",
+          "checkYourAnswers.stopClaim"
         )
 
         doc.getElementById("submit").text mustBe messages("site.acceptStopClaim")

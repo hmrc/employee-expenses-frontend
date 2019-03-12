@@ -17,6 +17,7 @@
 package pages.authenticated
 
 import models.AlreadyClaimingFREDifferentAmounts
+import models.AlreadyClaimingFREDifferentAmounts.{Change, Remove}
 import pages.behaviours.PageBehaviours
 
 class AlreadyClaimingFREDifferentAmountsPageSpec extends PageBehaviours {
@@ -28,5 +29,18 @@ class AlreadyClaimingFREDifferentAmountsPageSpec extends PageBehaviours {
     beSettable[AlreadyClaimingFREDifferentAmounts](AlreadyClaimingFREDifferentAmountsPage)
 
     beRemovable[AlreadyClaimingFREDifferentAmounts](AlreadyClaimingFREDifferentAmountsPage)
+  }
+
+  "remove YourEmployer and YourAddress when answer is Remove" in {
+
+    val userAnswers = emptyUserAnswers
+      .set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
+      .set(YourAddressPage, true).success.value
+      .set(YourEmployerPage, true).success.value
+
+    val updatedUserAnswers = userAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Remove).get
+
+    updatedUserAnswers.get(YourAddressPage) mustBe None
+    updatedUserAnswers.get(YourEmployerPage) mustBe None
   }
 }

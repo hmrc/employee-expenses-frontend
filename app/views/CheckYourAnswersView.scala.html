@@ -46,11 +46,19 @@
 
     @formHelper(action = CheckYourAnswersController.onSubmit, 'autoComplete -> "off") {
 
-        <h2>@messages("checkYourAnswers.claimExpenses")</h2>
-
         @if(freResponse == FlatRateExpenseOptions.FRENoYears && !removeFre) {
+            <h2>@messages("checkYourAnswers.claimExpenses")</h2>
             <p>@messages("checkYourAnswers.confirmInformationNoFre")</p>
-        } else {
+        }
+
+        @if((freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
+                freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) && !removeFre) {
+            <h2>@messages("checkYourAnswers.changeClaim")</h2>
+            <p>@messages("checkYourAnswers.confirmInformationChangeFre")</p>
+        }
+
+        @if(removeFre) {
+            <h2>@messages("checkYourAnswers.stopClaim")</h2>
             <p>@messages("checkYourAnswers.confirmInformationChangeFre")</p>
         }
 
