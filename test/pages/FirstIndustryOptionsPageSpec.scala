@@ -16,11 +16,10 @@
 
 package pages
 
-import models.{EmployerContribution, FirstIndustryOptions, SecondIndustryOptions, UserAnswers}
+import models._
+import pages.authenticated._
 import pages.behaviours.PageBehaviours
 import pages.construction._
-
-import scala.util.Try
 
 class FirstIndustryOptionsPageSpec extends PageBehaviours {
 
@@ -40,6 +39,12 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
         .set(ConstructionOccupationList2Page, true).success.value
         .set(EmployerContributionPage, EmployerContribution.SomeContribution).success.value
         .set(ExpensesEmployerPaidPage, 20).success.value
+        .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change).success.value
+        .set(AlreadyClaimingFRESameAmountPage, true).success.value
+        .set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
+        .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
+        .set(YourEmployerPage, true).success.value
 
       val updatedUserAnswers = userAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.Retail).get
 
@@ -47,6 +52,12 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
       updatedUserAnswers.data.keys.contains("industry") mustBe false
       updatedUserAnswers.data.keys.contains(ExpensesEmployerPaidPage) mustBe false
       updatedUserAnswers.data.keys.contains(EmployerContributionPage) mustBe false
+      updatedUserAnswers.data.keys.contains(AlreadyClaimingFREDifferentAmountsPage) mustBe false
+      updatedUserAnswers.data.keys.contains(AlreadyClaimingFRESameAmountPage) mustBe false
+      updatedUserAnswers.data.keys.contains(ChangeWhichTaxYearsPage) mustBe false
+      updatedUserAnswers.data.keys.contains(RemoveFRECodePage) mustBe false
+      updatedUserAnswers.data.keys.contains(TaxYearSelectionPage) mustBe false
+      updatedUserAnswers.data.keys.contains(YourEmployerPage) mustBe false
 
     }
   }
