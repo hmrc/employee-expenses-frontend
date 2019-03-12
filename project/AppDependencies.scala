@@ -16,7 +16,6 @@ object AppDependencies {
     "uk.gov.hmrc"           %% "tax-year"                       % "0.4.0",
     "com.typesafe.play"     %% "play-json-joda"                 % "2.6.10",
     "org.scalatra.scalate"  %% "play-scalate"                   % "0.4.0",
-    "org.jsoup"               %  "jsoup"                % "1.10.3",
     "org.scalatra.scalate"  %% "scalate-core"                   % "1.8.0"
   )
 

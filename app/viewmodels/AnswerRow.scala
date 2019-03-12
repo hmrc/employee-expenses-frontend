@@ -21,6 +21,5 @@ case class AnswerRow(label: String,
                      answerIsMessageKey: Boolean,
                      changeUrl: Option[String],
                      editText: Option[String],
-                     editTextHidden: Option[String],
                      labelArgs: String*)
 
