@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.manufacturing.WoodFurnitureOccupationList2View
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,7 @@ class WoodFurnitureOccupationList2Controller @Inject()(
                                                         formProvider: WoodFurnitureOccupationList2FormProvider,
                                                         val controllerComponents: MessagesControllerComponents,
                                                         view: WoodFurnitureOccupationList2View,
-                                                        save: SaveToSession
+                                                        sessionRepository: SessionRepository
                                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -74,7 +74,7 @@ class WoodFurnitureOccupationList2Controller @Inject()(
             } else {
               Future.fromTry(request.userAnswers.set(WoodFurnitureOccupationList2Page, value))
             }
-            _ <- save.toSession(request, updatedAnswers)
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(WoodFurnitureOccupationList2Page, mode)(updatedAnswers))
         }
       )

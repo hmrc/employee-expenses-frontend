@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.printing.PrintingOccupationList2View
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,7 @@ class PrintingOccupationList2Controller @Inject()(
                                                    formProvider: PrintingOccupationList2FormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
                                                    view: PrintingOccupationList2View,
-                                                   save: SaveToSession
+                                                   sessionRepository: SessionRepository
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -71,7 +71,7 @@ class PrintingOccupationList2Controller @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PrintingOccupationList2Page, value)
               .flatMap(_.set(ClaimAmount, claimAmount))
             )
-            _ <- save.toSession(request, updatedAnswers)
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(PrintingOccupationList2Page, mode)(updatedAnswers))
         }
       )

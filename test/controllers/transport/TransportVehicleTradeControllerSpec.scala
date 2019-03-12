@@ -18,6 +18,7 @@ package controllers.transport
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.TransportVehicleTradeFormProvider
 import models.{NormalMode, TransportVehicleTrade, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -169,7 +170,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
       }
 
@@ -188,7 +189,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
       }
 
@@ -207,7 +208,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehiclePainters
       }
 
@@ -226,7 +227,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
       }
 
@@ -245,7 +246,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
       }
 
@@ -264,7 +265,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.allOther
       }
 

@@ -18,6 +18,7 @@ package controllers.healthcare
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.healthcare.HealthcareList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -185,7 +186,7 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.list1
       }
 

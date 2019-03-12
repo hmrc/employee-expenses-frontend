@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.FourthIndustryOptionsView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,7 @@ class FourthIndustryOptionsController @Inject()(
                                                  formProvider: FourthIndustryOptionsFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: FourthIndustryOptionsView,
-                                                 save: SaveToSession
+                                                 sessionRepository: SessionRepository
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -75,7 +75,7 @@ class FourthIndustryOptionsController @Inject()(
               case Prisons => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.prisons))
               case _ => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate))
             }
-            _ <- save.toSession(request, newAnswers)
+            _ <- sessionRepository.set(request.identifier, newAnswers)
           } yield Redirect(navigator.nextPage(FourthIndustryOptionsPage, mode)(newAnswers))
         }
       )

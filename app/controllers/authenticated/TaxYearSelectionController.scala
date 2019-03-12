@@ -29,7 +29,7 @@ import pages.{ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.AuthedSessionRepository
+import repositories.SessionRepository
 import service.TaiService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.authenticated.TaxYearSelectionView
@@ -38,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TaxYearSelectionController @Inject()(
                                             override val messagesApi: MessagesApi,
-                                            sessionRepository: AuthedSessionRepository,
+                                            sessionRepository: SessionRepository,
                                             @Named(NavConstant.authenticated) navigator: Navigator,
                                             identify: AuthenticatedIdentifierAction,
                                             getData: DataRetrievalAction,
@@ -78,7 +78,7 @@ class TaxYearSelectionController @Inject()(
                     ua2 <- Future.fromTry(ua.set(FREResponse, freResponse))
                     freAmounts <- taiService.getFREAmount(value, nino)
                     ua3 <- Future.fromTry(ua2.set(FREAmounts, freAmounts))
-                    _   <- sessionRepository.set(ua3)
+                    _   <- sessionRepository.set(request.identifier, ua3)
                   } yield
                     Redirect(navigator.nextPage(TaxYearSelectionPage, mode)(ua3))
             case _ =>

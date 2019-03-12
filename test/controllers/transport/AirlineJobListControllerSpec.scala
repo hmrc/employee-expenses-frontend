@@ -18,6 +18,7 @@ package controllers.transport
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.transport.AirlineJobListFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -187,7 +188,7 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Integ
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Airlines.pilotsFlightDeck
       }
 
@@ -205,7 +206,7 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Integ
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Airlines.cabinCrew
       }
 

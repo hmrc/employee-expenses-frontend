@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.engineering.ConstructionalEngineeringList3View
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,7 @@ class ConstructionalEngineeringList3Controller @Inject()(
                                                           formProvider: ConstructionalEngineeringList3FormProvider,
                                                           val controllerComponents: MessagesControllerComponents,
                                                           view: ConstructionalEngineeringList3View,
-                                                          save: SaveToSession
+                                                          sessionRepository: SessionRepository
                                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -74,7 +74,7 @@ class ConstructionalEngineeringList3Controller @Inject()(
             } else {
               Future.fromTry(request.userAnswers.set(ConstructionalEngineeringList3Page, value))
             }
-            _ <- save.toSession(request, updatedAnswers)
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(ConstructionalEngineeringList3Page, mode)(updatedAnswers))
         }
       )

@@ -18,6 +18,7 @@ package controllers.transport
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.transport.WhichRailwayTradeFormProvider
 import models.{NormalMode, UserAnswers, WhichRailwayTrade}
 import navigation.{FakeNavigator, Navigator}
@@ -165,7 +166,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with In
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehiclePainters
       }
 
@@ -183,7 +184,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with In
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
       }
 
@@ -201,7 +202,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with In
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.allOther
       }
 

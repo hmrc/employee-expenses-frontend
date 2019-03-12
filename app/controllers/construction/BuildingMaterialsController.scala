@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.construction.BuildingMaterialsView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,7 @@ class BuildingMaterialsController @Inject()(
                                              formProvider: BuildingMaterialsFormProvider,
                                              val controllerComponents: MessagesControllerComponents,
                                              view: BuildingMaterialsView,
-                                             save: SaveToSession
+                                             sessionRepository: SessionRepository
                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -71,7 +71,7 @@ class BuildingMaterialsController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(BuildingMaterialsPage, value)
               .flatMap(_.set(ClaimAmount, claimAmount))
             )
-            _ <- save.toSession(request, updatedAnswers)
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(BuildingMaterialsPage, mode)(updatedAnswers))
         }
       )

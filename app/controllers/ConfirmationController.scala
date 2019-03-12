@@ -26,6 +26,7 @@ import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage, YourAddress
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.ConfirmationView
@@ -41,7 +42,8 @@ class ConfirmationController @Inject()(
                                         view: ConfirmationView,
                                         claimAmountService: ClaimAmountService,
                                         appConfig: FrontendAppConfig,
-                                        taiConnector: TaiConnector
+                                        taiConnector: TaiConnector,
+                                        sessionRepository: SessionRepository
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -64,7 +66,6 @@ class ConfirmationController @Inject()(
               } else {
                 appConfig.taxPercentageBand1
               }
-
               val higherRate: Int = if (result.head.taxCode(0) equals 'S') {
                 appConfig.taxPercentageScotlandBand2
               } else {
@@ -73,6 +74,8 @@ class ConfirmationController @Inject()(
 
               val claimAmountBasicRate = claimAmountService.calculateTax(basicRate, fullClaimAmount)
               val claimAmountHigherRate = claimAmountService.calculateTax(higherRate, fullClaimAmount)
+
+              sessionRepository.remove(request.identifier)
 
               Ok(view(
                 taxYearSelections = validTaxYearSelection,
@@ -83,7 +86,7 @@ class ConfirmationController @Inject()(
                 basicRate = basicRate,
                 higherRate = higherRate,
                 claimAmountBasicRate = claimAmountBasicRate,
-                claimAmountHigherRate = claimAmountHigherRate)).withNewSession
+                claimAmountHigherRate = claimAmountHigherRate))
 
           }.recoverWith {
             case e =>

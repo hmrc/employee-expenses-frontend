@@ -27,7 +27,7 @@ import pages.authenticated.{ChangeWhichTaxYearsPage, TaxYearSelectionPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.AuthedSessionRepository
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewmodels.RadioCheckboxOption
 import views.html.authenticated.ChangeWhichTaxYearsView
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ChangeWhichTaxYearsController @Inject()(
                                                override val messagesApi: MessagesApi,
-                                               sessionRepository: AuthedSessionRepository,
+                                               sessionRepository: SessionRepository,
                                                @Named(NavConstant.authenticated) navigator: Navigator,
                                                identify: AuthenticatedIdentifierAction,
                                                getData: DataRetrievalAction,
@@ -85,7 +85,7 @@ class ChangeWhichTaxYearsController @Inject()(
             value => {
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeWhichTaxYearsPage, value))
-                _ <- sessionRepository.set(updatedAnswers)
+                _ <- sessionRepository.set(request.identifier, updatedAnswers)
               } yield Redirect(navigator.nextPage(ChangeWhichTaxYearsPage, mode)(updatedAnswers))
             }
           )

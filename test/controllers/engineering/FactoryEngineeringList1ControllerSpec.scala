@@ -18,6 +18,7 @@ package controllers.engineering
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.engineering.FactoryEngineeringList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -189,7 +190,7 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
 
     route(application, request).value.futureValue
 
-    whenReady(sessionRepository.get(userAnswersId)) {
+    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.list1
     }
 

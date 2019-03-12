@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.SaveToSession
+import repositories.SessionRepository
 import views.html.engineering.AncillaryEngineeringWhichTradeView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,7 @@ class AncillaryEngineeringWhichTradeController @Inject()(
                                                           formProvider: AncillaryEngineeringWhichTradeFormProvider,
                                                           val controllerComponents: MessagesControllerComponents,
                                                           view: AncillaryEngineeringWhichTradeView,
-                                                          save: SaveToSession
+                                                          sessionRepository: SessionRepository
                                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
@@ -77,7 +77,7 @@ class AncillaryEngineeringWhichTradeController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AncillaryEngineeringWhichTradePage, value)
               .flatMap(_.set(ClaimAmount, claimAmount))
             )
-            _ <- save.toSession(request, updatedAnswers)
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(updatedAnswers))
         }
       )

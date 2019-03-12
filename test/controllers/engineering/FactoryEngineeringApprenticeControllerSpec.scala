@@ -18,6 +18,7 @@ package controllers.engineering
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.FactoryEngineeringApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -189,7 +190,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
 
     route(application, request).value.futureValue
 
-    whenReady(sessionRepository.get(userAnswersId)) {
+    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.apprentice
     }
 
@@ -208,7 +209,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
 
     route(application, request).value.futureValue
 
-    whenReady(sessionRepository.get(userAnswersId)) {
+    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.allOther
     }
 

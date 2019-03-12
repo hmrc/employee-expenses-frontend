@@ -18,6 +18,7 @@ package controllers.security
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.security.SecurityGuardNHSFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -166,7 +167,7 @@ class SecurityGuardNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Security.nhsSecurity
       }
 
@@ -184,7 +185,7 @@ class SecurityGuardNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
 

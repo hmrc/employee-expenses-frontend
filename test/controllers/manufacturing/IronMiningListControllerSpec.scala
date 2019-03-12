@@ -18,6 +18,7 @@ package controllers.manufacturing
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.manufacturing.IronMiningListFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -166,7 +167,7 @@ class IronMiningListControllerSpec extends SpecBase with ScalaFutures with Integ
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.IronMining.list1
       }
 
@@ -185,7 +186,7 @@ class IronMiningListControllerSpec extends SpecBase with ScalaFutures with Integ
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.IronMining.allOther
       }
 

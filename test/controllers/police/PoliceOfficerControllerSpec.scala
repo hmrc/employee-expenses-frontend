@@ -18,6 +18,7 @@ package controllers.police
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.police.PoliceOfficerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -166,7 +167,7 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Integr
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Police.policeOfficer
       }
 
@@ -184,7 +185,7 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Integr
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
 

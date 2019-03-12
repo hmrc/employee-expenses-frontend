@@ -18,6 +18,7 @@ package controllers.manufacturing
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.manufacturing.TypeOfManufacturingFormProvider
 import models.{NormalMode, TypeOfManufacturing, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -165,7 +166,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.brassCopper
       }
 
@@ -184,7 +185,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.glass
       }
 
@@ -203,7 +204,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.quarryingPreciousMetals
       }
 
@@ -222,7 +223,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
 

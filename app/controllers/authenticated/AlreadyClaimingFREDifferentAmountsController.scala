@@ -26,7 +26,7 @@ import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.AuthedSessionRepository
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.authenticated.AlreadyClaimingFREDifferentAmountsView
 
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AlreadyClaimingFREDifferentAmountsController @Inject()(
                                                               override val messagesApi: MessagesApi,
-                                                              sessionRepository: AuthedSessionRepository,
+                                                              sessionRepository: SessionRepository,
                                                               @Named("Authenticated") navigator: Navigator,
                                                               identify: AuthenticatedIdentifierAction,
                                                               getData: DataRetrievalAction,
@@ -73,7 +73,7 @@ class AlreadyClaimingFREDifferentAmountsController @Inject()(
             value => {
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AlreadyClaimingFREDifferentAmountsPage, value))
-                _ <- sessionRepository.set(updatedAnswers)
+                _ <- sessionRepository.set(request.identifier, updatedAnswers)
               } yield Redirect(navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, mode)(updatedAnswers))
             }
           )

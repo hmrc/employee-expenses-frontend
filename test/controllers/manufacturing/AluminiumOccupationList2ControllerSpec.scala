@@ -18,6 +18,7 @@ package controllers.manufacturing
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.manufacturing.AluminiumOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -166,7 +167,7 @@ class AluminiumOccupationList2ControllerSpec extends SpecBase with ScalaFutures 
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.Aluminium.list2
       }
 

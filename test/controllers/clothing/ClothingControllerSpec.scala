@@ -19,6 +19,7 @@ package controllers.clothing
 
 import base.SpecBase
 import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.clothing.ClothingFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -169,7 +170,7 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
 
     route(application, request).value.futureValue
 
-    whenReady(sessionRepository.get(userAnswersId)) {
+    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Clothing.clothingList
     }
 
@@ -188,7 +189,7 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
 
     route(application, request).value.futureValue
 
-    whenReady(sessionRepository.get(userAnswersId)) {
+    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
     }
 

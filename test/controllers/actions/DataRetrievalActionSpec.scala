@@ -23,15 +23,15 @@ import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import play.api.libs.json.Json
-import repositories.{AuthedSessionRepository, SessionRepository}
+import repositories.SessionRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
-  class Harness(sessionRepository: SessionRepository, authedSessionRepository: AuthedSessionRepository)
-    extends DataRetrievalActionImpl(sessionRepository, authedSessionRepository) {
+  class Harness(sessionRepository: SessionRepository)
+    extends DataRetrievalActionImpl(sessionRepository) {
     def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = transform(request)
   }
 
@@ -42,9 +42,8 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
       "set userAnswers in unauthed to 'None' in the request" in {
 
         val sessionRepository = mock[SessionRepository]
-        val authedSessionRepository = mock[AuthedSessionRepository]
-        when(sessionRepository.get(userAnswersId)) thenReturn Future(None)
-        val action = new Harness(sessionRepository, authedSessionRepository)
+        when(sessionRepository.get(UnAuthed(userAnswersId))) thenReturn Future(None)
+        val action = new Harness(sessionRepository)
 
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, UnAuthed(userAnswersId), Some(fakeNino)))
 
@@ -56,9 +55,8 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
       "set userAnswers in authed to 'None' in the request" in {
 
         val sessionRepository = mock[SessionRepository]
-        val authedSessionRepository = mock[AuthedSessionRepository]
-        when(authedSessionRepository.get(userAnswersId)) thenReturn Future(None)
-        val action = new Harness(sessionRepository, authedSessionRepository)
+        when(sessionRepository.get(Authed(userAnswersId))) thenReturn Future(None)
+        val action = new Harness(sessionRepository)
 
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, Authed(userAnswersId), Some(fakeNino)))
 
@@ -73,9 +71,8 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
       "build a userAnswers in unathed object and add it to the request" in {
 
         val sessionRepository = mock[SessionRepository]
-        val authedSessionRepository = mock[AuthedSessionRepository]
-        when(sessionRepository.get(userAnswersId)) thenReturn Future(Some(new UserAnswers("id", Json.obj())))
-        val action = new Harness(sessionRepository, authedSessionRepository)
+        when(sessionRepository.get(UnAuthed(userAnswersId))) thenReturn Future(Some(new UserAnswers("id", Json.obj())))
+        val action = new Harness(sessionRepository)
 
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, UnAuthed(userAnswersId), Some(fakeNino)))
 
@@ -87,9 +84,8 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
       "build a userAnswers in authed object and add it to the request" in {
 
         val sessionRepository = mock[SessionRepository]
-        val authedSessionRepository = mock[AuthedSessionRepository]
-        when(authedSessionRepository.get(userAnswersId)) thenReturn Future(Some(new UserAnswers("id", Json.obj())))
-        val action = new Harness(sessionRepository, authedSessionRepository)
+        when(sessionRepository.get(Authed(userAnswersId))) thenReturn Future(Some(new UserAnswers("id", Json.obj())))
+        val action = new Harness(sessionRepository)
 
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, Authed(userAnswersId), Some(fakeNino)))
 

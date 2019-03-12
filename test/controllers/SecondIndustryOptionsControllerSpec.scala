@@ -18,6 +18,7 @@ package controllers
 
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
+import controllers.actions.UnAuthed
 import forms.SecondIndustryOptionsFormProvider
 import generators.Generators
 import models.{NormalMode, SecondIndustryOptions, UserAnswers}
@@ -172,7 +173,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
       route(application, request).value.futureValue
 
-      whenReady(sessionRepository.get(userAnswersId)) {
+      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
 
