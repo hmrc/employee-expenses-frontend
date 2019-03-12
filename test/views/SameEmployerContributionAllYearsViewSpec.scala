@@ -54,8 +54,7 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "have the correct banner title" in {
 
           val doc = asDocument(applyView(form))
-          assertRenderedById(doc, "proposition-menu")
-          assertRenderedByCssSelector(doc, "span.header__menu__proposition-name")
+          assertRenderedById(doc, "pageTitle")
         }
 
         "hide account menu when user not logged in" in {
@@ -79,7 +78,7 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "display language toggles" in {
 
           val doc = asDocument(applyView(form))
-          assertRenderedById(doc, "switchToWelsh")
+          assertRenderedById(doc, "langSelector")
         }
       }
     }

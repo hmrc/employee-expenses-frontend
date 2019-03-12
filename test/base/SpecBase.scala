@@ -28,9 +28,8 @@ import org.joda.time.LocalDate
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
-import pages.authenticated.{AlreadyClaimingFRESameAmountPage, RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage}
 import pages._
-import play.api.Application
+import pages.authenticated.{AlreadyClaimingFRESameAmountPage, RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
@@ -40,16 +39,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.MockScalate
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
-
-  override lazy val app: Application = {
-
-    import play.api.inject._
-
-    new GuiceApplicationBuilder()
-      .overrides(
-        bind[Scalate].to[MockScalate]
-      ).build()
-  }
 
   lazy val userAnswersId = "id"
 
@@ -137,6 +126,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[AuthenticatedIdentifierAction].to[FakeAuthedIdentifierAction],
         bind[UnauthenticatedIdentifierAction].to[FakeUnauthenticatedIdentifierAction],
-        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
+        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
+        bind[Scalate].to[MockScalate]
       )
 }
