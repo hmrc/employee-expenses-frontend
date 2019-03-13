@@ -171,6 +171,7 @@ class SecurityGuardNHSControllerSpec extends SpecBase with ScalaFutures with Int
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Security.nhsSecurity
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -189,6 +190,7 @@ class SecurityGuardNHSControllerSpec extends SpecBase with ScalaFutures with Int
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

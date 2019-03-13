@@ -174,6 +174,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -193,6 +194,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -212,6 +214,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehiclePainters
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -231,6 +234,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -250,6 +254,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -269,6 +274,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.VehicleTrade.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

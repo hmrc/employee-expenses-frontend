@@ -192,6 +192,7 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.apprentice
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -211,6 +212,7 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

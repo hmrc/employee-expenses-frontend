@@ -194,6 +194,7 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.list1
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }

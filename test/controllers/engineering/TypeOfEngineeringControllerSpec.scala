@@ -192,6 +192,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with In
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 

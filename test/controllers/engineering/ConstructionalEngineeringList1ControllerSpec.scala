@@ -193,6 +193,7 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.list1
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

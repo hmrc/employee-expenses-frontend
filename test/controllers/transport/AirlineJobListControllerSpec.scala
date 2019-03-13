@@ -192,6 +192,7 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Integ
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Airlines.pilotsFlightDeck
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -210,6 +211,7 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Integ
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Airlines.cabinCrew
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

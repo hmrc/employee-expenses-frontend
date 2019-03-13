@@ -171,6 +171,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.patternMaker
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -190,6 +191,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -209,6 +211,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.apprentice
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -228,6 +231,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

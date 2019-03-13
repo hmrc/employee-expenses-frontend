@@ -171,6 +171,7 @@ class AluminiumOccupationList3ControllerSpec extends SpecBase with ScalaFutures 
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.Aluminium.list3
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

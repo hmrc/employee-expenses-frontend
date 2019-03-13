@@ -194,6 +194,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.apprentice
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 
@@ -213,6 +214,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.allOther
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }

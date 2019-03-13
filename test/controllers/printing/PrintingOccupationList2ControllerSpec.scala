@@ -191,6 +191,7 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.list2
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -209,6 +210,7 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

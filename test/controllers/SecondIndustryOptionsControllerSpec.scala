@@ -177,6 +177,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

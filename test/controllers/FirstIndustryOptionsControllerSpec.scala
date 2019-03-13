@@ -162,6 +162,7 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }

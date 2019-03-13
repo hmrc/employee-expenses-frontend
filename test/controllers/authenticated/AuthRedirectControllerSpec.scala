@@ -60,6 +60,7 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
           }
       }
 
+      sessionRepository.remove(Authed(userAnswersId))
       application.stop()
     }
 

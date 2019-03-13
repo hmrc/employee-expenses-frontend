@@ -193,6 +193,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.ambulanceStaff
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

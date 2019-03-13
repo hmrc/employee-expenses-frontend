@@ -173,6 +173,7 @@ class StoneMasonControllerSpec extends SpecBase with ScalaFutures with Integrati
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.stoneMasons
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }

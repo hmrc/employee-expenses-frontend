@@ -174,6 +174,7 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Clothing.clothingList
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 
@@ -193,6 +194,7 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }

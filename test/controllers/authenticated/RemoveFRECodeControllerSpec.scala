@@ -168,6 +168,7 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
           _.value.get(RemoveFRECodePage).value mustBe option
         }
 
+        sessionRepository.remove(Authed(userAnswersId))
         application.stop()
       }
     }

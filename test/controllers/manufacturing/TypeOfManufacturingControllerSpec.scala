@@ -170,6 +170,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.brassCopper
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -189,6 +190,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.glass
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -208,6 +210,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.quarryingPreciousMetals
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -227,6 +230,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

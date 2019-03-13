@@ -171,6 +171,7 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Integr
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Police.policeOfficer
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -189,6 +190,7 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Integr
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

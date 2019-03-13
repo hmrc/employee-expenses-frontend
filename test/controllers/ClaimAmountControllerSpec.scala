@@ -63,6 +63,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         _.value.get(ClaimAmountAndAnyDeductions).value mustBe 60
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -114,6 +115,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         _.value.get(ClaimAmountAndAnyDeductions).value mustBe 60
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -142,6 +144,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         _.value.get(ClaimAmountAndAnyDeductions).value mustBe 45
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

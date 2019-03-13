@@ -173,6 +173,7 @@ class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with Inte
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.joinersCarpenters
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }

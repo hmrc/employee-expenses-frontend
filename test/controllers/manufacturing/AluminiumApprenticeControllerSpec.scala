@@ -171,6 +171,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.Aluminium.apprentice
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -190,6 +191,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.Aluminium.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

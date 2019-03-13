@@ -191,6 +191,7 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.list1
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }
