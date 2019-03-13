@@ -30,7 +30,7 @@ class SubmissionService @Inject()(taiService: TaiService) {
     val responses: Future[Seq[HttpResponse]] = Future.sequence(taxYears.map {
       taxYearSelection =>
         val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
-        taiService.updateFRE(nino, taiTaxYear, IabdUpdateData(claimAmount))
+        taiService.updateFRE(nino, taiTaxYear, IabdUpdateData(0, claimAmount))
     })
 
     submissionResult(responses)
@@ -45,7 +45,7 @@ class SubmissionService @Inject()(taiService: TaiService) {
     val responses: Future[Seq[HttpResponse]] = Future.sequence(removeTaxYears.map {
       taxYearSelection =>
         val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
-        taiService.updateFRE(nino, taiTaxYear, IabdUpdateData(0))
+        taiService.updateFRE(nino, taiTaxYear, IabdUpdateData(0, 0))
     })
 
     submissionResult(responses)
@@ -58,7 +58,7 @@ class SubmissionService @Inject()(taiService: TaiService) {
     val responses: Future[Seq[HttpResponse]] = Future.sequence(changeYears.map {
       taxYearSelection =>
         val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
-        taiService.updateFRE(nino, taiTaxYear, IabdUpdateData(claimAmount))
+        taiService.updateFRE(nino, taiTaxYear, IabdUpdateData(0, claimAmount))
     })
 
     submissionResult(responses)
