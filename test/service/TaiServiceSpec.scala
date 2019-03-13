@@ -39,7 +39,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
   private val taxYear = TaiTaxYear()
   private val etag = 1
 
-  private val iabdUpdateData = IabdUpdateData(grossAmount = 100)
+  private val iabdUpdateData = IabdUpdateData(sequenceNumber = 1, grossAmount = 100)
 
   "TaiService" must {
     "taiEmployments" when {
