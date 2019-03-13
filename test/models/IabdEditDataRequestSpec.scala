@@ -28,7 +28,7 @@ class IabdEditDataRequestSpec extends SpecBase {
           |{
           |  "version": 1,
           |  "expensesData": {
-          |     "sequenceNumber": 0,
+          |     "employmentSequenceNumber": 0,
           |     "grossAmount": 100
           |  }
           |}

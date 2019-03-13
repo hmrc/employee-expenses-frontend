@@ -24,7 +24,7 @@ object IabdEditDataRequest {
   implicit val formats: Format[IabdEditDataRequest] = Json.format[IabdEditDataRequest]
 }
 
-case class IabdUpdateData(sequenceNumber: Int, grossAmount: Int)
+case class IabdUpdateData(employmentSequenceNumber: Int, grossAmount: Int)
 
 object IabdUpdateData {
   implicit val formats: Format[IabdUpdateData] = Json.format[IabdUpdateData]
