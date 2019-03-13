@@ -25,10 +25,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
-
-  private val claimAmountService = new ClaimAmountService()
-
-
+  private val claimAmountService = new ClaimAmountService(frontendAppConfig)
 
   "ClaimAmountService" must {
 

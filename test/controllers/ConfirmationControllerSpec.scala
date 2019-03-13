@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import connectors.TaiConnector
 import controllers.actions.Authed
-import models.{TaxCodeRecord, TaxYearSelection}
+import models.{Rates, TaxCodeRecord, TaxYearSelection}
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -39,6 +39,7 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   val mockTaiConnector: TaiConnector = mock[TaiConnector]
   val mockClaimAmountService: ClaimAmountService = mock[ClaimAmountService]
+  val claimAmountService = new ClaimAmountService(frontendAppConfig)
 
   "Confirmation Controller" must {
 
@@ -50,12 +51,15 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         .build()
 
       val claimAmount = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
-      val basicRate: Int = frontendAppConfig.taxPercentageBand1
-      val higherRate: Int = frontendAppConfig.taxPercentageBand2
-      val claimAmountBasicRate = mockClaimAmountService.calculateTax(basicRate, claimAmount)
-      val claimAmountHigherRate = mockClaimAmountService.calculateTax(higherRate, claimAmount)
 
       when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
+      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(Rates(
+        frontendAppConfig.taxPercentageBand1,
+        frontendAppConfig.taxPercentageBand2,
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
+        None
+      )))
 
       val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
 
@@ -72,10 +76,13 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           updateEmployerInfo = None,
           updateAddressInfo = None,
           claimAmount = claimAmount,
-          basicRate = basicRate,
-          higherRate = higherRate,
-          claimAmountBasicRate = claimAmountBasicRate,
-          claimAmountHigherRate = claimAmountHigherRate)(fakeRequest, messages).toString
+          claimRatesAndAmounts = Seq(Rates(
+            basicRate = frontendAppConfig.taxPercentageBand1,
+            higherRate = frontendAppConfig.taxPercentageBand2,
+            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
+            prefix = None
+          )))(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -88,12 +95,15 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         .build()
 
       val claimAmount = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
-      val scottishBasicRate: Int = frontendAppConfig.taxPercentageScotlandBand1
-      val scottishHigherRate: Int = frontendAppConfig.taxPercentageScotlandBand2
-      val claimAmountBasicRate = mockClaimAmountService.calculateTax(scottishBasicRate, claimAmount)
-      val claimAmountHigherRate = mockClaimAmountService.calculateTax(scottishHigherRate, claimAmount)
 
       when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("S850L"))))
+      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(Rates(
+        frontendAppConfig.taxPercentageScotlandBand1,
+        frontendAppConfig.taxPercentageScotlandBand2,
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+        None
+      )))
 
       val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
 
@@ -110,10 +120,13 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           updateEmployerInfo = None,
           updateAddressInfo = None,
           claimAmount = claimAmount,
-          basicRate = scottishBasicRate,
-          higherRate = scottishHigherRate,
-          claimAmountBasicRate = claimAmountBasicRate,
-          claimAmountHigherRate = claimAmountHigherRate)(fakeRequest, messages).toString
+          claimRatesAndAmounts = Seq(Rates(
+            basicRate = frontendAppConfig.taxPercentageScotlandBand1,
+            higherRate = frontendAppConfig.taxPercentageScotlandBand2,
+            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+            prefix = Some('S')
+          )))(fakeRequest, messages).toString
 
       application.stop()
     }

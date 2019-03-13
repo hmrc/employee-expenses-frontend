@@ -16,52 +16,59 @@
 
 package views
 
-import models.UserAnswers
+import models.Rates
 import pages.ClaimAmount
-import play.api.libs.json.Json
+import play.api.Application
+import service.ClaimAmountService
 import views.behaviours.ViewBehaviours
 import views.html.ClaimAmountView
 
 class ClaimAmountViewSpec extends ViewBehaviours {
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "ClaimAmount view" must {
 
     val claimAmount: Int = 180
     val employerContribution: Option[Int] = None
     val someEmployerContribution: Option[Int] = Some(10)
-    val band1 : Int = 20
-    val calculatedBand1 : String = "36.00"
-    val band2 : Int = 40
-    val calculatedBand2 : String = "72.00"
-    val scotlandBand1 : Int = 19
-    val calculatedScotlandBand1 : String = "36.00"
-    val scotlandBand2 : Int = 41
-    val calculatedScotlandBand2 : String = "72.00"
+
     val onwardRoute: String = "/employee-expenses/which-tax-year"
 
-    val messageKeyPrefix = "claimAmount"
-
-    def userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> claimAmount))
+    val userAnswers = emptyUserAnswers.set(ClaimAmount, claimAmount).success.value
 
     val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
     val view = application.injector.instanceOf[ClaimAmountView]
 
+    val claimAmountService = application.injector.instanceOf[ClaimAmountService]
+
+    val claimAmountsAndRates = Rates(
+      basicRate = frontendAppConfig.taxPercentageBand1,
+      higherRate = frontendAppConfig.taxPercentageBand2,
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
+      prefix = None
+    )
+
+    val scottishClaimAmountsAndRates = Rates(
+      basicRate = frontendAppConfig.taxPercentageScotlandBand1,
+      higherRate = frontendAppConfig.taxPercentageScotlandBand2,
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+      prefix = Some('S')
+    )
+
     val applyView = view.apply(
-      claimAmount, employerContribution, band1, calculatedBand1, band2, calculatedBand2,
-      scotlandBand1, calculatedScotlandBand1, scotlandBand2, calculatedScotlandBand2, onwardRoute
+      claimAmount, employerContribution, claimAmountsAndRates, scottishClaimAmountsAndRates, onwardRoute
     )(fakeRequest, messages)
 
     val applyViewWithEmployerContribution = view.apply(
-      claimAmount, someEmployerContribution, band1, calculatedBand1, band2, calculatedBand2,
-      scotlandBand1, calculatedScotlandBand1, scotlandBand2, calculatedScotlandBand2, onwardRoute
+      claimAmount, someEmployerContribution, claimAmountsAndRates, scottishClaimAmountsAndRates, onwardRoute
     )(fakeRequest, messages)
 
     val applyViewWithAuth = view.apply(
-      claimAmount, employerContribution, band1, calculatedBand1, band2, calculatedBand2,
-      scotlandBand1, calculatedScotlandBand1, scotlandBand2, calculatedScotlandBand2, onwardRoute
+      claimAmount, employerContribution, claimAmountsAndRates, scottishClaimAmountsAndRates, onwardRoute
     )(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(applyView, "claimAmount")
@@ -90,10 +97,10 @@ class ClaimAmountViewSpec extends ViewBehaviours {
 
     "display relevant data" in {
       val doc = asDocument(applyView)
-      assertContainsText(doc, messages("claimAmount.band1", calculatedBand1, band1))
-      assertContainsText(doc, messages("claimAmount.band2", calculatedBand2, band2))
-      assertContainsText(doc, messages("claimAmount.scotlandBand1", calculatedScotlandBand1, scotlandBand1))
-      assertContainsText(doc, messages("claimAmount.scotlandBand2", calculatedScotlandBand2, scotlandBand2))
+      assertContainsText(doc, messages("claimAmount.band1", claimAmountsAndRates.calculatedBasicRate, claimAmountsAndRates.basicRate))
+      assertContainsText(doc, messages("claimAmount.band2", claimAmountsAndRates.calculatedHigherRate, claimAmountsAndRates.higherRate))
+      assertContainsText(doc, messages("claimAmount.scotlandBand1", scottishClaimAmountsAndRates.calculatedBasicRate, scottishClaimAmountsAndRates.basicRate))
+      assertContainsText(doc, messages("claimAmount.scotlandBand2", scottishClaimAmountsAndRates.calculatedHigherRate, scottishClaimAmountsAndRates.higherRate))
     }
 
     behave like pageWithButtonLink(applyView, onwardRoute, "site.continue")

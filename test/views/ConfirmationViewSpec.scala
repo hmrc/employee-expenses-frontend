@@ -16,12 +16,13 @@
 
 package views
 
-import models.TaxYearSelection
+import models.{Rates, TaxYearSelection}
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
 import play.twirl.api.Html
+import service.ClaimAmountService
 import views.behaviours.ViewBehaviours
 import views.html.ConfirmationView
 
@@ -30,19 +31,34 @@ class ConfirmationViewSpec extends ViewBehaviours {
   val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "Confirmation view" must {
-
     val view = application.injector.instanceOf[ConfirmationView]
+    val claimAmountService = application.injector.instanceOf[ClaimAmountService]
+
+    val claimAmount: Int = 100
+
+    val claimAmountsAndRates: Rates = Rates(
+      basicRate = frontendAppConfig.taxPercentageBand1,
+      higherRate = frontendAppConfig.taxPercentageBand2,
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
+      prefix = None
+    )
+
+    val scottishClaimAmountsAndRates = Rates(
+      basicRate = frontendAppConfig.taxPercentageScotlandBand1,
+      higherRate = frontendAppConfig.taxPercentageScotlandBand2,
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+      prefix = Some('S')
+    )
 
     def applyView(taxYearSelection: Seq[TaxYearSelection],
                   removeFREOption: Option[TaxYearSelection] = None,
                   updateEmployer: Option[Boolean] = None,
                   updateAddress: Option[Boolean] = None,
-                  claimAmount: Int = 100,
-                  basicRate: Int = 20,
-                  higherRate: Int = 40,
-                  claimAmountBasicRate: String = "20",
-                  claimAmountHigherRate: String = "40")(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(taxYearSelection, removeFREOption, updateEmployer, updateAddress, claimAmount, basicRate, higherRate, claimAmountBasicRate, claimAmountHigherRate)(fakeRequest, messages)
+                  claimAmount: Int = claimAmount,
+                  claimRatesAndAmounts: Seq[Rates] = Seq(claimAmountsAndRates))(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
+      view.apply(taxYearSelection, removeFREOption, updateEmployer, updateAddress, claimAmount, claimRatesAndAmounts)(fakeRequest, messages)
 
     val viewWithAnswers = applyView(
       taxYearSelection = Seq(TaxYearSelection.CurrentYear))(fakeRequest, messages)
@@ -75,9 +91,9 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       "display correct dynamic text for title and tax rates" in {
 
-        assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", "100").toString)
-        assertContainsText(doc, messages("confirmation.basicRate", "20", 20).toString)
-        assertContainsText(doc, messages("confirmation.higherRate", "40", 40).toString)
+        assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", claimAmount).toString)
+        assertContainsText(doc, messages("confirmation.basicRate", claimAmountsAndRates.calculatedBasicRate, claimAmountsAndRates.basicRate).toString)
+        assertContainsText(doc, messages("confirmation.higherRate", claimAmountsAndRates.calculatedHigherRate, claimAmountsAndRates.higherRate).toString)
       }
     }
 
@@ -104,9 +120,9 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       "display correct dynamic text for title and tax rates" in {
 
-        assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", "100").toString)
-        assertContainsText(doc, messages("confirmation.basicRate", "20", 20).toString)
-        assertContainsText(doc, messages("confirmation.higherRate", "40", 40).toString)
+        assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", claimAmount).toString)
+        assertContainsText(doc, messages("confirmation.basicRate", claimAmountsAndRates.calculatedBasicRate, claimAmountsAndRates.basicRate).toString)
+        assertContainsText(doc, messages("confirmation.higherRate", claimAmountsAndRates.calculatedHigherRate, claimAmountsAndRates.higherRate).toString)
       }
     }
 
@@ -128,8 +144,8 @@ class ConfirmationViewSpec extends ViewBehaviours {
       }
 
       "display correct dynamic text for title and tax rates" in {
-        assertContainsText(doc, messages("confirmation.basicRate", "20", 20).toString)
-        assertContainsText(doc, messages("confirmation.higherRate", "40", 40).toString)
+        assertContainsText(doc, messages("confirmation.basicRate", claimAmountsAndRates.calculatedBasicRate, claimAmountsAndRates.basicRate).toString)
+        assertContainsText(doc, messages("confirmation.higherRate", claimAmountsAndRates.calculatedHigherRate, claimAmountsAndRates.higherRate).toString)
       }
     }
 
