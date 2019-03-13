@@ -173,6 +173,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Electrical.onlyLaundry
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -192,6 +193,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Electrical.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

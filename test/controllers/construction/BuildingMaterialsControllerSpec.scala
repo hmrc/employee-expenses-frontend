@@ -173,6 +173,7 @@ class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with In
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.buildingMaterials
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 
@@ -192,6 +193,7 @@ class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with In
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.allOther
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }

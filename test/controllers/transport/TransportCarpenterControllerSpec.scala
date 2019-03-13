@@ -193,6 +193,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with I
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Seamen.passengerLiners
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -211,6 +212,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with I
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

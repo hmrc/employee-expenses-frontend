@@ -171,6 +171,7 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.IronSteel.list1
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

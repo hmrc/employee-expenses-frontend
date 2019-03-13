@@ -172,6 +172,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Police.communitySupportOfficer
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

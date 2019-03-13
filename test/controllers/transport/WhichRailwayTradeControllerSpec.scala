@@ -170,6 +170,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with In
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehiclePainters
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -188,6 +189,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with In
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -206,6 +208,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with In
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

@@ -171,6 +171,7 @@ class WoodFurnitureOccupationList3ControllerSpec extends SpecBase with ScalaFutu
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.WoodFurniture.list3
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -190,6 +191,7 @@ class WoodFurnitureOccupationList3ControllerSpec extends SpecBase with ScalaFutu
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.WoodFurniture.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

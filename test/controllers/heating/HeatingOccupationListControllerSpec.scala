@@ -171,6 +171,7 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Heating.list
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -189,6 +190,7 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Heating.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

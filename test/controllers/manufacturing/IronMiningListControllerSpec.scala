@@ -171,6 +171,7 @@ class IronMiningListControllerSpec extends SpecBase with ScalaFutures with Integ
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.IronMining.list1
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -190,6 +191,7 @@ class IronMiningListControllerSpec extends SpecBase with ScalaFutures with Integ
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.IronMining.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

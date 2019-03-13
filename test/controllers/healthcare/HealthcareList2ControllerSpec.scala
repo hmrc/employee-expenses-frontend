@@ -189,6 +189,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.list2
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -207,6 +208,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

@@ -190,6 +190,7 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.list1
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

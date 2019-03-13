@@ -192,6 +192,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.PublicTransport.garageHands
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -210,6 +211,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.PublicTransport.conductorsDrivers
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

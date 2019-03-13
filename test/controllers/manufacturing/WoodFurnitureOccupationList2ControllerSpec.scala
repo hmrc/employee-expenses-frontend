@@ -172,6 +172,7 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase with ScalaFutu
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.WoodFurniture.list2
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

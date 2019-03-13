@@ -170,6 +170,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.agriculture
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -188,6 +189,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.fireService
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -206,6 +208,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.leisure
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -224,6 +227,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.prisons
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -242,6 +246,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

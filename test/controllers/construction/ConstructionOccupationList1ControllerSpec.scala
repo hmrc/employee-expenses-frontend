@@ -173,6 +173,7 @@ class ConstructionOccupationList1ControllerSpec extends SpecBase with ScalaFutur
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.list1
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }

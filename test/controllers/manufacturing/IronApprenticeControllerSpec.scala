@@ -171,6 +171,7 @@ class IronApprenticeControllerSpec extends SpecBase with ScalaFutures with Integ
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.IronSteel.apprentice
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
@@ -190,6 +191,7 @@ class IronApprenticeControllerSpec extends SpecBase with ScalaFutures with Integ
         _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.IronSteel.allOther
       }
 
+      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

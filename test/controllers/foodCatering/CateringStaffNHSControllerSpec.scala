@@ -172,6 +172,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.catering
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 
@@ -190,6 +191,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
       _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
     }
 
+    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }
