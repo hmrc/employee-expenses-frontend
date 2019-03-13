@@ -80,6 +80,11 @@ trait ViewBehaviours extends ViewSpecBase {
           val doc = asDocument(view)
           doc.getElementById("hideAccountMenu").text mustBe "false"
         }
+
+        "have correct signout url" in {
+          val doc = asDocument(view)
+          assertContainsText(doc, frontendAppConfig.feedbackSurveyUrl)
+        }
       }
     }
   }

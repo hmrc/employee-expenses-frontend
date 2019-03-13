@@ -67,6 +67,9 @@
         "pageTitle" -> title,
         "navTitle" -> messages("site.service_name"),
         "hideAccountMenu" -> request.session.get("authToken").isEmpty,
+        "signOutUrl" -> {
+            if (request.session.get("authToken").isDefined) appConfig.feedbackSurveyUrl else false
+        },
         "assetsPath" -> appConfig.assetsPath,
         "sidebar" -> sidebarContent,
         "linkElems" -> linkElem,
