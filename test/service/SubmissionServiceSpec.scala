@@ -39,7 +39,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
   "SubmissionService" when {
     "submitFRENotInCode" must {
       "return true when give 204 response" in {
-        when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
+        when(mockTaiService.updateFRE(any(),any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(204)))
 
         val result = submissionService.submitFRENotInCode(fakeNino, taxYears, claimAmount)
@@ -50,7 +50,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
       }
 
       "return false when give 500 response" in {
-        when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
+        when(mockTaiService.updateFRE(any(),any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(500)))
 
         val result = submissionService.submitFRENotInCode(fakeNino, taxYears, claimAmount)
@@ -63,7 +63,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
     "submitRemoveFREFromCode" must {
       "return true when give 204 response" in {
-        when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
+        when(mockTaiService.updateFRE(any(),any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(204)))
 
         val result = submissionService.submitRemoveFREFromCode(fakeNino, taxYears, TaxYearSelection.CurrentYear)
@@ -74,7 +74,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
       }
 
       "return false when give 500 response" in {
-        when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
+        when(mockTaiService.updateFRE(any(),any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(500)))
 
         val result = submissionService.submitRemoveFREFromCode(fakeNino, taxYears, TaxYearSelection.CurrentYear)
@@ -87,7 +87,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
     "submitChangeFREFromCode" must {
       "return true when give 204 response" in {
-        when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
+        when(mockTaiService.updateFRE(any(),any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(204)))
 
         val result = submissionService.submitChangeFREFromCode(fakeNino, taxYears, claimAmount, Seq(TaxYearSelection.CurrentYear))
@@ -98,7 +98,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
       }
 
       "return false when give 500 response" in {
-        when(mockTaiService.updateFRE(any(),any(),any())(any(),any()))
+        when(mockTaiService.updateFRE(any(),any(),any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(500)))
 
         val result = submissionService.submitChangeFREFromCode(fakeNino, taxYears, claimAmount, Seq(TaxYearSelection.CurrentYear))

@@ -18,14 +18,8 @@ package models
 
 import play.api.libs.json.{Format, Json}
 
-case class IabdEditDataRequest(version: Int, expensesData: IabdUpdateData)
+case class IabdEditDataRequest(version: Int, employmentSequenceNumber: Int, grossAmount: Int)
 
 object IabdEditDataRequest {
   implicit val formats: Format[IabdEditDataRequest] = Json.format[IabdEditDataRequest]
-}
-
-case class IabdUpdateData(employmentSequenceNumber: Int, grossAmount: Int)
-
-object IabdUpdateData {
-  implicit val formats: Format[IabdUpdateData] = Json.format[IabdUpdateData]
 }
