@@ -43,7 +43,7 @@ class ClaimAmountService @Inject()(
 
   def getRates(taxCodeRecords: Seq[TaxCodeRecord], claimAmount: Int): Seq[Rates] = {
     taxCodeRecords.headOption match {
-      case Some(taxCodeRecord) if taxCodeRecord.taxCode(0) != 'S' =>
+      case Some(taxCodeRecord) if taxCodeRecord.taxCode(0).toUpper != 'S' =>
         Seq(Rates(
           basicRate = appConfig.taxPercentageBand1,
           higherRate = appConfig.taxPercentageBand2,
@@ -51,7 +51,7 @@ class ClaimAmountService @Inject()(
           calculatedHigherRate = calculateTax(appConfig.taxPercentageBand2, claimAmount),
           prefix = None
         ))
-      case Some(taxCodeRecord) if taxCodeRecord.taxCode(0) == 'S' =>
+      case Some(taxCodeRecord) if taxCodeRecord.taxCode(0).toUpper == 'S' =>
         Seq(Rates(
           basicRate = appConfig.taxPercentageScotlandBand1,
           higherRate = appConfig.taxPercentageScotlandBand2,

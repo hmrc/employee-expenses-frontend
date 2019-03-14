@@ -76,7 +76,7 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           updateEmployerInfo = None,
           updateAddressInfo = None,
           claimAmount = claimAmount,
-          claimRatesAndAmounts = Seq(claimAmountsAndRates))(fakeRequest, messages).toString
+          claimAmountsAndRates = Seq(claimAmountsAndRates))(fakeRequest, messages).toString
 
       application.stop()
     }

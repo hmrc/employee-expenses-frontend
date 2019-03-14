@@ -59,7 +59,7 @@ class ConfirmationController @Inject()(
         case (Some(fullClaimAmount), Some(validTaxYearSelection), Some(nino)) =>
           taiConnector.taiTaxCodeRecords(nino).map {
             result =>
-              val claimRatesAndAmounts: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
+              val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
 
               sessionRepository.remove(request.identifier)
 
@@ -69,7 +69,7 @@ class ConfirmationController @Inject()(
                 updateEmployerInfo = updateEmployerInfo,
                 updateAddressInfo = updateAddressInfo,
                 claimAmount = fullClaimAmount,
-                claimRatesAndAmounts = claimRatesAndAmounts))
+                claimAmountsAndRates = claimAmountsAndRates))
           }.recoverWith {
             case e =>
               Logger.error(s"[ConfirmationController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
