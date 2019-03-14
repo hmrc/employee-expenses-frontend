@@ -16,27 +16,29 @@
 
 package pages.authenticated
 
+import models.AlreadyClaimingFRESameAmount
+import models.AlreadyClaimingFRESameAmount.{NoChange, Remove}
 import pages.behaviours.PageBehaviours
 
 class AlreadyClaimingFRESameAmountPageSpec extends PageBehaviours {
 
-  "AlreadyClaimingFREPage" must {
+  "AlreadyClaimingFRESameAmountPage" must {
 
-    beRetrievable[Boolean](AlreadyClaimingFRESameAmountPage)
+    beRetrievable[AlreadyClaimingFRESameAmount](AlreadyClaimingFRESameAmountPage)
 
-    beSettable[Boolean](AlreadyClaimingFRESameAmountPage)
+    beSettable[AlreadyClaimingFRESameAmount](AlreadyClaimingFRESameAmountPage)
 
-    beRemovable[Boolean](AlreadyClaimingFRESameAmountPage)
+    beRemovable[AlreadyClaimingFRESameAmount](AlreadyClaimingFRESameAmountPage)
   }
 
-  "remove YourEmployer and YourAddress when answer is false" in {
+  "remove YourEmployer and YourAddress when answer is Remove" in {
 
     val userAnswers = emptyUserAnswers
-      .set(AlreadyClaimingFRESameAmountPage, true).success.value
+      .set(AlreadyClaimingFRESameAmountPage, NoChange).success.value
       .set(YourAddressPage, true).success.value
       .set(YourEmployerPage, true).success.value
 
-    val updatedUserAnswers = userAnswers.set(AlreadyClaimingFRESameAmountPage, false).get
+    val updatedUserAnswers = userAnswers.set(AlreadyClaimingFRESameAmountPage, Remove).get
 
     updatedUserAnswers.get(YourAddressPage) mustBe None
     updatedUserAnswers.get(YourEmployerPage) mustBe None

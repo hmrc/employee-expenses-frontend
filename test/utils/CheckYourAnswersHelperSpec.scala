@@ -119,7 +119,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
 
   "alreadyClaimingFRESameAmount" must {
     "display the correct label and answer" in {
-      val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, false).success.value
+      val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.NoChange).success.value
       helper(ua).alreadyClaimingFRESameAmount.get.label mustBe "alreadyClaimingFRESameAmount.checkYourAnswersLabel"
       helper(ua).alreadyClaimingFRESameAmount.get.answer mustBe s"alreadyClaimingFRESameAmount.altNoText"
     }

@@ -18,12 +18,13 @@ package forms.authenticated
 
 import forms.mappings.Mappings
 import javax.inject.Inject
+import models.AlreadyClaimingFRESameAmount
 import play.api.data.Form
 
 class AlreadyClaimingFRESameAmountFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(): Form[AlreadyClaimingFRESameAmount] =
     Form(
-      "value" -> boolean("alreadyClaimingFRESameAmount.error.required")
+      "value" -> enumerable[AlreadyClaimingFRESameAmount]("alreadyClaimingFRESameAmount.error.required")
     )
 }
