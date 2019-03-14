@@ -19,7 +19,7 @@ package controllers
 import config.{FrontendAppConfig, NavConstant}
 import controllers.actions._
 import javax.inject.{Inject, Named}
-import models.Mode
+import models.{Mode, Rates}
 import navigation.Navigator
 import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage, ExpensesEmployerPaidPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -58,19 +58,30 @@ class ClaimAmountController @Inject()(
             saveClaimAmountAndAnyDeductions <- Future.fromTry(request.userAnswers.set(ClaimAmountAndAnyDeductions, claimAmountAndAnyDeductions))
             _ <- sessionRepository.set(request.identifier, saveClaimAmountAndAnyDeductions)
           } yield {
-              Ok(view(
-                claimAmount = claimAmount,
-                employerContribution = employerContribution,
-                band1 = appConfig.taxPercentageBand1,
-                calculatedBand1 = calculateTax(appConfig.taxPercentageBand1, claimAmountAndAnyDeductions),
-                band2 = appConfig.taxPercentageBand2,
-                calculatedBand2 = calculateTax(appConfig.taxPercentageBand2, claimAmountAndAnyDeductions),
-                scotlandBand1 = appConfig.taxPercentageScotlandBand1,
-                calculatedScotlandBand1 = calculateTax(appConfig.taxPercentageScotlandBand1, claimAmountAndAnyDeductions),
-                scotlandBand2 = appConfig.taxPercentageScotlandBand2,
-                calculatedScotlandBand2 = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmountAndAnyDeductions),
-                onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
-              ))
+
+            val claimAmountsAndRates = Rates(
+              basicRate = appConfig.taxPercentageBand1,
+              higherRate = appConfig.taxPercentageBand2,
+              calculatedBasicRate = calculateTax(appConfig.taxPercentageBand1, claimAmountAndAnyDeductions),
+              calculatedHigherRate = calculateTax(appConfig.taxPercentageBand2, claimAmountAndAnyDeductions),
+              prefix = None
+            )
+
+            val scottishClaimAmountsAndRates = Rates(
+              basicRate = appConfig.taxPercentageScotlandBand1,
+              higherRate = appConfig.taxPercentageScotlandBand2,
+              calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBand1, claimAmountAndAnyDeductions),
+              calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmountAndAnyDeductions),
+              prefix = Some('S')
+            )
+
+            Ok(view(
+              claimAmount = claimAmount,
+              employerContribution = employerContribution,
+              claimAmountsAndRates = claimAmountsAndRates,
+              scottishClaimAmountsAndRates = scottishClaimAmountsAndRates,
+              onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
+            ))
           }
 
         case _ =>

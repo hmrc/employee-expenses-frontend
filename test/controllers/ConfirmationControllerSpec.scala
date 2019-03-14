@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import connectors.TaiConnector
 import controllers.actions.Authed
-import models.{TaxCodeRecord, TaxYearSelection}
+import models.{Rates, TaxCodeRecord, TaxYearSelection}
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -39,6 +39,15 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   val mockTaiConnector: TaiConnector = mock[TaiConnector]
   val mockClaimAmountService: ClaimAmountService = mock[ClaimAmountService]
+  val claimAmountService = new ClaimAmountService(frontendAppConfig)
+  val claimAmount: Int = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
+  val claimAmountsAndRates = Rates(
+    frontendAppConfig.taxPercentageBand1,
+    frontendAppConfig.taxPercentageBand2,
+    claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
+    claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
+    None
+  )
 
   "Confirmation Controller" must {
 
@@ -49,13 +58,8 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      val claimAmount = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
-      val basicRate: Int = frontendAppConfig.taxPercentageBand1
-      val higherRate: Int = frontendAppConfig.taxPercentageBand2
-      val claimAmountBasicRate = mockClaimAmountService.calculateTax(basicRate, claimAmount)
-      val claimAmountHigherRate = mockClaimAmountService.calculateTax(higherRate, claimAmount)
-
       when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
+      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
 
@@ -72,48 +76,7 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           updateEmployerInfo = None,
           updateAddressInfo = None,
           claimAmount = claimAmount,
-          basicRate = basicRate,
-          higherRate = higherRate,
-          claimAmountBasicRate = claimAmountBasicRate,
-          claimAmountHigherRate = claimAmountHigherRate)(fakeRequest, messages).toString
-
-      application.stop()
-    }
-
-    "return OK and the correct view for a GET for a Scottish taxCode" in {
-
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
-        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
-        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
-        .build()
-
-      val claimAmount = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
-      val scottishBasicRate: Int = frontendAppConfig.taxPercentageScotlandBand1
-      val scottishHigherRate: Int = frontendAppConfig.taxPercentageScotlandBand2
-      val claimAmountBasicRate = mockClaimAmountService.calculateTax(scottishBasicRate, claimAmount)
-      val claimAmountHigherRate = mockClaimAmountService.calculateTax(scottishHigherRate, claimAmount)
-
-      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("S850L"))))
-
-      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[ConfirmationView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          taxYearSelections = Seq(TaxYearSelection.CurrentYear),
-          removeFreOption = None,
-          updateEmployerInfo = None,
-          updateAddressInfo = None,
-          claimAmount = claimAmount,
-          basicRate = scottishBasicRate,
-          higherRate = scottishHigherRate,
-          claimAmountBasicRate = claimAmountBasicRate,
-          claimAmountHigherRate = claimAmountHigherRate)(fakeRequest, messages).toString
+          claimAmountsAndRates = Seq(claimAmountsAndRates))(fakeRequest, messages).toString
 
       application.stop()
     }

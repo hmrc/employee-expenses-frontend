@@ -21,14 +21,8 @@
 @(
     claimAmount: Int,
     employerContribution: Option[Int],
-    band1 : Int,
-    calculatedBand1 : String,
-    band2 : Int,
-    calculatedBand2 : String,
-    scotlandBand1 : Int,
-    calculatedScotlandBand1 : String,
-    scotlandBand2 : Int,
-    calculatedScotlandBand2 : String,
+    claimAmountsAndRates: Rates,
+    scottishClaimAmountsAndRates: Rates,
     onwardRoute: String
 )(implicit request: Request[_], messages: Messages)
 
@@ -51,13 +45,13 @@
 
     <h2 class="heading-small">@messages("claimAmount.englandHeading")</h2>
 
-    <p>@messages("claimAmount.band1", calculatedBand1, band1)</p>
-    <p>@messages("claimAmount.band2", calculatedBand2, band2)</p>
+    <p>@messages("claimAmount.band1", claimAmountsAndRates.calculatedBasicRate, claimAmountsAndRates.basicRate)</p>
+    <p>@messages("claimAmount.band2", claimAmountsAndRates.calculatedHigherRate, claimAmountsAndRates.higherRate)</p>
 
     <h2 class="heading-small">@messages("claimAmount.scotlandHeading")</h2>
 
-    <p>@messages("claimAmount.scotlandBand1", calculatedScotlandBand1, scotlandBand1)</p>
-    <p>@messages("claimAmount.scotlandBand2", calculatedScotlandBand2, scotlandBand2)</p>
+    <p>@messages("claimAmount.scotlandBand1", scottishClaimAmountsAndRates.calculatedBasicRate, scottishClaimAmountsAndRates.basicRate)</p>
+    <p>@messages("claimAmount.scotlandBand2", scottishClaimAmountsAndRates.calculatedHigherRate, scottishClaimAmountsAndRates.higherRate)</p>
 
     @components.button_link(messages("site.continue"), onwardRoute)
 }

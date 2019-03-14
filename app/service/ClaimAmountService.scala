@@ -17,13 +17,16 @@
 package service
 
 import com.google.inject.Inject
-import models.UserAnswers
+import config.FrontendAppConfig
+import models.{Rates, TaxCodeRecord, UserAnswers}
 import pages.ExpensesEmployerPaidPage
 
 import scala.concurrent.ExecutionContext
 import scala.math.BigDecimal.RoundingMode
 
-class ClaimAmountService @Inject()()(implicit ec: ExecutionContext) {
+class ClaimAmountService @Inject()(
+                                    appConfig: FrontendAppConfig
+                                  )(implicit ec: ExecutionContext) {
 
   def calculateClaimAmount(userAnswers: UserAnswers, claimAmount: Int): Int = {
     userAnswers.get(ExpensesEmployerPaidPage) match {
@@ -38,5 +41,38 @@ class ClaimAmountService @Inject()()(implicit ec: ExecutionContext) {
     BigDecimal((amount.toDouble / 100) * percentage).setScale(2, RoundingMode.DOWN).toString
   }
 
-
+  def getRates(taxCodeRecords: Seq[TaxCodeRecord], claimAmount: Int): Seq[Rates] = {
+    taxCodeRecords.headOption match {
+      case Some(taxCodeRecord) if taxCodeRecord.taxCode(0).toUpper != 'S' =>
+        Seq(Rates(
+          basicRate = appConfig.taxPercentageBand1,
+          higherRate = appConfig.taxPercentageBand2,
+          calculatedBasicRate = calculateTax(appConfig.taxPercentageBand1, claimAmount),
+          calculatedHigherRate = calculateTax(appConfig.taxPercentageBand2, claimAmount),
+          prefix = None
+        ))
+      case Some(taxCodeRecord) if taxCodeRecord.taxCode(0).toUpper == 'S' =>
+        Seq(Rates(
+          basicRate = appConfig.taxPercentageScotlandBand1,
+          higherRate = appConfig.taxPercentageScotlandBand2,
+          calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBand1, claimAmount),
+          calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmount),
+          prefix = Some('S')
+        ))
+      case _ =>
+        Seq(Rates(
+          basicRate = appConfig.taxPercentageBand1,
+          higherRate = appConfig.taxPercentageBand2,
+          calculatedBasicRate = calculateTax(appConfig.taxPercentageBand1, claimAmount),
+          calculatedHigherRate = calculateTax(appConfig.taxPercentageBand2, claimAmount),
+          prefix = None
+        ), Rates(
+          basicRate = appConfig.taxPercentageScotlandBand1,
+          higherRate = appConfig.taxPercentageScotlandBand2,
+          calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBand1, claimAmount),
+          calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmount),
+          prefix = Some('S')
+        ))
+    }
+  }
 }

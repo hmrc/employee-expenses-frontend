@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import connectors.TaiConnector
 import controllers.actions._
 import javax.inject.Inject
-import models.TaxYearSelection
+import models.{Rates, TaxYearSelection}
 import pages.ClaimAmountAndAnyDeductions
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
 import play.api.Logger
@@ -54,26 +54,12 @@ class ConfirmationController @Inject()(
       val updateEmployerInfo: Option[Boolean] = request.userAnswers.get(YourEmployerPage)
       val updateAddressInfo: Option[Boolean] = request.userAnswers.get(YourAddressPage)
       val removeFreOption: Option[TaxYearSelection] = request.userAnswers.get(RemoveFRECodePage)
-      val nino = request.nino
 
-      (claimAmount, taxYearSelection, nino) match {
-        case (Some(fullClaimAmount), Some(validTaxYearSelection), Some(validNino)) =>
-
-          taiConnector.taiTaxCodeRecords(validNino).map {
+      (claimAmount, taxYearSelection, request.nino) match {
+        case (Some(fullClaimAmount), Some(validTaxYearSelection), Some(nino)) =>
+          taiConnector.taiTaxCodeRecords(nino).map {
             result =>
-              val basicRate: Int = if (result.head.taxCode(0) equals 'S') {
-                appConfig.taxPercentageScotlandBand1
-              } else {
-                appConfig.taxPercentageBand1
-              }
-              val higherRate: Int = if (result.head.taxCode(0) equals 'S') {
-                appConfig.taxPercentageScotlandBand2
-              } else {
-                appConfig.taxPercentageBand2
-              }
-
-              val claimAmountBasicRate = claimAmountService.calculateTax(basicRate, fullClaimAmount)
-              val claimAmountHigherRate = claimAmountService.calculateTax(higherRate, fullClaimAmount)
+              val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
 
               sessionRepository.remove(request.identifier)
 
@@ -83,11 +69,7 @@ class ConfirmationController @Inject()(
                 updateEmployerInfo = updateEmployerInfo,
                 updateAddressInfo = updateAddressInfo,
                 claimAmount = fullClaimAmount,
-                basicRate = basicRate,
-                higherRate = higherRate,
-                claimAmountBasicRate = claimAmountBasicRate,
-                claimAmountHigherRate = claimAmountHigherRate))
-
+                claimAmountsAndRates = claimAmountsAndRates))
           }.recoverWith {
             case e =>
               Logger.error(s"[ConfirmationController][taiConnector.taiTaxCodeRecord] Call failed $e", e)

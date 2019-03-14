@@ -24,10 +24,7 @@
         updateEmployerInfo: Option[Boolean],
         updateAddressInfo: Option[Boolean],
         claimAmount: Int,
-        basicRate: Int,
-        higherRate: Int,
-        claimAmountBasicRate: String,
-        claimAmountHigherRate: String
+        claimAmountsAndRates: Seq[Rates]
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
@@ -60,8 +57,18 @@
         }
 
         <p>@messages("confirmation.actualAmount")</p>
-        <p>@messages("confirmation.basicRate", claimAmountBasicRate, basicRate)</p>
-        <p>@messages("confirmation.higherRate", claimAmountHigherRate, higherRate)</p>
+
+        @for(rates <- claimAmountsAndRates){
+            @if(rates.prefix.isDefined){
+                @if(claimAmountsAndRates.length > 1){<h2 class="heading-small">@messages("confirmation.englandHeading")</h2>}
+                <p>@messages("confirmation.basicRate", rates.calculatedBasicRate, rates.basicRate)</p>
+                <p>@messages("confirmation.higherRate", rates.calculatedHigherRate, rates.higherRate)</p>
+            } else {
+                @if(claimAmountsAndRates.length > 1){<h2 class="heading-small">@messages("confirmation.scotlandHeading")</h2>}
+                <p>@messages("confirmation.basicRate", rates.calculatedBasicRate, rates.basicRate)</p>
+                <p>@messages("confirmation.higherRate", rates.calculatedHigherRate, rates.higherRate)</p>
+            }
+        }
 
         <h2>@messages("confirmation.whatHappensNext")</h2>
 

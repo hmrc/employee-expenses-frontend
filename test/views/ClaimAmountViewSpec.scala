@@ -16,52 +16,59 @@
 
 package views
 
-import models.UserAnswers
+import models.Rates
 import pages.ClaimAmount
-import play.api.libs.json.Json
+import play.api.Application
+import service.ClaimAmountService
 import views.behaviours.ViewBehaviours
 import views.html.ClaimAmountView
 
 class ClaimAmountViewSpec extends ViewBehaviours {
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "ClaimAmount view" must {
 
     val claimAmount: Int = 180
-    val employerContribution: Option[Int] = None
+    val noEmployerContribution: Option[Int] = None
     val someEmployerContribution: Option[Int] = Some(10)
-    val band1 : Int = 20
-    val calculatedBand1 : String = "36.00"
-    val band2 : Int = 40
-    val calculatedBand2 : String = "72.00"
-    val scotlandBand1 : Int = 19
-    val calculatedScotlandBand1 : String = "36.00"
-    val scotlandBand2 : Int = 41
-    val calculatedScotlandBand2 : String = "72.00"
+
     val onwardRoute: String = "/employee-expenses/which-tax-year"
 
-    val messageKeyPrefix = "claimAmount"
-
-    def userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> claimAmount))
+    val userAnswers = emptyUserAnswers.set(ClaimAmount, claimAmount).success.value
 
     val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
     val view = application.injector.instanceOf[ClaimAmountView]
 
+    val claimAmountService = application.injector.instanceOf[ClaimAmountService]
+
+    def claimAmountsAndRates(deduction: Option[Int]) = Rates(
+      basicRate = frontendAppConfig.taxPercentageBand1,
+      higherRate = frontendAppConfig.taxPercentageBand2,
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount - deduction.getOrElse(0)),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount - deduction.getOrElse(0)),
+      prefix = None
+    )
+
+    def scottishClaimAmountsAndRates(deduction: Option[Int]) = Rates(
+      basicRate = frontendAppConfig.taxPercentageScotlandBand1,
+      higherRate = frontendAppConfig.taxPercentageScotlandBand2,
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount - deduction.getOrElse(0)),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount - deduction.getOrElse(0)),
+      prefix = Some('S')
+    )
+
     val applyView = view.apply(
-      claimAmount, employerContribution, band1, calculatedBand1, band2, calculatedBand2,
-      scotlandBand1, calculatedScotlandBand1, scotlandBand2, calculatedScotlandBand2, onwardRoute
+      claimAmount, noEmployerContribution, claimAmountsAndRates(noEmployerContribution), scottishClaimAmountsAndRates(noEmployerContribution), onwardRoute
     )(fakeRequest, messages)
 
     val applyViewWithEmployerContribution = view.apply(
-      claimAmount, someEmployerContribution, band1, calculatedBand1, band2, calculatedBand2,
-      scotlandBand1, calculatedScotlandBand1, scotlandBand2, calculatedScotlandBand2, onwardRoute
+      claimAmount, someEmployerContribution, claimAmountsAndRates(someEmployerContribution), scottishClaimAmountsAndRates(someEmployerContribution), onwardRoute
     )(fakeRequest, messages)
 
     val applyViewWithAuth = view.apply(
-      claimAmount, employerContribution, band1, calculatedBand1, band2, calculatedBand2,
-      scotlandBand1, calculatedScotlandBand1, scotlandBand2, calculatedScotlandBand2, onwardRoute
+      claimAmount, noEmployerContribution, claimAmountsAndRates(noEmployerContribution), scottishClaimAmountsAndRates(someEmployerContribution), onwardRoute
     )(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(applyView, "claimAmount")
@@ -70,15 +77,65 @@ class ClaimAmountViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyView)
 
-    "display correct text when some employer contribution" in {
-      val doc = asDocument(applyViewWithEmployerContribution)
-      assertContainsText(doc, messages("claimAmount.someContributionDescription", claimAmount - someEmployerContribution.get))
-      assertContainsText(doc, messages("claimAmount.employerContributionDescription"))
+    "Some employer contribution" when {
+      "display correct text when" in {
+        val doc = asDocument(applyViewWithEmployerContribution)
+        assertContainsText(doc, messages("claimAmount.someContributionDescription", claimAmount - someEmployerContribution.get))
+        assertContainsText(doc, messages("claimAmount.employerContributionDescription"))
+      }
+      "display relevant data" in {
+        val doc = asDocument(applyViewWithEmployerContribution)
+        assertContainsText(doc, messages(
+          "claimAmount.band1",
+          claimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
+          claimAmountsAndRates(someEmployerContribution).basicRate
+        ))
+        assertContainsText(doc, messages(
+          "claimAmount.band2",
+          claimAmountsAndRates(someEmployerContribution).calculatedHigherRate,
+          claimAmountsAndRates(someEmployerContribution).higherRate
+        ))
+        assertContainsText(doc, messages(
+          "claimAmount.scotlandBand1",
+          scottishClaimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
+          scottishClaimAmountsAndRates(someEmployerContribution).basicRate
+        ))
+        assertContainsText(doc, messages(
+          "claimAmount.scotlandBand2",
+          scottishClaimAmountsAndRates(someEmployerContribution).calculatedHigherRate,
+          scottishClaimAmountsAndRates(someEmployerContribution).higherRate
+        ))
+      }
     }
 
-    "display correct text when no employer contribution" in {
-      val doc = asDocument(applyView)
-      assertContainsText(doc, messages("claimAmount.noContributionDescription", claimAmount))
+    "No employer contribution" when {
+      "display correct text when" in {
+        val doc = asDocument(applyView)
+        assertContainsText(doc, messages("claimAmount.noContributionDescription", claimAmount))
+      }
+      "display relevant data" in {
+        val doc = asDocument(applyView)
+        assertContainsText(doc, messages(
+          "claimAmount.band1",
+          claimAmountsAndRates(noEmployerContribution).calculatedBasicRate,
+          claimAmountsAndRates(noEmployerContribution).basicRate
+        ))
+        assertContainsText(doc, messages(
+          "claimAmount.band2",
+          claimAmountsAndRates(noEmployerContribution).calculatedHigherRate,
+          claimAmountsAndRates(noEmployerContribution).higherRate
+        ))
+        assertContainsText(doc, messages(
+          "claimAmount.scotlandBand1",
+          scottishClaimAmountsAndRates(noEmployerContribution).calculatedBasicRate,
+          scottishClaimAmountsAndRates(noEmployerContribution).basicRate
+        ))
+        assertContainsText(doc, messages(
+          "claimAmount.scotlandBand2",
+          scottishClaimAmountsAndRates(noEmployerContribution).calculatedHigherRate,
+          scottishClaimAmountsAndRates(noEmployerContribution).higherRate
+        ))
+      }
     }
 
     behave like pageWithBodyText(
@@ -87,14 +144,6 @@ class ClaimAmountViewSpec extends ViewBehaviours {
       "claimAmount.englandHeading",
       "claimAmount.scotlandHeading"
     )
-
-    "display relevant data" in {
-      val doc = asDocument(applyView)
-      assertContainsText(doc, messages("claimAmount.band1", calculatedBand1, band1))
-      assertContainsText(doc, messages("claimAmount.band2", calculatedBand2, band2))
-      assertContainsText(doc, messages("claimAmount.scotlandBand1", calculatedScotlandBand1, scotlandBand1))
-      assertContainsText(doc, messages("claimAmount.scotlandBand2", calculatedScotlandBand2, scotlandBand2))
-    }
 
     behave like pageWithButtonLink(applyView, onwardRoute, "site.continue")
   }
