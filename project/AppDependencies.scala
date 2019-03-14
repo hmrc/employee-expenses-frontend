@@ -6,17 +6,17 @@ object AppDependencies {
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
     "org.reactivemongo"     %% "play2-reactivemongo"            % "0.16.0-play26",
-    "uk.gov.hmrc"           %% "logback-json-logger"            % "3.1.0",
-    "uk.gov.hmrc"           %% "govuk-template"                 % "5.27.0-play-26",
-    "uk.gov.hmrc"           %% "play-health"                    % "3.11.0-play-26",
-    "uk.gov.hmrc"           %% "play-ui"                        % "7.32.0-play-26",
+    "uk.gov.hmrc"           %% "logback-json-logger"            % "4.4.0",
+    "uk.gov.hmrc"           %% "govuk-template"                 % "5.30.0-play-26",
+    "uk.gov.hmrc"           %% "play-health"                    % "3.12.0-play-26",
+    "uk.gov.hmrc"           %% "play-ui"                        % "7.33.0-play-26",
     "uk.gov.hmrc"           %% "play-conditional-form-mapping"  % "0.2.0",
-    "uk.gov.hmrc"           %% "bootstrap-play-26"              % "0.36.0",
+    "uk.gov.hmrc"           %% "bootstrap-play-26"              % "0.37.0",
     "uk.gov.hmrc"           %% "play-whitelist-filter"          % "2.0.0",
     "uk.gov.hmrc"           %% "tax-year"                       % "0.4.0",
-    "com.typesafe.play"     %% "play-json-joda"                 % "2.6.10",
-    "org.scalatra.scalate"  %% "play-scalate"                   % "0.4.0",
-    "org.scalatra.scalate"  %% "scalate-core"                   % "1.8.0"
+    "com.typesafe.play"     %% "play-json-joda"                 % "2.7.1",
+    "org.scalatra.scalate"  %% "play-scalate"                   % "0.5.0",
+    "org.scalatra.scalate"  %% "scalate-core"                   % "1.9.1"
   )
 
   val test: Seq[ModuleID] = Seq(
