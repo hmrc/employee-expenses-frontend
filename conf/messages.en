@@ -641,8 +641,8 @@ alreadyClaimingFRESameAmount.checkYourAnswersLabel = You are already claiming th
 alreadyClaimingFRESameAmount.error.required = Select keep claiming this amount if you want to keep claiming this amount
 alreadyClaimingFRESameAmount.bodyText = Based on the information HMRC holds, you are already earning an extra £{0} before you pay tax.
 alreadyClaimingFRESameAmount.radioLabel = What do you want to do?
-alreadyClaimingFRESameAmount.altYesText = Keep claiming this amount
-alreadyClaimingFRESameAmount.altNoText = Stop claiming this amount
+alreadyClaimingFRESameAmount.noChange = Keep claiming this amount
+alreadyClaimingFRESameAmount.remove = Stop claiming this amount
 alreadyClaimingFRESameAmount.tableTaxYearHeading = Tax year
 alreadyClaimingFRESameAmount.tableAmountHeading = Amount you are currently claiming
 

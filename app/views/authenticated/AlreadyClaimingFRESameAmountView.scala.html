@@ -27,7 +27,6 @@
 @main_template(
     title = s"${errorPrefix(form)} ${messages("alreadyClaimingFRESameAmount.title")}"
     ) {
-
     @formHelper(action = AlreadyClaimingFRESameAmountController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.back_link()
@@ -44,12 +43,11 @@
             messages("alreadyClaimingFRESameAmount.tableAmountHeading")
         )
 
-        @components.input_yes_no(
+        @components.input_radio(
             field = form("value"),
-            label = messages("alreadyClaimingFRESameAmount.radioLabel"),
-            labelClass = Some("heading-medium"),
-            altNoText = Some(messages("alreadyClaimingFRESameAmount.altNoText")),
-            altYesText = Some(messages("alreadyClaimingFRESameAmount.altYesText"))
+            legend = messages(s"alreadyClaimingFRESameAmount.heading"),
+            legendClass = Some("visually-hidden"),
+            inputs = AlreadyClaimingFRESameAmount.options
         )
 
         @components.submit_button()
