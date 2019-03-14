@@ -52,7 +52,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
       prefix = Some('S')
     )
 
-    def applyView(taxYearSelection: Seq[TaxYearSelection],
+    def applyView(taxYearSelection: Seq[TaxYearSelection] = Seq(TaxYearSelection.CurrentYear),
                   removeFREOption: Option[TaxYearSelection] = None,
                   updateEmployer: Option[Boolean] = None,
                   updateAddress: Option[Boolean] = None,
@@ -60,11 +60,9 @@ class ConfirmationViewSpec extends ViewBehaviours {
                   claimRatesAndAmounts: Seq[Rates] = Seq(claimAmountsAndRates))(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
       view.apply(taxYearSelection, removeFREOption, updateEmployer, updateAddress, claimAmount, claimRatesAndAmounts)(fakeRequest, messages)
 
-    val viewWithAnswers = applyView(
-      taxYearSelection = Seq(TaxYearSelection.CurrentYear))(fakeRequest, messages)
+    val viewWithAnswers = applyView()(fakeRequest, messages)
 
-    val applyViewWithAuth = applyView(
-      taxYearSelection = Seq(TaxYearSelection.CurrentYear))(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth = applyView()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(viewWithAnswers, "confirmation")
 
@@ -72,10 +70,82 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(viewWithAnswers)
 
-    "when only CY is selected" must {
+    "when english tax record" must {
 
-      val viewWithAnswers =
-        applyView(Seq(TaxYearSelection.CurrentYear))(fakeRequest, messages)
+      val viewWithSpecificAnswers =
+        applyView(claimRatesAndAmounts = Seq(claimAmountsAndRates))(fakeRequest, messages)
+
+      val doc = asDocument(viewWithSpecificAnswers)
+
+      "display correct dynamic tax rates" in {
+        assertContainsText(doc, messages(
+          "confirmation.basicRate",
+          claimAmountsAndRates.calculatedBasicRate,
+          claimAmountsAndRates.basicRate
+        ))
+        assertContainsText(doc, messages(
+          "confirmation.higherRate",
+          claimAmountsAndRates.calculatedHigherRate,
+          claimAmountsAndRates.higherRate
+        ))
+      }
+    }
+
+    "when scottish tax record" must {
+
+      val viewWithSpecificAnswers =
+        applyView(claimRatesAndAmounts = Seq(scottishClaimAmountsAndRates))(fakeRequest, messages)
+
+      val doc = asDocument(viewWithSpecificAnswers)
+
+      "display correct dynamic tax rates" in {
+        assertContainsText(doc, messages(
+          "confirmation.basicRate",
+          scottishClaimAmountsAndRates.calculatedBasicRate,
+          scottishClaimAmountsAndRates.basicRate
+        ))
+        assertContainsText(doc, messages(
+          "confirmation.higherRate",
+          scottishClaimAmountsAndRates.calculatedHigherRate,
+          scottishClaimAmountsAndRates.higherRate
+        ))
+      }
+    }
+
+    "when empty tax record" must {
+
+      val viewWithSpecificAnswers =
+        applyView(claimRatesAndAmounts = Seq(claimAmountsAndRates, scottishClaimAmountsAndRates))(fakeRequest, messages)
+
+      val doc = asDocument(viewWithSpecificAnswers)
+
+      "display correct dynamic tax rates and headings" in {
+        assertContainsText(doc, messages("confirmation.englandHeading"))
+        assertContainsText(doc, messages(
+          "confirmation.basicRate",
+          claimAmountsAndRates.calculatedBasicRate,
+          claimAmountsAndRates.basicRate
+        ))
+        assertContainsText(doc, messages(
+          "confirmation.higherRate",
+          claimAmountsAndRates.calculatedHigherRate,
+          claimAmountsAndRates.higherRate
+        ))
+        assertContainsText(doc, messages("confirmation.scotlandHeading"))
+        assertContainsText(doc, messages(
+          "confirmation.basicRate",
+          scottishClaimAmountsAndRates.calculatedBasicRate,
+          scottishClaimAmountsAndRates.basicRate
+        ))
+        assertContainsText(doc, messages(
+          "confirmation.higherRate",
+          scottishClaimAmountsAndRates.calculatedHigherRate,
+          scottishClaimAmountsAndRates.higherRate
+        ))
+      }
+    }
+
+    "when only CY is selected" must {
 
       val doc = asDocument(viewWithAnswers)
 
@@ -91,19 +161,27 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       "display correct dynamic text for title and tax rates" in {
 
-        assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", claimAmount).toString)
-        assertContainsText(doc, messages("confirmation.basicRate", claimAmountsAndRates.calculatedBasicRate, claimAmountsAndRates.basicRate).toString)
-        assertContainsText(doc, messages("confirmation.higherRate", claimAmountsAndRates.calculatedHigherRate, claimAmountsAndRates.higherRate).toString)
+        assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", claimAmount))
+        assertContainsText(doc, messages(
+          "confirmation.basicRate",
+          claimAmountsAndRates.calculatedBasicRate,
+          claimAmountsAndRates.basicRate
+        ))
+        assertContainsText(doc, messages(
+          "confirmation.higherRate",
+          claimAmountsAndRates.calculatedHigherRate,
+          claimAmountsAndRates.higherRate
+        ))
       }
     }
 
 
     "when CY and previous years have been selected" must {
 
-      val viewWithAnswers =
+      val viewWithSpecificAnswers =
         applyView(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))(fakeRequest, messages)
 
-      val doc = asDocument(viewWithAnswers)
+      val doc = asDocument(viewWithSpecificAnswers)
 
       "display correct static text" in {
 
@@ -120,18 +198,26 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       "display correct dynamic text for title and tax rates" in {
 
-        assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", claimAmount).toString)
-        assertContainsText(doc, messages("confirmation.basicRate", claimAmountsAndRates.calculatedBasicRate, claimAmountsAndRates.basicRate).toString)
-        assertContainsText(doc, messages("confirmation.higherRate", claimAmountsAndRates.calculatedHigherRate, claimAmountsAndRates.higherRate).toString)
+        assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", claimAmount))
+        assertContainsText(doc, messages(
+          "confirmation.basicRate",
+          claimAmountsAndRates.calculatedBasicRate,
+          claimAmountsAndRates.basicRate
+        ))
+        assertContainsText(doc, messages(
+          "confirmation.higherRate",
+          claimAmountsAndRates.calculatedHigherRate,
+          claimAmountsAndRates.higherRate
+        ))
       }
     }
 
     "when only previous years have been selected" must {
 
-      val viewWithAnswers =
+      val viewWithSpecificAnswers =
         applyView(Seq(TaxYearSelection.CurrentYearMinus1))(fakeRequest, messages)
 
-      val doc = asDocument(viewWithAnswers)
+      val doc = asDocument(viewWithSpecificAnswers)
 
 
       "display correct static text" in {
@@ -140,24 +226,32 @@ class ConfirmationViewSpec extends ViewBehaviours {
           "confirmation.heading",
           "confirmation.whatHappensNext",
           "confirmation.letterConfirmation"
-         )
+        )
       }
 
       "display correct dynamic text for title and tax rates" in {
-        assertContainsText(doc, messages("confirmation.basicRate", claimAmountsAndRates.calculatedBasicRate, claimAmountsAndRates.basicRate).toString)
-        assertContainsText(doc, messages("confirmation.higherRate", claimAmountsAndRates.calculatedHigherRate, claimAmountsAndRates.higherRate).toString)
+        assertContainsText(doc, messages(
+          "confirmation.basicRate",
+          claimAmountsAndRates.calculatedBasicRate,
+          claimAmountsAndRates.basicRate
+        ))
+        assertContainsText(doc, messages(
+          "confirmation.higherRate",
+          claimAmountsAndRates.calculatedHigherRate,
+          claimAmountsAndRates.higherRate
+        ))
       }
     }
 
     "when removeFREOption has been selected" must {
 
       "display correct content" in {
-        val viewWithAnswers =
+        val viewWithSpecificAnswers =
           applyView(
             taxYearSelection = Seq(TaxYearSelection.CurrentYearMinus1),
             removeFREOption = Some(TaxYearSelection.CurrentYearMinus1))(fakeRequest, messages)
 
-        val doc = asDocument(viewWithAnswers)
+        val doc = asDocument(viewWithSpecificAnswers)
 
         assertContainsMessages(doc, "confirmation.heading.stoppedClaim", "confirmation.noLongerGetAmount")
       }
@@ -167,12 +261,12 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       "display update address button and content" in {
 
-        val viewWithAnswers =
+        val viewWithSpecificAnswers =
           applyView(
             taxYearSelection = Seq(TaxYearSelection.CurrentYearMinus1),
             updateAddress = Some(false))(fakeRequest, messages)
 
-        val doc = asDocument(viewWithAnswers)
+        val doc = asDocument(viewWithSpecificAnswers)
 
         assertContainsMessages(doc, "confirmation.updateAddressInfo", "confirmation.addressChange")
         doc.getElementById("updateAddressInfoBtn").text mustBe messages("confirmation.updateAddressInfoNow")
@@ -183,12 +277,12 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       "display update employer button and content" in {
 
-        val viewWithAnswers =
+        val viewWithSpecificAnswers =
           applyView(
             taxYearSelection = Seq(TaxYearSelection.CurrentYearMinus1),
             updateEmployer = Some(false))(fakeRequest, messages)
 
-        val doc = asDocument(viewWithAnswers)
+        val doc = asDocument(viewWithSpecificAnswers)
 
         assertContainsMessages(doc, "confirmation.updateEmployerInfo", "confirmation.employerChange")
         doc.getElementById("updateEmployerInfoBtn").text mustBe messages("confirmation.updateEmployerInfoNow")

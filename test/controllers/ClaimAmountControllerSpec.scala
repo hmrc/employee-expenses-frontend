@@ -24,7 +24,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage, ExpensesEmployerPaidPage}
+import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -104,89 +104,6 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
 
         application.stop()
       }
-    }
-
-    "display correct figures when no employer contribution" in {
-      val claimAmount = 60
-      val userAnswers = emptyUserAnswers.set(ClaimAmount, claimAmount).success.value
-        .set(EmployerContributionPage, EmployerContribution.NoContribution).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-      val claimAmountService = application.injector.instanceOf[ClaimAmountService]
-
-      val claimAmountsAndRates = Rates(
-        basicRate = frontendAppConfig.taxPercentageBand1,
-        higherRate = frontendAppConfig.taxPercentageBand2,
-        calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
-        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
-        prefix = None
-      )
-
-      val scottishClaimAmountsAndRates = Rates(
-        basicRate = frontendAppConfig.taxPercentageScotlandBand1,
-        higherRate = frontendAppConfig.taxPercentageScotlandBand2,
-        calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
-        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
-        prefix = Some('S')
-      )
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
-      val result = route(application, request).value
-      val view = application.injector.instanceOf[ClaimAmountView]
-
-      contentAsString(result) mustEqual
-        view(claimAmount, None, claimAmountsAndRates, scottishClaimAmountsAndRates, "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 60
-      }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
-
-    "display correct figures when employer contribution is 15" in {
-      val claimAmount = 60
-      val employerContribution = 15
-      val userAnswers = emptyUserAnswers.set(ClaimAmount, claimAmount).success.value
-        .set(EmployerContributionPage, EmployerContribution.SomeContribution).success.value
-        .set(ExpensesEmployerPaidPage, employerContribution).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-      val claimAmountService = application.injector.instanceOf[ClaimAmountService]
-      val claimAmountAndAnyDeductions = claimAmountService.calculateClaimAmount(userAnswers, claimAmount)
-
-      val claimAmountsAndRates = Rates(
-        basicRate = frontendAppConfig.taxPercentageBand1,
-        higherRate = frontendAppConfig.taxPercentageBand2,
-        calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmountAndAnyDeductions),
-        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmountAndAnyDeductions),
-        prefix = None
-      )
-
-      val scottishClaimAmountsAndRates = Rates(
-        basicRate = frontendAppConfig.taxPercentageScotlandBand1,
-        higherRate = frontendAppConfig.taxPercentageScotlandBand2,
-        calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmountAndAnyDeductions),
-        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmountAndAnyDeductions),
-        prefix = Some('S')
-      )
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-      val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
-      val result = route(application, request).value
-      val view = application.injector.instanceOf[ClaimAmountView]
-
-      contentAsString(result) mustEqual
-        view(claimAmount, Some(employerContribution), claimAmountsAndRates, scottishClaimAmountsAndRates, "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 45
-      }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
     }
   }
 }
