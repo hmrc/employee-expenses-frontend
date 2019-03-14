@@ -19,6 +19,7 @@ package base
 import com.github.tototoshi.play2.scalate.Scalate
 import config.FrontendAppConfig
 import controllers.actions._
+import models.AlreadyClaimingFRESameAmount.Remove
 import models.EmployerContribution.{NoContribution, SomeContribution}
 import models.FirstIndustryOptions.{Healthcare, Retail}
 import models.FlatRateExpenseOptions.FRENoYears
@@ -103,7 +104,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     .set(EmployerContributionPage, NoContribution).success.value
     .set(ClaimAmountAndAnyDeductions, 60).success.value
     .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
-    .set(AlreadyClaimingFRESameAmountPage, false).success.value
+    .set(AlreadyClaimingFRESameAmountPage, Remove).success.value
     .set(RemoveFRECodePage, CurrentYear).success.value
 
   def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())

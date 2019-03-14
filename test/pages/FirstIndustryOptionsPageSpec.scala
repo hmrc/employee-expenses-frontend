@@ -40,7 +40,7 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
         .set(EmployerContributionPage, EmployerContribution.SomeContribution).success.value
         .set(ExpensesEmployerPaidPage, 20).success.value
         .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change).success.value
-        .set(AlreadyClaimingFRESameAmountPage, true).success.value
+        .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
         .set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
         .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
         .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value

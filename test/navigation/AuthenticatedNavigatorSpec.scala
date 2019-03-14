@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.authenticated.routes._
 import controllers.routes._
 import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove}
-import models.{CheckMode, FlatRateExpenseOptions, NormalMode, TaxYearSelection}
+import models.{AlreadyClaimingFRESameAmount, CheckMode, FlatRateExpenseOptions, NormalMode, TaxYearSelection}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.FREResponse
@@ -75,15 +75,15 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
 
       "from AlreadyClaimingFRESameAmount" must {
 
-        "go to NoCodeChange when answer is true" in {
-          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, true).success.value
+        "go to NoCodeChange when answer is NoChange" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.NoChange).success.value
 
           navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(ua) mustBe
             NoCodeChangeController.onPageLoad()
         }
 
         "go to RemoveFRECode when answer is false" in {
-          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, false).success.value
+          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
 
           navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(ua) mustBe
             RemoveFRECodeController.onPageLoad(NormalMode)

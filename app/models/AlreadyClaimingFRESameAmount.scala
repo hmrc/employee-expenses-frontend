@@ -22,7 +22,6 @@ sealed trait AlreadyClaimingFRESameAmount
 
 object AlreadyClaimingFRESameAmount extends Enumerable.Implicits {
 
-
   case object NoChange extends WithName("noChange") with AlreadyClaimingFRESameAmount
   case object Remove extends WithName("remove") with AlreadyClaimingFRESameAmount
 

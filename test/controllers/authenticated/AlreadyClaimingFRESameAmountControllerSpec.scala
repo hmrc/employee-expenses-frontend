@@ -18,10 +18,10 @@ package controllers.authenticated
 
 import base.SpecBase
 import forms.authenticated.AlreadyClaimingFRESameAmountFormProvider
-import models.{FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear}
+import models.{AlreadyClaimingFRESameAmount, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import pages.authenticated.AlreadyClaimingFRESameAmountPage
-import pages.{ClaimAmount, FREAmounts}
+import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -32,13 +32,10 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
+  lazy val alreadyClaimingFRESameAmountRoute: String = routes.AlreadyClaimingFRESameAmountController.onPageLoad(NormalMode).url
+
   val formProvider = new AlreadyClaimingFRESameAmountFormProvider()
   val form = formProvider()
-
-  lazy val alreadyClaimingFRERoute = routes.AlreadyClaimingFRESameAmountController.onPageLoad(NormalMode).url
-
-  private val fakeClaimAmount = 100
-  private val fakeFreAmounts = Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))
 
   "AlreadyClaimingFRESameAmount Controller" must {
 
@@ -46,7 +43,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
 
-      val request = FakeRequest(GET, alreadyClaimingFRERoute)
+      val request = FakeRequest(GET, alreadyClaimingFRESameAmountRoute)
 
       val result = route(application, request).value
 
@@ -55,18 +52,23 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest, messages).toString
+        view(
+          form,
+          NormalMode,
+          fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+          fullUserAnswers.get(FREAmounts).get
+        )(fakeRequest, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = fullUserAnswers.set(AlreadyClaimingFRESameAmountPage, true).success.value
+      val userAnswers = fullUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, alreadyClaimingFRERoute)
+      val request = FakeRequest(GET, alreadyClaimingFRESameAmountRoute)
 
       val view = application.injector.instanceOf[AlreadyClaimingFRESameAmountView]
 
@@ -75,7 +77,12 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest, messages).toString
+        view(
+          form.fill(AlreadyClaimingFRESameAmount.values.head),
+          NormalMode,
+          fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+          fullUserAnswers.get(FREAmounts).get
+        )(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -88,8 +95,8 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
           .build()
 
       val request =
-        FakeRequest(POST, alreadyClaimingFRERoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, alreadyClaimingFRESameAmountRoute)
+          .withFormUrlEncodedBody(("value", AlreadyClaimingFRESameAmount.options.head.value))
 
       val result = route(application, request).value
 
@@ -105,10 +112,10 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, alreadyClaimingFRERoute)
-          .withFormUrlEncodedBody(("value", ""))
+        FakeRequest(POST, alreadyClaimingFRESameAmountRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> ""))
+      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val view = application.injector.instanceOf[AlreadyClaimingFRESameAmountView]
 
@@ -117,100 +124,25 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest, messages).toString
+        view(
+          boundForm,
+          NormalMode,
+          fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+          fullUserAnswers.get(FREAmounts).get
+        )(fakeRequest, messages).toString
 
       application.stop()
     }
-
-    "redirect to Session Expired on GET if ClaimAmount is missing" in {
-
-      val userAnswers = emptyUserAnswers.set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, alreadyClaimingFRERoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to Session Expired on GET if FREAmount is missing" in {
-
-      val userAnswers = emptyUserAnswers.set(ClaimAmount, 100).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, alreadyClaimingFRERoute)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to Session Expired on POST if ClaimAmount is missing" in {
-
-      val userAnswers = emptyUserAnswers.set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
-          .build()
-
-      val request =
-        FakeRequest(POST, alreadyClaimingFRERoute)
-          .withFormUrlEncodedBody(("value", "true"))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
-    "redirect to Session Expired on POST if FREAmount is missing" in {
-
-      val userAnswers = emptyUserAnswers.set(ClaimAmount, 100).success.value
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
-          .build()
-
-      val request =
-        FakeRequest(POST, alreadyClaimingFRERoute)
-          .withFormUrlEncodedBody(("value", "true"))
-
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-      application.stop()
-    }
-
 
     "redirect to Session Expired for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, alreadyClaimingFRERoute)
+      val request = FakeRequest(GET, alreadyClaimingFRESameAmountRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
@@ -221,8 +153,8 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, alreadyClaimingFRERoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        FakeRequest(POST, alreadyClaimingFRESameAmountRoute)
+          .withFormUrlEncodedBody(("value", AlreadyClaimingFRESameAmount.values.head.toString))
 
       val result = route(application, request).value
 

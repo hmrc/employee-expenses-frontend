@@ -65,7 +65,7 @@ class AlreadyClaimingFRESameAmountController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-      (request.userAnswers.get(ClaimAmount), request.userAnswers.get(FREAmounts)) match {
+      (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.userAnswers.get(FREAmounts)) match {
         case (Some(claimAmount), Some(freAmounts)) =>
           form.bindFromRequest().fold(
             (formWithErrors: Form[_]) =>

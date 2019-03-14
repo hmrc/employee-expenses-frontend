@@ -18,7 +18,7 @@ package pages.authenticated
 
 import models.AlreadyClaimingFREDifferentAmounts.Change
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
-import models.{TaxYearSelection, UserAnswers}
+import models.{AlreadyClaimingFRESameAmount, TaxYearSelection, UserAnswers}
 import pages.behaviours.PageBehaviours
 
 class TaxYearSelectionPageSpec extends PageBehaviours {
@@ -36,7 +36,7 @@ class TaxYearSelectionPageSpec extends PageBehaviours {
       val userAnswers = new UserAnswers(userAnswersId)
         .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
         .set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
-        .set(AlreadyClaimingFRESameAmountPage, true).success.value
+        .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
         .set(ChangeWhichTaxYearsPage, Seq(CurrentYear)).success.value
         .set(RemoveFRECodePage, CurrentYear).success.value
         .set(YourEmployerPage, true).success.value
