@@ -17,9 +17,10 @@
 package service
 
 import base.SpecBase
+import models.{Rates, TaxCodeRecord}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.{ClaimAmount, ExpensesEmployerPaidPage}
+import pages.ExpensesEmployerPaidPage
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -63,6 +64,54 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         ) mustBe "72.00"
       }
     }
-  }
 
+    "getRates" when {
+      "english tax code record must return english rates" in {
+        val claimAmount = 100
+        val rates = claimAmountService.getRates(Seq(TaxCodeRecord("850L")), claimAmount)
+
+        rates mustBe Seq(Rates(
+          basicRate = frontendAppConfig.taxPercentageBand1,
+          higherRate = frontendAppConfig.taxPercentageBand2,
+          calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
+          calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
+          prefix = None
+        ))
+      }
+
+      "scottish tax code record must return scottish rates" in {
+        val claimAmount = 100
+        val rates = claimAmountService.getRates(Seq(TaxCodeRecord("S850L")), claimAmount)
+
+        rates mustBe Seq(Rates(
+          basicRate = frontendAppConfig.taxPercentageScotlandBand1,
+          higherRate = frontendAppConfig.taxPercentageScotlandBand2,
+          calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
+          calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+          prefix = Some('S')
+        ))
+      }
+
+      "no tax code record must return both english and scottish rates" in {
+        val claimAmount = 100
+        val rates = claimAmountService.getRates(Seq(), claimAmount)
+
+        rates mustBe Seq(
+          Rates(
+            basicRate = frontendAppConfig.taxPercentageBand1,
+            higherRate = frontendAppConfig.taxPercentageBand2,
+            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
+            prefix = None
+          ),
+          Rates(
+            basicRate = frontendAppConfig.taxPercentageScotlandBand1,
+            higherRate = frontendAppConfig.taxPercentageScotlandBand2,
+            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+            prefix = Some('S')
+          ))
+      }
+    }
+  }
 }
