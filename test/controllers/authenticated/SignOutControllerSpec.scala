@@ -14,12 +14,27 @@
  * limitations under the License.
  */
 
-package models
+package controllers.authenticated
 
-import play.api.libs.json.{Format, Json}
+import base.SpecBase
+import play.api.test.FakeRequest
+import play.api.test.Helpers._
 
-case class IabdEditDataRequest(version: Int, employmentSequenceNumber: Int, grossAmount: Int)
+class SignOutControllerSpec extends SpecBase{
 
-object IabdEditDataRequest {
-  implicit val formats: Format[IabdEditDataRequest] = Json.format[IabdEditDataRequest]
+  "SignOutController" must {
+
+    "redirect to Feedback survey" in {
+      val application = applicationBuilder(Some(minimumUserAnswers))
+        .build()
+
+      val request = FakeRequest(GET, routes.SignOutController.signOut().url)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustBe frontendAppConfig.feedbackSurveyUrl
+    }
+  }
 }

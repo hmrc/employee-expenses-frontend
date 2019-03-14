@@ -21,10 +21,11 @@ import config.FrontendAppConfig
 import controllers.routes._
 import models.requests.IdentifierRequest
 import play.api.Logger
+import play.api.libs.json.Reads
 import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals
+import uk.gov.hmrc.auth.core.retrieve.OptionalRetrieval
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
@@ -40,7 +41,8 @@ class AuthenticatedIdentifierActionImpl @Inject()(
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual).retrieve(Retrievals.nino and Retrievals.internalId) {
+    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual)
+      .retrieve(OptionalRetrieval("nino", Reads.StringReads) and OptionalRetrieval("internalId", Reads.StringReads)) {
       x =>
         val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
         val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
