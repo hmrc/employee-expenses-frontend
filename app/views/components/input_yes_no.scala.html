@@ -22,9 +22,7 @@
         hint: Option[String] = None,
         yesAssoc: Option[String] = None,
         noAssoc: Option[String] = None,
-        labelClass: Option[String] = None,
-        altYesText: Option[String] = None,
-        altNoText: Option[String] = None
+        labelClass: Option[String] = None
 )(implicit messages: Messages)
 
 
@@ -43,14 +41,14 @@
         <div class="multiple-choice">
             <input id="@{field.id}-yes" type="radio" name="@{field.id}" value="true" @if(field.value.contains("true")){checked="checked"} />
             <label class="block-label selection-button-radio" for="@{field.id}-yes" data-target="@if(yesAssoc.nonEmpty){@yesAssoc}">
-                @if(altYesText) { @Some(altYesText)} else { @messages("site.yes") }
+                @messages("site.yes")
             </label>
         </div>
 
         <div class="multiple-choice">
             <input id="@{field.id}-no" type="radio" name="@{field.id}" value="false" @if(field.value.contains("false")){checked="checked"} />
             <label class="block-label selection-button-radio" for="@{field.id}-no" data-target="@if(noAssoc.nonEmpty){@noAssoc}">
-                @if(altNoText) { @Some(altNoText)} else { @messages("site.no") }
+                @messages("site.no")
             </label>
         </div>
 
