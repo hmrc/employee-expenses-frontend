@@ -18,7 +18,7 @@ package controllers.authenticated
 
 import base.SpecBase
 import forms.authenticated.AlreadyClaimingFRESameAmountFormProvider
-import models.{AlreadyClaimingFRESameAmount, NormalMode}
+import models.{AlreadyClaimingFRESameAmount, FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear}
 import navigation.{FakeNavigator, Navigator}
 import pages.authenticated.AlreadyClaimingFRESameAmountPage
 import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
@@ -130,6 +130,84 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase {
           fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
           fullUserAnswers.get(FREAmounts).get
         )(fakeRequest, messages).toString
+
+      application.stop()
+    }
+
+    "redirect to Session Expired on GET if ClaimAmount is missing" in {
+
+      val userAnswers = emptyUserAnswers.set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(GET, alreadyClaimingFRESameAmountRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to Session Expired on GET if FREAmount is missing" in {
+
+      val userAnswers = emptyUserAnswers.set(ClaimAmountAndAnyDeductions, 100).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(GET, alreadyClaimingFRESameAmountRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to Session Expired on POST if ClaimAmount is missing" in {
+
+      val userAnswers = emptyUserAnswers.set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .build()
+
+      val request =
+        FakeRequest(POST, alreadyClaimingFRESameAmountRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to Session Expired on POST if FREAmount is missing" in {
+
+      val userAnswers = emptyUserAnswers.set(ClaimAmountAndAnyDeductions, 100).success.value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .build()
+
+      val request =
+        FakeRequest(POST, alreadyClaimingFRESameAmountRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
