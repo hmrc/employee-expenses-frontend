@@ -27,7 +27,6 @@ class IabdEditDataRequestSpec extends SpecBase {
         """
           |{
           |  "version": 1,
-          |  "employmentSequenceNumber": 0,
           |  "grossAmount": 100
           |}
         """.stripMargin)
@@ -36,7 +35,6 @@ class IabdEditDataRequestSpec extends SpecBase {
 
       iabdEditDataRequest.version mustBe 1
       iabdEditDataRequest.grossAmount mustBe 100
-      iabdEditDataRequest.employmentSequenceNumber mustBe 0
     }
 
     "fail to bind when given invalid json" in {
