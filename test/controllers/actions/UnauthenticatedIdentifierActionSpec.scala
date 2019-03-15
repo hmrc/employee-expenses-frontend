@@ -17,6 +17,7 @@
 package controllers.actions
 
 import base.SpecBase
+import controllers.routes
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -102,6 +103,30 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
       }
 
       exception.getMessage must include("no sessionId")
+
+      application.stop()
+    }
+
+    "redirect the user to the technical difficulties page when an unexpected exception occurs" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      val authConnector = mock[AuthConnector]
+
+      when(authConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
+        .thenReturn(Future.failed(new Exception))
+
+      val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+
+      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, frontendAppConfig, bodyParsers)
+
+      val controller = new Harness(unAuthAction)
+
+      val result = controller.onPageLoad()(fakeRequest)
+
+      status(result) mustBe SEE_OTHER
+
+      redirectLocation(result) mustBe Some(routes.TechnicalDifficultiesController.onPageLoad().url)
 
       application.stop()
     }
