@@ -68,12 +68,12 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
     "updateFRE" when {
       "must return a 204 on successful update" in {
-        when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, 0, 100))
+        when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, 100))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT)))
         when(mockCitizenDetailsConnector.getEtag(fakeNino))
           .thenReturn(Future.successful(etag))
 
-        val result = taiService.updateFRE(fakeNino, taxYear, 0, 100)
+        val result = taiService.updateFRE(fakeNino, taxYear, 100)
 
         whenReady(result) {
           result =>
@@ -82,12 +82,12 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
       }
 
       "must exception on failed tai FRE update" in {
-        when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, 0, 100))
+        when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, 100))
           .thenReturn(Future.failed(new RuntimeException))
         when(mockCitizenDetailsConnector.getEtag(fakeNino))
           .thenReturn(Future.successful(etag))
 
-        val result = taiService.updateFRE(fakeNino, taxYear, 0, 100)
+        val result = taiService.updateFRE(fakeNino, taxYear, 100)
 
         whenReady(result.failed) {
           result =>
@@ -96,12 +96,12 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
       }
 
       "must exception on failed citizen details ETag request" in {
-        when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, 0, 100))
+        when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, 100))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT)))
         when(mockCitizenDetailsConnector.getEtag(fakeNino))
           .thenReturn(Future.failed(new RuntimeException))
 
-        val result = taiService.updateFRE(fakeNino, taxYear, 0, 100)
+        val result = taiService.updateFRE(fakeNino, taxYear, 100)
 
         whenReady(result.failed) {
           result =>
