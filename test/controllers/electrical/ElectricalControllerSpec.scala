@@ -31,7 +31,6 @@ import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import pages.ClaimAmount
 import pages.electrical.ElectricalPage
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
