@@ -23,10 +23,14 @@ import controllers.actions.UnAuthed
 import forms.clothing.ClothingFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.scalatest.OptionValues
+import org.mockito.Matchers.any
+import org.mockito.Mockito._
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.clothing.ClothingPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -34,14 +38,20 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.clothing.ClothingView
 
-class ClothingControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class ClothingControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ClothingFormProvider()
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
-  lazy val clothingRoute = routes.ClothingController.onPageLoad(NormalMode).url
+  val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
+  override def beforeEach(): Unit = reset(mockSessionRepository)
+
+  lazy val clothingRoute: String = routes.ClothingController.onPageLoad(NormalMode).url
 
   "Clothing Controller" must {
 
@@ -160,41 +170,57 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
 
   "save 'clothingList' to ClaimAmount when 'Yes' is selected" in {
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-      .build()
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-    val sessionRepository = application.injector.instanceOf[SessionRepository]
+    val ua1 = emptyUserAnswers
+
+    val application = applicationBuilder(userAnswers = Some(ua1))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+      .build()
 
     val request = FakeRequest(POST, clothingRoute)
       .withFormUrlEncodedBody(("value", "true"))
 
-    route(application, request).value.futureValue
+    val result = route(application, request).value
 
-    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-      _.value.get(ClaimAmount).value mustBe ClaimAmounts.Clothing.clothingList
+    val ua2 =
+      ua1
+        .set(ClaimAmount, ClaimAmounts.Clothing.clothingList).success.value
+        .set(ClothingPage, true).success.value
+
+    whenReady(result) {
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
     }
 
-    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 
   "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-      .build()
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-    val sessionRepository = application.injector.instanceOf[SessionRepository]
+    val ua1 = emptyUserAnswers
+
+    val application = applicationBuilder(userAnswers = Some(ua1))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+      .build()
 
     val request = FakeRequest(POST, clothingRoute)
       .withFormUrlEncodedBody(("value", "false"))
 
-    route(application, request).value.futureValue
+    val result = route(application, request).value
 
-    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-      _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+    val ua2 =
+      ua1
+        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+        .set(ClothingPage, false).success.value
+
+    whenReady(result) {
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
     }
 
-    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }
