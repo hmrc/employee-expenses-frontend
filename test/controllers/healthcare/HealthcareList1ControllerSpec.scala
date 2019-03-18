@@ -22,8 +22,11 @@ import controllers.actions.UnAuthed
 import forms.healthcare.HealthcareList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.scalatest.OptionValues
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{reset, times, verify, when}
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.healthcare.HealthcareList1Page
 import play.api.inject.bind
@@ -33,12 +36,19 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.healthcare.HealthcareList1View
 
-class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with OptionValues with IntegrationPatience {
+import scala.concurrent.Future
+
+class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with OptionValues with IntegrationPatience with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new HealthcareList1FormProvider()
+
   val form = formProvider()
+
+  val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
+  override def beforeEach(): Unit = reset(mockSessionRepository)
 
   lazy val healthcareList1Route = controllers.healthcare.routes.HealthcareList1Controller.onPageLoad(NormalMode).url
 
@@ -177,20 +187,48 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
 
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+      val ua1 = emptyUserAnswers
+
+      val application = applicationBuilder(userAnswers = Some(ua1))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
       val request = FakeRequest(POST, healthcareList1Route).withFormUrlEncodedBody(("value", "true"))
 
-      route(application, request).value.futureValue
+      val ua2 = ua1
+        .set(ClaimAmount, ClaimAmounts.Healthcare.list1).success.value
+        .set(HealthcareList1Page, true).success.value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Healthcare.list1
+      whenReady(route(application, request).value) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
+      application.stop()
+    }
+
+    "not save ClaimAmount when 'No' is selected" in {
+
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+      val ua1 = emptyUserAnswers
+
+      val application = applicationBuilder(userAnswers = Some(ua1))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, healthcareList1Route).withFormUrlEncodedBody(("value", "false"))
+
+      val ua2 = ua1
+        .set(HealthcareList1Page, false).success.value
+
+      whenReady(route(application, request).value) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      }
+
       application.stop()
     }
   }
