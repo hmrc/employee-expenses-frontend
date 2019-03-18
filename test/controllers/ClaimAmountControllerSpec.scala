@@ -56,6 +56,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
       val application = applicationBuilder(userAnswers = Some(ua1))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
       val claimAmountService = application.injector.instanceOf[ClaimAmountService]
