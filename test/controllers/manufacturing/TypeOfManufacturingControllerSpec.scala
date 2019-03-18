@@ -52,10 +52,6 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  private def sessionApplication: Application = applicationBuilder(userAnswers = Some(userAnswers))
-    .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-    .build()
-
   "TypeOfManufacturing Controller" must {
 
     "return OK and the correct view for a GET" in {
@@ -179,10 +175,15 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
       }
 
       s"save '$claimAmount' to ClaimAmount when '$trade' is selected" in {
+
+        val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
+
         val request = FakeRequest(POST, typeOfManufacturingRoute)
           .withFormUrlEncodedBody(("value", trade.toString))
 
-        val result = route(sessionApplication, request).value
+        val result = route(application, request).value
 
         val userAnswers2 = userAnswers
           .set(ClaimAmount, claimAmount).success.value
@@ -193,7 +194,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
             verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
         }
 
-        sessionApplication.stop()
+        application.stop()
       }
     }
   }

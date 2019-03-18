@@ -49,10 +49,6 @@ class IronMiningListControllerSpec extends SpecBase with ScalaFutures with Mocki
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  private def sessionApplication: Application = applicationBuilder(userAnswers = Some(userAnswers))
-    .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-    .build()
-
   lazy val ironMiningListRoute = routes.IronMiningListController.onPageLoad(NormalMode).url
 
   "IronMiningList Controller" must {
@@ -171,10 +167,14 @@ class IronMiningListControllerSpec extends SpecBase with ScalaFutures with Mocki
 
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
 
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
       val request = FakeRequest(POST, ironMiningListRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
-      val result = route(sessionApplication, request).value
+      val result = route(application, request).value
 
       val userAnswers2 = userAnswers
         .set(ClaimAmount, ClaimAmounts.Manufacturing.IronMining.list1).success.value
@@ -185,15 +185,19 @@ class IronMiningListControllerSpec extends SpecBase with ScalaFutures with Mocki
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionApplication.stop()
+      application.stop()
     }
 
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
 
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
       val request = FakeRequest(POST, ironMiningListRoute)
         .withFormUrlEncodedBody(("value", "false"))
 
-      val result = route(sessionApplication, request).value
+      val result = route(application, request).value
 
       val userAnswers2 = userAnswers
         .set(ClaimAmount, ClaimAmounts.Manufacturing.IronMining.allOther).success.value
@@ -204,7 +208,7 @@ class IronMiningListControllerSpec extends SpecBase with ScalaFutures with Mocki
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionApplication.stop()
+      application.stop()
     }
   }
 }

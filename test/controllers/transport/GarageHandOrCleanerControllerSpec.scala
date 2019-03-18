@@ -210,7 +210,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
       application.stop()
     }
 
-    "save ClaimAmount '' when false" in {
+    "save ClaimAmount 'conductorsDrivers' when false" in {
 
       val userAnswers = emptyUserAnswers
 

@@ -29,6 +29,7 @@ import org.scalatest.mockito.MockitoSugar
 import org.mockito.Mockito._
 import pages.ClaimAmount
 import pages.printing.PrintingOccupationList2Page
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -40,13 +41,14 @@ import scala.concurrent.Future
 
 class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  val mockSessionRepository = mock[SessionRepository]
-
-
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new PrintingOccupationList2FormProvider()
-  val form = formProvider()
+  private val formProvider = new PrintingOccupationList2FormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
 
   lazy val printingOccupationList2Route = routes.PrintingOccupationList2Controller.onPageLoad(NormalMode).url
 
@@ -186,15 +188,9 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
 
     "save ClaimAmount when 'Yes' is selected" in {
 
-      val userAnswers = emptyUserAnswers
-
-
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
 
       val request = FakeRequest(POST, printingOccupationList2Route).withFormUrlEncodedBody(("value", "true"))
 
@@ -214,15 +210,9 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
 
     "save ClaimAmount when 'No' is selected" in {
 
-      val userAnswers = emptyUserAnswers
-
-
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
 
       val request = FakeRequest(POST, printingOccupationList2Route).withFormUrlEncodedBody(("value", "false"))
 

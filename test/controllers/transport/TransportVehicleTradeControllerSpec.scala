@@ -46,8 +46,13 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
   lazy val transportVehicleTradeRoute = routes.TransportVehicleTradeController.onPageLoad(NormalMode).url
 
-  val formProvider = new TransportVehicleTradeFormProvider()
-  val form = formProvider()
+  private val formProvider = new TransportVehicleTradeFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "TransportVehicleTrade Controller" must {
 
@@ -175,11 +180,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       }
 
       s"save $claimAmount 'buildersRepairersWagonLifters' when '$trade' is selected" in {
-        val userAnswers = emptyUserAnswers
 
-        val mockSessionRepository = mock[SessionRepository]
-
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -200,7 +201,6 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
         }
 
         application.stop()
-
       }
     }
   }

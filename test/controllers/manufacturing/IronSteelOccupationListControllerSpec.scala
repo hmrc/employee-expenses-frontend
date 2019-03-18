@@ -49,10 +49,6 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  private def sessionApplication: Application = applicationBuilder(userAnswers = Some(userAnswers))
-    .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-    .build()
-
   lazy val ironSteelOccupationListRoute = routes.IronSteelOccupationListController.onPageLoad(NormalMode).url
 
   "IronSteelOccupationList Controller" must {
@@ -171,10 +167,14 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
 
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
 
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
       val request = FakeRequest(POST, ironSteelOccupationListRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
-      val result = route(sessionApplication, request).value
+      val result = route(application, request).value
 
       val userAnswers2 = userAnswers
         .set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.list1).success.value
@@ -185,15 +185,19 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionApplication.stop()
+      application.stop()
     }
 
     "save only page data when 'No' is selected" in {
 
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
       val request = FakeRequest(POST, ironSteelOccupationListRoute)
         .withFormUrlEncodedBody(("value", "false"))
 
-      val result = route(sessionApplication, request).value
+      val result = route(application, request).value
 
       val userAnswers2 = userAnswers
         .set(IronSteelOccupationListPage, false).success.value
@@ -203,7 +207,7 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionApplication.stop()
+      application.stop()
     }
   }
 }

@@ -17,22 +17,35 @@
 package controllers.police
 
 import base.SpecBase
+import controllers.actions.UnAuthed
 import forms.police.SpecialConstableFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.police.SpecialConstablePage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.police.SpecialConstableView
 
-class SpecialConstableControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new SpecialConstableFormProvider()
-  val form = formProvider()
+  private val formProvider = new SpecialConstableFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val specialConstableRoute: String = routes.SpecialConstableController.onPageLoad(NormalMode).url
 
@@ -146,6 +159,50 @@ class SpecialConstableControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save 'true' when 'Yes' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, specialConstableRoute)
+        .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(SpecialConstablePage, true).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      application.stop()
+    }
+
+    "save 'false' when 'No' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, specialConstableRoute)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(SpecialConstablePage, false).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
 
       application.stop()
     }

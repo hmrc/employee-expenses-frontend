@@ -47,10 +47,6 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  private def sessionApplication: Application = applicationBuilder(userAnswers = Some(userAnswers))
-    .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-    .build()
-
   lazy val ironMiningRoute = routes.IronMiningController.onPageLoad(NormalMode).url
 
   "IronMining Controller" must {
@@ -169,10 +165,14 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
 
     "save 'true' when 'Yes' is selected" in {
 
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
       val request = FakeRequest(POST, ironMiningRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
-      val result = route(sessionApplication, request).value
+      val result = route(application, request).value
 
       val userAnswers2 = userAnswers
         .set(IronMiningPage, true).success.value
@@ -182,15 +182,19 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionApplication.stop()
+      application.stop()
     }
 
     "save 'false' when 'No' is selected" in {
 
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
       val request = FakeRequest(POST, ironMiningRoute)
         .withFormUrlEncodedBody(("value", "false"))
 
-      val result = route(sessionApplication, request).value
+      val result = route(application, request).value
 
       val userAnswers2 = userAnswers
         .set(IronMiningPage, false).success.value
@@ -200,7 +204,7 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionApplication.stop()
+      application.stop()
     }
   }
 }

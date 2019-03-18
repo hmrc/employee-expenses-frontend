@@ -49,10 +49,6 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  private def sessionApplication: Application = applicationBuilder(userAnswers = Some(userAnswers))
-    .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-    .build()
-
   lazy val woodFurnitureOccupationList1Route = routes.WoodFurnitureOccupationList1Controller.onPageLoad(NormalMode).url
 
   "WoodFurnitureOccupationList1 Controller" must {
@@ -171,10 +167,14 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
 
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
 
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
       val request = FakeRequest(POST, woodFurnitureOccupationList1Route)
         .withFormUrlEncodedBody(("value", "true"))
 
-      val result = route(sessionApplication, request).value
+      val result = route(application, request).value
 
       val userAnswers2 = userAnswers
           .set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.list1).success.value
@@ -185,15 +185,19 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionApplication.stop()
+      application.stop()
     }
 
     "save only page data when 'No' is selected" in {
 
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
       val request = FakeRequest(POST, woodFurnitureOccupationList1Route)
         .withFormUrlEncodedBody(("value", "false"))
 
-      val result = route(sessionApplication, request).value
+      val result = route(application, request).value
 
       val userAnswers2 = userAnswers
         .set(WoodFurnitureOccupationList1Page, false).success.value
@@ -203,7 +207,7 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionApplication.stop()
+      application.stop()
     }
   }
 }

@@ -17,24 +17,38 @@
 package controllers.transport
 
 import base.SpecBase
+import controllers.actions.UnAuthed
 import forms.transport.TypeOfTransportFormProvider
 import models.{NormalMode, TypeOfTransport, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.transport.TypeOfTransportPage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.transport.TypeOfTransportView
 
-class TypeOfTransportControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val typeOfTransportRoute = routes.TypeOfTransportController.onPageLoad(NormalMode).url
 
-  val formProvider = new TypeOfTransportFormProvider()
-  val form = formProvider()
+  private val formProvider = new TypeOfTransportFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "TypeOfTransport Controller" must {
 
@@ -147,6 +161,31 @@ class TypeOfTransportControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    for(transport <- TypeOfTransport.values) {
+      s"save '$transport' when selected" in {
+
+        val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
+
+
+        val request = FakeRequest(POST, typeOfTransportRoute)
+          .withFormUrlEncodedBody(("value", transport.toString))
+
+        val result = route(application, request).value
+
+        val userAnswers2 = userAnswers
+          .set(TypeOfTransportPage, transport).success.value
+
+        whenReady(result) {
+          _ =>
+            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+        }
+
+        application.stop()
+      }
     }
   }
 }

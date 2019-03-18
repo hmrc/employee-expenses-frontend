@@ -43,8 +43,12 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Mockit
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new PoliceOfficerFormProvider()
-  val form = formProvider()
+  private val formProvider = new PoliceOfficerFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
 
   lazy val policeOfficerRoute: String = routes.PoliceOfficerController.onPageLoad(NormalMode).url
 
@@ -164,12 +168,6 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Mockit
 
     "save 'policeOfficer' to ClaimAmount when 'Yes' is selected" in {
 
-      val userAnswers = emptyUserAnswers
-
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -191,12 +189,6 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Mockit
     }
 
     "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
-
-      val userAnswers = emptyUserAnswers
-
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

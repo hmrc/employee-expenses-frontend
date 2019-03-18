@@ -42,13 +42,14 @@ import scala.concurrent.Future
 
 class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  val mockSessionRepository = mock[SessionRepository]
-
-
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new PrintingOccupationList1FormProvider()
-  val form = formProvider()
+  private val formProvider = new PrintingOccupationList1FormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val printingOccupationList1Route: String = routes.PrintingOccupationList1Controller.onPageLoad(NormalMode).url
 
@@ -188,14 +189,10 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
     "save ClaimAmount when 'Yes' is selected" in {
 
-      val userAnswers = emptyUserAnswers
-
-
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
+
 
       val request = FakeRequest(POST, printingOccupationList1Route).withFormUrlEncodedBody(("value", "true"))
 

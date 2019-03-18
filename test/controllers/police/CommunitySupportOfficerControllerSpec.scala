@@ -43,8 +43,12 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new CommunitySupportOfficerFormProvider()
-  val form = formProvider()
+  private val formProvider = new CommunitySupportOfficerFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val communitySupportOfficerRoute = routes.CommunitySupportOfficerController.onPageLoad(NormalMode).url
 
@@ -165,12 +169,6 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
 
     "save 'communitySupportOfficer' to ClaimAmount when 'Yes' is selected" in {
 
-      val userAnswers = emptyUserAnswers
-
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -184,6 +182,28 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
         .set(CommunitySupportOfficerPage, true).success.value
 
       whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      application.stop()
+    }
+
+    "save no ClaimAmount when 'No' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, communitySupportOfficerRoute)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(CommunitySupportOfficerPage, false).success.value
+
+      whenReady(result) {
         _ =>
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }

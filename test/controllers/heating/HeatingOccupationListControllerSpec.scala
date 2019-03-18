@@ -22,10 +22,14 @@ import controllers.actions.UnAuthed
 import forms.heating.HeatingOccupationListFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.heating.HeatingOccupationListPage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -33,12 +37,18 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.heating.HeatingOccupationListView
 
-class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new HeatingOccupationListFormProvider()
-  val form = formProvider()
+  private val formProvider = new HeatingOccupationListFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val heatingOccupationListRoute = routes.HeatingOccupationListController.onPageLoad(NormalMode).url
 
@@ -158,39 +168,45 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
 
     "save 'list' to ClaimAmount when 'Yes' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
       val request = FakeRequest(POST, heatingOccupationListRoute).withFormUrlEncodedBody(("value", "true"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Heating.list
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Heating.list).success.value
+        .set(HeatingOccupationListPage, true).success.value
+
+       whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
       val request = FakeRequest(POST, heatingOccupationListRoute).withFormUrlEncodedBody(("value", "false"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Heating.allOther
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Heating.allOther).success.value
+        .set(HeatingOccupationListPage, false).success.value
+
+       whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }
