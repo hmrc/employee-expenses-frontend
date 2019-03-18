@@ -21,10 +21,13 @@ import controllers.actions.UnAuthed
 import models.{EmployerContribution, NormalMode, Rates, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage}
+import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -32,6 +35,8 @@ import play.twirl.api.Html
 import repositories.SessionRepository
 import service.ClaimAmountService
 import views.html.ClaimAmountView
+
+import scala.concurrent.Future
 
 class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
@@ -41,11 +46,23 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "return OK and the correct view for a GET when all data is found" in {
       val claimAmount = 60
-      val userAnswers = emptyUserAnswers.set(ClaimAmount, claimAmount).success.value
-        .set(EmployerContributionPage, EmployerContribution.NoContribution).success.value
+      val ua1 =
+        emptyUserAnswers
+          .set(ClaimAmount, claimAmount).success.value
+          .set(EmployerContributionPage, EmployerContribution.NoContribution).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+      val application = applicationBuilder(userAnswers = Some(ua1))
+        .build()
+
       val claimAmountService = application.injector.instanceOf[ClaimAmountService]
+
+      val claimAmountAndAnyDeductions = claimAmountService.calculateClaimAmount(ua1, claimAmount)
+
+      val ua2 = ua1.set(ClaimAmountAndAnyDeductions, claimAmountAndAnyDeductions).success.value
 
       val claimAmountsAndRates = Rates(
         basicRate = frontendAppConfig.taxPercentageBand1,
@@ -63,20 +80,21 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         prefix = Some('S')
       )
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
 
-      status(result) mustEqual OK
-      contentAsString(result) mustEqual
-        view(claimAmount, None, claimAmountsAndRates, scottishClaimAmountsAndRates, "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmountAndAnyDeductions).value mustBe 60
+      whenReady(result) {
+        _ =>
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(claimAmount, None, claimAmountsAndRates, scottishClaimAmountsAndRates, "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
+
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
