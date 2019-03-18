@@ -85,7 +85,6 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       val result = route(application, request).value
       val view = application.injector.instanceOf[ClaimAmountView]
 
-
       whenReady(result) {
         _ =>
           status(result) mustEqual OK

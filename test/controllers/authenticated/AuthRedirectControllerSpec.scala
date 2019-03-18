@@ -38,7 +38,7 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
 
   "AuthRedirectController" must {
 
-    "redirect to TaxYearSelection on success" in {
+    "redirect to TaxYearSelection on success and test integration with session repo works as expected" in {
 
       val application = applicationBuilder(Some(minimumUserAnswers))
         .build()
