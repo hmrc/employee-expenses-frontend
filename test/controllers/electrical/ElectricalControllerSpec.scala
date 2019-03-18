@@ -23,23 +23,34 @@ import controllers.electrical.routes._
 import forms.electrical.ElectricalFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.scalatest.OptionValues
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import pages.ClaimAmount
 import pages.electrical.ElectricalPage
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.electrical.ElectricalView
 
-class ElectricalControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class ElectricalControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ElectricalFormProvider()
+
   val form = formProvider()
+
+  val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
+  override def beforeEach(): Unit = reset(mockSessionRepository)
 
   lazy val electricalRoute = ElectricalController.onPageLoad(NormalMode).url
 
@@ -159,41 +170,51 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
 
     "save 'onlyLaundry' to ClaimAmount when 'Yes' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+      val ua1 = emptyUserAnswers
+
+      val application = applicationBuilder(userAnswers = Some(ua1))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
       val request = FakeRequest(POST, electricalRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
-      route(application, request).value.futureValue
+      val ua2 = ua1
+        .set(ClaimAmount, ClaimAmounts.Electrical.onlyLaundry).success.value
+        .set(ElectricalPage, true).success.value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Electrical.onlyLaundry
+      whenReady(route(application, request).value) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+      val ua1 = emptyUserAnswers
+
+      val application = applicationBuilder(userAnswers = Some(ua1))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
       val request = FakeRequest(POST, electricalRoute)
         .withFormUrlEncodedBody(("value", "false"))
 
-      route(application, request).value.futureValue
+      val ua2 = ua1
+        .set(ClaimAmount, ClaimAmounts.Electrical.allOther).success.value
+        .set(ElectricalPage, false).success.value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Electrical.allOther
+      whenReady(route(application, request).value) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }
