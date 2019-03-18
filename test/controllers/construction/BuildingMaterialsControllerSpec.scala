@@ -22,8 +22,11 @@ import controllers.actions.UnAuthed
 import forms.construction.BuildingMaterialsFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.scalatest.OptionValues
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{reset, times, verify, when}
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.construction.BuildingMaterialsPage
 import play.api.inject.bind
@@ -33,12 +36,18 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.construction.BuildingMaterialsView
 
-class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new BuildingMaterialsFormProvider()
   val form = formProvider()
+
+  val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
+  override def beforeEach(): Unit = reset(mockSessionRepository)
 
   lazy val buildingMaterialsRoute = routes.BuildingMaterialsController.onPageLoad(NormalMode).url
 
@@ -159,41 +168,57 @@ class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with In
 
   "save 'buildingMaterials' to ClaimAmount when 'Yes' is selected" in {
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-      .build()
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-    val sessionRepository = application.injector.instanceOf[SessionRepository]
+    val ua1 = emptyUserAnswers
+
+    val application = applicationBuilder(userAnswers = Some(ua1))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+      .build()
 
     val request = FakeRequest(POST, buildingMaterialsRoute)
       .withFormUrlEncodedBody(("value", "true"))
 
-    route(application, request).value.futureValue
+    val result = route(application, request).value
 
-    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-      _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.buildingMaterials
+    val ua2 =
+      ua1
+        .set(ClaimAmount, ClaimAmounts.Construction.buildingMaterials).success.value
+        .set(BuildingMaterialsPage, true).success.value
+
+    whenReady(result) {
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
     }
 
-    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 
   "save 'allOther' to ClaimAmount when 'No' is selected" in {
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-      .build()
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-    val sessionRepository = application.injector.instanceOf[SessionRepository]
+    val ua1 = emptyUserAnswers
+
+    val application = applicationBuilder(userAnswers = Some(ua1))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+      .build()
 
     val request = FakeRequest(POST, buildingMaterialsRoute)
       .withFormUrlEncodedBody(("value", "false"))
 
-    route(application, request).value.futureValue
+    val result = route(application, request).value
 
-    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-      _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.allOther
+    val ua2 =
+      ua1
+        .set(ClaimAmount, ClaimAmounts.Construction.allOther).success.value
+        .set(BuildingMaterialsPage, false).success.value
+
+    whenReady(result) {
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
     }
 
-    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }

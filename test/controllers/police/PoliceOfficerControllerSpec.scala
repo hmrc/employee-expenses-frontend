@@ -22,10 +22,14 @@ import controllers.actions.UnAuthed
 import forms.police.PoliceOfficerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.police.PoliceOfficerPage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -33,7 +37,9 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.police.PoliceOfficerView
 
-class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -158,39 +164,57 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Integr
 
     "save 'policeOfficer' to ClaimAmount when 'Yes' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
+      val userAnswers = emptyUserAnswers
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
       val request = FakeRequest(POST, policeOfficerRoute).withFormUrlEncodedBody(("value", "true"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Police.policeOfficer
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Police.policeOfficer).success.value
+        .set(PoliceOfficerPage, true).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
     "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
+      val userAnswers = emptyUserAnswers
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
       val request = FakeRequest(POST, policeOfficerRoute).withFormUrlEncodedBody(("value", "false"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+        .set(PoliceOfficerPage, false).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }
