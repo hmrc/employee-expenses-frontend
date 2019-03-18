@@ -17,22 +17,39 @@
 package controllers.manufacturing
 
 import base.SpecBase
+import controllers.actions.UnAuthed
 import forms.manufacturing.IronMiningFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.manufacturing.IronMiningPage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.manufacturing.IronMiningView
 
-class IronMiningControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new IronMiningFormProvider()
-  val form = formProvider()
+  private val formProvider = new IronMiningFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+  private def sessionApplication: Application = applicationBuilder(userAnswers = Some(userAnswers))
+    .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+    .build()
 
   lazy val ironMiningRoute = routes.IronMiningController.onPageLoad(NormalMode).url
 
@@ -148,6 +165,42 @@ class IronMiningControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    "save 'true' when 'Yes' is selected" in {
+
+      val request = FakeRequest(POST, ironMiningRoute)
+        .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(sessionApplication, request).value
+
+      val userAnswers2 = userAnswers
+        .set(IronMiningPage, true).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      sessionApplication.stop()
+    }
+
+    "save 'false' when 'No' is selected" in {
+
+      val request = FakeRequest(POST, ironMiningRoute)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(sessionApplication, request).value
+
+      val userAnswers2 = userAnswers
+        .set(IronMiningPage, false).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      sessionApplication.stop()
     }
   }
 }

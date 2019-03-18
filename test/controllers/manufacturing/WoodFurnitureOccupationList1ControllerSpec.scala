@@ -22,9 +22,13 @@ import controllers.actions.UnAuthed
 import forms.manufacturing.WoodFurnitureOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.manufacturing.WoodFurnitureOccupationList1Page
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -32,12 +36,22 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.manufacturing.WoodFurnitureOccupationList1View
 
-class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
+import scala.concurrent.Future
+
+class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new WoodFurnitureOccupationList1FormProvider()
-  val form = formProvider()
+  private val formProvider = new WoodFurnitureOccupationList1FormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+  private def sessionApplication: Application = applicationBuilder(userAnswers = Some(userAnswers))
+    .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+    .build()
 
   lazy val woodFurnitureOccupationList1Route = routes.WoodFurnitureOccupationList1Controller.onPageLoad(NormalMode).url
 
@@ -157,22 +171,39 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
 
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
       val request = FakeRequest(POST, woodFurnitureOccupationList1Route)
         .withFormUrlEncodedBody(("value", "true"))
 
-      route(application, request).value.futureValue
+      val result = route(sessionApplication, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.WoodFurniture.list1
+      val userAnswers2 = userAnswers
+          .set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.list1).success.value
+          .set(WoodFurnitureOccupationList1Page, true).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
+      sessionApplication.stop()
+    }
+
+    "save only page data when 'No' is selected" in {
+
+      val request = FakeRequest(POST, woodFurnitureOccupationList1Route)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(sessionApplication, request).value
+
+      val userAnswers2 = userAnswers
+        .set(WoodFurnitureOccupationList1Page, false).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      sessionApplication.stop()
     }
   }
 }

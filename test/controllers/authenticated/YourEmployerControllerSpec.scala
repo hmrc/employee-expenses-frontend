@@ -284,6 +284,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       redirectLocation(result).value mustEqual UpdateEmployerInformationController.onPageLoad(NormalMode).url
 
+      application.stop()
     }
 
     "redirect to Session Expired for a POST if no tax year selection in user answers" in {

@@ -20,11 +20,16 @@ import base.SpecBase
 import config.ClaimAmounts
 import controllers.actions.UnAuthed
 import forms.manufacturing.TypeOfManufacturingFormProvider
+import models.TypeOfManufacturing._
 import models.{NormalMode, TypeOfManufacturing, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.manufacturing.TypeOfManufacturingPage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -32,14 +37,24 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.manufacturing.TypeOfManufacturingView
 
-class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
+import scala.concurrent.Future
+
+class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val typeOfManufacturingRoute = controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(NormalMode).url
 
-  val formProvider = new TypeOfManufacturingFormProvider()
-  val form = formProvider()
+  private val formProvider = new TypeOfManufacturingFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+  private def sessionApplication: Application = applicationBuilder(userAnswers = Some(userAnswers))
+    .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+    .build()
 
   "TypeOfManufacturing Controller" must {
 
@@ -154,84 +169,32 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
       application.stop()
     }
 
-    "save 'brassCopper' to ClaimAmount when 'BrassCopper' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, typeOfManufacturingRoute)
-        .withFormUrlEncodedBody(("value", TypeOfManufacturing.BrassCopper.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.brassCopper
+    val pageType = Seq(BrassCopper, Glass, PreciousMetals, NoneOfAbove)
+    for (trade <- pageType) {
+      val claimAmount = trade match {
+        case BrassCopper => ClaimAmounts.Manufacturing.brassCopper
+        case Glass => ClaimAmounts.Manufacturing.glass
+        case PreciousMetals => ClaimAmounts.Manufacturing.quarryingPreciousMetals
+        case _ => ClaimAmounts.defaultRate
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
+      s"save '$claimAmount' to ClaimAmount when '$trade' is selected" in {
+        val request = FakeRequest(POST, typeOfManufacturingRoute)
+          .withFormUrlEncodedBody(("value", trade.toString))
 
-    "save 'glass' to ClaimAmount when 'Glass' is selected" in {
+        val result = route(sessionApplication, request).value
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
+        val userAnswers2 = userAnswers
+          .set(ClaimAmount, claimAmount).success.value
+          .set(TypeOfManufacturingPage, trade).success.value
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+        whenReady(result) {
+          _ =>
+            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+        }
 
-      val request = FakeRequest(POST, typeOfManufacturingRoute)
-        .withFormUrlEncodedBody(("value", TypeOfManufacturing.Glass.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.glass
+        sessionApplication.stop()
       }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
-
-    "save 'quarryingPreciousMetals' to ClaimAmount when 'PreciousMetals' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, typeOfManufacturingRoute)
-        .withFormUrlEncodedBody(("value", TypeOfManufacturing.PreciousMetals.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.quarryingPreciousMetals
-      }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
-
-    "save 'defaultRate' to ClaimAmount when 'NoneOfAbove' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, typeOfManufacturingRoute)
-        .withFormUrlEncodedBody(("value", TypeOfManufacturing.NoneOfAbove.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
-      }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
     }
   }
 }
