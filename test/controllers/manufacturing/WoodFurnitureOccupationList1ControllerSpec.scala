@@ -188,7 +188,7 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
       application.stop()
     }
 
-    "save only page data when 'No' is selected" in {
+    "not save ClaimAmount when 'No' is selected" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
