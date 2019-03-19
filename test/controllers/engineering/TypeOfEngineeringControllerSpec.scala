@@ -22,8 +22,11 @@ import controllers.actions.UnAuthed
 import forms.engineering.TypeOfEngineeringFormProvider
 import models.{NormalMode, TypeOfEngineering, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.engineering.TypeOfEngineeringPage
 import play.api.inject.bind
@@ -33,11 +36,17 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.engineering.TypeOfEngineeringView
 
-class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val typeOfEngineeringRoute: String = controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode).url
+
+  private val mockSessionRepository = mock[SessionRepository]
+  private val userAnswers = emptyUserAnswers
+
 
   val formProvider = new TypeOfEngineeringFormProvider()
   val form = formProvider()
@@ -178,21 +187,27 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with In
 
   "save 'defaultRate' to ClaimAmount when 'NoneOfTheAbove' is selected" in {
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+    val userAnswers = emptyUserAnswers
+
+    val application = applicationBuilder(userAnswers = Some(userAnswers))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
       .build()
 
-    val sessionRepository = application.injector.instanceOf[SessionRepository]
+    val request = FakeRequest(POST, typeOfEngineeringRoute).withFormUrlEncodedBody(("value", TypeOfEngineering.NoneOfTheAbove.toString))
 
-    val request = FakeRequest(POST, typeOfEngineeringRoute)
-      .withFormUrlEncodedBody(("value", TypeOfEngineering.NoneOfTheAbove.toString))
+    val result = route(application, request).value
 
-    route(application, request).value.futureValue
+    val userAnswers2 = userAnswers
+      .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+      .set(TypeOfEngineeringPage, TypeOfEngineering.NoneOfTheAbove).success.value
 
-    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-      _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+    whenReady(result) {
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
     }
 
-    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 
