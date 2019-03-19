@@ -167,7 +167,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
     }
   }
 
-  "save ClaimAmount when 'Yes' is selected" in {
+  "save 'catering' to ClaimAmount when 'Yes' is selected" in {
 
     when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
@@ -192,7 +192,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
     application.stop()
   }
 
-  "save ClaimAmount when 'No' is selected" in {
+  "save 'DefaultRate' to ClaimAmount when 'No' is selected" in {
 
     when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 

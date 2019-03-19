@@ -22,8 +22,11 @@ import controllers.actions.UnAuthed
 import forms.FactoryEngineeringApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.engineering.FactoryEngineeringApprenticePage
 import play.api.inject.bind
@@ -33,12 +36,18 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.engineering.FactoryEngineeringApprenticeView
 
-class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutures with OptionValues with IntegrationPatience {
+import scala.concurrent.Future
+
+class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with OptionValues with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new FactoryEngineeringApprenticeFormProvider()
-  val form = formProvider()
+  private val formProvider = new FactoryEngineeringApprenticeFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val factoryEngineeringApprenticeRoute: String = routes.FactoryEngineeringApprenticeController.onPageLoad(NormalMode).url
 
@@ -180,41 +189,45 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
 
   "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+    val application = applicationBuilder(userAnswers = Some(userAnswers))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
       .build()
 
-    val sessionRepository = application.injector.instanceOf[SessionRepository]
+    val request = FakeRequest(POST, factoryEngineeringApprenticeRoute).withFormUrlEncodedBody(("value", "true"))
 
-    val request = FakeRequest(POST, factoryEngineeringApprenticeRoute)
-      .withFormUrlEncodedBody(("value", "true"))
+    val result = route(application, request).value
 
-    route(application, request).value.futureValue
+    val userAnswers2 = userAnswers
+      .set(ClaimAmount, ClaimAmounts.FactoryEngineering.apprentice).success.value
+      .set(FactoryEngineeringApprenticePage, true).success.value
 
-    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-      _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.apprentice
+    whenReady(result) {
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
     }
 
-    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 
   "save 'allOther' to ClaimAmount when 'No' is selected" in {
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+    val application = applicationBuilder(userAnswers = Some(userAnswers))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
       .build()
 
-    val sessionRepository = application.injector.instanceOf[SessionRepository]
+    val request = FakeRequest(POST, factoryEngineeringApprenticeRoute).withFormUrlEncodedBody(("value", "false"))
 
-    val request = FakeRequest(POST, factoryEngineeringApprenticeRoute)
-      .withFormUrlEncodedBody(("value", "false"))
+    val result = route(application, request).value
 
-    route(application, request).value.futureValue
+    val userAnswers2 = userAnswers
+      .set(ClaimAmount, ClaimAmounts.FactoryEngineering.allOther).success.value
+      .set(FactoryEngineeringApprenticePage,  false).success.value
 
-    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-      _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.allOther
+    whenReady(result) {
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
     }
 
-    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }

@@ -17,22 +17,36 @@
 package controllers.police
 
 import base.SpecBase
+import controllers.actions.UnAuthed
 import forms.police.MetropolitanPoliceFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.police.MetropolitanPolicePage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.police.MetropolitanPoliceView
 
-class MetropolitanPoliceControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class MetropolitanPoliceControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new MetropolitanPoliceFormProvider()
-  val form = formProvider()
+  private val formProvider = new MetropolitanPoliceFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val metropolitanPoliceRoute: String = routes.MetropolitanPoliceController.onPageLoad(NormalMode).url
 
@@ -146,6 +160,48 @@ class MetropolitanPoliceControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save no ClaimAmount when 'Yes' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, metropolitanPoliceRoute).withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(MetropolitanPolicePage, true).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      application.stop()
+    }
+
+    "save no ClaimAmount when 'No' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, metropolitanPoliceRoute).withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(MetropolitanPolicePage, false).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
 
       application.stop()
     }

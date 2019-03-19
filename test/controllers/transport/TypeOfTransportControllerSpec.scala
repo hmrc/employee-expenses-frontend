@@ -170,7 +170,6 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
 
-
         val request = FakeRequest(POST, typeOfTransportRoute)
           .withFormUrlEncodedBody(("value", transport.toString))
 

@@ -209,5 +209,28 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
       application.stop()
     }
+
+    "save only page data when 'No' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+
+      val request = FakeRequest(POST, printingOccupationList1Route).withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(PrintingOccupationList1Page, false).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      application.stop()
+
+    }
   }
 }

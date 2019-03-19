@@ -186,7 +186,7 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
       application.stop()
     }
 
-    "save ClaimAmount when 'Yes' is selected" in {
+    "save 'list2' to ClaimAmount when 'Yes' is selected" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -208,7 +208,7 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
       application.stop()
     }
 
-    "save ClaimAmount when 'No' is selected" in {
+    "save 'allOther' to ClaimAmount when 'No' is selected" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
