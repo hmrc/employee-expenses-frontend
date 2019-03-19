@@ -21,11 +21,15 @@ import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.SecondIndustryOptionsFormProvider
 import generators.Generators
+import models.SecondIndustryOptions.Council
 import models.{NormalMode, SecondIndustryOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito._
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.PropertyChecks
 import pages.{ClaimAmount, SecondIndustryOptionsPage}
 import play.api.inject.bind
@@ -35,7 +39,13 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.SecondIndustryOptionsView
 
-class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
+import scala.concurrent.Future
+
+class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
+  with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
+
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -162,23 +172,36 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       application.stop()
     }
 
-    "save ClaimAmount when 'Council' is selected" in {
+    for (choice <- SecondIndustryOptions.values) {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
+      val userAnswers2 = choice match {
+        case Council => userAnswers
+          .set(SecondIndustryOptionsPage, choice).success.value
+          .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, secondIndustryOptionsRoute).withFormUrlEncodedBody(("value", SecondIndustryOptions.Council.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+        case _ => userAnswers
+          .set(SecondIndustryOptionsPage, choice).success.value
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
+     s"save correct data when $choice' is selected " in {
+
+        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
+
+        val request = FakeRequest(POST, secondIndustryOptionsRoute).withFormUrlEncodedBody(("value", choice.toString))
+
+        val result = route(application, request).value
+
+        whenReady(result) {
+          _ =>
+            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+        }
+
+        application.stop()
+      }
     }
   }
 }
