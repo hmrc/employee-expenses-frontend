@@ -165,16 +165,27 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
       application.stop()
     }
 
-    val pageType = Seq(BrassCopper, Glass, PreciousMetals, NoneOfAbove)
-    for (trade <- pageType) {
-      val claimAmount = trade match {
-        case BrassCopper => ClaimAmounts.Manufacturing.brassCopper
-        case Glass => ClaimAmounts.Manufacturing.glass
-        case PreciousMetals => ClaimAmounts.Manufacturing.quarryingPreciousMetals
-        case _ => ClaimAmounts.defaultRate
+    for (trade <- TypeOfManufacturing.values) {
+      val userAnswers2 = trade match {
+        case BrassCopper => userAnswers
+          .set(ClaimAmount, ClaimAmounts.Manufacturing.brassCopper).success.value
+          .set(TypeOfManufacturingPage, trade).success.value
+        case Glass =>
+          userAnswers
+            .set(ClaimAmount, ClaimAmounts.Manufacturing.glass).success.value
+            .set(TypeOfManufacturingPage, trade).success.value
+        case PreciousMetals =>
+          userAnswers
+            .set(ClaimAmount, ClaimAmounts.Manufacturing.quarryingPreciousMetals).success.value
+            .set(TypeOfManufacturingPage, trade).success.value
+        case NoneOfAbove => userAnswers
+          .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+          .set(TypeOfManufacturingPage, trade).success.value
+        case _ => userAnswers
+          .set(TypeOfManufacturingPage, trade).success.value
       }
 
-      s"save '$claimAmount' to ClaimAmount when '$trade' is selected" in {
+      s"save correct amount to ClaimAmount when '$trade' is selected" in {
 
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -184,10 +195,6 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
           .withFormUrlEncodedBody(("value", trade.toString))
 
         val result = route(application, request).value
-
-        val userAnswers2 = userAnswers
-          .set(ClaimAmount, claimAmount).success.value
-          .set(TypeOfManufacturingPage, trade).success.value
 
         whenReady(result) {
           _ =>
