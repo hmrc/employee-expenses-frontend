@@ -38,17 +38,16 @@ import views.html.construction.ConstructionOccupationList1View
 
 import scala.concurrent.Future
 
-class ConstructionOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
+class ConstructionOccupationList1ControllerSpec
+  extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ConstructionOccupationList1FormProvider()
-
   val form = formProvider()
-
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val constructionOccupationList1Route = routes.ConstructionOccupationList1Controller.onPageLoad(NormalMode).url
 
@@ -96,6 +95,7 @@ class ConstructionOccupationList1ControllerSpec extends SpecBase with ScalaFutur
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -169,8 +169,6 @@ class ConstructionOccupationList1ControllerSpec extends SpecBase with ScalaFutur
 
   "save 'list1' to ClaimAmount when 'Yes' is selected" in {
 
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
     val ua1 = emptyUserAnswers
 
     val application = applicationBuilder(userAnswers = Some(ua1))
@@ -196,8 +194,6 @@ class ConstructionOccupationList1ControllerSpec extends SpecBase with ScalaFutur
   }
 
   "not save ClaimAmount when 'No' is selected" in {
-
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
     val ua1 = emptyUserAnswers
 

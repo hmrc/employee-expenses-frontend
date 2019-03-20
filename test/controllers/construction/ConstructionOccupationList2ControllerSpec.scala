@@ -38,17 +38,16 @@ import views.html.construction.ConstructionOccupationList2View
 
 import scala.concurrent.Future
 
-class ConstructionOccupationList2ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
+class ConstructionOccupationList2ControllerSpec
+  extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ConstructionOccupationList2FormProvider()
-
   val form = formProvider()
-
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val constructionOccupationList2Route = routes.ConstructionOccupationList2Controller.onPageLoad(NormalMode).url
 
@@ -96,6 +95,7 @@ class ConstructionOccupationList2ControllerSpec extends SpecBase with ScalaFutur
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

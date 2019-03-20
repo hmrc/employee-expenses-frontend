@@ -44,10 +44,9 @@ class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with In
 
   val formProvider = new BuildingMaterialsFormProvider()
   val form = formProvider()
-
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val buildingMaterialsRoute = routes.BuildingMaterialsController.onPageLoad(NormalMode).url
 
@@ -95,6 +94,7 @@ class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with In
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -168,8 +168,6 @@ class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with In
 
   "save 'buildingMaterials' to ClaimAmount when 'Yes' is selected" in {
 
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
     val ua1 = emptyUserAnswers
 
     val application = applicationBuilder(userAnswers = Some(ua1))
@@ -195,8 +193,6 @@ class BuildingMaterialsControllerSpec extends SpecBase with ScalaFutures with In
   }
 
   "save 'allOther' to ClaimAmount when 'No' is selected" in {
-
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
     val ua1 = emptyUserAnswers
 

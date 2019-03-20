@@ -47,6 +47,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
   private val mockSessionRepository = mock[SessionRepository]
   private val userAnswers = emptyUserAnswers
 
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   val formProvider = new TypeOfEngineeringFormProvider()
   val form = formProvider()
@@ -95,6 +96,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -115,6 +117,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -186,10 +189,6 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
   }
 
   "save 'defaultRate' to ClaimAmount when 'NoneOfTheAbove' is selected" in {
-
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
-    val userAnswers = emptyUserAnswers
 
     val application = applicationBuilder(userAnswers = Some(userAnswers))
       .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

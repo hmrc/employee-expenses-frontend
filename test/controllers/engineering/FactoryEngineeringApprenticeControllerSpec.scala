@@ -95,6 +95,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -115,6 +116,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

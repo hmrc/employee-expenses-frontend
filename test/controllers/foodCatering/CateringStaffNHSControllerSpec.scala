@@ -43,12 +43,10 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CateringStaffNHSFormProvider()
-
   val form = formProvider()
-
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val cateringStaffNHSRoute = routes.CateringStaffNHSController.onPageLoad(NormalMode).url
 
@@ -96,6 +94,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("FoodCatering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

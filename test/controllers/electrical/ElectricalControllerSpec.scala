@@ -44,12 +44,10 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ElectricalFormProvider()
-
   val form = formProvider()
-
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val electricalRoute = ElectricalController.onPageLoad(NormalMode).url
 
@@ -97,6 +95,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Electrical").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

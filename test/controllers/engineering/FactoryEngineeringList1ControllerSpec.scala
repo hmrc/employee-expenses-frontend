@@ -43,6 +43,8 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
   private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new FactoryEngineeringList1FormProvider()
@@ -94,6 +96,7 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -114,6 +117,7 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -187,8 +191,6 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
   }
 
   "save  ClaimAmount when 'Yes' is selected" in {
-
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
     val application = applicationBuilder(userAnswers = Some(userAnswers))
       .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

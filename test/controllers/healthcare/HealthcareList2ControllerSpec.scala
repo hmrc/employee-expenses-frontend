@@ -48,7 +48,8 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
 
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
 
   lazy val healthcareList2Route = routes.HealthcareList2Controller.onPageLoad(NormalMode).url
 
@@ -96,6 +97,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Healthcare").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -111,10 +113,12 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
 
       application.stop()
     }
+
     "redirect to the next page when true is submitted" in {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Healthcare").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

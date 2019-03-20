@@ -93,6 +93,7 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

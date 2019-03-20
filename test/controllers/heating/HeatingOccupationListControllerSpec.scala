@@ -96,6 +96,7 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Heating").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

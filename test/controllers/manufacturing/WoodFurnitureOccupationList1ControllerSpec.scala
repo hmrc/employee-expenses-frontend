@@ -95,6 +95,7 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

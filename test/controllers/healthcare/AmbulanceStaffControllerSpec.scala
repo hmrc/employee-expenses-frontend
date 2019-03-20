@@ -45,10 +45,9 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
 
   val formProvider = new AmbulanceStaffFormProvider()
   val form: Form[Boolean] = formProvider()
-
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val ambulanceStaffRoute: String = controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode).url
 
@@ -96,6 +95,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Healthcare").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -116,6 +116,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Healthcare").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

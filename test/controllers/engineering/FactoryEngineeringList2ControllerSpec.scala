@@ -45,6 +45,8 @@ class FactoryEngineeringList2ControllerSpec extends SpecBase with MockitoSugar w
   private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new FactoryEngineeringList2FormProvider()
@@ -96,6 +98,7 @@ class FactoryEngineeringList2ControllerSpec extends SpecBase with MockitoSugar w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -116,6 +119,7 @@ class FactoryEngineeringList2ControllerSpec extends SpecBase with MockitoSugar w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

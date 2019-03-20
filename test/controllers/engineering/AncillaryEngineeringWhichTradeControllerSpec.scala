@@ -96,6 +96,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

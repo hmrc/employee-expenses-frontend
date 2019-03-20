@@ -46,10 +46,9 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
 
   val formProvider = new ClothingFormProvider()
   val form: Form[Boolean] = formProvider()
-
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val clothingRoute: String = routes.ClothingController.onPageLoad(NormalMode).url
 
@@ -97,6 +96,7 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Clothing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

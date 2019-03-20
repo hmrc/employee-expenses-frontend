@@ -43,12 +43,10 @@ class StoneMasonControllerSpec extends SpecBase with ScalaFutures with Integrati
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new StoneMasonFormProvider()
-
   val form = formProvider()
-
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val stoneMasonRoute = routes.StoneMasonController.onPageLoad(NormalMode).url
 
@@ -96,6 +94,7 @@ class StoneMasonControllerSpec extends SpecBase with ScalaFutures with Integrati
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

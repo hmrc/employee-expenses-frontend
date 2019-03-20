@@ -43,12 +43,10 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new HealthcareList1FormProvider()
-
   val form = formProvider()
-
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val healthcareList1Route = controllers.healthcare.routes.HealthcareList1Controller.onPageLoad(NormalMode).url
 
@@ -96,6 +94,7 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Healthcare").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -111,10 +110,12 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
 
       application.stop()
     }
+
     "redirect to the next page when false is submitted" in {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Healthcare").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

@@ -95,6 +95,7 @@ class AluminiumOccupationList2ControllerSpec extends SpecBase with ScalaFutures 
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
