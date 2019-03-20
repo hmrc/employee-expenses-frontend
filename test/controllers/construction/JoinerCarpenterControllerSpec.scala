@@ -42,13 +42,11 @@ class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with Inte
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new JoinerCarpenterFormProvider()
+  private val formProvider = new JoinerCarpenterFormProvider()
+  private val form = formProvider()
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  val form = formProvider()
-
-  val mockSessionRepository: SessionRepository = mock[SessionRepository]
-
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val joinerCarpenterRoute = routes.JoinerCarpenterController.onPageLoad(NormalMode).url
 
@@ -96,11 +94,11 @@ class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with Inte
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, joinerCarpenterRoute)
+      val request = FakeRequest(POST, joinerCarpenterRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -169,8 +167,6 @@ class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with Inte
 
   "save 'joinersCarpenters' to ClaimAmount when 'Yes' is selected" in {
 
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
     val ua1 = emptyUserAnswers
 
     val application = applicationBuilder(userAnswers = Some(ua1))
@@ -196,8 +192,6 @@ class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with Inte
   }
 
   "not save ClaimAmount when 'No' is selected" in {
-
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
     val ua1 = emptyUserAnswers
 

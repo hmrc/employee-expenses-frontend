@@ -43,8 +43,13 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new GarageHandOrCleanerFormProvider()
-  val form = formProvider()
+  private val formProvider = new GarageHandOrCleanerFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+
 
   lazy val garageHandOrCleanerRoute = routes.GarageHandOrCleanerController.onPageLoad(NormalMode).url
 
@@ -92,11 +97,11 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, garageHandOrCleanerRoute)
+      val request = FakeRequest(POST, garageHandOrCleanerRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -112,11 +117,11 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, garageHandOrCleanerRoute)
+      val request = FakeRequest(POST, garageHandOrCleanerRoute)
           .withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
@@ -130,10 +135,11 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
-      val request =
-        FakeRequest(POST, garageHandOrCleanerRoute)
+      val request = FakeRequest(POST, garageHandOrCleanerRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -169,8 +175,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request =
-        FakeRequest(POST, garageHandOrCleanerRoute)
+      val request = FakeRequest(POST, garageHandOrCleanerRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -183,12 +188,6 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     }
 
     "save ClaimAmount 'garageHands' when true" in {
-
-      val userAnswers = emptyUserAnswers
-
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -211,12 +210,6 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     }
 
     "save ClaimAmount 'conductorsDrivers' when false" in {
-
-      val userAnswers = emptyUserAnswers
-
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

@@ -43,8 +43,12 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new TransportCarpenterFormProvider()
-  val form = formProvider()
+  private val formProvider = new TransportCarpenterFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
 
   lazy val transportCarpenterRoute = routes.TransportCarpenterController.onPageLoad(NormalMode).url
 
@@ -88,15 +92,15 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
       application.stop()
     }
 
-    "redirect to the next page when valid 'Yes' data is submitted" in {
+    "redirect to the next page when valid 'Yes' is submitted" in {
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, transportCarpenterRoute)
+      val request = FakeRequest(POST, transportCarpenterRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -108,16 +112,16 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
       application.stop()
     }
 
-    "redirect to the next page when valid 'No' data is submitted" in {
+    "redirect to the next page when valid 'No' is submitted" in {
       transportCarpenterRoute
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, transportCarpenterRoute)
+      val request = FakeRequest(POST, transportCarpenterRoute)
           .withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
@@ -186,12 +190,6 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
 
     "save ClaimAmount 'passengerLiners' when true" in {
 
-      val userAnswers = emptyUserAnswers
-
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -213,12 +211,6 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
     }
 
     "save ClaimAmount 'cargoTankersCoastersFerries' when false" in {
-
-      val userAnswers = emptyUserAnswers
-
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

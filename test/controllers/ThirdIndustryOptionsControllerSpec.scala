@@ -47,6 +47,8 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
   private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
   def onwardRoute = Call("GET", "/foo")
 
   lazy val thirdIndustryOptionsRoute = routes.ThirdIndustryOptionsController.onPageLoad(NormalMode).url
@@ -190,7 +192,6 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
       }
 
       s"save correct data when '$choice' is selected" in {
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

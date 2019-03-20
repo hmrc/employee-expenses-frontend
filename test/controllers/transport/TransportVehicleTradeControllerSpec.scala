@@ -99,11 +99,11 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
         val application =
           applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
             .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
             .build()
 
-        val request =
-          FakeRequest(POST, transportVehicleTradeRoute)
+        val request = FakeRequest(POST, transportVehicleTradeRoute)
             .withFormUrlEncodedBody(("value", trade.toString))
 
         val result = route(application, request).value
@@ -118,10 +118,11 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
-      val request =
-        FakeRequest(POST, transportVehicleTradeRoute)
+      val request = FakeRequest(POST, transportVehicleTradeRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
       val boundForm = form.bind(Map("value" -> "invalid value"))

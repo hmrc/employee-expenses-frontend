@@ -42,6 +42,8 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
   private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new SameEmployerContributionAllYearsFormProvider()
@@ -96,6 +98,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
 
       val application =
         applicationBuilder(userAnswers = Some(fullUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -169,8 +172,6 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
 
     "save 'true' when 'Yes' is selected" in {
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
       val ua = userAnswers
         .set(ExpensesEmployerPaidPage, 0).success.value
 
@@ -194,8 +195,6 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
     }
 
     "save 'false' when 'No' is selected" in {
-
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
       val ua = userAnswers
         .set(ExpensesEmployerPaidPage, 0).success.value

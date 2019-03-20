@@ -45,8 +45,13 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
 
   lazy val whichRailwayTradeRoute = controllers.transport.routes.WhichRailwayTradeController.onPageLoad(NormalMode).url
 
-  val formProvider = new WhichRailwayTradeFormProvider()
-  val form = formProvider()
+  private val formProvider = new WhichRailwayTradeFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "WhichRailwayTrade Controller" must {
 
@@ -92,6 +97,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -169,11 +175,6 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
       }
 
       s"save '$claimAmount' to ClaimAmount when '$trade' is selected" in {
-        val userAnswers = emptyUserAnswers
-
-        val mockSessionRepository = mock[SessionRepository]
-
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

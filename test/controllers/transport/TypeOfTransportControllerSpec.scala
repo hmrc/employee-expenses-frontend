@@ -74,7 +74,8 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
 
       val userAnswers = UserAnswers(userAnswersId).set(TypeOfTransportPage, TypeOfTransport.values.head).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .build()
 
       val request = FakeRequest(GET, typeOfTransportRoute)
 
@@ -94,6 +95,7 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

@@ -47,6 +47,8 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
   private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
   def onwardRoute = Call("GET", "/foo")
 
   lazy val secondIndustryOptionsRoute = routes.SecondIndustryOptionsController.onPageLoad(NormalMode).url
@@ -98,6 +100,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -183,8 +186,6 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
       }
 
      s"save correct data when $choice' is selected " in {
-
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
