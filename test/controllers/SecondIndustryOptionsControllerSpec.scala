@@ -178,7 +178,6 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
         case Council => userAnswers
           .set(SecondIndustryOptionsPage, choice).success.value
           .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-
         case _ => userAnswers
           .set(SecondIndustryOptionsPage, choice).success.value
       }

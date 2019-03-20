@@ -20,11 +20,11 @@ import base.SpecBase
 import config.NavConstant
 import controllers.actions.UnAuthed
 import forms.SameEmployerContributionAllYearsFormProvider
-import models.{EmployerContribution, NormalMode, UserAnswers}
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.{ExpensesEmployerPaidPage, SameEmployerContributionAllYearsPage}
 import play.api.Application
@@ -37,7 +37,7 @@ import views.html.SameEmployerContributionAllYearsView
 
 import scala.concurrent.Future
 
-class SameEmployerContributionAllYearsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
+class SameEmployerContributionAllYearsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience{
 
   private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
@@ -167,7 +167,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
       application.stop()
     }
 
-    "save 'true' when data is saved" in {
+    "save 'true' when 'Yes' is selected" in {
 
       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
@@ -183,8 +183,34 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
       val result = route(application, request).value
 
       val userAnswers2 = ua
-
         .set(SameEmployerContributionAllYearsPage, true).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      application.stop()
+    }
+
+    "save 'false' when 'No' is selected" in {
+
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+      val ua = userAnswers
+        .set(ExpensesEmployerPaidPage, 0).success.value
+
+      val application: Application = applicationBuilder(userAnswers = Some(ua))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, sameEmployerContributionAllYearsRoute).withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = ua
+
+        .set(SameEmployerContributionAllYearsPage, false).success.value
 
       whenReady(result){
         _ =>

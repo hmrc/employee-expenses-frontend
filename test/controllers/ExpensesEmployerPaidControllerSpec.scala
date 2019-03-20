@@ -18,20 +18,32 @@ package controllers
 
 import base.SpecBase
 import config.NavConstant
+import controllers.actions.UnAuthed
 import forms.ExpensesEmployerPaidFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{times, verify, when}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ExpensesEmployerPaidPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.ExpensesEmployerPaidView
 
-class ExpensesEmployerPaidControllerSpec extends SpecBase {
+import scala.concurrent.Future
 
-  val formProvider = new ExpensesEmployerPaidFormProvider()
-  val form = formProvider()
+class ExpensesEmployerPaidControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
+
+  private val formProvider = new ExpensesEmployerPaidFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -139,9 +151,8 @@ class ExpensesEmployerPaidControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request =
-        FakeRequest(POST, expensesEmployerPaidRoute)
-          .withFormUrlEncodedBody(("value", validAnswer.toString))
+      val request = FakeRequest(POST, expensesEmployerPaidRoute)
+        .withFormUrlEncodedBody(("value", validAnswer.toString))
 
       val result = route(application, request).value
 
@@ -151,5 +162,26 @@ class ExpensesEmployerPaidControllerSpec extends SpecBase {
 
       application.stop()
     }
+
+    "save correct value" in {
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, expensesEmployerPaidRoute).withFormUrlEncodedBody(("value", "20"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(ExpensesEmployerPaidPage, 20).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      application.stop()
+    }
+
   }
 }

@@ -17,25 +17,38 @@
 package controllers
 
 import base.SpecBase
-import config.NavConstant
+import config.{ClaimAmounts, NavConstant}
+import controllers.actions.UnAuthed
 import forms.EmployerContributionFormProvider
 import models.{EmployerContribution, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.EmployerContributionPage
+import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
+import pages.{ClaimAmount, EmployerContributionPage}
+import pages.engineering.FactoryEngineeringApprenticePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.EmployerContributionView
 
-class EmployerContributionControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val employerContributionRoute = routes.EmployerContributionController.onPageLoad(NormalMode).url
 
-  val formProvider = new EmployerContributionFormProvider()
-  val form = formProvider()
+  private val formProvider = new EmployerContributionFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "EmployerContribution Controller" must {
 
@@ -148,6 +161,28 @@ class EmployerContributionControllerSpec extends SpecBase {
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
+    }
+
+    for(contribution <- EmployerContribution.values){
+      s"save '$contribution' when selected" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
+
+        val request = FakeRequest(POST, employerContributionRoute).withFormUrlEncodedBody(("value", contribution.toString))
+
+        val result = route(application, request).value
+
+        val userAnswers2 = userAnswers
+          .set(EmployerContributionPage,  contribution).success.value
+
+        whenReady(result) {
+          _ =>
+            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+        }
+
+        application.stop()
+      }
     }
   }
 }
