@@ -96,6 +96,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Police").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

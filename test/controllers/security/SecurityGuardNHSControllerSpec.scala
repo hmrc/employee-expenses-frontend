@@ -96,11 +96,11 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Security").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, securityGuardNHSRoute)
+      val request = FakeRequest(POST, securityGuardNHSRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value

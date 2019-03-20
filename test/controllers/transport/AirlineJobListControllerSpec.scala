@@ -48,7 +48,7 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
   private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val airlineJobListedRoute = routes.AirlineJobListController.onPageLoad(NormalMode).url
 

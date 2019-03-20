@@ -96,11 +96,11 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Printing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, printingOccupationList2Route)
+      val request = FakeRequest(POST, printingOccupationList2Route)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -116,6 +116,7 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Printing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

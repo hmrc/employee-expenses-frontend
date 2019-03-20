@@ -96,6 +96,7 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Mockit
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Police").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

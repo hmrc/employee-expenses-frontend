@@ -100,6 +100,7 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -174,7 +175,6 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
 
       application.stop()
     }
-
 
     for (choice <- ThirdIndustryOptions.values) {
       val userAnswers2 = choice match {

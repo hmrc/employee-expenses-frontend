@@ -93,6 +93,7 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Police").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

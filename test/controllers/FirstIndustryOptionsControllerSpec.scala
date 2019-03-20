@@ -23,9 +23,12 @@ import forms.FirstIndustryOptionsFormProvider
 import generators.Generators
 import models.{FirstIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.PropertyChecks
 import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.Application
@@ -36,14 +39,20 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.FirstIndustryOptionsView
 
+import scala.concurrent.Future
 
-class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
+
+class FirstIndustryOptionsControllerSpec
+  extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
 
   def onwardRoute = Call("GET", "/FOO")
 
   lazy val firstIndustryOptionsRoute = controllers.routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url
-  val formProvider = new FirstIndustryOptionsFormProvider()
-  val form = formProvider()
+  private val formProvider = new FirstIndustryOptionsFormProvider()
+  private val form = formProvider()
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "FirstIndustryOptionsController" must {
 
@@ -80,6 +89,7 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
     "redirect to next page when valid data is submitted" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
         .build()
 
