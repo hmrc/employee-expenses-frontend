@@ -33,6 +33,7 @@ import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import service.TaiService
 import views.html.authenticated.YourEmployerView
 
@@ -45,6 +46,10 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   private val formProvider = new YourEmployerFormProvider()
   private val form = formProvider()
   private val mockTaiService = mock[TaiService]
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val yourEmployerRoute: String = YourEmployerController.onPageLoad(NormalMode).url
 
@@ -190,6 +195,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 

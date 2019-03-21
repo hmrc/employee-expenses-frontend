@@ -40,9 +40,9 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
 
   def onwardRoute = Call("GET", "/foo")
 
-  val mockSessionRepository: SessionRepository = mock[SessionRepository]
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = reset(mockSessionRepository)
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val removeFRECodeRoute: String = routes.RemoveFRECodeController.onPageLoad(NormalMode).url
 
@@ -93,6 +93,7 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -165,8 +166,6 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
     for (option <- TaxYearSelection.values) {
       s"save '$option' when selected" in {
         val ua1 = emptyUserAnswers
-
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
         val application = applicationBuilder(userAnswers = Some(ua1))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

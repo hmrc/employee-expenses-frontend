@@ -116,6 +116,7 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -198,10 +199,10 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-          .set(ClaimAmount, ClaimAmounts.ConstructionalEngineering.list1).success.value
-          .set(ConstructionalEngineeringList1Page, true).success.value
+        .set(ClaimAmount, ClaimAmounts.ConstructionalEngineering.list1).success.value
+        .set(ConstructionalEngineeringList1Page, true).success.value
 
-      whenReady(result){
+      whenReady(result) {
         _ =>
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
@@ -222,7 +223,7 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
       val userAnswers2 = userAnswers
         .set(ConstructionalEngineeringList1Page, false).success.value
 
-      whenReady(result){
+      whenReady(result) {
         _ =>
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }

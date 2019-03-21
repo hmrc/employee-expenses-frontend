@@ -25,6 +25,7 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.SessionKeys
@@ -33,12 +34,17 @@ import scala.concurrent.Future
 
 class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "Index Controller" must {
 
     "redirect to the first page of the application and the correct view for a GET when user answers is empty when unauthed" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
       val controller = application.injector.instanceOf[IndexController]
 
@@ -58,6 +64,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with IntegrationPat
       val mockAuthConnector = mock[AuthConnector]
 
       val application = applicationBuilder(None)
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .overrides(bind[AuthConnector].toInstance(mockAuthConnector))
         .build()
 

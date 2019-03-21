@@ -21,7 +21,8 @@ import controllers.actions.{Authed, UnAuthed}
 import controllers.authenticated.routes._
 import controllers.routes._
 import models.requests.IdentifierRequest
-import models.{FirstIndustryOptions, NormalMode}
+import models.{NormalMode, UserAnswers}
+import models.FirstIndustryOptions.Retail
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -35,6 +36,13 @@ import repositories.SessionRepository
 import scala.concurrent.Future
 
 class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
+
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  private val firstRoute = controllers.routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "AuthRedirectController" must {
 
@@ -56,11 +64,10 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
           redirectLocation(result).get mustBe TaxYearSelectionController.onPageLoad(NormalMode).url
 
           whenReady(sessionRepository.get(Authed(userAnswersId))) {
-            _.value.get(FirstIndustryOptionsPage).value mustBe FirstIndustryOptions.Retail
+            _.value.get(FirstIndustryOptionsPage).value mustBe Retail
           }
       }
 
-      sessionRepository.remove(Authed(userAnswersId))
       application.stop()
     }
 
