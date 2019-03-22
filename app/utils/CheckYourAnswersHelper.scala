@@ -50,8 +50,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   }
 
   def alreadyClaimingFRESameAmount: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFRESameAmountPage) map {
-    _ =>
-      AnswerRow("alreadyClaimingFRESameAmount.checkYourAnswersLabel", "alreadyClaimingFRESameAmount.altNoText", true,
+    x =>
+      AnswerRow("alreadyClaimingFRESameAmount.checkYourAnswersLabel", s"alreadyClaimingFRESameAmount.$x", true,
         Some(AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode).url), editText = None)
   }
 
