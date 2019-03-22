@@ -61,14 +61,16 @@ class YourEmployerController @Inject()(
 
       request.userAnswers.get(TaxYearSelectionPage) match {
         case Some(taxYears) =>
-          taiService.employments(request.nino.get, taxYears.head).map {
+          taiService.employments(request.nino.get, taxYears.head).flatMap {
             employments =>
               if (employments.nonEmpty) {
                 val employerName = if (employments.forall(p => p.endDate.isDefined)) employments.head.name else employments.filter(p => p.endDate.isEmpty).head.name
-                Future.fromTry(request.userAnswers.set(YourEmployerName, employerName))
-                Ok(view(preparedForm, mode, employerName))
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerName, employerName))
+                  _ <- sessionRepository.set(request.identifier, updatedAnswers)
+                } yield Ok(view(preparedForm, mode, employerName))
               } else {
-                Redirect(UpdateEmployerInformationController.onPageLoad(mode))
+                Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(mode)))
               }
           }
         case _ =>
