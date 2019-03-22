@@ -91,29 +91,27 @@ class CheckYourAnswersController @Inject()(
         request.userAnswers.get(ChangeWhichTaxYearsPage)
       ) match {
         case (Some(FRENoYears), Some(taxYears), Some(claimAmount), None, None) =>
-          auditAndRedirect(submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount), dataToAudit)
-//        case (Some(_), Some(taxYears), Some(_), Some(removeYear), None) =>
-//          submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, removeYear).map(
-//            result =>
-//              result.map(p => auditAndRedirect(p, dataToAudit))
-//          )
-//        case (Some(_), Some(taxYears), Some(claimAmount), None, Some(changeYears)) =>
-//          submissionService.submitChangeFREFromCode(request.nino.get, taxYears, claimAmount, changeYears).map(
-//            result =>
-//              result.map(p => auditAndRedirect(p, dataToAudit))
-//          )
+          submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map(
+            result =>
+              auditAndRedirect(result, dataToAudit)
+          )
+        case (Some(_), Some(taxYears), Some(_), Some(removeYear), None) =>
+          submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, removeYear).map(
+            result =>
+              auditAndRedirect(result, dataToAudit)
+          )
+        case (Some(_), Some(taxYears), Some(claimAmount), None, Some(changeYears)) =>
+          submissionService.submitChangeFREFromCode(request.nino.get, taxYears, claimAmount, changeYears).map(
+            result =>
+              auditAndRedirect(result, dataToAudit)
+          )
         case _ =>
           Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
       }
   }
 
-  def auditAndRedirect(results: Seq[Future[Boolean]], auditData: AuditData)
-                      (implicit hc: HeaderCarrier): Future[Result] = {
-    val x = results.map(
-      result =>
-        result.map(p => p)
-    )
-
+  def auditAndRedirect(result: Boolean, auditData: AuditData)
+                      (implicit hc: HeaderCarrier): Result = {
     if (result) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
       Redirect(routes.ConfirmationController.onPageLoad())
