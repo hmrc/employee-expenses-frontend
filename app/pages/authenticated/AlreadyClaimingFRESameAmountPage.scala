@@ -16,22 +16,22 @@
 
 package pages.authenticated
 
-import models.UserAnswers
+import models.{AlreadyClaimingFRESameAmount, UserAnswers}
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
 import scala.util.Try
 
-case object AlreadyClaimingFRESameAmountPage extends QuestionPage[Boolean] {
+case object AlreadyClaimingFRESameAmountPage extends QuestionPage[AlreadyClaimingFRESameAmount] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "alreadyClaimingFRESameAmount"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[AlreadyClaimingFRESameAmount], userAnswers: UserAnswers): Try[UserAnswers] = {
 
     value match {
-      case Some(false) =>
+      case Some(AlreadyClaimingFRESameAmount.Remove) =>
         userAnswers.remove(YourEmployerPage)
           .flatMap(_.remove(YourAddressPage))
 

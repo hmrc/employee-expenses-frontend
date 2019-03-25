@@ -36,10 +36,11 @@ class TaiService @Inject()(taiConnector: TaiConnector,
     taiConnector.taiEmployments(nino, taxYear)
   }
 
-  def updateFRE(nino: String, year: TaiTaxYear, employmentSequenceNumber: Int, grossAmount: Int)
+  def updateFRE(nino: String, year: TaiTaxYear, grossAmount: Int)
                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     citizenDetailsConnector.getEtag(nino).flatMap {
-      etag => taiConnector.taiFREUpdate(nino, year, etag, employmentSequenceNumber: Int, grossAmount: Int)
+      etag =>
+        taiConnector.taiFREUpdate(nino, year, etag, grossAmount)
     }
   }
 

@@ -16,16 +16,15 @@
 
 package views.authenticated
 
-import controllers.authenticated.routes
 import forms.authenticated.AlreadyClaimingFRESameAmountFormProvider
-import models.{FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, TaxYearSelection}
+import models.{AlreadyClaimingFRESameAmount, FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, TaxYearSelection}
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.behaviours.OptionsViewBehaviours
 import views.html.authenticated.AlreadyClaimingFRESameAmountView
 
-class AlreadyClaimingFRESameAmountViewSpec extends YesNoViewBehaviours {
+class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[AlreadyClaimingFRESameAmount] {
 
   val messageKeyPrefix = "alreadyClaimingFRESameAmount"
 
@@ -52,13 +51,7 @@ class AlreadyClaimingFRESameAmountViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(
-      form = form,
-      createView = applyView,
-      messageKeyPrefix = messageKeyPrefix,
-      expectedFormAction = routes.AlreadyClaimingFRESameAmountController.onSubmit(NormalMode).url,
-      legendLabel = Some(messageKeyPrefix + ".radioLabel")
-    )
+    behave like optionsPage(form, applyView, AlreadyClaimingFRESameAmount.options)
 
     "contains correct headings for table" in {
       val doc = asDocument(applyView(form))

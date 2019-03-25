@@ -27,6 +27,7 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
+import pages.YourEmployerName
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import play.api.http.Status.OK
 import play.api.inject.bind
@@ -185,15 +186,12 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "redirect to the next page when valid data is submitted" in {
       val userAnswers = UserAnswers(userAnswersId)
-        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
+        .set(YourEmployerName, taiEmployment.head.name).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
-          .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
-
-      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmployment))
 
       val request =
         FakeRequest(POST, yourEmployerRoute)
@@ -210,10 +208,9 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "return a Bad Request and errors when invalid data is submitted" in {
       val userAnswers = UserAnswers(userAnswersId)
-        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
+        .set(YourEmployerName, taiEmployment.head.name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
       val request =
