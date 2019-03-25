@@ -32,7 +32,7 @@ object TransportVehicleTrade extends Enumerable.Implicits {
 
 
   val values: Seq[TransportVehicleTrade] = Seq(
-    Builder, BuildersAssistantOrRepairersAssistant, Letterer, VehicleRepairerWagonLifter,RailwayVehiclePainter,  NoneOfTheAbove
+    Builder, BuildersAssistantOrRepairersAssistant, Letterer, RailwayVehiclePainter, VehicleRepairerWagonLifter, NoneOfTheAbove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {
