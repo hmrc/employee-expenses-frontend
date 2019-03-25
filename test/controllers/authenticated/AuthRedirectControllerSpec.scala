@@ -17,17 +17,15 @@
 package controllers.authenticated
 
 import base.SpecBase
-import controllers.actions.{Authed, UnAuthed}
+import controllers.actions.Authed
 import controllers.authenticated.routes._
 import controllers.routes._
+import models.NormalMode
 import models.requests.IdentifierRequest
-import models.{NormalMode, UserAnswers}
-import models.FirstIndustryOptions.Retail
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.FirstIndustryOptionsPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -37,10 +35,7 @@ import scala.concurrent.Future
 
 class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
-  private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
-
-  private val firstRoute = controllers.routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
@@ -48,25 +43,20 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
 
     "redirect to TaxYearSelection on success and test integration with session repo works as expected" in {
 
+      when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(emptyUserAnswers))
+      when(mockSessionRepository.remove(any())) thenReturn Future.successful(Some(emptyUserAnswers))
+
       val application = applicationBuilder(Some(minimumUserAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+      val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
 
-      whenReady(sessionRepository.set(UnAuthed(userAnswersId), minimumUserAnswers)) {
-        _ =>
-          val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
+      val result = route(application, request).value
 
-          val result = route(application, request).value
+      status(result) mustEqual 303
 
-          status(result) mustEqual 303
-
-          redirectLocation(result).get mustBe TaxYearSelectionController.onPageLoad(NormalMode).url
-
-          whenReady(sessionRepository.get(Authed(userAnswersId))) {
-            _.value.get(FirstIndustryOptionsPage).value mustBe Retail
-          }
-      }
+      redirectLocation(result).get mustBe TaxYearSelectionController.onPageLoad(NormalMode).url
 
       application.stop()
     }
