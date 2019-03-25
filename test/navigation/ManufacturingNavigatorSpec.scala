@@ -52,10 +52,10 @@ class ManufacturingNavigatorSpec extends SpecBase {
               controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
 
-          "go to IronMiningController when 'IronSteel' is selected" in {
+          "go to IronApprentice when 'IronSteel' is selected" in {
             val answers = emptyUserAnswers.set(TypeOfManufacturingPage, IronSteel).success.value
             navigator.nextPage(TypeOfManufacturingPage, mode)(answers) mustBe
-              routes.IronMiningController.onPageLoad(mode)
+              routes.IronApprenticeController.onPageLoad(mode)
           }
 
           "go to EmployerContributionController when 'PreciousMetals' is selected" in {
@@ -163,22 +163,16 @@ class ManufacturingNavigatorSpec extends SpecBase {
               controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
 
-          "go to IronApprentice from IronSteelOccupationListController when 'No' is selected" in {
+          "go to EmployerContribution from IronSteelOccupationListController when 'No' is selected" in {
             val answers = emptyUserAnswers.set(IronSteelOccupationListPage, false).success.value
             navigator.nextPage(IronSteelOccupationListPage, mode)(answers) mustBe
-              routes.IronApprenticeController.onPageLoad(mode)
-          }
-
-          "go to EmployerContributionController from IronApprentice when 'Yes' is selected" in {
-            val answers = emptyUserAnswers.set(IronApprenticePage, true).success.value
-            navigator.nextPage(IronApprenticePage, mode)(answers) mustBe
               controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
 
-          "go to EmployerContributionController from IronApprentice when 'No' is selected" in {
+          "go to IronIndustryList from IronApprentice when 'No' is selected" in {
             val answers = emptyUserAnswers.set(IronApprenticePage, false).success.value
             navigator.nextPage(IronApprenticePage, mode)(answers) mustBe
-              controllers.routes.EmployerContributionController.onPageLoad(mode)
+              routes.IronMiningController.onPageLoad(mode)
           }
         }
 

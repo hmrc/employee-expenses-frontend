@@ -32,10 +32,10 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     case AluminiumOccupationList1Page => aluminiumOccupationList1(NormalMode)
     case AluminiumOccupationList2Page => aluminiumOccupationList2(NormalMode)
     case AluminiumOccupationList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case IronApprenticePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case IronApprenticePage => _ => routes.IronMiningController.onPageLoad(NormalMode)
     case IronMiningPage => ironMining(NormalMode)
     case IronMiningListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case IronSteelOccupationListPage => ironSteelOccupationList(NormalMode)
+    case IronSteelOccupationListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case WoodFurnitureOccupationList1Page => woodFurnitureOccupationList1(NormalMode)
     case WoodFurnitureOccupationList2Page => woodFurnitureOccupationList2(NormalMode)
     case WoodFurnitureOccupationList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
@@ -48,10 +48,10 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     case AluminiumOccupationList1Page => aluminiumOccupationList1(CheckMode)
     case AluminiumOccupationList2Page => aluminiumOccupationList2(CheckMode)
     case AluminiumOccupationList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case IronApprenticePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case IronApprenticePage => _ => routes.IronMiningController.onPageLoad(CheckMode)
     case IronMiningPage => ironMining(CheckMode)
     case IronMiningListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case IronSteelOccupationListPage => ironSteelOccupationList(CheckMode)
+    case IronSteelOccupationListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case WoodFurnitureOccupationList1Page => woodFurnitureOccupationList1(CheckMode)
     case WoodFurnitureOccupationList2Page => woodFurnitureOccupationList2(CheckMode)
     case WoodFurnitureOccupationList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
@@ -63,7 +63,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
       case Some(Aluminium) => routes.AluminiumApprenticeController.onPageLoad(mode)
       case Some(BrassCopper) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(Glass) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case Some(IronSteel) => routes.IronMiningController.onPageLoad(mode)
+      case Some(IronSteel) => routes.IronApprenticeController.onPageLoad(mode)
       case Some(PreciousMetals) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(WoodFurniture) => routes.WoodFurnitureOccupationList1Controller.onPageLoad(mode)
       case Some(NoneOfAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
@@ -99,14 +99,6 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     userAnswers.get(IronMiningPage) match {
       case Some(true) => routes.IronMiningListController.onPageLoad(mode)
       case Some(false) => routes.IronSteelOccupationListController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
-    }
-  }
-
-  def ironSteelOccupationList(mode: Mode)(userAnswers: UserAnswers): Call = {
-    userAnswers.get(IronSteelOccupationListPage) match {
-      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case Some(false) => routes.IronApprenticeController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }

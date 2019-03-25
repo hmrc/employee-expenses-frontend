@@ -72,7 +72,9 @@ class IronSteelOccupationListController @Inject()(
                 .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.list1))
               )
             } else {
-              Future.fromTry(request.userAnswers.set(IronSteelOccupationListPage, value))
+              Future.fromTry(request.userAnswers.set(IronSteelOccupationListPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
+              )
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(IronSteelOccupationListPage, mode)(updatedAnswers))
