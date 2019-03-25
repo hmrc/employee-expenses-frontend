@@ -35,17 +35,7 @@ case object FirstIndustryOptionsPage extends QuestionPage[FirstIndustryOptions] 
     Try(
       UserAnswers(
         id = userAnswers.id,
-        data =
-          userAnswers.data -
-            "industry" -
-            EmployerContributionPage -
-            ExpensesEmployerPaidPage -
-            AlreadyClaimingFREDifferentAmountsPage -
-            AlreadyClaimingFRESameAmountPage -
-            ChangeWhichTaxYearsPage -
-            RemoveFRECodePage -
-            TaxYearSelectionPage -
-            YourEmployerPage,
+        data = userAnswers.data - "industry",
         lastUpdated = LocalDateTime.now
       )
     )

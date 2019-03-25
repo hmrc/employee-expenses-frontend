@@ -20,7 +20,7 @@ import controllers.authenticated.routes._
 import controllers.routes._
 import javax.inject.Inject
 import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove}
-import models.{CheckMode, FlatRateExpenseOptions, Mode, NormalMode, UserAnswers}
+import models.{AlreadyClaimingFRESameAmount, CheckMode, FlatRateExpenseOptions, Mode, NormalMode, UserAnswers}
 import pages.authenticated._
 import pages.{FREResponse, Page}
 import play.api.mvc.Call
@@ -66,9 +66,9 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
 
   def alreadyClaimingFRESameAmount(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(AlreadyClaimingFRESameAmountPage) match {
-      case Some(true) =>
+      case Some(AlreadyClaimingFRESameAmount.NoChange) =>
         NoCodeChangeController.onPageLoad()
-      case Some(false) =>
+      case Some(AlreadyClaimingFRESameAmount.Remove) =>
         RemoveFRECodeController.onPageLoad(mode)
       case _ =>
         SessionExpiredController.onPageLoad()

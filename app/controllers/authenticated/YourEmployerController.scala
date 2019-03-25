@@ -59,47 +59,42 @@ class YourEmployerController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-
       request.userAnswers.get(TaxYearSelectionPage) match {
         case Some(taxYears) =>
-          taiService.employments(request.nino.get, taxYears.head).map {
+          taiService.employments(request.nino.get, taxYears.head).flatMap {
             employments =>
               if (employments.nonEmpty) {
-                if (employments.forall(p => p.endDate.isDefined)) {
-                  Ok(view(preparedForm, mode, employments.head.name))
-                } else {
-                  Ok(view(preparedForm, mode, employments.filter(p => p.endDate.isEmpty).head.name))
-                }
+                val employerName = if (employments.forall(p => p.endDate.isDefined)) employments.head.name else employments.filter(p => p.endDate.isEmpty).head.name
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerName, employerName))
+                  _ <- sessionRepository.set(request.identifier, updatedAnswers)
+                } yield Ok(view(preparedForm, mode, employerName))
               } else {
-                Redirect(UpdateEmployerInformationController.onPageLoad(mode))
+                Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(mode)))
               }
           }
         case _ =>
           Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
-
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      request.userAnswers.get(TaxYearSelectionPage) match {
-        case Some(taxYears) =>
-          taiService.employments(request.nino.get, taxYears.head).flatMap {
-            employments =>
-              form.bindFromRequest().fold(
-                (formWithErrors: Form[_]) =>
-                  Future.successful(BadRequest(view(formWithErrors, mode, employments.head.name))),
+      request.userAnswers.get(YourEmployerName) match {
+        case Some(employerName) =>
 
-                value => {
-                  for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value)
-                      .flatMap(_.set(YourEmployerName, employments.head.name)))
-                    _ <- sessionRepository.set(request.identifier, updatedAnswers)
-                  } yield Redirect(navigator.nextPage(YourEmployerPage, mode)(updatedAnswers))
-                }
-              )
-          }
+          form.bindFromRequest().fold(
+            (formWithErrors: Form[_]) =>
+              Future.successful(BadRequest(view(formWithErrors, mode, employerName))),
+
+            value => {
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value))
+                _ <- sessionRepository.set(request.identifier, updatedAnswers)
+              } yield Redirect(navigator.nextPage(YourEmployerPage, mode)(updatedAnswers))
+            }
+          )
         case _ =>
           Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }

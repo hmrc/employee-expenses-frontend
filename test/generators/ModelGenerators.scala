@@ -23,7 +23,12 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryAlreadyClaimingFREDifferentAmounts: Arbitrary[AlreadyClaimingFREDifferentAmounts] =
     Arbitrary {
-      Gen.oneOf(AlreadyClaimingFREDifferentAmounts.values.toSeq)
+      Gen.oneOf(AlreadyClaimingFREDifferentAmounts.values)
+    }
+
+  implicit lazy val arbitraryAlreadyClaimingFRESameAmount: Arbitrary[AlreadyClaimingFRESameAmount] =
+    Arbitrary {
+      Gen.oneOf(AlreadyClaimingFRESameAmount.values)
     }
 
   implicit lazy val arbitraryTaxYearSelection: Arbitrary[TaxYearSelection] =
@@ -33,7 +38,7 @@ trait ModelGenerators {
 
   implicit lazy val arbitraryFourthIndustryOptions: Arbitrary[FourthIndustryOptions] =
     Arbitrary {
-      Gen.oneOf(FourthIndustryOptions.values.toSeq)
+      Gen.oneOf(FourthIndustryOptions.values)
     }
 
   implicit lazy val arbitraryThirdIndustryOptions: Arbitrary[ThirdIndustryOptions] =

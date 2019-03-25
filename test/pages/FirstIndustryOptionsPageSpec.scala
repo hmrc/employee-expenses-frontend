@@ -40,7 +40,7 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
         .set(EmployerContributionPage, EmployerContribution.SomeContribution).success.value
         .set(ExpensesEmployerPaidPage, 20).success.value
         .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change).success.value
-        .set(AlreadyClaimingFRESameAmountPage, true).success.value
+        .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
         .set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
         .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
         .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
@@ -50,14 +50,14 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
 
 
       updatedUserAnswers.data.keys.contains("industry") mustBe false
-      updatedUserAnswers.data.keys.contains(ExpensesEmployerPaidPage) mustBe false
-      updatedUserAnswers.data.keys.contains(EmployerContributionPage) mustBe false
-      updatedUserAnswers.data.keys.contains(AlreadyClaimingFREDifferentAmountsPage) mustBe false
-      updatedUserAnswers.data.keys.contains(AlreadyClaimingFRESameAmountPage) mustBe false
-      updatedUserAnswers.data.keys.contains(ChangeWhichTaxYearsPage) mustBe false
-      updatedUserAnswers.data.keys.contains(RemoveFRECodePage) mustBe false
-      updatedUserAnswers.data.keys.contains(TaxYearSelectionPage) mustBe false
-      updatedUserAnswers.data.keys.contains(YourEmployerPage) mustBe false
+      updatedUserAnswers.data.keys.contains(ExpensesEmployerPaidPage) mustBe true
+      updatedUserAnswers.data.keys.contains(EmployerContributionPage) mustBe true
+      updatedUserAnswers.data.keys.contains(AlreadyClaimingFREDifferentAmountsPage) mustBe true
+      updatedUserAnswers.data.keys.contains(AlreadyClaimingFRESameAmountPage) mustBe true
+      updatedUserAnswers.data.keys.contains(ChangeWhichTaxYearsPage) mustBe true
+      updatedUserAnswers.data.keys.contains(RemoveFRECodePage) mustBe true
+      updatedUserAnswers.data.keys.contains(TaxYearSelectionPage) mustBe true
+      updatedUserAnswers.data.keys.contains(YourEmployerPage) mustBe true
 
     }
   }

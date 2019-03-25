@@ -23,7 +23,7 @@ import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.authenticated.AlreadyClaimingFRESameAmountPage
-import pages.{ClaimAmount, FREAmounts}
+import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -45,7 +45,7 @@ class AlreadyClaimingFRESameAmountController @Inject()(
                                                         view: AlreadyClaimingFRESameAmountView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = formProvider()
+  val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
@@ -55,7 +55,7 @@ class AlreadyClaimingFRESameAmountController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      (request.userAnswers.get(ClaimAmount), request.userAnswers.get(FREAmounts)) match {
+      (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.userAnswers.get(FREAmounts)) match {
         case (Some(claimAmount), Some(freAmounts)) =>
           Ok(view(preparedForm, mode, claimAmount, freAmounts))
         case _ =>
@@ -65,7 +65,7 @@ class AlreadyClaimingFRESameAmountController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-      (request.userAnswers.get(ClaimAmount), request.userAnswers.get(FREAmounts)) match {
+      (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.userAnswers.get(FREAmounts)) match {
         case (Some(claimAmount), Some(freAmounts)) =>
           form.bindFromRequest().fold(
             (formWithErrors: Form[_]) =>

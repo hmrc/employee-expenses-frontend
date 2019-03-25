@@ -16,24 +16,24 @@
 
 package forms.authenticated
 
-import forms.behaviours.BooleanFieldBehaviours
+import forms.behaviours.OptionFieldBehaviours
+import models.AlreadyClaimingFRESameAmount
 import play.api.data.FormError
 
-class AlreadyClaimingFRESameAmountFormProviderSpec extends BooleanFieldBehaviours {
-
-  val requiredKey = "alreadyClaimingFRESameAmount.error.required"
-  val invalidKey = "error.boolean"
+class AlreadyClaimingFRESameAmountFormProviderSpec extends OptionFieldBehaviours {
 
   val form = new AlreadyClaimingFRESameAmountFormProvider()()
 
   ".value" must {
 
     val fieldName = "value"
+    val requiredKey = "alreadyClaimingFRESameAmount.error.required"
 
-    behave like booleanField(
+    behave like optionsField[AlreadyClaimingFRESameAmount](
       form,
       fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+      validValues = AlreadyClaimingFRESameAmount.values,
+      invalidError = FormError(fieldName, "error.invalid")
     )
 
     behave like mandatoryField(
@@ -42,4 +42,5 @@ class AlreadyClaimingFRESameAmountFormProviderSpec extends BooleanFieldBehaviour
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }
