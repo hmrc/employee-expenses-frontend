@@ -32,7 +32,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     case AluminiumOccupationList1Page => aluminiumOccupationList1(NormalMode)
     case AluminiumOccupationList2Page => aluminiumOccupationList2(NormalMode)
     case AluminiumOccupationList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case IronApprenticePage => _ => routes.IronMiningController.onPageLoad(NormalMode)
+    case IronApprenticePage => ironApprentice(NormalMode)
     case IronMiningPage => ironMining(NormalMode)
     case IronMiningListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case IronSteelOccupationListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
@@ -48,7 +48,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     case AluminiumOccupationList1Page => aluminiumOccupationList1(CheckMode)
     case AluminiumOccupationList2Page => aluminiumOccupationList2(CheckMode)
     case AluminiumOccupationList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case IronApprenticePage => _ => routes.IronMiningController.onPageLoad(CheckMode)
+    case IronApprenticePage => ironApprentice(CheckMode)
     case IronMiningPage => ironMining(CheckMode)
     case IronMiningListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case IronSteelOccupationListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
@@ -91,6 +91,14 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     userAnswers.get(AluminiumOccupationList2Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.AluminiumOccupationList3Controller.onPageLoad(mode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  def ironApprentice(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(IronApprenticePage) match {
+      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(false) => routes.IronMiningController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }

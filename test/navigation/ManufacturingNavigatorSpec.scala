@@ -169,10 +169,16 @@ class ManufacturingNavigatorSpec extends SpecBase {
               controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
 
-          "go to IronIndustryList from IronApprentice when 'No' is selected" in {
+          "go to IronMining from IronApprentice when 'No' is selected" in {
             val answers = emptyUserAnswers.set(IronApprenticePage, false).success.value
             navigator.nextPage(IronApprenticePage, mode)(answers) mustBe
               routes.IronMiningController.onPageLoad(mode)
+          }
+
+          "go to EmployerContribution from IronApprentice when 'Yes' is selected" in {
+            val answers = emptyUserAnswers.set(IronApprenticePage, true).success.value
+            navigator.nextPage(IronApprenticePage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
         }
 
