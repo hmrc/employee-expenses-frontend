@@ -16,14 +16,15 @@
 
 package views
 
+import controllers.routes
 import forms.EmployerContributionFormProvider
 import models.{EmployerContribution, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.behaviours.YesNoViewBehaviours
 import views.html.EmployerContributionView
 
-class EmployerContributionViewSpec extends OptionsViewBehaviours[EmployerContribution] {
+class EmployerContributionViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "employerContribution"
 
@@ -47,7 +48,7 @@ class EmployerContributionViewSpec extends OptionsViewBehaviours[EmployerContrib
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, EmployerContribution.options)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.EmployerContributionController.onSubmit(NormalMode).url)
   }
 
   application.stop()

@@ -59,7 +59,7 @@ class EmployerContributionControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(EmployerContributionPage, EmployerContribution.values.head).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(EmployerContributionPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -72,7 +72,7 @@ class EmployerContributionControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(EmployerContribution.values.head), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -86,7 +86,7 @@ class EmployerContributionControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, employerContributionRoute)
-          .withFormUrlEncodedBody(("value", EmployerContribution.options.head.value))
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 

@@ -81,11 +81,6 @@ trait ModelGenerators {
       Gen.oneOf(TypeOfEngineering.values)
     }
 
-  implicit lazy val arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
-    Arbitrary {
-      Gen.oneOf(EmployerContribution.values)
-    }
-
   implicit lazy val arbitraryFirstIndustryOptions: Arbitrary[FirstIndustryOptions] =
     Arbitrary {
       Gen.oneOf(FirstIndustryOptions.values)

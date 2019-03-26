@@ -15,7 +15,7 @@
  *@
 
 @import controllers.routes._
-@import models.{EmployerContribution, Mode}
+@import models.Mode
 
 @this(
     main_template: MainTemplate,
@@ -36,11 +36,10 @@
 
         @components.heading("employerContribution.heading")
 
-        @components.input_radio(
+        @components.input_yes_no(
             field = form("value"),
-            legend = messages("employerContribution.heading"),
-            legendClass = Some("visually-hidden"),
-            inputs = EmployerContribution.options
+            label = messages("employerContribution.heading"),
+            labelClass = Some("visually-hidden")
         )
 
         @components.submit_button()

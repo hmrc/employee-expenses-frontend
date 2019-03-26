@@ -89,7 +89,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   def fullUserAnswers: UserAnswers = emptyUserAnswers
     .set(FirstIndustryOptionsPage, Healthcare).success.value
-    .set(EmployerContributionPage, SomeContribution).success.value
+    .set(EmployerContributionPage, true).success.value
     .set(ExpensesEmployerPaidPage, 123).success.value
     .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
     .set(YourAddressPage, true).success.value
@@ -101,7 +101,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   def minimumUserAnswers: UserAnswers = emptyUserAnswers
     .set(FirstIndustryOptionsPage, Retail).success.value
-    .set(EmployerContributionPage, NoContribution).success.value
+    .set(EmployerContributionPage, false).success.value
     .set(ClaimAmountAndAnyDeductions, 60).success.value
     .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
     .set(AlreadyClaimingFRESameAmountPage, Remove).success.value

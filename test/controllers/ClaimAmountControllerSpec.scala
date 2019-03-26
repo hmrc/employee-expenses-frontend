@@ -42,7 +42,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
     "return OK and the correct view for a GET when all data is found" in {
       val claimAmount = 60
       val userAnswers = emptyUserAnswers.set(ClaimAmount, claimAmount).success.value
-        .set(EmployerContributionPage, EmployerContribution.NoContribution).success.value
+        .set(EmployerContributionPage, false).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
       val claimAmountService = application.injector.instanceOf[ClaimAmountService]

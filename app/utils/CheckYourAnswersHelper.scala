@@ -128,7 +128,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   }
 
   def expensesEmployerPaid: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) match {
-    case Some(SomeContribution) =>
+    case Some(true) =>
       userAnswers.get(ExpensesEmployerPaidPage) map {
         x =>
           AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"£$x", false,
