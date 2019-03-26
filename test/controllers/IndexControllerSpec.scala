@@ -18,7 +18,8 @@ package controllers
 
 import base.SpecBase
 import controllers.actions.{Authed, FakeDataRetrievalAction, UnAuthed, UnauthenticatedIdentifierActionImpl}
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -39,8 +40,10 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
   private val mockAuthConnector: AuthConnector = mock[AuthConnector]
+  private val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+  when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
 
   "Index Controller" must {
 
@@ -102,8 +105,9 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
     "redirect to the first page of the application and create a user answers for a GET when user answers is empty when authed" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
       val mockAuthConnector = mock[AuthConnector]
       when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
@@ -119,7 +123,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
         controllerComponents = application.injector.instanceOf[MessagesControllerComponents],
         identify = passingAuthAction,
         getData = new FakeDataRetrievalAction(None),
-        sessionRepository = sessionRepository
+        sessionRepository = mockSessionRepository
       )
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
@@ -128,16 +132,13 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
       whenReady(result) {
         _ =>
-          whenReady(sessionRepository.get(Authed(userAnswersId))) {
-            _.get.id mustBe userAnswersId
-          }
+          assert(argCaptor.getValue.id == userAnswersId)
       }
 
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
 
-      sessionRepository.remove(Authed(userAnswersId))
       application.stop()
     }
   }

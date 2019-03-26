@@ -17,6 +17,7 @@
 package controllers.authenticated
 
 import base.SpecBase
+import controllers.actions.Authed
 import controllers.authenticated.routes._
 import controllers.routes._
 import forms.authenticated.YourEmployerFormProvider
@@ -92,11 +93,12 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   "YourEmployer Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK and the correct view for a GET and save employer data" in {
       val userAnswers = UserAnswers(userAnswersId)
         .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
@@ -108,10 +110,18 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val view = application.injector.instanceOf[YourEmployerView]
 
+      val userAnswers2 = userAnswers
+          .set(YourEmployerName, "HMRC LongBenton").success.value
+
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
         view(form, NormalMode, taiEmployment.head.name)(fakeRequest, messages).toString
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(Authed(userAnswersId), userAnswers2)
+      }
 
       application.stop()
     }
@@ -121,6 +131,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
@@ -145,6 +156,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
@@ -170,6 +182,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         .set(YourEmployerPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
