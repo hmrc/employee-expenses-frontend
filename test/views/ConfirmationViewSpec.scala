@@ -68,8 +68,6 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
     behave like pageWithAccountMenu(applyViewWithAuth)
 
-    behave like pageWithBackLink(viewWithAnswers)
-
     "when english tax record" must {
 
       val viewWithSpecificAnswers =
