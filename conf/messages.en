@@ -241,10 +241,10 @@ constructionalEngineeringApprentice.error.required = Select yes if you are an ap
 
 ancillaryEngineeringWhichTrade.title = Which trade do you work in?
 ancillaryEngineeringWhichTrade.heading = Which trade do you work in?
-ancillaryEngineeringWhichTrade.patternMaker = pattern maker
-ancillaryEngineeringWhichTrade.labourerSupervisorOrUnskilledWorker = labourer, supervisor or unskilled worker
-ancillaryEngineeringWhichTrade.apprenticeOrStorekeeper = apprentice or storekeeper
-ancillaryEngineeringWhichTrade.noneOfTheAbove = trade not listed
+ancillaryEngineeringWhichTrade.patternMaker = Pattern maker
+ancillaryEngineeringWhichTrade.labourerSupervisorOrUnskilledWorker = Labourer, supervisor or unskilled worker
+ancillaryEngineeringWhichTrade.apprenticeOrStorekeeper = Apprentice or storekeeper
+ancillaryEngineeringWhichTrade.noneOfTheAbove = Trade not listed
 ancillaryEngineeringWhichTrade.checkYourAnswersLabel = Which trade do you work in?
 ancillaryEngineeringWhichTrade.error.required = Select which trade you work in
 
