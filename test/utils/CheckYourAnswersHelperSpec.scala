@@ -105,18 +105,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
       }
     }
   }
-
-  "claimAmountAndDeductions" must {
-    "display the correct label and answers" in {
-      forAll(Gen.posNum[Int]) {
-        amount =>
-          val ua = emptyUserAnswers.set(ClaimAmountAndAnyDeductions, amount).success.value
-          helper(ua).claimAmountAndDeductions.get.label mustBe "claimAmount.checkYourAnswersLabel"
-          helper(ua).claimAmountAndDeductions.get.answer mustBe s"£$amount"
-      }
-    }
-  }
-
+  
   "alreadyClaimingFRESameAmount" must {
     "display the correct label and answer for no change" in {
       val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.NoChange).success.value

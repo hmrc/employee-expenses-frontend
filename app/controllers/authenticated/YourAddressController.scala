@@ -20,6 +20,7 @@ import config.NavConstant
 import connectors.CitizenDetailsConnector
 import controllers.actions._
 import controllers.authenticated.routes._
+import controllers.routes.SessionExpiredController
 import forms.authenticated.YourAddressFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
@@ -62,7 +63,10 @@ class YourAddressController @Inject()(
       citizenDetailsConnector.getAddress(request.nino.get).flatMap {
         address =>
           if (address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)) {
-            Future.successful(Ok(view(preparedForm, mode, address)))
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(CitizenDetailsAddress, address))
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Ok(view(preparedForm, mode, address))
           } else {
             Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
           }
@@ -76,24 +80,21 @@ class YourAddressController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      citizenDetailsConnector.getAddress(request.nino.get).flatMap {
-        address =>
+      request.userAnswers.get(CitizenDetailsAddress) match {
+        case Some(address) =>
           form.bindFromRequest().fold(
             (formWithErrors: Form[_]) =>
               Future.successful(BadRequest(view(formWithErrors, mode, address))),
 
             value => {
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(YourAddressPage, value)
-                  .flatMap(_.set(CitizenDetailsAddress, address)))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(YourAddressPage, value))
                 _ <- sessionRepository.set(request.identifier, updatedAnswers)
               } yield Redirect(navigator.nextPage(YourAddressPage, mode)(updatedAnswers))
             }
           )
-      }.recoverWith {
-        case e =>
-          Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
-          Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+        case _ =>
+          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
   }
 }
