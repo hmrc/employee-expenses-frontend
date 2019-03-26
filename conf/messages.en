@@ -66,7 +66,7 @@ expensesEmployerPaid.checkYourAnswersLabel = What is the amount that your employ
 expensesEmployerPaid.error.nonNumeric = Enter a whole number using characters 0 to 9
 expensesEmployerPaid.error.required = Enter the amount that your employer has paid back
 expensesEmployerPaid.error.wholeNumber = Enter a whole number
-expensesEmployerPaid.error.outOfRange = Enter an amount between {0} and {1}
+expensesEmployerPaid.error.outOfRange = Enter a whole number between {0} and {1}
 
 cannotClaim.title = You cannot claim tax relief for these expenses
 cannotClaim.heading = You cannot claim tax relief for these expenses
