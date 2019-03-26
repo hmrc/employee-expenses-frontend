@@ -17,12 +17,14 @@
 package controllers.authenticated
 
 import base.SpecBase
-import controllers.actions.Authed
+import controllers.actions.{Authed, UnAuthed}
 import controllers.authenticated.routes._
 import controllers.routes._
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
 import models.requests.IdentifierRequest
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers._
+import org.mockito.Matchers.{eq => eqTo}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
@@ -43,10 +45,15 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
 
     "redirect to TaxYearSelection on success and test integration with session repo works as expected" in {
 
-      when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(emptyUserAnswers))
-      when(mockSessionRepository.remove(any())) thenReturn Future.successful(Some(emptyUserAnswers))
+      val userAnswers = minimumUserAnswers
 
-      val application = applicationBuilder(Some(minimumUserAnswers))
+      val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+      when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
+      when(mockSessionRepository.remove(any())) thenReturn Future.successful(Some(userAnswers))
+
+      val application = applicationBuilder(Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
@@ -57,6 +64,13 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
       status(result) mustEqual 303
 
       redirectLocation(result).get mustBe TaxYearSelectionController.onPageLoad(NormalMode).url
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).remove(UnAuthed(userAnswersId))
+          verify(mockSessionRepository, times(1)).set(eqTo(Authed(userAnswersId)), any())
+          assert(argCaptor.getValue.data == userAnswers.data)
+      }
 
       application.stop()
     }
