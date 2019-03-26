@@ -50,7 +50,6 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     cyaHelper.industryType,
     cyaHelper.employerContribution,
     cyaHelper.expensesEmployerPaid,
-    cyaHelper.claimAmountAndDeductions,
     cyaHelper.taxYearSelection,
     cyaHelper.alreadyClaimingFRESameAmount,
     cyaHelper.removeFRECode
