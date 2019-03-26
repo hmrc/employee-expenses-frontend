@@ -23,10 +23,10 @@ import forms.construction.ConstructionOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{reset, times, verify, when}
+import org.mockito.Mockito.{times, verify, when}
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import pages.ClaimAmount
 import pages.construction.ConstructionOccupationList2Page
 import play.api.inject.bind
@@ -39,7 +39,7 @@ import views.html.construction.ConstructionOccupationList2View
 import scala.concurrent.Future
 
 class ConstructionOccupationList2ControllerSpec
-  extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
+  extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 

@@ -36,7 +36,7 @@ import views.html.authenticated.RemoveFRECodeView
 
 import scala.concurrent.Future
 
-class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar with BeforeAndAfterEach {
+class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 

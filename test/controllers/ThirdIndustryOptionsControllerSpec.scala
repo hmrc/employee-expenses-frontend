@@ -184,9 +184,6 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
         case Education  => userAnswers
           .set(ThirdIndustryOptionsPage, choice).success.value
           .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-        case NoneOfAbove => userAnswers
-          .set(ThirdIndustryOptionsPage, choice).success.value
-          .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
         case _ => userAnswers
           .set(ThirdIndustryOptionsPage, choice).success.value
       }

@@ -23,8 +23,8 @@ import forms.construction.StoneMasonFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{reset, times, verify, when}
-import org.scalatest.{BeforeAndAfterEach, OptionValues}
+import org.mockito.Mockito.{times, verify, when}
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
@@ -38,7 +38,7 @@ import views.html.construction.StoneMasonView
 
 import scala.concurrent.Future
 
-class StoneMasonControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
+class StoneMasonControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 

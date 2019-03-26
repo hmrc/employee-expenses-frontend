@@ -49,10 +49,6 @@ class AluminiumOccupationList1ControllerSpec extends SpecBase with ScalaFutures 
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  def sessionApplication: Application = applicationBuilder(userAnswers = Some(userAnswers))
-    .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-    .build()
-
   lazy val aluminiumOccupationList1Route = routes.AluminiumOccupationList1Controller.onPageLoad(NormalMode).url
 
   "AluminiumOccupationList1 Controller" must {
@@ -172,10 +168,14 @@ class AluminiumOccupationList1ControllerSpec extends SpecBase with ScalaFutures 
 
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
 
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
+
       val request = FakeRequest(POST, aluminiumOccupationList1Route)
         .withFormUrlEncodedBody(("value", "true"))
 
-      val result = route(sessionApplication, request).value
+      val result = route(application, request).value
 
       val userAnswers2 = userAnswers
         .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.list1).success.value
@@ -186,15 +186,19 @@ class AluminiumOccupationList1ControllerSpec extends SpecBase with ScalaFutures 
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionApplication.stop()
+      application.stop()
     }
 
     "save only page data when 'No' is selected" in {
 
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
       val request = FakeRequest(POST, aluminiumOccupationList1Route)
         .withFormUrlEncodedBody(("value", "false"))
 
-      val result = route(sessionApplication, request).value
+      val result = route(application, request).value
 
       val userAnswers2 = userAnswers
         .set(AluminiumOccupationList1Page, false).success.value
@@ -204,7 +208,7 @@ class AluminiumOccupationList1ControllerSpec extends SpecBase with ScalaFutures 
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionApplication.stop()
+      application.stop()
     }
   }
 }

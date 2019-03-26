@@ -39,7 +39,7 @@ import views.html.electrical.ElectricalView
 
 import scala.concurrent.Future
 
-class ElectricalControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
+class ElectricalControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 

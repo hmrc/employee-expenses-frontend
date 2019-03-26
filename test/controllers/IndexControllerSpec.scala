@@ -46,9 +46,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
     "redirect to the first page of the application and the correct view for a GET when user answers is not empty" in {
 
-      val application = applicationBuilder(userAnswers = None)
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .build()
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
 
       val controller = application.injector.instanceOf[IndexController]
 
@@ -67,7 +65,6 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
       val application = applicationBuilder(None)
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .overrides(bind[AuthConnector].toInstance(mockAuthConnector))
         .build()
 
       when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))

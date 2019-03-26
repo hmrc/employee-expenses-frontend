@@ -23,10 +23,10 @@ import forms.HealthcareList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{reset, times, verify, when}
+import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{BeforeAndAfterEach, OptionValues}
+import org.scalatest.OptionValues
 import pages.ClaimAmount
 import pages.healthcare.HealthcareList2Page
 import play.api.inject.bind
@@ -38,7 +38,7 @@ import views.html.healthcare.HealthcareList2View
 
 import scala.concurrent.Future
 
-class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
+class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 

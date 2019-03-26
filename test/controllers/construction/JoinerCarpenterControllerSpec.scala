@@ -38,7 +38,7 @@ import views.html.construction.JoinerCarpenterView
 
 import scala.concurrent.Future
 
-class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
+class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 

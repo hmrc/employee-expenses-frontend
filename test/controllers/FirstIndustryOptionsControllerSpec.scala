@@ -171,8 +171,6 @@ class FirstIndustryOptionsControllerSpec
 
     s"save correct amount to ClaimAmount when '$trade' is selected" in {
 
-      reset(mockSessionRepository)
-
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

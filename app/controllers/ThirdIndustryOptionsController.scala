@@ -72,18 +72,11 @@ class ThirdIndustryOptionsController @Inject()(
                 case Education =>
                   Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, Education)
                                 .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))
-
                 case BanksBuildingSocieties =>
                   Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, BanksBuildingSocieties)
                                  .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))
-
-                case NoneOfAbove =>
-                  Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, NoneOfAbove)
-                                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))
-
                 case _ => Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value))
               }
-
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(ThirdIndustryOptionsPage, mode)(updatedAnswers))
         }

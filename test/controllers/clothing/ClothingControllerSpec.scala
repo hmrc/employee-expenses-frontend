@@ -40,7 +40,7 @@ import views.html.clothing.ClothingView
 
 import scala.concurrent.Future
 
-class ClothingControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
+class ClothingControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
