@@ -130,6 +130,20 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase {
       application.stop()
     }
 
+    "redirect to Session Expired for a GET when user answers is empty" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request = FakeRequest(GET, changeWhichTaxYearsRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
     "redirect to Session Expired for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
@@ -146,5 +160,24 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase {
 
       application.stop()
     }
+
+    "redirect to Session Expired for a POST when user answers is empty" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request =
+        FakeRequest(POST, changeWhichTaxYearsRoute)
+          .withFormUrlEncodedBody(("value", TaxYearSelection.values.head.toString))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+
   }
 }
