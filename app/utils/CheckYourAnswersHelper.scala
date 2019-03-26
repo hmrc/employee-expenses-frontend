@@ -38,11 +38,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
         true, Some(RemoveFRECodeController.onPageLoad(CheckMode).url), editText = None)
   }
 
-  def claimAmountAndDeductions: Option[AnswerRow] = userAnswers.get(ClaimAmountAndAnyDeductions) map {
-    x =>
-      AnswerRow("claimAmount.checkYourAnswersLabel", s"£$x", true, changeUrl = None, editText = None)
-  }
-
   def alreadyClaimingFREDifferentAmounts: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) map {
     x =>
       AnswerRow("alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel", s"alreadyClaimingFREDifferentAmounts.$x", true,

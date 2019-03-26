@@ -26,6 +26,7 @@ import models.Mode
 import navigation.Navigator
 import pages.YourEmployerName
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -72,6 +73,10 @@ class YourEmployerController @Inject()(
               } else {
                 Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(mode)))
               }
+          }.recoverWith {
+            case e =>
+              Logger.error(s"[YourEmployerController][taiService.employments] failed $e", e)
+              Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(mode)))
           }
         case _ =>
           Future.successful(Redirect(SessionExpiredController.onPageLoad()))
@@ -98,6 +103,5 @@ class YourEmployerController @Inject()(
         case _ =>
           Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
-
   }
 }
