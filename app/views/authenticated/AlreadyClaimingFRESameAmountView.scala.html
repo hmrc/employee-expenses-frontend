@@ -35,7 +35,8 @@
 
         @components.heading("alreadyClaimingFRESameAmount.heading")
 
-        <p>@messages("alreadyClaimingFRESameAmount.bodyText", claimAmount)</p>
+        <p>@messages("alreadyClaimingFRESameAmount.paragraph1", claimAmount)</p>
+        <p>@messages("alreadyClaimingFRESameAmount.paragraph2", claimAmount)</p>
 
         @components.numeric_table(
             freAmounts,

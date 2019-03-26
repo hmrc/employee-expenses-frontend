@@ -636,15 +636,16 @@ yourEmployer.checkYourAnswersLabel.hidden = Change is this your employer
 yourEmployer.error.required = Select yes if this is your employer
 
 alreadyClaimingFRESameAmount.title = You are already claiming this
-alreadyClaimingFRESameAmount.heading = You are already claiming this
+alreadyClaimingFRESameAmount.heading = This amount is already in your tax code
 alreadyClaimingFRESameAmount.checkYourAnswersLabel = You are already claiming this
 alreadyClaimingFRESameAmount.error.required = Select keep claiming this amount if you want to keep claiming this amount
-alreadyClaimingFRESameAmount.bodyText = Based on the information HMRC holds, you are already earning an extra £{0} before you pay tax.
+alreadyClaimingFRESameAmount.paragraph1 = Your tax-free Personal Allowance already includes this amount. This is because you have claimed this expense before.
+alreadyClaimingFRESameAmount.paragraph2 = Your tax code was changed the first time that you claimed this expense and will stay the same until you tell us that your employment circumstances change.
 alreadyClaimingFRESameAmount.radioLabel = What do you want to do?
-alreadyClaimingFRESameAmount.noChange = Keep claiming this amount
-alreadyClaimingFRESameAmount.remove = Stop claiming this amount
+alreadyClaimingFRESameAmount.noChange = Keep this amount in your tax code
+alreadyClaimingFRESameAmount.remove = Remove this amount from your tax code
 alreadyClaimingFRESameAmount.tableTaxYearHeading = Tax year
-alreadyClaimingFRESameAmount.tableAmountHeading = Amount you are currently claiming
+alreadyClaimingFRESameAmount.tableAmountHeading = Personal allowance increase
 
 alreadyClaimingFREDifferentAmounts.title = The amount you are claiming is different to the amount you are entitled to
 alreadyClaimingFREDifferentAmounts.heading = The amount you are claiming is different to the amount you are entitled to
