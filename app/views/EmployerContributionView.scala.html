@@ -36,6 +36,16 @@
 
         @components.heading("employerContribution.heading")
 
+        <p>@messages("employerContribution.list.heading")</p>
+
+        <ul class="list list-bullet">
+            <li>@messages("employerContribution.list.item1")</li>
+            <li>@messages("employerContribution.list.item2")</li>
+            <li>@messages("employerContribution.list.item3")</li>
+        </ul>
+
+        <p>@messages("employerContribution.hint")</p>
+
         @components.input_yes_no(
             field = form("value"),
             label = messages("employerContribution.heading"),

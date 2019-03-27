@@ -38,7 +38,7 @@ class EmployerContributionViewSpec extends YesNoViewBehaviours {
     view.apply(form, NormalMode)(fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "EmployerContributionView" must {
 
@@ -48,8 +48,32 @@ class EmployerContributionViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
+    behave like pageWithList(applyView(form), messageKeyPrefix, Seq("list.item1", "list.item2", "list.item3"))
+
     behave like yesNoPage(form, applyView, messageKeyPrefix, routes.EmployerContributionController.onSubmit(NormalMode).url)
   }
 
   application.stop()
+
+  override def pageWithList(view: HtmlFormat.Appendable,
+                            pageKey: String,
+                            bulletList: Seq[String]): Unit = {
+
+    "behave like a page with a list" must {
+
+      "have a list" in {
+
+        val doc = asDocument(view)
+        assertContainsText(doc, "list list-bullet")
+      }
+
+      "have correct values" in {
+
+        val doc = asDocument(view)
+        bulletList.foreach {
+          x => assertContainsMessages(doc, s"$pageKey.$x")
+        }
+      }
+    }
+  }
 }

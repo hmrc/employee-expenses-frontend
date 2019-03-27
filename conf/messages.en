@@ -73,13 +73,16 @@ cannotClaim.heading = You cannot claim tax relief for these expenses
 cannotClaim.para1 = This is because your employer has paid back all of your expenses.
 cannotClaim.link = Read claim tax relief for your job expenses
 
-employerContribution.title = How much of your expenses has your employer paid back?
-employerContribution.heading = How much of your expenses has your employer paid back?
-employerContribution.all = All
-employerContribution.some = Some
-employerContribution.none = None
-employerContribution.checkYourAnswersLabel = How much of your expenses has your employer paid back?
-employerContribution.error.required = Select how much of your expenses your employer has paid back
+employerContribution.title = Has your employer paid back any of your expenses for uniform, work clothing or tools?
+employerContribution.heading = Has your employer paid back any of your expenses for uniform, work clothing or tools?
+
+employerContribution.list.heading = This is for:
+employerContribution.list.item1 = washing a uniform your employer gave to you
+employerContribution.list.item2 = repairing, replacing or cleaning any specialist or protective clothing you wear for your job
+employerContribution.list.item3 = repairing or replacing any small tools that you own, but use for your job
+employerContribution.hint = This does not include the cost of buying the first item.
+employerContribution.checkYourAnswersLabel = Has your employer paid back any of your expenses for uniform, work clothing or tools?
+employerContribution.error.required = Select if your employer paid back any of your expenses for uniform, work clothing or tools
 
 claimByAlternative.title = You can claim tax relief for these expenses by post or using an online form
 claimByAlternative.heading = You can claim tax relief for these expenses by post or using an online form
