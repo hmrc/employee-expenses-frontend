@@ -18,13 +18,13 @@ package views
 
 import controllers.routes
 import forms.MultipleEmploymentsFormProvider
-import models.NormalMode
+import models.{AlreadyClaimingFRESameAmount, MultipleEmployments, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.behaviours.{OptionsViewBehaviours, YesNoViewBehaviours}
 import views.html.MultipleEmploymentsView
 
-class MultipleEmploymentsViewSpec extends YesNoViewBehaviours {
+class MultipleEmploymentsViewSpec extends OptionsViewBehaviours[MultipleEmployments] {
 
   val messageKeyPrefix = "multipleEmployments"
 
@@ -48,7 +48,7 @@ class MultipleEmploymentsViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.MultipleEmploymentsController.onSubmit(NormalMode).url)
+    behave like optionsPage(form, applyView, MultipleEmployments.options)
   }
 
   application.stop()

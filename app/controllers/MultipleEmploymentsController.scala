@@ -20,7 +20,7 @@ import config.NavConstant
 import controllers.actions._
 import forms.MultipleEmploymentsFormProvider
 import javax.inject.{Inject, Named}
-import models.Mode
+import models.{Mode, MultipleEmployments}
 import navigation.Navigator
 import pages.MultipleEmploymentsPage
 import play.api.data.Form
@@ -44,7 +44,7 @@ class MultipleEmploymentsController @Inject()(
                                                sessionRepository: SessionRepository
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = formProvider()
+  val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
