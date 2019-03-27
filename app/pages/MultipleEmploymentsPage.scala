@@ -16,9 +16,10 @@
 
 package pages
 
+import models.MultipleEmployments
 import play.api.libs.json.JsPath
 
-case object MultipleEmploymentsPage extends QuestionPage[Boolean] {
+case object MultipleEmploymentsPage extends QuestionPage[MultipleEmployments] {
 
   override def path: JsPath = JsPath \ toString
 

@@ -16,10 +16,11 @@
 
 package forms
 
-import forms.behaviours.BooleanFieldBehaviours
+import forms.behaviours.{BooleanFieldBehaviours, OptionFieldBehaviours}
+import models.MultipleEmployments
 import play.api.data.FormError
 
-class MultipleEmploymentsFormProviderSpec extends BooleanFieldBehaviours {
+class MultipleEmploymentsFormProviderSpec extends OptionFieldBehaviours {
 
   val requiredKey = "multipleEmployments.error.required"
   val invalidKey = "error.boolean"
@@ -30,10 +31,11 @@ class MultipleEmploymentsFormProviderSpec extends BooleanFieldBehaviours {
 
     val fieldName = "value"
 
-    behave like booleanField(
+    behave like optionsField[MultipleEmployments](
       form,
       fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+      validValues = MultipleEmployments.values,
+      invalidError = FormError(fieldName, "error.invalid")
     )
 
     behave like mandatoryField(

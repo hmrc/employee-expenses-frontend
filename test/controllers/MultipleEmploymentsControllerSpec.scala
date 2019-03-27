@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import config.NavConstant
 import forms.MultipleEmploymentsFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{MultipleEmployments, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -69,7 +69,7 @@ class MultipleEmploymentsControllerSpec extends SpecBase  with ScalaFutures with
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(MultipleEmploymentsPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(MultipleEmploymentsPage, MultipleEmployments.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -82,7 +82,7 @@ class MultipleEmploymentsControllerSpec extends SpecBase  with ScalaFutures with
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(MultipleEmployments.values.head), NormalMode)(fakeRequest, messages).toString
 
       application.stop()
     }
@@ -97,7 +97,7 @@ class MultipleEmploymentsControllerSpec extends SpecBase  with ScalaFutures with
 
       val request =
         FakeRequest(POST, multipleEmploymentsRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+          .withFormUrlEncodedBody(("value", MultipleEmployments.options.head.value))
 
       val result = route(application, request).value
 
@@ -151,7 +151,7 @@ class MultipleEmploymentsControllerSpec extends SpecBase  with ScalaFutures with
 
       val request =
         FakeRequest(POST, multipleEmploymentsRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+          .withFormUrlEncodedBody(("value", MultipleEmployments.options.head.value))
 
       val result = route(application, request).value
 

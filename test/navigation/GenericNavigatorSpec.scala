@@ -53,14 +53,14 @@ class GenericNavigatorSpec extends SpecBase {
       //MultipleEmploymentsPage
 
       "go to ClaimByAlternativeController from MultipleEmploymentsPage when 'Yes' is selected" in {
-        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, true).success.value
+        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.MoreThanOneJob).success.value
 
         navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
           ClaimByAlternativeController.onPageLoad()
       }
 
       "go to ClaimByAlternativeController from MultipleEmploymentsPage when 'No' is selected" in {
-        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, false).success.value
+        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
 
         navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
           FirstIndustryOptionsController.onPageLoad(NormalMode)

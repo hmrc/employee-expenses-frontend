@@ -36,10 +36,12 @@
 
         @components.heading("multipleEmployments.heading")
 
-        @components.input_yes_no(
+        @components.input_radio(
             field = form("value"),
-            label = messages("multipleEmployments.heading"),
-            labelClass = Some("visually-hidden")
+            legend = messages("multipleEmployments.heading"),
+            legendClass = Some("visually-hidden"),
+            inputs = MultipleEmployments.options,
+            inline = true
         )
 
         @components.submit_button()
