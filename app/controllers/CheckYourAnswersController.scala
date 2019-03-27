@@ -62,7 +62,6 @@ class CheckYourAnswersController @Inject()(
             cyaHelper.industryType,
             cyaHelper.employerContribution,
             cyaHelper.expensesEmployerPaid,
-            cyaHelper.claimAmountAndDeductions,
             cyaHelper.taxYearSelection,
             cyaHelper.alreadyClaimingFRESameAmount,
             cyaHelper.alreadyClaimingFREDifferentAmounts,
