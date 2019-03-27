@@ -189,7 +189,7 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
       application.stop()
     }
 
-    "save only page data when 'No' is selected" in {
+    "save 'default' to ClaimAmount when 'No' is selected" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
