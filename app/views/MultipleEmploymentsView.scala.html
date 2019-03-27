@@ -40,7 +40,8 @@
             field = form("value"),
             legend = messages("multipleEmployments.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = MultipleEmployments.options
+            inputs = MultipleEmployments.options,
+            inline = true
         )
 
         @components.submit_button()

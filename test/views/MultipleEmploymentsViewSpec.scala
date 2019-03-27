@@ -16,12 +16,11 @@
 
 package views
 
-import controllers.routes
 import forms.MultipleEmploymentsFormProvider
-import models.{AlreadyClaimingFRESameAmount, MultipleEmployments, NormalMode}
+import models.{MultipleEmployments, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.{OptionsViewBehaviours, YesNoViewBehaviours}
+import views.behaviours.OptionsViewBehaviours
 import views.html.MultipleEmploymentsView
 
 class MultipleEmploymentsViewSpec extends OptionsViewBehaviours[MultipleEmployments] {
@@ -49,6 +48,13 @@ class MultipleEmploymentsViewSpec extends OptionsViewBehaviours[MultipleEmployme
     behave like pageWithBackLink(applyView(form))
 
     behave like optionsPage(form, applyView, MultipleEmployments.options)
+
+    "display RadioButtons inline" in {
+      val doc = asDocument(applyView(form))
+
+      doc.getElementById("value").attr("class") mustBe "inline"
+    }
+
   }
 
   application.stop()
