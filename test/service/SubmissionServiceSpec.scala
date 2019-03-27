@@ -17,6 +17,7 @@
 package service
 
 import base.SpecBase
+import connectors.TaiConnector
 import controllers.routes._
 import models.TaxYearSelection
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -28,10 +29,11 @@ import uk.gov.hmrc.http.HttpResponse
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
+class  SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
   private val mockTaiService = mock[TaiService]
-  private val submissionService = new SubmissionService(mockTaiService)
+  private val mockTaiConnector = mock[TaiConnector]
+  private val submissionService = new SubmissionService(mockTaiService, mockTaiConnector)
 
   private val taxYears = Seq(TaxYearSelection.CurrentYear)
   private val claimAmount = 100

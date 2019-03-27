@@ -16,23 +16,56 @@
 
 package service
 
+import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import com.google.inject.Inject
+import connectors.TaiConnector
 import models.{TaiTaxYear, TaxYearSelection}
+import org.joda.time.LocalDate
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.time.TaxYear
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SubmissionService @Inject()(taiService: TaiService) {
+class SubmissionService @Inject()(
+                                   taiService: TaiService,
+                                   taiConnector: TaiConnector
+                                 ) {
+
+
+  def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection])
+                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Seq[TaxYearSelection] = {
+
+    val currentDate = LocalDate.now
+
+    val claimYears: Seq[TaxYearSelection] =
+      if (!taxYears.contains(TaxYearSelection.CurrentYear)) {
+        taxYears
+      } else if (taxYears.contains(TaxYearSelection.CurrentYear) && (currentDate.getMonthOfYear <= 3 && currentDate.getDayOfMonth <= 5)) {
+        val result = taiConnector.taiTaxAccountSummary(nino, TaiTaxYear(TaxYear.current.currentYear).next).flatMap {
+          repsonse =>
+            repsonse.status match {
+              case 204 => Future.successful(taxYears :+ TaxYearSelection.NextYear)
+              case _ => Future.successful(taxYears)
+            }
+        }
+      } else {
+        taxYears :+ TaxYearSelection.NextYear
+      }
+    claimYears
+  }
 
   def submitFRENotInCode(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int)
                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
 
+    val claimYears = getTaxYearsToUpdate(nino, taxYears)
+
     val responses: Future[Seq[HttpResponse]] =
-      futureSequence(taxYears) {
+      futureSequence(claimYears) {
         taxYearSelection =>
           val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
           taiService.updateFRE(nino, taiTaxYear, claimAmount)
       }
+
 
     submissionResult(responses)
 
