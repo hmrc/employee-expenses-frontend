@@ -66,7 +66,7 @@ expensesEmployerPaid.checkYourAnswersLabel = What is the amount that your employ
 expensesEmployerPaid.error.nonNumeric = Enter a whole number using characters 0 to 9
 expensesEmployerPaid.error.required = Enter the amount that your employer has paid back
 expensesEmployerPaid.error.wholeNumber = Enter a whole number
-expensesEmployerPaid.error.outOfRange = Enter an amount between {0} and {1}
+expensesEmployerPaid.error.outOfRange = Enter a whole number between {0} and {1}
 
 cannotClaim.title = You cannot claim tax relief for these expenses
 cannotClaim.heading = You cannot claim tax relief for these expenses
@@ -319,8 +319,8 @@ factoryEngineeringApprentice.heading = Are you an apprentice or storekeeper?
 factoryEngineeringApprentice.checkYourAnswersLabel = Are you an apprentice or storekeeper?
 factoryEngineeringApprentice.error.required = Select yes if you are an apprentice or storekeeper
 
-typeOfManufacturing.title = What type of manufacturing do you work in?
-typeOfManufacturing.heading = What type of manufacturing do you work in?
+typeOfManufacturing.title = What type of manufacturing and warehousing do you work in?
+typeOfManufacturing.heading = What type of manufacturing and warehousing do you work in?
 typeOfManufacturing.aluminium = Aluminium
 typeOfManufacturing.brassCopper = Brass and copper
 typeOfManufacturing.glass = Glass
@@ -328,8 +328,8 @@ typeOfManufacturing.ironSteel = Iron and steel
 typeOfManufacturing.preciousMetals = Quarrying and precious metals
 typeOfManufacturing.woodFurniture = Wood and furniture
 typeOfManufacturing.none = Manufacturing type not listed
-typeOfManufacturing.checkYourAnswersLabel = What type of manufacturing do you work in?
-typeOfManufacturing.error.required = Select what type of manufacturing you work in
+typeOfManufacturing.checkYourAnswersLabel = What type of manufacturing and warehousing do you work in?
+typeOfManufacturing.error.required = Select what type of manufacturing and warehousing you work in
 
 specialConstable.title = Are you a special constable?
 specialConstable.heading = Are you a special constable?
@@ -421,9 +421,9 @@ cateringStaffNHS.heading = Are you catering staff in the NHS?
 cateringStaffNHS.checkYourAnswersLabel = Are you catering staff in the NHS?
 cateringStaffNHS.error.required = Select yes if you are catering staff in the NHS
 
-clothing.title = Clothing occupation list
-clothing.heading = Clothing occupation list
-clothing.checkYourAnswersLabel = Clothing occupation list
+clothing.title = Clothing and textiles occupation list
+clothing.heading = Clothing and textiles occupation list
+clothing.checkYourAnswersLabel = Clothing and textiles occupation list
 clothing.error.required = Select yes your occupation is listed
 clothing.listText = The occupations are:
 clothing.radioLabel = Is your occupation listed?
