@@ -22,10 +22,14 @@ import controllers.actions.UnAuthed
 import forms.printing.PrintingOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
+import org.mockito.Mockito._
 import pages.ClaimAmount
 import pages.printing.PrintingOccupationList2Page
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -33,12 +37,18 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.printing.PrintingOccupationList2View
 
-class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new PrintingOccupationList2FormProvider()
-  val form = formProvider()
+  private val formProvider = new PrintingOccupationList2FormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
 
   lazy val printingOccupationList2Route = routes.PrintingOccupationList2Controller.onPageLoad(NormalMode).url
 
@@ -86,11 +96,11 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Printing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, printingOccupationList2Route)
+      val request = FakeRequest(POST, printingOccupationList2Route)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -106,6 +116,7 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Printing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -176,41 +187,47 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
       application.stop()
     }
 
-    "save ClaimAmount when 'Yes' is selected" in {
+    "save 'list2' to ClaimAmount when 'Yes' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
       val request = FakeRequest(POST, printingOccupationList2Route).withFormUrlEncodedBody(("value", "true"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.list2
+      val userAnswers2 = userAnswers
+          .set(ClaimAmount, ClaimAmounts.Printing.list2).success.value
+          .set(PrintingOccupationList2Page, true).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
-    "save ClaimAmount when 'No' is selected" in {
+    "save 'allOther' to ClaimAmount when 'No' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
       val request = FakeRequest(POST, printingOccupationList2Route).withFormUrlEncodedBody(("value", "false"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Printing.allOther
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Printing.allOther).success.value
+        .set(PrintingOccupationList2Page, false).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

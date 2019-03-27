@@ -18,6 +18,7 @@ package controllers.authenticated
 
 import base.SpecBase
 import connectors.CitizenDetailsConnector
+import controllers.actions.Authed
 import controllers.authenticated.routes._
 import controllers.routes._
 import forms.authenticated.YourAddressFormProvider
@@ -35,6 +36,7 @@ import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.authenticated.YourAddressView
 
 import scala.concurrent.Future
@@ -43,10 +45,14 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new YourAddressFormProvider()
-  val form: Form[Boolean] = formProvider()
+  private val formProvider = new YourAddressFormProvider()
+  private val form: Form[Boolean] = formProvider()
+  private val mockSessionRepository = mock[SessionRepository]
+  private val userAnswers = emptyUserAnswers
 
-  val connector: CitizenDetailsConnector = mock[CitizenDetailsConnector]
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+  private val connector: CitizenDetailsConnector = mock[CitizenDetailsConnector]
 
   override def beforeEach(): Unit = reset(connector)
 
@@ -54,8 +60,9 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
   "YourAddress Controller" must {
 
-    "return OK and the correct view for a GET" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+    "return OK and the correct view for a GET and save address to 'CitizenDetailsAddress'" in {
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .overrides(bind[CitizenDetailsConnector].toInstance(connector))
         .build()
 
@@ -72,6 +79,14 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       contentAsString(result) mustEqual
         view(form, NormalMode, address)(fakeRequest, messages).toString
 
+      val userAnswers2 = userAnswers
+          .set(CitizenDetailsAddress, address).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(Authed(userAnswersId), userAnswers2)
+      }
+
       application.stop()
     }
 
@@ -80,6 +95,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val userAnswers = UserAnswers(userAnswersId).set(YourAddressPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .overrides(bind[CitizenDetailsConnector].toInstance(connector))
         .build()
 
@@ -127,6 +143,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       val application =
         applicationBuilder(userAnswers = Some(ua))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

@@ -75,6 +75,7 @@ class SecondIndustryOptionsController @Inject()(
               Future.fromTry(request.userAnswers.set(SecondIndustryOptionsPage, value))
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
+
           } yield Redirect(navigator.nextPage(SecondIndustryOptionsPage, mode)(updatedAnswers))
         }
       )

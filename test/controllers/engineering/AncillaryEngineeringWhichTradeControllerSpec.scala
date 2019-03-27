@@ -22,8 +22,11 @@ import controllers.actions.UnAuthed
 import forms.engineering.AncillaryEngineeringWhichTradeFormProvider
 import models.{AncillaryEngineeringWhichTrade, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.engineering.AncillaryEngineeringWhichTradePage
 import play.api.inject.bind
@@ -33,14 +36,21 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.engineering.AncillaryEngineeringWhichTradeView
 
-class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val ancillaryEngineeringWhichTradeRoute = routes.AncillaryEngineeringWhichTradeController.onPageLoad(NormalMode).url
 
-  val formProvider = new AncillaryEngineeringWhichTradeFormProvider()
-  val form = formProvider()
+  private val formProvider = new AncillaryEngineeringWhichTradeFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
 
   "AncillaryEngineeringWhichTrade Controller" must {
 
@@ -86,6 +96,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -155,84 +166,35 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
       application.stop()
     }
 
-    "save 'patternMaker' to ClaimAmount when 'PatternMaker' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, ancillaryEngineeringWhichTradeRoute)
-        .withFormUrlEncodedBody(("value", AncillaryEngineeringWhichTrade.PatternMaker.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.patternMaker
+    for (trade <- AncillaryEngineeringWhichTrade.values) {
+      val claimAmount = trade match {
+        case AncillaryEngineeringWhichTrade.PatternMaker => ClaimAmounts.AncillaryEngineering.patternMaker
+        case AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker => ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
+        case AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper => ClaimAmounts.AncillaryEngineering.apprentice
+        case AncillaryEngineeringWhichTrade.NoneOfTheAbove => ClaimAmounts.AncillaryEngineering.allOther
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
+      s"save $claimAmount to ClaimAmount when '$trade' is selected" in {
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
 
-    "save 'labourerSupervisorUnskilledWorker' to ClaimAmount when 'LabourerSupervisorOrUnskilledWorker' is selected" in {
+        val request = FakeRequest(POST, ancillaryEngineeringWhichTradeRoute).withFormUrlEncodedBody(("value", trade.toString))
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
+        val result = route(application, request).value
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+        val userAnswers2 = userAnswers
+          .set(ClaimAmount, claimAmount).success.value
+          .set(AncillaryEngineeringWhichTradePage, trade).success.value
 
-      val request = FakeRequest(POST, ancillaryEngineeringWhichTradeRoute)
-        .withFormUrlEncodedBody(("value", AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker.toString))
+        whenReady(result) {
+          _ =>
+            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+        }
 
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
+        application.stop()
       }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
     }
 
-    "save 'apprentice' to ClaimAmount when 'ApprenticeOrStorekeeper' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, ancillaryEngineeringWhichTradeRoute)
-        .withFormUrlEncodedBody(("value", AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.apprentice
-      }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
-
-    "save 'allOther' to ClaimAmount when 'NoneOfTheAbove' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, ancillaryEngineeringWhichTradeRoute)
-        .withFormUrlEncodedBody(("value", AncillaryEngineeringWhichTrade.NoneOfTheAbove.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.AncillaryEngineering.allOther
-      }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
   }
 }

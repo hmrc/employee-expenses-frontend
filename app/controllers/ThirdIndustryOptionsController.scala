@@ -20,14 +20,15 @@ import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.ThirdIndustryOptionsFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, Mode, ThirdIndustryOptions}
+import models.ThirdIndustryOptions.{BanksBuildingSocieties, Education, NoneOfAbove}
+import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.{ClaimAmount, ThirdIndustryOptionsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import repositories.SessionRepository
+import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.ThirdIndustryOptionsView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -66,13 +67,16 @@ class ThirdIndustryOptionsController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- if (value == ThirdIndustryOptions.Education) {
-              Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value))
-            }
+            updatedAnswers <-
+              value match {
+                case Education =>
+                  Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, Education)
+                                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))
+                case BanksBuildingSocieties =>
+                  Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, BanksBuildingSocieties)
+                                 .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))
+                case _ => Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value))
+              }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(ThirdIndustryOptionsPage, mode)(updatedAnswers))
         }

@@ -22,10 +22,14 @@ import controllers.actions.UnAuthed
 import forms.transport.WhichRailwayTradeFormProvider
 import models.{NormalMode, UserAnswers, WhichRailwayTrade}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
-import pages.transport.WhichRailwayTradePage
+import pages.transport.{AirlineJobListPage, WhichRailwayTradePage}
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -33,14 +37,21 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.transport.WhichRailwayTradeView
 
-class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val whichRailwayTradeRoute = controllers.transport.routes.WhichRailwayTradeController.onPageLoad(NormalMode).url
 
-  val formProvider = new WhichRailwayTradeFormProvider()
-  val form = formProvider()
+  private val formProvider = new WhichRailwayTradeFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "WhichRailwayTrade Controller" must {
 
@@ -86,6 +97,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with In
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -155,61 +167,34 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with In
       application.stop()
     }
 
-    "save 'vehiclePainters' to ClaimAmount when 'VehiclePainters' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, whichRailwayTradeRoute).withFormUrlEncodedBody(("value", WhichRailwayTrade.VehiclePainters.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehiclePainters
+    for(trade <- WhichRailwayTrade.values) {
+      val claimAmount = trade match {
+        case WhichRailwayTrade.VehiclePainters => ClaimAmounts.Transport.Railways.vehiclePainters
+        case WhichRailwayTrade.VehicleRepairersWagonLifters => ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
+        case WhichRailwayTrade.NoneOfTheAbove => ClaimAmounts.Transport.Railways.allOther
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
+      s"save '$claimAmount' to ClaimAmount when '$trade' is selected" in {
 
-    "save 'vehicleRepairersWagonLifters' to ClaimAmount when 'VehicleRepairersWagonLifters' is selected" in {
+        val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
+        val request = FakeRequest(POST, whichRailwayTradeRoute).withFormUrlEncodedBody(("value", trade.toString))
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+        val result = route(application, request).value
 
-      val request = FakeRequest(POST, whichRailwayTradeRoute).withFormUrlEncodedBody(("value", WhichRailwayTrade.VehicleRepairersWagonLifters.toString))
+        val userAnswers2 = userAnswers
+          .set(ClaimAmount, claimAmount).success.value
+          .set(WhichRailwayTradePage, trade).success.value
 
-      route(application, request).value.futureValue
+        whenReady(result){
+          _ =>
+            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+        }
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
+        application.stop()
       }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
-
-    "save 'allOther' to ClaimAmount when 'NoneOfTheAbove' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, whichRailwayTradeRoute).withFormUrlEncodedBody(("value", WhichRailwayTrade.NoneOfTheAbove.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Railways.allOther
-      }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
     }
   }
 }
