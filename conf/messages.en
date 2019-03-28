@@ -70,8 +70,8 @@ expensesEmployerPaid.error.outOfRange = Enter a whole number between {0} and {1}
 
 cannotClaim.title = You cannot claim tax relief for these expenses
 cannotClaim.heading = You cannot claim tax relief for these expenses
-cannotClaim.para1 = This is because your employer has paid back all of your expenses.
-cannotClaim.link = Read claim tax relief for your job expenses
+cannotClaim.para1 = You cannot claim these expenses because your employer has already paid back the full amount that you can claim.
+cannotClaim.link = Your employer has already paid back all of your expenses
 
 employerContribution.title = How much of your expenses has your employer paid back?
 employerContribution.heading = How much of your expenses has your employer paid back?
