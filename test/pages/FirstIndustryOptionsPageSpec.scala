@@ -37,7 +37,7 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
         .set(StoneMasonPage, false).success.value
         .set(ConstructionOccupationList1Page, false).success.value
         .set(ConstructionOccupationList2Page, true).success.value
-        .set(EmployerContributionPage, EmployerContribution.SomeContribution).success.value
+        .set(EmployerContributionPage, true).success.value
         .set(ExpensesEmployerPaidPage, 20).success.value
         .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change).success.value
         .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value

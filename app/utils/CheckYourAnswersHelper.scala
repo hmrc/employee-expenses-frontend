@@ -18,7 +18,6 @@ package utils
 
 import controllers.authenticated.routes._
 import controllers.routes._
-import models.EmployerContribution.SomeContribution
 import models.FirstIndustryOptions.{Engineering, FoodAndCatering, Healthcare, Retail, TransportAndDistribution}
 import models.FourthIndustryOptions.{Agriculture, FireService, Heating, Leisure, Prisons}
 import models.SecondIndustryOptions.{ClothingTextiles, Construction, Council, ManufacturingWarehousing, Police}
@@ -128,7 +127,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   }
 
   def expensesEmployerPaid: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) match {
-    case Some(SomeContribution) =>
+    case Some(true) =>
       userAnswers.get(ExpensesEmployerPaidPage) map {
         x =>
           AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"£$x", false,

@@ -16,20 +16,20 @@
 
 package pages
 
-import models.{EmployerContribution, UserAnswers}
+import models.UserAnswers
 import play.api.libs.json.JsPath
 
 import scala.util.{Success, Try}
 
-case object EmployerContributionPage extends QuestionPage[EmployerContribution] {
+case object EmployerContributionPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "employerContribution"
 
-  override def cleanup(value: Option[EmployerContribution], userAnswers: UserAnswers): Try[UserAnswers] =
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match  {
-      case Some(EmployerContribution.SomeContribution) => Success(userAnswers)
+      case Some(true) => Success(userAnswers)
       case _ =>
         userAnswers.remove(ExpensesEmployerPaidPage)
         .flatMap(_.remove(SameEmployerContributionAllYearsPage))

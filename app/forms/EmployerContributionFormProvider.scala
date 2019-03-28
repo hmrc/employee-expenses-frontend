@@ -20,12 +20,11 @@ import javax.inject.Inject
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import models.EmployerContribution
 
 class EmployerContributionFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[EmployerContribution] =
+  def apply(): Form[Boolean] =
     Form(
-      "value" -> enumerable[EmployerContribution]("employerContribution.error.required")
+      "value" -> boolean("employerContribution.error.required")
     )
 }

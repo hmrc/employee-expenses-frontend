@@ -17,10 +17,9 @@
 package navigation
 
 import base.SpecBase
+import controllers.authenticated.routes._
 import controllers.foodCatering.routes._
 import controllers.routes._
-import controllers.authenticated.routes._
-import models.EmployerContribution._
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions.{Agriculture, FireService, Heating, Leisure, Prisons}
 import models.SecondIndustryOptions._
@@ -278,22 +277,15 @@ class GenericNavigatorSpec extends SpecBase {
 
       //EmployerContributionPage
 
-      "go to CannotClaimController from EmployerContributionPage when 'All' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, All).success.value
-
-        navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
-          CannotClaimController.onPageLoad()
-      }
-
       "go to ClaimAmount from EmployerContributionPage when 'None' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, NoContribution).success.value
+        val answers = emptyUserAnswers.set(EmployerContributionPage, false).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
           ClaimAmountController.onPageLoad(NormalMode)
       }
 
       "go to ExpensesEmployerPaidController from EmployerContributionPage when 'Some' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, SomeContribution).success.value
+        val answers = emptyUserAnswers.set(EmployerContributionPage, true).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
           ExpensesEmployerPaidController.onPageLoad(NormalMode)
@@ -362,22 +354,15 @@ class GenericNavigatorSpec extends SpecBase {
 
       //EmployerContributionPage
 
-      "go to CannotClaimController from EmployerContributionPage when 'All' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, All).success.value
-
-        navigator.nextPage(EmployerContributionPage, CheckMode)(answers) mustBe
-          CannotClaimController.onPageLoad()
-      }
-
       "go to ClaimAmount from EmployerContributionPage when 'None' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, NoContribution).success.value
+        val answers = emptyUserAnswers.set(EmployerContributionPage, false).success.value
 
         navigator.nextPage(EmployerContributionPage, CheckMode)(answers) mustBe
           ClaimAmountController.onPageLoad(CheckMode)
       }
 
       "go to ExpensesEmployerPaidController from EmployerContributionPage when 'Some' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, SomeContribution).success.value
+        val answers = emptyUserAnswers.set(EmployerContributionPage, true).success.value
 
         navigator.nextPage(EmployerContributionPage, CheckMode)(answers) mustBe
           ExpensesEmployerPaidController.onPageLoad(CheckMode)
