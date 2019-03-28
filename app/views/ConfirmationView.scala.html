@@ -67,11 +67,8 @@
                     <h2 class="heading-small">@messages("confirmation.scotlandHeading")</h2>
                 }
 
-                @(rates.calculatedStarterRate, rates.starterRate) match {
-                    case (Some(calc), Some(rate)) => {
-                        <p>@messages("confirmation.starterRate", calc, claimAmount, rate)</p>
-                    }
-                    case _ => {}
+                @if(rates.calculatedStarterRate.nonEmpty && rates.starterRate.nonEmpty) {
+                    <p>@messages("confirmation.starterRate", rates.calculatedStarterRate.get, claimAmount, rates.starterRate.get)</p>
                 }
                 <p>@messages("confirmation.basicRate", rates.calculatedBasicRate, claimAmount, rates.basicRate)</p>
                 <p>@messages("confirmation.higherRate", rates.calculatedHigherRate, claimAmount, rates.higherRate)</p>
