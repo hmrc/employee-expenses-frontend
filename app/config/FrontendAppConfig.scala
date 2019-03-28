@@ -65,6 +65,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val taxPercentageBand2: Int = configuration.get[Int]("tax-percentage.band-2")
   lazy val taxPercentageScotlandBand1: Int = configuration.get[Int]("scottish-tax-percentage.band-1")
   lazy val taxPercentageScotlandBand2: Int = configuration.get[Int]("scottish-tax-percentage.band-2")
+  lazy val taxPercentageScotlandBand3: Int = configuration.get[Int]("scottish-tax-percentage.band-3")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),

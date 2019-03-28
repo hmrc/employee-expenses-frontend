@@ -45,10 +45,12 @@ class ConfirmationViewSpec extends ViewBehaviours {
     )
 
     val scottishClaimAmountsRates = Rates(
-      basicRate = frontendAppConfig.taxPercentageScotlandBand1,
-      higherRate = frontendAppConfig.taxPercentageScotlandBand2,
-      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+      starterRate = Some(frontendAppConfig.taxPercentageScotlandBand1),
+      basicRate = frontendAppConfig.taxPercentageScotlandBand2,
+      higherRate = frontendAppConfig.taxPercentageScotlandBand3,
+      calculatedStarterRate = Some(claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount)),
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount),
       prefix = Some('S')
     )
 
@@ -79,11 +81,13 @@ class ConfirmationViewSpec extends ViewBehaviours {
         assertContainsText(doc, messages(
           "confirmation.basicRate",
           claimAmountsRates.calculatedBasicRate,
+          claimAmount,
           claimAmountsRates.basicRate
         ))
         assertContainsText(doc, messages(
           "confirmation.higherRate",
           claimAmountsRates.calculatedHigherRate,
+          claimAmount,
           claimAmountsRates.higherRate
         ))
       }
@@ -98,13 +102,21 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       "display correct dynamic tax rates" in {
         assertContainsText(doc, messages(
+          "confirmation.starterRate",
+          scottishClaimAmountsRates.calculatedStarterRate.get,
+          claimAmount,
+          scottishClaimAmountsRates.starterRate.get
+        ))
+        assertContainsText(doc, messages(
           "confirmation.basicRate",
           scottishClaimAmountsRates.calculatedBasicRate,
+          claimAmount,
           scottishClaimAmountsRates.basicRate
         ))
         assertContainsText(doc, messages(
           "confirmation.higherRate",
           scottishClaimAmountsRates.calculatedHigherRate,
+          claimAmount,
           scottishClaimAmountsRates.higherRate
         ))
       }
@@ -122,22 +134,32 @@ class ConfirmationViewSpec extends ViewBehaviours {
         assertContainsText(doc, messages(
           "confirmation.basicRate",
           claimAmountsRates.calculatedBasicRate,
+          claimAmount,
           claimAmountsRates.basicRate
         ))
         assertContainsText(doc, messages(
           "confirmation.higherRate",
           claimAmountsRates.calculatedHigherRate,
+          claimAmount,
           claimAmountsRates.higherRate
         ))
         assertContainsText(doc, messages("confirmation.scotlandHeading"))
         assertContainsText(doc, messages(
+          "confirmation.starterRate",
+          scottishClaimAmountsRates.calculatedStarterRate.get,
+          claimAmount,
+          scottishClaimAmountsRates.starterRate.get
+        ))
+        assertContainsText(doc, messages(
           "confirmation.basicRate",
           scottishClaimAmountsRates.calculatedBasicRate,
+          claimAmount,
           scottishClaimAmountsRates.basicRate
         ))
         assertContainsText(doc, messages(
           "confirmation.higherRate",
           scottishClaimAmountsRates.calculatedHigherRate,
+          claimAmount,
           scottishClaimAmountsRates.higherRate
         ))
       }
@@ -163,11 +185,13 @@ class ConfirmationViewSpec extends ViewBehaviours {
         assertContainsText(doc, messages(
           "confirmation.basicRate",
           claimAmountsRates.calculatedBasicRate,
+          claimAmount,
           claimAmountsRates.basicRate
         ))
         assertContainsText(doc, messages(
           "confirmation.higherRate",
           claimAmountsRates.calculatedHigherRate,
+          claimAmount,
           claimAmountsRates.higherRate
         ))
       }
@@ -200,11 +224,13 @@ class ConfirmationViewSpec extends ViewBehaviours {
         assertContainsText(doc, messages(
           "confirmation.basicRate",
           claimAmountsRates.calculatedBasicRate,
+          claimAmount,
           claimAmountsRates.basicRate
         ))
         assertContainsText(doc, messages(
           "confirmation.higherRate",
           claimAmountsRates.calculatedHigherRate,
+          claimAmount,
           claimAmountsRates.higherRate
         ))
       }
@@ -231,11 +257,13 @@ class ConfirmationViewSpec extends ViewBehaviours {
         assertContainsText(doc, messages(
           "confirmation.basicRate",
           claimAmountsRates.calculatedBasicRate,
+          claimAmount,
           claimAmountsRates.basicRate
         ))
         assertContainsText(doc, messages(
           "confirmation.higherRate",
           claimAmountsRates.calculatedHigherRate,
+          claimAmount,
           claimAmountsRates.higherRate
         ))
       }
