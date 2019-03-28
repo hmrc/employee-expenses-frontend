@@ -14,11 +14,18 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
-    main_template: MainTemplate
+        main_template: MainTemplate,
+        frontendAppConfig: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
+
+@link = {
+    <a id="link" href=@frontendAppConfig.jobExpensesLink>@messages("cannotClaim.link")</a>
+}
 
 @main_template(
     title = messages("cannotClaim.title")
@@ -30,5 +37,5 @@
 
     <p>@messages("cannotClaim.para1")</p>
 
-    <p><a id="link" href="https://www.gov.uk/guidance/job-expenses-for-uniforms-work-clothing-and-tools#if-your-employer-pays-towards-the-costs-of-your-expenses">@messages("cannotClaim.link")</a></p>
+    <p>@link</p>
 }
