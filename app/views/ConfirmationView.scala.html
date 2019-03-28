@@ -89,7 +89,11 @@
                 <p>@messages("confirmation.letterConfirmation")</p>
 
                 @if(taxYearSelections.contains(TaxYearSelection.CurrentYearMinus1)) {
-                    <p>@messages("confirmation.currentYearMinusOneDelay")</p>
+                    <p>@messages(
+                        "confirmation.currentYearMinusOneDelay",
+                        TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
+                        TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString)
+                    </p>
                 }
 
             } else {
@@ -117,4 +121,4 @@
         @messages("confirmation.updateAddressInfoNow")
         </a>
     }
-}
+}@import models.TaxYearSelection.CurrentYearMinus2

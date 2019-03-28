@@ -218,9 +218,15 @@ class ConfirmationViewSpec extends ViewBehaviours {
           "confirmation.taxCodeChanged",
           "confirmation.continueToClaim",
           "confirmation.previousTaxYears",
-          "confirmation.letterConfirmation",
-          "confirmation.currentYearMinusOneDelay"
+          "confirmation.letterConfirmation"
         )
+
+        assertContainsText(doc,
+          messages(
+            "confirmation.currentYearMinusOneDelay",
+            TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
+            TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString
+          ))
       }
 
       "display correct dynamic text for title and tax rates" in {
