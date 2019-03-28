@@ -21,9 +21,13 @@ import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.FourthIndustryOptionsFormProvider
 import models.{FourthIndustryOptions, NormalMode, UserAnswers}
+import models.FourthIndustryOptions._
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.{ClaimAmount, FourthIndustryOptionsPage}
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -32,14 +36,20 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.FourthIndustryOptionsView
 
-class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val fourthIndustryOptionsRoute = routes.FourthIndustryOptionsController.onPageLoad(NormalMode).url
 
-  val formProvider = new FourthIndustryOptionsFormProvider()
-  val form = formProvider()
+  private val formProvider = new FourthIndustryOptionsFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "FourthIndustryOptions Controller" must {
 
@@ -85,6 +95,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -154,100 +165,37 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       application.stop()
     }
 
-
-    "save ClaimAmount when 'Agriculture' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.Agriculture.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.agriculture
+    for(trade <- FourthIndustryOptions.values){
+      val claimAmount = trade match {
+        case Agriculture => ClaimAmounts.agriculture
+        case FireService => ClaimAmounts.fireService
+        case Leisure => ClaimAmounts.leisure
+        case Prisons => ClaimAmounts.prisons
+        case _ => ClaimAmounts.defaultRate
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
+      s"save '$claimAmount' to ClaimAmount when '$trade' is selected" in {
 
-    "save ClaimAmount when 'FireService' is selected" in {
+        val application = applicationBuilder(Some(userAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
+        val request = FakeRequest(POST, fourthIndustryOptionsRoute)
+          .withFormUrlEncodedBody(("value", trade.toString))
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+        val result = route(application, request).value
 
-      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.FireService.toString))
+        val userAnswers2 = userAnswers
+          .set(ClaimAmount, claimAmount).success.value
+          .set(FourthIndustryOptionsPage, trade).success.value
 
-      route(application, request).value.futureValue
+        whenReady(result) {
+          _ =>
+            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+        }
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.fireService
+        application.stop()
       }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
-
-    "save ClaimAmount when 'Leisure' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.Leisure.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.leisure
-      }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
-
-    "save ClaimAmount when 'Prisons' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.Prisons.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.prisons
-      }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
-    }
-
-    "save ClaimAmount when 'My industry was not listed' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", FourthIndustryOptions.NoneOfAbove.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
-      }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
     }
   }
 }

@@ -20,13 +20,14 @@ import base.SpecBase
 import controllers.actions.{Authed, UnAuthed}
 import controllers.authenticated.routes._
 import controllers.routes._
+import models.{NormalMode, UserAnswers}
 import models.requests.IdentifierRequest
-import models.{FirstIndustryOptions, NormalMode}
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers._
+import org.mockito.Matchers.{eq => eqTo}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.FirstIndustryOptionsPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -36,31 +37,41 @@ import scala.concurrent.Future
 
 class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
   "AuthRedirectController" must {
 
-    "redirect to TaxYearSelection on success" in {
+    "redirect to TaxYearSelection on success and test integration with session repo works as expected" in {
 
-      val application = applicationBuilder(Some(minimumUserAnswers))
+      val userAnswers = minimumUserAnswers
+
+      val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+      when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
+      when(mockSessionRepository.remove(any())) thenReturn Future.successful(Some(userAnswers))
+
+      val application = applicationBuilder(Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
+      val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
 
-      whenReady(sessionRepository.set(UnAuthed(userAnswersId), minimumUserAnswers)) {
+      val result = route(application, request).value
+
+      status(result) mustEqual 303
+
+      redirectLocation(result).get mustBe TaxYearSelectionController.onPageLoad(NormalMode).url
+
+      whenReady(result) {
         _ =>
-          val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
-
-          val result = route(application, request).value
-
-          status(result) mustEqual 303
-
-          redirectLocation(result).get mustBe TaxYearSelectionController.onPageLoad(NormalMode).url
-
-          whenReady(sessionRepository.get(Authed(userAnswersId))) {
-            _.value.get(FirstIndustryOptionsPage).value mustBe FirstIndustryOptions.Retail
-          }
+          verify(mockSessionRepository, times(1)).remove(UnAuthed(userAnswersId))
+          verify(mockSessionRepository, times(1)).set(eqTo(Authed(userAnswersId)), any())
+          assert(argCaptor.getValue.data == userAnswers.data)
       }
 
-      sessionRepository.remove(Authed(userAnswersId))
       application.stop()
     }
 

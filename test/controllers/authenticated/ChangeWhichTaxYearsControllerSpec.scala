@@ -20,23 +20,33 @@ import base.SpecBase
 import forms.authenticated.ChangeWhichTaxYearsFormProvider
 import models.{NormalMode, TaxYearSelection}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.authenticated.ChangeWhichTaxYearsPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import viewmodels.RadioCheckboxOption
 import views.html.authenticated.ChangeWhichTaxYearsView
 
-class ChangeWhichTaxYearsControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val changeWhichTaxYearsRoute = routes.ChangeWhichTaxYearsController.onPageLoad(NormalMode).url
 
-  val formProvider = new ChangeWhichTaxYearsFormProvider()
-  val form = formProvider()
-  val taxYearsAndAmounts: Seq[(RadioCheckboxOption, Int)] = Seq((TaxYearSelection.options.head, 100))
+  private val formProvider = new ChangeWhichTaxYearsFormProvider()
+  private val form = formProvider()
+  private val taxYearsAndAmounts: Seq[(RadioCheckboxOption, Int)] = Seq((TaxYearSelection.options.head, 100))
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "ChangeWhichTaxYears Controller" must {
 
@@ -80,6 +90,7 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase {
       val application =
         applicationBuilder(userAnswers = Some(fullUserAnswers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
 
       val request =

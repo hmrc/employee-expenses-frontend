@@ -22,9 +22,13 @@ import controllers.actions.UnAuthed
 import forms.manufacturing.AluminiumOccupationList3FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.manufacturing.AluminiumOccupationList3Page
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -32,12 +36,18 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.manufacturing.AluminiumOccupationList3View
 
-class AluminiumOccupationList3ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
+import scala.concurrent.Future
+
+class AluminiumOccupationList3ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AluminiumOccupationList3FormProvider()
-  val form = formProvider()
+  private val formProvider = new AluminiumOccupationList3FormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val aluminiumOccupationList3Route = routes.AluminiumOccupationList3Controller.onPageLoad(NormalMode).url
 
@@ -85,6 +95,7 @@ class AluminiumOccupationList3ControllerSpec extends SpecBase with ScalaFutures 
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -157,21 +168,46 @@ class AluminiumOccupationList3ControllerSpec extends SpecBase with ScalaFutures 
 
     "save 'list3' to ClaimAmount when 'Yes' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
       val request = FakeRequest(POST, aluminiumOccupationList3Route)
         .withFormUrlEncodedBody(("value", "true"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.Aluminium.list3
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.list3).success.value
+        .set(AluminiumOccupationList3Page, true).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
+      application.stop()
+    }
+
+    "save only page data when 'No' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, aluminiumOccupationList3Route)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(AluminiumOccupationList3Page, false).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
       application.stop()
     }
   }

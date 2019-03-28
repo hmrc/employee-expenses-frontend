@@ -35,6 +35,7 @@ import models.FirstIndustryOptions._
 import models.FourthIndustryOptions._
 import models.SecondIndustryOptions._
 import models.ThirdIndustryOptions._
+import models.MultipleEmployments._
 import models._
 import pages._
 import play.api.mvc.Call
@@ -68,9 +69,9 @@ class GenericNavigator @Inject()() extends Navigator {
 
   private def multipleEmployments(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(MultipleEmploymentsPage) match {
-      case Some(true)  => ClaimByAlternativeController.onPageLoad()
-      case Some(false) => FirstIndustryOptionsController.onPageLoad(mode)
-      case _           => SessionExpiredController.onPageLoad()
+      case Some(MoreThanOneJob)   => ClaimByAlternativeController.onPageLoad()
+      case Some(OneJob)           => FirstIndustryOptionsController.onPageLoad(mode)
+      case _                      => SessionExpiredController.onPageLoad()
     }
 
   private def firstIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =

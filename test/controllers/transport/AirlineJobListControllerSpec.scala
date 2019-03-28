@@ -22,8 +22,11 @@ import controllers.actions.UnAuthed
 import forms.transport.AirlineJobListFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.transport.AirlineJobListPage
 import play.api.Application
@@ -34,12 +37,18 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.transport.AirlineJobListView
 
-class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new AirlineJobListFormProvider()
-  val form = formProvider()
+  private val formProvider = new AirlineJobListFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val airlineJobListedRoute = routes.AirlineJobListController.onPageLoad(NormalMode).url
 
@@ -47,7 +56,9 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Integ
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
       val request = FakeRequest(GET, airlineJobListedRoute)
 
@@ -87,11 +98,11 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Integ
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, airlineJobListedRoute)
+      val request = FakeRequest(POST, airlineJobListedRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -107,11 +118,11 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Integ
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, airlineJobListedRoute)
+      val request = FakeRequest(POST, airlineJobListedRoute)
           .withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
@@ -125,10 +136,11 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Integ
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
-      val request =
-        FakeRequest(POST, airlineJobListedRoute)
+      val request = FakeRequest(POST, airlineJobListedRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -147,7 +159,9 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Integ
 
     "redirect to Session Expired for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
       val request = FakeRequest(GET, airlineJobListedRoute)
 
@@ -162,10 +176,11 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Integ
 
     "redirect to Session Expired for a POST if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
-      val request =
-        FakeRequest(POST, airlineJobListedRoute)
+      val request = FakeRequest(POST, airlineJobListedRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -179,39 +194,45 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Integ
 
     "save ClaimAmount 'PilotsFlightDeck' when true" in {
 
-      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
       val request = FakeRequest(POST, airlineJobListedRoute).withFormUrlEncodedBody(("value", "true"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Airlines.pilotsFlightDeck
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Transport.Airlines.pilotsFlightDeck).success.value
+        .set(AirlineJobListPage, true).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
     "save ClaimAmount 'CabinCrew' when false" in {
 
-      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
       val request = FakeRequest(POST, airlineJobListedRoute).withFormUrlEncodedBody(("value", "false"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.Airlines.cabinCrew
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew).success.value
+        .set(AirlineJobListPage, false).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

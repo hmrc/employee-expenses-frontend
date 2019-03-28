@@ -17,14 +17,14 @@
 package forms
 
 import javax.inject.Inject
-
 import forms.mappings.Mappings
+import models.MultipleEmployments
 import play.api.data.Form
 
 class MultipleEmploymentsFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(): Form[MultipleEmployments] =
     Form(
-      "value" -> boolean("multipleEmployments.error.required")
+      "value" -> enumerable[MultipleEmployments]("multipleEmployments.error.required")
     )
 }

@@ -66,12 +66,12 @@ expensesEmployerPaid.checkYourAnswersLabel = What is the amount that your employ
 expensesEmployerPaid.error.nonNumeric = Enter a whole number using characters 0 to 9
 expensesEmployerPaid.error.required = Enter the amount that your employer has paid back
 expensesEmployerPaid.error.wholeNumber = Enter a whole number
-expensesEmployerPaid.error.outOfRange = Enter an amount between {0} and {1}
+expensesEmployerPaid.error.outOfRange = Enter a whole number between {0} and {1}
 
 cannotClaim.title = You cannot claim tax relief for these expenses
 cannotClaim.heading = You cannot claim tax relief for these expenses
-cannotClaim.para1 = This is because your employer has paid back all of your expenses.
-cannotClaim.link = Read claim tax relief for your job expenses
+cannotClaim.para1 = You cannot claim these expenses because your employer has already paid back the full amount that you can claim.
+cannotClaim.link = Your employer has already paid back all of your expenses
 
 employerContribution.title = Has your employer paid back any of your expenses for uniform, work clothing or tools?
 employerContribution.heading = Has your employer paid back any of your expenses for uniform, work clothing or tools?
@@ -87,10 +87,12 @@ employerContribution.error.required = Select if your employer paid back any of y
 claimByAlternative.title = You can claim tax relief for these expenses by post or using an online form
 claimByAlternative.heading = You can claim tax relief for these expenses by post or using an online form
 
-multipleEmployments.title = Are you claiming for more than one job?
-multipleEmployments.heading = Are you claiming for more than one job?
-multipleEmployments.checkYourAnswersLabel = Are you claiming for more than one job?
-multipleEmployments.error.required = Select yes if you are claiming for more than one job
+multipleEmployments.title = How many jobs are you claiming for?
+multipleEmployments.heading = How many jobs are you claiming for?
+multipleEmployments.checkYourAnswersLabel = How many jobs are you claiming for?
+multipleEmployments.error.required = Select if you have one job, or more than one job
+multipleEmployments.oneJob = One job
+multipleEmployments.moreThanOneJob = More than one job
 
 firstIndustryOptions.title = Industry list 1 of 4
 firstIndustryOptions.heading = Industry list 1 of 4
@@ -322,8 +324,8 @@ factoryEngineeringApprentice.heading = Are you an apprentice or storekeeper?
 factoryEngineeringApprentice.checkYourAnswersLabel = Are you an apprentice or storekeeper?
 factoryEngineeringApprentice.error.required = Select yes if you are an apprentice or storekeeper
 
-typeOfManufacturing.title = What type of manufacturing do you work in?
-typeOfManufacturing.heading = What type of manufacturing do you work in?
+typeOfManufacturing.title = What type of manufacturing and warehousing do you work in?
+typeOfManufacturing.heading = What type of manufacturing and warehousing do you work in?
 typeOfManufacturing.aluminium = Aluminium
 typeOfManufacturing.brassCopper = Brass and copper
 typeOfManufacturing.glass = Glass
@@ -331,8 +333,8 @@ typeOfManufacturing.ironSteel = Iron and steel
 typeOfManufacturing.preciousMetals = Quarrying and precious metals
 typeOfManufacturing.woodFurniture = Wood and furniture
 typeOfManufacturing.none = Manufacturing type not listed
-typeOfManufacturing.checkYourAnswersLabel = What type of manufacturing do you work in?
-typeOfManufacturing.error.required = Select what type of manufacturing you work in
+typeOfManufacturing.checkYourAnswersLabel = What type of manufacturing and warehousing do you work in?
+typeOfManufacturing.error.required = Select what type of manufacturing and warehousing you work in
 
 specialConstable.title = Are you a special constable?
 specialConstable.heading = Are you a special constable?
@@ -424,9 +426,9 @@ cateringStaffNHS.heading = Are you catering staff in the NHS?
 cateringStaffNHS.checkYourAnswersLabel = Are you catering staff in the NHS?
 cateringStaffNHS.error.required = Select yes if you are catering staff in the NHS
 
-clothing.title = Clothing occupation list
-clothing.heading = Clothing occupation list
-clothing.checkYourAnswersLabel = Clothing occupation list
+clothing.title = Clothing and textiles occupation list
+clothing.heading = Clothing and textiles occupation list
+clothing.checkYourAnswersLabel = Clothing and textiles occupation list
 clothing.error.required = Select yes your occupation is listed
 clothing.listText = The occupations are:
 clothing.radioLabel = Is your occupation listed?

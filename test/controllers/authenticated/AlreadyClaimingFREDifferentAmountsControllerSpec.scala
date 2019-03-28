@@ -20,22 +20,32 @@ import base.SpecBase
 import forms.authenticated.AlreadyClaimingFREDifferentAmountsFormProvider
 import models.{AlreadyClaimingFREDifferentAmounts, NormalMode}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.authenticated.AlreadyClaimingFREDifferentAmountsPage
 import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.authenticated.AlreadyClaimingFREDifferentAmountsView
 
-class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val alreadyClaimingFREDifferentAmountsRoute = routes.AlreadyClaimingFREDifferentAmountsController.onPageLoad(NormalMode).url
 
-  val formProvider = new AlreadyClaimingFREDifferentAmountsFormProvider()
-  val form = formProvider()
+  private val formProvider = new AlreadyClaimingFREDifferentAmountsFormProvider()
+  private val form = formProvider()
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "AlreadyClaimingFREDifferentAmounts Controller" must {
 
@@ -91,6 +101,7 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(fullUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 

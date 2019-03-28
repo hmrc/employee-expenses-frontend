@@ -21,6 +21,11 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryMultipleEmployments: Arbitrary[MultipleEmployments] =
+    Arbitrary {
+      Gen.oneOf(MultipleEmployments.values)
+    }
+
   implicit lazy val arbitraryAlreadyClaimingFREDifferentAmounts: Arbitrary[AlreadyClaimingFREDifferentAmounts] =
     Arbitrary {
       Gen.oneOf(AlreadyClaimingFREDifferentAmounts.values)

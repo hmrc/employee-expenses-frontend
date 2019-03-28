@@ -22,8 +22,11 @@ import controllers.actions.UnAuthed
 import forms.transport.GarageHandOrCleanerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
+import org.mockito.Mockito._
 import pages.ClaimAmount
 import pages.transport.GarageHandOrCleanerPage
 import play.api.Application
@@ -34,12 +37,19 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.transport.GarageHandOrCleanerView
 
-class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new GarageHandOrCleanerFormProvider()
-  val form = formProvider()
+  private val formProvider = new GarageHandOrCleanerFormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+
 
   lazy val garageHandOrCleanerRoute = routes.GarageHandOrCleanerController.onPageLoad(NormalMode).url
 
@@ -87,11 +97,11 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, garageHandOrCleanerRoute)
+      val request = FakeRequest(POST, garageHandOrCleanerRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -107,11 +117,11 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, garageHandOrCleanerRoute)
+      val request = FakeRequest(POST, garageHandOrCleanerRoute)
           .withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
@@ -125,10 +135,11 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
 
-      val request =
-        FakeRequest(POST, garageHandOrCleanerRoute)
+      val request = FakeRequest(POST, garageHandOrCleanerRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -164,8 +175,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request =
-        FakeRequest(POST, garageHandOrCleanerRoute)
+      val request = FakeRequest(POST, garageHandOrCleanerRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -179,39 +189,44 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
     "save ClaimAmount 'garageHands' when true" in {
 
-      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
       val request = FakeRequest(POST, garageHandOrCleanerRoute).withFormUrlEncodedBody(("value", "true"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.PublicTransport.garageHands
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.garageHands).success.value
+        .set(GarageHandOrCleanerPage, true).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
 
     "save ClaimAmount 'conductorsDrivers' when false" in {
 
-      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
       val request = FakeRequest(POST, garageHandOrCleanerRoute).withFormUrlEncodedBody(("value", "false"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Transport.PublicTransport.conductorsDrivers
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.conductorsDrivers).success.value
+        .set(GarageHandOrCleanerPage, false).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
-
-      sessionRepository.remove(UnAuthed(userAnswersId))
       application.stop()
     }
   }

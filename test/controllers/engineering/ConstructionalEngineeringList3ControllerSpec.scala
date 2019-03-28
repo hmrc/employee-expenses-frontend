@@ -22,8 +22,11 @@ import controllers.actions.UnAuthed
 import forms.engineering.ConstructionalEngineeringList3FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.engineering.ConstructionalEngineeringList3Page
 import play.api.inject.bind
@@ -33,13 +36,19 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.engineering.ConstructionalEngineeringList3View
 
+import scala.concurrent.Future
 
-class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+
+class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ConstructionalEngineeringList3FormProvider()
-  val form = formProvider()
+  private val formProvider = new ConstructionalEngineeringList3FormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val constructionalEngineeringList3Route = routes.ConstructionalEngineeringList3Controller.onPageLoad(NormalMode).url
 
@@ -87,6 +96,7 @@ class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFu
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -159,20 +169,44 @@ class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFu
 
     "save 'list3' to ClaimAmount when 'Yes' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
       val request = FakeRequest(POST, constructionalEngineeringList3Route).withFormUrlEncodedBody(("value", "true"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.ConstructionalEngineering.list3
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.ConstructionalEngineering.list3).success.value
+        .set(ConstructionalEngineeringList3Page, true).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
+      application.stop()
+    }
+
+    "save no ClaimAmount when 'No' is selected" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, constructionalEngineeringList3Route).withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(ConstructionalEngineeringList3Page, false).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
       application.stop()
     }
   }

@@ -18,14 +18,18 @@ package controllers
 
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
-import controllers.actions.UnAuthed
 import forms.FirstIndustryOptionsFormProvider
 import generators.Generators
+import models.FirstIndustryOptions._
 import models.{FirstIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.PropertyChecks
 import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.Application
@@ -36,14 +40,22 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.FirstIndustryOptionsView
 
+import scala.concurrent.Future
 
-class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
+
+class FirstIndustryOptionsControllerSpec
+  extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
 
   def onwardRoute = Call("GET", "/FOO")
 
   lazy val firstIndustryOptionsRoute = controllers.routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url
-  val formProvider = new FirstIndustryOptionsFormProvider()
-  val form = formProvider()
+  private val formProvider = new FirstIndustryOptionsFormProvider()
+  private val form = formProvider()
+  private val mockSessionRepository = mock[SessionRepository]
+  private val userAnswers = emptyUserAnswers
+
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "FirstIndustryOptionsController" must {
 
@@ -80,6 +92,7 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
     "redirect to next page when valid data is submitted" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
         .build()
 
@@ -147,22 +160,35 @@ class FirstIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
     }
   }
 
-  "save ClaimAmount when 'Retail' is selected" in {
-
-    val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-      .build()
-
-    val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-    val request = FakeRequest(POST, firstIndustryOptionsRoute).withFormUrlEncodedBody(("value", FirstIndustryOptions.Retail.toString))
-
-    route(application, request).value.futureValue
-
-    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-      _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+  for (trade <- FirstIndustryOptions.values) {
+    val userAnswers2 = trade match {
+      case Retail => userAnswers
+        .set(FirstIndustryOptionsPage, trade).success.value
+        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+      case _ => userAnswers
+        .set(FirstIndustryOptionsPage, trade).success.value
     }
 
-    sessionRepository.remove(UnAuthed(userAnswersId))
-    application.stop()
+    s"save correct amount to ClaimAmount when '$trade' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+
+      val request = FakeRequest(POST, firstIndustryOptionsRoute).withFormUrlEncodedBody(("value", trade.toString))
+
+      val result = route(application, request).value
+
+      whenReady(result) {
+        _ =>
+          assert(argCaptor.getValue.data == userAnswers2.data)
+      }
+
+      application.stop()
+    }
   }
 }

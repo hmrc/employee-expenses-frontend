@@ -18,17 +18,31 @@ package controllers
 
 import base.SpecBase
 import config.NavConstant
+import controllers.actions.UnAuthed
 import forms.SameEmployerContributionAllYearsFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito._
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.{ExpensesEmployerPaidPage, SameEmployerContributionAllYearsPage}
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.SameEmployerContributionAllYearsView
 
-class SameEmployerContributionAllYearsControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class SameEmployerContributionAllYearsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience{
+
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -84,6 +98,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase {
 
       val application =
         applicationBuilder(userAnswers = Some(fullUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -151,6 +166,55 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save 'true' when 'Yes' is selected" in {
+
+      val ua = userAnswers
+        .set(ExpensesEmployerPaidPage, 0).success.value
+
+      val application: Application = applicationBuilder(userAnswers = Some(ua))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, sameEmployerContributionAllYearsRoute).withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = ua
+        .set(SameEmployerContributionAllYearsPage, true).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      application.stop()
+    }
+
+    "save 'false' when 'No' is selected" in {
+
+      val ua = userAnswers
+        .set(ExpensesEmployerPaidPage, 0).success.value
+
+      val application: Application = applicationBuilder(userAnswers = Some(ua))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, sameEmployerContributionAllYearsRoute).withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = ua
+
+        .set(SameEmployerContributionAllYearsPage, false).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
 
       application.stop()
     }

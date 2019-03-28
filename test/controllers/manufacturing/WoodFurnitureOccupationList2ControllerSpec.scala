@@ -23,9 +23,13 @@ import controllers.routes.SessionExpiredController
 import forms.WoodFurnitureOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.manufacturing.WoodFurnitureOccupationList2Page
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -33,12 +37,18 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.manufacturing.WoodFurnitureOccupationList2View
 
-class WoodFurnitureOccupationList2ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
+import scala.concurrent.Future
+
+class WoodFurnitureOccupationList2ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new WoodFurnitureOccupationList2FormProvider()
-  val form = formProvider()
+  private val formProvider = new WoodFurnitureOccupationList2FormProvider()
+  private val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val woodFurnitureOccupationList2Route = controllers.manufacturing.routes.WoodFurnitureOccupationList2Controller.onPageLoad(NormalMode).url
 
@@ -86,6 +96,7 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase with ScalaFutu
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -158,21 +169,46 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase with ScalaFutu
 
     "save 'list2' to ClaimAmount when 'Yes' is selected" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
 
       val request = FakeRequest(POST, woodFurnitureOccupationList2Route)
         .withFormUrlEncodedBody(("value", "true"))
 
-      route(application, request).value.futureValue
+      val result = route(application, request).value
 
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.Manufacturing.WoodFurniture.list2
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.list2).success.value
+        .set(WoodFurnitureOccupationList2Page, true).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
+      application.stop()
+    }
+
+    "save only page data when 'No' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, woodFurnitureOccupationList2Route)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(WoodFurnitureOccupationList2Page, false).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
       application.stop()
     }
   }

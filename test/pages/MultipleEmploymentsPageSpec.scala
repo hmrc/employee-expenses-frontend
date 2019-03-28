@@ -16,16 +16,17 @@
 
 package pages
 
+import models.MultipleEmployments
 import pages.behaviours.PageBehaviours
 
 class MultipleEmploymentsPageSpec extends PageBehaviours {
 
   "MultipleEmploymentsPage" must {
 
-    beRetrievable[Boolean](MultipleEmploymentsPage)
+    beRetrievable[MultipleEmployments](MultipleEmploymentsPage)
 
-    beSettable[Boolean](MultipleEmploymentsPage)
+    beSettable[MultipleEmployments](MultipleEmploymentsPage)
 
-    beRemovable[Boolean](MultipleEmploymentsPage)
+    beRemovable[MultipleEmployments](MultipleEmploymentsPage)
   }
 }

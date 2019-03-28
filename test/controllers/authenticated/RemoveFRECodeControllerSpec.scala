@@ -21,8 +21,12 @@ import controllers.actions.Authed
 import forms.authenticated.RemoveFRECodeFormProvider
 import models.{NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import pages.authenticated.RemoveFRECodePage
+import org.scalatest.mockito.MockitoSugar
+import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -30,11 +34,17 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.authenticated.RemoveFRECodeView
 
-class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience {
+import scala.concurrent.Future
+
+class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val removeFRECodeRoute = routes.RemoveFRECodeController.onPageLoad(NormalMode).url
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+  lazy val removeFRECodeRoute: String = routes.RemoveFRECodeController.onPageLoad(NormalMode).url
 
   val formProvider = new RemoveFRECodeFormProvider()
   val form = formProvider()
@@ -83,6 +93,7 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -153,22 +164,25 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
     }
 
     for (option <- TaxYearSelection.values) {
-      s"save '${option}' when '${option}' is selected" in {
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .build()
+      s"save '$option' when selected" in {
+        val ua1 = emptyUserAnswers
 
-        val sessionRepository = application.injector.instanceOf[SessionRepository]
+        val application = applicationBuilder(userAnswers = Some(ua1))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
 
         val request = FakeRequest(POST, removeFRECodeRoute)
           .withFormUrlEncodedBody(("value", option.toString))
 
-        route(application, request).value.futureValue
+        val result = route(application, request).value
 
-        whenReady(sessionRepository.get(Authed(userAnswersId))) {
-          _.value.get(RemoveFRECodePage).value mustBe option
+        val ua2 = ua1.set(RemoveFRECodePage, option).success.value
+
+        whenReady(result) {
+          _ =>
+            verify(mockSessionRepository, times(1)).set(Authed(userAnswersId), ua2)
         }
 
-        sessionRepository.remove(Authed(userAnswersId))
         application.stop()
       }
     }

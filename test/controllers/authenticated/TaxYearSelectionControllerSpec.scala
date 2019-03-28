@@ -32,6 +32,7 @@ import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import service.TaiService
 import views.html.authenticated.TaxYearSelectionView
 
@@ -43,10 +44,14 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
   lazy val taxYearSelectionRoute: String = routes.TaxYearSelectionController.onPageLoad(NormalMode).url
 
-  val formProvider = new TaxYearSelectionFormProvider()
-  val form: Form[Seq[TaxYearSelection]] = formProvider()
+  private val formProvider = new TaxYearSelectionFormProvider()
+  private val form: Form[Seq[TaxYearSelection]] = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
 
-  val mockTaiService: TaiService = mock[TaiService]
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+  private val mockTaiService: TaiService = mock[TaiService]
 
   "TaxYearSelection Controller" must {
 
@@ -96,6 +101,7 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
         applicationBuilder(Some(answers))
           .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[TaiService].toInstance(mockTaiService))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
 
       when(mockTaiService.freResponse(any(), any(), any())(any(), any())) thenReturn Future.successful(FlatRateExpenseOptions.FRENoYears)

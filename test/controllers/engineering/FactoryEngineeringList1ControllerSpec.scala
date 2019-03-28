@@ -22,8 +22,11 @@ import controllers.actions.UnAuthed
 import forms.engineering.FactoryEngineeringList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.engineering.FactoryEngineeringList1Page
 import play.api.inject.bind
@@ -33,7 +36,14 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.engineering.FactoryEngineeringList1View
 
-class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -86,6 +96,7 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -106,6 +117,7 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -178,23 +190,25 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
     }
   }
 
-  "save 'list' to ClaimAmount when 'Yes' is selected" in {
+  "save  ClaimAmount when 'Yes' is selected" in {
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+    val application = applicationBuilder(userAnswers = Some(userAnswers))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
       .build()
 
-    val sessionRepository = application.injector.instanceOf[SessionRepository]
+    val request = FakeRequest(POST, factoryEngineeringList1Route).withFormUrlEncodedBody(("value", "true"))
 
-    val request = FakeRequest(POST, factoryEngineeringList1Route)
-      .withFormUrlEncodedBody(("value", "true"))
+    val result = route(application, request).value
 
-    route(application, request).value.futureValue
+    val userAnswers2= userAnswers
+    .set(ClaimAmount, ClaimAmounts.FactoryEngineering.list1).success.value
+    .set(FactoryEngineeringList1Page, true).success.value
 
-    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-      _.value.get(ClaimAmount).value mustBe ClaimAmounts.FactoryEngineering.list1
+    whenReady(result){
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
     }
 
-    sessionRepository.remove(UnAuthed(userAnswersId))
     application.stop()
   }
 }

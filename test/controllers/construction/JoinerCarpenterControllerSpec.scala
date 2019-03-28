@@ -22,8 +22,11 @@ import controllers.actions.UnAuthed
 import forms.construction.JoinerCarpenterFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.scalatest.OptionValues
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import pages.ClaimAmount
 import pages.construction.JoinerCarpenterPage
 import play.api.inject.bind
@@ -33,12 +36,17 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.construction.JoinerCarpenterView
 
-class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues {
+import scala.concurrent.Future
+
+class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new JoinerCarpenterFormProvider()
-  val form = formProvider()
+  private val formProvider = new JoinerCarpenterFormProvider()
+  private val form = formProvider()
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val joinerCarpenterRoute = routes.JoinerCarpenterController.onPageLoad(NormalMode).url
 
@@ -86,11 +94,11 @@ class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with Inte
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-      val request =
-        FakeRequest(POST, joinerCarpenterRoute)
+      val request = FakeRequest(POST, joinerCarpenterRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -159,21 +167,50 @@ class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with Inte
 
   "save 'joinersCarpenters' to ClaimAmount when 'Yes' is selected" in {
 
-    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-      .build()
+    val ua1 = emptyUserAnswers
 
-    val sessionRepository = application.injector.instanceOf[SessionRepository]
+    val application = applicationBuilder(userAnswers = Some(ua1))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+      .build()
 
     val request = FakeRequest(POST, joinerCarpenterRoute)
       .withFormUrlEncodedBody(("value", "true"))
 
-    route(application, request).value.futureValue
+    val ua2 =
+      ua1
+        .set(ClaimAmount, ClaimAmounts.Construction.joinersCarpenters).success.value
+        .set(JoinerCarpenterPage, true).success.value
 
-    whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-      _.value.get(ClaimAmount).value mustBe ClaimAmounts.Construction.joinersCarpenters
+    val result = route(application, request).value
+
+    whenReady(result) {
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
     }
 
-    sessionRepository.remove(UnAuthed(userAnswersId))
+    application.stop()
+  }
+
+  "not save ClaimAmount when 'No' is selected" in {
+
+    val ua1 = emptyUserAnswers
+
+    val application = applicationBuilder(userAnswers = Some(ua1))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+      .build()
+
+    val request = FakeRequest(POST, joinerCarpenterRoute)
+      .withFormUrlEncodedBody(("value", "false"))
+
+    val ua2 = ua1.set(JoinerCarpenterPage, false).success.value
+
+    val result = route(application, request).value
+
+    whenReady(result) {
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+    }
+
     application.stop()
   }
 }

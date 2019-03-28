@@ -21,11 +21,15 @@ import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.ThirdIndustryOptionsFormProvider
 import generators.Generators
+import models.ThirdIndustryOptions._
 import models.{NormalMode, ThirdIndustryOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.PropertyChecks
 import pages.{ClaimAmount, ThirdIndustryOptionsPage}
 import play.api.inject.bind
@@ -35,7 +39,15 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.ThirdIndustryOptionsView
 
-class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
+import scala.concurrent.Future
+
+class ThirdIndustryOptionsControllerSpec extends SpecBase
+  with ScalaFutures with MockitoSugar with IntegrationPatience with PropertyChecks with Generators with OptionValues {
+
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -88,6 +100,7 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
@@ -163,23 +176,35 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with
       application.stop()
     }
 
-    "save ClaimAmount when 'Education' is selected" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .build()
-
-      val sessionRepository = application.injector.instanceOf[SessionRepository]
-
-      val request = FakeRequest(POST, thirdIndustryOptionsRoute).withFormUrlEncodedBody(("value", ThirdIndustryOptions.Education.toString))
-
-      route(application, request).value.futureValue
-
-      whenReady(sessionRepository.get(UnAuthed(userAnswersId))) {
-        _.value.get(ClaimAmount).value mustBe ClaimAmounts.defaultRate
+    for (choice <- ThirdIndustryOptions.values) {
+      val userAnswers2 = choice match {
+        case BanksBuildingSocieties => userAnswers
+          .set(ThirdIndustryOptionsPage, choice).success.value
+          .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+        case Education  => userAnswers
+          .set(ThirdIndustryOptionsPage, choice).success.value
+          .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+        case _ => userAnswers
+          .set(ThirdIndustryOptionsPage, choice).success.value
       }
 
-      sessionRepository.remove(UnAuthed(userAnswersId))
-      application.stop()
+      s"save correct data when '$choice' is selected" in {
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
+
+        val request = FakeRequest(POST, thirdIndustryOptionsRoute).withFormUrlEncodedBody(("value", choice.toString))
+
+        val result = route(application, request).value
+
+        whenReady(result) {
+          _ =>
+            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+        }
+
+        application.stop()
+      }
     }
   }
 }
