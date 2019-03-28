@@ -82,7 +82,7 @@ employerContribution.list.item2 = repairing, replacing or cleaning any specialis
 employerContribution.list.item3 = repairing or replacing any small tools that you own, but use for your job
 employerContribution.hint = This does not include the cost of buying the first item.
 employerContribution.checkYourAnswersLabel = Has your employer paid back any of your expenses for uniform, work clothing or tools?
-employerContribution.error.required = Select if your employer paid back any of your expenses for uniform, work clothing or tools
+employerContribution.error.required = Select yes if your employer paid back any of your expenses for uniform, work clothing or tools
 
 claimByAlternative.title = You can claim tax relief for these expenses by post or using an online form
 claimByAlternative.heading = You can claim tax relief for these expenses by post or using an online form
