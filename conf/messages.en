@@ -147,13 +147,10 @@ claimAmount.noContributionDescription = Based on your industry and occupation, y
 claimAmount.description = The actual amount you will get depends on the rate of tax you pay, and where you live in the UK.
 claimAmount.englandHeading = Taxpayers in England, Northern Ireland and Wales
 claimAmount.scotlandHeading = Taxpayers in Scotland
-
 claimAmount.listHeading = You will get:
-
 claimAmount.starterRate = £{0} of this £{1} per year if you are a starter rate ({2}%) taxpayer.
 claimAmount.basicRate = £{0} of this £{1} per year if you are a basic rate ({2}%) taxpayer.
 claimAmount.higherRate = £{0} of this £{1} per year if you are a higher rate ({2}%) taxpayer.
-
 claimAmount.checkYourAnswersLabel = Personal allowance increase
 
 typeOfEngineering.title = Engineering industry list
