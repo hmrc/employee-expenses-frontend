@@ -42,8 +42,10 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   val claimAmountService = new ClaimAmountService(frontendAppConfig)
   val claimAmount: Int = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
   val claimAmountsAndRates = Rates(
+    None,
     frontendAppConfig.taxPercentageBand1,
     frontendAppConfig.taxPercentageBand2,
+    None,
     claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
     claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
     None
@@ -76,7 +78,8 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           updateEmployerInfo = None,
           updateAddressInfo = None,
           claimAmount = claimAmount,
-          claimAmountsAndRates = Seq(claimAmountsAndRates))(fakeRequest, messages).toString
+          claimAmountsAndRates = Seq(claimAmountsAndRates)
+        )(fakeRequest, messages).toString
 
       application.stop()
     }

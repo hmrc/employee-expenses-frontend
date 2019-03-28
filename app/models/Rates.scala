@@ -16,6 +16,14 @@
 
 package models
 
-case class Rates(basicRate: Int, higherRate: Int, calculatedBasicRate: String, calculatedHigherRate: String, prefix: Option[Char])
+case class Rates(
+                  starterRate: Option[Int] = None,
+                  basicRate: Int,
+                  higherRate: Int,
+                  calculatedStarterRate: Option[String] = None,
+                  calculatedBasicRate: String,
+                  calculatedHigherRate: String,
+                  prefix: Option[Char]
+                )
 
 object Rates

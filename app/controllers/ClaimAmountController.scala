@@ -68,10 +68,12 @@ class ClaimAmountController @Inject()(
             )
 
             val scottishClaimAmountsAndRates = Rates(
-              basicRate = appConfig.taxPercentageScotlandBand1,
-              higherRate = appConfig.taxPercentageScotlandBand2,
-              calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBand1, claimAmountAndAnyDeductions),
-              calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmountAndAnyDeductions),
+              starterRate = Some(appConfig.taxPercentageScotlandBand1),
+              basicRate = appConfig.taxPercentageScotlandBand2,
+              higherRate = appConfig.taxPercentageScotlandBand3,
+              calculatedStarterRate = Some(calculateTax(appConfig.taxPercentageScotlandBand1, claimAmountAndAnyDeductions)),
+              calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmountAndAnyDeductions),
+              calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandBand3, claimAmountAndAnyDeductions),
               prefix = Some('S')
             )
 
