@@ -49,7 +49,7 @@
             }
         }
 
-        <p class ="form-block">@messages("input.radio.or")</p>
+        <p class ="form-block">@messages("site.or")</p>
 
         <div class="multiple-choice">
             <input id="@{inputs.last.id}" type="radio" name="@{field.id}" value="@{inputs.last.value}" @if(field.value.contains(inputs.last.value)){checked="checked"} @if(trackGa){data-journey-click="employee-expenses-frontend:click:@{inputs.last.id}"} />

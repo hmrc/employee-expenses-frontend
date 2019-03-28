@@ -11,8 +11,6 @@ checkYourAnswers.confirmInformationChangeFre = By making this change, you confir
 checkYourAnswers.prosecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
 checkYourAnswers.editText = Change your answer
 
-input.radio.or = or
-
 date.day = Day
 date.month = Month
 date.year = Year
@@ -54,6 +52,7 @@ site.acceptStopClaim = Accept and stop claim
 site.service_name = Employee Expenses
 site.textarea.char_limit = (Limit is {0} characters)
 site.startAgain = Restart your expenses claim
+site.or = or
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account

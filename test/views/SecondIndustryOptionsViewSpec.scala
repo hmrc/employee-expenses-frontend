@@ -53,7 +53,7 @@ class SecondIndustryOptionsViewSpec extends OptionsViewBehaviours[SecondIndustry
 
       val doc = asDocument(applyView(form))
 
-      doc.getElementsByClass("form-block").text() mustBe messages("input.radio.or")
+      doc.getElementsByClass("form-block").text() mustBe messages("site.or")
     }
   }
 
