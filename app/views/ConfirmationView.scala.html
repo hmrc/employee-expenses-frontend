@@ -60,14 +60,15 @@
                 @if(claimAmountsAndRates.length > 1) {
                     <h2 class="heading-small">@messages("confirmation.englandHeading")</h2>
                 }
-                <p>@messages("confirmation.basicRate", rates.calculatedBasicRate, rates.basicRate)</p>
-                <p>@messages("confirmation.higherRate", rates.calculatedHigherRate, rates.higherRate)</p>
+                <p>@messages("confirmation.basicRate", rates.calculatedBasicRate, claimAmount, rates.basicRate)</p>
+                <p>@messages("confirmation.higherRate", rates.calculatedHigherRate, claimAmount, rates.higherRate)</p>
             } else {
                 @if(claimAmountsAndRates.length > 1) {
                     <h2 class="heading-small">@messages("confirmation.scotlandHeading")</h2>
                 }
-                <p>@messages("confirmation.basicRate", rates.calculatedBasicRate, rates.basicRate)</p>
-                <p>@messages("confirmation.higherRate", rates.calculatedHigherRate, rates.higherRate)</p>
+                <p>@messages("confirmation.starterRate", rates.calculatedBasicRate, claimAmount, rates.basicRate)</p>
+                <p>@messages("confirmation.basicRate", rates.calculatedBasicRate, claimAmount, rates.basicRate)</p>
+                <p>@messages("confirmation.higherRate", rates.calculatedHigherRate, claimAmount, rates.higherRate)</p>
             }
         }
 
