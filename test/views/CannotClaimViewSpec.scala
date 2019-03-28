@@ -36,7 +36,7 @@ class CannotClaimViewSpec extends ViewBehaviours {
     "display page content" in {
       val doc = asDocument(applyView)
       assertContainsMessages(doc, "cannotClaim.para1", "cannotClaim.link")
-      doc.getElementById("link").attr("href") mustBe "https://www.gov.uk/tax-relief-for-employees"
+      doc.getElementById("link").attr("href") mustBe "https://www.gov.uk/guidance/job-expenses-for-uniforms-work-clothing-and-tools#if-your-employer-pays-towards-the-costs-of-your-expenses"
 
     }
 
