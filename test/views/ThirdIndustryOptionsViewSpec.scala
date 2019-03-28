@@ -48,6 +48,13 @@ class ThirdIndustryOptionsViewSpec extends OptionsViewBehaviours[ThirdIndustryOp
     behave like pageWithBackLink(applyView(form))
 
     behave like optionsPage(form, applyView, ThirdIndustryOptions.options)
+
+    "must have the correct text of 'or' between last 2 radioButtons" in {
+
+      val doc = asDocument(applyView(form))
+
+      doc.getElementsByClass("form-block").text() mustBe messages("site.or")
+    }
   }
 
   application.stop()

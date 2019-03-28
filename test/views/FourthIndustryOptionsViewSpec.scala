@@ -50,6 +50,13 @@ class FourthIndustryOptionsViewSpec extends OptionsViewBehaviours[FourthIndustry
     behave like optionsPage(form, applyView, FourthIndustryOptions.options)
 
     behave like pageWithBodyText(applyView(form), "fourthIndustryOptions.listText")
+
+    "must have the correct text of 'or' between last 2 radioButtons" in {
+
+      val doc = asDocument(applyView(form))
+
+      doc.getElementsByClass("form-block").text() mustBe messages("site.or")
+    }
   }
 
   application.stop()
