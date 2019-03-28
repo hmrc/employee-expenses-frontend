@@ -44,35 +44,46 @@ class ClaimAmountService @Inject()(
   def getRates(taxCodeRecords: Seq[TaxCodeRecord], claimAmount: Int): Seq[Rates] = {
     taxCodeRecords.headOption match {
       case Some(taxCodeRecord) if taxCodeRecord.taxCode(0).toUpper != 'S' =>
-        Seq(Rates(
-          basicRate = appConfig.taxPercentageBand1,
-          higherRate = appConfig.taxPercentageBand2,
-          calculatedBasicRate = calculateTax(appConfig.taxPercentageBand1, claimAmount),
-          calculatedHigherRate = calculateTax(appConfig.taxPercentageBand2, claimAmount),
-          prefix = None
-        ))
+        Seq(
+          Rates(
+            basicRate = appConfig.taxPercentageBand1,
+            higherRate = appConfig.taxPercentageBand2,
+            calculatedBasicRate = calculateTax(appConfig.taxPercentageBand1, claimAmount),
+            calculatedHigherRate = calculateTax(appConfig.taxPercentageBand2, claimAmount),
+            prefix = None
+          )
+        )
       case Some(taxCodeRecord) if taxCodeRecord.taxCode(0).toUpper == 'S' =>
-        Seq(Rates(
-          basicRate = appConfig.taxPercentageScotlandBand1,
-          higherRate = appConfig.taxPercentageScotlandBand2,
-          calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBand1, claimAmount),
-          calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmount),
-          prefix = Some('S')
-        ))
+        Seq(
+          Rates(
+            starterRate = Some(appConfig.taxPercentageScotlandBand1),
+            basicRate = appConfig.taxPercentageScotlandBand2,
+            higherRate = appConfig.taxPercentageScotlandBand3,
+            calculatedStarterRate = Some(calculateTax(appConfig.taxPercentageScotlandBand1, claimAmount)),
+            calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmount),
+            calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandBand3, claimAmount),
+            prefix = Some('S')
+          )
+        )
       case _ =>
-        Seq(Rates(
-          basicRate = appConfig.taxPercentageBand1,
-          higherRate = appConfig.taxPercentageBand2,
-          calculatedBasicRate = calculateTax(appConfig.taxPercentageBand1, claimAmount),
-          calculatedHigherRate = calculateTax(appConfig.taxPercentageBand2, claimAmount),
-          prefix = None
-        ), Rates(
-          basicRate = appConfig.taxPercentageScotlandBand1,
-          higherRate = appConfig.taxPercentageScotlandBand2,
-          calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBand1, claimAmount),
-          calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmount),
-          prefix = Some('S')
-        ))
+        Seq(
+          Rates(
+            basicRate = appConfig.taxPercentageBand1,
+            higherRate = appConfig.taxPercentageBand2,
+            calculatedBasicRate = calculateTax(appConfig.taxPercentageBand1, claimAmount),
+            calculatedHigherRate = calculateTax(appConfig.taxPercentageBand2, claimAmount),
+            prefix = None
+          ),
+          Rates(
+            starterRate = Some(appConfig.taxPercentageScotlandBand1),
+            basicRate = appConfig.taxPercentageScotlandBand2,
+            higherRate = appConfig.taxPercentageScotlandBand3,
+            calculatedStarterRate = Some(calculateTax(appConfig.taxPercentageScotlandBand1, claimAmount)),
+            calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmount),
+            calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandBand3, claimAmount),
+            prefix = Some('S')
+          )
+        )
     }
   }
 }

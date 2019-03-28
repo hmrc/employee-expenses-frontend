@@ -84,10 +84,12 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         val rates = claimAmountService.getRates(Seq(TaxCodeRecord("S850L")), claimAmount)
 
         rates mustBe Seq(Rates(
-          basicRate = frontendAppConfig.taxPercentageScotlandBand1,
-          higherRate = frontendAppConfig.taxPercentageScotlandBand2,
-          calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
-          calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+          starterRate = Some(frontendAppConfig.taxPercentageScotlandBand1),
+          basicRate = frontendAppConfig.taxPercentageScotlandBand2,
+          higherRate = frontendAppConfig.taxPercentageScotlandBand3,
+          calculatedStarterRate = Some(claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount)),
+          calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+          calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount),
           prefix = Some('S')
         ))
       }
@@ -105,10 +107,12 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
             prefix = None
           ),
           Rates(
-            basicRate = frontendAppConfig.taxPercentageScotlandBand1,
-            higherRate = frontendAppConfig.taxPercentageScotlandBand2,
-            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
-            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+            starterRate = Some(frontendAppConfig.taxPercentageScotlandBand1),
+            basicRate = frontendAppConfig.taxPercentageScotlandBand2,
+            higherRate = frontendAppConfig.taxPercentageScotlandBand3,
+            calculatedStarterRate = Some(claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount)),
+            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount),
             prefix = Some('S')
           ))
       }

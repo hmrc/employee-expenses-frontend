@@ -61,7 +61,7 @@ class ConfirmationController @Inject()(
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
 
-              sessionRepository.remove(request.identifier)
+//              sessionRepository.remove(request.identifier)
 
               Ok(view(
                 taxYearSelections = validTaxYearSelection,
