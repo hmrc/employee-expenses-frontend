@@ -16,7 +16,6 @@
 
 package service
 
-import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import com.google.inject.Inject
 import connectors.TaiConnector
 import models.{TaiTaxYear, TaxYearSelection}
@@ -31,44 +30,39 @@ class SubmissionService @Inject()(
                                    taiConnector: TaiConnector
                                  ) {
 
+  def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection], currentDate: LocalDate = LocalDate.now)
+                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxYearSelection]] = {
 
-  def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection])
-                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Seq[TaxYearSelection] = {
-
-    val currentDate = LocalDate.now
-
-    val claimYears: Seq[TaxYearSelection] =
-      if (!taxYears.contains(TaxYearSelection.CurrentYear)) {
-        taxYears
-      } else if (taxYears.contains(TaxYearSelection.CurrentYear) && (currentDate.getMonthOfYear <= 3 && currentDate.getDayOfMonth <= 5)) {
-        val result = taiConnector.taiTaxAccountSummary(nino, TaiTaxYear(TaxYear.current.currentYear).next).flatMap {
-          repsonse =>
-            repsonse.status match {
-              case 204 => Future.successful(taxYears :+ TaxYearSelection.NextYear)
-              case _ => Future.successful(taxYears)
-            }
-        }
-      } else {
-        taxYears :+ TaxYearSelection.NextYear
+    if (!taxYears.contains(TaxYearSelection.CurrentYear)) {
+      Future.successful(taxYears)
+    } else if (currentDate.getMonthOfYear < 4 || (currentDate.getMonthOfYear == 4 && currentDate.getDayOfMonth <= 5)) {
+      taiConnector.taiTaxAccountSummary(nino, TaiTaxYear(TaxYear.current.currentYear)).map {
+        result =>
+          result.status match {
+            case 204 =>
+              taxYears :+ TaxYearSelection.NextYear
+            case _ =>
+              taxYears
+          }
       }
-    claimYears
+    } else {
+      Future.successful(taxYears)
+    }
   }
 
   def submitFRENotInCode(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int)
                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
 
-    val claimYears = getTaxYearsToUpdate(nino, taxYears)
-
-    val responses: Future[Seq[HttpResponse]] =
-      futureSequence(claimYears) {
-        taxYearSelection =>
-          val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
-          taiService.updateFRE(nino, taiTaxYear, claimAmount)
-      }
-
+    val responses: Future[Seq[HttpResponse]] = getTaxYearsToUpdate(nino, taxYears).flatMap {
+      claimYears =>
+        futureSequence(claimYears) {
+          taxYearSelection =>
+            val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
+            taiService.updateFRE(nino, taiTaxYear, claimAmount)
+        }
+    }
 
     submissionResult(responses)
-
   }
 
   def submitRemoveFREFromCode(nino: String, taxYears: Seq[TaxYearSelection], removeYear: TaxYearSelection)
@@ -76,29 +70,31 @@ class SubmissionService @Inject()(
 
     val removeTaxYears = taxYears.take(TaxYearSelection.values.indexOf(removeYear) + 1)
 
-    val responses: Future[Seq[HttpResponse]] =
-      futureSequence(removeTaxYears) {
-        taxYearSelection =>
-          val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
-          taiService.updateFRE(nino, taiTaxYear, 0)
-      }
+    val responses: Future[Seq[HttpResponse]] = getTaxYearsToUpdate(nino, removeTaxYears).flatMap {
+      claimYears =>
+        futureSequence(claimYears) {
+          taxYearSelection =>
+            val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
+            taiService.updateFRE(nino, taiTaxYear, 0)
+        }
+    }
 
     submissionResult(responses)
-
   }
 
   def submitChangeFREFromCode(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int, changeYears: Seq[TaxYearSelection])
                              (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
 
-    val responses: Future[Seq[HttpResponse]] =
-      futureSequence(changeYears) {
-        taxYearSelection =>
-          val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
-          taiService.updateFRE(nino, taiTaxYear, claimAmount)
-      }
+    val responses: Future[Seq[HttpResponse]] = getTaxYearsToUpdate(nino, taxYears).flatMap {
+      claimYears =>
+        futureSequence(claimYears) {
+          taxYearSelection =>
+            val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
+            taiService.updateFRE(nino, taiTaxYear, claimAmount)
+        }
+    }
 
     submissionResult(responses)
-
   }
 
   private def futureSequence[I, O](inputs: Seq[I])(flatMapFunction: I => Future[O])
