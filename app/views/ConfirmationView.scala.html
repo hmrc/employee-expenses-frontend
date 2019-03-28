@@ -56,22 +56,19 @@
         <p>@messages("confirmation.actualAmount")</p>
 
         @for(rates <- claimAmountsAndRates) {
-            @if(rates.prefix.isEmpty) {
+            @if(rates.prefix.isDefined) {
                 @if(claimAmountsAndRates.length > 1) {
                     <h2 class="heading-small">@messages("confirmation.englandHeading")</h2>
                 }
-                <p>@messages("confirmation.basicRate", rates.calculatedBasicRate, claimAmount, rates.basicRate)</p>
-                <p>@messages("confirmation.higherRate", rates.calculatedHigherRate, claimAmount, rates.higherRate)</p>
+                <p>@messages("confirmation.basicRate", rates.calculatedBasicRate, rates.basicRate)</p>
+                <p>@messages("confirmation.higherRate", rates.calculatedHigherRate, rates.higherRate)</p>
             } else {
                 @if(claimAmountsAndRates.length > 1) {
                     <h2 class="heading-small">@messages("confirmation.scotlandHeading")</h2>
                 }
 
-                @(rates.calculatedStarterRate, rates.starterRate) match {
-                    case (Some(calc), Some(rate)) => {
-                        <p>@messages("confirmation.starterRate", calc, claimAmount, rate)</p>
-                    }
-                    case _ => {}
+                @if(rates.calculatedStarterRate.nonEmpty && rates.starterRate.nonEmpty) {
+                    <p>@messages("confirmation.starterRate", rates.calculatedStarterRate.get, claimAmount, rates.starterRate.get)</p>
                 }
                 <p>@messages("confirmation.basicRate", rates.calculatedBasicRate, claimAmount, rates.basicRate)</p>
                 <p>@messages("confirmation.higherRate", rates.calculatedHigherRate, claimAmount, rates.higherRate)</p>
