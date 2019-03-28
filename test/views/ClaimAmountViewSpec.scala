@@ -52,10 +52,12 @@ class ClaimAmountViewSpec extends ViewBehaviours {
     )
 
     def scottishClaimAmountsAndRates(deduction: Option[Int]) = Rates(
-      basicRate = frontendAppConfig.taxPercentageScotlandBand1,
-      higherRate = frontendAppConfig.taxPercentageScotlandBand2,
-      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount - deduction.getOrElse(0)),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount - deduction.getOrElse(0)),
+      starterRate = Some(frontendAppConfig.taxPercentageScotlandBand1),
+      basicRate = frontendAppConfig.taxPercentageScotlandBand2,
+      higherRate = frontendAppConfig.taxPercentageScotlandBand3,
+      calculatedStarterRate = Some(claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount - deduction.getOrElse(0))),
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount - deduction.getOrElse(0)),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount - deduction.getOrElse(0)),
       prefix = Some('S')
     )
 
@@ -99,9 +101,9 @@ class ClaimAmountViewSpec extends ViewBehaviours {
         ))
         assertContainsText(doc, messages(
           "claimAmount.starterRate",
-          scottishClaimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
+          scottishClaimAmountsAndRates(someEmployerContribution).calculatedStarterRate.get,
           claimAmount,
-          scottishClaimAmountsAndRates(someEmployerContribution).basicRate
+          scottishClaimAmountsAndRates(someEmployerContribution).starterRate.get
         ))
         assertContainsText(doc, messages(
           "claimAmount.basicRate",
