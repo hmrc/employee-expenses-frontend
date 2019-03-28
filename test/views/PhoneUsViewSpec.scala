@@ -38,7 +38,7 @@ class PhoneUsViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyViewWithAuth)
 
-    val link: Html = Html(s"""<a href="${frontendAppConfig.phoneContact}">${messages("phoneUs.paragraph.linkText")}</a>""")
+    val link: Html = Html(s"""<a href="${frontendAppConfig.contactHMRC}">${messages("phoneUs.paragraph.linkText")}</a>""")
 
     behave like pageWithBodyText(applyViewWithAuth, Html(messages("phoneUs.paragraph", link)).toString)
   }
