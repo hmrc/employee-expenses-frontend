@@ -37,7 +37,7 @@
     <p>@messages("firstIndustryOptions.listText")</p>
 
     @formHelper(action = FirstIndustryOptionsController.onSubmit(mode), 'autoComplete -> "off") {
-        @components.input_radio(
+        @components.input_radio_or(
             field = form("value"),
             legend = messages("firstIndustryOptions.heading"),
             legendClass = Some("visually-hidden"),
