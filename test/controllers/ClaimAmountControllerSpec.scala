@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import controllers.actions.UnAuthed
-import models.{EmployerContribution, NormalMode, Rates, UserAnswers}
+import models.{NormalMode, Rates, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.OptionValues

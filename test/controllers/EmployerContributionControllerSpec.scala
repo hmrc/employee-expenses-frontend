@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import config.NavConstant
 import forms.EmployerContributionFormProvider
-import models.{EmployerContribution, NormalMode, UserAnswers}
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import pages.EmployerContributionPage
 import play.api.inject.bind
@@ -139,7 +139,7 @@ class EmployerContributionControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, employerContributionRoute)
-          .withFormUrlEncodedBody(("value", EmployerContribution.values.head.toString))
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 

@@ -17,7 +17,7 @@
 package pages
 
 import generators.Generators
-import models.{EmployerContribution, UserAnswers}
+import models.UserAnswers
 import pages.behaviours.PageBehaviours
 
 import scala.util.Try

@@ -17,10 +17,9 @@
 package navigation
 
 import base.SpecBase
+import controllers.authenticated.routes._
 import controllers.foodCatering.routes._
 import controllers.routes._
-import controllers.authenticated.routes._
-import models.EmployerContribution._
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions.{Agriculture, FireService, Heating, Leisure, Prisons}
 import models.SecondIndustryOptions._

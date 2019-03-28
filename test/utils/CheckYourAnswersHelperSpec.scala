@@ -18,7 +18,6 @@ package utils
 
 import base.SpecBase
 import models.AlreadyClaimingFREDifferentAmounts._
-import models.EmployerContribution.SomeContribution
 import models._
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks

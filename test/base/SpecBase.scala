@@ -20,7 +20,6 @@ import com.github.tototoshi.play2.scalate.Scalate
 import config.FrontendAppConfig
 import controllers.actions._
 import models.AlreadyClaimingFRESameAmount.Remove
-import models.EmployerContribution.{NoContribution, SomeContribution}
 import models.FirstIndustryOptions.{Healthcare, Retail}
 import models.FlatRateExpenseOptions.FRENoYears
 import models.TaxYearSelection.CurrentYear
