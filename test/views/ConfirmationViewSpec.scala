@@ -196,6 +196,33 @@ class ConfirmationViewSpec extends ViewBehaviours {
         ))
       }
     }
+    "when CY minus 1 has not been been selected" must {
+
+      val viewWithSpecificAnswers =
+        applyView(Seq(TaxYearSelection.CurrentYear,TaxYearSelection.CurrentYearMinus2))(fakeRequest, messages)
+
+      val doc = asDocument(viewWithSpecificAnswers)
+
+      "display correct static text" in {
+
+        assertContainsMessages(doc,
+          "confirmation.heading",
+          "confirmation.actualAmount",
+          "confirmation.whatHappensNext",
+          "confirmation.currentTaxYear",
+          "confirmation.taxCodeChanged",
+          "confirmation.continueToClaim",
+          "confirmation.previousTaxYears",
+          "confirmation.letterConfirmation"
+
+        )
+
+        assertTextNotRendered(doc,
+          messages("confirmation.currentYearMinusOneDelay")
+        )
+
+      }
+    }
 
 
     "when CY and previous years have been selected" must {
@@ -215,7 +242,15 @@ class ConfirmationViewSpec extends ViewBehaviours {
           "confirmation.taxCodeChanged",
           "confirmation.continueToClaim",
           "confirmation.previousTaxYears",
-          "confirmation.letterConfirmation")
+          "confirmation.letterConfirmation"
+        )
+
+        assertContainsText(doc,
+          messages(
+            "confirmation.currentYearMinusOneDelay",
+            TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
+            TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString
+          ))
       }
 
       "display correct dynamic text for title and tax rates" in {

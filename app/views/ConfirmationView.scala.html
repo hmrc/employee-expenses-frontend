@@ -91,6 +91,15 @@
                 <h3>@messages("confirmation.previousTaxYears")</h3>
 
                 <p>@messages("confirmation.letterConfirmation")</p>
+
+                @if(taxYearSelections.contains(TaxYearSelection.CurrentYearMinus1)) {
+                    <p>@messages(
+                        "confirmation.currentYearMinusOneDelay",
+                        TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
+                        TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString)
+                    </p>
+                }
+
             } else {
                 <p>@messages("confirmation.taxCodeChanged")</p>
                 <p>@messages("confirmation.continueToClaim")</p>
