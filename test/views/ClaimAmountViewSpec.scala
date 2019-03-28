@@ -52,10 +52,12 @@ class ClaimAmountViewSpec extends ViewBehaviours {
     )
 
     def scottishClaimAmountsAndRates(deduction: Option[Int]) = Rates(
-      basicRate = frontendAppConfig.taxPercentageScotlandBand1,
-      higherRate = frontendAppConfig.taxPercentageScotlandBand2,
-      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount - deduction.getOrElse(0)),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount - deduction.getOrElse(0)),
+      starterRate = Some(frontendAppConfig.taxPercentageScotlandBand1),
+      basicRate = frontendAppConfig.taxPercentageScotlandBand2,
+      higherRate = frontendAppConfig.taxPercentageScotlandBand3,
+      calculatedStarterRate = Some(claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount - deduction.getOrElse(0))),
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount - deduction.getOrElse(0)),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount - deduction.getOrElse(0)),
       prefix = Some('S')
     )
 
@@ -86,23 +88,33 @@ class ClaimAmountViewSpec extends ViewBehaviours {
       "display relevant data" in {
         val doc = asDocument(applyViewWithEmployerContribution)
         assertContainsText(doc, messages(
-          "claimAmount.band1",
+          "claimAmount.basicRate",
           claimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
+          claimAmount,
           claimAmountsAndRates(someEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.band2",
+          "claimAmount.higherRate",
           claimAmountsAndRates(someEmployerContribution).calculatedHigherRate,
+          claimAmount,
           claimAmountsAndRates(someEmployerContribution).higherRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand1",
+          "claimAmount.starterRate",
+          scottishClaimAmountsAndRates(someEmployerContribution).calculatedStarterRate.get,
+          claimAmount,
+          scottishClaimAmountsAndRates(someEmployerContribution).starterRate.get
+        ))
+        assertContainsText(doc, messages(
+          "claimAmount.basicRate",
           scottishClaimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
+          claimAmount,
           scottishClaimAmountsAndRates(someEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand2",
+          "claimAmount.higherRate",
           scottishClaimAmountsAndRates(someEmployerContribution).calculatedHigherRate,
+          claimAmount,
           scottishClaimAmountsAndRates(someEmployerContribution).higherRate
         ))
       }
@@ -116,23 +128,27 @@ class ClaimAmountViewSpec extends ViewBehaviours {
       "display relevant data" in {
         val doc = asDocument(applyView)
         assertContainsText(doc, messages(
-          "claimAmount.band1",
+          "claimAmount.basicRate",
           claimAmountsAndRates(noEmployerContribution).calculatedBasicRate,
+          claimAmount,
           claimAmountsAndRates(noEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.band2",
+          "claimAmount.higherRate",
           claimAmountsAndRates(noEmployerContribution).calculatedHigherRate,
+          claimAmount,
           claimAmountsAndRates(noEmployerContribution).higherRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand1",
+          "claimAmount.basicRate",
           scottishClaimAmountsAndRates(noEmployerContribution).calculatedBasicRate,
+          claimAmount,
           scottishClaimAmountsAndRates(noEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand2",
+          "claimAmount.higherRate",
           scottishClaimAmountsAndRates(noEmployerContribution).calculatedHigherRate,
+          claimAmount,
           scottishClaimAmountsAndRates(noEmployerContribution).higherRate
         ))
       }

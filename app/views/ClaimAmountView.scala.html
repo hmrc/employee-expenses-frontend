@@ -45,13 +45,24 @@
 
     <h2 class="heading-small">@messages("claimAmount.englandHeading")</h2>
 
-    <p>@messages("claimAmount.band1", claimAmountsAndRates.calculatedBasicRate, claimAmountsAndRates.basicRate)</p>
-    <p>@messages("claimAmount.band2", claimAmountsAndRates.calculatedHigherRate, claimAmountsAndRates.higherRate)</p>
+    <p>@messages("claimAmount.listHeading")</p>
+
+    <ul class="list list-bullet">
+        <li>@messages("claimAmount.basicRate", claimAmountsAndRates.calculatedBasicRate, claimAmount, claimAmountsAndRates.basicRate)</li>
+        <li>@messages("claimAmount.higherRate", claimAmountsAndRates.calculatedHigherRate, claimAmount, claimAmountsAndRates.higherRate)</li>
+    </ul>
 
     <h2 class="heading-small">@messages("claimAmount.scotlandHeading")</h2>
 
-    <p>@messages("claimAmount.scotlandBand1", scottishClaimAmountsAndRates.calculatedBasicRate, scottishClaimAmountsAndRates.basicRate)</p>
-    <p>@messages("claimAmount.scotlandBand2", scottishClaimAmountsAndRates.calculatedHigherRate, scottishClaimAmountsAndRates.higherRate)</p>
+    <p>@messages("claimAmount.listHeading")</p>
+
+    <ul class="list list-bullet">
+        @if(scottishClaimAmountsAndRates.calculatedStarterRate.nonEmpty && scottishClaimAmountsAndRates.starterRate.nonEmpty){
+            <li>@messages("claimAmount.starterRate", scottishClaimAmountsAndRates.calculatedStarterRate.get, claimAmount, scottishClaimAmountsAndRates.starterRate.get)</li>
+        }
+        <li>@messages("claimAmount.basicRate", scottishClaimAmountsAndRates.calculatedBasicRate, claimAmount, scottishClaimAmountsAndRates.basicRate)</li>
+        <li>@messages("claimAmount.higherRate", scottishClaimAmountsAndRates.calculatedHigherRate, claimAmount, scottishClaimAmountsAndRates.higherRate)</li>
+    </ul>
 
     @components.button_link(messages("site.continue"), onwardRoute)
 }
