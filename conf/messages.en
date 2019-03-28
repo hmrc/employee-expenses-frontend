@@ -622,7 +622,7 @@ removeFRECode.error.required = Select the tax year that your expense ended
 phoneUs.title = You cannot make this change online
 phoneUs.heading = You cannot make this change online
 phoneUs.paragraph = You need to {0} to provide more information so that we can complete this claim.
-phoneUs.paragraph.linkText = call HMRC
+phoneUs.paragraph.linkText = contact HMRC
 
 industryType.checkYourAnswersLabel = What industry do you work in?
 
