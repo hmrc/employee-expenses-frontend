@@ -86,23 +86,33 @@ class ClaimAmountViewSpec extends ViewBehaviours {
       "display relevant data" in {
         val doc = asDocument(applyViewWithEmployerContribution)
         assertContainsText(doc, messages(
-          "claimAmount.band1",
+          "claimAmount.basicRate",
           claimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
+          claimAmount,
           claimAmountsAndRates(someEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.band2",
+          "claimAmount.higherRate",
           claimAmountsAndRates(someEmployerContribution).calculatedHigherRate,
+          claimAmount,
           claimAmountsAndRates(someEmployerContribution).higherRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand1",
+          "claimAmount.starterRate",
           scottishClaimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
+          claimAmount,
           scottishClaimAmountsAndRates(someEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand2",
+          "claimAmount.basicRate",
+          scottishClaimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
+          claimAmount,
+          scottishClaimAmountsAndRates(someEmployerContribution).basicRate
+        ))
+        assertContainsText(doc, messages(
+          "claimAmount.higherRate",
           scottishClaimAmountsAndRates(someEmployerContribution).calculatedHigherRate,
+          claimAmount,
           scottishClaimAmountsAndRates(someEmployerContribution).higherRate
         ))
       }
@@ -116,23 +126,27 @@ class ClaimAmountViewSpec extends ViewBehaviours {
       "display relevant data" in {
         val doc = asDocument(applyView)
         assertContainsText(doc, messages(
-          "claimAmount.band1",
+          "claimAmount.basicRate",
           claimAmountsAndRates(noEmployerContribution).calculatedBasicRate,
+          claimAmount,
           claimAmountsAndRates(noEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.band2",
+          "claimAmount.higherRate",
           claimAmountsAndRates(noEmployerContribution).calculatedHigherRate,
+          claimAmount,
           claimAmountsAndRates(noEmployerContribution).higherRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand1",
+          "claimAmount.basicRate",
           scottishClaimAmountsAndRates(noEmployerContribution).calculatedBasicRate,
+          claimAmount,
           scottishClaimAmountsAndRates(noEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand2",
+          "claimAmount.higherRate",
           scottishClaimAmountsAndRates(noEmployerContribution).calculatedHigherRate,
+          claimAmount,
           scottishClaimAmountsAndRates(noEmployerContribution).higherRate
         ))
       }
