@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import controllers.actions.UnAuthed
-import models.{NormalMode, Rates, UserAnswers}
+import models.{NormalMode, Rates, ScottishRate, StandardRate, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Matchers._
@@ -67,22 +67,20 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       val ua2 = ua1.set(ClaimAmountAndAnyDeductions, claimAmountAndAnyDeductions).success.value
 
-      val claimAmountsAndRates = Rates(
+      val claimAmountsAndRates = StandardRate(
         basicRate = frontendAppConfig.taxPercentageBand1,
         higherRate = frontendAppConfig.taxPercentageBand2,
         calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
-        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
-        prefix = None
+        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount)
       )
 
-      val scottishClaimAmountsAndRates = Rates(
-        starterRate = Some(frontendAppConfig.taxPercentageScotlandBand1),
+      val scottishClaimAmountsAndRates = ScottishRate(
+        starterRate = frontendAppConfig.taxPercentageScotlandBand1,
         basicRate = frontendAppConfig.taxPercentageScotlandBand2,
         higherRate = frontendAppConfig.taxPercentageScotlandBand3,
-        calculatedStarterRate = Some(claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount)),
+        calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
         calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
-        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount),
-        prefix = Some('S')
+        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount)
       )
 
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)

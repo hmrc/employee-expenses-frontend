@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import connectors.TaiConnector
 import controllers.actions.Authed
-import models.{Rates, TaxCodeRecord, TaxYearSelection}
+import models.{Rates, StandardRate, TaxCodeRecord, TaxYearSelection}
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -41,14 +41,12 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   val mockClaimAmountService: ClaimAmountService = mock[ClaimAmountService]
   val claimAmountService = new ClaimAmountService(frontendAppConfig)
   val claimAmount: Int = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
-  val claimAmountsAndRates = Rates(
-    None,
+  val claimAmountsAndRates = StandardRate(
+
     frontendAppConfig.taxPercentageBand1,
     frontendAppConfig.taxPercentageBand2,
-    None,
     claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
-    claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
-    None
+    claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount)
   )
 
   "Confirmation Controller" must {
