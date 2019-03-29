@@ -122,7 +122,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
 
   def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
     x =>
-      AnswerRow("employerContribution.checkYourAnswersLabel", s"employerContribution.$x", true,
+      AnswerRow("employerContribution.checkYourAnswersLabel", if (x) "site.yes" else "site.no", true,
         Some(EmployerContributionController.onPageLoad(CheckMode).url), editText = None)
   }
 
