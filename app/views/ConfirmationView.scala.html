@@ -24,13 +24,23 @@
         updateEmployerInfo: Option[Boolean],
         updateAddressInfo: Option[Boolean],
         claimAmount: Int,
-        claimAmountsAndRates: Seq[Rates]
+        claimAmountsAndRates: Seq[Rates],
+        freResponse: FlatRateExpenseOptions
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("confirmation.title")
+    title = {
+        if(removeFreOption) {
+            messages("confirmation.titleStopped")
+        } else if((freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
+                freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) && !removeFreOption) {
+            messages("confirmation.titleChanged")
+        } else {
+            messages("confirmation.titleCompleted")
+        }
+    }
 ) {
-    @if(removeFreOption) {
+        @if(removeFreOption) {
 
         <div class="govuk-box-highlight">
             <h1 class="heading-xlarge">
