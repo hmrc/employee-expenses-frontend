@@ -30,7 +30,7 @@
     <fieldset class="inline" id="@{field.id}">
 
         <legend>
-            <h2 @if(labelClass.nonEmpty){class="@labelClass"}>@label</h2>
+            <span @if(labelClass.nonEmpty){class="@labelClass"}>@label</span>
             @if(hint.nonEmpty){
                 <span class="form-hint">@hint</span>
             }
