@@ -19,7 +19,7 @@ package controllers
 import config.{FrontendAppConfig, NavConstant}
 import controllers.actions._
 import javax.inject.{Inject, Named}
-import models.{Mode, Rates}
+import models.{Mode, Rates, ScottishRate, StandardRate}
 import navigation.Navigator
 import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage, ExpensesEmployerPaidPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -59,30 +59,15 @@ class ClaimAmountController @Inject()(
             _ <- sessionRepository.set(request.identifier, saveClaimAmountAndAnyDeductions)
           } yield {
 
-            val claimAmountsAndRates = Rates(
-              basicRate = appConfig.taxPercentageBand1,
-              higherRate = appConfig.taxPercentageBand2,
-              calculatedBasicRate = calculateTax(appConfig.taxPercentageBand1, claimAmountAndAnyDeductions),
-              calculatedHigherRate = calculateTax(appConfig.taxPercentageBand2, claimAmountAndAnyDeductions),
-              prefix = None
-            )
-
-            val scottishClaimAmountsAndRates = Rates(
-              starterRate = Some(appConfig.taxPercentageScotlandBand1),
-              basicRate = appConfig.taxPercentageScotlandBand2,
-              higherRate = appConfig.taxPercentageScotlandBand3,
-              calculatedStarterRate = Some(calculateTax(appConfig.taxPercentageScotlandBand1, claimAmountAndAnyDeductions)),
-              calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmountAndAnyDeductions),
-              calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandBand3, claimAmountAndAnyDeductions),
-              prefix = Some('S')
-            )
+            val standardRate: StandardRate = claimAmountService.standardRate(claimAmount)
+            val scottishRate: ScottishRate = claimAmountService.scottishRate(claimAmount)
 
             Ok(view(
-              claimAmount = claimAmount,
-              employerContribution = employerContribution,
-              claimAmountsAndRates = claimAmountsAndRates,
-              scottishClaimAmountsAndRates = scottishClaimAmountsAndRates,
-              onwardRoute = navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
+              claimAmount,
+              employerContribution,
+              standardRate,
+              scottishRate,
+              navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
             ))
           }
 
