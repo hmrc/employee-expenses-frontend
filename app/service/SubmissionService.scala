@@ -38,7 +38,7 @@ class SubmissionService @Inject()(
       taiConnector.taiTaxAccountSummary(nino, TaiTaxYear(TaxYear.current.currentYear)).map {
         result =>
           result.status match {
-            case 204 =>
+            case 200 =>
               taxYears :+ TaxYearSelection.NextYear
             case _ =>
               taxYears
