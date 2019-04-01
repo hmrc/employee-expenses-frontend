@@ -171,11 +171,11 @@ class EngineeringNavigatorSpec extends SpecBase {
               controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
 
-          "go to FactoryEngineeringApprentice when no is selected" in {
+          "go to EmployerContribution when no is selected" in {
             val answers = emptyUserAnswers.set(FactoryEngineeringList2Page, false).success.value
 
             navigator.nextPage(FactoryEngineeringList2Page, mode)(answers) mustBe
-              controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(mode)
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
         }
 

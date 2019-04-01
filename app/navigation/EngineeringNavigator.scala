@@ -34,7 +34,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     case ConstructionalEngineeringList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case AncillaryEngineeringWhichTradePage => ancillaryEngineeringWhichTrade(NormalMode)
     case FactoryEngineeringList1Page => factoryEngineeringList1(NormalMode)
-    case FactoryEngineeringList2Page => factoryEngineeringList2(NormalMode)
+    case FactoryEngineeringList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case FactoryEngineeringApprenticePage => factoryEngineeringApprentice(NormalMode)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
@@ -47,7 +47,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     case ConstructionalEngineeringList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case AncillaryEngineeringWhichTradePage => ancillaryEngineeringWhichTrade(CheckMode)
     case FactoryEngineeringList1Page => factoryEngineeringList1(CheckMode)
-    case FactoryEngineeringList2Page => factoryEngineeringList2(CheckMode)
+    case FactoryEngineeringList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case FactoryEngineeringApprenticePage => factoryEngineeringApprentice(CheckMode)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
@@ -97,14 +97,6 @@ class EngineeringNavigator @Inject()() extends Navigator {
     userAnswers.get(FactoryEngineeringList1Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.engineering.routes.FactoryEngineeringList2Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
-    }
-  }
-
-  private def factoryEngineeringList2(mode: Mode)(userAnswers: UserAnswers): Call = {
-    userAnswers.get(FactoryEngineeringList2Page) match {
-      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case Some(false) => controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
