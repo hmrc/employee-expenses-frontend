@@ -32,7 +32,7 @@ class MockScalate @Inject() (environment: Environment) extends Scalate(environme
     val parameters: Html = HtmlFormat.fill(
       params.map {
         case (key, value) =>
-          Html(s"<div id=$key>$value</div>")
+          if (key == "keepAliveUrl") Html(s"<div id=$key>keepAliveUrl</div>") else Html(s"<div id=$key>$value</div>")
       }.toList
     )
 
