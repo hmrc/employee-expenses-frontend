@@ -116,7 +116,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, taiEmployment.head.name)(fakeRequest, messages).toString
+        view(form, NormalMode, taiEmployment.head.name)(request, messages).toString
 
       whenReady(result) {
         _ =>
@@ -146,7 +146,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, taiEmploymentsWithCurrent(1).name)(fakeRequest, messages).toString
+        view(form, NormalMode, taiEmploymentsWithCurrent(1).name)(request, messages).toString
 
       application.stop()
     }
@@ -171,7 +171,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, taiEmploymentsWithoutCurrent.head.name)(fakeRequest, messages).toString
+        view(form, NormalMode, taiEmploymentsWithoutCurrent.head.name)(request, messages).toString
 
       application.stop()
     }
@@ -197,7 +197,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, taiEmployment.head.name)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode, taiEmployment.head.name)(request, messages).toString
 
       application.stop()
     }
@@ -246,7 +246,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, taiEmployment.head.name)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, taiEmployment.head.name)(request, messages).toString
 
       application.stop()
     }

@@ -78,7 +78,7 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           claimAmount = claimAmount,
           claimAmountsAndRates = Seq(claimAmountsAndRates),
           freResponse = FlatRateExpenseOptions.FRENoYears
-        )(fakeRequest, messages).toString
+        )(request, messages).toString
 
       application.stop()
     }
