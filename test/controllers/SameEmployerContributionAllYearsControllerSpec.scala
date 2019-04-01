@@ -68,7 +68,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, contribution)(fakeRequest, messages).toString
+        view(form, NormalMode, contribution)(request, messages).toString
 
       application.stop()
     }
@@ -89,7 +89,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, contribution)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode, contribution)(request, messages).toString
 
       application.stop()
     }
@@ -133,7 +133,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, contribution)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, contribution)(request, messages).toString
 
       application.stop()
     }

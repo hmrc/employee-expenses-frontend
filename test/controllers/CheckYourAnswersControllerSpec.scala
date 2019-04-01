@@ -74,7 +74,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(minimumSections, FlatRateExpenseOptions.FRENoYears, removeFre = true)(fakeRequest, messages).toString
+          view(minimumSections, FlatRateExpenseOptions.FRENoYears, removeFre = true)(request, messages).toString
 
         application.stop()
       }
