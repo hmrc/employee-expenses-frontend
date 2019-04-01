@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import connectors.TaiConnector
 import controllers.actions.Authed
-import models.{Rates, StandardRate, TaxCodeRecord, TaxYearSelection}
+import models.{FlatRateExpenseOptions, Rates, StandardRate, TaxCodeRecord, TaxYearSelection}
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -76,7 +76,8 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           updateEmployerInfo = None,
           updateAddressInfo = None,
           claimAmount = claimAmount,
-          claimAmountsAndRates = Seq(claimAmountsAndRates)
+          claimAmountsAndRates = Seq(claimAmountsAndRates),
+          freResponse = FlatRateExpenseOptions.FRENoYears
         )(fakeRequest, messages).toString
 
       application.stop()
