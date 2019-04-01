@@ -20,8 +20,8 @@ import config.FrontendAppConfig
 import connectors.TaiConnector
 import controllers.actions._
 import javax.inject.Inject
-import models.{Rates, TaxYearSelection}
-import pages.ClaimAmountAndAnyDeductions
+import models.{FlatRateExpenseOptions, Rates, TaxYearSelection}
+import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -54,9 +54,10 @@ class ConfirmationController @Inject()(
       val updateEmployerInfo: Option[Boolean] = request.userAnswers.get(YourEmployerPage)
       val updateAddressInfo: Option[Boolean] = request.userAnswers.get(YourAddressPage)
       val removeFreOption: Option[TaxYearSelection] = request.userAnswers.get(RemoveFRECodePage)
+      val freResponse: Option[FlatRateExpenseOptions] = request.userAnswers.get(FREResponse)
 
-      (claimAmount, taxYearSelection, request.nino) match {
-        case (Some(fullClaimAmount), Some(validTaxYearSelection), Some(nino)) =>
+      (claimAmount, taxYearSelection, request.nino, freResponse) match {
+        case (Some(fullClaimAmount), Some(validTaxYearSelection), Some(nino), Some(flatRateExpense)) =>
           taiConnector.taiTaxCodeRecords(nino).map {
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
@@ -69,7 +70,8 @@ class ConfirmationController @Inject()(
                 updateEmployerInfo = updateEmployerInfo,
                 updateAddressInfo = updateAddressInfo,
                 claimAmount = fullClaimAmount,
-                claimAmountsAndRates = claimAmountsAndRates))
+                claimAmountsAndRates = claimAmountsAndRates,
+                freResponse = flatRateExpense))
           }.recoverWith {
             case e =>
               Logger.error(s"[ConfirmationController][taiConnector.taiTaxCodeRecord] Call failed $e", e)

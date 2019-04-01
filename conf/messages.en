@@ -671,7 +671,9 @@ changeWhichTaxYears.columnHeading2 = Amount you were claiming
 changeWhichTaxYears.checkYourAnswersLabel = Tell us which years you want to change the claim amount for
 changeWhichTaxYears.error.required = Select which years you want to change the claim amount for
 
-confirmation.title = Confirmation
+confirmation.title = Claim completed
+confirmation.titleChanged = Claim changed
+confirmation.titleStopped = Claim stopped
 confirmation.heading = Claim completed
 confirmation.heading.stoppedClaim = Your claim has been stopped
 confirmation.personalAllowanceIncrease = Your tax-free Personal Allowance has been increased by £{0} per year based on your industry and occupation

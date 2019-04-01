@@ -16,7 +16,7 @@
 
 package views
 
-import models.{Rates, TaxYearSelection}
+import models.{FlatRateExpenseOptions, Rates, TaxYearSelection}
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent
@@ -59,8 +59,9 @@ class ConfirmationViewSpec extends ViewBehaviours {
                   updateEmployer: Option[Boolean] = None,
                   updateAddress: Option[Boolean] = None,
                   claimAmount: Int = claimAmount,
-                  claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates))(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(taxYearSelection, removeFREOption, updateEmployer, updateAddress, claimAmount, claimAmountsAndRates)(fakeRequest, messages)
+                  claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates),
+                  freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears)(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
+      view.apply(taxYearSelection, removeFREOption, updateEmployer, updateAddress, claimAmount, claimAmountsAndRates, freResponse)(fakeRequest, messages)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 
@@ -69,6 +70,25 @@ class ConfirmationViewSpec extends ViewBehaviours {
     behave like normalPage(viewWithAnswers, "confirmation")
 
     behave like pageWithAccountMenu(applyViewWithAuth)
+
+    "display claimStopped title" in {
+      val claimStoppedView =
+        applyView(removeFREOption = Some(TaxYearSelection.CurrentYearMinus1))(fakeRequest, messages)
+
+      val doc = asDocument(claimStoppedView)
+
+      assertEqualsMessage(doc, "title", s"confirmation.titleStopped")
+    }
+
+    "display claimChanged title" in {
+      val claimChangedView =
+        applyView(freResponse = FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount)(fakeRequest, messages)
+
+      val doc = asDocument(claimChangedView)
+
+      assertEqualsMessage(doc, "title", s"confirmation.titleChanged")
+
+    }
 
     "when english tax record" must {
 
