@@ -56,7 +56,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     userAnswers.get(TypeOfEngineeringPage) match {
       case Some(ConstructionalEngineering) => controllers.engineering.routes.ConstructionalEngineeringApprenticeController.onPageLoad(mode)
       case Some(TradesRelatingToEngineering) => controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(mode)
-      case Some(FactoryOrWorkshopEngineering) => controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(mode)
+      case Some(FactoryOrWorkshopEngineering) => controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(mode)
       case Some(NoneOfTheAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
@@ -111,7 +111,8 @@ class EngineeringNavigator @Inject()() extends Navigator {
 
   private def factoryEngineeringApprentice(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(FactoryEngineeringApprenticePage) match {
-      case Some(true) | Some(false) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(true)  => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(false) => controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }

@@ -46,11 +46,11 @@ class EngineeringNavigatorSpec extends SpecBase {
               controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(mode)
           }
 
-          "go to FactoryEngineeringList1 when FactoryOrWorkshopEngineering is selected " in {
+          "go to FactoryEngineeringAprentice when FactoryOrWorkshopEngineering is selected " in {
             val answers = emptyUserAnswers.set(TypeOfEngineeringPage, FactoryOrWorkshopEngineering).success.value
 
             navigator.nextPage(TypeOfEngineeringPage, mode)(answers) mustBe
-              controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(mode)
+              controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(mode)
           }
 
           "go to EmployerContribution when NoneOfTheAbove is selected " in {
@@ -188,11 +188,11 @@ class EngineeringNavigatorSpec extends SpecBase {
               controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
 
-          "go to EmployerContribution when no is selected" in {
+          "go to factory-engineering-list-1 when no is selected" in {
             val answers = emptyUserAnswers.set(FactoryEngineeringApprenticePage, false).success.value
 
             navigator.nextPage(FactoryEngineeringApprenticePage, mode)(answers) mustBe
-              controllers.routes.EmployerContributionController.onPageLoad(mode)
+              controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(mode)
           }
         }
       }
