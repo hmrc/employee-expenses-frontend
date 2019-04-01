@@ -22,7 +22,7 @@ import play.api.Application
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
-import play.twirl.api.Html
+import play.twirl.api.{Html, HtmlFormat}
 import service.ClaimAmountService
 import views.behaviours.ViewBehaviours
 import views.html.ConfirmationView
