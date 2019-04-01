@@ -16,14 +16,20 @@
 
 package models
 
-case class Rates(
-                  starterRate: Option[Int] = None,
-                  basicRate: Int,
-                  higherRate: Int,
-                  calculatedStarterRate: Option[String] = None,
-                  calculatedBasicRate: String,
-                  calculatedHigherRate: String,
-                  prefix: Option[Char]
-                )
+sealed trait Rates
 
-object Rates
+case class StandardRate(
+                         basicRate: Int,
+                         higherRate: Int,
+                         calculatedBasicRate: String,
+                         calculatedHigherRate: String
+                       ) extends Rates
+
+case class ScottishRate(
+                          starterRate: Int,
+                          basicRate: Int,
+                          higherRate: Int,
+                          calculatedStarterRate: String,
+                          calculatedBasicRate: String,
+                          calculatedHigherRate: String
+                        ) extends Rates
