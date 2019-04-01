@@ -62,7 +62,7 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, taxYearsAndAmounts)(fakeRequest, messages).toString
+        view(form, NormalMode, taxYearsAndAmounts)(request, messages).toString
 
       application.stop()
     }
@@ -81,7 +81,7 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(TaxYearSelection.values), NormalMode, taxYearsAndAmounts)(fakeRequest, messages).toString
+        view(form.fill(TaxYearSelection.values), NormalMode, taxYearsAndAmounts)(request, messages).toString
 
       application.stop()
     }
@@ -122,7 +122,7 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, taxYearsAndAmounts)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, taxYearsAndAmounts)(request, messages).toString
 
       application.stop()
     }

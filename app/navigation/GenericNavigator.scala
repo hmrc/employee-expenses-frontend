@@ -121,10 +121,9 @@ class GenericNavigator @Inject()() extends Navigator {
 
   private def employerContribution(mode: Mode)(userAnswers: UserAnswers): Call =
    userAnswers.get(EmployerContributionPage) match {
-      case Some(EmployerContribution.All)  => CannotClaimController.onPageLoad()
-      case Some(EmployerContribution.NoContribution) => ClaimAmountController.onPageLoad(mode)
-      case Some(EmployerContribution.SomeContribution) => ExpensesEmployerPaidController.onPageLoad(mode)
-      case _                               => SessionExpiredController.onPageLoad()
+     case Some(true) => ExpensesEmployerPaidController.onPageLoad(mode)
+     case Some(false) => ClaimAmountController.onPageLoad(mode)
+     case _ => SessionExpiredController.onPageLoad()
     }
 
   private def expensesEmployerPaid(mode: Mode)(userAnswers: UserAnswers): Call =

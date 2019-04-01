@@ -16,7 +16,7 @@
 
 package views
 
-import models.Rates
+import models.{Rates, ScottishRate, StandardRate}
 import pages.ClaimAmount
 import play.api.Application
 import service.ClaimAmountService
@@ -43,20 +43,20 @@ class ClaimAmountViewSpec extends ViewBehaviours {
 
     val claimAmountService = application.injector.instanceOf[ClaimAmountService]
 
-    def claimAmountsAndRates(deduction: Option[Int]) = Rates(
+    def claimAmountsAndRates(deduction: Option[Int]) = StandardRate(
       basicRate = frontendAppConfig.taxPercentageBand1,
       higherRate = frontendAppConfig.taxPercentageBand2,
       calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount - deduction.getOrElse(0)),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount - deduction.getOrElse(0)),
-      prefix = None
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount - deduction.getOrElse(0))
     )
 
-    def scottishClaimAmountsAndRates(deduction: Option[Int]) = Rates(
-      basicRate = frontendAppConfig.taxPercentageScotlandBand1,
-      higherRate = frontendAppConfig.taxPercentageScotlandBand2,
-      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount - deduction.getOrElse(0)),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount - deduction.getOrElse(0)),
-      prefix = Some('S')
+    def scottishClaimAmountsAndRates(deduction: Option[Int]) = ScottishRate(
+      starterRate = frontendAppConfig.taxPercentageScotlandBand1,
+      basicRate = frontendAppConfig.taxPercentageScotlandBand2,
+      higherRate = frontendAppConfig.taxPercentageScotlandBand3,
+      calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount - deduction.getOrElse(0)),
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount - deduction.getOrElse(0)),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount - deduction.getOrElse(0))
     )
 
     val applyView = view.apply(
@@ -86,23 +86,33 @@ class ClaimAmountViewSpec extends ViewBehaviours {
       "display relevant data" in {
         val doc = asDocument(applyViewWithEmployerContribution)
         assertContainsText(doc, messages(
-          "claimAmount.band1",
+          "claimAmount.basicRate",
           claimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
+          claimAmount,
           claimAmountsAndRates(someEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.band2",
+          "claimAmount.higherRate",
           claimAmountsAndRates(someEmployerContribution).calculatedHigherRate,
+          claimAmount,
           claimAmountsAndRates(someEmployerContribution).higherRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand1",
+          "claimAmount.starterRate",
+          scottishClaimAmountsAndRates(someEmployerContribution).calculatedStarterRate,
+          claimAmount,
+          scottishClaimAmountsAndRates(someEmployerContribution).starterRate
+        ))
+        assertContainsText(doc, messages(
+          "claimAmount.basicRate",
           scottishClaimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
+          claimAmount,
           scottishClaimAmountsAndRates(someEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand2",
+          "claimAmount.higherRate",
           scottishClaimAmountsAndRates(someEmployerContribution).calculatedHigherRate,
+          claimAmount,
           scottishClaimAmountsAndRates(someEmployerContribution).higherRate
         ))
       }
@@ -116,23 +126,27 @@ class ClaimAmountViewSpec extends ViewBehaviours {
       "display relevant data" in {
         val doc = asDocument(applyView)
         assertContainsText(doc, messages(
-          "claimAmount.band1",
+          "claimAmount.basicRate",
           claimAmountsAndRates(noEmployerContribution).calculatedBasicRate,
+          claimAmount,
           claimAmountsAndRates(noEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.band2",
+          "claimAmount.higherRate",
           claimAmountsAndRates(noEmployerContribution).calculatedHigherRate,
+          claimAmount,
           claimAmountsAndRates(noEmployerContribution).higherRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand1",
+          "claimAmount.basicRate",
           scottishClaimAmountsAndRates(noEmployerContribution).calculatedBasicRate,
+          claimAmount,
           scottishClaimAmountsAndRates(noEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.scotlandBand2",
+          "claimAmount.higherRate",
           scottishClaimAmountsAndRates(noEmployerContribution).calculatedHigherRate,
+          claimAmount,
           scottishClaimAmountsAndRates(noEmployerContribution).higherRate
         ))
       }

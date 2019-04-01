@@ -18,7 +18,6 @@ package utils
 
 import base.SpecBase
 import models.AlreadyClaimingFREDifferentAmounts._
-import models.EmployerContribution.SomeContribution
 import models._
 import org.scalacheck.Gen
 import org.scalatest.prop.PropertyChecks
@@ -83,22 +82,11 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
     }
   }
 
-  "employerContribution" must {
-    "display the correct label and answer" in {
-      forAll(Gen.oneOf(EmployerContribution.values)) {
-        contribution =>
-          val ua = emptyUserAnswers.set(EmployerContributionPage, contribution).success.value
-          helper(ua).employerContribution.get.label mustBe "employerContribution.checkYourAnswersLabel"
-          helper(ua).employerContribution.get.answer mustBe s"employerContribution.${contribution.toString}"
-      }
-    }
-  }
-
   "expensesEmployerPaid" must {
     "display the correct label and answer" in {
       forAll(Gen.posNum[Int]) {
         amount =>
-          val ua = emptyUserAnswers.set(EmployerContributionPage, SomeContribution).success.value
+          val ua = emptyUserAnswers.set(EmployerContributionPage, true).success.value
           val ua2 = ua.set(ExpensesEmployerPaidPage, amount).success.value
           helper(ua2).expensesEmployerPaid.get.label mustBe "expensesEmployerPaid.checkYourAnswersLabel"
           helper(ua2).expensesEmployerPaid.get.answer mustBe s"£$amount"
@@ -207,6 +195,20 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
               )
           }.mkString("<br>")
       }
+    }
+  }
+
+  "employerContribution" when {
+    "display the correct label and answer when 'True'" in {
+          val ua = emptyUserAnswers.set(EmployerContributionPage, true).success.value
+          helper(ua).employerContribution.get.label mustBe "employerContribution.checkYourAnswersLabel"
+          helper(ua).employerContribution.get.answer mustBe "site.yes"
+    }
+
+    "display the correct label and answer when 'False'" in {
+      val ua = emptyUserAnswers.set(EmployerContributionPage, false).success.value
+      helper(ua).employerContribution.get.label mustBe "employerContribution.checkYourAnswersLabel"
+      helper(ua).employerContribution.get.answer mustBe "site.no"
     }
   }
 

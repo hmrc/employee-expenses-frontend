@@ -77,7 +77,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, address)(fakeRequest, messages).toString
+        view(form, NormalMode, address)(request, messages).toString
 
       val userAnswers2 = userAnswers
           .set(CitizenDetailsAddress, address).success.value
@@ -110,7 +110,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, address)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode, address)(request, messages).toString
 
       application.stop()
     }
@@ -181,7 +181,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, address)(fakeRequest, messages).toString
+        view(boundForm, NormalMode, address)(request, messages).toString
 
       application.stop()
     }

@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import controllers.actions.UnAuthed
-import models.{EmployerContribution, NormalMode, Rates, UserAnswers}
+import models.{NormalMode, Rates, ScottishRate, StandardRate, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Matchers._
@@ -49,7 +49,9 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       val ua1 =
         emptyUserAnswers
           .set(ClaimAmount, claimAmount).success.value
-          .set(EmployerContributionPage, EmployerContribution.NoContribution).success.value
+          .set(EmployerContributionPage, true).success.value
+      val userAnswers = emptyUserAnswers.set(ClaimAmount, claimAmount).success.value
+        .set(EmployerContributionPage, false).success.value
 
       val mockSessionRepository = mock[SessionRepository]
 
@@ -65,20 +67,20 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       val ua2 = ua1.set(ClaimAmountAndAnyDeductions, claimAmountAndAnyDeductions).success.value
 
-      val claimAmountsAndRates = Rates(
+      val claimAmountsAndRates = StandardRate(
         basicRate = frontendAppConfig.taxPercentageBand1,
         higherRate = frontendAppConfig.taxPercentageBand2,
         calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
-        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount),
-        prefix = None
+        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount)
       )
 
-      val scottishClaimAmountsAndRates = Rates(
-        basicRate = frontendAppConfig.taxPercentageScotlandBand1,
-        higherRate = frontendAppConfig.taxPercentageScotlandBand2,
-        calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
-        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
-        prefix = Some('S')
+      val scottishClaimAmountsAndRates = ScottishRate(
+        starterRate = frontendAppConfig.taxPercentageScotlandBand1,
+        basicRate = frontendAppConfig.taxPercentageScotlandBand2,
+        higherRate = frontendAppConfig.taxPercentageScotlandBand3,
+        calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
+        calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount)
       )
 
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
@@ -90,7 +92,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(claimAmount, None, claimAmountsAndRates, scottishClaimAmountsAndRates, "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
+            view(claimAmount, None, claimAmountsAndRates, scottishClaimAmountsAndRates, "/employee-expenses/which-tax-year")(request, messages).toString
 
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }

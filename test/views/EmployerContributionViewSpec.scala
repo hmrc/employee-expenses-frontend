@@ -16,14 +16,15 @@
 
 package views
 
+import controllers.routes
 import forms.EmployerContributionFormProvider
-import models.{EmployerContribution, NormalMode}
+import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.behaviours.YesNoViewBehaviours
 import views.html.EmployerContributionView
 
-class EmployerContributionViewSpec extends OptionsViewBehaviours[EmployerContribution] {
+class EmployerContributionViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "employerContribution"
 
@@ -37,7 +38,7 @@ class EmployerContributionViewSpec extends OptionsViewBehaviours[EmployerContrib
     view.apply(form, NormalMode)(fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "EmployerContributionView" must {
 
@@ -47,8 +48,32 @@ class EmployerContributionViewSpec extends OptionsViewBehaviours[EmployerContrib
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, EmployerContribution.options)
+    behave like pageWithList(applyView(form), messageKeyPrefix, Seq("list.item1", "list.item2", "list.item3"))
+
+    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.EmployerContributionController.onSubmit(NormalMode).url)
   }
 
   application.stop()
+
+  override def pageWithList(view: HtmlFormat.Appendable,
+                            pageKey: String,
+                            bulletList: Seq[String]): Unit = {
+
+    "behave like a page with a list" must {
+
+      "have a list" in {
+
+        val doc = asDocument(view)
+        assertContainsText(doc, "list list-bullet")
+      }
+
+      "have correct values" in {
+
+        val doc = asDocument(view)
+        bulletList.foreach {
+          x => assertContainsMessages(doc, s"$pageKey.$x")
+        }
+      }
+    }
+  }
 }

@@ -19,39 +19,48 @@
 )
 
 @(
-    claimAmount: Int,
-    employerContribution: Option[Int],
-    claimAmountsAndRates: Rates,
-    scottishClaimAmountsAndRates: Rates,
-    onwardRoute: String
+        amount: Int,
+        contribution: Option[Int],
+        standardRate: StandardRate,
+        scottishRate: ScottishRate,
+        onwardRoute: String
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = messages("claimAmount.title", claimAmount)
+    title = messages("claimAmount.title", amount)
     ) {
 
     @components.back_link()
 
-    @components.heading(messages("claimAmount.heading", claimAmount))
+    @components.heading(messages("claimAmount.heading", amount))
 
-    @if(employerContribution){
-        <p>@messages("claimAmount.someContributionDescription", claimAmount - employerContribution.get)</p>
+    @if(contribution){
+        <p>@messages("claimAmount.someContributionDescription", amount - contribution.get)</p>
         <p>@messages("claimAmount.employerContributionDescription")</p>
     }else{
-        <p>@messages("claimAmount.noContributionDescription", claimAmount)</p>
+        <p>@messages("claimAmount.noContributionDescription", amount)</p>
     }
 
     <p>@messages("claimAmount.description")</p>
 
     <h2 class="heading-small">@messages("claimAmount.englandHeading")</h2>
 
-    <p>@messages("claimAmount.band1", claimAmountsAndRates.calculatedBasicRate, claimAmountsAndRates.basicRate)</p>
-    <p>@messages("claimAmount.band2", claimAmountsAndRates.calculatedHigherRate, claimAmountsAndRates.higherRate)</p>
+    <p>@messages("claimAmount.listHeading")</p>
+
+    <ul class="list list-bullet">
+        <li>@messages("claimAmount.basicRate", standardRate.calculatedBasicRate, amount, standardRate.basicRate)</li>
+        <li>@messages("claimAmount.higherRate", standardRate.calculatedHigherRate, amount, standardRate.higherRate)</li>
+    </ul>
 
     <h2 class="heading-small">@messages("claimAmount.scotlandHeading")</h2>
 
-    <p>@messages("claimAmount.scotlandBand1", scottishClaimAmountsAndRates.calculatedBasicRate, scottishClaimAmountsAndRates.basicRate)</p>
-    <p>@messages("claimAmount.scotlandBand2", scottishClaimAmountsAndRates.calculatedHigherRate, scottishClaimAmountsAndRates.higherRate)</p>
+    <p>@messages("claimAmount.listHeading")</p>
+
+    <ul class="list list-bullet">
+        <li>@messages("claimAmount.starterRate", scottishRate.calculatedStarterRate, amount, scottishRate.starterRate)</li>
+        <li>@messages("claimAmount.basicRate", scottishRate.calculatedBasicRate, amount, scottishRate.basicRate)</li>
+        <li>@messages("claimAmount.higherRate", scottishRate.calculatedHigherRate, amount, scottishRate.higherRate)</li>
+    </ul>
 
     @components.button_link(messages("site.continue"), onwardRoute)
 }

@@ -52,6 +52,7 @@ site.acceptStopClaim = Accept and stop claim
 site.service_name = Employee Expenses
 site.textarea.char_limit = (Limit is {0} characters)
 site.startAgain = Restart your expenses claim
+site.or = or
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
@@ -70,16 +71,19 @@ expensesEmployerPaid.error.outOfRange = Enter a whole number between {0} and {1}
 
 cannotClaim.title = You cannot claim tax relief for these expenses
 cannotClaim.heading = You cannot claim tax relief for these expenses
-cannotClaim.para1 = This is because your employer has paid back all of your expenses.
-cannotClaim.link = Read claim tax relief for your job expenses
+cannotClaim.para1 = You cannot claim these expenses because your employer has already paid back the full amount that you can claim.
+cannotClaim.link = Your employer has already paid back all of your expenses
 
-employerContribution.title = How much of your expenses has your employer paid back?
-employerContribution.heading = How much of your expenses has your employer paid back?
-employerContribution.all = All
-employerContribution.some = Some
-employerContribution.none = None
-employerContribution.checkYourAnswersLabel = How much of your expenses has your employer paid back?
-employerContribution.error.required = Select how much of your expenses your employer has paid back
+employerContribution.title = Has your employer paid back any of your expenses for uniform, work clothing or tools?
+employerContribution.heading = Has your employer paid back any of your expenses for uniform, work clothing or tools?
+
+employerContribution.list.heading = This is for:
+employerContribution.list.item1 = washing a uniform your employer gave to you
+employerContribution.list.item2 = repairing, replacing or cleaning any specialist or protective clothing you wear for your job
+employerContribution.list.item3 = repairing or replacing any small tools that you own, but use for your job
+employerContribution.hint = This does not include the cost of buying the first item.
+employerContribution.checkYourAnswersLabel = Has your employer paid back any of your expenses for uniform, work clothing or tools?
+employerContribution.error.required = Select yes if your employer paid back any of your expenses for uniform, work clothing or tools
 
 claimByAlternative.title = You can claim tax relief for these expenses by post or using an online form
 claimByAlternative.heading = You can claim tax relief for these expenses by post or using an online form
@@ -147,10 +151,10 @@ claimAmount.noContributionDescription = Based on your industry and occupation, y
 claimAmount.description = The actual amount you will get depends on the rate of tax you pay, and where you live in the UK.
 claimAmount.englandHeading = Taxpayers in England, Northern Ireland and Wales
 claimAmount.scotlandHeading = Taxpayers in Scotland
-claimAmount.band1 = You will get £{0} per year if you are a basic rate ({1}%) taxpayer.
-claimAmount.band2 = You will get £{0} per year if you are a higher rate ({1}%) taxpayer.
-claimAmount.scotlandBand1 = You will get £{0} per year if you are a basic rate ({1}%) taxpayer.
-claimAmount.scotlandBand2 = You will get £{0} per year if you are a higher rate ({1}%) taxpayer.
+claimAmount.listHeading = You will get:
+claimAmount.starterRate = £{0} of this £{1} per year if you are a starter rate ({2}%) taxpayer.
+claimAmount.basicRate = £{0} of this £{1} per year if you are a basic rate ({2}%) taxpayer.
+claimAmount.higherRate = £{0} of this £{1} per year if you are a higher rate ({2}%) taxpayer.
 claimAmount.checkYourAnswersLabel = Personal allowance increase
 
 typeOfEngineering.title = Engineering industry list
@@ -622,7 +626,7 @@ removeFRECode.error.required = Select the tax year that your expense ended
 phoneUs.title = You cannot make this change online
 phoneUs.heading = You cannot make this change online
 phoneUs.paragraph = You need to {0} to provide more information so that we can complete this claim.
-phoneUs.paragraph.linkText = call HMRC
+phoneUs.paragraph.linkText = contact HMRC
 
 industryType.checkYourAnswersLabel = What industry do you work in?
 
@@ -667,15 +671,18 @@ changeWhichTaxYears.columnHeading2 = Amount you were claiming
 changeWhichTaxYears.checkYourAnswersLabel = Tell us which years you want to change the claim amount for
 changeWhichTaxYears.error.required = Select which years you want to change the claim amount for
 
-confirmation.title = Confirmation
+confirmation.title = Claim completed
+confirmation.titleChanged = Claim changed
+confirmation.titleStopped = Claim stopped
 confirmation.heading = Claim completed
 confirmation.heading.stoppedClaim = Your claim has been stopped
 confirmation.personalAllowanceIncrease = Your tax-free Personal Allowance has been increased by £{0} per year based on your industry and occupation
 confirmation.actualAmount = The actual amount you will get depends on the rate of tax you pay.
 confirmation.englandHeading = Taxpayers in England, Northern Ireland and Wales
 confirmation.scotlandHeading = Taxpayers in Scotland
-confirmation.basicRate = You will get £{0} per year if you are a basic rate ({1}%) taxpayer.
-confirmation.higherRate = You will get £{0} per year if you are a higher rate ({1}%) taxpayer.
+confirmation.starterRate = You will get £{0} per year from this £{1} increase if you are a starter rate ({2}%) taxpayer.
+confirmation.basicRate = You will get £{0} per year from this £{1} increase if you are a basic rate ({2}%) taxpayer.
+confirmation.higherRate = You will get £{0} per year from this £{1} increase if you are a higher rate ({2}%) taxpayer.
 confirmation.whatHappensNext = What happens next
 confirmation.currentTaxYear = Current tax year
 confirmation.taxCodeChanged = We have already increased your tax-free Personal Allowance by changing your tax code. You will get a letter to confirm this.
@@ -689,5 +696,5 @@ confirmation.updateEmployerInfoNow = Update your employer information now
 confirmation.updateAddressInfoNow = Update your address now
 confirmation.updateAddressInfo = Update your address
 confirmation.addressChange = You told us that your address has changed. If you do not update it you may not receive any letters from HMRC.
-confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April 2018 to 5 April 2019, this may take longer if your employer has not yet sent your information for that tax year.
+confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April {0} to 5 April {1}, this may take longer if your employer has not yet sent your information for that tax year.
 

@@ -67,7 +67,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
           NormalMode,
           fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
           fullUserAnswers.get(FREAmounts).get
-        )(fakeRequest, messages).toString
+        )(request, messages).toString
 
       application.stop()
     }
@@ -92,7 +92,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
           NormalMode,
           fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
           fullUserAnswers.get(FREAmounts).get
-        )(fakeRequest, messages).toString
+        )(request, messages).toString
 
       application.stop()
     }
@@ -140,7 +140,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
           NormalMode,
           fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
           fullUserAnswers.get(FREAmounts).get
-        )(fakeRequest, messages).toString
+        )(request, messages).toString
 
       application.stop()
     }

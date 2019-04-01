@@ -16,24 +16,24 @@
 
 package forms
 
-import forms.behaviours.OptionFieldBehaviours
-import models.EmployerContribution
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class EmployerContributionFormProviderSpec extends OptionFieldBehaviours {
+class EmployerContributionFormProviderSpec extends BooleanFieldBehaviours {
+
+  val requiredKey = "employerContribution.error.required"
+  val invalidKey = "error.boolean"
 
   val form = new EmployerContributionFormProvider()()
 
   ".value" must {
 
     val fieldName = "value"
-    val requiredKey = "employerContribution.error.required"
 
-    behave like optionsField[EmployerContribution](
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = EmployerContribution.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(
