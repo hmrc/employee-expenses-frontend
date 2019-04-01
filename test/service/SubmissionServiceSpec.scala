@@ -75,7 +75,9 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         whenReady(result) {
           result =>
             result.length mustBe 3
-            result.contains(CurrentYear, NextYear, CurrentYearMinus1)
+            result.contains(CurrentYear)
+            result.contains(NextYear)
+            result.contains(CurrentYearMinus1)
         }
       }
 
@@ -88,7 +90,8 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         whenReady(result) {
           result =>
             result.length mustBe 2
-            result.contains(CurrentYear, NextYear)
+            result.contains(CurrentYear)
+            result.contains(NextYear)
         }
       }
 
@@ -112,7 +115,8 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         whenReady(result) {
           result =>
             result.length mustBe 2
-            result.contains(CurrentYearMinus1, CurrentYearMinus2)
+            result.contains(CurrentYearMinus1)
+            result.contains(CurrentYearMinus2)
         }
       }
 
