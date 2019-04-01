@@ -88,14 +88,16 @@
 
                 <p>@messages("confirmation.letterConfirmation")</p>
 
-                @if(taxYearSelections.contains(TaxYearSelection.CurrentYearMinus1)) {
-                    <p>@messages("confirmation.currentYearMinusOneDelay")</p>
-                }
 
             } else {
                 <p>@messages("confirmation.taxCodeChanged")</p>
                 <p>@messages("confirmation.continueToClaim")</p>
+                }
             }
+            @if(taxYearSelections.contains(TaxYearSelection.CurrentYearMinus1)) {
+            <p>@messages("confirmation.currentYearMinusOneDelay")</p>
+
+
         }
     }
 
