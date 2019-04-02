@@ -57,7 +57,7 @@ class CurrentYearConfirmationController @Inject()(
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
 
-              Ok(onePreviousYearConfirmationView(
+              Ok(currentYearConfirmationView(
                 removeFreOption,
                 claimAmountsAndRates,
                 claimAmount.get,

@@ -76,7 +76,7 @@ class OnePreviousYearConfirmationViewSpec extends ViewBehaviours {
         "confirmation.heading",
         "confirmation.actualAmount",
         "confirmation.whatHappensNext",
-        "letterConfirmation"
+        "confirmation.confirmationLetter"
       )
     }
 
