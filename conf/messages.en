@@ -614,6 +614,7 @@ noCodeChange.link = PAYE Income Tax summary.
 
 yourAddress.title = Is this your address?
 yourAddress.heading = Is this your address?
+yourAddress.label = Is {0}, {1} your address?
 yourAddress.checkYourAnswersLabel = Is this your address? {0}
 yourAddress.checkYourAnswersLabel.hidden = Change is this your address
 yourAddress.error.required = Select yes if this is your address
