@@ -232,7 +232,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
           "confirmation.taxCodeChanged",
           "confirmation.continueToClaim",
           "confirmation.previousTaxYears",
-          "confirmation.secondConfirmationLetter"
+          "confirmation.additionalConfirmationLetter"
 
         )
 
@@ -260,7 +260,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
           "confirmation.taxCodeChanged",
           "confirmation.continueToClaim",
           "confirmation.previousTaxYears",
-          "confirmation.secondConfirmationLetter"
+          "confirmation.additionalConfirmationLetter"
         )
 
         assertContainsText(doc,
@@ -302,7 +302,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
         assertContainsMessages(doc,
           "confirmation.heading",
           "confirmation.whatHappensNext",
-          "confirmation.firstConfirmationLetter"
+          "confirmation.confirmationLetter"
         )
       }
 
