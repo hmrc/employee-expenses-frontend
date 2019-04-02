@@ -15,7 +15,6 @@
  *@
 
 @(columnValues: Seq[FlatRateExpenseAmounts], columnHeadings: String*)(implicit messages: Messages)
-
 <ul class="govuk-check-your-answers cya-questions-long section">
     <li>
         <div id="tax-year-heading" class="cya-question">
@@ -27,16 +26,17 @@
     </li>
     @for(columnValue <- columnValues) {
         <li>
-            <div id="tax-year-@{columnValue.taxYear.year}" class="cya-answer">
-                @{messages(
+            <div id="tax-year-@columnValue.taxYear.year" class="cya-answer">
+                @messages(
                     s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(columnValue.taxYear.year)}",
                     columnValue.taxYear.year.toString,
                     (columnValue.taxYear.year + 1).toString
-                )}
+                )
             </div>
-            <div id="fre-amount-@{columnValue.taxYear.year}" class="cya-change">
-                £@{columnValue.freAmount.get.grossAmount}
+            <div id="fre-amount-@columnValue.taxYear.year" class="cya-change">
+                £@columnValue.freAmount.get.grossAmount
             </div>
         </li>
     }
 </ul>
+

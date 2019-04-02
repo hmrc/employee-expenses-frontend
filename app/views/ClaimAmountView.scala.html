@@ -35,7 +35,7 @@
     @components.heading(messages("claimAmount.heading", amount))
 
     @if(contribution){
-        <p>@messages("claimAmount.someContributionDescription", amount - contribution.get)</p>
+        <p>@messages("claimAmount.someContributionDescription", amount)</p>
         <p>@messages("claimAmount.employerContributionDescription")</p>
     }else{
         <p>@messages("claimAmount.noContributionDescription", amount)</p>

@@ -35,13 +35,29 @@
 
         @components.heading(s"alreadyClaimingFREDifferentAmounts.heading")
 
-        <p>@{messages(s"alreadyClaimingFREDifferentAmounts.bodyText1", claimAmount)}</p>
+        <p>@messages("alreadyClaimingFREDifferentAmounts.bodyText1", claimAmount)</p>
 
-        @components.numeric_table(
-            freAmounts,
-            messages("alreadyClaimingFREDifferentAmounts.tableTaxYearHeading"),
-            messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading")
-        )
+        @if(freAmounts.length == 1) {
+            <p>
+                @messages(
+                    "alreadyClaimingFREDifferentAmounts.bodyText1.singleYearOnly",
+                    freAmounts.head.freAmount.get.grossAmount,
+                    messages(
+                        s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(freAmounts.head.taxYear.year)}",
+                        freAmounts.head.taxYear.year.toString,
+                        (freAmounts.head.taxYear.year + 1).toString
+                    )
+                )
+            </p>
+        }
+
+        @if(freAmounts.length > 1) {
+            @components.numeric_table(
+                freAmounts,
+                messages("alreadyClaimingFREDifferentAmounts.tableTaxYearHeading"),
+                messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading")
+            )
+        }
 
         @components.input_radio(
             field = form("value"),

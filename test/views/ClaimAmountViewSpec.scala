@@ -80,7 +80,7 @@ class ClaimAmountViewSpec extends ViewBehaviours {
     "Some employer contribution" when {
       "display correct text when" in {
         val doc = asDocument(applyViewWithEmployerContribution)
-        assertContainsText(doc, messages("claimAmount.someContributionDescription", claimAmount - someEmployerContribution.get))
+        assertContainsText(doc, messages("claimAmount.someContributionDescription", claimAmount))
         assertContainsText(doc, messages("claimAmount.employerContributionDescription"))
       }
       "display relevant data" in {
