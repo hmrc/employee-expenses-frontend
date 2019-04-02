@@ -67,9 +67,9 @@ class FactoryEngineeringApprenticeController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- if (value ){
+            updatedAnswers <- if (value){
               Future.fromTry(request.userAnswers.set(FactoryEngineeringApprenticePage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.FactoryEngineering.apprentice )))
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.FactoryEngineering.apprentice)))
             } else {
               Future.fromTry(request.userAnswers.set(FactoryEngineeringApprenticePage, value))
             }
