@@ -76,7 +76,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       val doc = asDocument(claimStoppedView)
 
-      assertEqualsMessage(doc, "title", s"confirmation.titleStopped")
+      assertEqualsMessage(doc, "title", s"${messages("confirmation.titleStopped")} - ${frontendAppConfig.serviceTitle}")
     }
 
     "display claimChanged title" in {
@@ -85,7 +85,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       val doc = asDocument(claimChangedView)
 
-      assertEqualsMessage(doc, "title", s"confirmation.titleChanged")
+      assertEqualsMessage(doc, "title", s"${messages("confirmation.titleChanged")} - ${frontendAppConfig.serviceTitle}")
 
     }
 
