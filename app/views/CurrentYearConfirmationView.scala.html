@@ -36,8 +36,6 @@
     }
 }
 
-
-
 @main_template(
     title = {
         if(removeFreOption) messages("confirmation.titleStopped") else messages("confirmation.title")
@@ -78,7 +76,7 @@
 
     <p>@messages("confirmation.continueToClaim")</p>
 
-    @if(updateEmployerInfo) {
+    @if(!updateEmployerInfo) {
         <h2>@messages("confirmation.updateEmployerInfo")</h2>
         <p>@messages("confirmation.employerChange")</p>
         <a class="button" id="updateEmployerInfoBtn" href="https://www.tax.service.gov.uk/check-income-tax/income-summary" target="_blank">
@@ -86,7 +84,7 @@
         </a>
     }
 
-    @if(updateAddressInfo) {
+    @if(!updateAddressInfo) {
         <h2>@messages("confirmation.updateAddressInfo")</h2>
         <p>@messages("confirmation.addressChange")</p>
         <a class="button" id="updateAddressInfoBtn" href="https://www.tax.service.gov.uk/personal-account/personal-details" target="_blank">@messages("confirmation.updateAddressInfoNow")</a>

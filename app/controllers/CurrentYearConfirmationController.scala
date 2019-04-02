@@ -45,13 +45,13 @@ class CurrentYearConfirmationController @Inject()(
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      val claimAmount: Int = request.userAnswers.get(ClaimAmountAndAnyDeductions).get
-      val updateEmployerInfo: Boolean = request.userAnswers.get(YourEmployerPage).getOrElse(false)
-      val updateAddressInfo: Boolean = request.userAnswers.get(YourAddressPage).getOrElse(false)
+      val claimAmount = request.userAnswers.get(ClaimAmountAndAnyDeductions)
+      val updateEmployerInfo: Boolean = request.userAnswers.get(YourEmployerPage).isDefined
+      val updateAddressInfo: Boolean = request.userAnswers.get(YourAddressPage).isDefined
       val removeFreOption = request.userAnswers.get(RemoveFRECodePage).isDefined
 
       (claimAmount, request.nino) match {
-        case (fullClaimAmount, Some(nino)) =>
+        case (Some(fullClaimAmount), Some(nino)) =>
           taiConnector.taiTaxCodeRecords(nino).map {
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
@@ -59,7 +59,7 @@ class CurrentYearConfirmationController @Inject()(
               Ok(view(
                 removeFreOption,
                 claimAmountsAndRates,
-                claimAmount,
+                claimAmount.get,
                 updateEmployerInfo,
                 updateAddressInfo
                 ))

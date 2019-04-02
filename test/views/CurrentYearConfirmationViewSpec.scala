@@ -53,12 +53,12 @@ class CurrentYearConfirmationViewSpec extends ViewBehaviours {
     )
 
     def applyView(
-                  removeFREOption: Boolean = false,
-                  claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates),
-                  claimAmount: Int = claimAmount,
-                  updateEmployer: Boolean = false,
-                  updateAddress: Boolean = false
-                  )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
+                   removeFREOption: Boolean = false,
+                   claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
+                   claimAmount: Int = claimAmount,
+                   updateEmployer: Boolean = false,
+                   updateAddress: Boolean = false
+                 )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
       view.apply(removeFREOption, claimAmountsAndRates, claimAmount, updateEmployer, updateAddress)(fakeRequest, messages)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
@@ -68,6 +68,79 @@ class CurrentYearConfirmationViewSpec extends ViewBehaviours {
     behave like normalPage(viewWithAnswers, "confirmation")
 
     behave like pageWithAccountMenu(applyViewWithAuth)
+
+    "display correct static text" in {
+
+      val doc = asDocument(viewWithAnswers)
+
+      assertContainsMessages(doc,
+        "confirmation.heading",
+        "confirmation.actualAmount",
+        "confirmation.whatHappensNext",
+        "confirmation.taxCodeChanged",
+        "confirmation.continueToClaim")
+    }
+
+    "display correct dynamic text for title and tax rates" in {
+
+      val doc = asDocument(viewWithAnswers)
+
+      assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", claimAmount))
+      assertContainsText(doc, messages(
+        "confirmation.basicRate",
+        claimAmountsRates.calculatedBasicRate,
+        claimAmount,
+        claimAmountsRates.basicRate
+      ))
+      assertContainsText(doc, messages(
+        "confirmation.higherRate",
+        claimAmountsRates.calculatedHigherRate,
+        claimAmount,
+        claimAmountsRates.higherRate
+      ))
+      assertContainsText(doc, messages("claimAmount.englandHeading"))
+      assertContainsText(doc, messages("claimAmount.scotlandHeading"))
+    }
+
+    "YourAddress" must {
+
+      "display update address button and content when 'false'" in {
+
+        val doc = asDocument(applyView()(fakeRequest, messages))
+
+        assertContainsMessages(doc, "confirmation.updateAddressInfo", "confirmation.addressChange")
+        doc.getElementById("updateAddressInfoBtn").text mustBe messages("confirmation.updateAddressInfoNow")
+      }
+
+      "not display update address button and content when 'true'" in {
+
+        val doc = asDocument(applyView(updateAddress = true)(fakeRequest, messages))
+
+        assertNotRenderedById(doc, "updateAddressInfoBtn")
+      }
+    }
+
+    "YourEmployer" must {
+
+      "display update employer button and content when 'false'" in {
+
+        val viewWithSpecificAnswers = applyView()(fakeRequest, messages)
+
+        val doc = asDocument(viewWithSpecificAnswers)
+
+        assertContainsMessages(doc, "confirmation.updateEmployerInfo", "confirmation.employerChange")
+        doc.getElementById("updateEmployerInfoBtn").text mustBe messages("confirmation.updateEmployerInfoNow")
+      }
+
+      "not display update employer button and content when 'true'" in {
+
+        val viewWithSpecificAnswers = applyView(updateEmployer = true)(fakeRequest, messages)
+
+        val doc = asDocument(viewWithSpecificAnswers)
+
+        assertNotRenderedById(doc, "updateEmployerInfoNow")
+      }
+    }
   }
 
   application.stop()
