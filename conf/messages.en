@@ -701,3 +701,6 @@ confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April
 
 currentYearConfirmation.title = currentYearConfirmation
 currentYearConfirmation.heading = currentYearConfirmation
+
+onePreviousYearConfirmation.title = onePreviousYearConfirmation
+onePreviousYearConfirmation.heading = onePreviousYearConfirmation
