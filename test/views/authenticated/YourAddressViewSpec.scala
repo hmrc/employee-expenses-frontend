@@ -49,7 +49,13 @@ class YourAddressViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, YourAddressController.onSubmit(NormalMode).url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      YourAddressController.onSubmit(NormalMode).url,
+      Some(messages(s"$messageKeyPrefix.label", address.line1, address.postcode))
+    )
 
     "behave like page with address" in {
       val doc = asDocument(applyViewWithAuth(form))
