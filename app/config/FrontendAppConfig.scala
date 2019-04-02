@@ -55,6 +55,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val contactHMRC: String = configuration.get[String]("contactHMRC.url")
   lazy val incomeTaxSummary: String = configuration.get[String]("incomeTaxSummary.url")
 
+  lazy val incomeSummary: String = configuration.get[String]("incomeSummary.url")
+  lazy val personalDetails: String = configuration.get[String]("personalDetails.url")
+
   lazy val feedbackSurveyUrl: String = configuration.get[String]("feedbackSurvey.url")
   lazy val signOutUrl: String = employeeExpensesFrontendUrl + "/sign-out"
 
