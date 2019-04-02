@@ -33,7 +33,8 @@ class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[Already
   val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   private val fakeClaimAmount = 100
-  private val fakeFreAmounts = Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))
+  private val fakeFreAmounts = Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()), FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear().prev))
+  private val fakeFreAmount = Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))
 
   "AlreadyClaimingFRESameAmount view" must {
 
@@ -41,6 +42,9 @@ class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[Already
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest, messages)
+
+    def applyViewSingleYear(form: Form[_]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmount)(fakeRequest, messages)
 
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
@@ -53,11 +57,18 @@ class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[Already
 
     behave like optionsPage(form, applyView, AlreadyClaimingFRESameAmount.options)
 
-    "contains correct headings for table" in {
+    "contain table and correct headings for multiple years" in {
       val doc = asDocument(applyView(form))
 
       doc.getElementById("tax-year-heading").text mustBe messages("alreadyClaimingFRESameAmount.tableTaxYearHeading")
       doc.getElementById("amount-heading").text mustBe messages("alreadyClaimingFRESameAmount.tableAmountHeading")
+    }
+
+    "not contain table for  for single year" in {
+      val doc = asDocument(applyViewSingleYear(form))
+
+      doc.getElementById("tax-year-heading") mustBe null
+      doc.getElementById("amount-heading") mustBe null
     }
 
     "contains correct column values for table" in {

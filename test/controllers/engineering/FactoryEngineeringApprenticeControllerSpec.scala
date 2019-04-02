@@ -211,7 +211,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
     application.stop()
   }
 
-  "save 'allOther' to ClaimAmount when 'No' is selected" in {
+  "save no data to ClaimAmount when 'No' is selected" in {
 
     val application = applicationBuilder(userAnswers = Some(userAnswers))
       .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -222,7 +222,6 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
     val result = route(application, request).value
 
     val userAnswers2 = userAnswers
-      .set(ClaimAmount, ClaimAmounts.FactoryEngineering.allOther).success.value
       .set(FactoryEngineeringApprenticePage,  false).success.value
 
     whenReady(result) {

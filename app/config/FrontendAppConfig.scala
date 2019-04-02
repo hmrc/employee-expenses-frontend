@@ -25,6 +25,8 @@ import play.api.mvc.Call
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
+  lazy val serviceTitle = "Employee Expenses - GOV.UK"
+
   private val contactHost = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = "employeeExpensesFrontend"
 
@@ -54,6 +56,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val jobExpensesLink: String = configuration.get[String]("jobExpenses.url")
   lazy val contactHMRC: String = configuration.get[String]("contactHMRC.url")
   lazy val incomeTaxSummary: String = configuration.get[String]("incomeTaxSummary.url")
+
+  lazy val incomeSummary: String = configuration.get[String]("incomeSummary.url")
+  lazy val personalDetails: String = configuration.get[String]("personalDetails.url")
 
   lazy val feedbackSurveyUrl: String = configuration.get[String]("feedbackSurvey.url")
   lazy val signOutUrl: String = employeeExpensesFrontendUrl + "/sign-out"

@@ -76,7 +76,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       val doc = asDocument(claimStoppedView)
 
-      assertEqualsMessage(doc, "title", s"confirmation.titleStopped")
+      assertEqualsMessage(doc, "title", s"${messages("confirmation.titleStopped")} - ${frontendAppConfig.serviceTitle}")
     }
 
     "display claimChanged title" in {
@@ -85,7 +85,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       val doc = asDocument(claimChangedView)
 
-      assertEqualsMessage(doc, "title", s"confirmation.titleChanged")
+      assertEqualsMessage(doc, "title", s"${messages("confirmation.titleChanged")} - ${frontendAppConfig.serviceTitle}")
 
     }
 
@@ -232,7 +232,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
           "confirmation.taxCodeChanged",
           "confirmation.continueToClaim",
           "confirmation.previousTaxYears",
-          "confirmation.letterConfirmation"
+          "confirmation.additionalConfirmationLetter"
 
         )
 
@@ -242,7 +242,6 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       }
     }
-
 
     "when CY and previous years have been selected" must {
 
@@ -261,7 +260,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
           "confirmation.taxCodeChanged",
           "confirmation.continueToClaim",
           "confirmation.previousTaxYears",
-          "confirmation.letterConfirmation"
+          "confirmation.additionalConfirmationLetter"
         )
 
         assertContainsText(doc,
@@ -303,7 +302,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
         assertContainsMessages(doc,
           "confirmation.heading",
           "confirmation.whatHappensNext",
-          "confirmation.letterConfirmation"
+          "confirmation.confirmationLetter"
         )
       }
 

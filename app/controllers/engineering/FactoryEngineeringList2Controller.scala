@@ -72,7 +72,9 @@ class FactoryEngineeringList2Controller @Inject()(
                 .flatMap(_.set(ClaimAmount, ClaimAmounts.FactoryEngineering.list2))
               )
             } else {
-              Future.fromTry(request.userAnswers.set(FactoryEngineeringList2Page, value))
+              Future.fromTry(request.userAnswers.set(FactoryEngineeringList2Page, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.FactoryEngineering.allOther))
+              )
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(FactoryEngineeringList2Page, mode)(updatedAnswers))
