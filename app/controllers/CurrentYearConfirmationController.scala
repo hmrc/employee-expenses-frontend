@@ -27,7 +27,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.CurrentYearConfirmationView
+import views.html.{CurrentYearConfirmationView, OnePreviousYearConfirmationView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,7 +39,8 @@ class CurrentYearConfirmationController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        taiConnector: TaiConnector,
                                        claimAmountService: ClaimAmountService,
-                                       view: CurrentYearConfirmationView
+                                       currentYearConfirmationView: CurrentYearConfirmationView,
+                                       onePreviousYearConfirmationView: OnePreviousYearConfirmationView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -56,7 +57,7 @@ class CurrentYearConfirmationController @Inject()(
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
 
-              Ok(view(
+              Ok(onePreviousYearConfirmationView(
                 removeFreOption,
                 claimAmountsAndRates,
                 claimAmount.get,

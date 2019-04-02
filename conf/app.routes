@@ -349,5 +349,3 @@ POST        /change-which-years-change-claim                     controllers.aut
 GET        /confirmation                                         controllers.ConfirmationController.onPageLoad()
 
 GET        /current-year-confirmation                            controllers.CurrentYearConfirmationController.onPageLoad()
-
-GET        /onePreviousYearConfirmation                       controllers.OnePreviousYearConfirmationController.onPageLoad()

@@ -32,6 +32,7 @@ class CurrentYearConfirmationViewSpec extends ViewBehaviours {
   "CurrentYearConfirmation view" must {
 
     val view = application.injector.instanceOf[CurrentYearConfirmationView]
+
     val claimAmountService = application.injector.instanceOf[ClaimAmountService]
 
     val claimAmount: Int = 100
