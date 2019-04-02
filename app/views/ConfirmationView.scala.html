@@ -88,7 +88,7 @@
         <h2>@messages("confirmation.whatHappensNext")</h2>
 
         @if(!taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
-            <p>@messages("confirmation.firstConfirmationLetter")</p>
+            <p>@messages("confirmation.confirmationLetter")</p>
         }
 
         @if(taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
@@ -102,7 +102,7 @@
 
                 <h3>@messages("confirmation.previousTaxYears")</h3>
 
-                <p>@messages("confirmation.secondConfirmationLetter")</p>
+                <p>@messages("confirmation.additionalConfirmationLetter")</p>
 
             } else {
                 <p>@messages("confirmation.taxCodeChanged")</p>
