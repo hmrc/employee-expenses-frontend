@@ -59,11 +59,11 @@ class ClaimAmountController @Inject()(
             _ <- sessionRepository.set(request.identifier, saveClaimAmountAndAnyDeductions)
           } yield {
 
-            val standardRate: StandardRate = claimAmountService.standardRate(claimAmount)
-            val scottishRate: ScottishRate = claimAmountService.scottishRate(claimAmount)
+            val standardRate: StandardRate = claimAmountService.standardRate(claimAmountAndAnyDeductions)
+            val scottishRate: ScottishRate = claimAmountService.scottishRate(claimAmountAndAnyDeductions)
 
             Ok(view(
-              claimAmount,
+              claimAmountAndAnyDeductions,
               employerContribution,
               standardRate,
               scottishRate,

@@ -15,38 +15,28 @@
  *@
 
 @(columnValues: Seq[FlatRateExpenseAmounts], columnHeadings: String*)(implicit messages: Messages)
-@if(columnValues.length == 1) {
-    <p>
-        For the tax year @{messages(
-            s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(columnValues.head.taxYear.year)}",
-            columnValues.head.taxYear.year.toString,
-            (columnValues.head.taxYear.year + 1).toString
-        )} you are already claiming
-        £@{columnValues.head.freAmount.get.grossAmount}.
-    </p>
-} else {
-    <ul class="govuk-check-your-answers cya-questions-long section">
+<ul class="govuk-check-your-answers cya-questions-long section">
+    <li>
+        <div id="tax-year-heading" class="cya-question">
+            @columnHeadings.head
+        </div>
+        <div id="amount-heading" class="cya-change heading-small">
+            @columnHeadings.tail
+        </div>
+    </li>
+    @for(columnValue <- columnValues) {
         <li>
-            <div id="tax-year-heading" class="cya-question">
-                @columnHeadings.head
+            <div id="tax-year-@columnValue.taxYear.year" class="cya-answer">
+                @messages(
+                    s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(columnValue.taxYear.year)}",
+                    columnValue.taxYear.year.toString,
+                    (columnValue.taxYear.year + 1).toString
+                )
             </div>
-            <div id="amount-heading" class="cya-change heading-small">
-                @columnHeadings.tail
+            <div id="fre-amount-@columnValue.taxYear.year" class="cya-change">
+                £@columnValue.freAmount.get.grossAmount
             </div>
         </li>
-        @for(columnValue <- columnValues) {
-            <li>
-                <div id="tax-year-@{columnValue.taxYear.year}" class="cya-answer">
-                    @{messages(
-                        s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(columnValue.taxYear.year)}",
-                        columnValue.taxYear.year.toString,
-                        (columnValue.taxYear.year + 1).toString
-                    )}
-                </div>
-                <div id="fre-amount-@{columnValue.taxYear.year}" class="cya-change">
-                    £@{columnValue.freAmount.get.grossAmount}
-                </div>
-            </li>
-        }
-    </ul>
-}
+    }
+</ul>
+
