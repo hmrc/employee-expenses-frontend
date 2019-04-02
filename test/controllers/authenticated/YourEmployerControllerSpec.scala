@@ -323,5 +323,26 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       application.stop()
     }
+
+    "redirect to Your Address for a GET when TAI call fails" in {
+      val ua1 = emptyUserAnswers.set(TaxYearSelectionPage, TaxYearSelection.values).success.value
+      val application =
+        applicationBuilder(userAnswers = Some(ua1))
+          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[TaiService].toInstance(mockTaiService))
+          .build()
+
+      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.failed(new Exception))
+
+      val request = FakeRequest(GET, yourEmployerRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual YourAddressController.onPageLoad(NormalMode).url
+
+      application.stop()
+    }
   }
 }
