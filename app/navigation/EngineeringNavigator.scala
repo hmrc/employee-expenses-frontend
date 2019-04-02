@@ -34,7 +34,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     case ConstructionalEngineeringList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case AncillaryEngineeringWhichTradePage => ancillaryEngineeringWhichTrade(NormalMode)
     case FactoryEngineeringList1Page => factoryEngineeringList1(NormalMode)
-    case FactoryEngineeringList2Page => factoryEngineeringList2(NormalMode)
+    case FactoryEngineeringList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case FactoryEngineeringApprenticePage => factoryEngineeringApprentice(NormalMode)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
@@ -47,7 +47,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     case ConstructionalEngineeringList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case AncillaryEngineeringWhichTradePage => ancillaryEngineeringWhichTrade(CheckMode)
     case FactoryEngineeringList1Page => factoryEngineeringList1(CheckMode)
-    case FactoryEngineeringList2Page => factoryEngineeringList2(CheckMode)
+    case FactoryEngineeringList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case FactoryEngineeringApprenticePage => factoryEngineeringApprentice(CheckMode)
     case _ => _ => routes.SessionExpiredController.onPageLoad()
   }
@@ -56,7 +56,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     userAnswers.get(TypeOfEngineeringPage) match {
       case Some(ConstructionalEngineering) => controllers.engineering.routes.ConstructionalEngineeringApprenticeController.onPageLoad(mode)
       case Some(TradesRelatingToEngineering) => controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(mode)
-      case Some(FactoryOrWorkshopEngineering) => controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(mode)
+      case Some(FactoryOrWorkshopEngineering) => controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(mode)
       case Some(NoneOfTheAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
@@ -101,17 +101,10 @@ class EngineeringNavigator @Inject()() extends Navigator {
     }
   }
 
-  private def factoryEngineeringList2(mode: Mode)(userAnswers: UserAnswers): Call = {
-    userAnswers.get(FactoryEngineeringList2Page) match {
-      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case Some(false) => controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
-    }
-  }
-
   private def factoryEngineeringApprentice(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(FactoryEngineeringApprenticePage) match {
-      case Some(true) | Some(false) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(true)  => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(false) => controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }

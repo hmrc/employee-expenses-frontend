@@ -66,11 +66,13 @@ class FactoryEngineeringApprenticeController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
-          val claimAmount: Int = if (value) ClaimAmounts.FactoryEngineering.apprentice else ClaimAmounts.FactoryEngineering.allOther
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(FactoryEngineeringApprenticePage, value)
-              .flatMap(_.set(ClaimAmount, claimAmount))
-            )
+            updatedAnswers <- if (value){
+              Future.fromTry(request.userAnswers.set(FactoryEngineeringApprenticePage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.FactoryEngineering.apprentice)))
+            } else {
+              Future.fromTry(request.userAnswers.set(FactoryEngineeringApprenticePage, value))
+            }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(FactoryEngineeringApprenticePage, mode)(updatedAnswers))
         }
