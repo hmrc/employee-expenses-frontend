@@ -69,7 +69,7 @@
             @rate match {
                 case standardRate: StandardRate => {
                     @if(claimAmountsAndRates.length > 1) {
-                        <h2 class="heading-small">@messages("confirmation.englandHeading")</h2>
+                         <h2 class="heading-small">@messages("confirmation.englandHeading")</h2>
                     }
                     <p>@messages("confirmation.basicRate", standardRate.calculatedBasicRate, claimAmount, standardRate.basicRate)</p>
                     <p>@messages("confirmation.higherRate", standardRate.calculatedHigherRate, claimAmount, standardRate.higherRate)</p>
@@ -88,11 +88,13 @@
         <h2>@messages("confirmation.whatHappensNext")</h2>
 
         @if(!taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
-            <p>@messages("confirmation.letterConfirmation")</p>
+            <p>@messages("confirmation.firstConfirmationLetter")</p>
         }
 
         @if(taxYearSelections.contains(TaxYearSelection.CurrentYear)) {
+
             @if(taxYearSelections.size > 1) {
+
                 <h3>@messages("confirmation.currentTaxYear")</h3>
 
                 <p>@messages("confirmation.taxCodeChanged")</p>
@@ -100,9 +102,7 @@
 
                 <h3>@messages("confirmation.previousTaxYears")</h3>
 
-                <p>@messages("confirmation.letterConfirmation")</p>
-
-
+                <p>@messages("confirmation.secondConfirmationLetter")</p>
 
             } else {
                 <p>@messages("confirmation.taxCodeChanged")</p>
@@ -110,14 +110,13 @@
                 }
             }
 
-            @if(taxYearSelections.contains(TaxYearSelection.CurrentYearMinus1)) {
+        @if(taxYearSelections.contains(TaxYearSelection.CurrentYearMinus1)) {
 
-            <p><p>@messages(
+            <p>@messages(
                             "confirmation.currentYearMinusOneDelay",
                             TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
                             TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString)
             </p>
-
             }
          }
 

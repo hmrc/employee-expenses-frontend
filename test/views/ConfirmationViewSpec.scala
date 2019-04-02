@@ -232,7 +232,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
           "confirmation.taxCodeChanged",
           "confirmation.continueToClaim",
           "confirmation.previousTaxYears",
-          "confirmation.letterConfirmation"
+          "confirmation.secondConfirmationLetter"
 
         )
 
@@ -242,7 +242,6 @@ class ConfirmationViewSpec extends ViewBehaviours {
 
       }
     }
-
 
     "when CY and previous years have been selected" must {
 
@@ -261,7 +260,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
           "confirmation.taxCodeChanged",
           "confirmation.continueToClaim",
           "confirmation.previousTaxYears",
-          "confirmation.letterConfirmation"
+          "confirmation.secondConfirmationLetter"
         )
 
         assertContainsText(doc,
@@ -303,7 +302,7 @@ class ConfirmationViewSpec extends ViewBehaviours {
         assertContainsMessages(doc,
           "confirmation.heading",
           "confirmation.whatHappensNext",
-          "confirmation.letterConfirmation"
+          "confirmation.firstConfirmationLetter"
         )
       }
 
