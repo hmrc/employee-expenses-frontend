@@ -25,6 +25,8 @@ import play.api.mvc.Call
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
+  lazy val serviceTitle = "Employee Expenses - GOV.UK"
+
   private val contactHost = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = "employeeExpensesFrontend"
 
