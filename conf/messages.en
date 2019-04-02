@@ -647,6 +647,7 @@ alreadyClaimingFRESameAmount.heading = This amount is already in your tax code
 alreadyClaimingFRESameAmount.checkYourAnswersLabel = You are already claiming this
 alreadyClaimingFRESameAmount.error.required = Select keep claiming this amount if you want to keep claiming this amount
 alreadyClaimingFRESameAmount.paragraph1 = Your tax-free Personal Allowance already includes this amount. This is because you have claimed this expense before.
+alreadyClaimingFRESameAmount.paragraph1.singleYearOnly = Your tax-free Personal Allowance for the tax year {0} already includes £{1}. This is because you have claimed this expense before.
 alreadyClaimingFRESameAmount.paragraph2 = Your tax code was changed the first time that you claimed this expense and will stay the same until you tell us that your employment circumstances change.
 alreadyClaimingFRESameAmount.radioLabel = What do you want to do?
 alreadyClaimingFRESameAmount.noChange = Keep this amount in your tax code
