@@ -125,6 +125,25 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     }
   }
 
+  "taiTaxAccountSummary" must {
+    "return a 200 on success" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/summary"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+          )
+      )
+
+      val result: Future[HttpResponse] = taiConnector.taiTaxAccountSummary(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result.status mustBe OK
+      }
+    }
+  }
+
   val validEmploymentsJson: JsValue = Json.parse(
     """{
      |  "data" : {
