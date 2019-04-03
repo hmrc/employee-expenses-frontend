@@ -72,7 +72,6 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
 
     httpClient.GET(taiUrl)
   }
-
 }
 
 @ImplementedBy(classOf[TaiConnectorImpl])

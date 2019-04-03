@@ -66,7 +66,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode)(fakeRequest, messages).toString
+        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -86,7 +86,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(true), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -151,7 +151,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(fakeRequest, messages).toString
+        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -211,7 +211,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
     application.stop()
   }
 
-  "save 'allOther' to ClaimAmount when 'No' is selected" in {
+  "save no data to ClaimAmount when 'No' is selected" in {
 
     val application = applicationBuilder(userAnswers = Some(userAnswers))
       .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -222,7 +222,6 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
     val result = route(application, request).value
 
     val userAnswers2 = userAnswers
-      .set(ClaimAmount, ClaimAmounts.FactoryEngineering.allOther).success.value
       .set(FactoryEngineeringApprenticePage,  false).success.value
 
     whenReady(result) {

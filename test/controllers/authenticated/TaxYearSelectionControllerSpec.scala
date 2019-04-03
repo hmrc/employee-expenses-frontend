@@ -68,7 +68,7 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode)(fakeRequest, messages).toString
+        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -88,7 +88,7 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(TaxYearSelection.values), NormalMode)(fakeRequest, messages).toString
+        view(form.fill(TaxYearSelection.values), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -138,7 +138,7 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(fakeRequest, messages).toString
+        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

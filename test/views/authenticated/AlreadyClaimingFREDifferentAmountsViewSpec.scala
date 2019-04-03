@@ -17,7 +17,7 @@
 package views.authenticated
 
 import forms.authenticated.AlreadyClaimingFREDifferentAmountsFormProvider
-import models.{AlreadyClaimingFREDifferentAmounts, NormalMode, TaiTaxYear, TaxYearSelection}
+import models.{AlreadyClaimingFREDifferentAmounts, FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, TaxYearSelection}
 import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -40,6 +40,14 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
       NormalMode,
       fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
       fullUserAnswers.get(FREAmounts).get
+    )(fakeRequest, messages)
+
+  def applyViewMultipleYears(form: Form[_]): HtmlFormat.Appendable =
+    view.apply(
+      form,
+      NormalMode,
+      fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+      Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()), FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear().prev))
     )(fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
@@ -66,14 +74,14 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
     }
 
     "contains correct headings for table" in {
-      val doc = asDocument(applyView(form))
+      val doc = asDocument(applyViewMultipleYears(form))
 
       doc.getElementById("tax-year-heading").text mustBe messages("alreadyClaimingFREDifferentAmounts.tableTaxYearHeading")
       doc.getElementById("amount-heading").text mustBe messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading")
     }
 
     "contains correct column values for table" in {
-      val doc = asDocument(applyView(form))
+      val doc = asDocument(applyViewMultipleYears(form))
 
       doc.getElementById(s"tax-year-${TaiTaxYear().year}").text mustBe messages(
         s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(TaiTaxYear().year)}",

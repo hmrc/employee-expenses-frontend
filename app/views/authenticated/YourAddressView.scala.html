@@ -49,7 +49,11 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("yourAddress.heading"),
+            label = messages(
+                "yourAddress.label",
+                if(address.line1.exists(_.trim.nonEmpty)) {address.line1},
+                if(address.postcode.exists(_.trim.nonEmpty)) {address.postcode}
+            ),
             labelClass = Some("visually-hidden")
         )
 

@@ -64,7 +64,7 @@
 @scalate.render(
     "/templates/mustache/production/govuk-template.mustache.html",
     Map(
-        "pageTitle" -> title,
+        "pageTitle" -> s"$title - ${appConfig.serviceTitle}",
         "navTitle" -> messages("site.service_name"),
         "hideAccountMenu" -> request.session.get("authToken").isEmpty,
         "signOutUrl" -> {
@@ -84,6 +84,9 @@
             Map("enUrl" -> appConfig.routeToSwitchLanguage("english"),
                 "cyUrl" -> appConfig.routeToSwitchLanguage("cymraeg"))
         },
-        "betaBanner" -> true
+        "betaBanner" -> true,
+        "sessionTimeout" -> true,
+        "keepAliveUrl" -> request.uri,
+        "logoutUrl" -> appConfig.employeeExpensesFrontendUrl
     )
 )

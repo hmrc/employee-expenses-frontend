@@ -40,7 +40,7 @@ class UpdateEmployerInformationControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(nextPageURL)(fakeRequest, messages).toString
+        view(nextPageURL)(request, messages).toString
 
       application.stop()
     }

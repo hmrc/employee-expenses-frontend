@@ -92,7 +92,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(claimAmount, None, claimAmountsAndRates, scottishClaimAmountsAndRates, "/employee-expenses/which-tax-year")(fakeRequest, messages).toString
+            view(claimAmount, None, claimAmountsAndRates, scottishClaimAmountsAndRates, "/employee-expenses/which-tax-year")(request, messages).toString
 
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }

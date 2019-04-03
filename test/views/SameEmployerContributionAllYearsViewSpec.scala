@@ -66,7 +66,11 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "display the correct browser title" in {
 
           val doc = asDocument(applyView(form))
-          assertEqualsMessage(doc, "title", messages(s"$messageKeyPrefix.title", contribution))
+          assertEqualsMessage(
+            doc,
+            "title",
+            s"${messages(s"$messageKeyPrefix.title", contribution)} - ${frontendAppConfig.serviceTitle}"
+          )
         }
 
         "display the correct page title" in {
@@ -134,7 +138,11 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "show an error prefix in the browser title" in {
 
           val doc = asDocument(applyView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title", contribution)}""")
+          assertEqualsValue(
+            doc,
+            "title",
+            s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title", contribution)} - ${frontendAppConfig.serviceTitle}"""
+          )
         }
       }
     }
