@@ -19,6 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.authenticated.routes._
 import controllers.foodCatering.routes._
+import controllers.docks.routes._
 import controllers.routes._
 import models.FifthIndustryOptions.{Armedforces, Dockswaterways, Forestry, Shipyard, Textiles}
 import models.FirstIndustryOptions._
@@ -289,7 +290,7 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Dockswaterways).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
-          EmployerContributionController.onPageLoad(NormalMode)
+          DocksOccupationList1Controller.onPageLoad(NormalMode)
       }
 
       "go HeatingController from FifthIndustryOptionsPage when 'Forestry' is selected" in {

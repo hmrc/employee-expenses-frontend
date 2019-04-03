@@ -21,6 +21,7 @@ import pages._
 import pages.authenticated._
 import pages.clothing._
 import pages.construction._
+import pages.docks.DocksOccupationList1Page
 import pages.electrical.ElectricalPage
 import pages.healthcare._
 import pages.engineering._
@@ -33,6 +34,9 @@ import pages.security._
 import pages.printing._
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryDocksOccupationList1Page: Arbitrary[DocksOccupationList1Page.type] =
+    Arbitrary(DocksOccupationList1Page)
 
   implicit lazy val arbitraryFifthIndustryOptionsPage: Arbitrary[FifthIndustryOptionsPage.type] =
     Arbitrary(FifthIndustryOptionsPage)

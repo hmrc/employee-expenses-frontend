@@ -26,6 +26,7 @@ import controllers.manufacturing.routes._
 import controllers.police.routes._
 import controllers.printing.routes._
 import controllers.heating.routes._
+import controllers.docks.routes._
 import controllers.routes._
 import controllers.security.routes._
 import controllers.transport.routes._
@@ -125,7 +126,7 @@ class GenericNavigator @Inject()() extends Navigator {
   private def fifthIndustryOptions(mode:Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(FifthIndustryOptionsPage) match {
       case Some(Armedforces)                           => EmployerContributionController.onPageLoad(mode)
-      case Some(Dockswaterways)                        => EmployerContributionController.onPageLoad(mode)
+      case Some(Dockswaterways)                        => DocksOccupationList1Controller.onPageLoad(mode)
       case Some(Forestry)                              => EmployerContributionController.onPageLoad(mode)
       case Some(Shipyard)                              => EmployerContributionController.onPageLoad(mode)
       case Some(Textiles)                              => EmployerContributionController.onPageLoad(mode)

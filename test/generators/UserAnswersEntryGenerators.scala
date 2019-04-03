@@ -23,6 +23,7 @@ import pages._
 import pages.authenticated._
 import pages.clothing.ClothingPage
 import pages.construction._
+import pages.docks.DocksOccupationList1Page
 import pages.electrical.ElectricalPage
 import pages.healthcare._
 import pages.engineering._
@@ -36,6 +37,14 @@ import pages.printing._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryDocksOccupationList1UserAnswersEntry: Arbitrary[(DocksOccupationList1Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[DocksOccupationList1Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
 
   implicit lazy val arbitraryFifthIndustryOptionsUserAnswersEntry: Arbitrary[(FifthIndustryOptionsPage.type, JsValue)] =
     Arbitrary {

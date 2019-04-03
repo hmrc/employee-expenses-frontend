@@ -29,6 +29,7 @@ object ClaimAmounts {
   lazy val leisure: Int = 60
   lazy val prisons: Int = 80
   lazy val forestry: Int = 100
+  lazy val docksAndWaterways: Int = 80
 
   object Healthcare {
     lazy val ambulanceStaff: Int = 185
