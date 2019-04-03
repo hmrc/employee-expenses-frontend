@@ -128,7 +128,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
           .thenReturn(Future.successful(HttpResponse(204)))
 
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
+          .thenReturn(Future.successful(HttpResponse(200)))
 
         val result = submissionService.submitFRENotInCode(fakeNino, currentTaxYear, claimAmount)
 
@@ -142,7 +142,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
           .thenReturn(Future.successful(HttpResponse(500)))
 
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
+          .thenReturn(Future.successful(HttpResponse(200)))
 
         val result = submissionService.submitFRENotInCode(fakeNino, currentTaxYear, claimAmount)
 
@@ -158,7 +158,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
           .thenReturn(Future.successful(HttpResponse(204)))
 
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
+          .thenReturn(Future.successful(HttpResponse(200)))
 
         val result = submissionService.submitRemoveFREFromCode(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
 
