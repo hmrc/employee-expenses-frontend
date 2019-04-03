@@ -25,7 +25,7 @@ import service.ClaimAmountService
 import views.behaviours.ViewBehaviours
 import views.html.OnePreviousYearConfirmationView
 
-class OnePreviousYearConfirmationViewSpec extends ViewBehaviours {
+class PreviousYearsConfirmationViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
