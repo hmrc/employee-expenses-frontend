@@ -31,6 +31,7 @@ import controllers.security.routes._
 import controllers.transport.routes._
 import controllers.authenticated.routes._
 import javax.inject.Inject
+import models.FifthIndustryOptions.{Armedforces, Dockswaterways, Forestry, Shipyard, Textiles}
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions._
 import models.SecondIndustryOptions._
@@ -48,6 +49,8 @@ class GenericNavigator @Inject()() extends Navigator {
     case SecondIndustryOptionsPage => secondIndustryOptions(NormalMode)
     case ThirdIndustryOptionsPage  => thirdIndustryOptions(NormalMode)
     case FourthIndustryOptionsPage => fourthIndustryOptions(NormalMode)
+    case FifthIndustryOptionsPage => fifthIndustryOptions(NormalMode)
+
     case EmployerContributionPage  => employerContribution(NormalMode)
     case ExpensesEmployerPaidPage  => expensesEmployerPaid(NormalMode)
     case SameEmployerContributionAllYearsPage  => sameEmployerContributionAllYears(NormalMode)
@@ -61,6 +64,7 @@ class GenericNavigator @Inject()() extends Navigator {
     case SecondIndustryOptionsPage => secondIndustryOptions(CheckMode)
     case ThirdIndustryOptionsPage => thirdIndustryOptions(CheckMode)
     case FourthIndustryOptionsPage => fourthIndustryOptions(CheckMode)
+    case FifthIndustryOptionsPage => fifthIndustryOptions(CheckMode)
     case EmployerContributionPage => employerContribution(CheckMode)
     case ExpensesEmployerPaidPage => expensesEmployerPaid(CheckMode)
     case SameEmployerContributionAllYearsPage => sameEmployerContributionAllYears(CheckMode)
@@ -114,9 +118,19 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Heating)                              => HeatingOccupationListController.onPageLoad(mode)
       case Some(Leisure)                              => EmployerContributionController.onPageLoad(mode)
       case Some(Prisons)                              => EmployerContributionController.onPageLoad(mode)
-      case Some(FourthIndustryOptions.NoneOfAbove) => EmployerContributionController.onPageLoad(mode)
+      case Some(FourthIndustryOptions.NoneOfAbove)    => FifthIndustryOptionsController.onPageLoad(mode)
       case _                                          => SessionExpiredController.onPageLoad()
+    }
 
+  private def fifthIndustryOptions(mode:Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(FifthIndustryOptionsPage) match {
+      case Some(Armedforces)                           => EmployerContributionController.onPageLoad(mode)
+      case Some(Dockswaterways)                        => EmployerContributionController.onPageLoad(mode)
+      case Some(Forestry)                              => EmployerContributionController.onPageLoad(mode)
+      case Some(Shipyard)                              => EmployerContributionController.onPageLoad(mode)
+      case Some(Textiles)                              => EmployerContributionController.onPageLoad(mode)
+      case Some(FifthIndustryOptions.NoneOfAbove)      => EmployerContributionController.onPageLoad(mode)
+      case _                                           => SessionExpiredController.onPageLoad()
     }
 
   private def employerContribution(mode: Mode)(userAnswers: UserAnswers): Call =

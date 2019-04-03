@@ -95,8 +95,8 @@ multipleEmployments.error.required = Select if you have one job, or more than on
 multipleEmployments.oneJob = One job
 multipleEmployments.moreThanOneJob = More than one job
 
-firstIndustryOptions.title = Industry list 1 of 4
-firstIndustryOptions.heading = Industry list 1 of 4
+firstIndustryOptions.title = Industry list 1 of 5
+firstIndustryOptions.heading = Industry list 1 of 5
 firstIndustryOptions.listText = Select your industry.
 firstIndustryOptions.healthcare = Healthcare
 firstIndustryOptions.foodAndCatering = Food and catering
@@ -104,11 +104,11 @@ firstIndustryOptions.retail = Retail
 firstIndustryOptions.engineering = Engineering
 firstIndustryOptions.transportAndDistribution = Transport and travel
 firstIndustryOptions.none = Show more industries
-firstIndustryOptions.checkYourAnswersLabel = Industry list 1 of 4
+firstIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
 firstIndustryOptions.error.required = Select the industry you work in
 
-secondIndustryOptions.title = Industry list 2 of 4
-secondIndustryOptions.heading = Industry list 2 of 4
+secondIndustryOptions.title = Industry list 2 of 5
+secondIndustryOptions.heading = Industry list 2 of 5
 secondIndustryOptions.listText = Select your industry.
 secondIndustryOptions.manufacturingWarehousing = Manufacturing and warehousing (including wood, furniture and metals)
 secondIndustryOptions.council = Council
@@ -119,8 +119,8 @@ secondIndustryOptions.none = Show more industries
 secondIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
 secondIndustryOptions.error.required = Select the industry you work in
 
-thirdIndustryOptions.title = Industry list 3 of 4
-thirdIndustryOptions.heading = Industry list 3 of 4
+thirdIndustryOptions.title = Industry list 3 of 5
+thirdIndustryOptions.heading = Industry list 3 of 5
 thirdIndustryOptions.listText = Select your industry.
 thirdIndustryOptions.electrical = Electrical
 thirdIndustryOptions.education = Education
@@ -131,8 +131,8 @@ thirdIndustryOptions.none = Show more industries
 thirdIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
 thirdIndustryOptions.error.required = Select the industry you work in
 
-fourthIndustryOptions.title = Industry list 4 of 4
-fourthIndustryOptions.heading = Industry list 4 of 4
+fourthIndustryOptions.title = Industry list 4 of 5
+fourthIndustryOptions.heading = Industry list 4 of 5
 fourthIndustryOptions.listText = Select your industry.
 fourthIndustryOptions.agriculture = Agriculture
 fourthIndustryOptions.fireService = Fire service
@@ -140,8 +140,20 @@ fourthIndustryOptions.heating = Heating
 fourthIndustryOptions.leisure = Leisure
 fourthIndustryOptions.prisons = Prisons
 fourthIndustryOptions.none = My industry was not listed
-fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
+fourthIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
 fourthIndustryOptions.error.required = Select the industry you work in
+
+fifthIndustryOptions.title = Industry list 5 of 5
+fifthIndustryOptions.heading = Industry list 5 of 5
+fifthIndustryOptions.listText = Select your industry.
+fifthIndustryOptions.armedForces = Armed Forces
+fifthIndustryOptions.docksWaterways = Docks and inland waterways
+fifthIndustryOptions.forestry = Forestry
+fifthIndustryOptions.shipyard = Ship yard
+fifthIndustryOptions.textiles = Textiles and textile printing
+fifthIndustryOptions.none = My industry was not listed
+fifthIndustryOptions.checkYourAnswersLabel = Industry list 5 of 5
+fifthIndustryOptions.error.required = Select the industry you work in
 
 claimAmount.title = You are eligible to claim this expense
 claimAmount.heading = You are eligible to claim this expense
@@ -702,4 +714,3 @@ confirmation.updateAddressInfoNow = Update your address now
 confirmation.updateAddressInfo = Update your address
 confirmation.addressChange = You told us that your address has changed. If you do not update it you may not receive any letters from HMRC.
 confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April {0} to 5 April {1}, this may take longer if your employer has not yet sent your information for that tax year.
-

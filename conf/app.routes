@@ -347,3 +347,8 @@ GET         /change-which-years-change-claim                     controllers.aut
 POST        /change-which-years-change-claim                     controllers.authenticated.ChangeWhichTaxYearsController.onSubmit(mode: Mode = CheckMode)
 
 GET        /confirmation                       controllers.ConfirmationController.onPageLoad()
+
+GET        /fifth-Industry-Options                               controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST       /fifth-Industry-Options                               controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-FifthIndustry-Options                         controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-FifthIndustry-Options                         controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)

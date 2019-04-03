@@ -18,6 +18,7 @@ package utils
 
 import controllers.authenticated.routes._
 import controllers.routes._
+import models.FifthIndustryOptions.{Armedforces, Dockswaterways, Forestry, NoneOfAbove, Shipyard, Textiles}
 import models.FirstIndustryOptions.{Engineering, FoodAndCatering, Healthcare, Retail, TransportAndDistribution}
 import models.FourthIndustryOptions.{Agriculture, FireService, Heating, Leisure, Prisons}
 import models.SecondIndustryOptions.{ClothingTextiles, Construction, Council, ManufacturingWarehousing, Police}
@@ -116,6 +117,18 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       case Some(Heating) => industryAnswerRow(s"fourthIndustryOptions.${Heating.toString}")
       case Some(Leisure) => industryAnswerRow(s"fourthIndustryOptions.${Leisure.toString}")
       case Some(Prisons) => industryAnswerRow(s"fourthIndustryOptions.${Prisons.toString}")
+      case _ => fifthIndustryList
+    }
+  }
+
+  def fifthIndustryList: Option[AnswerRow] = {
+    userAnswers.get(FifthIndustryOptionsPage) match {
+      case Some(Armedforces) => industryAnswerRow(s"fifthIndustryOptions.${Armedforces.toString}")
+      case Some(Dockswaterways) => industryAnswerRow(s"fifthIndustryOptions.${Dockswaterways.toString}")
+      case Some(Forestry) => industryAnswerRow(s"fifthIndustryOptions.${Forestry.toString}")
+      case Some(Shipyard) => industryAnswerRow(s"fifthIndustryOptions.${Shipyard.toString}")
+      case Some(Textiles) => industryAnswerRow(s"fifthIndustryOptions.${Textiles.toString}")
+      case Some(NoneOfAbove) => industryAnswerRow(s"fifthIndustryOptions.${NoneOfAbove.toString}")
       case _ => industryAnswerRow("default rate")
     }
   }
