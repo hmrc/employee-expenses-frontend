@@ -26,27 +26,32 @@
 )(implicit request: Request[_], messages: Messages)
 
 
-  @main_template(
-    title = messages("confirmation.heading")
-  ) {
+@main_template(
+  title = messages("confirmation.heading")
+) {
+  <div class="govuk-box-highlight">
+    <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
+  </div>
 
-    <div class="govuk-box-highlight">
-      <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
-    </div>
+  <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
 
-    <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
+  <p>@messages("confirmation.actualAmount")</p>
 
-    <p>@messages("confirmation.actualAmount")</p>
+  @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
 
-    @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
+  <h2>@messages("confirmation.whatHappensNext")</h2>
 
-    <h2>@messages("confirmation.whatHappensNext")</h2>
+  <h3>@messages("confirmation.currentTaxYear")</h3>
 
-    <p>@messages("confirmation.taxCodeChanged")</p>
+  <p>@messages("confirmation.taxCodeChanged")</p>
 
-    <p>@messages("confirmation.continueToClaim")</p>
+  <p>@messages("confirmation.continueToClaim")</p>
 
-    @components.update_employer_info(updateEmployerInfo)
+  <h3>@messages("confirmation.previousTaxYears")</h3>
 
-    @components.update_address_info(updateAddressInfo)
-  }
+  <p>@messages("confirmation.additionalConfirmationLetter")</p>
+
+  @components.update_employer_info(updateEmployerInfo)
+
+  @components.update_address_info(updateAddressInfo)
+}

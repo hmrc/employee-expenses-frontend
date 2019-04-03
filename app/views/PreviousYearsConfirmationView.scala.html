@@ -26,27 +26,22 @@
 )(implicit request: Request[_], messages: Messages)
 
 
-  @main_template(
-    title = messages("confirmation.heading")
-  ) {
+@main_template(
+  title = messages("confirmation.heading")
+) {
+  <div class="govuk-box-highlight">
+    <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
+  </div>
 
-    <div class="govuk-box-highlight">
-      <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
-    </div>
+  <p>@messages("confirmation.actualAmount")</p>
 
-    <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
+  @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
 
-    <p>@messages("confirmation.actualAmount")</p>
+  <h2>@messages("confirmation.whatHappensNext")</h2>
 
-    @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
+  <p>@messages("confirmation.confirmationLetter")</p>
 
-    <h2>@messages("confirmation.whatHappensNext")</h2>
+  @components.update_employer_info(updateEmployerInfo)
 
-    <p>@messages("confirmation.taxCodeChanged")</p>
-
-    <p>@messages("confirmation.continueToClaim")</p>
-
-    @components.update_employer_info(updateEmployerInfo)
-
-    @components.update_address_info(updateAddressInfo)
-  }
+  @components.update_address_info(updateAddressInfo)
+}

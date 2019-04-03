@@ -27,21 +27,22 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.{CurrentYearConfirmationView, OnePreviousYearConfirmationView}
+import views.html.{CurrentYearConfirmationView, OnePreviousYearConfirmationView, PreviousCurrentYearsConfirmationView}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class CurrentYearConfirmationController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       identify: AuthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       taiConnector: TaiConnector,
-                                       claimAmountService: ClaimAmountService,
-                                       currentYearConfirmationView: CurrentYearConfirmationView,
-                                       onePreviousYearConfirmationView: OnePreviousYearConfirmationView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                   override val messagesApi: MessagesApi,
+                                                   identify: AuthenticatedIdentifierAction,
+                                                   getData: DataRetrievalAction,
+                                                   requireData: DataRequiredAction,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   taiConnector: TaiConnector,
+                                                   claimAmountService: ClaimAmountService,
+                                                   currentYearConfirmationView: CurrentYearConfirmationView,
+                                                   onePreviousYearConfirmationView: OnePreviousYearConfirmationView,
+                                                   previousCurrentConfirmationView: PreviousCurrentYearsConfirmationView
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
@@ -57,13 +58,12 @@ class CurrentYearConfirmationController @Inject()(
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
 
-              Ok(currentYearConfirmationView(
-                removeFreOption,
+              Ok(previousCurrentConfirmationView(
                 claimAmountsAndRates,
                 claimAmount.get,
                 updateEmployerInfo,
                 updateAddressInfo
-                ))
+              ))
           }.recoverWith {
             case e =>
               Logger.error(s"[ConfirmationController][taiConnector.taiTaxCodeRecord] Call failed $e", e)

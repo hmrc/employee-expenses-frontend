@@ -86,7 +86,7 @@ class CurrentYearConfirmationControllerSpec extends SpecBase with MockitoSugar{
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(removeFreOption = false,
+        view(
           claimAmountsAndRates = Seq(claimAmountsRates),
           claimAmount = claimAmount,
           updateEmployerInfo = false,
