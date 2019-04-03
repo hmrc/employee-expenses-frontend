@@ -282,7 +282,7 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Armedforces).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
-          EmployerContributionController.onPageLoad(NormalMode)
+          CannotClaimExpenseController.onPageLoad()
       }
 
       "go EmployerContributionController from FifthIndustryOptionsPage when 'Docks and inland waterways' is selected" in {
