@@ -36,10 +36,25 @@
 
         @components.heading("shipyardOccupationList1.heading")
 
+        @components.list(
+             pageKey = Some("shipyardOccupationList1"),
+               listText = Some("shipyardOccupationList1.listText"),
+               bulletList = Seq(
+                   "occupation1",
+                   "occupation2",
+                   "occupation3",
+                   "occupation4",
+                   "occupation5",
+                   "occupation6",
+                   "occupation7"
+                   )
+
+        )
+
         @components.input_yes_no(
             field = form("value"),
-            label = messages("shipyardOccupationList1.heading"),
-            labelClass = Some("visually-hidden")
+            label = messages("shipyardOccupationList1.radioLabel"),
+            labelClass = Some("heading-medium")
         )
 
         @components.submit_button()
