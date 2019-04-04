@@ -23,6 +23,7 @@ import controllers.engineering.routes._
 import controllers.foodCatering.routes._
 import controllers.healthcare.routes._
 import controllers.manufacturing.routes._
+import controllers.shipyard.routes._
 import controllers.police.routes._
 import controllers.printing.routes._
 import controllers.heating.routes._
@@ -127,7 +128,7 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Armedforces)                           => EmployerContributionController.onPageLoad(mode)
       case Some(Dockswaterways)                        => EmployerContributionController.onPageLoad(mode)
       case Some(Forestry)                              => EmployerContributionController.onPageLoad(mode)
-      case Some(Shipyard)                              => EmployerContributionController.onPageLoad(mode)
+      case Some(Shipyard)                              => ShipyardOccupationList1Controller.onPageLoad(mode)
       case Some(Textiles)                              => EmployerContributionController.onPageLoad(mode)
       case Some(FifthIndustryOptions.NoneOfAbove)      => EmployerContributionController.onPageLoad(mode)
       case _                                           => SessionExpiredController.onPageLoad()
