@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.shipyard
 
 import controllers.actions._
-import forms.ShipyardOccupationList1FormProvider
+import forms.shipyard.ShipyardOccupationList1FormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.ShipyardOccupationList1Page
+import pages.shipyard.ShipyardOccupationList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.ShipyardOccupationList1View
+import views.html.shipyard.ShipyardOccupationList1View
 
 import scala.concurrent.{ExecutionContext, Future}
 

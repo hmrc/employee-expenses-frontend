@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.shipyard
 
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
 
 class ShipyardOccupationList1FormProvider @Inject() extends Mappings {

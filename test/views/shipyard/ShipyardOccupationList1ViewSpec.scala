@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.shipyard
 
-import controllers.routes
-import forms.ShipyardOccupationList1FormProvider
+import controllers.shipyard.routes
+import forms.shipyard.ShipyardOccupationList1FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.ShipyardOccupationList1View
+import views.html.shipyard.ShipyardOccupationList1View
 
 class ShipyardOccupationList1ViewSpec extends YesNoViewBehaviours {
 

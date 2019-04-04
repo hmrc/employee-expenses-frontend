@@ -31,6 +31,7 @@ import pages.foodCatering._
 import pages.heating._
 import pages.security._
 import pages.printing._
+import pages.shipyard.ShipyardOccupationList1Page
 
 trait PageGenerators {
 
