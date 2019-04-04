@@ -17,22 +17,37 @@
 package controllers.shipyard
 
 import base.SpecBase
+import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.shipyard.ShipyardOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{times, verify, when}
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
+import pages.ClaimAmount
 import pages.shipyard.ShipyardOccupationList1Page
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.shipyard.ShipyardOccupationList1View
 
-class ShipyardOccupationList1ControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class ShipyardOccupationList1ControllerSpec extends SpecBase with ScalaFutures
+  with IntegrationPatience with OptionValues with MockitoSugar  {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ShipyardOccupationList1FormProvider()
   val form = formProvider()
+  val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val shipyardOccupationList1Route = routes.ShipyardOccupationList1Controller.onPageLoad(NormalMode).url
 
@@ -146,6 +161,55 @@ class ShipyardOccupationList1ControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+    "save 'list1' to ClaimAmount when 'Yes' is selected" in {
+
+      val ua1 = emptyUserAnswers
+
+      val application = applicationBuilder(userAnswers = Some(ua1))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, shipyardOccupationList1Route)
+        .withFormUrlEncodedBody(("value", "true"))
+
+      val ua2 =
+        ua1
+          .set(ClaimAmount, ClaimAmounts.Shipyard.list1).success.value
+          .set(ShipyardOccupationList1Page, true).success.value
+
+      val result = route(application, request).value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      }
+
+      application.stop()
+    }
+
+    "not save ClaimAmount when 'No' is selected" in {
+
+      val ua1 = emptyUserAnswers
+
+      val application = applicationBuilder(userAnswers = Some(ua1))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, shipyardOccupationList1Route)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      val ua2 =
+        ua1.set(ShipyardOccupationList1Page, false).success.value
+
+      val result = route(application, request).value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      }
 
       application.stop()
     }
