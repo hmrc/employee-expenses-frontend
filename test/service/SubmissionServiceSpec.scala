@@ -70,7 +70,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(200)))
 
-        val result = submissionService.getTaxYearsToUpdate(fakeNino, taxYearsWithCurrentYear, beforeApril)
+        val result = submissionService.getTaxYearsToUpdate(fgit akeNino, taxYearsWithCurrentYear, beforeApril)
 
         whenReady(result) {
           result =>
