@@ -54,7 +54,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
       "return correct taxYears when date is before April 6th and currentYear is passed in and no next year record" in {
 
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(500)))
+          .thenReturn(Future.successful(HttpResponse(400)))
 
         val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear, beforeApril)
 
