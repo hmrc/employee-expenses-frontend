@@ -18,7 +18,7 @@ package views.authenticated
 
 import controllers.authenticated.routes._
 import forms.authenticated.YourAddressFormProvider
-import models.NormalMode
+import models.{Address, NormalMode}
 import org.jsoup.nodes.Element
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -54,7 +54,7 @@ class YourAddressViewSpec extends YesNoViewBehaviours {
       applyView,
       messageKeyPrefix,
       YourAddressController.onSubmit(NormalMode).url,
-      Some(messages(s"$messageKeyPrefix.label", address.line1, address.postcode))
+      Some(messages(s"$messageKeyPrefix.label", Address.asLabel(address)))
     )
 
     "behave like page with address" in {
