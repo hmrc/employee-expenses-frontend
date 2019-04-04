@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.shipyard
 
-import pages.behaviours.PageBehaviours
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class ShipyardOccupationList2PageSpec extends PageBehaviours {
+class ShipyardOccupationList2FormProvider @Inject() extends Mappings {
 
-  "ShipyardOccupationList2Page" must {
-
-    beRetrievable[Boolean](ShipyardOccupationList2Page)
-
-    beSettable[Boolean](ShipyardOccupationList2Page)
-
-    beRemovable[Boolean](ShipyardOccupationList2Page)
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("shipyardOccupationList2.error.required")
+    )
 }

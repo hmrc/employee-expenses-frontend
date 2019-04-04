@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.shipyard
 
 import base.SpecBase
-import forms.ShipyardOccupationList2FormProvider
+import forms.shipyard.ShipyardOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.ShipyardOccupationList2Page
+import pages.shipyard.ShipyardOccupationList2Page
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.ShipyardOccupationList2View
+import views.html.shipyard.ShipyardOccupationList2View
 
 class ShipyardOccupationList2ControllerSpec extends SpecBase {
 
@@ -129,7 +128,7 @@ class ShipyardOccupationList2ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +145,7 @@ class ShipyardOccupationList2ControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

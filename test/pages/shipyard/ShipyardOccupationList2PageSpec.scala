@@ -14,32 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages.shipyard
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import pages.behaviours.PageBehaviours
 
-class ShipyardOccupationList2FormProviderSpec extends BooleanFieldBehaviours {
+class ShipyardOccupationList2PageSpec extends PageBehaviours {
 
-  val requiredKey = "shipyardOccupationList2.error.required"
-  val invalidKey = "error.boolean"
+  "ShipyardOccupationList2Page" must {
 
-  val form = new ShipyardOccupationList2FormProvider()()
+    beRetrievable[Boolean](ShipyardOccupationList2Page)
 
-  ".value" must {
+    beSettable[Boolean](ShipyardOccupationList2Page)
 
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    beRemovable[Boolean](ShipyardOccupationList2Page)
   }
 }

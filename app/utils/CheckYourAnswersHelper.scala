@@ -31,7 +31,7 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
-  def removeFRECode: Option[AnswerRow] = userAnswers.get(RemoveFRECodePage) map {
+    def removeFRECode: Option[AnswerRow] = userAnswers.get(RemoveFRECodePage) map {
     x =>
       AnswerRow("removeFRECode.checkYourAnswersLabel",
         messages(s"taxYearSelection.$x", TaxYearSelection.getTaxYear(x).toString, (TaxYearSelection.getTaxYear(x) + 1).toString),
