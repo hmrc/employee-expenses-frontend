@@ -23,7 +23,6 @@ import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.ClaimAmount
-import pages.construction.ConstructionOccupationList1Page
 import pages.shipyard.ShipyardOccupationList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}

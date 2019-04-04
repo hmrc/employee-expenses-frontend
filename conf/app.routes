@@ -348,12 +348,12 @@ POST        /change-which-years-change-claim                     controllers.aut
 
 GET        /confirmation                       controllers.ConfirmationController.onPageLoad()
 
-GET        /fifth-Industry-Options                               controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
-POST       /fifth-Industry-Options                               controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
-GET        /change-FifthIndustry-Options                         controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-FifthIndustry-Options                         controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+GET        /fifth-industry-options                                controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST       /fifth-industry-options                               controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-fifthIndustry-options                         controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-fifthIndustry-options                         controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
-GET        /shipyard-occupation-list-1                        controllers.shipyard.ShipyardOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
-POST       /shipyard-occupation-list-1                        controllers.shipyard.ShipyardOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
-GET        /change-shipyard-occupation-list-1                  controllers.shipyard.ShipyardOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
-POST       /change-shipyard-occupation-list-1                  controllers.shipyard.ShipyardOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
+GET        /shipyard-occupation-list-1                           controllers.shipyard.ShipyardOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /shipyard-occupation-list-1                           controllers.shipyard.ShipyardOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-shipyard-occupation-list-1                    controllers.shipyard.ShipyardOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-shipyard-occupation-list-1                    controllers.shipyard.ShipyardOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
