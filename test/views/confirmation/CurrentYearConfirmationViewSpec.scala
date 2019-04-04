@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.confirmation
 
 import models.{Rates, ScottishRate, StandardRate}
 import play.api.i18n.Messages
@@ -23,15 +23,15 @@ import play.api.test.FakeRequest
 import play.twirl.api.Html
 import service.ClaimAmountService
 import views.behaviours.ViewBehaviours
-import views.html.PreviousCurrentYearsConfirmationView
+import views.html.confirmation.CurrentYearConfirmationView
 
-class PreviousCurrentYearsConfirmationViewSpec extends ViewBehaviours {
+class CurrentYearConfirmationViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "PreviousCurrentYearsConfirmationView" must {
+  "CurrentYearConfirmation view" must {
 
-    val view = application.injector.instanceOf[PreviousCurrentYearsConfirmationView]
+    val view = application.injector.instanceOf[CurrentYearConfirmationView]
 
     val claimAmountService = application.injector.instanceOf[ClaimAmountService]
 
@@ -53,10 +53,12 @@ class PreviousCurrentYearsConfirmationViewSpec extends ViewBehaviours {
       calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount)
     )
 
-    def applyView(claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
-                  claimAmount: Int = claimAmount,
-                  updateEmployer: Boolean = false,
-                  updateAddress: Boolean = false)(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
+    def applyView(
+                   claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
+                   claimAmount: Int = claimAmount,
+                   updateEmployer: Boolean = false,
+                   updateAddress: Boolean = false
+                 )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
       view.apply(claimAmountsAndRates, claimAmount, updateEmployer, updateAddress)(fakeRequest, messages)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
@@ -73,21 +75,17 @@ class PreviousCurrentYearsConfirmationViewSpec extends ViewBehaviours {
 
       assertContainsMessages(doc,
         "confirmation.heading",
-        messages("confirmation.personalAllowanceIncrease", claimAmount),
         "confirmation.actualAmount",
         "confirmation.whatHappensNext",
-        "confirmation.currentTaxYear",
         "confirmation.taxCodeChanged",
-        "confirmation.continueToClaim",
-        "confirmation.previousTaxYears",
-        "confirmation.additionalConfirmationLetter"
-      )
+        "confirmation.continueToClaim")
     }
 
     "display correct dynamic text for title and tax rates" in {
 
       val doc = asDocument(viewWithAnswers)
 
+      assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", claimAmount))
       assertContainsText(doc, messages(
         "confirmation.basicRate",
         claimAmountsRates.calculatedBasicRate,
@@ -143,7 +141,6 @@ class PreviousCurrentYearsConfirmationViewSpec extends ViewBehaviours {
         assertNotRenderedById(doc, "updateEmployerInfoNow")
       }
     }
-
   }
 
   application.stop()

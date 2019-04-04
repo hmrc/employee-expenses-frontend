@@ -19,18 +19,22 @@ package controllers
 import base.SpecBase
 import connectors.TaiConnector
 import controllers.actions.Authed
-import models.{FlatRateExpenseOptions, Rates, StandardRate, TaxCodeRecord, TaxYearSelection}
+import models.FirstIndustryOptions.Healthcare
+import models.FlatRateExpenseOptions.FRENoYears
+import models.TaxYearSelection._
+import models._
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.ClaimAmountAndAnyDeductions
+import pages._
+import pages.authenticated._
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import service.ClaimAmountService
-import views.html.ConfirmationView
+import views.html.confirmation._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -51,7 +55,7 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   "Confirmation Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK and the correct CurrentYearConfirmationView for a GET with specific answers" in {
 
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
@@ -65,19 +69,123 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConfirmationView]
+      val view = application.injector.instanceOf[CurrentYearConfirmationView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
         view(
-          taxYearSelections = Seq(TaxYearSelection.CurrentYear),
-          removeFreOption = None,
-          updateEmployerInfo = None,
-          updateAddressInfo = None,
-          claimAmount = claimAmount,
           claimAmountsAndRates = Seq(claimAmountsAndRates),
-          freResponse = FlatRateExpenseOptions.FRENoYears
+          claimAmount = claimAmount,
+          updateEmployerInfo = true,
+          updateAddressInfo = true
+        )(request, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct ClaimStoppedConfirmationView for a GET with specific answers" in {
+
+      val userAnswers = fullUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYearMinus1).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+        .build()
+
+      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
+      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+
+      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ClaimStoppedConfirmationView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view()(request, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct PreviousCurrentYearsConfirmationView for a GET with specific answers" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(EmployerContributionPage, false).success.value
+        .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
+        .set(YourAddressPage, true).success.value
+        .set(YourEmployerPage, true).success.value
+        .set(ClaimAmount, 100).success.value
+        .set(ClaimAmountAndAnyDeductions, 80).success.value
+        .set(FREResponse, FRENoYears).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+        .build()
+
+      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
+      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+
+      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[PreviousCurrentYearsConfirmationView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(
+          claimAmountsAndRates = Seq(claimAmountsAndRates),
+          claimAmount = claimAmount,
+          updateEmployerInfo = true,
+          updateAddressInfo = true,
+          currentYearMinus1 =true
+        )(request, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct PreviousYearsConfirmationView for a GET with specific answers" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(EmployerContributionPage, false).success.value
+        .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
+        .set(YourAddressPage, true).success.value
+        .set(YourEmployerPage, true).success.value
+        .set(ClaimAmount, 100).success.value
+        .set(ClaimAmountAndAnyDeductions, 80).success.value
+        .set(FREResponse, FRENoYears).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+        .build()
+
+      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
+      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+
+      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[PreviousYearsConfirmationView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(
+          claimAmountsAndRates = Seq(claimAmountsAndRates),
+          claimAmount = claimAmount,
+          updateEmployerInfo = true,
+          updateAddressInfo = true,
+          currentYearMinus1 =true
         )(request, messages).toString
 
       application.stop()

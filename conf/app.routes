@@ -347,5 +347,3 @@ GET         /change-which-years-change-claim                     controllers.aut
 POST        /change-which-years-change-claim                     controllers.authenticated.ChangeWhichTaxYearsController.onSubmit(mode: Mode = CheckMode)
 
 GET        /confirmation                                         controllers.ConfirmationController.onPageLoad()
-
-GET        /current-year-confirmation                            controllers.CurrentYearConfirmationController.onPageLoad()

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.confirmation
 
 import play.api.Application
 import play.api.i18n.Messages
@@ -22,7 +22,7 @@ import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
-import views.html.ClaimStoppedConfirmationView
+import views.html.confirmation.ClaimStoppedConfirmationView
 
 class ClaimStoppedConfirmationViewSpec extends ViewBehaviours {
 
