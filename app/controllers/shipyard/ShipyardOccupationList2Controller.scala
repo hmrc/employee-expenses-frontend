@@ -14,33 +14,35 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.shipyard
 
+import config.ClaimAmounts
 import controllers.actions._
-import forms.ApprenticeStorekeeperFormProvider
+import forms.shipyard.ShipyardOccupationList2FormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.ApprenticeStorekeeperPage
+import pages.ClaimAmount
+import pages.shipyard.ShipyardOccupationList2Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.ApprenticeStorekeeperView
+import views.html.shipyard.ShipyardOccupationList2View
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ApprenticeStorekeeperController @Inject()(
+class ShipyardOccupationList2Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
                                          @Named("Generic") navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
-                                         formProvider: ApprenticeStorekeeperFormProvider,
+                                         formProvider: ShipyardOccupationList2FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
-                                         view: ApprenticeStorekeeperView
+                                         view: ShipyardOccupationList2View
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -48,7 +50,7 @@ class ApprenticeStorekeeperController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(ApprenticeStorekeeperPage) match {
+      val preparedForm = request.userAnswers.get(ShipyardOccupationList2Page) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,9 +67,15 @@ class ApprenticeStorekeeperController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ApprenticeStorekeeperPage, value))
-            _              <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(ApprenticeStorekeeperPage, mode)(updatedAnswers))
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(ShipyardOccupationList2Page, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Shipyard.list2))
+              )
+            } else {
+              Future.fromTry(request.userAnswers.set(ShipyardOccupationList2Page, value))
+            }
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
+          } yield Redirect(navigator.nextPage(ShipyardOccupationList2Page, mode)(updatedAnswers))
         }
       )
   }

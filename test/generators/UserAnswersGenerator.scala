@@ -33,6 +33,7 @@ import pages.manufacturing._
 import pages.police._
 import pages.printing._
 import pages.security._
+import pages.shipyard.{ApprenticeStorekeeperPage, ShipyardOccupationList1Page, ShipyardOccupationList2Page}
 import pages.transport._
 import play.api.libs.json.{JsValue, Json}
 
@@ -40,6 +41,8 @@ trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
+    arbitrary[(ShipyardOccupationList1Page.type, JsValue)] ::
+    arbitrary[(ShipyardOccupationList2Page.type, JsValue)] ::
     arbitrary[(ApprenticeStorekeeperPage.type, JsValue)] ::
     arbitrary[(FifthIndustryOptionsPage.type, JsValue)] ::
     arbitrary[(AlreadyClaimingFREDifferentAmountsPage.type, JsValue)] ::

@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.shipyard
 
-import pages.behaviours.PageBehaviours
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class ApprenticeStorekeeperPageSpec extends PageBehaviours {
+case object ShipyardOccupationList1Page extends QuestionPage[Boolean] {
 
-  "ApprenticeStorekeeperPage" must {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[Boolean](ApprenticeStorekeeperPage)
-
-    beSettable[Boolean](ApprenticeStorekeeperPage)
-
-    beRemovable[Boolean](ApprenticeStorekeeperPage)
-  }
+  override def toString: String = "shipyardOccupationList1"
 }

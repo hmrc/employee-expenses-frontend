@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.shipyard
 
 import base.SpecBase
-import forms.ApprenticeStorekeeperFormProvider
+import forms.shipyard.ApprenticeStorekeeperFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import pages.ApprenticeStorekeeperPage
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.mockito.MockitoSugar
+import pages.shipyard.ApprenticeStorekeeperPage
 import play.api.inject.bind
-import play.api.libs.json.{JsBoolean, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.ApprenticeStorekeeperView
+import views.html.shipyard.ApprenticeStoreKeeperView
 
-class ApprenticeStorekeeperControllerSpec extends SpecBase {
+class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
+  with IntegrationPatience with OptionValues with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -47,7 +50,7 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ApprenticeStorekeeperView]
+      val view = application.injector.instanceOf[ApprenticeStoreKeeperView]
 
       status(result) mustEqual OK
 
@@ -65,7 +68,7 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase {
 
       val request = FakeRequest(GET, apprenticeStorekeeperRoute)
 
-      val view = application.injector.instanceOf[ApprenticeStorekeeperView]
+      val view = application.injector.instanceOf[ApprenticeStoreKeeperView]
 
       val result = route(application, request).value
 
@@ -107,7 +110,7 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[ApprenticeStorekeeperView]
+      val view = application.injector.instanceOf[ApprenticeStoreKeeperView]
 
       val result = route(application, request).value
 
@@ -129,7 +132,7 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -146,7 +149,7 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }

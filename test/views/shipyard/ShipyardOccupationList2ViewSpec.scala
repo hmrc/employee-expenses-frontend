@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package views
+package views.shipyard
 
-import controllers.routes
-import forms.ApprenticeStorekeeperFormProvider
+import controllers.shipyard.routes
+import forms.shipyard.ShipyardOccupationList2FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.ApprenticeStorekeeperView
+import views.html.shipyard.ShipyardOccupationList2View
 
-class ApprenticeStorekeeperViewSpec extends YesNoViewBehaviours {
+class ShipyardOccupationList2ViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "apprenticeStorekeeper"
+  val messageKeyPrefix = "shipyardOccupationList2"
 
-  val form = new ApprenticeStorekeeperFormProvider()()
+  val form = new ShipyardOccupationList2FormProvider()()
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "ApprenticeStorekeeper view" must {
+  "ShipyardOccupationList2 view" must {
 
-    val view = application.injector.instanceOf[ApprenticeStorekeeperView]
+    val view = application.injector.instanceOf[ShipyardOccupationList2View]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -48,7 +48,26 @@ class ApprenticeStorekeeperViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.ApprenticeStorekeeperController.onSubmit(NormalMode).url)
+    behave like yesNoPage(form,
+      applyView,
+      messageKeyPrefix,
+      routes.ShipyardOccupationList2Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+
+    )
+    behave like pageWithList(applyView(form), messageKeyPrefix,
+      Seq(
+        "occupation1",
+        "occupation2",
+        "occupation3",
+        "occupation4",
+        "occupation5",
+        "occupation6",
+        "occupation7"
+      )
+    )
+    behave like pageWithBodyText(applyView(form), "shipyardOccupationList2.listText")
+
   }
 
   application.stop()

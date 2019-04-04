@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.shipyard
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-case object ApprenticeStorekeeperPage extends QuestionPage[Boolean] {
+class ApprenticeStorekeeperFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "apprenticeStorekeeper"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("apprenticeStorekeeper.error.required")
+    )
 }
