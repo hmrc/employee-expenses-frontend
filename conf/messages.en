@@ -612,6 +612,22 @@ shipyardOccupationList1.occupation5 = caulkers
 shipyardOccupationList1.occupation6 = drillers
 shipyardOccupationList1.occupation7 = furnacemen (platers) holders up
 
+shipyardOccupationList2.heading = Shipyard Occupation List 2 of 2
+shipyardOccupationList2.checkYourAnswersLabel = Shipyard Occupation List 2 of 2
+shipyardOccupationList2.error.required = Select yes if shipyardOccupationList2 of 2
+shipyardOccupationList2.error.required = Select yes if your occupation is listed
+shipyardOccupationList2.radioLabel = Is your occupation listed?
+shipyardOccupationList2.listText = The occupations are:
+shipyardOccupationList2.occupation1 = fitters
+shipyardOccupationList2.occupation2 = platers
+shipyardOccupationList2.occupation3 = plumbers
+shipyardOccupationList2.occupation4 = riveters
+shipyardOccupationList2.occupation5 = sheet iron workers
+shipyardOccupationList2.occupation6 = shipwrights
+shipyardOccupationList2.occupation7 = tubers and welders
+
+
+
 updateEmployerInformation.title = You need to update your employer information
 updateEmployerInformation.heading = You need to update your employer information
 updateEmployerInformation.paragraph1 = You can still complete this claim but you must update your employer information with HMRC when you have finished.
@@ -729,9 +745,5 @@ confirmation.updateAddressInfo = Update your address
 confirmation.addressChange = You told us that your address has changed. If you do not update it you may not receive any letters from HMRC.
 confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April {0} to 5 April {1}, this may take longer if your employer has not yet sent your information for that tax year.
 
-shipyardOccupationList2.title = shipyardOccupationList2
-shipyardOccupationList2.heading = shipyardOccupationList2
-shipyardOccupationList2.checkYourAnswersLabel = shipyardOccupationList2
-shipyardOccupationList2.error.required = Select yes if shipyardOccupationList2
 
 

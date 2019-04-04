@@ -49,8 +49,25 @@ class ShipyardOccupationList2ViewSpec extends YesNoViewBehaviours {
     behave like pageWithBackLink(applyView(form))
 
     behave like yesNoPage(form,
-      applyView, messageKeyPrefix,
-      routes.ShipyardOccupationList2Controller.onSubmit(NormalMode).url)
+      applyView,
+      messageKeyPrefix,
+      routes.ShipyardOccupationList2Controller.onSubmit(NormalMode).url,
+      legendLabel = Some(messageKeyPrefix + ".radioLabel")
+
+    )
+    behave like pageWithList(applyView(form), messageKeyPrefix,
+      Seq(
+        "occupation1",
+        "occupation2",
+        "occupation3",
+        "occupation4",
+        "occupation5",
+        "occupation6",
+        "occupation7"
+      )
+    )
+    behave like pageWithBodyText(applyView(form), "shipyardOccupationList2.listText")
+
   }
 
   application.stop()
