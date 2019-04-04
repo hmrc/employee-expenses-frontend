@@ -16,11 +16,13 @@
 
 package controllers.shipyard
 
+import config.ClaimAmounts
 import controllers.actions._
 import forms.shipyard.ShipyardOccupationList1FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.shipyard.ShipyardOccupationList1Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -41,7 +43,7 @@ class ShipyardOccupationList1Controller @Inject()(
                                          formProvider: ShipyardOccupationList1FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
                                          view: ShipyardOccupationList1View
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
@@ -65,8 +67,14 @@ class ShipyardOccupationList1Controller @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ShipyardOccupationList1Page, value))
-            _              <- sessionRepository.set(request.identifier,updatedAnswers)
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(ShipyardOccupationList1Page, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Shipyard.list1))
+              )
+            } else {
+              Future.fromTry(request.userAnswers.set(ShipyardOccupationList1Page, value))
+            }
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(ShipyardOccupationList1Page, mode)(updatedAnswers))
         }
       )

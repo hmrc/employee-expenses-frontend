@@ -16,11 +16,13 @@
 
 package controllers.shipyard
 
+import config.ClaimAmounts
 import controllers.actions._
 import forms.shipyard.ShipyardOccupationList2FormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.shipyard.ShipyardOccupationList2Page
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -65,8 +67,14 @@ class ShipyardOccupationList2Controller @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ShipyardOccupationList2Page, value))
-            _              <- sessionRepository.set(request.identifier,updatedAnswers)
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(ShipyardOccupationList2Page, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Shipyard.list2))
+              )
+            } else {
+              Future.fromTry(request.userAnswers.set(ShipyardOccupationList2Page, value))
+            }
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(ShipyardOccupationList2Page, mode)(updatedAnswers))
         }
       )
