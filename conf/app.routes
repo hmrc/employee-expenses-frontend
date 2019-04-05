@@ -372,3 +372,5 @@ GET        /apprentice-storekeeper                               controllers.shi
 POST       /apprentice-storekeeper                               controllers.shipyard.ApprenticeStorekeeperController.onSubmit(mode: Mode = NormalMode)
 GET        /change-apprentice-storekeeper                        controllers.shipyard.ApprenticeStorekeeperController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-apprentice-storekeeper                        controllers.shipyard.ApprenticeStorekeeperController.onSubmit(mode: Mode = CheckMode)
+
+

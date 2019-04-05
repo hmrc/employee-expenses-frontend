@@ -31,7 +31,7 @@ import pages.foodCatering._
 import pages.heating._
 import pages.security._
 import pages.printing._
-import pages.shipyard.{ApprenticeStorekeeperPage, ShipyardOccupationList1Page, ShipyardOccupationList2Page}
+import pages.shipyard._
 
 trait PageGenerators {
 
