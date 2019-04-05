@@ -178,7 +178,7 @@ class ShipyardOccupationList2ControllerSpec extends SpecBase with ScalaFutures
 
       val ua2 =
         ua1
-          .set(ClaimAmount, ClaimAmounts.Shipyard.list1).success.value
+          .set(ClaimAmount, ClaimAmounts.Shipyard.list2).success.value
           .set(ShipyardOccupationList2Page, true).success.value
 
       val result = route(application, request).value
