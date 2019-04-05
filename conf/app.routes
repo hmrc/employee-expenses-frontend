@@ -350,8 +350,8 @@ GET        /confirmation                                         controllers.Con
 
 GET        /fifth-industry-options                               controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
 POST       /fifth-industry-options                               controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
-GET        /change-fifthIndustry-options                         controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-fifthIndustry-options                         controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+GET        /change-fifth-industry-options                         controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-fifth-industry-options                         controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
 GET        /shipyard-occupation-list-1                           controllers.shipyard.ShipyardOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
 POST       /shipyard-occupation-list-1                           controllers.shipyard.ShipyardOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
