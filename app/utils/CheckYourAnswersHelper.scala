@@ -31,7 +31,6 @@ import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
-
   def removeFRECode: Option[AnswerRow] = userAnswers.get(RemoveFRECodePage) map {
     x =>
       AnswerRow("removeFRECode.checkYourAnswersLabel",

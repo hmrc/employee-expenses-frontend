@@ -149,7 +149,7 @@ fifthIndustryOptions.listText = Select your industry.
 fifthIndustryOptions.armedForces = Armed Forces
 fifthIndustryOptions.docksWaterways = Docks and inland waterways
 fifthIndustryOptions.forestry = Forestry
-fifthIndustryOptions.shipyard = Ship yard
+fifthIndustryOptions.shipyard = Shipyard
 fifthIndustryOptions.textiles = Textiles and textile printing
 fifthIndustryOptions.none = My industry was not listed
 fifthIndustryOptions.checkYourAnswersLabel = Industry list 5 of 5
@@ -598,6 +598,35 @@ constructionalEngineeringList3.occupation2 = labourers
 constructionalEngineeringList3.occupation3 = shop-helpers
 constructionalEngineeringList3.occupation4 = slewers and straighteners
 
+shipyardOccupationList1.title = Shipyard occupation List 1 of 2
+shipyardOccupationList1.heading = Shipyard occupation List 1 of 2
+shipyardOccupationList1.checkYourAnswersLabel = Shipyard occupation List 1 of 2
+shipyardOccupationList1.error.required = Select yes if your occupation is listed
+shipyardOccupationList1.radioLabel = Is your occupation listed?
+shipyardOccupationList1.listText = The occupations are:
+shipyardOccupationList1.occupation1 = blacksmiths and their strikers
+shipyardOccupationList1.occupation2 = boilermakers
+shipyardOccupationList1.occupation3 = burners
+shipyardOccupationList1.occupation4 = carpenters
+shipyardOccupationList1.occupation5 = caulkers
+shipyardOccupationList1.occupation6 = drillers
+shipyardOccupationList1.occupation7 = furnacemen (platers) holders up
+
+shipyardOccupationList2.heading = Shipyard Occupation List 2 of 2
+shipyardOccupationList2.checkYourAnswersLabel = Shipyard Occupation List 2 of 2
+shipyardOccupationList2.error.required = Select yes if your occupation is listed
+shipyardOccupationList2.radioLabel = Is your occupation listed?
+shipyardOccupationList2.listText = The occupations are:
+shipyardOccupationList2.occupation1 = fitters
+shipyardOccupationList2.occupation2 = platers
+shipyardOccupationList2.occupation3 = plumbers
+shipyardOccupationList2.occupation4 = riveters
+shipyardOccupationList2.occupation5 = sheet iron workers
+shipyardOccupationList2.occupation6 = shipwrights
+shipyardOccupationList2.occupation7 = tubers and welders
+
+
+
 updateEmployerInformation.title = You need to update your employer information
 updateEmployerInformation.heading = You need to update your employer information
 updateEmployerInformation.paragraph1 = You can still complete this claim but you must update your employer information with HMRC when you have finished.
@@ -714,6 +743,11 @@ confirmation.updateAddressInfoNow = Update your address now
 confirmation.updateAddressInfo = Update your address
 confirmation.addressChange = You told us that your address has changed. If you do not update it you may not receive any letters from HMRC.
 confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April {0} to 5 April {1}, this may take longer if your employer has not yet sent your information for that tax year.
+
+apprenticeStorekeeper.title = Are you an apprentice or storekeeper?
+apprenticeStorekeeper.heading = Are you an apprentice or storekeeper?
+apprenticeStorekeeper.checkYourAnswersLabel = Are you an apprentice or storekeeper?
+apprenticeStorekeeper.error.required = Select yes if you are an apprentice or storekeeper
 
 labourer.title = labourer
 labourer.heading = labourer

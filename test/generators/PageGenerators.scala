@@ -31,11 +31,21 @@ import pages.foodCatering._
 import pages.heating._
 import pages.security._
 import pages.printing._
+import pages.shipyard._
 
 trait PageGenerators {
 
   implicit lazy val arbitraryLabourerPage: Arbitrary[LabourerPage.type] =
     Arbitrary(LabourerPage)
+
+  implicit lazy val arbitraryApprenticeStorekeeperPage: Arbitrary[ApprenticeStorekeeperPage.type] =
+    Arbitrary(ApprenticeStorekeeperPage)
+
+  implicit lazy val arbitraryShipyardOccupationList2Page: Arbitrary[ShipyardOccupationList2Page.type] =
+    Arbitrary(ShipyardOccupationList2Page)
+
+  implicit lazy val arbitraryShipyardOccupationList1Page: Arbitrary[ShipyardOccupationList1Page.type] =
+    Arbitrary(ShipyardOccupationList1Page)
 
   implicit lazy val arbitraryFifthIndustryOptionsPage: Arbitrary[FifthIndustryOptionsPage.type] =
     Arbitrary(FifthIndustryOptionsPage)

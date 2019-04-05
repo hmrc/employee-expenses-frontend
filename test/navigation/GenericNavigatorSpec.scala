@@ -19,6 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.authenticated.routes._
 import controllers.foodCatering.routes._
+import controllers.shipyard.routes._
 import controllers.routes._
 import models.FifthIndustryOptions.{Armedforces, Dockswaterways, Forestry, Shipyard, Textiles}
 import models.FirstIndustryOptions._
@@ -282,7 +283,7 @@ class GenericNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Armedforces).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
-          EmployerContributionController.onPageLoad(NormalMode)
+          CannotClaimExpenseController.onPageLoad()
       }
 
       "go EmployerContributionController from FifthIndustryOptionsPage when 'Docks and inland waterways' is selected" in {
@@ -299,11 +300,11 @@ class GenericNavigatorSpec extends SpecBase {
           EmployerContributionController.onPageLoad(NormalMode)
       }
 
-      "go EmployerContributionController from FifthIndustryOptionsPage when 'Ship yard' is selected" in {
+      "go ShipyardOccupationList1Controller from FifthIndustryOptionsPage when 'Shipyard' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Shipyard).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
-          EmployerContributionController.onPageLoad(NormalMode)
+           ShipyardOccupationList1Controller.onPageLoad(NormalMode)
       }
 
       "go EmployerContributionController from FifthIndustryOptionsPage when 'Textiles and textile printing' is selected" in {
