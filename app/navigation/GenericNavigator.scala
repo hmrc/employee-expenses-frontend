@@ -128,7 +128,7 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Armedforces)                           => CannotClaimExpenseController.onPageLoad()
       case Some(Dockswaterways)                        => EmployerContributionController.onPageLoad(mode)
       case Some(Forestry)                              => EmployerContributionController.onPageLoad(mode)
-      case Some(Shipyard)                              => ShipyardOccupationList1Controller.onPageLoad(mode)
+      case Some(Shipyard)                              => ApprenticeStorekeeperController.onPageLoad(mode)
       case Some(Textiles)                              => EmployerContributionController.onPageLoad(mode)
       case Some(FifthIndustryOptions.NoneOfAbove)      => EmployerContributionController.onPageLoad(mode)
       case _                                           => SessionExpiredController.onPageLoad()
