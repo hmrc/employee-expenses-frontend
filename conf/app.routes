@@ -375,7 +375,7 @@ POST       /change-apprentice-storekeeper                        controllers.shi
 
 
 
-GET        /labourer                        controllers.LabourerController.onPageLoad(mode: Mode = NormalMode)
-POST       /labourer                        controllers.LabourerController.onSubmit(mode: Mode = NormalMode)
-GET        /change-labourer                  controllers.LabourerController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-labourer                  controllers.LabourerController.onSubmit(mode: Mode = CheckMode)
+GET        /labourer                                            controllers.shipyard.LabourerController.onPageLoad(mode: Mode = NormalMode)
+POST       /labourer                                            controllers.shipyard.LabourerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-labourer                                     controllers.shipyard.LabourerController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-labourer                                     controllers.shipyard.LabourerController.onSubmit(mode: Mode = CheckMode)

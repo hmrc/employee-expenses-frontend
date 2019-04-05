@@ -14,17 +14,32 @@
  * limitations under the License.
  */
 
-package forms
+package forms.shipyard
 
-import javax.inject.Inject
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class LabourerFormProviderSpec extends BooleanFieldBehaviours {
 
-class LabourerFormProvider @Inject() extends Mappings {
+  val requiredKey = "labourer.error.required"
+  val invalidKey = "error.boolean"
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("labourer.error.required")
+  val form = new LabourerFormProvider()()
+
+  ".value" must {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
     )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.shipyard
 
-import controllers.routes
-import forms.LabourerFormProvider
+import controllers.shipyard.routes
+import forms.shipyard.LabourerFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.LabourerView
+import views.html.shipyard.LabourerView
 
 class LabourerViewSpec extends YesNoViewBehaviours {
 

@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package forms.shipyard
 
-import pages.behaviours.PageBehaviours
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-class LabourerPageSpec extends PageBehaviours {
+class LabourerFormProvider @Inject() extends Mappings {
 
-  "LabourerPage" must {
-
-    beRetrievable[Boolean](LabourerPage)
-
-    beSettable[Boolean](LabourerPage)
-
-    beRemovable[Boolean](LabourerPage)
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("labourer.error.required")
+    )
 }
