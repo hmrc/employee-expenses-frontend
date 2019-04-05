@@ -45,6 +45,7 @@ trait UserAnswersGenerator extends TryValues {
     arbitrary[(ShipyardOccupationList2Page.type, JsValue)] ::
     arbitrary[(ApprenticeStorekeeperPage.type, JsValue)] ::
     arbitrary[(ShipyardOccupationList2Page.type, JsValue)] ::
+    arbitrary[(LabourerPage.type, JsValue)] ::
     arbitrary[(FifthIndustryOptionsPage.type, JsValue)] ::
     arbitrary[(AlreadyClaimingFREDifferentAmountsPage.type, JsValue)] ::
     arbitrary[(AlreadyClaimingFRESameAmountPage.type, JsValue)] ::

@@ -748,3 +748,8 @@ apprenticeStorekeeper.title = Are you an apprentice or storekeeper?
 apprenticeStorekeeper.heading = Are you an apprentice or storekeeper?
 apprenticeStorekeeper.checkYourAnswersLabel = Are you an apprentice or storekeeper?
 apprenticeStorekeeper.error.required = Select yes if you are an apprentice or storekeeper
+
+labourer.title = Are you a labourer?
+labourer.heading = Are you a labourer?
+labourer.checkYourAnswersLabel = Are you a labourer?
+labourer.error.required = Select yes if you are a labourer

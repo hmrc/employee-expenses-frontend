@@ -180,7 +180,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
 
       val userAnswers2 = userAnswers
           .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.apprentice).success.value
-          .set(ApprenticeStorekeeperPage, true).success.value
+          .set(AluminiumApprenticePage, true).success.value
 
       whenReady(result){
         _ =>
@@ -203,7 +203,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
 
       val userAnswers2 = userAnswers
         .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.allOther).success.value
-        .set(ApprenticeStorekeeperPage, false).success.value
+        .set(AluminiumApprenticePage, false).success.value
 
       whenReady(result){
         _ =>

@@ -35,6 +35,9 @@ import pages.shipyard._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryLabourerPage: Arbitrary[LabourerPage.type] =
+    Arbitrary(LabourerPage)
+
   implicit lazy val arbitraryApprenticeStorekeeperPage: Arbitrary[ApprenticeStorekeeperPage.type] =
     Arbitrary(ApprenticeStorekeeperPage)
 
