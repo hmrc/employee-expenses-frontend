@@ -33,7 +33,7 @@ import pages.manufacturing._
 import pages.police._
 import pages.printing._
 import pages.security._
-import pages.shipyard.{ApprenticeStorekeeperPage, ShipyardOccupationList1Page, ShipyardOccupationList2Page}
+import pages.shipyard._
 import pages.transport._
 import play.api.libs.json.{JsValue, Json}
 

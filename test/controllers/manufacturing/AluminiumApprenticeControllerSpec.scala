@@ -28,6 +28,7 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.manufacturing.AluminiumApprenticePage
+import pages.shipyard.ApprenticeStorekeeperPage
 import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -179,7 +180,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
 
       val userAnswers2 = userAnswers
           .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.apprentice).success.value
-          .set(AluminiumApprenticePage, true).success.value
+          .set(ApprenticeStorekeeperPage, true).success.value
 
       whenReady(result){
         _ =>
@@ -202,7 +203,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
 
       val userAnswers2 = userAnswers
         .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.allOther).success.value
-        .set(AluminiumApprenticePage, false).success.value
+        .set(ApprenticeStorekeeperPage, false).success.value
 
       whenReady(result){
         _ =>

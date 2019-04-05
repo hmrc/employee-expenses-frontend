@@ -23,7 +23,6 @@ import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.ClaimAmount
-import pages.manufacturing.AluminiumApprenticePage
 import pages.shipyard.ApprenticeStorekeeperPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -69,16 +68,16 @@ class ApprenticeStorekeeperController @Inject()(
         value => {
           for {
             updatedAnswers <- if (value) {
-              Future.fromTry(request.userAnswers.set(AluminiumApprenticePage, value)
+              Future.fromTry(request.userAnswers.set(ApprenticeStorekeeperPage, value)
                 .flatMap(_.set(ClaimAmount, ClaimAmounts.Shipyard.apprentice))
               )
             } else {
-              Future.fromTry(request.userAnswers.set(AluminiumApprenticePage, value)
+              Future.fromTry(request.userAnswers.set(ApprenticeStorekeeperPage, value)
                 .flatMap(_.set(ClaimAmount, ClaimAmounts.Shipyard.allOther))
               )
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(AluminiumApprenticePage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(ApprenticeStorekeeperPage, mode)(updatedAnswers))
         }
       )
   }
