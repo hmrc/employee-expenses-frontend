@@ -49,6 +49,9 @@ object ClaimAmounts {
   object Shipyard {
     lazy val list1: Int = 140
     lazy val list2: Int = 140
+    lazy val labourer: Int = 80
+    lazy val apprentice: Int = 60
+    lazy val allOther: Int = 100
   }
 
   object AncillaryEngineering {

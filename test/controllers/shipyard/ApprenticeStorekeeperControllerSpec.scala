@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package controllers.manufacturing
+package controllers.shipyard
 
 import base.SpecBase
 import config.ClaimAmounts
 import controllers.actions.UnAuthed
-import forms.manufacturing.AluminiumApprenticeFormProvider
+import forms.shipyard.ApprenticeStorekeeperFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers._
-import org.mockito.Mockito._
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{times, verify, when}
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
@@ -35,34 +36,35 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.manufacturing.AluminiumApprenticeView
+import views.html.shipyard.ApprenticeStoreKeeperView
 
 import scala.concurrent.Future
 
-class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
+class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
+  with IntegrationPatience with OptionValues with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new AluminiumApprenticeFormProvider()
-  private val form = formProvider()
+  val formProvider = new ApprenticeStorekeeperFormProvider()
+  val form = formProvider()
   private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  lazy val aluminiumApprenticeRoute = routes.AluminiumApprenticeController.onPageLoad(NormalMode).url
+  lazy val apprenticeStorekeeperRoute = routes.ApprenticeStorekeeperController.onPageLoad(NormalMode).url
 
-  "AluminiumApprentice Controller" must {
+  "ApprenticeStorekeeper Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, aluminiumApprenticeRoute)
+      val request = FakeRequest(GET, apprenticeStorekeeperRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[AluminiumApprenticeView]
+      val view = application.injector.instanceOf[ApprenticeStoreKeeperView]
 
       status(result) mustEqual OK
 
@@ -74,13 +76,13 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(AluminiumApprenticePage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(ApprenticeStorekeeperPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, aluminiumApprenticeRoute)
+      val request = FakeRequest(GET, apprenticeStorekeeperRoute)
 
-      val view = application.injector.instanceOf[AluminiumApprenticeView]
+      val view = application.injector.instanceOf[ApprenticeStoreKeeperView]
 
       val result = route(application, request).value
 
@@ -96,12 +98,11 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
-        FakeRequest(POST, aluminiumApprenticeRoute)
+        FakeRequest(POST, apprenticeStorekeeperRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -118,12 +119,12 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, aluminiumApprenticeRoute)
+        FakeRequest(POST, apprenticeStorekeeperRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[AluminiumApprenticeView]
+      val view = application.injector.instanceOf[ApprenticeStoreKeeperView]
 
       val result = route(application, request).value
 
@@ -139,7 +140,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, aluminiumApprenticeRoute)
+      val request = FakeRequest(GET, apprenticeStorekeeperRoute)
 
       val result = route(application, request).value
 
@@ -155,7 +156,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, aluminiumApprenticeRoute)
+        FakeRequest(POST, apprenticeStorekeeperRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -173,14 +174,14 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = FakeRequest(POST, aluminiumApprenticeRoute)
+      val request = FakeRequest(POST, apprenticeStorekeeperRoute)
         .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-          .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.apprentice).success.value
-          .set(ApprenticeStorekeeperPage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Shipyard.apprentice).success.value
+        .set(AluminiumApprenticePage, true).success.value
 
       whenReady(result){
         _ =>
@@ -196,14 +197,14 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = FakeRequest(POST, aluminiumApprenticeRoute)
+      val request = FakeRequest(POST, apprenticeStorekeeperRoute)
         .withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.allOther).success.value
-        .set(ApprenticeStorekeeperPage, false).success.value
+        .set(ClaimAmount, ClaimAmounts.Shipyard.allOther).success.value
+        .set(AluminiumApprenticePage, false).success.value
 
       whenReady(result){
         _ =>
