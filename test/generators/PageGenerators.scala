@@ -31,9 +31,12 @@ import pages.foodCatering._
 import pages.heating._
 import pages.security._
 import pages.printing._
-import pages.shipyard.ShipyardOccupationList1Page
+import pages.shipyard.{ShipyardOccupationList1Page, ShipyardOccupationList2Page}
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryShipyardOccupationList2Page: Arbitrary[ShipyardOccupationList2Page.type] =
+    Arbitrary(ShipyardOccupationList2Page)
 
   implicit lazy val arbitraryShipyardOccupationList1Page: Arbitrary[ShipyardOccupationList1Page.type] =
     Arbitrary(ShipyardOccupationList1Page)

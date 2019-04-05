@@ -16,12 +16,16 @@
 
 package pages.shipyard
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import pages.behaviours.PageBehaviours
 
-case object ShipyardOccupationList1Page extends QuestionPage[Boolean] {
+class ShipyardOccupationList2PageSpec extends PageBehaviours {
 
-  override def path: JsPath = JsPath \ "industry" \ toString
+  "ShipyardOccupationList2Page" must {
 
-  override def toString: String = "shipyardOccupationList1"
+    beRetrievable[Boolean](ShipyardOccupationList2Page)
+
+    beSettable[Boolean](ShipyardOccupationList2Page)
+
+    beRemovable[Boolean](ShipyardOccupationList2Page)
+  }
 }
