@@ -16,7 +16,7 @@
 
 package views.confirmation
 
-import models.{Rates, ScottishRate, StandardRate}
+import models.{FlatRateExpenseOptions, Rates, ScottishRate, StandardRate}
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
@@ -57,9 +57,10 @@ class CurrentYearConfirmationViewSpec extends ViewBehaviours {
                    claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
                    claimAmount: Int = claimAmount,
                    updateEmployer: Boolean = false,
-                   updateAddress: Boolean = false
+                   updateAddress: Boolean = false,
+                   freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
                  )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(claimAmountsAndRates, claimAmount, updateEmployer, updateAddress)(fakeRequest, messages)
+      view.apply(claimAmountsAndRates, claimAmount, updateEmployer, updateAddress, freResponse)(fakeRequest, messages)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 
@@ -81,7 +82,7 @@ class CurrentYearConfirmationViewSpec extends ViewBehaviours {
         "confirmation.continueToClaim")
     }
 
-    "display correct dynamic text for title and tax rates" in {
+    "display correct dynamic text for tax rates" in {
 
       val doc = asDocument(viewWithAnswers)
 
@@ -100,6 +101,27 @@ class CurrentYearConfirmationViewSpec extends ViewBehaviours {
       ))
       assertContainsText(doc, messages("claimAmount.englandHeading"))
       assertContainsText(doc, messages("claimAmount.scotlandHeading"))
+    }
+
+    "display correct title when freResponse is 'FREAllYearsAmountsDifferent'" in {
+
+      val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent)(fakeRequest, messages))
+
+      doc.getElementsByTag("title").text mustBe "Claim changed - Employee Expenses - GOV.UK"
+    }
+
+    "display correct title when freResponse is 'FREAllYearsAllAmountsSameAsClaimAmount'" in {
+
+      val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount)(fakeRequest, messages))
+
+      doc.getElementsByTag("title").text mustBe "Claim changed - Employee Expenses - GOV.UK"
+    }
+
+    "display correct title when freResponse is 'FRENoYears'" in {
+
+      val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FRENoYears)(fakeRequest, messages))
+
+      doc.getElementsByTag("title").text mustBe "Claim completed - Employee Expenses - GOV.UK"
     }
 
     "YourAddress" must {

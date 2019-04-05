@@ -78,7 +78,8 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           claimAmountsAndRates = Seq(claimAmountsAndRates),
           claimAmount = claimAmount,
           updateEmployerInfo = true,
-          updateAddressInfo = true
+          updateAddressInfo = true,
+          freResponse = FlatRateExpenseOptions.FRENoYears
         )(request, messages).toString
 
       application.stop()
@@ -145,7 +146,8 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           claimAmount = claimAmount,
           updateEmployerInfo = true,
           updateAddressInfo = true,
-          currentYearMinus1 =true
+          currentYearMinus1 =true,
+          freResponse = FlatRateExpenseOptions.FRENoYears
         )(request, messages).toString
 
       application.stop()
@@ -185,7 +187,8 @@ class ConfirmationControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           claimAmount = claimAmount,
           updateEmployerInfo = true,
           updateAddressInfo = true,
-          currentYearMinus1 =true
+          currentYearMinus1 =true,
+          freResponse = FlatRateExpenseOptions.FRENoYears
         )(request, messages).toString
 
       application.stop()

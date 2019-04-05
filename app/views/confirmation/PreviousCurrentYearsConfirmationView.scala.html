@@ -23,12 +23,20 @@
         claimAmount: Int,
         updateEmployerInfo: Boolean,
         updateAddressInfo: Boolean,
-        currentYearMinus1: Boolean
+        currentYearMinus1: Boolean,
+        freResponse: FlatRateExpenseOptions
 )(implicit request: Request[_], messages: Messages)
 
 
 @main_template(
-  title = messages("confirmation.heading")
+  title = {
+      if(freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
+              freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) {
+          messages("confirmation.titleChanged")
+      } else {
+          messages("confirmation.title")
+      }
+  }
 ) {
 
   <div class="govuk-box-highlight">
