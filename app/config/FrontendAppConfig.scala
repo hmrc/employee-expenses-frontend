@@ -27,14 +27,13 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val serviceTitle = "Employee Expenses - GOV.UK"
 
-  private val contactHost = configuration.get[String]("contact-frontend.host")
+  private val contactHost = configuration.get[Service]("microservice.services.contact-frontend").baseUrl
   private val contactFormServiceIdentifier = "employeeExpensesFrontend"
 
   val assetsPath: String = configuration.get[String]("assets.url") + configuration.get[String]("assets.version") + "/"
-  val govukTemplatePath: String = "/templates/mustache/production/"
   val analyticsToken: String = configuration.get[String](s"google-analytics.token")
   val analyticsHost: String = configuration.get[String](s"google-analytics.host")
-  val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports?service=$contactFormServiceIdentifier"
   val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   val betaFeedbackUrl = s"$contactHost/contact/beta-feedback"
   val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated"
