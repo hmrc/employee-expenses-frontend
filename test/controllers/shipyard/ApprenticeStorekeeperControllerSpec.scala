@@ -17,18 +17,28 @@
 package controllers.shipyard
 
 import base.SpecBase
+import config.ClaimAmounts
+import controllers.actions.UnAuthed
 import forms.shipyard.ApprenticeStorekeeperFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
+import pages.ClaimAmount
+import pages.manufacturing.AluminiumApprenticePage
 import pages.shipyard.ApprenticeStorekeeperPage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.shipyard.ApprenticeStoreKeeperView
+
+import scala.concurrent.Future
 
 class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
   with IntegrationPatience with OptionValues with MockitoSugar {
@@ -37,6 +47,10 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
 
   val formProvider = new ApprenticeStorekeeperFormProvider()
   val form = formProvider()
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
+
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val apprenticeStorekeeperRoute = routes.ApprenticeStorekeeperController.onPageLoad(NormalMode).url
 
@@ -150,6 +164,52 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, apprenticeStorekeeperRoute)
+        .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.apprentice).success.value
+        .set(AluminiumApprenticePage, true).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      application.stop()
+    }
+
+    "save 'allOther' to ClaimAmount when 'No' is selected" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, apprenticeStorekeeperRoute)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.allOther).success.value
+        .set(AluminiumApprenticePage, false).success.value
+
+      whenReady(result){
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
 
       application.stop()
     }
