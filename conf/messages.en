@@ -63,6 +63,7 @@ technicalDifficulties.message = Try again in a few minutes. We did not save your
 
 expensesEmployerPaid.title = What is the amount that your employer has paid back?
 expensesEmployerPaid.heading = What is the amount that your employer has paid back?
+expensesEmployerPaid.hint = The amount must not include pence, like 20 or 40
 expensesEmployerPaid.checkYourAnswersLabel = What is the amount that your employer has paid back?
 expensesEmployerPaid.error.nonNumeric = Enter a whole number using characters 0 to 9
 expensesEmployerPaid.error.required = Enter the amount that your employer has paid back
