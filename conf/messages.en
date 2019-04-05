@@ -614,7 +614,6 @@ shipyardOccupationList1.occupation7 = furnacemen (platers) holders up
 
 shipyardOccupationList2.heading = Shipyard Occupation List 2 of 2
 shipyardOccupationList2.checkYourAnswersLabel = Shipyard Occupation List 2 of 2
-shipyardOccupationList2.error.required = Select yes if shipyardOccupationList2 of 2
 shipyardOccupationList2.error.required = Select yes if your occupation is listed
 shipyardOccupationList2.radioLabel = Is your occupation listed?
 shipyardOccupationList2.listText = The occupations are:
