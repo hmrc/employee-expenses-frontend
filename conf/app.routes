@@ -352,3 +352,8 @@ GET        /fifth-Industry-Options                               controllers.Fif
 POST       /fifth-Industry-Options                               controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
 GET        /change-FifthIndustry-Options                         controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-FifthIndustry-Options                         controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /labourer                        controllers.LabourerController.onPageLoad(mode: Mode = NormalMode)
+POST       /labourer                        controllers.LabourerController.onSubmit(mode: Mode = NormalMode)
+GET        /changeLabourer                  controllers.LabourerController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeLabourer                  controllers.LabourerController.onSubmit(mode: Mode = CheckMode)
