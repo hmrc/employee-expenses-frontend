@@ -363,7 +363,3 @@ POST       /shipyard-occupation-list-2                           controllers.shi
 GET        /change-shipyard-occupation-list-2                    controllers.shipyard.ShipyardOccupationList2Controller.onPageLoad(mode: Mode = CheckMode)
 POST       /change-shipyard-occupation-list-2                    controllers.shipyard.ShipyardOccupationList2Controller.onSubmit(mode: Mode = CheckMode)
 
-GET        /shipyard-occupation-list-1                           controllers.shipyard.ShipyardOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
-POST       /shipyard-occupation-list-1                           controllers.shipyard.ShipyardOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
-GET        /change-shipyard-occupation-list-1                    controllers.shipyard.ShipyardOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
-POST       /change-shipyard-occupation-list-1                    controllers.shipyard.ShipyardOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
