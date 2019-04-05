@@ -16,11 +16,13 @@
 
 package controllers.shipyard
 
+import config.ClaimAmounts
 import controllers.actions._
 import forms.shipyard.LabourerFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.shipyard.LabourerPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -59,14 +61,21 @@ class LabourerController @Inject()(
   def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
     implicit request =>
 
+
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(LabourerPage, value))
-            _              <- sessionRepository.set(request.identifier, updatedAnswers)
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(LabourerPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Shipyard.labourer))
+              )
+            } else {
+              Future.fromTry(request.userAnswers.set(LabourerPage, value))
+            }
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(LabourerPage, mode)(updatedAnswers))
         }
       )
