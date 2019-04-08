@@ -21,6 +21,7 @@ import controllers.authenticated.routes._
 import controllers.foodCatering.routes._
 import controllers.docks.routes._
 import controllers.shipyard.routes._
+import controllers.textiles.routes._
 import controllers.routes._
 import models.FifthIndustryOptions.{Armedforces, Dockswaterways, Forestry, Shipyard, Textiles}
 import models.FirstIndustryOptions._
@@ -308,11 +309,11 @@ class GenericNavigatorSpec extends SpecBase {
            ShipyardOccupationList1Controller.onPageLoad(NormalMode)
       }
 
-      "go to EmployerContributionController from FifthIndustryOptionsPage when 'Textiles and textile printing' is selected" in {
+      "go to TextilesOccupationList1Controller from FifthIndustryOptionsPage when 'Textiles and textile printing' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Textiles).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
-          EmployerContributionController.onPageLoad(NormalMode)
+          TextilesOccupationList1Controller.onPageLoad(NormalMode)
       }
 
       "go to EmployerContributionController from FifthIndustryOptionsPage when 'NoneOfTheAbove' is selected" in {
@@ -325,7 +326,6 @@ class GenericNavigatorSpec extends SpecBase {
       "go to SessionExpiredController from FifthIndustryOptionsPage when no data is available" in {
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
           SessionExpiredController.onPageLoad()
-
       }
 
       //EmployerContributionPage

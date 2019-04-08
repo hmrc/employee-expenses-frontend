@@ -16,29 +16,30 @@
 
 package navigation
 
+import controllers.authenticated.routes._
 import controllers.clothing.routes._
 import controllers.construction.routes._
+import controllers.docks.routes._
 import controllers.electrical.routes._
 import controllers.engineering.routes._
 import controllers.foodCatering.routes._
 import controllers.healthcare.routes._
+import controllers.heating.routes._
 import controllers.manufacturing.routes._
-import controllers.shipyard.routes._
 import controllers.police.routes._
 import controllers.printing.routes._
-import controllers.heating.routes._
-import controllers.docks.routes._
 import controllers.routes._
 import controllers.security.routes._
+import controllers.shipyard.routes._
+import controllers.textiles.routes._
 import controllers.transport.routes._
-import controllers.authenticated.routes._
 import javax.inject.Inject
 import models.FifthIndustryOptions.{Armedforces, Dockswaterways, Forestry, Shipyard, Textiles}
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions._
+import models.MultipleEmployments._
 import models.SecondIndustryOptions._
 import models.ThirdIndustryOptions._
-import models.MultipleEmployments._
 import models._
 import pages._
 import play.api.mvc.Call
@@ -130,7 +131,7 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Dockswaterways)                        => DocksOccupationList1Controller.onPageLoad(mode)
       case Some(Forestry)                              => EmployerContributionController.onPageLoad(mode)
       case Some(Shipyard)                              => ShipyardOccupationList1Controller.onPageLoad(mode)
-      case Some(Textiles)                              => EmployerContributionController.onPageLoad(mode)
+      case Some(Textiles)                              => TextilesOccupationList1Controller.onPageLoad(mode)
       case Some(FifthIndustryOptions.NoneOfAbove)      => EmployerContributionController.onPageLoad(mode)
       case _                                           => SessionExpiredController.onPageLoad()
     }
