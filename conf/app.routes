@@ -346,14 +346,34 @@ POST        /which-years-change-claim                            controllers.aut
 GET         /change-which-years-change-claim                     controllers.authenticated.ChangeWhichTaxYearsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-which-years-change-claim                     controllers.authenticated.ChangeWhichTaxYearsController.onSubmit(mode: Mode = CheckMode)
 
-GET         /confirmation                                        controllers.ConfirmationController.onPageLoad()
+GET        /confirmation                                         controllers.ConfirmationController.onPageLoad()
 
-GET         /fifth-industry-options                              controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
-POST        /fifth-industry-options                              controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
-GET         /change-fifth-industry-options                       controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-fifth-industry-options                       controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+GET        /fifth-industry-options                               controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST       /fifth-industry-options                               controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-fifth-industry-options                         controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-fifth-industry-options                         controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
-GET         /docks-occupation-list1                              controllers.docks.DocksOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
-POST        /docks-occupation-list1                              controllers.docks.DocksOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
-GET         /change-docks-occupation-list1                       controllers.docks.DocksOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
-POST        /change-docks-occupation-list1                       controllers.docks.DocksOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
+GET        /shipyard-occupation-list-1                           controllers.shipyard.ShipyardOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /shipyard-occupation-list-1                           controllers.shipyard.ShipyardOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-shipyard-occupation-list-1                    controllers.shipyard.ShipyardOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-shipyard-occupation-list-1                    controllers.shipyard.ShipyardOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /shipyard-occupation-list-2                           controllers.shipyard.ShipyardOccupationList2Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /shipyard-occupation-list-2                           controllers.shipyard.ShipyardOccupationList2Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-shipyard-occupation-list-2                    controllers.shipyard.ShipyardOccupationList2Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-shipyard-occupation-list-2                    controllers.shipyard.ShipyardOccupationList2Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /apprentice-storekeeper                               controllers.shipyard.ApprenticeStorekeeperController.onPageLoad(mode: Mode = NormalMode)
+POST       /apprentice-storekeeper                               controllers.shipyard.ApprenticeStorekeeperController.onSubmit(mode: Mode = NormalMode)
+GET        /change-apprentice-storekeeper                        controllers.shipyard.ApprenticeStorekeeperController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-apprentice-storekeeper                        controllers.shipyard.ApprenticeStorekeeperController.onSubmit(mode: Mode = CheckMode)
+
+GET        /labourer                                            controllers.shipyard.LabourerController.onPageLoad(mode: Mode = NormalMode)
+POST       /labourer                                            controllers.shipyard.LabourerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-labourer                                     controllers.shipyard.LabourerController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-labourer                                     controllers.shipyard.LabourerController.onSubmit(mode: Mode = CheckMode)
+
+GET        /docks-occupation-list1                              controllers.docks.DocksOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /docks-occupation-list1                              controllers.docks.DocksOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
+GET        /change-docks-occupation-list1                       controllers.docks.DocksOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /change-docks-occupation-list1                       controllers.docks.DocksOccupationList1Controller.onSubmit(mode: Mode = CheckMode)

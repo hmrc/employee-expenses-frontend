@@ -20,6 +20,7 @@ import base.SpecBase
 import controllers.authenticated.routes._
 import controllers.foodCatering.routes._
 import controllers.docks.routes._
+import controllers.shipyard.routes._
 import controllers.routes._
 import models.FifthIndustryOptions.{Armedforces, Dockswaterways, Forestry, Shipyard, Textiles}
 import models.FirstIndustryOptions._
@@ -279,42 +280,42 @@ class GenericNavigatorSpec extends SpecBase {
 
       //FifthIndustryOptionsPage
 
-      "go EmployerContributionController from FifthIndustryOptionsPage when 'Armed forces' is selected" in {
+      "go to EmployerContributionController from FifthIndustryOptionsPage when 'Armed forces' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Armedforces).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
-          EmployerContributionController.onPageLoad(NormalMode)
+          CannotClaimExpenseController.onPageLoad()
       }
 
-      "go EmployerContributionController from FifthIndustryOptionsPage when 'Docks and inland waterways' is selected" in {
+      "go to DocksOccupationList1Controller from FifthIndustryOptionsPage when 'Docks and inland waterways' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Dockswaterways).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
           DocksOccupationList1Controller.onPageLoad(NormalMode)
       }
 
-      "go HeatingController from FifthIndustryOptionsPage when 'Forestry' is selected" in {
+      "go to HeatingController from FifthIndustryOptionsPage when 'Forestry' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Forestry).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
           EmployerContributionController.onPageLoad(NormalMode)
       }
 
-      "go EmployerContributionController from FifthIndustryOptionsPage when 'Ship yard' is selected" in {
+      "go to ShipyardOccupationList1Controller from FifthIndustryOptionsPage when 'Shipyard' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Shipyard).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
-          EmployerContributionController.onPageLoad(NormalMode)
+           ShipyardOccupationList1Controller.onPageLoad(NormalMode)
       }
 
-      "go EmployerContributionController from FifthIndustryOptionsPage when 'Textiles and textile printing' is selected" in {
+      "go to EmployerContributionController from FifthIndustryOptionsPage when 'Textiles and textile printing' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Textiles).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
           EmployerContributionController.onPageLoad(NormalMode)
       }
 
-      "go EmployerContributionController from FifthIndustryOptionsPage when 'NoneOfTheAbove' is selected" in {
+      "go to EmployerContributionController from FifthIndustryOptionsPage when 'NoneOfTheAbove' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, FifthIndustryOptions.NoneOfAbove).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
