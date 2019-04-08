@@ -26,6 +26,7 @@ import models.ThirdIndustryOptions.{BanksBuildingSocieties, Education, Electrica
 import models.{Address, CheckMode, TaxYearSelection, UserAnswers}
 import pages._
 import pages.authenticated._
+import pages.docks.DocksOccupationList1Page
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 

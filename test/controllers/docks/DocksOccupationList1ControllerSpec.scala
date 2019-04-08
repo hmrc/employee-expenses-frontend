@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package controllers.shipyard
+package controllers.docks
 
 import base.SpecBase
 import config.ClaimAmounts
 import controllers.actions.UnAuthed
-import forms.shipyard.ApprenticeStorekeeperFormProvider
+import forms.docks.DocksOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -28,43 +28,39 @@ import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
-import pages.manufacturing.AluminiumApprenticePage
-import pages.shipyard.ApprenticeStorekeeperPage
-import play.api.Application
+import pages.docks.DocksOccupationList1Page
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.shipyard.ApprenticeStoreKeeperView
+import views.html.docks.DocksOccupationList1View
 
 import scala.concurrent.Future
 
-class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
-  with IntegrationPatience with OptionValues with MockitoSugar {
+class DocksOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ApprenticeStorekeeperFormProvider()
+  val formProvider = new DocksOccupationList1FormProvider()
   val form = formProvider()
-  private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
 
+  private val mockSessionRepository = mock[SessionRepository]
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  lazy val apprenticeStorekeeperRoute = routes.ApprenticeStorekeeperController.onPageLoad(NormalMode).url
+  lazy val docksOccupationList1Route = routes.DocksOccupationList1Controller.onPageLoad(NormalMode).url
 
-  "ApprenticeStorekeeper Controller" must {
+  "DocksOccupationList1 Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, apprenticeStorekeeperRoute)
+      val request = FakeRequest(GET, docksOccupationList1Route)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ApprenticeStoreKeeperView]
+      val view = application.injector.instanceOf[DocksOccupationList1View]
 
       status(result) mustEqual OK
 
@@ -76,13 +72,13 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ApprenticeStorekeeperPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(DocksOccupationList1Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, apprenticeStorekeeperRoute)
+      val request = FakeRequest(GET, docksOccupationList1Route)
 
-      val view = application.injector.instanceOf[ApprenticeStoreKeeperView]
+      val view = application.injector.instanceOf[DocksOccupationList1View]
 
       val result = route(application, request).value
 
@@ -98,12 +94,11 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-
-          .overrides(bind[Navigator].qualifiedWith("Shipyard").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Docks").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
-        FakeRequest(POST, apprenticeStorekeeperRoute)
+        FakeRequest(POST, docksOccupationList1Route)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -120,12 +115,12 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, apprenticeStorekeeperRoute)
+        FakeRequest(POST, docksOccupationList1Route)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[ApprenticeStoreKeeperView]
+      val view = application.injector.instanceOf[DocksOccupationList1View]
 
       val result = route(application, request).value
 
@@ -141,7 +136,7 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, apprenticeStorekeeperRoute)
+      val request = FakeRequest(GET, docksOccupationList1Route)
 
       val result = route(application, request).value
 
@@ -157,7 +152,7 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, apprenticeStorekeeperRoute)
+        FakeRequest(POST, docksOccupationList1Route)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -168,51 +163,57 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
 
       application.stop()
     }
+  }
 
-    "save 'ClaimAmount' when 'Yes' is selected" in {
+  "save 'docksAndWaterways' to ClaimAmount when 'Yes' is selected" in {
 
-      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .build()
+    val ua1 = emptyUserAnswers
 
-      val request = FakeRequest(POST, apprenticeStorekeeperRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+    val application = applicationBuilder(userAnswers = Some(ua1))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+      .build()
 
-      val result = route(application, request).value
+    val request = FakeRequest(POST, docksOccupationList1Route)
+      .withFormUrlEncodedBody(("value", "true"))
 
-      val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Shipyard.apprentice).success.value
-        .set(ApprenticeStorekeeperPage, true).success.value
+    val ua2 =
+      ua1
+        .set(ClaimAmount, ClaimAmounts.docksAndWaterways).success.value
+        .set(DocksOccupationList1Page, true).success.value
 
-      whenReady(result){
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+    val result = route(application, request).value
 
-      application.stop()
+    whenReady(result) {
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
     }
 
-    "not save ClaimAmount when 'No' is selected" in {
+    application.stop()
+  }
 
-      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .build()
+  "save 'default rate' to ClaimAmount when 'No' is selected" in {
 
-      val request = FakeRequest(POST, apprenticeStorekeeperRoute)
-        .withFormUrlEncodedBody(("value", "false"))
+    val ua1 = emptyUserAnswers
 
+    val application = applicationBuilder(userAnswers = Some(ua1))
+      .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+      .build()
 
-      val userAnswers2 = userAnswers
-        .set(ApprenticeStorekeeperPage, false).success.value
+    val request = FakeRequest(POST, docksOccupationList1Route)
+      .withFormUrlEncodedBody(("value", "false"))
 
-      val result = route(application, request).value
+    val ua2 =
+      ua1
+        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+        .set(DocksOccupationList1Page, false).success.value
 
-      whenReady(result){
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+    val result = route(application, request).value
 
-      application.stop()
+    whenReady(result) {
+      _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
     }
+
+    application.stop()
   }
 }
