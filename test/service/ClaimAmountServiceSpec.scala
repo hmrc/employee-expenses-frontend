@@ -30,6 +30,22 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
 
   "ClaimAmountService" must {
 
+
+    "calculateTax" when {
+      "return a string without decimals when a whole number" in {
+
+        claimAmountService.calculateTax(10, 100) mustBe "10"
+        claimAmountService.calculateTax(20, 250) mustBe "50"
+      }
+
+      "return a string with decimals when not a whole number" in {
+
+        claimAmountService.calculateTax(15, 10) mustBe "1.50"
+        claimAmountService.calculateTax(5, 125) mustBe "6.25"
+      }
+    }
+
+
     "band1" when {
       "return 20% of claim amount as a string with contribution from employer" in {
         val userAnswers = emptyUserAnswers.set(ExpensesEmployerPaidPage, 50).success.value
@@ -40,7 +56,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         claimAmountService.calculateTax(
           percentage = frontendAppConfig.taxPercentageBand1,
           amount = actualClaimAmount
-        ) mustBe "10.00"
+        ) mustBe "10"
       }
 
       "return 20% of claim amount as a string" in {
@@ -52,7 +68,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         claimAmountService.calculateTax(
           percentage = frontendAppConfig.taxPercentageBand1,
           amount = actualClaimAmount
-        ) mustBe "20.00"
+        ) mustBe "20"
       }
     }
 
@@ -61,7 +77,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         claimAmountService.calculateTax(
           percentage = frontendAppConfig.taxPercentageBand2,
           amount = 180
-        ) mustBe "72.00"
+        ) mustBe "72"
       }
     }
 
