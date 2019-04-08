@@ -29,7 +29,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.ConfirmationView
+import views.html.confirmation._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,39 +39,50 @@ class ConfirmationController @Inject()(
                                         getData: DataRetrievalAction,
                                         requireData: DataRequiredAction,
                                         val controllerComponents: MessagesControllerComponents,
-                                        view: ConfirmationView,
                                         claimAmountService: ClaimAmountService,
                                         appConfig: FrontendAppConfig,
                                         taiConnector: TaiConnector,
+                                        currentYearConfirmationView: CurrentYearConfirmationView,
+                                        previousYearConfirmationView: PreviousYearsConfirmationView,
+                                        previousCurrentConfirmationView: PreviousCurrentYearsConfirmationView,
+                                        claimStoppedConfirmationView: ClaimStoppedConfirmationView,
+
                                         sessionRepository: SessionRepository
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmountAndAnyDeductions)
-      val taxYearSelection: Option[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage)
-      val updateEmployerInfo: Option[Boolean] = request.userAnswers.get(YourEmployerPage)
-      val updateAddressInfo: Option[Boolean] = request.userAnswers.get(YourAddressPage)
-      val removeFreOption: Option[TaxYearSelection] = request.userAnswers.get(RemoveFRECodePage)
-      val freResponse: Option[FlatRateExpenseOptions] = request.userAnswers.get(FREResponse)
+      val claimAmount = request.userAnswers.get(ClaimAmountAndAnyDeductions)
+      val updateEmployerInfo: Boolean = request.userAnswers.get(YourEmployerPage).isDefined
+      val updateAddressInfo: Boolean = request.userAnswers.get(YourAddressPage).isDefined
+      val removeFreOption = request.userAnswers.get(RemoveFRECodePage).isDefined
+      val freReponse: Option[FlatRateExpenseOptions] = request.userAnswers.get(FREResponse)
 
-      (claimAmount, taxYearSelection, request.nino, freResponse) match {
-        case (Some(fullClaimAmount), Some(validTaxYearSelection), Some(nino), Some(flatRateExpense)) =>
+      val taxYearSelection: Option[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage)
+
+      (claimAmount, request.nino, removeFreOption, taxYearSelection, freReponse) match {
+        case (_, _, true, _, _) => {
+          sessionRepository.remove(request.identifier)
+          Future.successful(Ok(claimStoppedConfirmationView()))
+        }
+
+        case (Some(fullClaimAmount), Some(nino), false, Some(taxYears), Some(freResponse)) =>
+          val currentYearSelected = taxYears.contains(TaxYearSelection.CurrentYear)
+          val currentYearMinus1 = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
+
           taiConnector.taiTaxCodeRecords(nino).map {
             result =>
-              val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
-
               sessionRepository.remove(request.identifier)
+              val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
+              if (currentYearSelected && taxYears.length == 1) {
+                Ok(currentYearConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, freResponse))
+              } else if (currentYearSelected && taxYears.length > 1) {
+                Ok(previousCurrentConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, currentYearMinus1, freResponse))
+              } else {
+                Ok(previousYearConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, currentYearMinus1, freResponse))
+              }
 
-              Ok(view(
-                taxYearSelections = validTaxYearSelection,
-                removeFreOption = removeFreOption,
-                updateEmployerInfo = updateEmployerInfo,
-                updateAddressInfo = updateAddressInfo,
-                claimAmount = fullClaimAmount,
-                claimAmountsAndRates = claimAmountsAndRates,
-                freResponse = flatRateExpense))
           }.recoverWith {
             case e =>
               Logger.error(s"[ConfirmationController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
@@ -80,5 +91,4 @@ class ConfirmationController @Inject()(
         case _ =>
           Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
       }
-  }
-}
+  }}
