@@ -702,10 +702,3 @@ confirmation.updateAddressInfoNow = Update your address now
 confirmation.updateAddressInfo = Update your address
 confirmation.addressChange = You told us that your address has changed. If you do not update it you may not receive any letters from HMRC.
 confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April {0} to 5 April {1}, this may take longer if your employer has not yet sent your information for that tax year.
-
-
-currentYearConfirmation.title = currentYearConfirmation
-currentYearConfirmation.heading = currentYearConfirmation
-
-onePreviousYearConfirmation.title = onePreviousYearConfirmation
-onePreviousYearConfirmation.heading = onePreviousYearConfirmation
