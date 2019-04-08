@@ -37,10 +37,7 @@ object NavConstant {
   final val printing = "Printing"
   final val security = "Security"
   final val transport = "Transport"
-<<<<<<< HEAD
   final val shipyard = "Shipyard"
-=======
   final val docks = "Docks"
->>>>>>> 980acb4d6619c9dc100b3e929d61730aa8906259
 
 }

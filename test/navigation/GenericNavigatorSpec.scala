@@ -301,11 +301,7 @@ class GenericNavigatorSpec extends SpecBase {
           EmployerContributionController.onPageLoad(NormalMode)
       }
 
-<<<<<<< HEAD
       "go ApprenticeStorekeeperController from FifthIndustryOptionsPage when 'Shipyard' is selected" in {
-=======
-      "go to ShipyardOccupationList1Controller from FifthIndustryOptionsPage when 'Shipyard' is selected" in {
->>>>>>> 980acb4d6619c9dc100b3e929d61730aa8906259
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Shipyard).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe

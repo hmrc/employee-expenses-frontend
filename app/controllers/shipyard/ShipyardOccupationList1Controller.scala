@@ -16,7 +16,7 @@
 
 package controllers.shipyard
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.shipyard.ShipyardOccupationList1FormProvider
 import javax.inject.{Inject, Named}
@@ -34,15 +34,15 @@ import views.html.shipyard.ShipyardOccupationList1View
 import scala.concurrent.{ExecutionContext, Future}
 
 class ShipyardOccupationList1Controller @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: ShipyardOccupationList1FormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: ShipyardOccupationList1View
+                                                   override val messagesApi: MessagesApi,
+                                                   sessionRepository: SessionRepository,
+                                                   @Named(NavConstant.shipyard) navigator: Navigator,
+                                                   identify: UnauthenticatedIdentifierAction,
+                                                   getData: DataRetrievalAction,
+                                                   requireData: DataRequiredAction,
+                                                   formProvider: ShipyardOccupationList1FormProvider,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   view: ShipyardOccupationList1View
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
