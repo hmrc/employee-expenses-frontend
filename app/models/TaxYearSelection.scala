@@ -31,7 +31,7 @@ object TaxYearSelection extends Enumerable.Implicits {
   case object CurrentYearMinus3 extends WithName("currentYearMinus3") with TaxYearSelection
   case object CurrentYearMinus4 extends WithName("currentYearMinus4") with TaxYearSelection
 
-  val values: Seq[TaxYearSelection] = Seq(
+  def values: Seq[TaxYearSelection] = Seq(
     CurrentYear,
     CurrentYearMinus1,
     CurrentYearMinus2,
@@ -39,7 +39,7 @@ object TaxYearSelection extends Enumerable.Implicits {
     CurrentYearMinus4
   )
 
-  val options: Seq[RadioCheckboxOption] = Seq(
+  def options: Seq[RadioCheckboxOption] = Seq(
     taxYearRadioCheckboxOption(TaxYear.current, CurrentYear),
     taxYearRadioCheckboxOption(TaxYear.current.back(1), CurrentYearMinus1),
     taxYearRadioCheckboxOption(TaxYear.current.back(2), CurrentYearMinus2),
