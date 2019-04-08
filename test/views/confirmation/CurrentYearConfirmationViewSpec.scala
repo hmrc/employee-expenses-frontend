@@ -78,8 +78,11 @@ class CurrentYearConfirmationViewSpec extends ViewBehaviours {
         "confirmation.heading",
         "confirmation.actualAmount",
         "confirmation.whatHappensNext",
-        "confirmation.taxCodeChanged",
-        "confirmation.continueToClaim")
+        "confirmation.taxCodeChanged.paragraph1",
+        "confirmation.taxCodeChanged.paragraph2",
+        "confirmation.continueToClaim.paragraph1",
+        "confirmation.continueToClaim.paragraph2"
+      )
     }
 
     "display correct dynamic text for tax rates" in {
