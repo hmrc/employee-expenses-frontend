@@ -20,7 +20,8 @@ import config.ClaimAmounts
 import controllers.actions._
 import forms.FifthIndustryOptionsFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, FifthIndustryOptions, Mode}
+import models.FifthIndustryOptions.{Forestry, NoneOfAbove}
+import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.{ClaimAmount, FifthIndustryOptionsPage}
 import play.api.data.Form
@@ -66,12 +67,17 @@ class FifthIndustryOptionsController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- if (value == FifthIndustryOptions.Forestry) {
-              Future.fromTry(request.userAnswers.set(FifthIndustryOptionsPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.forestry))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(FifthIndustryOptionsPage, value))
+            updatedAnswers <- value match {
+              case Forestry =>
+                Future.fromTry(request.userAnswers.set(FifthIndustryOptionsPage, value)
+                  .flatMap(_.set(ClaimAmount, ClaimAmounts.forestry))
+                )
+              case NoneOfAbove =>
+                Future.fromTry(request.userAnswers.set(FifthIndustryOptionsPage, value)
+                  .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
+                )
+              case _ =>
+                Future.fromTry(request.userAnswers.set(FifthIndustryOptionsPage, value))
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(FifthIndustryOptionsPage, mode)(updatedAnswers))

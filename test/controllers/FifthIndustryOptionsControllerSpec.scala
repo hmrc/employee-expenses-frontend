@@ -20,7 +20,7 @@ import base.SpecBase
 import config.ClaimAmounts
 import forms.FifthIndustryOptionsFormProvider
 import generators.Generators
-import models.FifthIndustryOptions.Forestry
+import models.FifthIndustryOptions.{Forestry, NoneOfAbove}
 import models.FirstIndustryOptions.Retail
 import models.{FifthIndustryOptions, FirstIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -175,6 +175,9 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
       case Forestry => userAnswers
         .set(FifthIndustryOptionsPage, trade).success.value
         .set(ClaimAmount, ClaimAmounts.forestry).success.value
+      case NoneOfAbove => userAnswers
+        .set(FifthIndustryOptionsPage, trade).success.value
+        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
       case _ => userAnswers.set(FifthIndustryOptionsPage, trade).success.value
     }
 
