@@ -164,7 +164,7 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
 
       application.stop()
     }
-    "save 'labourer' to ClaimAmount when 'Yes' is selected" in {
+    "save correct ClaimAmount when 'Yes' is selected" in {
 
       val ua1 = emptyUserAnswers
 
@@ -190,7 +190,7 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
       application.stop()
     }
 
-    "save ClaimAmount when 'No' is selected" in {
+    "save correct ClaimAmount when 'No' is selected" in {
 
       val ua1 = emptyUserAnswers
 

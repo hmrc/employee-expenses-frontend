@@ -27,7 +27,7 @@ import play.api.mvc.Call
 class ShipyardNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case ApprenticeStorekeeperPage   => apprenticeStoreKeeper(NormalMode)
+    case ShipyardApprenticeStorekeeperPage   => shipyardApprenticeStoreKeeper(NormalMode)
     case ShipyardOccupationList1Page => shipyardOccupationList1(NormalMode)
     case ShipyardOccupationList2Page => shipyardOccupationList2(NormalMode)
     case LabourerPage                => _ => EmployerContributionController.onPageLoad(NormalMode)
@@ -35,7 +35,7 @@ class ShipyardNavigator @Inject()() extends Navigator {
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case ApprenticeStorekeeperPage   => apprenticeStoreKeeper(CheckMode)
+    case ShipyardApprenticeStorekeeperPage   => shipyardApprenticeStoreKeeper(CheckMode)
     case ShipyardOccupationList1Page => shipyardOccupationList1(CheckMode)
     case ShipyardOccupationList2Page => shipyardOccupationList2(CheckMode)
     case LabourerPage                => _ => EmployerContributionController.onPageLoad(CheckMode)
@@ -43,8 +43,8 @@ class ShipyardNavigator @Inject()() extends Navigator {
   }
 
 
-  def apprenticeStoreKeeper(mode: Mode)(userAnswers: UserAnswers): Call = {
-    userAnswers.get(ApprenticeStorekeeperPage) match {
+  def shipyardApprenticeStoreKeeper(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(ShipyardApprenticeStorekeeperPage) match {
       case Some(true) => EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.shipyard.routes.ShipyardOccupationList1Controller.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()

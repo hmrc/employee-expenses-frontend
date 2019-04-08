@@ -32,16 +32,16 @@ class ShipyardNavigatorSpec extends SpecBase {
       s"in $mode" must {
 
         "go to EmployerContributionPage when Appprentice 'yes' is selected" in {
-          val answers = emptyUserAnswers.set(ApprenticeStorekeeperPage, true).success.value
+          val answers = emptyUserAnswers.set(ShipyardApprenticeStorekeeperPage, true).success.value
 
-          navigator.nextPage(ApprenticeStorekeeperPage, mode)(answers) mustBe
+          navigator.nextPage(ShipyardApprenticeStorekeeperPage, mode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
 
         "go to ShipyardOccupationList1Page when Appprentice 'no' selected" in {
-          val answers = emptyUserAnswers.set(ApprenticeStorekeeperPage, false).success.value
+          val answers = emptyUserAnswers.set(ShipyardApprenticeStorekeeperPage, false).success.value
 
-          navigator.nextPage(ApprenticeStorekeeperPage, mode)(answers) mustBe
+          navigator.nextPage(ShipyardApprenticeStorekeeperPage, mode)(answers) mustBe
             controllers.shipyard.routes.ShipyardOccupationList1Controller.onPageLoad(mode)
         }
 

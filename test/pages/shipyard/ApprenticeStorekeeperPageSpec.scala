@@ -22,10 +22,10 @@ class ApprenticeStorekeeperPageSpec extends PageBehaviours {
 
   "ApprenticeStorekeeperPage" must {
 
-    beRetrievable[Boolean](ApprenticeStorekeeperPage)
+    beRetrievable[Boolean](ShipyardApprenticeStorekeeperPage)
 
-    beSettable[Boolean](ApprenticeStorekeeperPage)
+    beSettable[Boolean](ShipyardApprenticeStorekeeperPage)
 
-    beRemovable[Boolean](ApprenticeStorekeeperPage)
+    beRemovable[Boolean](ShipyardApprenticeStorekeeperPage)
   }
 }

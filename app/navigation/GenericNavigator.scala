@@ -87,7 +87,7 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Healthcare)                          => AmbulanceStaffController.onPageLoad(mode)
       case Some(Retail)                              => EmployerContributionController.onPageLoad(mode)
       case Some(TransportAndDistribution)            => TypeOfTransportController.onPageLoad(mode)
-      case Some(FirstIndustryOptions.NoneOfAbove) => SecondIndustryOptionsController.onPageLoad(mode)
+      case Some(FirstIndustryOptions.NoneOfAbove)    => SecondIndustryOptionsController.onPageLoad(mode)
       case _                                         => SessionExpiredController.onPageLoad()
     }
 
@@ -129,7 +129,7 @@ class GenericNavigator @Inject()() extends Navigator {
       case Some(Armedforces)                           => CannotClaimExpenseController.onPageLoad()
       case Some(Dockswaterways)                        => DocksOccupationList1Controller.onPageLoad(mode)
       case Some(Forestry)                              => EmployerContributionController.onPageLoad(mode)
-      case Some(Shipyard)                              => ApprenticeStorekeeperController.onPageLoad(mode)
+      case Some(Shipyard)                              => ShipyardApprenticeStorekeeperController.onPageLoad(mode)
       case Some(Textiles)                              => EmployerContributionController.onPageLoad(mode)
       case Some(FifthIndustryOptions.NoneOfAbove)      => EmployerContributionController.onPageLoad(mode)
       case _                                           => SessionExpiredController.onPageLoad()
