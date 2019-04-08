@@ -758,3 +758,13 @@ docksOccupationList1.radioLabel = Is your occupation listed?
 docksOccupationList1.listText = The occupations are:
 docksOccupationList1.occupation1 = Dockers
 docksOccupationList1.occupation2 = Dredger drivers and hopper steerers
+
+textilesOccupationList1.title = Textiles and textile printing occupation list
+textilesOccupationList1.heading = Textiles and textile printing occupation list
+textilesOccupationList1.checkYourAnswersLabel = Textiles and textile printing occupation list
+textilesOccupationList1.error.required = Select yes if your occupation is listed
+textilesOccupationList1.radioLabel = Is your occupation listed?
+textilesOccupationList1.listText = The occupations are:
+textilesOccupationList1.occupation1 = Carders
+textilesOccupationList1.occupation2 = Carding engineers
+textilesOccupationList1.occupation3 = Overlookers and technicians in spinning mills

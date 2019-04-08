@@ -33,8 +33,12 @@ import pages.heating._
 import pages.security._
 import pages.printing._
 import pages.shipyard._
+import pages.textiles.TextilesOccupationList1Page
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryTextilesOccupationList1Page: Arbitrary[TextilesOccupationList1Page.type] =
+    Arbitrary(TextilesOccupationList1Page)
 
   implicit lazy val arbitraryDocksOccupationList1Page: Arbitrary[DocksOccupationList1Page.type] =
     Arbitrary(DocksOccupationList1Page)

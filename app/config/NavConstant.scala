@@ -38,5 +38,6 @@ object NavConstant {
   final val security = "Security"
   final val transport = "Transport"
   final val docks = "Docks"
+  final val textiles = "Textiles"
 
 }
