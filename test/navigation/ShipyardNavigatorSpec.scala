@@ -1,9 +1,24 @@
+/*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package navigation
 
 
 import base.SpecBase
 import models._
-import pages.engineering.TypeOfEngineeringPage
 import pages.shipyard._
 
 
@@ -16,15 +31,55 @@ class ShipyardNavigatorSpec extends SpecBase {
     for (mode <- modes) {
       s"in $mode" must {
 
+        "go to EmployerContributionPage when Appprentice 'yes' is selected" in {
+          val answers = emptyUserAnswers.set(ApprenticeStorekeeperPage, true).success.value
 
-        "go to ApprenticePage when Apprentice or storekeeper is selected" in {
-          val answers = emptyUserAnswers.set(ApprenticeStorekeeperPage, ApprenticeStorekeeperPage).success.value
-
-          navigator.nextPage(TypeOfEngineeringPage, mode)(answers) mustBe
-            controllers.engineering.routes.ConstructionalEngineeringApprenticeController.onPageLoad(mode)
-
+          navigator.nextPage(ApprenticeStorekeeperPage, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
 
+        "go to ShipyardOccupationList1Page when Appprentice 'no' selected" in {
+          val answers = emptyUserAnswers.set(ApprenticeStorekeeperPage, false).success.value
+
+          navigator.nextPage(ApprenticeStorekeeperPage, mode)(answers) mustBe
+            controllers.shipyard.routes.ShipyardOccupationList1Controller.onPageLoad(mode)
+        }
+
+        "go to EmployerContributionPage when ShipyardOccupationList1 'Yes selected" in {
+          val answers = emptyUserAnswers.set(ShipyardOccupationList1Page, true).success.value
+
+          navigator.nextPage(ShipyardOccupationList1Page, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
+        }
+
+        "go to ShipyardOccupationList2Page when ShipyardOccupationList1 'No selected" in {
+          val answers = emptyUserAnswers.set(ShipyardOccupationList1Page, false).success.value
+
+          navigator.nextPage(ShipyardOccupationList1Page, mode)(answers) mustBe
+            controllers.shipyard.routes.ShipyardOccupationList2Controller.onPageLoad(mode)
+        }
+
+        "go to EmployerContributionPage when ShipyardOccupationList2 'Yes selected" in {
+          val answers = emptyUserAnswers.set(ShipyardOccupationList2Page, true).success.value
+
+          navigator.nextPage(ShipyardOccupationList2Page, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
+        }
+
+        "go to LabourerPage when ShipyardOccupationList2 'No selected" in {
+          val answers = emptyUserAnswers.set(ShipyardOccupationList2Page, false).success.value
+
+          navigator.nextPage(ShipyardOccupationList2Page, mode)(answers) mustBe
+            controllers.shipyard.routes.LabourerController.onPageLoad(mode)
+        }
+
+        "go to EmployerContributionPage when Labourer 'Yes selected" in {
+          val answers = emptyUserAnswers.set(LabourerPage, true).success.value
+
+          navigator.nextPage(LabourerPage, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
+        }
       }
     }
   }
+}

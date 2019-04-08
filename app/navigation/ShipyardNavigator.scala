@@ -52,7 +52,7 @@ class ShipyardNavigator @Inject()() extends Navigator {
   }
 
   def shipyardOccupationList1(mode: Mode)(userAnswers: UserAnswers): Call = {
-    userAnswers.get(ApprenticeStorekeeperPage) match {
+    userAnswers.get(ShipyardOccupationList1Page) match {
       case Some(true) => EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.shipyard.routes.ShipyardOccupationList2Controller.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
@@ -60,7 +60,7 @@ class ShipyardNavigator @Inject()() extends Navigator {
   }
 
   def shipyardOccupationList2(mode: Mode)(userAnswers: UserAnswers): Call = {
-    userAnswers.get(ApprenticeStorekeeperPage) match {
+    userAnswers.get(ShipyardOccupationList2Page) match {
       case Some(true) => EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.shipyard.routes.LabourerController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()

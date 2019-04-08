@@ -73,7 +73,6 @@ class ApprenticeStorekeeperController @Inject()(
               )
             } else {
               Future.fromTry(request.userAnswers.set(ApprenticeStorekeeperPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Shipyard.allOther))
               )
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)

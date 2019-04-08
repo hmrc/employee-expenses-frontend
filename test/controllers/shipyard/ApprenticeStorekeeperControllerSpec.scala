@@ -98,7 +98,8 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          
+          .overrides(bind[Navigator].qualifiedWith("Shipyard").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -168,7 +169,7 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
       application.stop()
     }
 
-    "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
+    "save 'ClaimAmount' when 'Yes' is selected" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -191,7 +192,7 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
       application.stop()
     }
 
-    "save 'allOther' to ClaimAmount when 'No' is selected" in {
+    "not save ClaimAmount when 'No' is selected" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -200,11 +201,11 @@ class ApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
       val request = FakeRequest(POST, apprenticeStorekeeperRoute)
         .withFormUrlEncodedBody(("value", "false"))
 
-      val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Shipyard.allOther).success.value
         .set(ApprenticeStorekeeperPage, false).success.value
+
+      val result = route(application, request).value
 
       whenReady(result){
         _ =>
