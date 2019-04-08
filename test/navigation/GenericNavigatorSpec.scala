@@ -281,7 +281,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       //FifthIndustryOptionsPage
 
-      "go to EmployerContributionController from FifthIndustryOptionsPage when 'Armed forces' is selected" in {
+      "go to CannotClaimExpenseController from FifthIndustryOptionsPage when 'Armed forces' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Armedforces).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
