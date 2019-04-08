@@ -45,22 +45,14 @@
 
     <h2 class="heading-small">@messages("claimAmount.englandHeading")</h2>
 
-    <p>@messages("claimAmount.listHeading")</p>
-
-    <ul class="list list-bullet">
-        <li>@messages("claimAmount.basicRate", standardRate.calculatedBasicRate, amount, standardRate.basicRate)</li>
-        <li>@messages("claimAmount.higherRate", standardRate.calculatedHigherRate, amount, standardRate.higherRate)</li>
-    </ul>
+    <p>@messages("claimAmount.basicRate", standardRate.calculatedBasicRate, amount, standardRate.basicRate)</p>
+    <p>@messages("claimAmount.higherRate", standardRate.calculatedHigherRate, amount, standardRate.higherRate)</p>
 
     <h2 class="heading-small">@messages("claimAmount.scotlandHeading")</h2>
 
-    <p>@messages("claimAmount.listHeading")</p>
-
-    <ul class="list list-bullet">
-        <li>@messages("claimAmount.starterRate", scottishRate.calculatedStarterRate, amount, scottishRate.starterRate)</li>
-        <li>@messages("claimAmount.basicRate", scottishRate.calculatedBasicRate, amount, scottishRate.basicRate)</li>
-        <li>@messages("claimAmount.higherRate", scottishRate.calculatedHigherRate, amount, scottishRate.higherRate)</li>
-    </ul>
+    <p>@messages("claimAmount.starterRate", scottishRate.calculatedStarterRate, amount, scottishRate.starterRate)</p>
+    <p>@messages("claimAmount.basicRate", scottishRate.calculatedBasicRate, amount, scottishRate.basicRate)</p>
+    <p>@messages("claimAmount.higherRate", scottishRate.calculatedHigherRate, amount, scottishRate.higherRate)</p>
 
     @components.button_link(messages("site.continue"), onwardRoute)
 }

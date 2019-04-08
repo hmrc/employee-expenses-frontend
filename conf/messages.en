@@ -152,10 +152,9 @@ claimAmount.noContributionDescription = Based on your industry and occupation, y
 claimAmount.description = The actual amount you will get depends on the rate of tax you pay, and where you live in the UK.
 claimAmount.englandHeading = Taxpayers in England, Northern Ireland and Wales
 claimAmount.scotlandHeading = Taxpayers in Scotland
-claimAmount.listHeading = You will get:
-claimAmount.starterRate = £{0} of this £{1} per year if you are a starter rate ({2}%) taxpayer.
-claimAmount.basicRate = £{0} of this £{1} per year if you are a basic rate ({2}%) taxpayer.
-claimAmount.higherRate = £{0} of this £{1} per year if you are a higher rate ({2}%) taxpayer.
+claimAmount.starterRate = You will get £{0} of this £{1} per year if you are a starter rate ({2}%) taxpayer.
+claimAmount.basicRate = You will get £{0} of this £{1} per year if you are a basic rate ({2}%) taxpayer.
+claimAmount.higherRate = You will get £{0} of this £{1} per year if you are a higher rate ({2}%) taxpayer.
 claimAmount.checkYourAnswersLabel = Personal allowance increase
 
 typeOfEngineering.title = Engineering industry list
@@ -704,3 +703,9 @@ confirmation.updateAddressInfo = Update your address
 confirmation.addressChange = You told us that your address has changed. If you do not update it you may not receive any letters from HMRC.
 confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April {0} to 5 April {1}, this may take longer if your employer has not yet sent your information for that tax year.
 
+
+currentYearConfirmation.title = currentYearConfirmation
+currentYearConfirmation.heading = currentYearConfirmation
+
+onePreviousYearConfirmation.title = onePreviousYearConfirmation
+onePreviousYearConfirmation.heading = onePreviousYearConfirmation
