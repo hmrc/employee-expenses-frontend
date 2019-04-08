@@ -497,8 +497,6 @@ electrical.heading = Are you only claiming for laundry costs?
 electrical.checkYourAnswersLabel = Are you only claiming for laundry costs?
 electrical.error.required = Select yes if you are only claiming for laundry costs
 
-
-
 metropolitanPolice.title = Do you work for the Metropolitan Police?
 metropolitanPolice.heading = Do you work for the Metropolitan Police?
 metropolitanPolice.checkYourAnswersLabel = Do you work for the Metropolitan Police?
@@ -624,8 +622,6 @@ shipyardOccupationList2.occupation4 = riveters
 shipyardOccupationList2.occupation5 = sheet iron workers
 shipyardOccupationList2.occupation6 = shipwrights
 shipyardOccupationList2.occupation7 = tubers and welders
-
-
 
 updateEmployerInformation.title = You need to update your employer information
 updateEmployerInformation.heading = You need to update your employer information
@@ -753,3 +749,12 @@ labourer.title = Are you a labourer?
 labourer.heading = Are you a labourer?
 labourer.checkYourAnswersLabel = Are you a labourer?
 labourer.error.required = Select yes if you are a labourer
+
+docksOccupationList1.title = Docks and inland waterways occupation list
+docksOccupationList1.heading = Docks and inland waterways occupation list
+docksOccupationList1.checkYourAnswersLabel = Docks and inland waterways occupation list
+docksOccupationList1.error.required = Select yes if your occupation is listed
+docksOccupationList1.radioLabel = Is your occupation listed?
+docksOccupationList1.listText = The occupations are:
+docksOccupationList1.occupation1 = Dockers
+docksOccupationList1.occupation2 = Dredger drivers and hopper steerers

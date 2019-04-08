@@ -24,6 +24,7 @@ import pages._
 import pages.authenticated._
 import pages.clothing.ClothingPage
 import pages.construction._
+import pages.docks.DocksOccupationList1Page
 import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.foodCatering._
@@ -46,6 +47,7 @@ trait UserAnswersGenerator extends TryValues {
     arbitrary[(ApprenticeStorekeeperPage.type, JsValue)] ::
     arbitrary[(ShipyardOccupationList2Page.type, JsValue)] ::
     arbitrary[(LabourerPage.type, JsValue)] ::
+    arbitrary[(DocksOccupationList1Page.type, JsValue)] ::
     arbitrary[(FifthIndustryOptionsPage.type, JsValue)] ::
     arbitrary[(AlreadyClaimingFREDifferentAmountsPage.type, JsValue)] ::
     arbitrary[(AlreadyClaimingFRESameAmountPage.type, JsValue)] ::
