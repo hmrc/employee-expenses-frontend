@@ -39,10 +39,10 @@ class ClaimAmountService @Inject()(
   
   def calculateTax(percentage: Int, amount: Int): String = {
 
-    val calculatedResult =  BigDecimal((amount.toDouble / 100) * percentage).setScale(2, RoundingMode.DOWN)
+    val calculatedResult = BigDecimal((amount.toDouble / 100) * percentage).setScale(2, RoundingMode.DOWN)
 
     if (calculatedResult.isWhole) {
-      calculatedResult.underlying.stripTrailingZeros.toPlainString
+      "%.0f".format(calculatedResult)
     } else {
       calculatedResult.toString
     }
