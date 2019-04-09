@@ -79,6 +79,13 @@ class ShipyardNavigatorSpec extends SpecBase {
           navigator.nextPage(LabourerPage, mode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
+
+        "go to EmployerContributionPage when Labourer 'No selected" in {
+          val answers = emptyUserAnswers.set(LabourerPage, false).success.value
+
+          navigator.nextPage(LabourerPage, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
+        }
       }
     }
   }
