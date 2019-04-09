@@ -76,7 +76,7 @@ class YourEmployerController @Inject()(
           }.recoverWith {
             case e =>
               Logger.error(s"[YourEmployerController][taiService.employments] failed $e", e)
-              Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(mode)))
+              Future.successful(Redirect(YourAddressController.onPageLoad(mode)))
           }
         case _ =>
           Future.successful(Redirect(SessionExpiredController.onPageLoad()))
