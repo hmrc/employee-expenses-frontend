@@ -36,7 +36,8 @@
         @components.input_text_currency(
             field = form("value"),
             label = messages("expensesEmployerPaid.heading"),
-            labelClass=Some("visually-hidden")
+            labelClass=Some("visually-hidden"),
+            hint = Some(messages("expensesEmployerPaid.hint"))
         )
 
         @components.submit_button()

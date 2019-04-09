@@ -29,7 +29,7 @@ import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
 import pages._
-import pages.authenticated.{AlreadyClaimingFRESameAmountPage, RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage}
+import pages.authenticated._
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
@@ -92,6 +92,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     .set(ExpensesEmployerPaidPage, 123).success.value
     .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
     .set(YourAddressPage, true).success.value
+    .set(YourEmployerPage, true).success.value
     .set(CitizenDetailsAddress, address).success.value
     .set(ClaimAmount, 100).success.value
     .set(ClaimAmountAndAnyDeductions, 80).success.value
