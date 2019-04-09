@@ -14,8 +14,11 @@
  * limitations under the License.
  *@
 
+  @import config.FrontendAppConfig
+
 @this(
         main_template: MainTemplate,
+        frontendAppConfig: FrontendAppConfig,
         formHelper: FormWithCSRF
 )
 
@@ -31,6 +34,12 @@
 
         @components.heading("claimByAlternative.heading")
 
+        <p>@messages("claimByAlternative.paragraph")
+          <a href="@frontendAppConfig.p87ClaimOnlineUrl">@messages("claimByAlternative.onlineFormLink")</a>
+          @messages("site.or")
+          <a href="@frontendAppConfig.p87ClaimByPostUrl">@messages("claimByAlternative.claimByPostLink")</a>.
+        </p>
+
         @components.submit_button()
     }
-}
+}@import config.FrontendAppConfig
