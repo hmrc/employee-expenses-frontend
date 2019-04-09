@@ -17,25 +17,25 @@
 package views.shipyard
 
 import controllers.shipyard.routes
-import forms.shipyard.ApprenticeStorekeeperFormProvider
+import forms.shipyard.ShipyardApprenticeStorekeeperFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.shipyard.ApprenticeStoreKeeperView
+import views.html.shipyard.ShipyardApprenticeStoreKeeperView
 
 
-class ApprenticeStorekeeperViewSpec extends YesNoViewBehaviours {
+class ShipyardApprenticeStorekeeperViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "apprenticeStorekeeper"
+  val messageKeyPrefix = "shipyardApprenticeStorekeeper"
 
-  val form = new ApprenticeStorekeeperFormProvider()()
+  val form = new ShipyardApprenticeStorekeeperFormProvider()()
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "ApprenticeStorekeeper view" must {
+  "ShipyardApprenticeStorekeeper view" must {
 
-    val view = application.injector.instanceOf[ApprenticeStoreKeeperView]
+    val view = application.injector.instanceOf[ShipyardApprenticeStoreKeeperView]
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
@@ -49,7 +49,7 @@ class ApprenticeStorekeeperViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.ApprenticeStorekeeperController.onSubmit(NormalMode).url)
+    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.ShipyardApprenticeStorekeeperController.onSubmit(NormalMode).url)
   }
 
   application.stop()

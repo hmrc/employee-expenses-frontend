@@ -21,10 +21,10 @@ import play.api.data.FormError
 
 class ApprenticeStorekeeperFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "apprenticeStorekeeper.error.required"
+  val requiredKey = "shipyardApprenticeStorekeeper.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new ApprenticeStorekeeperFormProvider()()
+  val form = new ShipyardApprenticeStorekeeperFormProvider()()
 
   ".value" must {
 

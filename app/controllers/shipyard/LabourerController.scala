@@ -16,7 +16,7 @@
 
 package controllers.shipyard
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.shipyard.LabourerFormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LabourerController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
+                                         @Named(NavConstant.shipyard) navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
@@ -73,7 +73,9 @@ class LabourerController @Inject()(
                 .flatMap(_.set(ClaimAmount, ClaimAmounts.Shipyard.labourer))
               )
             } else {
-              Future.fromTry(request.userAnswers.set(LabourerPage, value))
+              Future.fromTry(request.userAnswers.set(LabourerPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Shipyard.allOther))
+              )
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(LabourerPage, mode)(updatedAnswers))

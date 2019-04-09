@@ -16,7 +16,7 @@
 
 package controllers.shipyard
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.shipyard.ShipyardOccupationList2FormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ShipyardOccupationList2Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
+                                         @Named(NavConstant.shipyard) navigator: Navigator,
                                          identify: UnauthenticatedIdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,

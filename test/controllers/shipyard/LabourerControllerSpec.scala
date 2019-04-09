@@ -95,7 +95,7 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Shipyard").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -164,7 +164,7 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
 
       application.stop()
     }
-    "save 'labourer' to ClaimAmount when 'Yes' is selected" in {
+    "save correct ClaimAmount when 'Yes' is selected" in {
 
       val ua1 = emptyUserAnswers
 
@@ -190,7 +190,7 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
       application.stop()
     }
 
-    "not save ClaimAmount when 'No' is selected" in {
+    "save correct ClaimAmount when 'No' is selected" in {
 
       val ua1 = emptyUserAnswers
 
@@ -201,10 +201,11 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
       val request = FakeRequest(POST, labourerRoute)
         .withFormUrlEncodedBody(("value", "false"))
 
-      val ua2 =
-        ua1.set(LabourerPage, false).success.value
-
       val result = route(application, request).value
+
+      val ua2 = ua1
+          .set(ClaimAmount, ClaimAmounts.Shipyard.allOther).success.value
+          .set(LabourerPage, false).success.value
 
       whenReady(result) {
         _ =>

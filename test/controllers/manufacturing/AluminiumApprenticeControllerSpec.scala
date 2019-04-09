@@ -28,7 +28,6 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.manufacturing.AluminiumApprenticePage
-import pages.shipyard.ApprenticeStorekeeperPage
 import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call

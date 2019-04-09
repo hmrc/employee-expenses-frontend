@@ -16,33 +16,33 @@
 
 package controllers.shipyard
 
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
-import forms.shipyard.ApprenticeStorekeeperFormProvider
+import forms.shipyard.ShipyardApprenticeStorekeeperFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.ClaimAmount
-import pages.shipyard.ApprenticeStorekeeperPage
+import pages.shipyard.ShipyardApprenticeStorekeeperPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.shipyard.ApprenticeStoreKeeperView
+import views.html.shipyard.ShipyardApprenticeStoreKeeperView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ApprenticeStorekeeperController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Generic") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: ApprenticeStorekeeperFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: ApprenticeStoreKeeperView
+class ShipyardApprenticeStorekeeperController @Inject()(
+                                                 override val messagesApi: MessagesApi,
+                                                 sessionRepository: SessionRepository,
+                                                 @Named(NavConstant.shipyard) navigator: Navigator,
+                                                 identify: UnauthenticatedIdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 formProvider: ShipyardApprenticeStorekeeperFormProvider,
+                                                 val controllerComponents: MessagesControllerComponents,
+                                                 view: ShipyardApprenticeStoreKeeperView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -50,7 +50,7 @@ class ApprenticeStorekeeperController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(ApprenticeStorekeeperPage) match {
+      val preparedForm = request.userAnswers.get(ShipyardApprenticeStorekeeperPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -68,16 +68,15 @@ class ApprenticeStorekeeperController @Inject()(
         value => {
           for {
             updatedAnswers <- if (value) {
-              Future.fromTry(request.userAnswers.set(ApprenticeStorekeeperPage, value)
+              Future.fromTry(request.userAnswers.set(ShipyardApprenticeStorekeeperPage, value)
                 .flatMap(_.set(ClaimAmount, ClaimAmounts.Shipyard.apprentice))
               )
             } else {
-              Future.fromTry(request.userAnswers.set(ApprenticeStorekeeperPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Shipyard.allOther))
+              Future.fromTry(request.userAnswers.set(ShipyardApprenticeStorekeeperPage, value)
               )
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(ApprenticeStorekeeperPage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(ShipyardApprenticeStorekeeperPage, mode)(updatedAnswers))
         }
       )
   }

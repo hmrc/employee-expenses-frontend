@@ -95,7 +95,7 @@ class ShipyardOccupationList1ControllerSpec extends SpecBase with ScalaFutures
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Shipyard").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
