@@ -28,6 +28,8 @@ object ClaimAmounts {
   lazy val fireService: Int = 80
   lazy val leisure: Int = 60
   lazy val prisons: Int = 80
+  lazy val forestry: Int = 100
+  lazy val docksAndWaterways: Int = 80
 
   object Healthcare {
     lazy val ambulanceStaff: Int = 185
@@ -41,6 +43,14 @@ object ClaimAmounts {
     lazy val list1: Int = 140
     lazy val list2: Int = 140
     lazy val list3: Int = 80
+    lazy val apprentice: Int = 60
+    lazy val allOther: Int = 100
+  }
+
+  object Shipyard {
+    lazy val list1: Int = 140
+    lazy val list2: Int = 140
+    lazy val labourer: Int = 80
     lazy val apprentice: Int = 60
     lazy val allOther: Int = 100
   }
@@ -160,4 +170,8 @@ object ClaimAmounts {
     }
   }
 
+  object Textiles {
+    lazy val list1: Int = 120
+    lazy val allOther: Int = 80
+  }
 }

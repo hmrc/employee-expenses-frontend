@@ -96,8 +96,8 @@ multipleEmployments.error.required = Select if you have one job, or more than on
 multipleEmployments.oneJob = One job
 multipleEmployments.moreThanOneJob = More than one job
 
-firstIndustryOptions.title = Industry list 1 of 4
-firstIndustryOptions.heading = Industry list 1 of 4
+firstIndustryOptions.title = Industry list 1 of 5
+firstIndustryOptions.heading = Industry list 1 of 5
 firstIndustryOptions.listText = Select your industry.
 firstIndustryOptions.healthcare = Healthcare
 firstIndustryOptions.foodAndCatering = Food and catering
@@ -105,11 +105,11 @@ firstIndustryOptions.retail = Retail
 firstIndustryOptions.engineering = Engineering
 firstIndustryOptions.transportAndDistribution = Transport and travel
 firstIndustryOptions.none = Show more industries
-firstIndustryOptions.checkYourAnswersLabel = Industry list 1 of 4
+firstIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
 firstIndustryOptions.error.required = Select the industry you work in
 
-secondIndustryOptions.title = Industry list 2 of 4
-secondIndustryOptions.heading = Industry list 2 of 4
+secondIndustryOptions.title = Industry list 2 of 5
+secondIndustryOptions.heading = Industry list 2 of 5
 secondIndustryOptions.listText = Select your industry.
 secondIndustryOptions.manufacturingWarehousing = Manufacturing and warehousing (including wood, furniture and metals)
 secondIndustryOptions.council = Council
@@ -120,8 +120,8 @@ secondIndustryOptions.none = Show more industries
 secondIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
 secondIndustryOptions.error.required = Select the industry you work in
 
-thirdIndustryOptions.title = Industry list 3 of 4
-thirdIndustryOptions.heading = Industry list 3 of 4
+thirdIndustryOptions.title = Industry list 3 of 5
+thirdIndustryOptions.heading = Industry list 3 of 5
 thirdIndustryOptions.listText = Select your industry.
 thirdIndustryOptions.electrical = Electrical
 thirdIndustryOptions.education = Education
@@ -132,17 +132,29 @@ thirdIndustryOptions.none = Show more industries
 thirdIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
 thirdIndustryOptions.error.required = Select the industry you work in
 
-fourthIndustryOptions.title = Industry list 4 of 4
-fourthIndustryOptions.heading = Industry list 4 of 4
+fourthIndustryOptions.title = Industry list 4 of 5
+fourthIndustryOptions.heading = Industry list 4 of 5
 fourthIndustryOptions.listText = Select your industry.
 fourthIndustryOptions.agriculture = Agriculture
 fourthIndustryOptions.fireService = Fire service
 fourthIndustryOptions.heating = Heating
 fourthIndustryOptions.leisure = Leisure
 fourthIndustryOptions.prisons = Prisons
-fourthIndustryOptions.none = My industry was not listed
-fourthIndustryOptions.checkYourAnswersLabel = Industry list 3 of 4
+fourthIndustryOptions.none = Show more industries
+fourthIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
 fourthIndustryOptions.error.required = Select the industry you work in
+
+fifthIndustryOptions.title = Industry list 5 of 5
+fifthIndustryOptions.heading = Industry list 5 of 5
+fifthIndustryOptions.listText = Select your industry.
+fifthIndustryOptions.armedForces = Armed Forces
+fifthIndustryOptions.docksWaterways = Docks and inland waterways
+fifthIndustryOptions.forestry = Forestry
+fifthIndustryOptions.shipyard = Shipyard
+fifthIndustryOptions.textiles = Textiles and textile printing
+fifthIndustryOptions.none = My industry was not listed
+fifthIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
+fifthIndustryOptions.error.required = Select the industry you work in
 
 claimAmount.title = You are eligible to claim this expense
 claimAmount.heading = You are eligible to claim this expense
@@ -485,8 +497,6 @@ electrical.heading = Are you only claiming for laundry costs?
 electrical.checkYourAnswersLabel = Are you only claiming for laundry costs?
 electrical.error.required = Select yes if you are only claiming for laundry costs
 
-
-
 metropolitanPolice.title = Do you work for the Metropolitan Police?
 metropolitanPolice.heading = Do you work for the Metropolitan Police?
 metropolitanPolice.checkYourAnswersLabel = Do you work for the Metropolitan Police?
@@ -704,3 +714,59 @@ confirmation.updateAddressInfoNow = Update your address now
 confirmation.updateAddressInfo = Update your address
 confirmation.addressChange = You told us that your address has changed. If you do not update it you may not receive any letters from HMRC.
 confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April {0} to 5 April {1}, this may take longer if your employer has not yet sent your information for that tax year.
+
+shipyardApprenticeStorekeeper.title = Are you an apprentice or storekeeper?
+shipyardApprenticeStorekeeper.heading = Are you an apprentice or storekeeper?
+shipyardApprenticeStorekeeper.checkYourAnswersLabel = Are you an apprentice or storekeeper?
+shipyardApprenticeStorekeeper.error.required = Select yes if you are an apprentice or storekeeper
+
+labourer.title = Are you a labourer?
+labourer.heading = Are you a labourer?
+labourer.checkYourAnswersLabel = Are you a labourer?
+labourer.error.required = Select yes if you are a labourer
+
+docksOccupationList1.title = Docks and inland waterways occupation list
+docksOccupationList1.heading = Docks and inland waterways occupation list
+docksOccupationList1.checkYourAnswersLabel = Docks and inland waterways occupation list
+docksOccupationList1.error.required = Select yes if your occupation is listed
+docksOccupationList1.radioLabel = Is your occupation listed?
+docksOccupationList1.listText = The occupations are:
+docksOccupationList1.occupation1 = Dockers
+docksOccupationList1.occupation2 = Dredger drivers and hopper steerers
+
+textilesOccupationList1.title = Textiles and textile printing occupation list
+textilesOccupationList1.heading = Textiles and textile printing occupation list
+textilesOccupationList1.checkYourAnswersLabel = Textiles and textile printing occupation list
+textilesOccupationList1.error.required = Select yes if your occupation is listed
+textilesOccupationList1.radioLabel = Is your occupation listed?
+textilesOccupationList1.listText = The occupations are:
+textilesOccupationList1.occupation1 = Carders
+textilesOccupationList1.occupation2 = Carding engineers
+textilesOccupationList1.occupation3 = Overlookers and technicians in spinning mills
+
+shipyardOccupationList1.title = Shipyard occupation List 1 of 2
+shipyardOccupationList1.heading = Shipyard occupation List 1 of 2
+shipyardOccupationList1.checkYourAnswersLabel = Shipyard occupation List 1 of 2
+shipyardOccupationList1.error.required = Select yes if your occupation is listed
+shipyardOccupationList1.radioLabel = Is your occupation listed?
+shipyardOccupationList1.listText = The occupations are:
+shipyardOccupationList1.occupation1 = blacksmiths and their strikers
+shipyardOccupationList1.occupation2 = boilermakers
+shipyardOccupationList1.occupation3 = burners
+shipyardOccupationList1.occupation4 = carpenters
+shipyardOccupationList1.occupation5 = caulkers
+shipyardOccupationList1.occupation6 = drillers
+shipyardOccupationList1.occupation7 = furnacemen (platers) holders up
+
+shipyardOccupationList2.heading = Shipyard Occupation List 2 of 2
+shipyardOccupationList2.checkYourAnswersLabel = Shipyard Occupation List 2 of 2
+shipyardOccupationList2.error.required = Select yes if your occupation is listed
+shipyardOccupationList2.radioLabel = Is your occupation listed?
+shipyardOccupationList2.listText = The occupations are:
+shipyardOccupationList2.occupation1 = fitters
+shipyardOccupationList2.occupation2 = platers
+shipyardOccupationList2.occupation3 = plumbers
+shipyardOccupationList2.occupation4 = riveters
+shipyardOccupationList2.occupation5 = sheet iron workers
+shipyardOccupationList2.occupation6 = shipwrights
+shipyardOccupationList2.occupation7 = tubers and welders

@@ -80,6 +80,19 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
         }
       }
     }
+
+    "fifth industry list" must {
+      "display the correct label and answer" in {
+        forAll(Gen.oneOf(FifthIndustryOptions.values)) {
+          industry =>
+            if (industry != FifthIndustryOptions.NoneOfAbove) {
+              val ua = emptyUserAnswers.set(FifthIndustryOptionsPage, industry).success.value
+              helper(ua).fifthIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
+              helper(ua).fifthIndustryList.get.answer mustBe s"fifthIndustryOptions.${industry.toString}"
+            }
+        }
+      }
+    }
   }
 
   "expensesEmployerPaid" must {

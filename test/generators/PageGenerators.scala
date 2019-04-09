@@ -21,6 +21,7 @@ import pages._
 import pages.authenticated._
 import pages.clothing._
 import pages.construction._
+import pages.docks.DocksOccupationList1Page
 import pages.electrical.ElectricalPage
 import pages.healthcare._
 import pages.engineering._
@@ -31,8 +32,31 @@ import pages.foodCatering._
 import pages.heating._
 import pages.security._
 import pages.printing._
+import pages.shipyard._
+import pages.textiles.TextilesOccupationList1Page
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryTextilesOccupationList1Page: Arbitrary[TextilesOccupationList1Page.type] =
+    Arbitrary(TextilesOccupationList1Page)
+
+  implicit lazy val arbitraryDocksOccupationList1Page: Arbitrary[DocksOccupationList1Page.type] =
+    Arbitrary(DocksOccupationList1Page)
+
+  implicit lazy val arbitraryLabourerPage: Arbitrary[LabourerPage.type] =
+    Arbitrary(LabourerPage)
+
+  implicit lazy val arbitraryShipyardApprenticeStorekeeperPage: Arbitrary[ShipyardApprenticeStorekeeperPage.type] =
+    Arbitrary(ShipyardApprenticeStorekeeperPage)
+
+  implicit lazy val arbitraryShipyardOccupationList2Page: Arbitrary[ShipyardOccupationList2Page.type] =
+    Arbitrary(ShipyardOccupationList2Page)
+
+  implicit lazy val arbitraryShipyardOccupationList1Page: Arbitrary[ShipyardOccupationList1Page.type] =
+    Arbitrary(ShipyardOccupationList1Page)
+
+  implicit lazy val arbitraryFifthIndustryOptionsPage: Arbitrary[FifthIndustryOptionsPage.type] =
+    Arbitrary(FifthIndustryOptionsPage)
 
   implicit lazy val arbitraryAlreadyClaimingFREDifferentAmountsPage: Arbitrary[AlreadyClaimingFREDifferentAmountsPage.type] =
     Arbitrary(AlreadyClaimingFREDifferentAmountsPage)

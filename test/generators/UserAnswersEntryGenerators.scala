@@ -23,6 +23,7 @@ import pages._
 import pages.authenticated._
 import pages.clothing.ClothingPage
 import pages.construction._
+import pages.docks.DocksOccupationList1Page
 import pages.electrical.ElectricalPage
 import pages.healthcare._
 import pages.engineering._
@@ -33,9 +34,67 @@ import pages.foodCatering._
 import pages.heating._
 import pages.security._
 import pages.printing._
+import pages.shipyard._
+import pages.textiles.TextilesOccupationList1Page
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryTextilesOccupationList1UserAnswersEntry: Arbitrary[(TextilesOccupationList1Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[TextilesOccupationList1Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryApprenticeStorekeeperUserAnswersEntry: Arbitrary[(ShipyardApprenticeStorekeeperPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[ShipyardApprenticeStorekeeperPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryShipyardOccupationList2UserAnswersEntry: Arbitrary[(ShipyardOccupationList2Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[ShipyardOccupationList2Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryShipyardOccupationList1UserAnswersEntry: Arbitrary[(ShipyardOccupationList1Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[ShipyardOccupationList1Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryLabourerUserAnswersEntry: Arbitrary[(LabourerPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[LabourerPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryDocksOccupationList1UserAnswersEntry: Arbitrary[(DocksOccupationList1Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[DocksOccupationList1Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryFifthIndustryOptionsUserAnswersEntry: Arbitrary[(FifthIndustryOptionsPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[FifthIndustryOptionsPage.type]
+        value <- arbitrary[FifthIndustryOptions].map(Json.toJson(_))
+      } yield (page, value)
+    }
 
   implicit lazy val arbitraryAlreadyClaimingFREDifferentAmountsUserAnswersEntry: Arbitrary[(AlreadyClaimingFREDifferentAmountsPage.type, JsValue)] =
     Arbitrary {

@@ -24,6 +24,7 @@ import pages._
 import pages.authenticated._
 import pages.clothing.ClothingPage
 import pages.construction._
+import pages.docks.DocksOccupationList1Page
 import pages.electrical.ElectricalPage
 import pages.engineering._
 import pages.foodCatering._
@@ -33,6 +34,8 @@ import pages.manufacturing._
 import pages.police._
 import pages.printing._
 import pages.security._
+import pages.shipyard._
+import pages.textiles.TextilesOccupationList1Page
 import pages.transport._
 import play.api.libs.json.{JsValue, Json}
 
@@ -40,6 +43,14 @@ trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
+    arbitrary[(TextilesOccupationList1Page.type, JsValue)] ::
+    arbitrary[(ShipyardOccupationList1Page.type, JsValue)] ::
+    arbitrary[(ShipyardOccupationList2Page.type, JsValue)] ::
+    arbitrary[(ShipyardApprenticeStorekeeperPage.type, JsValue)] ::
+    arbitrary[(ShipyardOccupationList2Page.type, JsValue)] ::
+    arbitrary[(LabourerPage.type, JsValue)] ::
+    arbitrary[(DocksOccupationList1Page.type, JsValue)] ::
+    arbitrary[(FifthIndustryOptionsPage.type, JsValue)] ::
     arbitrary[(AlreadyClaimingFREDifferentAmountsPage.type, JsValue)] ::
     arbitrary[(AlreadyClaimingFRESameAmountPage.type, JsValue)] ::
     arbitrary[(SameEmployerContributionAllYearsPage.type, JsValue)] ::
