@@ -17,12 +17,14 @@
 @import com.github.tototoshi.play2.scalate._
 @import config.FrontendAppConfig
 @import scalate._
+@import uk.gov.hmrc.play.partials.FormPartialRetriever
 
 @this(
         appConfig: FrontendAppConfig,
         article: Article,
         sidebar: Sidebar,
-        scalate: Scalate
+        scalate: Scalate,
+        formPartialRetriever: FormPartialRetriever
 )
 
 @(
@@ -56,9 +58,12 @@
 
 @scriptElem = @{
     Seq(
-        Map("url" -> controllers.routes.Assets.versioned("javascripts/employeeexpensesfrontend.js")),
-        Map("url" -> controllers.routes.Assets.versioned("javascripts/google-tag-manager-script.js"))
+        Map("url" -> controllers.routes.Assets.versioned("javascripts/employeeexpensesfrontend.js"))
     )
+}
+
+@helpForm = @{
+    formPartialRetriever.getPartialContent(appConfig.reportAProblemPartialUrl)
 }
 
 @scalate.render(
@@ -76,6 +81,7 @@
         "scriptElems" -> scriptElem,
         "mainClass" -> mainClass,
         "article" -> articleContent,
+        "getHelpForm" -> helpForm,
         "isWelsh" -> {
             messages.lang.code == "cy"
         },
