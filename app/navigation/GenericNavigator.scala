@@ -34,7 +34,7 @@ import controllers.shipyard.routes._
 import controllers.textiles.routes._
 import controllers.transport.routes._
 import javax.inject.Inject
-import models.FifthIndustryOptions.{Armedforces, Dockswaterways, Forestry, Shipyard, Textiles}
+import models.FifthIndustryOptions._
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions._
 import models.MultipleEmployments._

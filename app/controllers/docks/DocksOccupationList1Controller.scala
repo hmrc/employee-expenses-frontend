@@ -17,6 +17,7 @@
 package controllers.docks
 
 import config.ClaimAmounts
+import config.NavConstant.docks
 import controllers.actions._
 import forms.docks.DocksOccupationList1FormProvider
 import javax.inject.{Inject, Named}
@@ -36,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DocksOccupationList1Controller @Inject()(
                                                 override val messagesApi: MessagesApi,
                                                 sessionRepository: SessionRepository,
-                                                @Named("Docks") navigator: Navigator,
+                                                @Named(docks) navigator: Navigator,
                                                 identify: UnauthenticatedIdentifierAction,
                                                 getData: DataRetrievalAction,
                                                 requireData: DataRequiredAction,

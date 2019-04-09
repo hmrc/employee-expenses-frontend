@@ -23,12 +23,14 @@ import forms.FourthIndustryOptionsFormProvider
 import models.{FourthIndustryOptions, NormalMode, UserAnswers}
 import models.FourthIndustryOptions._
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.{ClaimAmount, FourthIndustryOptionsPage}
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -166,32 +168,41 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
     }
 
     for(trade <- FourthIndustryOptions.values){
-      val claimAmount = trade match {
-        case Agriculture => ClaimAmounts.agriculture
-        case FireService => ClaimAmounts.fireService
-        case Leisure => ClaimAmounts.leisure
-        case Prisons => ClaimAmounts.prisons
-        case _ => ClaimAmounts.defaultRate
+
+      val userAnswers = emptyUserAnswers
+      val userAnswers2 = trade match {
+        case Agriculture => userAnswers
+          .set(FourthIndustryOptionsPage, trade).success.value
+          .set(ClaimAmount, ClaimAmounts.agriculture).success.value
+        case FireService => userAnswers
+          .set(FourthIndustryOptionsPage, trade).success.value
+          .set(ClaimAmount, ClaimAmounts.fireService).success.value
+        case Leisure => userAnswers
+          .set(FourthIndustryOptionsPage, trade).success.value
+          .set(ClaimAmount, ClaimAmounts.leisure).success.value
+        case Prisons => userAnswers
+          .set(FourthIndustryOptionsPage, trade).success.value
+          .set(ClaimAmount, ClaimAmounts.prisons).success.value
+        case _ => userAnswers.set(FourthIndustryOptionsPage, trade).success.value
       }
 
-      s"save '$claimAmount' to ClaimAmount when '$trade' is selected" in {
+      s"save correct amount to ClaimAmount when '$trade' is selected" in {
 
-        val application = applicationBuilder(Some(userAnswers))
+        val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
 
-        val request = FakeRequest(POST, fourthIndustryOptionsRoute)
-          .withFormUrlEncodedBody(("value", trade.toString))
+        val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+        when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+
+        val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", trade.toString))
 
         val result = route(application, request).value
 
-        val userAnswers2 = userAnswers
-          .set(ClaimAmount, claimAmount).success.value
-          .set(FourthIndustryOptionsPage, trade).success.value
-
         whenReady(result) {
           _ =>
-            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+            assert(argCaptor.getValue.data == userAnswers2.data)
         }
 
         application.stop()

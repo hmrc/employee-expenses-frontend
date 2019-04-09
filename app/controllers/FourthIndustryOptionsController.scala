@@ -67,16 +67,27 @@ class FourthIndustryOptionsController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value))
-            newAnswers <- value match {
-              case Agriculture => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.agriculture))
-              case FireService => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.fireService))
-              case Leisure => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.leisure))
-              case Prisons => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.prisons))
-              case _ => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate))
+            updatedAnswers <- value match {
+              case Agriculture =>
+                Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value)
+                  .flatMap(_.set(ClaimAmount, ClaimAmounts.agriculture))
+                )
+              case FireService =>
+                Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value)
+                  .flatMap(_.set(ClaimAmount, ClaimAmounts.fireService))
+                )
+              case Leisure =>
+                Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value)
+                  .flatMap(_.set(ClaimAmount, ClaimAmounts.leisure))
+                )
+              case Prisons =>
+                Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value)
+                  .flatMap(_.set(ClaimAmount, ClaimAmounts.prisons))
+                )
+              case _ => Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value))
             }
-            _ <- sessionRepository.set(request.identifier, newAnswers)
-          } yield Redirect(navigator.nextPage(FourthIndustryOptionsPage, mode)(newAnswers))
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
+          } yield Redirect(navigator.nextPage(FourthIndustryOptionsPage, mode)(updatedAnswers))
         }
       )
   }
