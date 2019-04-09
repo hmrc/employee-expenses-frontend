@@ -35,9 +35,18 @@ import pages.heating._
 import pages.security._
 import pages.printing._
 import pages.shipyard._
+import pages.textiles.TextilesOccupationList1Page
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryTextilesOccupationList1UserAnswersEntry: Arbitrary[(TextilesOccupationList1Page.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[TextilesOccupationList1Page.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
 
   implicit lazy val arbitraryApprenticeStorekeeperUserAnswersEntry: Arbitrary[(ShipyardApprenticeStorekeeperPage.type, JsValue)] =
     Arbitrary {

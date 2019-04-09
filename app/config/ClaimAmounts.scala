@@ -169,4 +169,9 @@ object ClaimAmounts {
       lazy val allOther = 100
     }
   }
+
+  object Textiles {
+    lazy val list1: Int = 120
+    lazy val allOther: Int = 80
+  }
 }

@@ -14,57 +14,53 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.textiles
 
 import base.SpecBase
 import config.ClaimAmounts
-import forms.FifthIndustryOptionsFormProvider
-import generators.Generators
-import models.FifthIndustryOptions.{Forestry, NoneOfAbove}
-import models.FirstIndustryOptions.Retail
-import models.{FifthIndustryOptions, FirstIndustryOptions, NormalMode, UserAnswers}
+import controllers.actions.UnAuthed
+import forms.TextilesOccupationList1FormProvider
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import org.scalatest.prop.PropertyChecks
-import pages.{ClaimAmount, FifthIndustryOptionsPage, FirstIndustryOptionsPage}
-import play.api.Application
+import pages.ClaimAmount
+import pages.textiles.TextilesOccupationList1Page
 import play.api.inject.bind
-import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.FifthIndustryOptionsView
+import views.html.textiles.TextilesOccupationList1View
 
 import scala.concurrent.Future
 
-class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures
-  with IntegrationPatience with PropertyChecks with Generators with OptionValues {
+class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val fifthIndustryOptionsRoute = routes.FifthIndustryOptionsController.onPageLoad(NormalMode).url
-  private val formProvider = new FifthIndustryOptionsFormProvider()
-  private val form = formProvider()
-  private val mockSessionRepository = mock[SessionRepository]
-  private val userAnswers = emptyUserAnswers
+  val formProvider = new TextilesOccupationList1FormProvider()
+  val form = formProvider()
 
-  "FifthIndustryOptions Controller" must {
+  private val mockSessionRepository = mock[SessionRepository]
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+
+  lazy val textilesOccupationList1Route = routes.TextilesOccupationList1Controller.onPageLoad(NormalMode).url
+
+  "TextilesOccupationList1 Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, fifthIndustryOptionsRoute)
+      val request = FakeRequest(GET, textilesOccupationList1Route)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[FifthIndustryOptionsView]
+      val view = application.injector.instanceOf[TextilesOccupationList1View]
 
       status(result) mustEqual OK
 
@@ -76,20 +72,20 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(FifthIndustryOptionsPage, FifthIndustryOptions.values.head).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(TextilesOccupationList1Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, fifthIndustryOptionsRoute)
+      val request = FakeRequest(GET, textilesOccupationList1Route)
 
-      val view = application.injector.instanceOf[FifthIndustryOptionsView]
+      val view = application.injector.instanceOf[TextilesOccupationList1View]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(FifthIndustryOptions.values.head), NormalMode)(request, messages).toString
+        view(form.fill(true), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -98,12 +94,12 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith("Textiles").toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
-        FakeRequest(POST, fifthIndustryOptionsRoute)
-          .withFormUrlEncodedBody(("value", FifthIndustryOptions.options.head.value))
+        FakeRequest(POST, textilesOccupationList1Route)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -119,12 +115,12 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, fifthIndustryOptionsRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
+        FakeRequest(POST, textilesOccupationList1Route)
+          .withFormUrlEncodedBody(("value", ""))
 
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[FifthIndustryOptionsView]
+      val view = application.injector.instanceOf[TextilesOccupationList1View]
 
       val result = route(application, request).value
 
@@ -140,12 +136,13 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, fifthIndustryOptionsRoute)
+      val request = FakeRequest(GET, textilesOccupationList1Route)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
@@ -155,49 +152,65 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, fifthIndustryOptionsRoute)
-          .withFormUrlEncodedBody(("value", FifthIndustryOptions.values.head.toString))
+        FakeRequest(POST, textilesOccupationList1Route)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
-  }
 
-  for (trade <- FifthIndustryOptions.values) {
+    "save 'textiles.list1' to ClaimAmount when 'Yes' is selected" in {
 
-    val userAnswers = emptyUserAnswers
-    val userAnswers2 = trade match {
-      case Forestry => userAnswers
-        .set(FifthIndustryOptionsPage, trade).success.value
-        .set(ClaimAmount, ClaimAmounts.forestry).success.value
-      case NoneOfAbove => userAnswers
-        .set(FifthIndustryOptionsPage, trade).success.value
-        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-      case _ => userAnswers.set(FifthIndustryOptionsPage, trade).success.value
-    }
+      val ua1 = emptyUserAnswers
 
-    s"save correct amount to ClaimAmount when '$trade' is selected" in {
-
-      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(ua1))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      val request = FakeRequest(POST, textilesOccupationList1Route)
+        .withFormUrlEncodedBody(("value", "true"))
 
-      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
-
-      val request = FakeRequest(POST, fifthIndustryOptionsRoute).withFormUrlEncodedBody(("value", trade.toString))
+      val ua2 =
+        ua1
+          .set(ClaimAmount, ClaimAmounts.Textiles.list1).success.value
+          .set(TextilesOccupationList1Page, true).success.value
 
       val result = route(application, request).value
 
       whenReady(result) {
         _ =>
-          assert(argCaptor.getValue.data == userAnswers2.data)
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      }
+
+      application.stop()
+    }
+
+    "save 'textiles.allOther' to ClaimAmount when 'No' is selected" in {
+
+      val ua1 = emptyUserAnswers
+
+      val application = applicationBuilder(userAnswers = Some(ua1))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, textilesOccupationList1Route)
+        .withFormUrlEncodedBody(("value", "false"))
+
+      val ua2 =
+        ua1
+          .set(ClaimAmount, ClaimAmounts.Textiles.allOther).success.value
+          .set(TextilesOccupationList1Page, false).success.value
+
+      val result = route(application, request).value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
       application.stop()

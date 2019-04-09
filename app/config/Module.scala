@@ -53,6 +53,7 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.heating)).to(classOf[HeatingNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.shipyard)).to(classOf[ShipyardNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.docks)).to(classOf[DocksNavigator])
+    bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.textiles)).to(classOf[TextilesNavigator])
 
   }
 }
