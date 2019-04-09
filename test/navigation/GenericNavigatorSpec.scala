@@ -295,14 +295,14 @@ class GenericNavigatorSpec extends SpecBase {
           DocksOccupationList1Controller.onPageLoad(NormalMode)
       }
 
-      "go to HeatingController from FifthIndustryOptionsPage when 'Forestry' is selected" in {
+      "go to EmployerContributionController from FifthIndustryOptionsPage when 'Forestry' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Forestry).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
           EmployerContributionController.onPageLoad(NormalMode)
       }
 
-      "go ApprenticeStorekeeperController from FifthIndustryOptionsPage when 'Shipyard' is selected" in {
+      "go ShipyardApprenticeStorekeeperController from FifthIndustryOptionsPage when 'Shipyard' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Shipyard).success.value
 
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(answers) mustBe
