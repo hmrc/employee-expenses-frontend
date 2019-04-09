@@ -17,16 +17,30 @@
 package controllers.authenticated
 
 import base.SpecBase
+import models.auditing.AuditData
+import org.mockito.ArgumentCaptor
+import org.mockito.Matchers.{eq => eqTo, _}
+import org.mockito.Mockito.{times, verify}
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.mockito.MockitoSugar
+import play.api.inject.bind
+import play.api.libs.json.JsObject
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import views.html.authenticated.NoCodeChangeView
 
-class NoCodeChangeControllerSpec extends SpecBase {
+class NoCodeChangeControllerSpec extends SpecBase with MockitoSugar with ScalaFutures{
 
   "NoCodeChange Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val mockAuditConnector = mock[AuditConnector]
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[AuditConnector].toInstance(mockAuditConnector))
+        .build()
 
       val request = FakeRequest(GET, routes.NoCodeChangeController.onPageLoad().url)
 
@@ -38,6 +52,20 @@ class NoCodeChangeControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view()(request, messages).toString
+
+      whenReady(result) {
+        _ =>
+
+          val captor = ArgumentCaptor.forClass(classOf[AuditData])
+
+          verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("noCodeChange"), captor.capture())(any(), any(), any())
+
+          val auditData = captor.getValue
+
+          auditData.nino mustEqual fakeNino
+          auditData.userAnswers mustEqual emptyUserAnswers.data
+          auditData.userAnswers mustBe a[JsObject]
+      }
 
       application.stop()
     }
