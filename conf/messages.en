@@ -139,7 +139,7 @@ fourthIndustryOptions.fireService = Fire service
 fourthIndustryOptions.heating = Heating
 fourthIndustryOptions.leisure = Leisure
 fourthIndustryOptions.prisons = Prisons
-fourthIndustryOptions.none = My industry was not listed
+fourthIndustryOptions.none = Show more industries
 fourthIndustryOptions.checkYourAnswersLabel = What type of industry do you work in?
 fourthIndustryOptions.error.required = Select the industry you work in
 
