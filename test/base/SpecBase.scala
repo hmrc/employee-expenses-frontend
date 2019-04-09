@@ -36,7 +36,8 @@ import play.api.inject.{Injector, bind}
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.MockScalate
+import uk.gov.hmrc.play.partials.FormPartialRetriever
+import utils.{MockEeFormPartialRetriever, MockScalate}
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
@@ -128,6 +129,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
         bind[AuthenticatedIdentifierAction].to[FakeAuthedIdentifierAction],
         bind[UnauthenticatedIdentifierAction].to[FakeUnauthenticatedIdentifierAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
-        bind[Scalate].to[MockScalate]
+        bind[Scalate].to[MockScalate],
+        bind[FormPartialRetriever].to[MockEeFormPartialRetriever]
       )
 }
