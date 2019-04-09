@@ -38,7 +38,14 @@ class ClaimAmountService @Inject()(
   }
   
   def calculateTax(percentage: Int, amount: Int): String = {
-    BigDecimal((amount.toDouble / 100) * percentage).setScale(2, RoundingMode.DOWN).toString
+
+    val calculatedResult =  BigDecimal((amount.toDouble / 100) * percentage).setScale(2, RoundingMode.DOWN)
+
+    if (calculatedResult.isWhole) {
+      calculatedResult.underlying.stripTrailingZeros.toPlainString
+    } else {
+      calculatedResult.toString
+    }
   }
 
   def standardRate(claimAmount: Int): StandardRate = {

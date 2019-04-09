@@ -30,9 +30,11 @@ case class Address(
                   )
 
 object Address {
-  def answeredLines(a: Address): Seq[String] = Seq(a.line1, a.line2, a.line3, a.line4, a.line5, a.country).flatten
+  def answeredLines(a: Address): Seq[String] = Seq(a.line1, a.line2, a.line3, a.line4, a.line5, a.postcode, a.country).flatten
 
   def asString(a: Address) = s"<p>${answeredLines(a).mkString("<br>")}</p>"
+
+  def asLabel(a: Address): String = s"${answeredLines(a).mkString(", ")}"
 
   implicit lazy val reads: Reads[Address] = (
     (__ \ "address" \ "line1").readNullable[String] and

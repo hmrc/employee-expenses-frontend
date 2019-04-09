@@ -37,5 +37,35 @@ class AddressSpec extends SpecBase with OptionValues {
       address.as[Address].postcode.value mustBe "DN16 3FB"
       address.as[Address].country.value mustBe "GREAT BRITAIN"
     }
+
+    "build label with one value" in {
+
+      val address = Address(Some("Test"), None, None, None, None, None, None)
+
+      Address.asLabel(address) mustBe "Test"
+    }
+
+
+    "build label with two values" in {
+
+      val address = Address(Some("Test"), None, None, None, None, Some("AB12CD"), None)
+
+      Address.asLabel(address) mustBe "Test, AB12CD"
+    }
+
+    "build label with all values" in {
+
+      val address = Address(
+        Some("Test Line 1"),
+        Some("Test Line 2"),
+        Some("Test Line 3"),
+        Some("Test Line 4"),
+        Some("Test Line 5"),
+        Some("AB12CD"),
+        Some("GREAT BRITAIN"))
+
+      Address.asLabel(address) mustBe "Test Line 1, Test Line 2, Test Line 3, Test Line 4, Test Line 5, AB12CD, GREAT BRITAIN"
+
+    }
   }
 }
