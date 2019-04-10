@@ -18,9 +18,12 @@ package navigation
 
 import base.SpecBase
 import models.{CheckMode, NormalMode}
+import org.mockito.MockitoAnnotations.Mock
+import org.scalatest.mockito.MockitoSugar
+import pages.Page
 import pages.electrical.ElectricalPage
 
-class ElectricalNavigatorSpec extends SpecBase {
+class ElectricalNavigatorSpec extends SpecBase with MockitoSugar {
   private val modes = Seq(NormalMode, CheckMode)
   private val navigator = new ElectricalNavigator
 
@@ -41,6 +44,11 @@ class ElectricalNavigatorSpec extends SpecBase {
 
             navigator.nextPage(ElectricalPage, mode)(answers) mustBe
               controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
+
+          "go to SessionExpired when not part of ElectricalPage" in {
+            navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
           }
         }
       }

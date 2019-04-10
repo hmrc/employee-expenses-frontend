@@ -19,9 +19,11 @@ package navigation
 import base.SpecBase
 import controllers.construction.routes
 import models.{CheckMode, NormalMode}
+import org.scalatest.mockito.MockitoSugar
+import pages.Page
 import pages.construction._
 
-class ConstructionNavigatorSpec extends SpecBase {
+class ConstructionNavigatorSpec extends SpecBase with MockitoSugar {
   private val modes = Seq(NormalMode, CheckMode)
   private val navigator = new ConstructionNavigator
 
@@ -135,6 +137,11 @@ class ConstructionNavigatorSpec extends SpecBase {
 
         "go to SessionExpired from BuildingMaterials when no data is available" in {
           navigator.nextPage(BuildingMaterialsPage, mode)(emptyUserAnswers) mustBe
+            controllers.routes.SessionExpiredController.onPageLoad()
+        }
+
+        "go to SessionExpired when not one of the ConstructionPage" in {
+          navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
             controllers.routes.SessionExpiredController.onPageLoad()
         }
       }

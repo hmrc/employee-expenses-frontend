@@ -18,9 +18,11 @@ package navigation
 
 import base.SpecBase
 import models.{CheckMode, NormalMode}
+import org.scalatest.mockito.MockitoSugar
+import pages.Page
 import pages.docks.DocksOccupationList1Page
 
-class DocksNavigatorSpec extends SpecBase {
+class DocksNavigatorSpec extends SpecBase with MockitoSugar {
   private val modes = Seq(NormalMode, CheckMode)
   val navigator = new DocksNavigator
 
@@ -39,6 +41,11 @@ class DocksNavigatorSpec extends SpecBase {
 
           navigator.nextPage(DocksOccupationList1Page, mode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(mode)
+        }
+
+        "go to SessionExpired when not DocksOccupationList1Page" in {
+          navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
+            controllers.routes.SessionExpiredController.onPageLoad()
         }
       }
     }
