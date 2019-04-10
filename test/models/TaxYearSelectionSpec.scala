@@ -18,17 +18,24 @@ package models
 
 import base.SpecBase
 import models.TaxYearSelection._
+import org.scalatest.mockito.MockitoSugar
+import org.mockito.Matchers._
 import uk.gov.hmrc.time.TaxYear
 import viewmodels.RadioCheckboxOption
 
-class TaxYearSelectionSpec extends SpecBase {
+class TaxYearSelectionSpec extends SpecBase with MockitoSugar {
 
   "TaxYearSelection getTaxYear" must {
     "return correct tax year in 'YYYY' format " in {
       val taxYear = TaxYearSelection.CurrentYear
 
       TaxYearSelection.getTaxYear(taxYear) mustBe TaxYear.current.startYear
+    }
 
+    "return next years tax year in YYYY format" in {
+      val taxYear = TaxYearSelection.NextYear
+
+      TaxYearSelection.getTaxYear(taxYear) mustBe TaxYear.current.next.startYear
     }
 
     "return current year minus 1 tax year in 'YYYY' format " in {
@@ -53,6 +60,13 @@ class TaxYearSelectionSpec extends SpecBase {
       val taxYear = TaxYearSelection.CurrentYearMinus4
 
       TaxYearSelection.getTaxYear(taxYear) mustBe TaxYear.current.back(4).startYear
+    }
+
+    "throw exception when getTaxYear & getTaxYearPeriod is given an invalid tax year" in {
+      val thrown = intercept[IllegalArgumentException] {
+        TaxYearSelection.getTaxYear(TaxYearSelection.getTaxYearPeriod(2000))
+      }
+      thrown.getMessage mustBe "Invalid tax year selected"
     }
 
     "return a sequence of RadioCheckboxOption from options" in {

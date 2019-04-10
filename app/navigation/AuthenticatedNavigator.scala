@@ -127,8 +127,6 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
           CheckYourAnswersController.onPageLoad()
         case None =>
           YourAddressController.onPageLoad(mode)
-        case _ =>
-          SessionExpiredController.onPageLoad()
       }
     } else {
       YourAddressController.onPageLoad(mode)
