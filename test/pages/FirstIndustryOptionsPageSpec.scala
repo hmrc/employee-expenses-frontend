@@ -38,16 +38,17 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
         .set(ConstructionOccupationList1Page, false).success.value
         .set(ConstructionOccupationList2Page, true).success.value
         .set(EmployerContributionPage, true).success.value
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
         .set(ExpensesEmployerPaidPage, 20).success.value
         .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change).success.value
         .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
         .set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
         .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
-        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
         .set(YourEmployerPage, true).success.value
 
+      print(s"\n\nBefore: $userAnswers")
       val updatedUserAnswers = userAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.Retail).get
-
+print(s"\nAfter: $updatedUserAnswers")
 
       updatedUserAnswers.data.keys.contains("industry") mustBe false
       updatedUserAnswers.data.keys.contains(ExpensesEmployerPaidPage) mustBe true
