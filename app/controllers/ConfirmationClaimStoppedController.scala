@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@()(implicit messages: Messages)
+package controllers
 
-<h2>@messages("confirmation.updateEmployerInfo")</h2>
-<p>@messages("confirmation.employerChange")</p>
-<a class="button" id="updateEmployerInfoBtn" href="https://www.tax.service.gov.uk/check-income-tax/income-summary" target="_blank">
-@messages("confirmation.updateEmployerInfoNow")
-</a>
+class ConfirmationClaimStoppedController {
+
+}

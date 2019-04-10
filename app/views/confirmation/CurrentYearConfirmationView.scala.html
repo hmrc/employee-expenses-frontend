@@ -21,44 +21,47 @@
 @(
         claimAmountsAndRates: Seq[Rates],
         claimAmount: Int,
-        updateEmployerInfo: Boolean,
-        updateAddressInfo: Boolean,
-        freResponse: FlatRateExpenseOptions
+        freResponse: FlatRateExpenseOptions,
+        employerInfoCorrect: Boolean,
+        addressInfoCorrect: Boolean
 )(implicit request: Request[_], messages: Messages)
 
+    @main_template(
+        title = {
+            if(freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
+                    freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) {
+                messages("confirmation.titleChanged")
+            } else {
+                messages("confirmation.title")
+            }
+        }
+    ) {
 
-  @main_template(
-    title = {
-        if(freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
-                freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) {
-            messages("confirmation.titleChanged")
-        } else {
-            messages("confirmation.title")
+        <div class="govuk-box-highlight">
+            <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
+        </div>
+
+        <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
+
+        <p>@messages("confirmation.actualAmount")</p>
+
+        @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
+
+        <h2>@messages("confirmation.whatHappensNext")</h2>
+
+        <p>@messages("confirmation.taxCodeChanged.paragraph1")</p>
+
+        <p>@messages("confirmation.taxCodeChanged.paragraph2")</p>
+
+        <p>@messages("confirmation.continueToClaim.paragraph1")</p>
+
+        <p>@messages("confirmation.continueToClaim.paragraph2")</p>
+
+        @if(!employerInfoCorrect) {
+            @components.update_employer_info()
+        }
+
+        @if(!addressInfoCorrect) {
+            @components.update_address_info()
         }
     }
-  ) {
-
-    <div class="govuk-box-highlight">
-      <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
-    </div>
-
-    <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
-
-    <p>@messages("confirmation.actualAmount")</p>
-
-    @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
-
-    <h2>@messages("confirmation.whatHappensNext")</h2>
-
-    <p>@messages("confirmation.taxCodeChanged.paragraph1")</p>
-
-    <p>@messages("confirmation.taxCodeChanged.paragraph2")</p>
-
-    <p>@messages("confirmation.continueToClaim.paragraph1")</p>
-
-    <p>@messages("confirmation.continueToClaim.paragraph2")</p>
-
-    @components.update_employer_info(updateEmployerInfo)
-
-    @components.update_address_info(updateAddressInfo)
-  }

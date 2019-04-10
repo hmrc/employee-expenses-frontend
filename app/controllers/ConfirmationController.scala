@@ -57,17 +57,16 @@ class ConfirmationController @Inject()(
       val updateEmployerInfo: Boolean = request.userAnswers.get(YourEmployerPage).isDefined
       val updateAddressInfo: Boolean = request.userAnswers.get(YourAddressPage).isDefined
       val removeFreOption = request.userAnswers.get(RemoveFRECodePage).isDefined
-      val freReponse: Option[FlatRateExpenseOptions] = request.userAnswers.get(FREResponse)
+      val freResponse: Option[FlatRateExpenseOptions] = request.userAnswers.get(FREResponse)
 
       val taxYearSelection: Option[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage)
 
-      (claimAmount, request.nino, removeFreOption, taxYearSelection, freReponse) match {
-        case (_, _, true, _, _) => {
+      (claimAmount, request.nino, removeFreOption, taxYearSelection, freResponse) match {
+        case (_, _, true, _, _) =>
           sessionRepository.remove(request.identifier)
           Future.successful(Ok(claimStoppedConfirmationView()))
-        }
 
-        case (Some(fullClaimAmount), Some(nino), false, Some(taxYears), Some(freResponse)) =>
+        case (Some(fullClaimAmount), Some(nino), false, Some(taxYears), Some(response)) =>
           val currentYearSelected = taxYears.contains(TaxYearSelection.CurrentYear)
           val currentYearMinus1 = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
 
@@ -76,11 +75,11 @@ class ConfirmationController @Inject()(
               sessionRepository.remove(request.identifier)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
               if (currentYearSelected && taxYears.length == 1) {
-                Ok(currentYearConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, freResponse))
+                Ok(currentYearConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, response))
               } else if (currentYearSelected && taxYears.length > 1) {
-                Ok(previousCurrentConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, currentYearMinus1, freResponse))
+                Ok(previousCurrentConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, currentYearMinus1, response))
               } else {
-                Ok(previousYearConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, currentYearMinus1, freResponse))
+                Ok(previousYearConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, currentYearMinus1, response))
               }
 
           }.recoverWith {
@@ -91,4 +90,5 @@ class ConfirmationController @Inject()(
         case _ =>
           Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
       }
-  }}
+  }
+}

@@ -22,7 +22,8 @@
         claimAmountsAndRates: Seq[Rates],
         claimAmount: Int,
         updateEmployerInfo: Boolean,
-        updateAddressInfo: Boolean,
+        employerInfoCorrect: Boolean,
+        addressInfoCorrect: Boolean,
         currentYearMinus1: Boolean,
         freResponse: FlatRateExpenseOptions
 )(implicit request: Request[_], messages: Messages)
@@ -59,7 +60,11 @@
     </p>
   }
 
-  @components.update_employer_info(updateEmployerInfo)
+    @if(!employerInfoCorrect) {
+        @components.update_employer_info()
+    }
 
-  @components.update_address_info(updateAddressInfo)
+    @if(!addressInfoCorrect) {
+        @components.update_address_info()
+    }
 }
