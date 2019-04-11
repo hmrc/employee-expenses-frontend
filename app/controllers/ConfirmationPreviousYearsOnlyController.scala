@@ -16,6 +16,59 @@
 
 package controllers
 
-class ConfirmationPreviousYearsOnlyController {
+import config.FrontendAppConfig
+import connectors.TaiConnector
+import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
+import controllers.routes.SessionExpiredController
+import javax.inject.Inject
+import models.{Rates, TaxYearSelection}
+import pages.{ClaimAmountAndAnyDeductions, FREResponse}
+import pages.authenticated.{TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
+import play.api.Logger
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
+import service.ClaimAmountService
+import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import views.html.confirmation.PreviousYearsConfirmationView
 
+import scala.concurrent.{ExecutionContext, Future}
+
+class ConfirmationPreviousYearsOnlyController @Inject()(
+                                                         override val messagesApi: MessagesApi,
+                                                         identify: AuthenticatedIdentifierAction,
+                                                         getData: DataRetrievalAction,
+                                                         requireData: DataRequiredAction,
+                                                         val controllerComponents: MessagesControllerComponents,
+                                                         claimAmountService: ClaimAmountService,
+                                                         appConfig: FrontendAppConfig,
+                                                         taiConnector: TaiConnector,
+                                                         sessionRepository: SessionRepository,
+                                                         previousYearsConfirmationView: PreviousYearsConfirmationView
+                                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
+    implicit request =>
+      (
+        request.userAnswers.get(FREResponse),
+        request.userAnswers.get(YourEmployerPage),
+        request.userAnswers.get(YourAddressPage),
+        request.userAnswers.get(ClaimAmountAndAnyDeductions),
+        request.userAnswers.get(TaxYearSelectionPage)
+      ) match {
+        case (Some(freResponse), Some(employer), Some(address), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
+          taiConnector.taiTaxCodeRecords(request.nino.get).map {
+            result =>
+              val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
+              val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
+              Ok(previousYearsConfirmationView(claimAmountsAndRates, claimAmountAndAnyDeductions, employer, address, currentYearMinus1, freResponse))
+          }.recoverWith {
+            case e =>
+              Logger.error(s"[ConfirmationPreviousYearsOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
+              Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+          }
+        case _ =>
+          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+      }
+  }
 }

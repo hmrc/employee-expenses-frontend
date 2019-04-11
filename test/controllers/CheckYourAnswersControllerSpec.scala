@@ -110,7 +110,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
     "onSubmit" must {
       "for submitFRENotInCode redirect to CYA when submission success" in {
-        when(mockSubmissionService.submitFRENotInCode(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(true))
 
         val application = applicationBuilder(Some(fullUserAnswers))
@@ -147,7 +147,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
       }
 
       "for submitRemoveFREFromCode redirect to CYA when submission success" in {
-        when(mockSubmissionService.submitRemoveFREFromCode(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(true))
 
         val userAnswers = minimumUserAnswers
@@ -229,7 +229,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
       }
 
       "for submitFRENotInCode redirect to tech difficulties when submission fail" in {
-        when(mockSubmissionService.submitFRENotInCode(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(false))
 
         val application = applicationBuilder(Some(fullUserAnswers))
@@ -266,7 +266,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
       }
 
       "for submitRemoveFREFromCode redirect to tech difficulties when submission fail" in {
-        when(mockSubmissionService.submitRemoveFREFromCode(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(false))
 
         val userAnswers = minimumUserAnswers

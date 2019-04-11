@@ -22,8 +22,8 @@ import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, D
 import controllers.routes._
 import javax.inject.Inject
 import models.Rates
-import pages.authenticated.{YourAddressPage, YourEmployerPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
+import pages.authenticated.{YourAddressPage, YourEmployerPage}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -50,20 +50,21 @@ class ConfirmationCurrentYearOnlyController @Inject()(
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
       (
-        request.userAnswers.get(ClaimAmountAndAnyDeductions),
-        request.userAnswers.get(FREResponse),
         request.userAnswers.get(YourEmployerPage),
-        request.userAnswers.get(YourAddressPage)
+        request.userAnswers.get(YourAddressPage),
+        request.userAnswers.get(FREResponse),
+        request.userAnswers.get(ClaimAmountAndAnyDeductions)
       ) match {
-        case (Some(claimAmount), Some(freResponse), Some(employer), Some(address)) =>
+        case (Some(employer), Some(address), Some(freResponse), Some(claimAmountAndAnyDeductions)) =>
           taiConnector.taiTaxCodeRecords(request.nino.get).map {
             result =>
-              val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmount)
-              Ok(currentYearConfirmationView(claimAmountsAndRates, claimAmount, freResponse, employer, address))
+              val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
+//              sessionRepository.remove(request.identifier)
+              Ok(currentYearConfirmationView(claimAmountsAndRates, claimAmountAndAnyDeductions, employer, address, freResponse))
           }.recoverWith {
             case e =>
-              Logger.error(s"[ConfirmationController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
-              Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+              Logger.error(s"[ConfirmationCurrentYearOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
+              Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
           }
         case _ =>
           Future.successful(Redirect(SessionExpiredController.onPageLoad()))

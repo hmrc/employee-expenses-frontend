@@ -16,6 +16,26 @@
 
 package controllers
 
-class ConfirmationClaimStoppedController {
+import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
+import javax.inject.Inject
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import views.html.confirmation.ClaimStoppedConfirmationView
 
+import scala.concurrent.ExecutionContext
+
+class ConfirmationClaimStoppedController @Inject()(
+                                                    override val messagesApi: MessagesApi,
+                                                    identify: AuthenticatedIdentifierAction,
+                                                    getData: DataRetrievalAction,
+                                                    requireData: DataRequiredAction,
+                                                    val controllerComponents: MessagesControllerComponents,
+                                                    claimStoppedConfirmationView: ClaimStoppedConfirmationView
+                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
+    implicit request =>
+      Ok(claimStoppedConfirmationView())
+  }
 }

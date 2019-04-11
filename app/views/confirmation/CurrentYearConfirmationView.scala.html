@@ -21,10 +21,10 @@
 @(
         claimAmountsAndRates: Seq[Rates],
         claimAmount: Int,
-        freResponse: FlatRateExpenseOptions,
         employerInfoCorrect: Boolean,
-        addressInfoCorrect: Boolean
-)(implicit request: Request[_], messages: Messages)
+        addressInfoCorrect: Boolean,
+        freResponse: FlatRateExpenseOptions
+    )(implicit request: Request[_], messages: Messages)
 
     @main_template(
         title = {

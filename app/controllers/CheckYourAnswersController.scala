@@ -19,8 +19,9 @@ package controllers
 import com.google.inject.Inject
 import config.NavConstant
 import controllers.actions._
+import controllers.routes._
 import javax.inject.Named
-import models.FlatRateExpenseOptions.FRENoYears
+import models.{AlreadyClaimingFREDifferentAmounts, TaxYearSelection}
 import models.auditing.AuditData
 import models.auditing.AuditEventType._
 import navigation.Navigator
@@ -73,7 +74,7 @@ class CheckYourAnswersController @Inject()(
 
           Ok(view(sections, freResponse, removeFre))
         case _ =>
-          Redirect(routes.SessionExpiredController.onPageLoad())
+          Redirect(SessionExpiredController.onPageLoad())
       }
   }
 
@@ -83,37 +84,44 @@ class CheckYourAnswersController @Inject()(
         AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
 
       (
-        request.userAnswers.get(FREResponse),
         request.userAnswers.get(TaxYearSelectionPage),
         request.userAnswers.get(ClaimAmountAndAnyDeductions),
-        request.userAnswers.get(RemoveFRECodePage),
-        request.userAnswers.get(ChangeWhichTaxYearsPage)
+        request.userAnswers.get(AlreadyClaimingFREDifferentAmountsPage),
+        request.userAnswers.get(RemoveFRECodePage)
       ) match {
-        case (Some(FRENoYears), Some(taxYears), Some(claimAmount), None, None) =>
-          submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map(
+        case (Some(taxYears), Some(_), Some(_), Some(removeYear)) =>
+          submissionService.removeFRE(request.nino.get, taxYears, removeYear).map(
             result =>
-              auditAndRedirect(result, dataToAudit)
+              auditAndRedirect(result, dataToAudit, taxYears, Some(removeYear), None)
           )
-        case (Some(_), Some(taxYears), Some(_), Some(removeYear), None) =>
-          submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, removeYear).map(
+        case (Some(taxYears), Some(claimAmountAndAnyDeductions), Some(alreadyClaiming), None) =>
+          submissionService.submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions).map(
             result =>
-              auditAndRedirect(result, dataToAudit)
-          )
-        case (Some(_), Some(taxYears), Some(claimAmount), None, Some(changeYears)) =>
-          submissionService.submitChangeFREFromCode(request.nino.get, taxYears, claimAmount, changeYears).map(
-            result =>
-              auditAndRedirect(result, dataToAudit)
+              auditAndRedirect(result, dataToAudit, taxYears, None, Some(alreadyClaiming))
           )
         case _ =>
-          Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+          Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
       }
   }
 
-  def auditAndRedirect(result: Boolean, auditData: AuditData)
-                      (implicit hc: HeaderCarrier): Result = {
+  def auditAndRedirect(result: Boolean,
+                       auditData: AuditData,
+                       taxYears: Seq[TaxYearSelection],
+                       removeYear: Option[TaxYearSelection],
+                       alreadyClaiming: Option[AlreadyClaimingFREDifferentAmounts]
+                      )(implicit hc: HeaderCarrier): Result = {
+
     if (result) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
-      Redirect(routes.ConfirmationController.onPageLoad())
+      if (removeYear.isDefined) {
+        Redirect(ConfirmationClaimStoppedController.onPageLoad())
+      } else if (taxYears.contains(TaxYearSelection.CurrentYear) && taxYears.length == 1) {
+        Redirect(ConfirmationCurrentYearOnlyController.onPageLoad())
+      } else if (taxYears.contains(TaxYearSelection.CurrentYear) && taxYears.length > 1) {
+        Redirect(ConfirmationCurrentAndPreviousYearsController.onPageLoad())
+      } else {
+        Redirect(ConfirmationPreviousYearsOnlyController.onPageLoad())
+      }
     } else {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, auditData)
       Redirect(routes.TechnicalDifficultiesController.onPageLoad())

@@ -21,50 +21,48 @@
 @(
         claimAmountsAndRates: Seq[Rates],
         claimAmount: Int,
-        updateEmployerInfo: Boolean,
         employerInfoCorrect: Boolean,
         addressInfoCorrect: Boolean,
         currentYearMinus1: Boolean,
         freResponse: FlatRateExpenseOptions
 )(implicit request: Request[_], messages: Messages)
 
+    @main_template(
+        title = {
+            if(freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
+                    freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) {
+                messages("confirmation.titleChanged")
+            } else {
+                messages("confirmation.title")
+            }
+        }
+    ) {
 
-@main_template(
-  title = {
-      if(freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
-              freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) {
-          messages("confirmation.titleChanged")
-      } else {
-          messages("confirmation.title")
-      }
-  }
-) {
+        <div class="govuk-box-highlight">
+            <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
+        </div>
 
-  <div class="govuk-box-highlight">
-    <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
-  </div>
+        <p>@messages("confirmation.actualAmount")</p>
 
-  <p>@messages("confirmation.actualAmount")</p>
+        @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
 
-  @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
+        <h2>@messages("confirmation.whatHappensNext")</h2>
 
-  <h2>@messages("confirmation.whatHappensNext")</h2>
+        <p>@messages("confirmation.confirmationLetter")</p>
 
-  <p>@messages("confirmation.confirmationLetter")</p>
+        @if(currentYearMinus1) {
+            <p>@messages(
+                "confirmation.currentYearMinusOneDelay",
+                TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
+                TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString)
+            </p>
+        }
 
-  @if(currentYearMinus1) {
-    <p>@messages(
-      "confirmation.currentYearMinusOneDelay",
-      TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
-      TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString)
-    </p>
-  }
+        @if(!employerInfoCorrect) {
+            @components.update_employer_info()
+        }
 
-    @if(!employerInfoCorrect) {
-        @components.update_employer_info()
+        @if(!addressInfoCorrect) {
+            @components.update_address_info()
+        }
     }
-
-    @if(!addressInfoCorrect) {
-        @components.update_address_info()
-    }
-}
