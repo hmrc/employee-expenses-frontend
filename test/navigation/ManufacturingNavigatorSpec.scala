@@ -20,9 +20,11 @@ import base.SpecBase
 import controllers.manufacturing.routes
 import models.TypeOfManufacturing._
 import models._
+import org.scalatest.mockito.MockitoSugar
+import pages.Page
 import pages.manufacturing._
 
-class ManufacturingNavigatorSpec extends SpecBase {
+class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 
   private val navigator = new ManufacturingNavigator
   private val modes = Seq(NormalMode, CheckMode)
@@ -32,6 +34,11 @@ class ManufacturingNavigatorSpec extends SpecBase {
 
     for (mode <- modes) {
       s"in $mode" must {
+
+        "go to SessionExpired when not a ManufacturingPage" in {
+          navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
+            controllers.routes.SessionExpiredController.onPageLoad()
+        }
 
         "on TypeOfManufacturingController" must {
           "go to AluminiumApprentice when 'Aluminium' is selected" in {

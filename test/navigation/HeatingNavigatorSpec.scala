@@ -18,9 +18,11 @@ package navigation
 
 import base.SpecBase
 import models.{CheckMode, NormalMode}
+import org.scalatest.mockito.MockitoSugar
+import pages.Page
 import pages.heating.HeatingOccupationListPage
 
-class HeatingNavigatorSpec extends SpecBase {
+class HeatingNavigatorSpec extends SpecBase with MockitoSugar{
   private val modes = Seq(NormalMode, CheckMode)
   private val navigator = new HeatingNavigator
 
@@ -40,6 +42,11 @@ class HeatingNavigatorSpec extends SpecBase {
 
             navigator.nextPage(HeatingOccupationListPage, mode)(answers) mustBe
               controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
+
+          "go to SessionExpired when not HeatingOccupationListPage" in {
+            navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
           }
         }
       }

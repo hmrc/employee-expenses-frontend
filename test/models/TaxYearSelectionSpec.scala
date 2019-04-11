@@ -19,7 +19,6 @@ package models
 import base.SpecBase
 import models.TaxYearSelection._
 import org.scalatest.mockito.MockitoSugar
-import org.mockito.Matchers._
 import uk.gov.hmrc.time.TaxYear
 import viewmodels.RadioCheckboxOption
 
@@ -62,9 +61,9 @@ class TaxYearSelectionSpec extends SpecBase with MockitoSugar {
       TaxYearSelection.getTaxYear(taxYear) mustBe TaxYear.current.back(4).startYear
     }
 
-    "throw exception when getTaxYear & getTaxYearPeriod is given an invalid tax year" in {
+    "throw exception when getTaxYear is given an invalid tax year" in {
       val thrown = intercept[IllegalArgumentException] {
-        TaxYearSelection.getTaxYear(TaxYearSelection.getTaxYearPeriod(2000))
+        TaxYearSelection.getTaxYear(mock[TaxYearSelection])
       }
       thrown.getMessage mustBe "Invalid tax year selected"
     }
@@ -95,6 +94,13 @@ class TaxYearSelectionSpec extends SpecBase with MockitoSugar {
       TaxYearSelection.getTaxYearPeriod(TaxYear.current.back(2).startYear) mustBe CurrentYearMinus2
       TaxYearSelection.getTaxYearPeriod(TaxYear.current.back(3).startYear) mustBe CurrentYearMinus3
       TaxYearSelection.getTaxYearPeriod(TaxYear.current.back(4).startYear) mustBe CurrentYearMinus4
+    }
+
+    "throw exception when getTaxYearPeriod is given an invalid tax year" in {
+      val thrown = intercept[IllegalArgumentException] {
+        TaxYearSelection.getTaxYearPeriod(0)
+      }
+      thrown.getMessage mustBe "Invalid tax year selected"
     }
   }
 }

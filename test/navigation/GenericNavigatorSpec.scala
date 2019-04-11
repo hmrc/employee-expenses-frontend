@@ -472,6 +472,282 @@ class GenericNavigatorSpec extends SpecBase {
       "go to TaxYearSelectionController from ClaimAmountPage" in {
         navigator.nextPage(ClaimAmount, CheckMode)(emptyUserAnswers) mustBe CheckYourAnswersController.onPageLoad()
       }
+
+
+      //MultipleEmploymentsPage
+
+      "go to ClaimByAlternativeController from MultipleEmploymentsPage when 'Yes' is selected" in {
+        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.MoreThanOneJob).success.value
+
+        navigator.nextPage(MultipleEmploymentsPage, CheckMode)(answers) mustBe
+          ClaimByAlternativeController.onPageLoad()
+      }
+
+      "go to ClaimByAlternativeController from MultipleEmploymentsPage when 'No' is selected" in {
+        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
+
+        navigator.nextPage(MultipleEmploymentsPage, CheckMode)(answers) mustBe
+          FirstIndustryOptionsController.onPageLoad(CheckMode)
+      }
+
+      "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
+        navigator.nextPage(MultipleEmploymentsPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      //FirstIndustryOptionsPage
+
+      "go to TypeOfEngineeringController from FirstIndustryOptionsPage when Engineering is selected" in {
+        val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, Engineering).success.value
+
+        navigator.nextPage(FirstIndustryOptionsPage, CheckMode)(answers) mustBe
+          controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(CheckMode)
+      }
+
+      "go to TypeOfTransportController from FirstIndustryOptionsPage when TransportAndDistribution is selected" in {
+        val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, TransportAndDistribution).success.value
+
+        navigator.nextPage(FirstIndustryOptionsPage, CheckMode)(answers) mustBe
+          controllers.transport.routes.TypeOfTransportController.onPageLoad(CheckMode)
+      }
+
+      "go to AmbulanceStaffController from FirstIndustryOptionsPage when Healthcare is selected" in {
+        val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, Healthcare).success.value
+
+        navigator.nextPage(FirstIndustryOptionsPage, CheckMode)(answers) mustBe
+          controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(CheckMode)
+      }
+
+      "go to EmployerContributionController from FirstIndustryOptionsPage when Retail is selected" in {
+        val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, Retail).success.value
+
+        navigator.nextPage(FirstIndustryOptionsPage, CheckMode)(answers) mustBe
+          EmployerContributionController.onPageLoad(CheckMode)
+      }
+
+      "go to CateringStaffNHSController from FirstIndustryOptionsPage when FoodAndCatering is selected" in {
+        val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, FoodAndCatering).success.value
+
+        navigator.nextPage(FirstIndustryOptionsPage, CheckMode)(answers) mustBe
+          CateringStaffNHSController.onPageLoad(CheckMode)
+      }
+
+      "go to SecondIndustryOptionsController from FirstIndustryOptionsPage when NoneOfTheAbove is selected" in {
+        val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.NoneOfAbove).success.value
+
+        navigator.nextPage(FirstIndustryOptionsPage, CheckMode)(answers) mustBe
+          SecondIndustryOptionsController.onPageLoad(CheckMode)
+      }
+
+      "go to SessionExpiredController from FirstIndustryOptionsPage when no data is available" in {
+        navigator.nextPage(FirstIndustryOptionsPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      //SecondIndustryOptionsPage
+
+      "go JoinerCarpenterController from SecondIndustryOptionsPage when 'Construction' is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
+          controllers.construction.routes.JoinerCarpenterController.onPageLoad(CheckMode)
+      }
+
+      "go ThirdIndustryOptionsController from SecondIndustryOptionsPage when NoneOfAbove is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, SecondIndustryOptions.NoneOfAbove).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
+          ThirdIndustryOptionsController.onPageLoad(CheckMode)
+
+      }
+
+      "go to EmployersContributionsController from SecondIndustryOptionsPage when 'Council' is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Council).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
+          EmployerContributionController.onPageLoad(CheckMode)
+      }
+
+      "go to TypeOfManufacturingController from SecondIndustryOptionsPage when 'ManufacturingWarehousing' is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, ManufacturingWarehousing).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
+          controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(CheckMode)
+      }
+
+      "go to SpecialConstableController from SecondIndustryOptionsPage when 'Police' is selected" in{
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Police).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
+          controllers.police.routes.SpecialConstableController.onPageLoad(CheckMode)
+      }
+
+      "go to ClothingController from SecondIndustryOptionsPage when 'ClothingTextiles' is selected" in{
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, ClothingTextiles).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
+          controllers.clothing.routes.ClothingController.onPageLoad(CheckMode)
+      }
+
+      "go to ThirdIndustryOptionsController from SecondIndustryOptionsPage when 'None of the above' is selected" in{
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, SecondIndustryOptions.NoneOfAbove).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
+          ThirdIndustryOptionsController.onPageLoad(CheckMode)
+      }
+
+      "go to SessionExpiredController from SecondIndustryOptionsPage when no data is available" in {
+        navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      //ThirdIndustryOptionsPage
+
+      "go EmployerContributionController from ThirdIndustryOptionsPage when Education is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, Education).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, CheckMode)(answers) mustBe
+          EmployerContributionController.onPageLoad(CheckMode)
+      }
+
+      "go EmployerContributionController from ThirdIndustryOptionsPage when Banks and Building Societies is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, BanksBuildingSocieties).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, CheckMode)(answers) mustBe
+          EmployerContributionController.onPageLoad(CheckMode)
+      }
+
+      "go ElectricalControllerPage from ThirdIndustryOptionsPage when Eletrical is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, Electrical).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, CheckMode)(answers) mustBe
+          controllers.electrical.routes.ElectricalController.onPageLoad(CheckMode)
+      }
+
+      "go PrintingOccupationList1Controller from ThirdIndustryOptionsPage when Printing is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, Printing).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, CheckMode)(answers) mustBe
+          controllers.printing.routes.PrintingOccupationList1Controller.onPageLoad(CheckMode)
+      }
+
+      "go SecurityGuardNHSController from ThirdIndustryOptionsPage when Security is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, Security).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, CheckMode)(answers) mustBe
+          controllers.security.routes.SecurityGuardNHSController.onPageLoad(CheckMode)
+      }
+
+      "go FourthIndustryOptionsController from ThirdIndustryOptionsPage when NoneOfAbove is selected" in {
+        val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, ThirdIndustryOptions.NoneOfAbove).success.value
+
+        navigator.nextPage(ThirdIndustryOptionsPage, CheckMode)(answers) mustBe
+          FourthIndustryOptionsController.onPageLoad(CheckMode)
+      }
+
+      "go to SessionExpiredController from ThirdIndustryOptionsPage when no data is available" in {
+        navigator.nextPage(ThirdIndustryOptionsPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      //FourthIndustryOptionsPage
+
+      "go EmployerContributionController from FourthIndustryOptionsPage when 'agriculture' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Agriculture).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, CheckMode)(answers) mustBe
+          EmployerContributionController.onPageLoad(CheckMode)
+      }
+
+      "go EmployerContributionController from FourthIndustryOptionsPage when 'fire service' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, FireService).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, CheckMode)(answers) mustBe
+          EmployerContributionController.onPageLoad(CheckMode)
+      }
+
+      "go HeatingController from FourthIndustryOptionsPage when 'heating' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Heating).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, CheckMode)(answers) mustBe
+          controllers.heating.routes.HeatingOccupationListController.onPageLoad(CheckMode)
+      }
+
+      "go EmployerContributionController from FourthIndustryOptionsPage when 'leisure' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Leisure).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, CheckMode)(answers) mustBe
+          EmployerContributionController.onPageLoad(CheckMode)
+      }
+
+      "go EmployerContributionController from FourthIndustryOptionsPage when 'prison' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Prisons).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, CheckMode)(answers) mustBe
+          EmployerContributionController.onPageLoad(CheckMode)
+      }
+
+      "go EmployerContributionController from FourthIndustryOptionsPage when 'NoneOfTheAbove' is selected" in {
+        val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, FourthIndustryOptions.NoneOfAbove).success.value
+
+        navigator.nextPage(FourthIndustryOptionsPage, CheckMode)(answers) mustBe
+          FifthIndustryOptionsController.onPageLoad(CheckMode)
+      }
+
+      "go to SessionExpiredController from FourthIndustryOptionsPage when no data is available" in {
+        navigator.nextPage(FourthIndustryOptionsPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+
+      }
+
+      //FifthIndustryOptionsPage
+
+      "go to CannotClaimExpenseController from FifthIndustryOptionsPage when 'Armed forces' is selected" in {
+        val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Armedforces).success.value
+
+        navigator.nextPage(FifthIndustryOptionsPage, CheckMode)(answers) mustBe
+          CannotClaimExpenseController.onPageLoad()
+      }
+
+      "go to DocksOccupationList1Controller from FifthIndustryOptionsPage when 'Docks and inland waterways' is selected" in {
+        val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Dockswaterways).success.value
+
+        navigator.nextPage(FifthIndustryOptionsPage, CheckMode)(answers) mustBe
+          DocksOccupationList1Controller.onPageLoad(CheckMode)
+      }
+
+      "go to EmployerContributionController from FifthIndustryOptionsPage when 'Forestry' is selected" in {
+        val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Forestry).success.value
+
+        navigator.nextPage(FifthIndustryOptionsPage, CheckMode)(answers) mustBe
+          EmployerContributionController.onPageLoad(CheckMode)
+      }
+
+      "go ShipyardApprenticeStorekeeperController from FifthIndustryOptionsPage when 'Shipyard' is selected" in {
+        val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Shipyard).success.value
+
+        navigator.nextPage(FifthIndustryOptionsPage, CheckMode)(answers) mustBe
+          ShipyardApprenticeStorekeeperController.onPageLoad(CheckMode)
+      }
+
+      "go to TextilesOccupationList1Controller from FifthIndustryOptionsPage when 'Textiles and textile printing' is selected" in {
+        val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Textiles).success.value
+
+        navigator.nextPage(FifthIndustryOptionsPage, CheckMode)(answers) mustBe
+          TextilesOccupationList1Controller.onPageLoad(CheckMode)
+      }
+
+      "go to EmployerContributionController from FifthIndustryOptionsPage when 'NoneOfTheAbove' is selected" in {
+        val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, FifthIndustryOptions.NoneOfAbove).success.value
+
+        navigator.nextPage(FifthIndustryOptionsPage, CheckMode)(answers) mustBe
+          EmployerContributionController.onPageLoad(CheckMode)
+      }
+
+      "go to SessionExpiredController from FifthIndustryOptionsPage when no data is available" in {
+        navigator.nextPage(FifthIndustryOptionsPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
     }
   }
 }
