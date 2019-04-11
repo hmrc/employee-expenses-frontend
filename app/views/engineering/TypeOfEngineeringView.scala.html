@@ -36,11 +36,11 @@
 
         @components.heading("typeOfEngineering.heading")
 
-        <p>@messages("typeOfEngineering.listText")</p>
+        <p aria-hidden="true">@messages("typeOfEngineering.listText")</p>
 
         @components.input_radio(
             field = form("value"),
-            legend = messages("typeOfEngineering.heading"),
+            legend = messages("typeOfEngineering.listText"),
             legendClass = Some("visually-hidden"),
             inputs = TypeOfEngineering.options
         )
