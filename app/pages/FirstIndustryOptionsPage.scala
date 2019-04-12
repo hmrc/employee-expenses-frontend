@@ -35,7 +35,7 @@ case object FirstIndustryOptionsPage extends QuestionPage[FirstIndustryOptions] 
     Try(
       UserAnswers(
         id = userAnswers.id,
-        data = userAnswers.data - "industry",
+        data = userAnswers.data - industryPath,
         lastUpdated = LocalDateTime.now
       )
     )

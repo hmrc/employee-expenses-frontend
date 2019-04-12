@@ -23,6 +23,8 @@ import pages.construction._
 
 class FirstIndustryOptionsPageSpec extends PageBehaviours {
 
+  private val industryPath = "industry"
+
   "FirstIndustryOptionsPage" must {
 
     beRetrievable[FirstIndustryOptions](FirstIndustryOptionsPage)
@@ -49,7 +51,7 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
       val updatedUserAnswers = userAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.Retail).get
 
 
-      updatedUserAnswers.data.keys.contains("industry") mustBe false
+      updatedUserAnswers.data.keys.contains(industryPath) mustBe false
       updatedUserAnswers.data.keys.contains(ExpensesEmployerPaidPage) mustBe true
       updatedUserAnswers.data.keys.contains(EmployerContributionPage) mustBe true
       updatedUserAnswers.data.keys.contains(AlreadyClaimingFREDifferentAmountsPage) mustBe true
