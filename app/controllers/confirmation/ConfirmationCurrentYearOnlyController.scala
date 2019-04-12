@@ -59,7 +59,7 @@ class ConfirmationCurrentYearOnlyController @Inject()(
           taiConnector.taiTaxCodeRecords(request.nino.get).map {
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
-//              sessionRepository.remove(request.identifier)
+              sessionRepository.remove(request.identifier)
               Ok(confirmationCurrentYearOnlyView(claimAmountsAndRates, claimAmountAndAnyDeductions, employer, address, freResponse))
           }.recoverWith {
             case e =>

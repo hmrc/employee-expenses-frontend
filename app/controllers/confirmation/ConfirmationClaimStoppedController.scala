@@ -20,6 +20,7 @@ import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, D
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.confirmation.ConfirmationClaimStoppedView
 
@@ -31,11 +32,13 @@ class ConfirmationClaimStoppedController @Inject()(
                                                     getData: DataRetrievalAction,
                                                     requireData: DataRequiredAction,
                                                     val controllerComponents: MessagesControllerComponents,
-                                                    confirmationClaimStoppedView: ConfirmationClaimStoppedView
+                                                    confirmationClaimStoppedView: ConfirmationClaimStoppedView,
+                                                    sessionRepository: SessionRepository
                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
+      sessionRepository.remove(request.identifier)
       Ok(confirmationClaimStoppedView())
   }
 }

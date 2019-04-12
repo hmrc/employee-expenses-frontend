@@ -30,12 +30,13 @@
 // * limitations under the License.
 // */
 //
-//package controllers
+//package controllers.confirmation
 //
 //import base.SpecBase
 //import connectors.TaiConnector
 //import controllers.actions.Authed
-//import models.FirstIndustryOptions.Healthcare
+//import controllers.routes._
+//import controllers.confirmation.routes._
 //import models.FlatRateExpenseOptions.FRENoYears
 //import models.TaxYearSelection._
 //import models._
@@ -71,7 +72,7 @@
 //
 //  "Confirmation Controller" must {
 //
-//    "return OK and the correct CurrentYearConfirmationView for a GET with specific answers" in {
+//    "return OK and the correct ConfirmationCurrentYearOnlyView for a GET with specific answers" in {
 //
 //      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
 //        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
@@ -81,11 +82,11 @@
 //      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
 //      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
 //
-//      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+//      val request = FakeRequest(GET, ConfirmationCurrentYearOnlyController.onPageLoad().url)
 //
 //      val result = route(application, request).value
 //
-//      val view = application.injector.instanceOf[CurrentYearConfirmationView]
+//      val view = application.injector.instanceOf[ConfirmationCurrentYearOnlyView]
 //
 //      status(result) mustEqual OK
 //
@@ -93,15 +94,15 @@
 //        view(
 //          claimAmountsAndRates = Seq(claimAmountsAndRates),
 //          claimAmount = claimAmount,
-//          updateEmployerInfo = true,
-//          updateAddressInfo = true,
+//          employerInfoCorrect = true,
+//          addressInfoCorrect = true,
 //          freResponse = FlatRateExpenseOptions.FRENoYears
 //        )(request, messages).toString
 //
 //      application.stop()
 //    }
 //
-//    "return OK and the correct ClaimStoppedConfirmationView for a GET with specific answers" in {
+//    "return OK and the correct ConfirmationClaimStoppedView for a GET with specific answers" in {
 //
 //      val userAnswers = fullUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYearMinus1).success.value
 //
@@ -113,11 +114,11 @@
 //      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
 //      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
 //
-//      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+//      val request = FakeRequest(GET, ConfirmationClaimStoppedController.onPageLoad().url)
 //
 //      val result = route(application, request).value
 //
-//      val view = application.injector.instanceOf[ClaimStoppedConfirmationView]
+//      val view = application.injector.instanceOf[ConfirmationClaimStoppedView]
 //
 //      status(result) mustEqual OK
 //
@@ -127,7 +128,7 @@
 //      application.stop()
 //    }
 //
-//    "return OK and the correct PreviousCurrentYearsConfirmationView for a GET with specific answers" in {
+//    "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET with specific answers" in {
 //
 //      val userAnswers = emptyUserAnswers
 //        .set(EmployerContributionPage, false).success.value
@@ -148,11 +149,11 @@
 //      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
 //      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
 //
-//      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+//      val request = FakeRequest(GET, ConfirmationCurrentAndPreviousYearsController.onPageLoad().url)
 //
 //      val result = route(application, request).value
 //
-//      val view = application.injector.instanceOf[PreviousCurrentYearsConfirmationView]
+//      val view = application.injector.instanceOf[ConfirmationCurrentAndPreviousYearsView]
 //
 //      status(result) mustEqual OK
 //
@@ -160,8 +161,8 @@
 //        view(
 //          claimAmountsAndRates = Seq(claimAmountsAndRates),
 //          claimAmount = claimAmount,
-//          updateEmployerInfo = true,
-//          updateAddressInfo = true,
+//          employerInfoCorrect = true,
+//          addressInfoCorrect = true,
 //          currentYearMinus1 =true,
 //          freResponse = FlatRateExpenseOptions.FRENoYears
 //        )(request, messages).toString
@@ -169,7 +170,7 @@
 //      application.stop()
 //    }
 //
-//    "return OK and the correct PreviousYearsConfirmationView for a GET with specific answers" in {
+//    "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with specific answers" in {
 //
 //      val userAnswers = emptyUserAnswers
 //        .set(EmployerContributionPage, false).success.value
@@ -189,11 +190,11 @@
 //      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
 //      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
 //
-//      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+//      val request = FakeRequest(GET, ConfirmationPreviousYearsOnlyController.onPageLoad().url)
 //
 //      val result = route(application, request).value
 //
-//      val view = application.injector.instanceOf[PreviousYearsConfirmationView]
+//      val view = application.injector.instanceOf[ConfirmationPreviousYearsOnlyView]
 //
 //      status(result) mustEqual OK
 //
@@ -201,8 +202,8 @@
 //        view(
 //          claimAmountsAndRates = Seq(claimAmountsAndRates),
 //          claimAmount = claimAmount,
-//          updateEmployerInfo = true,
-//          updateAddressInfo = true,
+//          employerInfoCorrect = true,
+//          addressInfoCorrect = true,
 //          currentYearMinus1 =true,
 //          freResponse = FlatRateExpenseOptions.FRENoYears
 //        )(request, messages).toString
@@ -210,61 +211,61 @@
 //      application.stop()
 //    }
 //
-//    "Redirect to TechnicalDifficulties when call to Tai fails" in {
-//
-//      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
-//        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
-//        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
-//        .build()
-//
-//      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.failed(new Exception))
-//
-//      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
-//
-//      val result = route(application, request).value
-//
-//      status(result) mustEqual SEE_OTHER
-//
-//      redirectLocation(result).value mustBe routes.TechnicalDifficultiesController.onPageLoad().url
-//
-//      application.stop()
-//    }
-//
-//    "Redirect to SessionExpired when missing userAnswers" in {
-//
-//      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-//
-//      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
-//
-//      val result = route(application, request).value
-//
-//      status(result) mustEqual SEE_OTHER
-//
-//      redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
-//
-//      application.stop()
-//    }
-//
-//    "Remove session on page load" in {
-//
-//      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
-//        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
-//        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
-//        .build()
-//
-//      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
-//
-//      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
-//
-//      val result = route(application, request).value
-//
-//      whenReady(result) {
-//        _ =>
-//          val sessionRepository = application.injector.instanceOf[SessionRepository]
-//          sessionRepository.get(Authed(userAnswersId)).map(_ mustBe None)
-//      }
-//
-//      application.stop()
-//    }
+////    "Redirect to TechnicalDifficulties when call to Tai fails" in {
+////
+////      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
+////        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+////        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+////        .build()
+////
+////      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.failed(new Exception))
+////
+////      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+////
+////      val result = route(application, request).value
+////
+////      status(result) mustEqual SEE_OTHER
+////
+////      redirectLocation(result).value mustBe TechnicalDifficultiesController.onPageLoad().url
+////
+////      application.stop()
+////    }
+////
+////    "Redirect to SessionExpired when missing userAnswers" in {
+////
+////      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+////
+////      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+////
+////      val result = route(application, request).value
+////
+////      status(result) mustEqual SEE_OTHER
+////
+////      redirectLocation(result).value mustBe SessionExpiredController.onPageLoad().url
+////
+////      application.stop()
+////    }
+////
+////    "Remove session on page load" in {
+////
+////      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
+////        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+////        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+////        .build()
+////
+////      when(mockTaiConnector.taiTaxCodeRecords(any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
+////
+////      val request = FakeRequest(GET, routes.ConfirmationController.onPageLoad().url)
+////
+////      val result = route(application, request).value
+////
+////      whenReady(result) {
+////        _ =>
+////          val sessionRepository = application.injector.instanceOf[SessionRepository]
+////          sessionRepository.get(Authed(userAnswersId)).map(_ mustBe None)
+////      }
+////
+////      application.stop()
+////    }
 //  }
 //}
