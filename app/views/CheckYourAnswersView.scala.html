@@ -28,63 +28,61 @@
         removeFre: Boolean
 )(implicit request: Request[_], messages: Messages)
 
-    @main_template(
-        title = messages("checkYourAnswers.title")
-    ) {
+@headingText = @{
+    if(removeFre) "heading" else "title.claimExpenses"
+}
 
-        @if(removeFre) {
-            @components.heading("checkYourAnswers.heading")
-        } else {
-            @components.heading("checkYourAnswers.title.claimExpenses")
-        }
+@buttonText = @{
+    (removeFre, freResponse) match {
+        case (true, _) => "acceptStopClaim"
+        case (false, FRENoYears) => "acceptClaimExpenses"
+        case (false, FREAllYearsAllAmountsSameAsClaimAmount | FREAllYearsAllAmountsDifferent) => "acceptChangeClaim"
+        case _ => "acceptClaimExpenses"
+    }
+}
 
-        @for(section <- answerSections) {
-            @{
-                section match {
-                    case a: AnswerSection => components.answer_section(a)
-                    case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-                }
-            }
-        }
+@main_template(
+    title = messages("checkYourAnswers.title")
+) {
 
-        @formHelper(action = CheckYourAnswersController.onSubmit, 'autoComplete -> "off") {
+    @components.heading(s"checkYourAnswers.$headingText")
 
-            @if(freResponse == FlatRateExpenseOptions.FRENoYears && !removeFre) {
-                <h2>@messages("checkYourAnswers.claimExpenses")</h2>
-                <p>@messages("checkYourAnswers.confirmInformationNoFre")</p>
-            }
-
-            @if((freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
-                    freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) && !removeFre) {
-                <h2>@messages("checkYourAnswers.changeClaim")</h2>
-                <p>@messages("checkYourAnswers.confirmInformationChangeFre")</p>
-            }
-
-            @if(removeFre) {
-                <h2>@messages("checkYourAnswers.stopClaim")</h2>
-                <p>@messages("checkYourAnswers.confirmInformationChangeFre")</p>
-            }
-
-            <div class="notice">
-                <i class="icon icon-important">
-                    <span class="visually-hidden">Warning</span>
-                </i>
-                <strong class="bold-small">
-                @messages("checkYourAnswers.prosecuted")
-                </strong>
-            </div>
-
-            @if(freResponse == FRENoYears && !removeFre) {
-                @components.submit_button(messages("site.acceptClaimExpenses"))
-            }
-
-            @if((freResponse == FREAllYearsAllAmountsSameAsClaimAmount ||
-                    freResponse == FREAllYearsAllAmountsDifferent) && !removeFre) {
-                @components.submit_button(messages("site.acceptChangeClaim"))
-            }
-
-            @if(removeFre) {
-                @components.submit_button(messages("site.acceptStopClaim"))
+    @for(section <- answerSections) {
+        @{
+            section match {
+                case a: AnswerSection => components.answer_section(a)
+                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
             }
         }
     }
+
+    @formHelper(action = CheckYourAnswersController.onSubmit, 'autoComplete -> "off") {
+
+        @if(freResponse == FlatRateExpenseOptions.FRENoYears && !removeFre) {
+            <h2>@messages("checkYourAnswers.claimExpenses")</h2>
+            <p>@messages("checkYourAnswers.confirmInformationNoFre")</p>
+        }
+
+        @if((freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
+                freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) && !removeFre) {
+            <h2>@messages("checkYourAnswers.changeClaim")</h2>
+            <p>@messages("checkYourAnswers.confirmInformationChangeFre")</p>
+        }
+
+        @if(removeFre) {
+            <h2>@messages("checkYourAnswers.stopClaim")</h2>
+            <p>@messages("checkYourAnswers.confirmInformationChangeFre")</p>
+        }
+
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Warning</span>
+            </i>
+            <strong class="bold-small">
+            @messages("checkYourAnswers.prosecuted")
+            </strong>
+        </div>
+
+        @components.submit_button(messages(s"site.$buttonText"))
+    }
+}
