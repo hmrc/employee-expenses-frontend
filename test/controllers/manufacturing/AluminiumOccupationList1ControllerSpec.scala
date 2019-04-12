@@ -17,7 +17,7 @@
 package controllers.manufacturing
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.manufacturing.AluminiumOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
@@ -28,7 +28,6 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.manufacturing.AluminiumOccupationList1Page
-import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -96,7 +95,7 @@ class AluminiumOccupationList1ControllerSpec extends SpecBase with ScalaFutures 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

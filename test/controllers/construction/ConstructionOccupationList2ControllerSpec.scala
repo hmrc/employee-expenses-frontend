@@ -17,7 +17,7 @@
 package controllers.construction
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.construction.ConstructionOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
@@ -96,7 +96,7 @@ class ConstructionOccupationList2ControllerSpec
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.construction).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

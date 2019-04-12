@@ -17,7 +17,7 @@
 package controllers.transport
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.transport.TransportCarpenterFormProvider
 import models.{NormalMode, UserAnswers}
@@ -97,7 +97,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request = FakeRequest(POST, transportCarpenterRoute)
@@ -118,7 +118,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request = FakeRequest(POST, transportCarpenterRoute)

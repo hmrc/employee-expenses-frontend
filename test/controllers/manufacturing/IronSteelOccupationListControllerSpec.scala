@@ -17,7 +17,7 @@
 package controllers.manufacturing
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.manufacturing.IronSteelOccupationListFormProvider
 import models.{NormalMode, UserAnswers}
@@ -96,7 +96,7 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

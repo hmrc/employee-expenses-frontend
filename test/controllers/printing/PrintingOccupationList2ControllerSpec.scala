@@ -17,7 +17,7 @@
 package controllers.printing
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.printing.PrintingOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
@@ -97,7 +97,7 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Printing").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.printing).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request = FakeRequest(POST, printingOccupationList2Route)
@@ -117,7 +117,7 @@ class PrintingOccupationList2ControllerSpec extends SpecBase with ScalaFutures w
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Printing").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.printing).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

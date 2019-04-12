@@ -17,6 +17,7 @@
 package controllers.authenticated
 
 import base.SpecBase
+import config.NavConstant
 import forms.authenticated.ChangeWhichTaxYearsFormProvider
 import models.{NormalMode, TaxYearSelection}
 import navigation.{FakeNavigator, Navigator}
@@ -89,7 +90,7 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
     "redirect to the next page when valid data is submitted" in {
       val application =
         applicationBuilder(userAnswers = Some(fullUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
 

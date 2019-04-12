@@ -17,7 +17,7 @@
 package controllers.manufacturing
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.manufacturing.TypeOfManufacturingFormProvider
 import models.TypeOfManufacturing._
@@ -97,7 +97,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

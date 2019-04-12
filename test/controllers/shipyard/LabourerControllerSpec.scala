@@ -17,7 +17,7 @@
 package controllers.shipyard
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.shipyard.LabourerFormProvider
 import models.{NormalMode, UserAnswers}
@@ -28,7 +28,7 @@ import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
-import pages.shipyard.{LabourerPage, ShipyardOccupationList1Page}
+import pages.shipyard.LabourerPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -95,7 +95,7 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Shipyard").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.shipyard).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

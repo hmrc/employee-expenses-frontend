@@ -17,7 +17,7 @@
 package controllers.docks
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.docks.DocksOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
@@ -94,7 +94,7 @@ class DocksOccupationList1ControllerSpec extends SpecBase with ScalaFutures with
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Docks").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.docks).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

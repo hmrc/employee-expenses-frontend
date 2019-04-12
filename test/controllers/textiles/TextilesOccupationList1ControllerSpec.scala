@@ -17,7 +17,7 @@
 package controllers.textiles
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.TextilesOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
@@ -94,7 +94,7 @@ class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Textiles").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.textiles).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

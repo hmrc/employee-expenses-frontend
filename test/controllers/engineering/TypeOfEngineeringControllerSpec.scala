@@ -17,7 +17,7 @@
 package controllers.engineering
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.engineering.TypeOfEngineeringFormProvider
 import models.{NormalMode, TypeOfEngineering, UserAnswers}
@@ -97,7 +97,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.engineering).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -118,7 +118,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.engineering).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
