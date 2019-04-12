@@ -62,6 +62,7 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
             result =>
               val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
+              sessionRepository.remove(request.identifier)
               Ok(confirmationCurrentAndPreviousYearsView(claimAmountsAndRates, claimAmountAndAnyDeductions, employer, address, currentYearMinus1, freResponse))
           }.recoverWith {
             case e =>
