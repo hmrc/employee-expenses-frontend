@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import play.twirl.api.Html
 import service.ClaimAmountService
 import views.behaviours.ViewBehaviours
-import views.html.confirmation.PreviousCurrentYearsConfirmationView
+import views.html.confirmation.ConfirmationCurrentAndPreviousYearsView
 
 class PreviousCurrentYearsConfirmationViewSpec extends ViewBehaviours {
 
@@ -31,7 +31,7 @@ class PreviousCurrentYearsConfirmationViewSpec extends ViewBehaviours {
 
   "PreviousCurrentYearsConfirmationView" must {
 
-    val view = application.injector.instanceOf[PreviousCurrentYearsConfirmationView]
+    val view = application.injector.instanceOf[ConfirmationCurrentAndPreviousYearsView]
 
     val claimAmountService = application.injector.instanceOf[ClaimAmountService]
 

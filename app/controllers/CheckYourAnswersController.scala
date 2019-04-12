@@ -19,9 +19,10 @@ package controllers
 import com.google.inject.Inject
 import config.NavConstant
 import controllers.actions._
+import controllers.confirmation.routes._
 import controllers.routes._
 import javax.inject.Named
-import models.{AlreadyClaimingFREDifferentAmounts, TaxYearSelection}
+import models.TaxYearSelection
 import models.auditing.AuditData
 import models.auditing.AuditEventType._
 import navigation.Navigator
@@ -86,18 +87,17 @@ class CheckYourAnswersController @Inject()(
       (
         request.userAnswers.get(TaxYearSelectionPage),
         request.userAnswers.get(ClaimAmountAndAnyDeductions),
-        request.userAnswers.get(AlreadyClaimingFREDifferentAmountsPage),
         request.userAnswers.get(RemoveFRECodePage)
       ) match {
-        case (Some(taxYears), Some(_), Some(_), Some(removeYear)) =>
+        case (Some(taxYears), Some(_), Some(removeYear)) =>
           submissionService.removeFRE(request.nino.get, taxYears, removeYear).map(
             result =>
-              auditAndRedirect(result, dataToAudit, taxYears, Some(removeYear), None)
+              auditAndRedirect(result, dataToAudit, taxYears, Some(removeYear))
           )
-        case (Some(taxYears), Some(claimAmountAndAnyDeductions), Some(alreadyClaiming), None) =>
+        case (Some(taxYears), Some(claimAmountAndAnyDeductions), None) =>
           submissionService.submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions).map(
             result =>
-              auditAndRedirect(result, dataToAudit, taxYears, None, Some(alreadyClaiming))
+              auditAndRedirect(result, dataToAudit, taxYears, None)
           )
         case _ =>
           Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
@@ -107,20 +107,19 @@ class CheckYourAnswersController @Inject()(
   def auditAndRedirect(result: Boolean,
                        auditData: AuditData,
                        taxYears: Seq[TaxYearSelection],
-                       removeYear: Option[TaxYearSelection],
-                       alreadyClaiming: Option[AlreadyClaimingFREDifferentAmounts]
+                       removeYear: Option[TaxYearSelection]
                       )(implicit hc: HeaderCarrier): Result = {
 
     if (result) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
       if (removeYear.isDefined) {
         Redirect(ConfirmationClaimStoppedController.onPageLoad())
-      } else if (taxYears.contains(TaxYearSelection.CurrentYear) && taxYears.length == 1) {
+      } else if (taxYears.forall(_ == TaxYearSelection.CurrentYear)) {
         Redirect(ConfirmationCurrentYearOnlyController.onPageLoad())
-      } else if (taxYears.contains(TaxYearSelection.CurrentYear) && taxYears.length > 1) {
-        Redirect(ConfirmationCurrentAndPreviousYearsController.onPageLoad())
-      } else {
+      } else if (!taxYears.contains(TaxYearSelection.CurrentYear)) {
         Redirect(ConfirmationPreviousYearsOnlyController.onPageLoad())
+      } else {
+        Redirect(ConfirmationCurrentAndPreviousYearsController.onPageLoad())
       }
     } else {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, auditData)

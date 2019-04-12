@@ -346,10 +346,10 @@ POST        /which-years-change-claim                            controllers.aut
 GET         /change-which-years-change-claim                     controllers.authenticated.ChangeWhichTaxYearsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-which-years-change-claim                     controllers.authenticated.ChangeWhichTaxYearsController.onSubmit(mode: Mode = CheckMode)
 
-GET         /confirmation                                        controllers.ConfirmationClaimStoppedController.onPageLoad()
-GET         /confirmation                                        controllers.ConfirmationCurrentYearOnlyController.onPageLoad()
-GET         /confirmation                                        controllers.ConfirmationCurrentAndPreviousYearsController.onPageLoad()
-GET         /confirmation                                        controllers.ConfirmationPreviousYearsOnlyController.onPageLoad()
+GET         /confirmation-claim-stopped                          controllers.confirmation.ConfirmationClaimStoppedController.onPageLoad()
+GET         /confirmation-current-year                           controllers.confirmation.ConfirmationCurrentYearOnlyController.onPageLoad()
+GET         /confirmation-current-and-previous-year              controllers.confirmation.ConfirmationCurrentAndPreviousYearsController.onPageLoad()
+GET         /confirmation-previous-year                          controllers.confirmation.ConfirmationPreviousYearsOnlyController.onPageLoad()
 
 GET         /fifth-industry-options                              controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
 POST        /fifth-industry-options                              controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)

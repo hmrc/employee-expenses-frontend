@@ -21,11 +21,11 @@ import connectors.TaiConnector
 import models.TaxYearSelection
 import models.TaxYearSelection._
 import org.joda.time.LocalDate
+import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import org.mockito.Mockito._
-import org.mockito.Matchers._
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
 import uk.gov.hmrc.http.HttpResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -182,35 +182,35 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
       }
     }
 
-    "submitChangeFREFromCode" must {
-      "return true when give 204 response" in {
-        when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
-
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
-
-        val result = submissionService.submitChangeFREFromCode(fakeNino, currentTaxYear, claimAmount, Seq(TaxYearSelection.CurrentYear))
-
-        whenReady(result) {
-          _ mustBe true
-        }
-      }
-
-      "return false when give 500 response" in {
-        when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(500)))
-
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
-
-        val result = submissionService.submitChangeFREFromCode(fakeNino, currentTaxYear, claimAmount, Seq(TaxYearSelection.CurrentYear))
-
-        whenReady(result) {
-          _ mustBe false
-        }
-      }
-    }
+//    "submitChangeFREFromCode" must {
+//      "return true when give 204 response" in {
+//        when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
+//          .thenReturn(Future.successful(HttpResponse(204)))
+//
+//        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+//          .thenReturn(Future.successful(HttpResponse(204)))
+//
+//        val result = submissionService.submitChangeFREFromCode(fakeNino, currentTaxYear, claimAmount, Seq(TaxYearSelection.CurrentYear))
+//
+//        whenReady(result) {
+//          _ mustBe true
+//        }
+//      }
+//
+//      "return false when give 500 response" in {
+//        when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
+//          .thenReturn(Future.successful(HttpResponse(500)))
+//
+//        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+//          .thenReturn(Future.successful(HttpResponse(204)))
+//
+//        val result = submissionService.submitChangeFREFromCode(fakeNino, currentTaxYear, claimAmount, Seq(TaxYearSelection.CurrentYear))
+//
+//        whenReady(result) {
+//          _ mustBe false
+//        }
+//      }
+//    }
 
     "submissionResult" must {
       "return true when given 204 responses" in {

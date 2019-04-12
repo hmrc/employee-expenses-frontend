@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.confirmation
 
 import config.FrontendAppConfig
 import connectors.TaiConnector
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
+import controllers.routes._
 import controllers.routes.SessionExpiredController
 import javax.inject.Inject
 import models.{Rates, TaxYearSelection}
-import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import pages.authenticated.{TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
+import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.confirmation.PreviousYearsConfirmationView
+import views.html.confirmation.ConfirmationPreviousYearsOnlyView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,7 +45,7 @@ class ConfirmationPreviousYearsOnlyController @Inject()(
                                                          appConfig: FrontendAppConfig,
                                                          taiConnector: TaiConnector,
                                                          sessionRepository: SessionRepository,
-                                                         previousYearsConfirmationView: PreviousYearsConfirmationView
+                                                         confirmationPreviousYearsOnlyView: ConfirmationPreviousYearsOnlyView
                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -61,11 +62,11 @@ class ConfirmationPreviousYearsOnlyController @Inject()(
             result =>
               val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
-              Ok(previousYearsConfirmationView(claimAmountsAndRates, claimAmountAndAnyDeductions, employer, address, currentYearMinus1, freResponse))
+              Ok(confirmationPreviousYearsOnlyView(claimAmountsAndRates, claimAmountAndAnyDeductions, employer, address, currentYearMinus1, freResponse))
           }.recoverWith {
             case e =>
               Logger.error(s"[ConfirmationPreviousYearsOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
-              Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+              Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
           }
         case _ =>
           Future.successful(Redirect(SessionExpiredController.onPageLoad()))

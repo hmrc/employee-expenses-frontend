@@ -22,15 +22,15 @@ import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
-import views.html.confirmation.ClaimStoppedConfirmationView
+import views.html.confirmation.ConfirmationClaimStoppedView
 
-class ClaimStoppedConfirmationViewSpec extends ViewBehaviours {
+class ConfirmationClaimStoppedViewSpec extends ViewBehaviours {
 
   val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "ClaimStoppedConfirmation view" must {
 
-    val view = application.injector.instanceOf[ClaimStoppedConfirmationView]
+    val view = application.injector.instanceOf[ConfirmationClaimStoppedView]
 
     def applyView()(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
       view()(fakeRequest, messages)

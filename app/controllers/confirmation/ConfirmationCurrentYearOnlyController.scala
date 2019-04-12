@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.confirmation
 
 import config.FrontendAppConfig
 import connectors.TaiConnector
@@ -22,15 +22,15 @@ import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, D
 import controllers.routes._
 import javax.inject.Inject
 import models.Rates
-import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import pages.authenticated.{YourAddressPage, YourEmployerPage}
+import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.confirmation.CurrentYearConfirmationView
+import views.html.confirmation.ConfirmationCurrentYearOnlyView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,7 +44,7 @@ class ConfirmationCurrentYearOnlyController @Inject()(
                                                        appConfig: FrontendAppConfig,
                                                        taiConnector: TaiConnector,
                                                        sessionRepository: SessionRepository,
-                                                       currentYearConfirmationView: CurrentYearConfirmationView
+                                                       confirmationCurrentYearOnlyView: ConfirmationCurrentYearOnlyView
                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -60,7 +60,7 @@ class ConfirmationCurrentYearOnlyController @Inject()(
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
 //              sessionRepository.remove(request.identifier)
-              Ok(currentYearConfirmationView(claimAmountsAndRates, claimAmountAndAnyDeductions, employer, address, freResponse))
+              Ok(confirmationCurrentYearOnlyView(claimAmountsAndRates, claimAmountAndAnyDeductions, employer, address, freResponse))
           }.recoverWith {
             case e =>
               Logger.error(s"[ConfirmationCurrentYearOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)

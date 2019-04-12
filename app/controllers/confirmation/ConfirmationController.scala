@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.confirmation
 
 import config.FrontendAppConfig
 import connectors.TaiConnector
 import controllers.actions._
+import controllers.routes._
 import javax.inject.Inject
 import models.{FlatRateExpenseOptions, Rates, TaxYearSelection}
-import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
+import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import service.ClaimAmountService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.confirmation._
+import views.html.confirmation.{ConfirmationClaimStoppedView, _}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -42,10 +43,10 @@ class ConfirmationController @Inject()(
                                         claimAmountService: ClaimAmountService,
                                         appConfig: FrontendAppConfig,
                                         taiConnector: TaiConnector,
-                                        currentYearConfirmationView: CurrentYearConfirmationView,
-                                        previousYearConfirmationView: PreviousYearsConfirmationView,
-                                        previousCurrentConfirmationView: PreviousCurrentYearsConfirmationView,
-                                        claimStoppedConfirmationView: ClaimStoppedConfirmationView,
+                                        confirmationCurrentYearOnlyView: ConfirmationCurrentYearOnlyView,
+                                        confirmationPreviousYearsOnlyView: ConfirmationPreviousYearsOnlyView,
+                                        confirmationCurrentAndPreviousYearsView: ConfirmationCurrentAndPreviousYearsView,
+                                        confirmationClaimStoppedView: ConfirmationClaimStoppedView,
 
                                         sessionRepository: SessionRepository
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
@@ -64,7 +65,7 @@ class ConfirmationController @Inject()(
       (claimAmount, request.nino, removeFreOption, taxYearSelection, freResponse) match {
         case (_, _, true, _, _) =>
           sessionRepository.remove(request.identifier)
-          Future.successful(Ok(claimStoppedConfirmationView()))
+          Future.successful(Ok(confirmationClaimStoppedView()))
 
         case (Some(fullClaimAmount), Some(nino), false, Some(taxYears), Some(response)) =>
           val currentYearSelected = taxYears.contains(TaxYearSelection.CurrentYear)
@@ -75,20 +76,20 @@ class ConfirmationController @Inject()(
               sessionRepository.remove(request.identifier)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, fullClaimAmount)
               if (currentYearSelected && taxYears.length == 1) {
-                Ok(currentYearConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, response))
+                Ok(confirmationCurrentYearOnlyView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, response))
               } else if (currentYearSelected && taxYears.length > 1) {
-                Ok(previousCurrentConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, currentYearMinus1, response))
+                Ok(confirmationCurrentAndPreviousYearsView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, currentYearMinus1, response))
               } else {
-                Ok(previousYearConfirmationView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, currentYearMinus1, response))
+                Ok(confirmationPreviousYearsOnlyView(claimAmountsAndRates, fullClaimAmount, updateEmployerInfo, updateAddressInfo, currentYearMinus1, response))
               }
 
           }.recoverWith {
             case e =>
               Logger.error(s"[ConfirmationController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
-              Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+              Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
           }
         case _ =>
-          Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
   }
 }

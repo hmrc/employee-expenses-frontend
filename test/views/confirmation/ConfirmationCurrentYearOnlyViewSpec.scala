@@ -23,15 +23,15 @@ import play.api.test.FakeRequest
 import play.twirl.api.Html
 import service.ClaimAmountService
 import views.behaviours.ViewBehaviours
-import views.html.confirmation.CurrentYearConfirmationView
+import views.html.confirmation.ConfirmationCurrentYearOnlyView
 
-class CurrentYearConfirmationViewSpec extends ViewBehaviours {
+class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "CurrentYearConfirmation view" must {
 
-    val view = application.injector.instanceOf[CurrentYearConfirmationView]
+    val view = application.injector.instanceOf[ConfirmationCurrentYearOnlyView]
 
     val claimAmountService = application.injector.instanceOf[ClaimAmountService]
 
