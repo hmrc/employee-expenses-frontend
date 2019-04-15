@@ -34,13 +34,11 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("removeFRECode.heading")
-
         @components.input_radio(
             field = form("value"),
             legend = messages("removeFRECode.heading"),
-            legendClass = Some("visually-hidden"),
-            inputs = TaxYearSelection.options
+            inputs = TaxYearSelection.options,
+            headingIsLegend = true
         )
 
         @components.submit_button()

@@ -36,11 +36,11 @@
 
         @components.heading("secondIndustryOptions.heading")
 
-        <p>@messages("secondIndustryOptions.listText")</p>
+        <p aria-hidden="true">@messages("secondIndustryOptions.listText")</p>
 
         @components.input_radio_or(
             field = form("value"),
-            legend = messages("secondIndustryOptions.heading"),
+            legend = messages("secondIndustryOptions.listText"),
             legendClass = Some("visually-hidden"),
             inputs = SecondIndustryOptions.options
         )

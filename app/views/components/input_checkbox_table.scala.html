@@ -20,10 +20,10 @@
         legend: String,
         legendClass: Option[String] = None,
         hint: Option[String] = None,
-        trackGa: Boolean = false,
         inputs: Seq[(RadioCheckboxOption, Int)],
         columnHeading1: String,
-        columnHeading2: String
+        columnHeading2: String,
+        headingIsLegend: Boolean = false
 )(implicit
         messages: Messages
 )
@@ -48,6 +48,14 @@
     if(field.hasErrors) "form-group form-field--error" else "form-group"
 }
 
+@legendBlock = {
+    @if(headingIsLegend) {
+        <legend class="@lgndClass"><h1 class="heading-xlarge">@legend</h1></legend>
+    } else {
+        <legend class="@lgndClass">@legend</legend>
+    }
+}
+
 @lgndClass = @{
     legendClass match {
         case Some(str) => s"bold-small $str"
@@ -56,10 +64,8 @@
 }
 
 <div class="@divClass">
-    <fieldset id="@{
-        field.id
-    }">
-        <legend class="@lgndClass">@legend</legend>
+    <fieldset id="@{field.id}">
+        @legendBlock
         @hintBlock
         @errorBlock
 
@@ -81,18 +87,14 @@
                             <th id="tax-year-@{value}" scope="row">
                                 <div class="multiple-choice">
                                     <input
-                                    id="@field(s"[$index]").id"
-                                    type="checkbox"
-                                    name="@field(s"[$index]").name"
-                                    value="@value"
-                                        @if(answers.contains(value)) {
-                                            checked="checked"
-                                        }
-                                        @if(true) {
-                                            data-journey-click="employee-expenses-frontend:click:@field(s"[$index]").id"}
+                                        id="@field(s"[$index]").id"
+                                        type="checkbox"
+                                        name="@field(s"[$index]").name"
+                                        value="@value"
+                                        @if(answers.contains(value)){checked="checked"}
                                     />
                                     <label for="@field(s"[$index]").id">
-                                    @inputs(index)._1.message.html
+                                        @inputs(index)._1.message.html
                                     </label>
                                 </div>
                             </th>

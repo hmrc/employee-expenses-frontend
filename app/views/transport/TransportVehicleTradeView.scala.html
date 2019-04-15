@@ -34,13 +34,12 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("transportVehicleTrade.heading")
-
         @components.input_radio(
             field = form("value"),
             legend = messages("transportVehicleTrade.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = TransportVehicleTrade.options
+            inputs = TransportVehicleTrade.options,
+            headingIsLegend = true
         )
 
         @components.submit_button()

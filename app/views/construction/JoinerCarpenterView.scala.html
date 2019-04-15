@@ -34,12 +34,11 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("joinerCarpenter.heading")
-
         @components.input_yes_no(
             field = form("value"),
             label = messages("joinerCarpenter.heading"),
-            labelClass = Some("visually-hidden")
+            labelClass = Some("visually-hidden"),
+            headingIsLegend = true
         )
 
         @components.submit_button()
