@@ -78,7 +78,7 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
           employerInfoCorrect = true,
           addressInfoCorrect = true,
           freResponse = FlatRateExpenseOptions.FRENoYears
-        )(request, messages).toString
+        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }

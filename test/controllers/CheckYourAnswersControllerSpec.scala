@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import controllers.confirmation.routes._
 import controllers.routes._
-import models.FlatRateExpenseOptions.{FREAllYearsAllAmountsSameAsClaimAmount, FRENoYears}
+import models.FlatRateExpenseOptions._
 import models.{FlatRateExpenseOptions, TaxYearSelection}
 import models.TaxYearSelection._
 import models.auditing._
@@ -117,6 +117,27 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
       "return OK and the correct view for a GET for a new claim" in {
 
         val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+
+        val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[CheckYourAnswersView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(fullSections, checkYourAnswersTextNoFre)(request, messages).toString
+
+        application.stop()
+      }
+
+      "return OK and default text to new claim with irregular data" in {
+        val userAnswers =
+          fullUserAnswers
+            .set(FREResponse, ComplexClaim).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
 

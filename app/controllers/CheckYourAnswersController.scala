@@ -19,13 +19,12 @@ package controllers
 import com.google.inject.Inject
 import config.NavConstant
 import controllers.actions._
-import controllers.confirmation.routes._
 import controllers.routes._
 import javax.inject.Named
-import models.{CheckYourAnswersText, FlatRateExpenseOptions, TaxYearSelection}
+import models.FlatRateExpenseOptions._
 import models.auditing.AuditData
 import models.auditing.AuditEventType._
-import models.FlatRateExpenseOptions._
+import models.{CheckYourAnswersText, FlatRateExpenseOptions, NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.authenticated._
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
@@ -106,12 +105,12 @@ class CheckYourAnswersController @Inject()(
         case (Some(taxYears), Some(_), Some(removeYear)) =>
           submissionService.removeFRE(request.nino.get, taxYears, removeYear).map(
             result =>
-              auditAndRedirect(result, dataToAudit, taxYears, Some(removeYear))
+              auditAndRedirect(result, dataToAudit, request.userAnswers)
           )
         case (Some(taxYears), Some(claimAmountAndAnyDeductions), None) =>
           submissionService.submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions).map(
             result =>
-              auditAndRedirect(result, dataToAudit, taxYears, None)
+              auditAndRedirect(result, dataToAudit, request.userAnswers)
           )
         case _ =>
           Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
@@ -120,21 +119,12 @@ class CheckYourAnswersController @Inject()(
 
   def auditAndRedirect(result: Boolean,
                        auditData: AuditData,
-                       taxYears: Seq[TaxYearSelection],
-                       removeYear: Option[TaxYearSelection]
+                       userAnswers: UserAnswers
                       )(implicit hc: HeaderCarrier): Result = {
 
     if (result) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
-      if (removeYear.isDefined) {
-        Redirect(ConfirmationClaimStoppedController.onPageLoad())
-      } else if (taxYears.forall(_ == TaxYearSelection.CurrentYear)) {
-        Redirect(ConfirmationCurrentYearOnlyController.onPageLoad())
-      } else if (!taxYears.contains(TaxYearSelection.CurrentYear)) {
-        Redirect(ConfirmationPreviousYearsOnlyController.onPageLoad())
-      } else {
-        Redirect(ConfirmationCurrentAndPreviousYearsController.onPageLoad())
-      }
+      Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers))
     } else {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, auditData)
       Redirect(routes.TechnicalDifficultiesController.onPageLoad())

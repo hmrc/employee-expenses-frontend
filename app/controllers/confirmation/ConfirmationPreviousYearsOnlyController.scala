@@ -42,11 +42,10 @@ class ConfirmationPreviousYearsOnlyController @Inject()(
                                                          requireData: DataRequiredAction,
                                                          val controllerComponents: MessagesControllerComponents,
                                                          claimAmountService: ClaimAmountService,
-                                                         appConfig: FrontendAppConfig,
                                                          taiConnector: TaiConnector,
                                                          sessionRepository: SessionRepository,
                                                          confirmationPreviousYearsOnlyView: ConfirmationPreviousYearsOnlyView
-                                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                       )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>

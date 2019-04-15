@@ -92,7 +92,7 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
           addressInfoCorrect = true,
           currentYearMinus1 =true,
           freResponse = FlatRateExpenseOptions.FRENoYears
-        )(request, messages).toString
+        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }

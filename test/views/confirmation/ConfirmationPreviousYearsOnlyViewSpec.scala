@@ -23,15 +23,15 @@ import play.api.test.FakeRequest
 import play.twirl.api.Html
 import service.ClaimAmountService
 import views.behaviours.ViewBehaviours
-import views.html.confirmation.ConfirmationCurrentAndPreviousYearsView
+import views.html.confirmation.ConfirmationPreviousYearsOnlyView
 
-class PreviousCurrentYearsConfirmationViewSpec extends ViewBehaviours {
+class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "PreviousCurrentYearsConfirmationView" must {
+  "PreviousYearConfirmation view" must {
 
-    val view = application.injector.instanceOf[ConfirmationCurrentAndPreviousYearsView]
+    val view = application.injector.instanceOf[ConfirmationPreviousYearsOnlyView]
 
     val claimAmountService = application.injector.instanceOf[ClaimAmountService]
 
@@ -60,7 +60,7 @@ class PreviousCurrentYearsConfirmationViewSpec extends ViewBehaviours {
                   currentYearMinus1: Boolean = true,
                   freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
                  )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(claimAmountsAndRates, claimAmount, updateEmployer, updateAddress, currentYearMinus1, freResponse)(fakeRequest, messages)
+      view.apply(claimAmountsAndRates, claimAmount, updateEmployer, updateAddress, currentYearMinus1, freResponse)(fakeRequest, messages, frontendAppConfig)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 
@@ -76,16 +76,9 @@ class PreviousCurrentYearsConfirmationViewSpec extends ViewBehaviours {
 
       assertContainsMessages(doc,
         "confirmation.heading",
-        messages("confirmation.personalAllowanceIncrease", claimAmount),
         "confirmation.actualAmount",
         "confirmation.whatHappensNext",
-        "confirmation.currentTaxYear",
-        "confirmation.taxCodeChanged.paragraph1",
-        "confirmation.taxCodeChanged.paragraph2",
-        "confirmation.continueToClaim.paragraph1",
-        "confirmation.continueToClaim.paragraph2",
-        "confirmation.previousTaxYears",
-        "confirmation.additionalConfirmationLetter",
+        "confirmation.confirmationLetter",
         messages("confirmation.currentYearMinusOneDelay",
           TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
           TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString

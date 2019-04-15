@@ -91,7 +91,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
           addressInfoCorrect = true,
           currentYearMinus1 =true,
           freResponse = FlatRateExpenseOptions.FRENoYears
-        )(request, messages).toString
+        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }
