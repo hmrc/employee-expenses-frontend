@@ -17,7 +17,7 @@
 package controllers.healthcare
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.HealthcareList2FormProvider
 import models.{NormalMode, UserAnswers}
@@ -98,7 +98,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Healthcare").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.healthcare).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -119,7 +119,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Healthcare").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.healthcare).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

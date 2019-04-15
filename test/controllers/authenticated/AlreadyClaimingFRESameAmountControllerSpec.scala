@@ -17,6 +17,7 @@
 package controllers.authenticated
 
 import base.SpecBase
+import config.NavConstant
 import forms.authenticated.AlreadyClaimingFRESameAmountFormProvider
 import models.{AlreadyClaimingFRESameAmount, FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear}
 import navigation.{FakeNavigator, Navigator}
@@ -102,7 +103,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
       val application =
         applicationBuilder(userAnswers = Some(fullUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -185,7 +186,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -207,7 +208,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

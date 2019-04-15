@@ -17,16 +17,16 @@
 package controllers.construction
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.construction.JoinerCarpenterFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import pages.ClaimAmount
 import pages.construction.JoinerCarpenterPage
 import play.api.inject.bind
@@ -95,7 +95,7 @@ class JoinerCarpenterControllerSpec extends SpecBase with ScalaFutures with Inte
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.construction).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request = FakeRequest(POST, joinerCarpenterRoute)

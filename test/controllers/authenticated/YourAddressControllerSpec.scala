@@ -17,6 +17,7 @@
 package controllers.authenticated
 
 import base.SpecBase
+import config.NavConstant
 import connectors.CitizenDetailsConnector
 import controllers.actions.Authed
 import controllers.authenticated.routes._
@@ -119,7 +120,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
           .build()
 
@@ -144,7 +145,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val application =
         applicationBuilder(userAnswers = Some(ua))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -165,7 +166,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val ua = emptyUserAnswers.set(CitizenDetailsAddress, address).success.value
 
       val application = applicationBuilder(userAnswers = Some(ua))
-        .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+        .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
         .build()
 
       val request =

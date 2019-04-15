@@ -17,6 +17,7 @@
 package controllers.authenticated
 
 import base.SpecBase
+import config.NavConstant
 import controllers.actions.Authed
 import controllers.authenticated.routes._
 import controllers.routes._
@@ -208,7 +209,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
@@ -307,7 +308,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     "redirect to Session Expired for a POST if no tax year selection in user answers" in {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
@@ -328,7 +329,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     "redirect to Session Expired for a GET if no tax year selection in user answers" in {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
@@ -349,7 +350,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val ua1 = emptyUserAnswers.set(TaxYearSelectionPage, TaxYearSelection.values).success.value
       val application =
         applicationBuilder(userAnswers = Some(ua1))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 

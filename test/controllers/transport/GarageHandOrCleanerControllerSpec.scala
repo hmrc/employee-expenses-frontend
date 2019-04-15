@@ -17,7 +17,7 @@
 package controllers.transport
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.transport.GarageHandOrCleanerFormProvider
 import models.{NormalMode, UserAnswers}
@@ -98,7 +98,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request = FakeRequest(POST, garageHandOrCleanerRoute)
@@ -118,7 +118,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request = FakeRequest(POST, garageHandOrCleanerRoute)

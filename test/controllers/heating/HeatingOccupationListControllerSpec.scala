@@ -17,7 +17,7 @@
 package controllers.heating
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.heating.HeatingOccupationListFormProvider
 import models.{NormalMode, UserAnswers}
@@ -97,7 +97,7 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Heating").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.heating).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

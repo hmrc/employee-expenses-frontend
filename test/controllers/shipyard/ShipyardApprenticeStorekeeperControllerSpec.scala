@@ -17,7 +17,7 @@
 package controllers.shipyard
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.shipyard.ShipyardApprenticeStorekeeperFormProvider
 import models.{NormalMode, UserAnswers}
@@ -98,7 +98,7 @@ class ShipyardApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFut
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
 
-          .overrides(bind[Navigator].qualifiedWith("Shipyard").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.shipyard).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
