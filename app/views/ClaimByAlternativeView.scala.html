@@ -26,7 +26,6 @@
 
 @claimOnlineLink = {<a href="@frontendAppConfig.p87ClaimOnlineUrl">@messages("claimByAlternative.onlineFormLink")</a>}
 
-
 @claimByPostLink = {<a href="@frontendAppConfig.p87ClaimByPostUrl">@messages("claimByAlternative.claimByPostLink")</a>}
 
 @main_template(
@@ -39,8 +38,8 @@
 
     @components.heading("claimByAlternative.heading")
 
-    <p>@messages("claimByAlternative.paragraph") @claimOnlineLink @messages("site.or") @claimByPostLink.</p>
+    <p>@Html(messages("claimByAlternative.paragraph", claimOnlineLink, claimByPostLink))</p>
 
     @components.submit_button()
   }
-}@import config.FrontendAppConfig
+}

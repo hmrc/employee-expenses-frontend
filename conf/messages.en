@@ -88,7 +88,7 @@ employerContribution.error.required = Select yes if your employer paid back any 
 
 claimByAlternative.title = If you are claiming for more than one job you must use an online form or claim by post
 claimByAlternative.heading = If you are claiming for more than one job you must use an online form or claim by post
-claimByAlternative.paragraph = Use the
+claimByAlternative.paragraph = Use the {0} or {1}.
 claimByAlternative.onlineFormLink = online form
 claimByAlternative.claimByPostLink = claim by post
 
