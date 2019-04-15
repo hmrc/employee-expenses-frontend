@@ -17,7 +17,7 @@
 package controllers.transport
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.transport.WhichRailwayTradeFormProvider
 import models.{NormalMode, UserAnswers, WhichRailwayTrade}
@@ -28,7 +28,7 @@ import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
-import pages.transport.{AirlineJobListPage, WhichRailwayTradePage}
+import pages.transport.WhichRailwayTradePage
 import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -98,7 +98,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

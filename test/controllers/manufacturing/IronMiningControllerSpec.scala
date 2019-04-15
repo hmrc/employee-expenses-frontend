@@ -17,6 +17,7 @@
 package controllers.manufacturing
 
 import base.SpecBase
+import config.NavConstant
 import controllers.actions.UnAuthed
 import forms.manufacturing.IronMiningFormProvider
 import models.{NormalMode, UserAnswers}
@@ -94,7 +95,7 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Manufacturing").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

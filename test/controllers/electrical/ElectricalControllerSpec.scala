@@ -17,7 +17,7 @@
 package controllers.electrical
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import controllers.electrical.routes._
 import forms.electrical.ElectricalFormProvider
@@ -25,9 +25,9 @@ import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
+import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import pages.ClaimAmount
 import pages.electrical.ElectricalPage
 import play.api.inject.bind
@@ -96,7 +96,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Electrical").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.electrical).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

@@ -17,7 +17,7 @@
 package controllers.transport
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.transport.AirlineJobListFormProvider
 import models.{NormalMode, UserAnswers}
@@ -99,7 +99,7 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request = FakeRequest(POST, airlineJobListedRoute)
@@ -119,7 +119,7 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request = FakeRequest(POST, airlineJobListedRoute)

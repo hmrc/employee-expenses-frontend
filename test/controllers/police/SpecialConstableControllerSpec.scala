@@ -17,6 +17,7 @@
 package controllers.police
 
 import base.SpecBase
+import config.NavConstant
 import controllers.actions.UnAuthed
 import forms.police.SpecialConstableFormProvider
 import models.{NormalMode, UserAnswers}
@@ -94,7 +95,7 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Police").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.police).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

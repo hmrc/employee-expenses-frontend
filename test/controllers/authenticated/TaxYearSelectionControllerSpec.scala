@@ -17,6 +17,7 @@
 package controllers.authenticated
 
 import base.SpecBase
+import config.NavConstant
 import controllers.routes._
 import forms.authenticated.TaxYearSelectionFormProvider
 import models.{FlatRateExpense, FlatRateExpenseAmounts, FlatRateExpenseOptions, NormalMode, TaiTaxYear, TaxYearSelection, UserAnswers}
@@ -99,7 +100,7 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
       val application =
         applicationBuilder(Some(answers))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
@@ -146,7 +147,7 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
     "redirect to session expired when no claim amount set" in {
       val application =
         applicationBuilder(Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 

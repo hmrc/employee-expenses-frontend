@@ -17,6 +17,7 @@
 package controllers.authenticated
 
 import base.SpecBase
+import config.NavConstant
 import forms.authenticated.AlreadyClaimingFREDifferentAmountsFormProvider
 import models.{AlreadyClaimingFREDifferentAmounts, NormalMode}
 import navigation.{FakeNavigator, Navigator}
@@ -102,7 +103,7 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
       val application =
         applicationBuilder(userAnswers = Some(fullUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
