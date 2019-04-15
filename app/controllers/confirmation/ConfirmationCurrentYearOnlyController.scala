@@ -50,12 +50,12 @@ class ConfirmationCurrentYearOnlyController @Inject()(
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
       (
+        request.userAnswers.get(FREResponse),
         request.userAnswers.get(YourEmployerPage),
         request.userAnswers.get(YourAddressPage),
-        request.userAnswers.get(FREResponse),
         request.userAnswers.get(ClaimAmountAndAnyDeductions)
       ) match {
-        case (Some(employer), Some(address), Some(freResponse), Some(claimAmountAndAnyDeductions)) =>
+        case (Some(freResponse), Some(employer), Some(address), Some(claimAmountAndAnyDeductions)) =>
           taiConnector.taiTaxCodeRecords(request.nino.get).map {
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
