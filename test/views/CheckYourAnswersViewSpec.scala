@@ -41,10 +41,16 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     ).flatten))
 
     def applyView(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, freOption, removeFRE)(fakeRequest, messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre)(fakeRequest, messages)
 
     def applyViewWithAuth(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, freOption, removeFRE)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+
+    def applyViewNewClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextNoFre)(fakeRequest, messages)
+
+    def applyViewChangeClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextChangeFre)(fakeRequest, messages)
 
     behave like normalPage(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true), "checkYourAnswers")
 
@@ -53,7 +59,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     "display correct content" when {
 
       "new claim has been made" in {
-        val doc = asDocument(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = false))
+        val doc = asDocument(applyViewNewClaim(FlatRateExpenseOptions.FRENoYears, removeFRE = false))
 
         assertContainsMessages(doc,
           "checkYourAnswers.heading.claimExpenses",
@@ -65,7 +71,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       }
 
       "claim has been changed" in {
-        val doc = asDocument(applyView(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent, removeFRE = false))
+        val doc = asDocument(applyViewChangeClaim(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent, removeFRE = false))
 
         assertContainsMessages(doc,
           "checkYourAnswers.heading.claimExpenses",

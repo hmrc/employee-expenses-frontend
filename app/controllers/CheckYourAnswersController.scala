@@ -22,9 +22,10 @@ import controllers.actions._
 import controllers.confirmation.routes._
 import controllers.routes._
 import javax.inject.Named
-import models.TaxYearSelection
+import models.{CheckYourAnswersText, FlatRateExpenseOptions, TaxYearSelection}
 import models.auditing.AuditData
 import models.auditing.AuditEventType._
+import models.FlatRateExpenseOptions._
 import navigation.Navigator
 import pages.authenticated._
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
@@ -73,10 +74,23 @@ class CheckYourAnswersController @Inject()(
             cyaHelper.yourAddress
           ).flatten))
 
-          Ok(view(sections, freResponse, removeFre))
+          Ok(view(sections, checkYourAnswersText(removeFre, freResponse)))
         case _ =>
           Redirect(SessionExpiredController.onPageLoad())
       }
+  }
+
+  def checkYourAnswersText(removeFre: Boolean, freResponse: FlatRateExpenseOptions): CheckYourAnswersText = {
+    (removeFre, freResponse) match {
+      case (true, _) =>
+        CheckYourAnswersText(heading = "heading", disclaimerHeading = "stopClaim", disclaimer = "confirmInformationChangeFre", button = "acceptStopClaim")
+      case (false, FRENoYears) =>
+        CheckYourAnswersText(heading = "title.claimExpenses", disclaimerHeading = "claimExpenses", disclaimer = "confirmInformationNoFre", button = "acceptClaimExpenses")
+      case (false, FREAllYearsAllAmountsSameAsClaimAmount | FREAllYearsAllAmountsDifferent) =>
+        CheckYourAnswersText(heading = "title.claimExpenses", disclaimerHeading = "changeClaim", disclaimer = "confirmInformationChangeFre", button = "acceptChangeClaim")
+      case _ =>
+        CheckYourAnswersText(heading = "title.claimExpenses", disclaimerHeading = "claimExpenses", disclaimer = "confirmInformationNoFre", button = "acceptClaimExpenses")
+    }
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {

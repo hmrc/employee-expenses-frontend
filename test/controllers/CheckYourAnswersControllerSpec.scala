@@ -17,17 +17,20 @@
 package controllers
 
 import base.SpecBase
-import models.FlatRateExpenseOptions.{FREAllYearsAllAmountsDifferent, FREAllYearsAllAmountsSameAsClaimAmount, FRENoYears}
-import models.auditing._
+import controllers.confirmation.routes._
+import controllers.routes._
+import models.FlatRateExpenseOptions.{FREAllYearsAllAmountsSameAsClaimAmount, FRENoYears}
 import models.{FlatRateExpenseOptions, TaxYearSelection}
+import models.TaxYearSelection._
+import models.auditing._
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.{eq => eqTo, _}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, FREResponse}
-import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
+import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.inject.bind
 import play.api.libs.json.JsObject
 import play.api.test.FakeRequest
@@ -37,9 +40,6 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.CheckYourAnswersView
-import controllers.routes._
-import controllers.confirmation.routes._
-import models.TaxYearSelection._
 
 import scala.concurrent.Future
 
@@ -47,22 +47,32 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
   private val mockSubmissionService = mock[SubmissionService]
   private val mockAuditConnector = mock[AuditConnector]
-  private val cyaHelper = new CheckYourAnswersHelper(minimumUserAnswers)
+  private val cyaHelperMinimumUa = new CheckYourAnswersHelper(minimumUserAnswers)
+  private val cyaHelperFullUa = new CheckYourAnswersHelper(fullUserAnswers)
 
   private val minimumSections = Seq(AnswerSection(None, Seq(
-    cyaHelper.industryType,
-    cyaHelper.employerContribution,
-    cyaHelper.expensesEmployerPaid,
-    cyaHelper.taxYearSelection,
-    cyaHelper.alreadyClaimingFRESameAmount,
-    cyaHelper.removeFRECode
+    cyaHelperMinimumUa.industryType,
+    cyaHelperMinimumUa.employerContribution,
+    cyaHelperMinimumUa.expensesEmployerPaid,
+    cyaHelperMinimumUa.taxYearSelection,
+    cyaHelperMinimumUa.alreadyClaimingFRESameAmount,
+    cyaHelperMinimumUa.removeFRECode
+  ).flatten))
+
+  private val fullSections = Seq(AnswerSection(None, Seq(
+    cyaHelperFullUa.industryType,
+    cyaHelperFullUa.employerContribution,
+    cyaHelperFullUa.expensesEmployerPaid,
+    cyaHelperFullUa.taxYearSelection,
+    cyaHelperFullUa.yourAddress,
+    cyaHelperFullUa.yourEmployer
   ).flatten))
 
   override def beforeEach(): Unit = reset(mockAuditConnector)
 
   "Check Your Answers Controller" when {
     "onPageLoad" must {
-      "return OK and the correct view for a GET" in {
+      "return OK and the correct view for a GET for a stopped claim" in {
 
         val userAnswers = minimumUserAnswers.set(FREResponse, FRENoYears).success.value
 
@@ -77,7 +87,47 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(minimumSections, FlatRateExpenseOptions.FRENoYears, removeFre = true)(request, messages).toString
+          view(minimumSections, checkYourAnswersTextStopFre)(request, messages).toString
+
+        application.stop()
+      }
+
+      "return OK and the correct view for a GET for a changed claim" in {
+
+        val userAnswers =
+          fullUserAnswers
+            .set(FREResponse, FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[CheckYourAnswersView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(fullSections, checkYourAnswersTextChangeFre)(request, messages).toString
+
+        application.stop()
+      }
+
+      "return OK and the correct view for a GET for a new claim" in {
+
+        val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+
+        val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[CheckYourAnswersView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(fullSections, checkYourAnswersTextNoFre)(request, messages).toString
 
         application.stop()
       }

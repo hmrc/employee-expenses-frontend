@@ -15,7 +15,7 @@
  *@
 
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
-@import models.FlatRateExpenseOptions._
+@import models.CheckYourAnswersText
 
 @this(
         main_template: MainTemplate,
@@ -24,28 +24,14 @@
 
 @(
         answerSections: Seq[Section],
-        freResponse: FlatRateExpenseOptions,
-        removeFre: Boolean
+        checkYourAnswersText: CheckYourAnswersText
 )(implicit request: Request[_], messages: Messages)
-
-@headingText = @{
-    if(removeFre) "heading" else "title.claimExpenses"
-}
-
-@buttonText = @{
-    (removeFre, freResponse) match {
-        case (true, _) => "acceptStopClaim"
-        case (false, FRENoYears) => "acceptClaimExpenses"
-        case (false, FREAllYearsAllAmountsSameAsClaimAmount | FREAllYearsAllAmountsDifferent) => "acceptChangeClaim"
-        case _ => "acceptClaimExpenses"
-    }
-}
 
 @main_template(
     title = messages("checkYourAnswers.title")
 ) {
 
-    @components.heading(s"checkYourAnswers.$headingText")
+    @components.heading(s"checkYourAnswers.${checkYourAnswersText.heading}")
 
     @for(section <- answerSections) {
         @{
@@ -58,31 +44,18 @@
 
     @formHelper(action = CheckYourAnswersController.onSubmit, 'autoComplete -> "off") {
 
-        @if(freResponse == FlatRateExpenseOptions.FRENoYears && !removeFre) {
-            <h2>@messages("checkYourAnswers.claimExpenses")</h2>
-            <p>@messages("checkYourAnswers.confirmInformationNoFre")</p>
-        }
-
-        @if((freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
-                freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) && !removeFre) {
-            <h2>@messages("checkYourAnswers.changeClaim")</h2>
-            <p>@messages("checkYourAnswers.confirmInformationChangeFre")</p>
-        }
-
-        @if(removeFre) {
-            <h2>@messages("checkYourAnswers.stopClaim")</h2>
-            <p>@messages("checkYourAnswers.confirmInformationChangeFre")</p>
-        }
+        <h2>@messages(s"checkYourAnswers.${checkYourAnswersText.disclaimerHeading}")</h2>
+        <p>@messages(s"checkYourAnswers.${checkYourAnswersText.disclaimer}")</p>
 
         <div class="notice">
             <i class="icon icon-important">
                 <span class="visually-hidden">Warning</span>
             </i>
             <strong class="bold-small">
-            @messages("checkYourAnswers.prosecuted")
+                @messages("checkYourAnswers.prosecuted")
             </strong>
         </div>
 
-        @components.submit_button(messages(s"site.$buttonText"))
+        @components.submit_button(messages(s"site.${checkYourAnswersText.button}"))
     }
 }
