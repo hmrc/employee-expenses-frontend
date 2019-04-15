@@ -86,8 +86,11 @@ employerContribution.hint = This does not include the cost of buying the first i
 employerContribution.checkYourAnswersLabel = Has your employer paid back any of your expenses for uniform, work clothing or tools?
 employerContribution.error.required = Select yes if your employer paid back any of your expenses for uniform, work clothing or tools
 
-claimByAlternative.title = You can claim tax relief for these expenses by post or using an online form
-claimByAlternative.heading = You can claim tax relief for these expenses by post or using an online form
+claimByAlternative.title = If you are claiming for more than one job you must use an online form or claim by post
+claimByAlternative.heading = If you are claiming for more than one job you must use an online form or claim by post
+claimByAlternative.paragraph = Use the {0} or {1}.
+claimByAlternative.onlineFormLink = online form
+claimByAlternative.claimByPostLink = claim by post
 
 multipleEmployments.title = How many jobs are you claiming for?
 multipleEmployments.heading = How many jobs are you claiming for?
