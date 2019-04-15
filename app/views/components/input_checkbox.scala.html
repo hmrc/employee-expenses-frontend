@@ -20,17 +20,17 @@
         legend: String,
         legendClass: Option[String] = None,
         hint: Option[String] = None,
-        trackGa: Boolean = false,
-        inputs: Seq[RadioCheckboxOption]
+        inputs: Seq[RadioCheckboxOption],
+        headingIsLegend: Boolean = false
 )(implicit
         messages: Messages
 )
 
 @hintBlock = {
     @hint.map { hint =>
-        <span class="form-hint">
+        <p class="form-hint">
             @hint
-        </span>
+        </p>
     }
 }
 
@@ -44,7 +44,11 @@
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
     <fieldset id="@{field.id}">
-        <legend class="bold-small @legendClass.map(x => x)">@legend</legend>
+        @if(headingIsLegend){
+            <legend class="@legendClass.map(x => x)"><h1 class="heading-xlarge">@legend</h1></legend>
+        } else {
+            <legend class="bold-small @legendClass.map(x => x)">@legend</legend>
+        }
         @hintBlock
         @errorBlock
         @for((RadioCheckboxOption(id, value, messageKey), index) <- inputs.zipWithIndex) {
