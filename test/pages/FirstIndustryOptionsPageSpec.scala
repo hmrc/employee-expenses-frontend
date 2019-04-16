@@ -40,16 +40,17 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
         .set(ConstructionOccupationList1Page, false).success.value
         .set(ConstructionOccupationList2Page, true).success.value
         .set(EmployerContributionPage, true).success.value
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
         .set(ExpensesEmployerPaidPage, 20).success.value
         .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change).success.value
         .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
         .set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
         .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
-        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
         .set(YourEmployerPage, true).success.value
 
       val updatedUserAnswers = userAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.Retail).get
 
+      updatedUserAnswers.data.keys.contains("industry") mustBe false
 
       updatedUserAnswers.data.keys.contains(industryPath) mustBe false
       updatedUserAnswers.data.keys.contains(ExpensesEmployerPaidPage) mustBe true
@@ -60,8 +61,6 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
       updatedUserAnswers.data.keys.contains(RemoveFRECodePage) mustBe true
       updatedUserAnswers.data.keys.contains(TaxYearSelectionPage) mustBe true
       updatedUserAnswers.data.keys.contains(YourEmployerPage) mustBe true
-
     }
   }
-
 }
