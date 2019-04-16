@@ -48,7 +48,6 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case YourEmployerPage => yourEmployer(CheckMode)
     case UpdateYourEmployerInformationPage => updateEmployerInformation(CheckMode)
     case ChangeWhichTaxYearsPage => changeWhichTaxYears(CheckMode)
-    case CheckYourAnswersPage => checkYourAnswers()
     case _ => _ => CheckYourAnswersController.onPageLoad()
   }
 

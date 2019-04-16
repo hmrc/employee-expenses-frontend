@@ -301,37 +301,6 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
             TechnicalDifficultiesController.onPageLoad()
         }
-
-      }
-
-      "from CYA" must {
-        "go to ConfirmationClaimStoppedController" in {
-          val ua = minimumUserAnswers.set(FREResponse, FRENoYears).success.value
-
-          navigator.nextPage(CheckYourAnswersPage, CheckMode)(ua) mustBe
-            ConfirmationClaimStoppedController.onPageLoad()
-        }
-
-        "go to ConfirmationCurrentAndPreviousYearsController" in {
-          val ua = fullUserAnswers
-            .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
-
-          navigator.nextPage(CheckYourAnswersPage, CheckMode)(ua) mustBe
-            ConfirmationCurrentAndPreviousYearsController.onPageLoad()
-        }
-
-        "go to ConfirmationCurrentYearOnlyController" in {
-          navigator.nextPage(CheckYourAnswersPage, CheckMode)(fullUserAnswers) mustBe
-            ConfirmationCurrentYearOnlyController.onPageLoad()
-        }
-
-        "go to ConfirmationPreviousYearsOnlyController" in {
-          val ua = fullUserAnswers
-            .set(TaxYearSelectionPage, Seq(CurrentYearMinus1, CurrentYearMinus2)).success.value
-
-          navigator.nextPage(CheckYourAnswersPage, CheckMode)(ua) mustBe
-            ConfirmationPreviousYearsOnlyController.onPageLoad()
-        }
       }
     }
   }
