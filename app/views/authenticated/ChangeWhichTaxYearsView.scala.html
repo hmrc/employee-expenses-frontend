@@ -35,15 +35,13 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("changeWhichTaxYears.heading")
-
         @components.input_checkbox_table(
             field = form("value"),
             legend = messages("changeWhichTaxYears.heading"),
-            legendClass = Some("visually-hidden"),
             inputs = yearsAndAmounts,
             columnHeading1 = messages("changeWhichTaxYears.columnHeading1"),
-            columnHeading2 = messages("changeWhichTaxYears.columnHeading2")
+            columnHeading2 = messages("changeWhichTaxYears.columnHeading2"),
+            headingIsLegend = true
         )
 
         @components.submit_button()

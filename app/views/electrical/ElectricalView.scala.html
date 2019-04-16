@@ -34,12 +34,10 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("electrical.heading")
-
         @components.input_yes_no(
             field = form("value"),
             label = messages("electrical.heading"),
-            labelClass = Some("visually-hidden")
+            headingIsLegend = true
         )
 
         @components.submit_button()

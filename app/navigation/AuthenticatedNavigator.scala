@@ -17,10 +17,11 @@
 package navigation
 
 import controllers.authenticated.routes._
+import controllers.confirmation.routes.{ConfirmationClaimStoppedController, ConfirmationCurrentAndPreviousYearsController, ConfirmationCurrentYearOnlyController, ConfirmationPreviousYearsOnlyController}
 import controllers.routes._
 import javax.inject.Inject
 import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove}
-import models.{AlreadyClaimingFRESameAmount, CheckMode, FlatRateExpenseOptions, Mode, NormalMode, UserAnswers}
+import models.{AlreadyClaimingFRESameAmount, CheckMode, FlatRateExpenseOptions, Mode, NormalMode, TaxYearSelection, UserAnswers}
 import pages.authenticated._
 import pages.{FREResponse, Page}
 import play.api.mvc.Call
@@ -36,6 +37,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case UpdateYourEmployerInformationPage => updateEmployerInformation(NormalMode)
     case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad()
     case ChangeWhichTaxYearsPage => changeWhichTaxYears(NormalMode)
+    case CheckYourAnswersPage => checkYourAnswers()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -143,6 +145,23 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       }
     } else {
       YourEmployerController.onPageLoad(NormalMode)
+    }
+  }
+
+  def checkYourAnswers()(userAnswers: UserAnswers): Call = {
+    (userAnswers.get(TaxYearSelectionPage), userAnswers.get(RemoveFRECodePage)) match {
+      case (Some(_), Some(_)) =>
+        ConfirmationClaimStoppedController.onPageLoad()
+      case (Some(taxYears), None) =>
+        if (taxYears.forall(_ == TaxYearSelection.CurrentYear)) {
+          ConfirmationCurrentYearOnlyController.onPageLoad()
+        } else if (!taxYears.contains(TaxYearSelection.CurrentYear)) {
+          ConfirmationPreviousYearsOnlyController.onPageLoad()
+        } else {
+          ConfirmationCurrentAndPreviousYearsController.onPageLoad()
+        }
+      case _ =>
+        SessionExpiredController.onPageLoad()
     }
   }
 

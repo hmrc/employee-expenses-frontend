@@ -36,11 +36,11 @@
 
         @components.heading("whichRailwayTrade.heading")
 
-        <p>@messages("whichRailwayTrade.listText")</p>
+        <p aria-hidden="true">@messages("whichRailwayTrade.listText")</p>
 
         @components.input_radio(
             field = form("value"),
-            legend = messages("whichRailwayTrade.heading"),
+            legend = messages("whichRailwayTrade.listText"),
             legendClass = Some("visually-hidden"),
             inputs = WhichRailwayTrade.options
         )

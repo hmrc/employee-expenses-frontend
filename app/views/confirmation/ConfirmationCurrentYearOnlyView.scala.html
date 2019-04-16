@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import models.FlatRateExpenseOptions._
+
 @this(
         main_template: MainTemplate
 )
@@ -21,25 +23,21 @@
 @(
         claimAmountsAndRates: Seq[Rates],
         claimAmount: Int,
-        updateEmployerInfo: Boolean,
-        updateAddressInfo: Boolean,
+        employerInfoCorrect: Boolean,
+        addressInfoCorrect: Boolean,
         freResponse: FlatRateExpenseOptions
-)(implicit request: Request[_], messages: Messages)
+)(implicit request: Request[_], messages: Messages, appConfig: config.FrontendAppConfig)
 
+@title = @{
+    if(freResponse == FREAllYearsAllAmountsSameAsClaimAmount || freResponse == FREAllYearsAllAmountsDifferent) "titleChanged" else "title"
+}
 
-  @main_template(
-    title = {
-        if(freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount ||
-                freResponse == FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) {
-            messages("confirmation.titleChanged")
-        } else {
-            messages("confirmation.title")
-        }
-    }
-  ) {
+@main_template(
+    title = messages(s"confirmation.$title")
+) {
 
     <div class="govuk-box-highlight">
-      <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
+        <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
     </div>
 
     <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
@@ -58,7 +56,11 @@
 
     <p>@messages("confirmation.continueToClaim.paragraph2")</p>
 
-    @components.update_employer_info(updateEmployerInfo)
+    @if(!employerInfoCorrect) {
+        @components.update_employer_info()
+    }
 
-    @components.update_address_info(updateAddressInfo)
-  }
+    @if(!addressInfoCorrect) {
+        @components.update_address_info()
+    }
+}

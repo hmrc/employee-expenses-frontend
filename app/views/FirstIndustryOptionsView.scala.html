@@ -34,12 +34,12 @@
 
     @components.heading("firstIndustryOptions.heading")
 
-    <p>@messages("firstIndustryOptions.listText")</p>
+    <p aria-hidden="true">@messages("firstIndustryOptions.listText")</p>
 
     @formHelper(action = FirstIndustryOptionsController.onSubmit(mode), 'autoComplete -> "off") {
         @components.input_radio_or(
             field = form("value"),
-            legend = messages("firstIndustryOptions.heading"),
+            legend = messages("firstIndustryOptions.listText"),
             legendClass = Some("visually-hidden"),
             inputs = FirstIndustryOptions.options
         )

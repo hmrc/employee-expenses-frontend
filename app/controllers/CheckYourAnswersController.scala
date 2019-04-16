@@ -19,10 +19,12 @@ package controllers
 import com.google.inject.Inject
 import config.NavConstant
 import controllers.actions._
+import controllers.routes._
 import javax.inject.Named
-import models.FlatRateExpenseOptions.FRENoYears
+import models.FlatRateExpenseOptions._
 import models.auditing.AuditData
 import models.auditing.AuditEventType._
+import models.{CheckYourAnswersText, FlatRateExpenseOptions, NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.authenticated._
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
@@ -71,10 +73,23 @@ class CheckYourAnswersController @Inject()(
             cyaHelper.yourAddress
           ).flatten))
 
-          Ok(view(sections, freResponse, removeFre))
+          Ok(view(sections, checkYourAnswersText(removeFre, freResponse)))
         case _ =>
-          Redirect(routes.SessionExpiredController.onPageLoad())
+          Redirect(SessionExpiredController.onPageLoad())
       }
+  }
+
+  def checkYourAnswersText(removeFre: Boolean, freResponse: FlatRateExpenseOptions): CheckYourAnswersText = {
+    (removeFre, freResponse) match {
+      case (true, _) =>
+        CheckYourAnswersText(heading = "heading", disclaimerHeading = "stopClaim", disclaimer = "confirmInformationChangeFre", button = "acceptStopClaim")
+      case (false, FRENoYears) =>
+        CheckYourAnswersText(heading = "title.claimExpenses", disclaimerHeading = "claimExpenses", disclaimer = "confirmInformationNoFre", button = "acceptClaimExpenses")
+      case (false, FREAllYearsAllAmountsSameAsClaimAmount | FREAllYearsAllAmountsDifferent) =>
+        CheckYourAnswersText(heading = "title.claimExpenses", disclaimerHeading = "changeClaim", disclaimer = "confirmInformationChangeFre", button = "acceptChangeClaim")
+      case _ =>
+        CheckYourAnswersText(heading = "title.claimExpenses", disclaimerHeading = "claimExpenses", disclaimer = "confirmInformationNoFre", button = "acceptClaimExpenses")
+    }
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -83,37 +98,33 @@ class CheckYourAnswersController @Inject()(
         AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
 
       (
-        request.userAnswers.get(FREResponse),
         request.userAnswers.get(TaxYearSelectionPage),
         request.userAnswers.get(ClaimAmountAndAnyDeductions),
-        request.userAnswers.get(RemoveFRECodePage),
-        request.userAnswers.get(ChangeWhichTaxYearsPage)
+        request.userAnswers.get(RemoveFRECodePage)
       ) match {
-        case (Some(FRENoYears), Some(taxYears), Some(claimAmount), None, None) =>
-          submissionService.submitFRENotInCode(request.nino.get, taxYears, claimAmount).map(
+        case (Some(taxYears), Some(_), Some(removeYear)) =>
+          submissionService.removeFRE(request.nino.get, taxYears, removeYear).map(
             result =>
-              auditAndRedirect(result, dataToAudit)
+              auditAndRedirect(result, dataToAudit, request.userAnswers)
           )
-        case (Some(_), Some(taxYears), Some(_), Some(removeYear), None) =>
-          submissionService.submitRemoveFREFromCode(request.nino.get, taxYears, removeYear).map(
+        case (Some(taxYears), Some(claimAmountAndAnyDeductions), None) =>
+          submissionService.submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions).map(
             result =>
-              auditAndRedirect(result, dataToAudit)
-          )
-        case (Some(_), Some(taxYears), Some(claimAmount), None, Some(changeYears)) =>
-          submissionService.submitChangeFREFromCode(request.nino.get, taxYears, claimAmount, changeYears).map(
-            result =>
-              auditAndRedirect(result, dataToAudit)
+              auditAndRedirect(result, dataToAudit, request.userAnswers)
           )
         case _ =>
-          Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad()))
+          Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
       }
   }
 
-  def auditAndRedirect(result: Boolean, auditData: AuditData)
-                      (implicit hc: HeaderCarrier): Result = {
+  def auditAndRedirect(result: Boolean,
+                       auditData: AuditData,
+                       userAnswers: UserAnswers
+                      )(implicit hc: HeaderCarrier): Result = {
+
     if (result) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
-      Redirect(routes.ConfirmationController.onPageLoad())
+      Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers))
     } else {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, auditData)
       Redirect(routes.TechnicalDifficultiesController.onPageLoad())
