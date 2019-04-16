@@ -21,11 +21,11 @@ import connectors.TaiConnector
 import models.TaxYearSelection
 import models.TaxYearSelection._
 import org.joda.time.LocalDate
+import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import org.mockito.Mockito._
-import org.mockito.Matchers._
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
 import uk.gov.hmrc.http.HttpResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -122,7 +122,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
     }
 
-    "submitFRENotInCode" must {
+    "submitFRE" must {
       "return true when give 204 response" in {
         when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(204)))
@@ -130,7 +130,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(200)))
 
-        val result = submissionService.submitFRENotInCode(fakeNino, currentTaxYear, claimAmount)
+        val result = submissionService.submitFRE(fakeNino, currentTaxYear, claimAmount)
 
         whenReady(result) {
           _ mustBe true
@@ -144,7 +144,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(200)))
 
-        val result = submissionService.submitFRENotInCode(fakeNino, currentTaxYear, claimAmount)
+        val result = submissionService.submitFRE(fakeNino, currentTaxYear, claimAmount)
 
         whenReady(result) {
           _ mustBe false
@@ -152,7 +152,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
       }
     }
 
-    "submitRemoveFREFromCode" must {
+    "removeFRE" must {
       "return true when give 204 response" in {
         when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(204)))
@@ -160,7 +160,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(200)))
 
-        val result = submissionService.submitRemoveFREFromCode(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
+        val result = submissionService.removeFRE(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
 
         whenReady(result) {
           _ mustBe true
@@ -174,37 +174,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(204)))
 
-        val result = submissionService.submitRemoveFREFromCode(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
-
-        whenReady(result) {
-          _ mustBe false
-        }
-      }
-    }
-
-    "submitChangeFREFromCode" must {
-      "return true when give 204 response" in {
-        when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
-
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
-
-        val result = submissionService.submitChangeFREFromCode(fakeNino, currentTaxYear, claimAmount, Seq(TaxYearSelection.CurrentYear))
-
-        whenReady(result) {
-          _ mustBe true
-        }
-      }
-
-      "return false when give 500 response" in {
-        when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(500)))
-
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
-
-        val result = submissionService.submitChangeFREFromCode(fakeNino, currentTaxYear, claimAmount, Seq(TaxYearSelection.CurrentYear))
+        val result = submissionService.removeFRE(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
 
         whenReady(result) {
           _ mustBe false
@@ -230,7 +200,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
       }
 
       "return false when not given 204 responses" in {
-        val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(500))))
+        val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(500), HttpResponse(204))))
 
         whenReady(result) {
           _ mustBe false
