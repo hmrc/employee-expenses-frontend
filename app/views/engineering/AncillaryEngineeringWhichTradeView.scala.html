@@ -34,13 +34,12 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("ancillaryEngineeringWhichTrade.heading")
-
         @components.input_radio(
             field = form("value"),
             legend = messages("ancillaryEngineeringWhichTrade.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = AncillaryEngineeringWhichTrade.options
+            inputs = AncillaryEngineeringWhichTrade.options,
+            headingIsLegend = true
         )
 
         @components.submit_button()

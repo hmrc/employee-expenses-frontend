@@ -55,8 +55,8 @@ class SubmissionService @Inject()(
     }
   }
 
-  def submitFRENotInCode(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int)
-                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
+  def submitFRE(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int)
+               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
 
     val responses: Future[Seq[HttpResponse]] = getTaxYearsToUpdate(nino, taxYears).flatMap {
       claimYears =>
@@ -70,8 +70,8 @@ class SubmissionService @Inject()(
     submissionResult(responses)
   }
 
-  def submitRemoveFREFromCode(nino: String, taxYears: Seq[TaxYearSelection], removeYear: TaxYearSelection)
-                             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
+  def removeFRE(nino: String, taxYears: Seq[TaxYearSelection], removeYear: TaxYearSelection)
+               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
 
     val removeTaxYears = taxYears.take(TaxYearSelection.values.indexOf(removeYear) + 1)
 
@@ -81,21 +81,6 @@ class SubmissionService @Inject()(
           taxYearSelection =>
             val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
             taiService.updateFRE(nino, taiTaxYear, 0)
-        }
-    }
-
-    submissionResult(responses)
-  }
-
-  def submitChangeFREFromCode(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int, changeYears: Seq[TaxYearSelection])
-                             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
-
-    val responses: Future[Seq[HttpResponse]] = getTaxYearsToUpdate(nino, taxYears).flatMap {
-      claimYears =>
-        futureSequence(claimYears) {
-          taxYearSelection =>
-            val taiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
-            taiService.updateFRE(nino, taiTaxYear, claimAmount)
         }
     }
 

@@ -17,16 +17,16 @@
 package controllers.authenticated
 
 import base.SpecBase
+import config.NavConstant
 import controllers.actions.Authed
 import forms.authenticated.RemoveFRECodeFormProvider
 import models.{NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
-import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage}
+import pages.authenticated.RemoveFRECodePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -94,7 +94,7 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Authenticated").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

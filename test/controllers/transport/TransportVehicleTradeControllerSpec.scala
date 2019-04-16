@@ -17,7 +17,7 @@
 package controllers.transport
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.TransportVehicleTradeFormProvider
 import models.{NormalMode, TransportVehicleTrade, UserAnswers}
@@ -100,7 +100,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
         val application =
           applicationBuilder(userAnswers = Some(emptyUserAnswers))
             .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-            .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
+            .overrides(bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)))
             .build()
 
         val request = FakeRequest(POST, transportVehicleTradeRoute)

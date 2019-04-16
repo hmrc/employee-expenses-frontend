@@ -16,6 +16,7 @@
 
 package controllers.authenticated
 
+import config.NavConstant
 import controllers.actions._
 import forms.authenticated.AlreadyClaimingFREDifferentAmountsFormProvider
 import javax.inject.{Inject, Named}
@@ -35,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AlreadyClaimingFREDifferentAmountsController @Inject()(
                                                               override val messagesApi: MessagesApi,
                                                               sessionRepository: SessionRepository,
-                                                              @Named("Authenticated") navigator: Navigator,
+                                                              @Named(NavConstant.authenticated) navigator: Navigator,
                                                               identify: AuthenticatedIdentifierAction,
                                                               getData: DataRetrievalAction,
                                                               requireData: DataRequiredAction,

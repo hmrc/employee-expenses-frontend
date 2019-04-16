@@ -23,15 +23,15 @@ import play.api.test.FakeRequest
 import play.twirl.api.Html
 import service.ClaimAmountService
 import views.behaviours.ViewBehaviours
-import views.html.confirmation.PreviousCurrentYearsConfirmationView
+import views.html.confirmation.ConfirmationCurrentAndPreviousYearsView
 
-class PreviousCurrentYearsConfirmationViewSpec extends ViewBehaviours {
+class ConfirmationCurrentAndPreviousYearsViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "PreviousCurrentYearsConfirmationView" must {
 
-    val view = application.injector.instanceOf[PreviousCurrentYearsConfirmationView]
+    val view = application.injector.instanceOf[ConfirmationCurrentAndPreviousYearsView]
 
     val claimAmountService = application.injector.instanceOf[ClaimAmountService]
 
@@ -60,7 +60,7 @@ class PreviousCurrentYearsConfirmationViewSpec extends ViewBehaviours {
                   currentYearMinus1: Boolean = true,
                   freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
                  )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(claimAmountsAndRates, claimAmount, updateEmployer, updateAddress, currentYearMinus1, freResponse)(fakeRequest, messages)
+      view.apply(claimAmountsAndRates, claimAmount, updateEmployer, updateAddress, currentYearMinus1, freResponse)(fakeRequest, messages, frontendAppConfig)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 

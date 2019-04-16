@@ -17,7 +17,7 @@
 package controllers.police
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.police.CommunitySupportOfficerFormProvider
 import models.{NormalMode, UserAnswers}
@@ -97,7 +97,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Police").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.police).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

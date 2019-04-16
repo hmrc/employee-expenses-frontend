@@ -23,6 +23,12 @@ import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove}
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
 import models.{AlreadyClaimingFRESameAmount, CheckMode, FlatRateExpenseOptions, NormalMode, TaxYearSelection}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import controllers.confirmation.routes._
+import models.AlreadyClaimingFREDifferentAmounts._
+import models.FlatRateExpenseOptions.FRENoYears
+import models.TaxYearSelection._
+import models._
+import org.scalatest.concurrent._
 import org.scalatest.mockito.MockitoSugar
 import pages.FREResponse
 import pages.authenticated._
@@ -195,6 +201,36 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
         navigator.nextPage(UpdateYourAddressPage, NormalMode)(emptyUserAnswers) mustBe
           CheckYourAnswersController.onPageLoad()
       }
+
+      "from CYA" must {
+        "go to ConfirmationClaimStoppedController" in {
+          val ua = minimumUserAnswers.set(FREResponse, FRENoYears).success.value
+
+          navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
+            ConfirmationClaimStoppedController.onPageLoad()
+        }
+
+        "go to ConfirmationCurrentAndPreviousYearsController" in {
+          val ua = fullUserAnswers
+            .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
+
+          navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
+            ConfirmationCurrentAndPreviousYearsController.onPageLoad()
+        }
+
+        "go to ConfirmationCurrentYearOnlyController" in {
+          navigator.nextPage(CheckYourAnswersPage, NormalMode)(fullUserAnswers) mustBe
+            ConfirmationCurrentYearOnlyController.onPageLoad()
+        }
+
+        "go to ConfirmationPreviousYearsOnlyController" in {
+          val ua = fullUserAnswers
+            .set(TaxYearSelectionPage, Seq(CurrentYearMinus1, CurrentYearMinus2)).success.value
+
+          navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
+            ConfirmationPreviousYearsOnlyController.onPageLoad()
+        }
+      }
     }
 
     "in CheckMode" must {
@@ -306,9 +342,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
             TechnicalDifficultiesController.onPageLoad()
         }
-
       }
     }
   }
-
 }

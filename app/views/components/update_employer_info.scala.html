@@ -14,14 +14,11 @@
  * limitations under the License.
  *@
 
-@(
-        updateEmployerInfo: Boolean
-)(implicit messages: Messages)
+@import config.FrontendAppConfig
+@()(implicit messages: Messages, appConfig: FrontendAppConfig)
 
-@if(!updateEmployerInfo) {
-  <h2>@messages("confirmation.updateEmployerInfo")</h2>
-  <p>@messages("confirmation.employerChange")</p>
-  <a class="button" id="updateEmployerInfoBtn" href="https://www.tax.service.gov.uk/check-income-tax/income-summary" target="_blank">
-  @messages("confirmation.updateEmployerInfoNow")
-  </a>
-}
+<h2>@messages("confirmation.updateEmployerInfo")</h2>
+<p>@messages("confirmation.employerChange")</p>
+<a class="button" id="updateEmployerInfoBtn" href="@appConfig.updateEmployerInfoUrl" target="_blank">
+    @messages("confirmation.updateEmployerInfoNow")
+</a>

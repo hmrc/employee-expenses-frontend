@@ -17,6 +17,7 @@
 package controllers.transport
 
 import base.SpecBase
+import config.NavConstant
 import controllers.actions.UnAuthed
 import forms.transport.TypeOfTransportFormProvider
 import models.{NormalMode, TypeOfTransport, UserAnswers}
@@ -96,7 +97,7 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

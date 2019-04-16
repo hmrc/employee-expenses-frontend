@@ -17,19 +17,18 @@
 package controllers.engineering
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.engineering.FactoryEngineeringList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
+import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import org.mockito.Mockito._
 import pages.ClaimAmount
 import pages.engineering.FactoryEngineeringList2Page
-import pages.printing.PrintingOccupationList1Page
 import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -99,7 +98,7 @@ class FactoryEngineeringList2ControllerSpec extends SpecBase with MockitoSugar w
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.engineering).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
@@ -120,7 +119,7 @@ class FactoryEngineeringList2ControllerSpec extends SpecBase with MockitoSugar w
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.engineering).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

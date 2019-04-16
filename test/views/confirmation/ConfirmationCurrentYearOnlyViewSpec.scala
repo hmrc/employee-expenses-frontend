@@ -16,22 +16,22 @@
 
 package views.confirmation
 
-import models.{FlatRateExpenseOptions, Rates, ScottishRate, StandardRate, TaxYearSelection}
+import models.{FlatRateExpenseOptions, Rates, ScottishRate, StandardRate}
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import service.ClaimAmountService
 import views.behaviours.ViewBehaviours
-import views.html.confirmation.PreviousYearsConfirmationView
+import views.html.confirmation.ConfirmationCurrentYearOnlyView
 
-class PreviousYearsConfirmationViewSpec extends ViewBehaviours {
+class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "PreviousYearConfirmation view" must {
+  "CurrentYearConfirmation view" must {
 
-    val view = application.injector.instanceOf[PreviousYearsConfirmationView]
+    val view = application.injector.instanceOf[ConfirmationCurrentYearOnlyView]
 
     val claimAmountService = application.injector.instanceOf[ClaimAmountService]
 
@@ -53,14 +53,14 @@ class PreviousYearsConfirmationViewSpec extends ViewBehaviours {
       calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount)
     )
 
-    def applyView(claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
-                  claimAmount: Int = claimAmount,
-                  updateEmployer: Boolean = false,
-                  updateAddress: Boolean = false,
-                  currentYearMinus1: Boolean = true,
-                  freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
+    def applyView(
+                   claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
+                   claimAmount: Int = claimAmount,
+                   updateEmployer: Boolean = false,
+                   updateAddress: Boolean = false,
+                   freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
                  )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(claimAmountsAndRates, claimAmount, updateEmployer, updateAddress, currentYearMinus1, freResponse)(fakeRequest, messages)
+      view.apply(claimAmountsAndRates, claimAmount, updateEmployer, updateAddress, freResponse)(fakeRequest, messages, frontendAppConfig)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 
@@ -78,20 +78,10 @@ class PreviousYearsConfirmationViewSpec extends ViewBehaviours {
         "confirmation.heading",
         "confirmation.actualAmount",
         "confirmation.whatHappensNext",
-        "confirmation.confirmationLetter",
-        messages("confirmation.currentYearMinusOneDelay",
-          TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
-          TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString
-        )
-      )
-    }
-
-    "not display currentYearMinusOneDelay when currentYearMinus1 is false" in {
-
-      val doc = asDocument(applyView(currentYearMinus1 = false)(fakeRequest, messages))
-
-      assertTextNotRendered(doc,
-        messages("confirmation.currentYearMinusOneDelay")
+        "confirmation.taxCodeChanged.paragraph1",
+        "confirmation.taxCodeChanged.paragraph2",
+        "confirmation.continueToClaim.paragraph1",
+        "confirmation.continueToClaim.paragraph2"
       )
     }
 
@@ -99,6 +89,7 @@ class PreviousYearsConfirmationViewSpec extends ViewBehaviours {
 
       val doc = asDocument(viewWithAnswers)
 
+      assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", claimAmount))
       assertContainsText(doc, messages(
         "confirmation.basicRate",
         claimAmountsRates.calculatedBasicRate,
@@ -175,7 +166,6 @@ class PreviousYearsConfirmationViewSpec extends ViewBehaviours {
         assertNotRenderedById(doc, "updateEmployerInfoNow")
       }
     }
-
   }
 
   application.stop()

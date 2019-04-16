@@ -34,12 +34,12 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("metropolitanPolice.heading")
-
         @components.input_yes_no(
             field = form("value"),
             label = messages("metropolitanPolice.heading"),
-            labelClass = Some("visually-hidden")
+            labelClass = Some("visually-hidden"),
+            headingIsLegend = true
+
         )
 
         @components.submit_button()

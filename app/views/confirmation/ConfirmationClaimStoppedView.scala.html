@@ -20,13 +20,13 @@
 
 @()(implicit request: Request[_], messages: Messages)
 
-@main_template(
-  title = messages("confirmation.titleStopped")
-) {
+    @main_template(
+        title = messages("confirmation.titleStopped")
+    ) {
 
-  <div class="govuk-box-highlight">
-    <h1 class="heading-xlarge">@messages("confirmation.heading.stoppedClaim")</h1>
-  </div>
+        <div class="govuk-box-highlight">
+            <h1 class="heading-xlarge">@messages("confirmation.heading.stoppedClaim")</h1>
+        </div>
 
-  <p>@messages("confirmation.noLongerGetAmount")</p>
-}
+        <p>@messages("confirmation.noLongerGetAmount")</p>
+    }

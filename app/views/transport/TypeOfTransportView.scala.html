@@ -34,13 +34,12 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("typeOfTransport.heading")
-
         @components.input_radio(
             field = form("value"),
             legend = messages("typeOfTransport.heading"),
             legendClass = Some("visually-hidden"),
-            inputs = TypeOfTransport.options
+            inputs = TypeOfTransport.options,
+            headingIsLegend = true
         )
 
         @components.submit_button()

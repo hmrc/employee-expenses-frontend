@@ -25,6 +25,8 @@ trait QuestionPage[A] extends Page {
 
   def path: JsPath
 
+  lazy val industryPath: String = "indsutry"
+
   def cleanup(value: Option[A], userAnswers: UserAnswers): Try[UserAnswers] =
     Success(userAnswers)
 }

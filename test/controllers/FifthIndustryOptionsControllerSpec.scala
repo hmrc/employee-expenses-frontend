@@ -17,12 +17,11 @@
 package controllers
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import forms.FifthIndustryOptionsFormProvider
 import generators.Generators
 import models.FifthIndustryOptions.{Forestry, NoneOfAbove}
-import models.FirstIndustryOptions.Retail
-import models.{FifthIndustryOptions, FirstIndustryOptions, NormalMode, UserAnswers}
+import models.{FifthIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
@@ -31,10 +30,9 @@ import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.PropertyChecks
-import pages.{ClaimAmount, FifthIndustryOptionsPage, FirstIndustryOptionsPage}
+import pages.{ClaimAmount, FifthIndustryOptionsPage}
 import play.api.Application
 import play.api.inject.bind
-import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -98,7 +96,7 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Generic").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =

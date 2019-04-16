@@ -51,6 +51,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val unauthorisedCallback: String = configuration.get[String]("identity-verification-uplift.unauthorised-callback.url")
 
   lazy val p87Url: String = configuration.get[String]("p87.url")
+  lazy val p87ClaimOnlineUrl: String = configuration.get[String]("p87.claimOnlineUrl")
+  lazy val p87ClaimByPostUrl: String = configuration.get[String]("p87.claimByPostUrl")
   lazy val govUkUrl: String = configuration.get[String]("govUk.url")
   lazy val jobExpensesLink: String = configuration.get[String]("jobExpenses.url")
   lazy val contactHMRC: String = configuration.get[String]("contactHMRC.url")
@@ -58,6 +60,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val incomeSummary: String = configuration.get[String]("incomeSummary.url")
   lazy val personalDetails: String = configuration.get[String]("personalDetails.url")
+
+  lazy val updateAddressInfoUrl: String = configuration.get[String]("updateAddressInfo.url")
+  lazy val updateEmployerInfoUrl: String = configuration.get[String]("updateEmployerInfo.url")
 
   lazy val feedbackSurveyUrl: String = configuration.get[String]("feedbackSurvey.url")
   lazy val signOutUrl: String = employeeExpensesFrontendUrl + "/sign-out"

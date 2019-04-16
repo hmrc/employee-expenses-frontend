@@ -17,7 +17,7 @@
 package controllers.engineering
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.engineering.ConstructionalEngineeringList3FormProvider
 import models.{NormalMode, UserAnswers}
@@ -97,7 +97,7 @@ class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFu
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith("Engineering").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.engineering).toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
       val request =
