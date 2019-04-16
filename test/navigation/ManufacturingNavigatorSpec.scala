@@ -103,16 +103,26 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
               routes.AluminiumOccupationList1Controller.onPageLoad(mode)
           }
 
-          "go to EmployerContributionController from AluminiumOccupatinoList1 when 'Yes' is selected" in {
+          "go to SessionExpired from AluminiumApprentice when AluminiumApprenticePage when empty user answers" in {
+            navigator.nextPage(AluminiumApprenticePage, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
+          }
+
+          "go to EmployerContributionController from AluminiumOccupationList1 when 'Yes' is selected" in {
             val answers = emptyUserAnswers.set(AluminiumOccupationList1Page, true).success.value
             navigator.nextPage(AluminiumOccupationList1Page, mode)(answers) mustBe
               controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
 
-          "go to AluminiumOccupationList2 from AluminiumOccupatinoList1 when 'No' is selected" in {
+          "go to AluminiumOccupationList2 from AluminiumOccupationList1 when 'No' is selected" in {
             val answers = emptyUserAnswers.set(AluminiumOccupationList1Page, false).success.value
             navigator.nextPage(AluminiumOccupationList1Page, mode)(answers) mustBe
               controllers.manufacturing.routes.AluminiumOccupationList2Controller.onPageLoad(mode)
+          }
+
+          "go to SessionExpired from AluminiumOccupationList1 when empty user answers" in {
+            navigator.nextPage(AluminiumOccupationList1Page, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
           }
 
           "go to EmployerContributionController from AluminiumOccupatinoList2 when 'Yes' is selected" in {
@@ -127,6 +137,11 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
               controllers.manufacturing.routes.AluminiumOccupationList3Controller.onPageLoad(mode)
           }
 
+          "go to SessionExpired from AluminiumOccupationList2 when empty user answers" in {
+            navigator.nextPage(AluminiumOccupationList2Page, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
+          }
+
           "go to EmployerContributionController from AluminiumOccupationList3 when 'Yes' is selected" in {
             val answers = emptyUserAnswers.set(AluminiumOccupationList3Page, true).success.value
             navigator.nextPage(AluminiumOccupationList3Page, mode)(answers) mustBe
@@ -136,7 +151,8 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
           "go to EmployerContributionController from AluminiumOccupationList3 when 'No' is selected" in {
             val answers = emptyUserAnswers.set(AluminiumOccupationList3Page, false).success.value
             navigator.nextPage(AluminiumOccupationList3Page, mode)(answers) mustBe
-              controllers.routes.EmployerContributionController.onPageLoad(mode)          }
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
         }
 
         "in Iron and Steel journey" must {
@@ -150,6 +166,11 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
             val answers = emptyUserAnswers.set(IronMiningPage, false).success.value
             navigator.nextPage(IronMiningPage, mode)(answers) mustBe
               routes.IronSteelOccupationListController.onPageLoad(mode)
+          }
+
+          "go to SessionExpired from IronMiningController when empty user answers" in {
+            navigator.nextPage(IronMiningPage, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
           }
 
           "go to EmployerContributionController from IronMiningListController when 'Yes' is selected" in {
@@ -187,6 +208,11 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
             navigator.nextPage(IronApprenticePage, mode)(answers) mustBe
               controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
+
+          "go to SessionExpired from IronApprentice when empty user answers" in {
+            navigator.nextPage(IronApprenticePage, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
+          }
         }
 
         "in Wood Furniture journey" must {
@@ -202,6 +228,11 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
               routes.WoodFurnitureOccupationList2Controller.onPageLoad(mode)
           }
 
+          "go to SessionExpired from WoodFurnitureOccupationList1 when empty user answers" in {
+            navigator.nextPage(WoodFurnitureOccupationList1Page, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
+          }
+
           "go to EmployerContributionController from WoodFurnitureOccupationList2 when 'Yes' is selected" in {
             val answers = emptyUserAnswers.set(WoodFurnitureOccupationList2Page, true).success.value
             navigator.nextPage(WoodFurnitureOccupationList2Page, mode)(answers) mustBe
@@ -212,6 +243,11 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
             val answers = emptyUserAnswers.set(WoodFurnitureOccupationList2Page, false).success.value
             navigator.nextPage(WoodFurnitureOccupationList2Page, mode)(answers) mustBe
               routes.WoodFurnitureOccupationList3Controller.onPageLoad(mode)
+          }
+
+          "go to SessionExpired from WoodFurnitureOccupationList2 when empty user answers" in {
+            navigator.nextPage(WoodFurnitureOccupationList2Page, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
           }
 
           "go to EmployerContributionController from WoodFurnitureOccupationList3 when 'Yes' is selected" in {
