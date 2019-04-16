@@ -202,6 +202,21 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           CheckYourAnswersController.onPageLoad()
       }
 
+      "go to SessionExpired from YourAddress when YourAddressPage is not in UserAnswers" in {
+        navigator.nextPage(YourAddressPage, NormalMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      "go to SessionExpired from YourEmployer when YourEmployerPage is not in UserAnswers" in {
+        navigator.nextPage(YourEmployerPage, NormalMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      "go to SessionExpired from TaxYearSelectionPage when FREResponse is not in UserAnswers" in {
+        navigator.nextPage(TaxYearSelectionPage, NormalMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
       "from CYA" must {
         "go to ConfirmationClaimStoppedController" in {
           val ua = minimumUserAnswers.set(FREResponse, FRENoYears).success.value
@@ -343,6 +358,88 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
             TechnicalDifficultiesController.onPageLoad()
         }
       }
+
+
+      "from AlreadyClaimingFRESameAmount" must {
+
+        "go to NoCodeChange when answer is NoChange" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.NoChange).success.value
+
+          navigator.nextPage(AlreadyClaimingFRESameAmountPage, CheckMode)(ua) mustBe
+            NoCodeChangeController.onPageLoad()
+        }
+
+        "go to RemoveFRECode when answer is false" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
+
+          navigator.nextPage(AlreadyClaimingFRESameAmountPage, CheckMode)(ua) mustBe
+            RemoveFRECodeController.onPageLoad(CheckMode)
+        }
+
+        "go to SessionExpired if no answer" in {
+          navigator.nextPage(AlreadyClaimingFRESameAmountPage, CheckMode)(emptyUserAnswers) mustBe
+            SessionExpiredController.onPageLoad()
+        }
+      }
+
+      "from AlreadyClaimingFREDifferentAmounts" must {
+
+        "go to NoCodeChange when answer is true" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, NoChange).success.value
+
+          navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, CheckMode)(ua) mustBe
+            NoCodeChangeController.onPageLoad()
+        }
+
+        "go to ChangeWhichTaxYears when answer is false" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
+
+          navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, CheckMode)(ua) mustBe
+            ChangeWhichTaxYearsController.onPageLoad(CheckMode)
+        }
+
+        "go to RemoveFRECode when answer is false" in {
+          val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Remove).success.value
+
+          navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, CheckMode)(ua) mustBe
+            RemoveFRECodeController.onPageLoad(CheckMode)
+        }
+
+        "go to SessionExpired if no answer" in {
+          navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, CheckMode)(emptyUserAnswers) mustBe
+            SessionExpiredController.onPageLoad()
+        }
+      }
+
+      "go to CheckYourAnswers from YourAddress when answered true" in {
+        val ua = emptyUserAnswers.set(YourAddressPage, true).success.value
+
+        navigator.nextPage(YourAddressPage, CheckMode)(ua) mustBe
+          CheckYourAnswersController.onPageLoad()
+      }
+
+      "go to UpdateYourAddress from YourAddress when answered false" in {
+        val ua = emptyUserAnswers.set(YourAddressPage, false).success.value
+
+        navigator.nextPage(YourAddressPage, CheckMode)(ua) mustBe
+          UpdateYourAddressController.onPageLoad()
+      }
+
+      "go to SessionExpired from YourAddress when YourAddressPage is not in UserAnswers" in {
+        navigator.nextPage(YourAddressPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      "go to SessionExpired from YourEmployer when YourEmployerPage is not in UserAnswers" in {
+        navigator.nextPage(YourEmployerPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      "go to SessionExpired from TaxYearSelectionPage when FREResponse is not in UserAnswers" in {
+        navigator.nextPage(TaxYearSelectionPage, CheckMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
     }
   }
 }

@@ -53,9 +53,9 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  private val connector: CitizenDetailsConnector = mock[CitizenDetailsConnector]
+  private val mockCitizenDetailsConnector: CitizenDetailsConnector = mock[CitizenDetailsConnector]
 
-  override def beforeEach(): Unit = reset(connector)
+  override def beforeEach(): Unit = reset(mockCitizenDetailsConnector)
 
   lazy val yourAddressRoute: String = YourAddressController.onPageLoad(NormalMode).url
 
@@ -64,10 +64,10 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
     "return OK and the correct view for a GET and save address to 'CitizenDetailsAddress'" in {
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .overrides(bind[CitizenDetailsConnector].toInstance(connector))
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
         .build()
 
-      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
 
       val request = FakeRequest(GET, yourAddressRoute)
 
@@ -97,10 +97,10 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .overrides(bind[CitizenDetailsConnector].toInstance(connector))
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
         .build()
 
-      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
 
       val request = FakeRequest(GET, yourAddressRoute)
 
@@ -121,10 +121,10 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
-          .overrides(bind[CitizenDetailsConnector].toInstance(connector))
+          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
           .build()
 
-      when(connector.getAddress(any())(any(), any())) thenReturn Future.successful(emptyAddress)
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(emptyAddress)
 
       val request = FakeRequest(GET, yourAddressRoute)
 
@@ -202,9 +202,47 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       application.stop()
     }
 
+    "redirect to UpdateYourAddressController for a GET if citizen details address call fails" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
+
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.failed(new Exception)
+
+      val request =
+        FakeRequest(GET, yourAddressRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual UpdateYourAddressController.onPageLoad().url
+
+      application.stop()
+    }
+
     "redirect to Session Expired for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
+
+      val request =
+        FakeRequest(POST, yourAddressRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to Session Expired for a POST if CitizenDetailsAddress is not stored in user answers" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
         FakeRequest(POST, yourAddressRoute)

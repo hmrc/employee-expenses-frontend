@@ -20,9 +20,11 @@ import base.SpecBase
 import models.AncillaryEngineeringWhichTrade._
 import models.TypeOfEngineering._
 import models._
+import org.scalatest.mockito.MockitoSugar
+import pages.Page
 import pages.engineering._
 
-class EngineeringNavigatorSpec extends SpecBase {
+class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
   private val modes = Seq(NormalMode, CheckMode)
   private val navigator = new EngineeringNavigator
 
@@ -59,6 +61,11 @@ class EngineeringNavigatorSpec extends SpecBase {
             navigator.nextPage(TypeOfEngineeringPage, mode)(answers) mustBe
               controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
+
+          "go to SessionExpired when no TypeOfEngineeringPage in UserAnswers" in {
+            navigator.nextPage(TypeOfEngineeringPage, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
+          }
         }
 
         //Constructional Engineering
@@ -78,6 +85,11 @@ class EngineeringNavigatorSpec extends SpecBase {
             navigator.nextPage(ConstructionalEngineeringApprenticePage, mode)(answers) mustBe
               controllers.engineering.routes.ConstructionalEngineeringList1Controller.onPageLoad(mode)
           }
+
+          "go to SessionExpired when no ConstructionalEngineeringApprenticePage in UserAnswers" in {
+            navigator.nextPage(ConstructionalEngineeringApprenticePage, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
+          }
         }
 
         "from ConstructionalEngineeringList1" must {
@@ -95,6 +107,11 @@ class EngineeringNavigatorSpec extends SpecBase {
             navigator.nextPage(ConstructionalEngineeringList1Page, mode)(answers) mustBe
               controllers.engineering.routes.ConstructionalEngineeringList2Controller.onPageLoad(mode)
           }
+
+          "go to SessionExpired when no ConstructionalEngineeringList1Page in UserAnswers" in {
+            navigator.nextPage(ConstructionalEngineeringList1Page, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
+          }
         }
 
         "from ConstructionalEngineeringList2" must {
@@ -111,6 +128,11 @@ class EngineeringNavigatorSpec extends SpecBase {
 
             navigator.nextPage(ConstructionalEngineeringList2Page, mode)(answers) mustBe
               controllers.engineering.routes.ConstructionalEngineeringList3Controller.onPageLoad(mode)
+          }
+
+          "go to SessionExpired when no ConstructionalEngineeringList2Page in UserAnswers" in {
+            navigator.nextPage(ConstructionalEngineeringList2Page, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
           }
         }
 
@@ -141,6 +163,11 @@ class EngineeringNavigatorSpec extends SpecBase {
                 controllers.routes.EmployerContributionController.onPageLoad(mode)
             }
           }
+
+          "go to SessionExpired when no AncillaryEngineeringWhichTradePage in UserAnswers" in {
+            navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
+          }
         }
 
         //Factory Engineering
@@ -159,6 +186,11 @@ class EngineeringNavigatorSpec extends SpecBase {
 
             navigator.nextPage(FactoryEngineeringList1Page, mode)(answers) mustBe
               controllers.engineering.routes.FactoryEngineeringList2Controller.onPageLoad(mode)
+          }
+
+          "go to SessionExpired when no FactoryEngineeringList1Page in UserAnswers" in {
+            navigator.nextPage(FactoryEngineeringList1Page, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
           }
         }
 
@@ -194,6 +226,16 @@ class EngineeringNavigatorSpec extends SpecBase {
             navigator.nextPage(FactoryEngineeringApprenticePage, mode)(answers) mustBe
               controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(mode)
           }
+
+          "go to SessionExpired when no FactoryEngineeringApprenticePage in UserAnswers" in {
+            navigator.nextPage(FactoryEngineeringApprenticePage, mode)(emptyUserAnswers) mustBe
+              controllers.routes.SessionExpiredController.onPageLoad()
+          }
+        }
+
+        "go to SessionExpired when not one of the EngineeringPage" in {
+          navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
+            controllers.routes.SessionExpiredController.onPageLoad()
         }
       }
     }
