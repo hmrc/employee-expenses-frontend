@@ -26,19 +26,21 @@ object TaxYearSelectionPage extends QuestionPage[Seq[TaxYearSelection]] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString:String = "taxYearSelection"
+  override def toString: String = "taxYearSelection"
 
   override def cleanup(value: Option[Seq[TaxYearSelection]], userAnswers: UserAnswers): Try[UserAnswers] = {
 
     value match {
-      case Some(_) =>
-        userAnswers
-          .remove(AlreadyClaimingFREDifferentAmountsPage)
-          .flatMap(_.remove(AlreadyClaimingFRESameAmountPage))
-          .flatMap(_.remove(ChangeWhichTaxYearsPage))
-          .flatMap(_.remove(RemoveFRECodePage))
-          .flatMap(_.remove(YourEmployerPage))
+      case Some(ty) =>
+        val data =
+          userAnswers.data - AlreadyClaimingFREDifferentAmountsPage - AlreadyClaimingFRESameAmountPage - ChangeWhichTaxYearsPage - RemoveFRECodePage
 
+        Try(
+          UserAnswers(
+            id = userAnswers.id,
+            data = if (ty.contains(TaxYearSelection.CurrentYear)) data else data - YourEmployerPage
+          )
+        )
       case _ =>
         super.cleanup(value, userAnswers)
     }
