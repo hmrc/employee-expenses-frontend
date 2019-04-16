@@ -46,9 +46,7 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
         .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
         .set(YourEmployerPage, true).success.value
 
-      print(s"\n\nBefore: $userAnswers")
       val updatedUserAnswers = userAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.Retail).get
-print(s"\nAfter: $updatedUserAnswers")
 
       updatedUserAnswers.data.keys.contains("industry") mustBe false
       updatedUserAnswers.data.keys.contains(ExpensesEmployerPaidPage) mustBe true
@@ -59,8 +57,6 @@ print(s"\nAfter: $updatedUserAnswers")
       updatedUserAnswers.data.keys.contains(RemoveFRECodePage) mustBe true
       updatedUserAnswers.data.keys.contains(TaxYearSelectionPage) mustBe true
       updatedUserAnswers.data.keys.contains(YourEmployerPage) mustBe true
-
     }
   }
-
 }

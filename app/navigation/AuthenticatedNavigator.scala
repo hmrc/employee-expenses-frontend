@@ -141,19 +141,15 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
   }
 
   def changeWhichTaxYears(mode: Mode)(userAnswers: UserAnswers): Call = {
-    val selectedYears = userAnswers.get(TaxYearSelectionPage)
-    if (mode == CheckMode) {
-      (userAnswers.get(YourEmployerPage), selectedYears)  match {
-        case (None, Some(_)) =>
-          if (selectedYears.get.contains(CurrentYear)) YourEmployerController.onPageLoad(mode) else CheckYourAnswersController.onPageLoad()
-        case _ =>
-          CheckYourAnswersController.onPageLoad()
-      }
-    } else {
-      (userAnswers.get(YourEmployerPage), selectedYears) match{
-        case (None, Some(_)) => if (selectedYears.get.contains(CurrentYear)) YourEmployerController.onPageLoad(mode) else YourAddressController.onPageLoad(mode)
-        case _ => YourAddressController.onPageLoad(mode)
-      }
+    (mode, userAnswers.get(YourEmployerPage), userAnswers.get(ChangeWhichTaxYearsPage)) match {
+      case (NormalMode, None, Some(selectedYears)) =>
+        if (selectedYears.contains(CurrentYear)) YourEmployerController.onPageLoad(mode) else YourAddressController.onPageLoad(mode)
+      case (NormalMode, _, None) =>
+        YourAddressController.onPageLoad(mode)
+      case (CheckMode, None, Some(selectedYears)) =>
+        if (selectedYears.contains(CurrentYear)) YourEmployerController.onPageLoad(mode) else CheckYourAnswersController.onPageLoad()
+      case _ =>
+        CheckYourAnswersController.onPageLoad()
     }
   }
 }
