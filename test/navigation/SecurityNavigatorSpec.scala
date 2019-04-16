@@ -17,10 +17,13 @@
 package navigation
 
 import base.SpecBase
+import controllers.routes.SessionExpiredController
 import models.{CheckMode, NormalMode}
+import org.scalatest.mockito.MockitoSugar
+import pages.Page
 import pages.security.SecurityGuardNHSPage
 
-class SecurityNavigatorSpec extends SpecBase {
+class SecurityNavigatorSpec extends SpecBase with MockitoSugar {
 
   private val modes = Seq(NormalMode, CheckMode)
   private val navigator = new SecurityNavigator
@@ -30,6 +33,11 @@ class SecurityNavigatorSpec extends SpecBase {
       s"in $mode" must {
 
         "from SecurityGuardNHS" must {
+
+          "go to SessionExpired when not a security page" in {
+            navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
+              SessionExpiredController.onPageLoad()
+          }
 
           "go to EmployerContribution when 'Yes' is selected" in {
             val answers = emptyUserAnswers.set(SecurityGuardNHSPage, true).success.value

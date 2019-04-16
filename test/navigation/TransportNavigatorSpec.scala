@@ -21,9 +21,11 @@ import controllers.transport.routes
 import models.TypeOfTransport.{NoneOfTheAbove, _}
 import models.WhichRailwayTrade._
 import models._
+import org.scalatest.mockito.MockitoSugar
+import pages.Page
 import pages.transport._
 
-class TransportNavigatorSpec extends SpecBase {
+class TransportNavigatorSpec extends SpecBase with MockitoSugar {
 
   private val navigator = new TransportNavigator
   private val modes = Seq(NormalMode, CheckMode)
@@ -33,6 +35,11 @@ class TransportNavigatorSpec extends SpecBase {
 
     for (mode <- modes) {
       s"in $mode" must {
+
+        "go to SessionExpired when not a transport page" in {
+          navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
+            controllers.routes.SessionExpiredController.onPageLoad()
+        }
 
         "on TypeOfTransportController" must {
           "go to AirlineJobList when 'Airlines' is selected" in {

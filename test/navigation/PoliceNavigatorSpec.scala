@@ -18,10 +18,13 @@ package navigation
 
 import base.SpecBase
 import controllers.police.routes
+import controllers.routes._
 import models.{CheckMode, NormalMode}
+import org.scalatest.mockito.MockitoSugar
+import pages.Page
 import pages.police._
 
-class PoliceNavigatorSpec extends SpecBase {
+class PoliceNavigatorSpec extends SpecBase with MockitoSugar {
   private val navigator = new PoliceNavigator
   private val modes = Seq(NormalMode, CheckMode)
 
@@ -29,6 +32,11 @@ class PoliceNavigatorSpec extends SpecBase {
 
     for (mode <- modes) {
       s"in $mode" must {
+
+        "go to SessionExpired when not a police page" in {
+          navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
+            SessionExpiredController.onPageLoad()
+        }
 
         "on SpecialConstableController" must {
 
@@ -42,6 +50,11 @@ class PoliceNavigatorSpec extends SpecBase {
             val answers = emptyUserAnswers.set(SpecialConstablePage, false).success.value
             navigator.nextPage(SpecialConstablePage, mode)(answers) mustBe
               routes.CommunitySupportOfficerController.onPageLoad(mode)
+          }
+
+          "go to SessionExpired when None" in {
+            navigator.nextPage(SpecialConstablePage, mode)(emptyUserAnswers) mustBe
+              SessionExpiredController.onPageLoad()
           }
         }
 
@@ -58,6 +71,11 @@ class PoliceNavigatorSpec extends SpecBase {
             navigator.nextPage(CommunitySupportOfficerPage, mode)(answers) mustBe
               routes.MetropolitanPoliceController.onPageLoad(mode)
           }
+
+          "go to SessionExpired when None" in {
+            navigator.nextPage(CommunitySupportOfficerPage, mode)(emptyUserAnswers) mustBe
+              SessionExpiredController.onPageLoad()
+          }
         }
 
         "on MetropolitanPolice" must {
@@ -73,6 +91,11 @@ class PoliceNavigatorSpec extends SpecBase {
             val answers = emptyUserAnswers.set(MetropolitanPolicePage, false).success.value
             navigator.nextPage(MetropolitanPolicePage, mode)(answers) mustBe
               routes.PoliceOfficerController.onPageLoad(mode)
+          }
+
+          "go to SessionExpired when None" in {
+            navigator.nextPage(MetropolitanPolicePage, mode)(emptyUserAnswers) mustBe
+              SessionExpiredController.onPageLoad()
           }
         }
 

@@ -43,7 +43,7 @@ class TransportNavigator @Inject()() extends Navigator {
     case WhichRailwayTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case TransportCarpenterPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case TransportVehicleTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => controllers.routes.CheckYourAnswersController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
   private def typeOfTransportOptions(mode: Mode)(userAnswers: UserAnswers): Call = {

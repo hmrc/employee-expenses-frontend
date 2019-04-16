@@ -18,15 +18,23 @@ package navigation
 
 import base.SpecBase
 import models.{CheckMode, NormalMode}
+import org.scalatest.mockito.MockitoSugar
+import pages.Page
 import pages.textiles.TextilesOccupationList1Page
 
-class TextilesNavigatorSpec extends SpecBase {
+class TextilesNavigatorSpec extends SpecBase with MockitoSugar {
   private val modes = Seq(NormalMode, CheckMode)
   val navigator = new TextilesNavigator
 
   "TextilesNavigator" when {
     for (mode <- modes) {
       s"in $mode" must {
+
+        "go to SessionExpired when not a textiles page" in {
+          navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
+            controllers.routes.SessionExpiredController.onPageLoad()
+        }
+
         "go to EmployerContribution from Textiles when 'Yes' is selected" in {
           val answers = emptyUserAnswers.set(TextilesOccupationList1Page, true).success.value
 
