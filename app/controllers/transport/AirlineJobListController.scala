@@ -73,7 +73,6 @@ class AirlineJobListController @Inject()(
               )
             } else {
               Future.fromTry(request.userAnswers.set(AirlineJobListPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew))
               )
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)

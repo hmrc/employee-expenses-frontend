@@ -214,7 +214,7 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
       application.stop()
     }
 
-    "save ClaimAmount 'CabinCrew' when false" in {
+    "save ClaimAmount 'null amount' when false" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -225,7 +225,6 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew).success.value
         .set(AirlineJobListPage, false).success.value
 
       whenReady(result){

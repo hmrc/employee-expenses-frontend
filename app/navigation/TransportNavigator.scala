@@ -18,9 +18,10 @@ package navigation
 
 import controllers.transport.routes
 import javax.inject.Inject
+
 import models.TypeOfTransport._
 import models._
-import pages.Page
+import pages.{CabinCrewPage, Page}
 import pages.transport._
 import play.api.mvc.Call
 
@@ -28,21 +29,23 @@ class TransportNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case TypeOfTransportPage => userAnswers => typeOfTransportOptions(NormalMode)(userAnswers)
-    case AirlineJobListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case AirlineJobListPage => airlineJobList(NormalMode)
     case GarageHandOrCleanerPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case WhichRailwayTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case TransportCarpenterPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case TransportVehicleTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case CabinCrewPage              => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case TypeOfTransportPage => userAnswers => typeOfTransportOptions(CheckMode)(userAnswers)
-    case AirlineJobListPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case AirlineJobListPage => airlineJobList(CheckMode)
     case GarageHandOrCleanerPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case WhichRailwayTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case TransportCarpenterPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case TransportVehicleTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case CabinCrewPage              => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
@@ -54,6 +57,14 @@ class TransportNavigator @Inject()() extends Navigator {
       case Some(SeamanCarpenter) => routes.TransportCarpenterController.onPageLoad(mode)
       case Some(Vehicles) => routes.TransportVehicleTradeController.onPageLoad(mode)
       case Some(NoneOfTheAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+    }
+  }
+
+  private def airlineJobList(mode: Mode)(userAnswers: UserAnswers): Call = {
+    userAnswers.get(AirlineJobListPage) match {
+      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(false) => routes.CabinCrewController.onPageLoad(mode)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }
