@@ -16,12 +16,13 @@
 
 package controllers.transport
 
-import config.NavConstant
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.transport.TypeOfTransportFormProvider
 import javax.inject.{Inject, Named}
-import models.{Enumerable, Mode}
+import models.{Enumerable, Mode, TypeOfTransport}
 import navigation.Navigator
+import pages.ClaimAmount
 import pages.transport.TypeOfTransportPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -66,7 +67,12 @@ class TypeOfTransportController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfTransportPage, value))
+            updatedAnswers <- if (value == TypeOfTransport.NoneOfTheAbove) {
+              Future.fromTry(request.userAnswers.set(TypeOfTransportPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))
+            } else {
+              Future.fromTry(request.userAnswers.set(TypeOfTransportPage, value))
+            }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(TypeOfTransportPage, mode)(updatedAnswers))
         }

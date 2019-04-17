@@ -17,15 +17,17 @@
 package controllers.transport
 
 import base.SpecBase
-import config.NavConstant
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.transport.TypeOfTransportFormProvider
+import models.TypeOfTransport.NoneOfTheAbove
 import models.{NormalMode, TypeOfTransport, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
+import pages.ClaimAmount
 import pages.transport.TypeOfTransportPage
 import play.api.Application
 import play.api.inject.bind
@@ -167,6 +169,14 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
     }
 
     for(transport <- TypeOfTransport.values) {
+      val userAnswers2 = transport match {
+        case NoneOfTheAbove => userAnswers
+          .set(TypeOfTransportPage, transport).success.value
+          .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+        case _ => userAnswers
+          .set(TypeOfTransportPage, transport).success.value
+      }
+
       s"save '$transport' when selected" in {
 
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
@@ -177,9 +187,6 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
           .withFormUrlEncodedBody(("value", transport.toString))
 
         val result = route(application, request).value
-
-        val userAnswers2 = userAnswers
-          .set(TypeOfTransportPage, transport).success.value
 
         whenReady(result) {
           _ =>
