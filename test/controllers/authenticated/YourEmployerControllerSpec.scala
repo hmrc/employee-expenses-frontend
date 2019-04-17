@@ -49,7 +49,6 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   private val formProvider = new YourEmployerFormProvider()
   private val form = formProvider()
   private val mockTaiService = mock[TaiService]
-  private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
@@ -346,7 +345,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       application.stop()
     }
 
-    "redirect to Your Address for a GET when TAI call fails" in {
+    "redirect to Update Your Employer for a GET when TAI call fails" in {
       val ua1 = emptyUserAnswers.set(TaxYearSelectionPage, TaxYearSelection.values).success.value
       val application =
         applicationBuilder(userAnswers = Some(ua1))
@@ -362,7 +361,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual YourAddressController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustEqual UpdateEmployerInformationController.onPageLoad(NormalMode).url
 
       application.stop()
     }

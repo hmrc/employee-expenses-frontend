@@ -70,10 +70,15 @@ class YourAddressController @Inject()(
           } else {
             Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
           }
-      }.recoverWith{
+      }.recoverWith {
         case e =>
-        Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
-        Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(YourAddressPage, false))
+            _ <- sessionRepository.set(request.identifier, updatedAnswers)
+          } yield {
+            Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
+            Redirect(UpdateYourAddressController.onPageLoad())
+          }
       }
   }
 
