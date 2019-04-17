@@ -775,3 +775,8 @@ shipyardOccupationList2.occupation4 = riveters
 shipyardOccupationList2.occupation5 = sheet iron workers
 shipyardOccupationList2.occupation6 = shipwrights
 shipyardOccupationList2.occupation7 = tubers and welders
+
+cabinCrew.title = Are you airline cabin crew?
+cabinCrew.heading = Are you airline cabin crew?
+cabinCrew.checkYourAnswersLabel = Are you airline cabin crew?
+cabinCrew.error.required = Select yes if you are cabin crew

@@ -16,41 +16,41 @@
 
 package controllers.transport
 
+import javax.inject.{Inject, Named}
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
-import forms.transport.AirlineJobListFormProvider
-import javax.inject.{Inject, Named}
+import views.html.transport.CabinCrewView
+import forms.transport.CabinCrewFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.ClaimAmount
-import pages.transport.AirlineJobListPage
+import pages.transport.CabinCrewPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import repositories.SessionRepository
-import views.html.transport.AirlineJobListView
+import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AirlineJobListController @Inject()(
-                                          override val messagesApi: MessagesApi,
-                                          @Named(NavConstant.transport) navigator: Navigator,
-                                          identify: UnauthenticatedIdentifierAction,
-                                          getData: DataRetrievalAction,
-                                          requireData: DataRequiredAction,
-                                          formProvider: AirlineJobListFormProvider,
-                                          val controllerComponents: MessagesControllerComponents,
-                                          view: AirlineJobListView,
-                                          sessionRepository: SessionRepository
-                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class CabinCrewController @Inject()(
+                                     override val messagesApi: MessagesApi,
+                                     sessionRepository: SessionRepository,
+                                     @Named(NavConstant.transport) navigator: Navigator,
+                                     identify: UnauthenticatedIdentifierAction,
+                                     getData: DataRetrievalAction,
+                                     requireData: DataRequiredAction,
+                                     formProvider: CabinCrewFormProvider,
+                                     val controllerComponents: MessagesControllerComponents,
+                                     view: CabinCrewView
+                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(AirlineJobListPage) match {
+      val preparedForm = request.userAnswers.get(CabinCrewPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -68,15 +68,16 @@ class AirlineJobListController @Inject()(
         value => {
           for {
             updatedAnswers <- if (value) {
-              Future.fromTry(request.userAnswers.set(AirlineJobListPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Airlines.pilotsFlightDeck))
+              Future.fromTry(request.userAnswers.set(CabinCrewPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew))
               )
             } else {
-              Future.fromTry(request.userAnswers.set(AirlineJobListPage, value)
+              Future.fromTry(request.userAnswers.set(CabinCrewPage, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
               )
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(AirlineJobListPage, mode)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CabinCrewPage, mode)(updatedAnswers))
         }
       )
   }

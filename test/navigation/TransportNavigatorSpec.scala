@@ -91,9 +91,22 @@ class TransportNavigatorSpec extends SpecBase with MockitoSugar {
               controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
 
-          "goto EmployerContributionController when 'No' selected" in {
+          "go to CabinCrewController when 'No' selected" in {
             val answers = emptyUserAnswers.set(AirlineJobListPage, false).success.value
             navigator.nextPage(AirlineJobListPage, mode)(answers) mustBe
+              routes.CabinCrewController.onPageLoad(mode)
+          }
+
+        }
+        "on CabinCrewController" must{
+          "go to EmployerContributionController when 'Yes' selected on CabinCrewPage" in {
+            val answers = emptyUserAnswers.set(CabinCrewPage, true).success.value
+            navigator.nextPage(CabinCrewPage, mode)(answers) mustBe
+              controllers.routes.EmployerContributionController.onPageLoad(mode)
+          }
+          "go to EmployerContributionController when 'No' selected on CabinCrewPage" in {
+            val answers = emptyUserAnswers.set(CabinCrewPage, false).success.value
+            navigator.nextPage(CabinCrewPage, mode)(answers) mustBe
               controllers.routes.EmployerContributionController.onPageLoad(mode)
           }
         }
