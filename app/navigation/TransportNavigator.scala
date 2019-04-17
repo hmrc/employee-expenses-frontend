@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 import models.TypeOfTransport._
 import models._
-import pages.{CabinCrewPage, Page}
+import pages.Page
 import pages.transport._
 import play.api.mvc.Call
 

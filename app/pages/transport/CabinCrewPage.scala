@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.transport
 
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
 case object CabinCrewPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ industryPath \ toString
 
   override def toString: String = "cabinCrew"
 }

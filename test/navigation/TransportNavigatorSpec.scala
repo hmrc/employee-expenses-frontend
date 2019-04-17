@@ -22,7 +22,7 @@ import models.TypeOfTransport.{NoneOfTheAbove, _}
 import models.WhichRailwayTrade._
 import models._
 import org.scalatest.mockito.MockitoSugar
-import pages.{CabinCrewPage, Page}
+import pages.Page
 import pages.transport._
 
 class TransportNavigatorSpec extends SpecBase with MockitoSugar {

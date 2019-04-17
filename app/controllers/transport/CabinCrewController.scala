@@ -17,14 +17,14 @@
 package controllers.transport
 
 import javax.inject.{Inject, Named}
-
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import views.html.transport.CabinCrewView
 import forms.transport.CabinCrewFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CabinCrewPage, ClaimAmount}
+import pages.ClaimAmount
+import pages.transport.CabinCrewPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -34,15 +34,15 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import scala.concurrent.{ExecutionContext, Future}
 
 class CabinCrewController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         @Named("Transport") navigator: Navigator,
-                                         identify: UnauthenticatedIdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: CabinCrewFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: CabinCrewView
+                                     override val messagesApi: MessagesApi,
+                                     sessionRepository: SessionRepository,
+                                     @Named(NavConstant.transport) navigator: Navigator,
+                                     identify: UnauthenticatedIdentifierAction,
+                                     getData: DataRetrievalAction,
+                                     requireData: DataRequiredAction,
+                                     formProvider: CabinCrewFormProvider,
+                                     val controllerComponents: MessagesControllerComponents,
+                                     view: CabinCrewView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
@@ -58,7 +58,7 @@ class CabinCrewController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -73,8 +73,8 @@ class CabinCrewController @Inject()(
               )
             } else {
               Future.fromTry(request.userAnswers.set(CabinCrewPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)
-              ))
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
+              )
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(CabinCrewPage, mode)(updatedAnswers))

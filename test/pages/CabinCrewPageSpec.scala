@@ -17,6 +17,7 @@
 package pages
 
 import pages.behaviours.PageBehaviours
+import pages.transport.CabinCrewPage
 
 class CabinCrewPageSpec extends PageBehaviours {
 

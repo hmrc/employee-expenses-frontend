@@ -17,152 +17,199 @@
 package controllers.transport
 
 import base.SpecBase
-import config.ClaimAmounts
+import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.transport.CabinCrewFormProvider
-import views.html.transport.CabinCrewView
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.OptionValues
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.{CabinCrewPage, ClaimAmount}
+import pages.ClaimAmount
+import pages.transport.CabinCrewPage
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import org.mockito.Mockito._
-import org.scalatest.OptionValues
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import play.api.Application
+import views.html.transport.CabinCrewView
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-    def onwardRoute = Call("GET", "/foo")
+  def onwardRoute = Call("GET", "/foo")
 
-    private val formProvider = new CabinCrewFormProvider()
-    private val form = formProvider()
+  private val formProvider = new CabinCrewFormProvider()
+  private val form = formProvider()
 
-    private val userAnswers = emptyUserAnswers
-    private val mockSessionRepository = mock[SessionRepository]
+  private val userAnswers = emptyUserAnswers
+  private val mockSessionRepository = mock[SessionRepository]
 
-    lazy val cabinCrewRoute = routes.CabinCrewController.onPageLoad(NormalMode).url
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-    "CabinCrew Controller" must {
+  lazy val cabinCrewRoute = routes.CabinCrewController.onPageLoad(NormalMode).url
 
-      "return OK and the correct view for a GET" in {
+  "CabinCrew Controller" must {
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+    "return OK and the correct view for a GET" in {
 
-        val request = FakeRequest(GET, cabinCrewRoute)
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-        val result = route(application, request).value
+      val request = FakeRequest(GET, cabinCrewRoute)
 
-        val view = application.injector.instanceOf[CabinCrewView]
+      val result = route(application, request).value
 
-        status(result) mustEqual OK
+      val view = application.injector.instanceOf[CabinCrewView]
 
-        contentAsString(result) mustEqual
-          view(form, NormalMode)(request, messages).toString
+      status(result) mustEqual OK
 
-        application.stop()
-      }
+      contentAsString(result) mustEqual
+        view(form, NormalMode)(request, messages).toString
 
-      "populate the view correctly on a GET when the question has previously been answered" in {
-
-        val userAnswers = UserAnswers(userAnswersId).set(CabinCrewPage, true).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, cabinCrewRoute)
-
-        val view = application.injector.instanceOf[CabinCrewView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(form.fill(true), NormalMode)(request, messages).toString
-
-        application.stop()
-      }
-
-      "redirect to the next page when valid data is submitted" in {
-
-        val application =
-          applicationBuilder(userAnswers = Some(emptyUserAnswers))
-            .overrides(bind[Navigator].qualifiedWith("Transport").toInstance(new FakeNavigator(onwardRoute)))
-            .build()
-
-        val request =
-          FakeRequest(POST, cabinCrewRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual onwardRoute.url
-
-        application.stop()
-      }
-
-      "return a Bad Request and errors when invalid data is submitted" in {
-
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-        val request =
-          FakeRequest(POST, cabinCrewRoute)
-            .withFormUrlEncodedBody(("value", ""))
-
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[CabinCrewView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-
-        contentAsString(result) mustEqual
-          view(boundForm, NormalMode)(request, messages).toString
-
-        application.stop()
-      }
-
-      "redirect to Session Expired for a GET if no existing data is found" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        val request = FakeRequest(GET, cabinCrewRoute)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-        application.stop()
-      }
-
-      "redirect to Session Expired for a POST if no existing data is found" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        val request =
-          FakeRequest(POST, cabinCrewRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
-
-        application.stop()
-      }
-
-
+      application.stop()
     }
+
+    "populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers = UserAnswers(userAnswersId).set(CabinCrewPage, true).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(GET, cabinCrewRoute)
+
+      val view = application.injector.instanceOf[CabinCrewView]
+
+      val result = route(application, request).value
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(form.fill(true), NormalMode)(request, messages).toString
+
+      application.stop()
+    }
+
+    "redirect to the next page when valid data is submitted" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)))
+          .build()
+
+      val request =
+        FakeRequest(POST, cabinCrewRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual onwardRoute.url
+
+      application.stop()
+    }
+
+    "return a Bad Request and errors when invalid data is submitted" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request =
+        FakeRequest(POST, cabinCrewRoute)
+          .withFormUrlEncodedBody(("value", ""))
+
+      val boundForm = form.bind(Map("value" -> ""))
+
+      val view = application.injector.instanceOf[CabinCrewView]
+
+      val result = route(application, request).value
+
+      status(result) mustEqual BAD_REQUEST
+
+      contentAsString(result) mustEqual
+        view(boundForm, NormalMode)(request, messages).toString
+
+      application.stop()
+    }
+
+    "redirect to Session Expired for a GET if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      val request = FakeRequest(GET, cabinCrewRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to Session Expired for a POST if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      val request =
+        FakeRequest(POST, cabinCrewRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "save ClaimAmount 'CabinCrew' when true" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, cabinCrewRoute).withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew).success.value
+        .set(CabinCrewPage, true).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      application.stop()
+    }
+
+    "save ClaimAmount 'defaultRate' when false" in {
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = FakeRequest(POST, cabinCrewRoute).withFormUrlEncodedBody(("value", "false"))
+
+      val result = route(application, request).value
+
+      val userAnswers2 = userAnswers
+        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+        .set(CabinCrewPage, false).success.value
+
+      whenReady(result) {
+        _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
+      }
+
+      application.stop()
+    }
+
+  }
 }
