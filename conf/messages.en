@@ -280,8 +280,8 @@ factoryEngineeringList1.occupation2 = maintenance engineers (rotary presses) and
 factoryEngineeringList1.occupation3 = pattern maker
 
 
-airlineJobList.title = Airline occupation list
-airlineJobList.heading = Airline occupation list
+airlineJobList.title = Airline occupations
+airlineJobList.heading = Airline occupations
 airlineJobList.listText = The occupations are:
 airlineJobList.radioLabel = Is your occupation listed?
 airlineJobList.occupation1 = co-pilot
