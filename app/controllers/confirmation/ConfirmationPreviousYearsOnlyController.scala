@@ -51,17 +51,17 @@ class ConfirmationPreviousYearsOnlyController @Inject()(
     implicit request =>
       (
         request.userAnswers.get(FREResponse),
-        request.userAnswers.get(YourAddressPage),
         request.userAnswers.get(ClaimAmountAndAnyDeductions),
         request.userAnswers.get(TaxYearSelectionPage)
       ) match {
-        case (Some(freResponse), Some(address), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
+        case (Some(freResponse), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
           taiConnector.taiTaxCodeRecords(request.nino.get).map {
             result =>
               val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
+              val addressOption: Option[Boolean] = request.userAnswers.get(YourAddressPage)
               sessionRepository.remove(request.identifier)
-              Ok(confirmationPreviousYearsOnlyView(claimAmountsAndRates, claimAmountAndAnyDeductions, address, currentYearMinus1, freResponse))
+              Ok(confirmationPreviousYearsOnlyView(claimAmountsAndRates, claimAmountAndAnyDeductions, addressOption, currentYearMinus1, freResponse))
           }.recoverWith {
             case e =>
               Logger.error(s"[ConfirmationPreviousYearsOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)

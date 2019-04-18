@@ -602,7 +602,7 @@ constructionalEngineeringList3.occupation4 = slewers and straighteners
 updateEmployerInformation.title = You need to update your employer information
 updateEmployerInformation.heading = You need to update your employer information
 updateEmployerInformation.paragraph1 = You can still complete this claim but you must update your employer information with HMRC when you have finished.
-updateEmployerInformation.paragraph2 = We will give you the link to change your employer information after you have completed this claim.
+updateEmployerInformation.paragraph2 = After you have completed this claim, we will tell you how to do this.
 
 ironApprentice.title = Are you an apprentice in the iron and steel industry?
 ironApprentice.heading = Are you an apprentice in the iron and steel industry?
@@ -616,8 +616,8 @@ aluminiumApprentice.error.required = Select yes if you are an apprentice in the 
 
 updateYourAddress.title = You need to update your address
 updateYourAddress.heading = You need to update your address
-updateYourAddress.guidance1 = You can still complete this claim but you must update your address with HMRC when you have finished.
-updateYourAddress.guidance2 = We will give you the link to change your address after you have completed this claim.
+updateYourAddress.guidance1 = You can still complete this claim, but HMRC will not be able to send you any letters or amounts due unless you update your address.
+updateYourAddress.guidance2 = After you have completed this claim, we will tell you how to do this.
 
 noCodeChange.title = You do not need to do anything else
 noCodeChange.heading = You do not need to do anything else
@@ -713,11 +713,11 @@ confirmation.confirmationLetter = We will process your claim and send you a lett
 confirmation.additionalConfirmationLetter = We will process your claim and send you another letter to confirm any amounts due. This can take up to 10 working days.
 confirmation.noLongerGetAmount = You will no longer get this amount. You will get a letter to confirm this change to your tax-free Personal Allowance.
 confirmation.updateEmployerInfo = Update your employer information
-confirmation.employerChange = You told us that your employer information has changed. You must update this with HMRC.
+confirmation.employerChange = You must update your employer information with HMRC.
 confirmation.updateEmployerInfoNow = Update your employer information now
 confirmation.updateAddressInfoNow = Update your address now
 confirmation.updateAddressInfo = Update your address
-confirmation.addressChange = You told us that your address has changed. If you do not update it you may not receive any letters from HMRC.
+confirmation.addressChange = You must update your address, otherwise HMRC will not be able to send you any letters or amounts due.
 confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April {0} to 5 April {1}, this may take longer if your employer has not yet sent your information for that tax year.
 
 confirmationPreviousYears.englandHeading = Taxpayers in England, Northern Ireland and Wales

@@ -87,7 +87,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
         view(
           claimAmountsAndRates = Seq(claimAmountsAndRates),
           claimAmount = claimAmount,
-          addressInfoCorrect = true,
+          addressInfoCorrect = Some(true),
           currentYearMinus1 =true,
           freResponse = FlatRateExpenseOptions.FRENoYears
         )(request, messages, frontendAppConfig).toString

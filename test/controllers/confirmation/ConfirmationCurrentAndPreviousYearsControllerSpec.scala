@@ -88,8 +88,8 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
         view(
           claimAmountsAndRates = Seq(claimAmountsAndRates),
           claimAmount = claimAmount,
-          employerInfoCorrect = true,
-          addressInfoCorrect = true,
+          employerInfoCorrect = Some(true),
+          addressInfoCorrect = Some(true),
           currentYearMinus1 =true,
           freResponse = FlatRateExpenseOptions.FRENoYears
         )(request, messages, frontendAppConfig).toString

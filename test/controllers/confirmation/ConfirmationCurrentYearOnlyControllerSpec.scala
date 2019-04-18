@@ -75,8 +75,8 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
         view(
           claimAmountsAndRates = Seq(claimAmountsAndRates),
           claimAmount = claimAmount,
-          employerInfoCorrect = true,
-          addressInfoCorrect = true,
+          employerInfoCorrect = Some(true),
+          addressInfoCorrect = Some(true),
           freResponse = FlatRateExpenseOptions.FRENoYears
         )(request, messages, frontendAppConfig).toString
 
