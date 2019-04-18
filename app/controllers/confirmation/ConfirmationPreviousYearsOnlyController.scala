@@ -60,7 +60,7 @@ class ConfirmationPreviousYearsOnlyController @Inject()(
               val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
               val addressOption: Option[Boolean] = request.userAnswers.get(YourAddressPage)
-//              sessionRepository.remove(request.identifier)
+              sessionRepository.remove(request.identifier)
               Ok(confirmationPreviousYearsOnlyView(claimAmountsAndRates, claimAmountAndAnyDeductions, addressOption, currentYearMinus1, freResponse))
           }.recoverWith {
             case e =>

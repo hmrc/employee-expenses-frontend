@@ -58,7 +58,7 @@ class ConfirmationCurrentYearOnlyController @Inject()(
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
               val addressOption: Option[Boolean] = request.userAnswers.get(YourAddressPage)
-//              sessionRepository.remove(request.identifier)
+              sessionRepository.remove(request.identifier)
               Ok(confirmationCurrentYearOnlyView(claimAmountsAndRates, claimAmountAndAnyDeductions, Some(employer), addressOption, freResponse))
           }.recoverWith {
             case e =>
