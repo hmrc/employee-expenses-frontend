@@ -99,13 +99,13 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
       val doc = asDocument(viewWithAnswers)
 
       assertContainsText(doc, messages(
-        "confirmation.basicRate",
+        "confirmationPreviousYears.basicRate",
         claimAmountsRates.calculatedBasicRate,
         claimAmount,
         claimAmountsRates.basicRate
       ))
       assertContainsText(doc, messages(
-        "confirmation.higherRate",
+        "confirmationPreviousYears.higherRate",
         claimAmountsRates.calculatedHigherRate,
         claimAmount,
         claimAmountsRates.higherRate
