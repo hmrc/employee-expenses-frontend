@@ -392,9 +392,9 @@ aluminiumOccupationList2.occupation4 = drier
 aluminiumOccupationList2.occupation5 = drill puncher
 aluminiumOccupationList2.occupation6 = dross unloader
 
-ironSteelOccupationList.title = Iron and steel occupation list
-ironSteelOccupationList.heading = Iron and steel occupation list
-ironSteelOccupationList.checkYourAnswersLabel = Iron and steel occupation list
+ironSteelOccupationList.title = Iron and steel occupations
+ironSteelOccupationList.heading = Iron and steel occupations
+ironSteelOccupationList.checkYourAnswersLabel = Iron and steel occupations
 ironSteelOccupationList.error.required = Select yes if your occupation is listed
 ironSteelOccupationList.listText = The occupations are:
 ironSteelOccupationList.radioLabel = Is your occupation listed?
