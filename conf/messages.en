@@ -442,9 +442,9 @@ cateringStaffNHS.heading = Are you catering staff in the NHS?
 cateringStaffNHS.checkYourAnswersLabel = Are you catering staff in the NHS?
 cateringStaffNHS.error.required = Select yes if you are catering staff in the NHS
 
-clothing.title = Clothing and textiles occupation list
-clothing.heading = Clothing and textiles occupation list
-clothing.checkYourAnswersLabel = Clothing and textiles occupation list
+clothing.title = Clothing occupations
+clothing.heading = Clothing occupations
+clothing.checkYourAnswersLabel = Clothing occupations
 clothing.error.required = Select yes if your occupation is listed
 clothing.listText = The occupations are:
 clothing.radioLabel = Is your occupation listed?
