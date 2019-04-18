@@ -71,7 +71,7 @@
         </p>
     }
 
-    @if(!employerInfoCorrect.getOrElse(true)) {
+    @if(!employerInfoCorrect.getOrElse(false)) {
         @components.update_employer_info()
     }
 

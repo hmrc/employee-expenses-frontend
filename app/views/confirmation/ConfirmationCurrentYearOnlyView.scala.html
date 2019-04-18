@@ -56,7 +56,7 @@
 
     <p>@messages("confirmation.continueToClaim.paragraph2")</p>
 
-    @if(!employerInfoCorrect.getOrElse(true)) {
+    @if(!employerInfoCorrect.getOrElse(false)) {
         @components.update_employer_info()
     }
 

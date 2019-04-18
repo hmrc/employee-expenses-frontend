@@ -15,22 +15,22 @@
  *@
 
 @this(
-    main_template: MainTemplate
+        main_template: MainTemplate
 )
 
 @(nextPageURL: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("updateYourAddress.title")
-    ) {
+) {
 
     @components.back_link()
 
     @components.heading("updateYourAddress.heading")
 
-  <p>@messages("updateYourAddress.guidance1")</p>
+    <p>@messages("updateYourAddress.guidance1")</p>
 
-  <p>@messages("updateYourAddress.guidance2")</p>
+    <p>@messages("updateYourAddress.guidance2")</p>
 
-  @components.button_link("site.continue", nextPageURL)
+    @components.button_link("site.continue", nextPageURL)
 }
