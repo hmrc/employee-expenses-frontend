@@ -71,6 +71,15 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
      """.stripMargin
   )
 
+  lazy val etag: Int = 123
+
+  lazy val validEtagJson: JsValue = Json.parse(
+    s"""
+       |{
+       |   "etag":"$etag"
+       |}
+    """.stripMargin)
+
   lazy val taiEmployment: Seq[Employment] = Seq(Employment(
     name = "HMRC LongBenton",
     startDate = LocalDate.parse("2018-06-27"),

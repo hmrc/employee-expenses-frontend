@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.authenticated
 
 import com.google.inject.Inject
 import config.NavConstant
@@ -109,8 +109,9 @@ class CheckYourAnswersController @Inject()(
           )
         case (Some(taxYears), Some(claimAmountAndAnyDeductions), None) =>
           submissionService.submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions).map(
-            result =>
+            result => {
               auditAndRedirect(result, dataToAudit, request.userAnswers)
+            }
           )
         case _ =>
           Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))

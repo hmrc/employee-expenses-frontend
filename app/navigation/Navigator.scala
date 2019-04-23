@@ -16,7 +16,8 @@
 
 package navigation
 
-import controllers.routes
+import controllers.routes._
+import controllers.authenticated.routes._
 import models._
 import pages._
 import play.api.mvc.Call
@@ -29,8 +30,8 @@ trait Navigator {
 
   def nextPage(page: Page, mode: Mode): UserAnswers => Call = mode match {
     case NormalMode =>
-      routeMap.lift(page).getOrElse(_ => routes.IndexController.onPageLoad())
+      routeMap.lift(page).getOrElse(_ => IndexController.onPageLoad())
     case CheckMode =>
-      checkRouteMap.lift(page).getOrElse(_ => routes.CheckYourAnswersController.onPageLoad())
+      checkRouteMap.lift(page).getOrElse(_ => CheckYourAnswersController.onPageLoad())
   }
 }

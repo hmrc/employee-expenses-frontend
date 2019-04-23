@@ -92,12 +92,4 @@ class SubmissionService @Inject()(
           future <- flatMapFunction(nextInput)
         } yield futureSeq :+ future
     )
-
-//  def submissionResult(response: Future[Seq[HttpResponse]])
-//                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
-//    response.map {
-//      responses =>
-//        responses.nonEmpty && responses.forall(_.status == 204)
-//    }
-//  }
 }

@@ -30,6 +30,7 @@ import pages.authenticated.YourAddressPage
 import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -64,14 +65,19 @@ class YourAddressController @Inject()(
         response =>
           response.status match {
             case 200 =>
-              val address = response.body.asInstanceOf[Address]
-              if (address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)) {
-                for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(CitizenDetailsAddress, address))
-                  _ <- sessionRepository.set(request.identifier, updatedAnswers)
-                } yield Ok(view(preparedForm, mode, address))
-              } else {
-                Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+              Json.parse(response.body).validate[Address] match {
+                case JsSuccess(address, _) =>
+                  if (address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)) {
+                    for {
+                      updatedAnswers <- Future.fromTry(request.userAnswers.set(CitizenDetailsAddress, address))
+                      _ <- sessionRepository.set(request.identifier, updatedAnswers)
+                    } yield Ok(view(preparedForm, mode, address))
+                  } else {
+                    Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+                  }
+                case JsError(e) =>
+                  Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress][Json.parse] failed $e")
+                  Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
               }
             case 404 =>
               Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
@@ -80,10 +86,10 @@ class YourAddressController @Inject()(
             case _ =>
               Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
           }
-      }.recoverWith{
+      }.recoverWith {
         case e =>
-        Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
-        Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+          Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
+          Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
       }
   }
 

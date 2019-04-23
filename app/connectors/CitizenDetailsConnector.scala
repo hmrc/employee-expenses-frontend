@@ -28,9 +28,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class CitizenDetailsConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient) extends CitizenDetailsConnector {
   override def getEtag(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
-    val citizenDetailsUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/etag"
+    val etagUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/etag"
 
-    httpClient.GET(citizenDetailsUrl)
+    httpClient.GET(etagUrl)
   }
 
   override def getAddress(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {

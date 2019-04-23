@@ -18,6 +18,7 @@ package controllers
 
 import base.SpecBase
 import controllers.confirmation.routes._
+import controllers.authenticated.routes._
 import controllers.routes._
 import models.FlatRateExpenseOptions._
 import models.{FlatRateExpenseOptions, TaxYearSelection}
@@ -36,6 +37,7 @@ import play.api.libs.json.JsObject
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.SubmissionService
+import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
@@ -185,7 +187,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     "onSubmit" must {
       "removeFRE and redirect to ConfirmationClaimStoppedController when submission success" in {
         when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(true))
+          .thenReturn(Future.successful(Seq(HttpResponse(204))))
 
         val userAnswers = minimumUserAnswers
           .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
@@ -226,7 +228,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
       "submitFRE and redirect to ConfirmationCurrentYearOnlyController when submission success" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(true))
+          .thenReturn(Future.successful(Seq(HttpResponse(204))))
 
         val application = applicationBuilder(Some(fullUserAnswers))
           .overrides(
@@ -263,7 +265,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
       "submitFRE and redirect to ConfirmationCurrentAndPreviousYearsController when submission success" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(true))
+          .thenReturn(Future.successful(Seq(HttpResponse(204))))
 
         val userAnswers = minimumUserAnswers
           .set(ClaimAmountAndAnyDeductions, 100).success.value
@@ -302,9 +304,44 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
       }
 
+      "not submitFRE and not audit and redirect to PhoneUsController when citizen details returns 423" in {
+        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(Seq(HttpResponse(423))))
+
+        val userAnswers = minimumUserAnswers
+          .set(ClaimAmountAndAnyDeductions, 100).success.value
+          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
+
+        val application = applicationBuilder(Some(userAnswers))
+          .overrides(
+            bind[SubmissionService].toInstance(mockSubmissionService),
+            bind[AuditConnector].toInstance(mockAuditConnector),
+            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
+          ).build()
+
+        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
+
+        val result = route(application, request).value
+
+        whenReady(result) {
+          _ =>
+
+            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+
+            verify(mockAuditConnector, times(0)).sendExplicitAudit(eqTo("updateFlatRateExpenseSuccess"), captor.capture())(any(), any(), any())
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual PhoneUsController.onPageLoad().url
+        }
+
+        application.stop()
+
+      }
+
       "submitFRE and redirect to ConfirmationPreviousYearsOnlyController when submission success" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(true))
+          .thenReturn(Future.successful(Seq(HttpResponse(204))))
 
         val userAnswers = minimumUserAnswers
           .set(ClaimAmountAndAnyDeductions, 100).success.value
@@ -345,7 +382,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
       "redirect to tech difficulties when submitFRE fails" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(false))
+          .thenReturn(Future.successful(Seq(HttpResponse(500))))
 
         val application = applicationBuilder(Some(fullUserAnswers))
           .overrides(
@@ -382,7 +419,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
       "redirect to tech difficulties when removeFRE fails" in {
         when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(false))
+          .thenReturn(Future.successful(Seq(HttpResponse(500))))
 
         val userAnswers = minimumUserAnswers
           .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
@@ -395,7 +432,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
             bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
           ).build()
 
-        val request = FakeRequest(POST, routes.CheckYourAnswersController.onSubmit().url)
+        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
 
         val result = route(application, request).value
 
@@ -415,6 +452,41 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
             status(result) mustEqual SEE_OTHER
 
             redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad().url
+        }
+
+        application.stop()
+
+      }
+
+      "not removeFRE and not audit and redirect to PhoneUsController when citizen details returns 423" in {
+        when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(Seq(HttpResponse(423))))
+
+        val userAnswers = minimumUserAnswers
+          .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
+          .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
+
+        val application = applicationBuilder(Some(userAnswers))
+          .overrides(
+            bind[SubmissionService].toInstance(mockSubmissionService),
+            bind[AuditConnector].toInstance(mockAuditConnector),
+            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
+          ).build()
+
+        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
+
+        val result = route(application, request).value
+
+        whenReady(result) {
+          _ =>
+
+            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+
+            verify(mockAuditConnector, times(0)).sendExplicitAudit(eqTo("updateFlatRateExpenseFailure"), captor.capture())(any(), any(), any())
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual PhoneUsController.onPageLoad().url
         }
 
         application.stop()

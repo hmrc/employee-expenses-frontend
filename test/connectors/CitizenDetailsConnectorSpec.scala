@@ -26,6 +26,7 @@ import play.api.Application
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
+import uk.gov.hmrc.http.HttpResponse
 import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -42,14 +43,6 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
   private lazy val citizenDetailsConnector: CitizenDetailsConnector = app.injector.instanceOf[CitizenDetailsConnector]
 
-  private val etag = 123
-  private val validEtagJson = Json.parse(
-    s"""
-       |{
-       |   "etag":"$etag"
-       |}
-    """.stripMargin)
-
   "getEtag" must {
     "return an etag on success" in {
       server.stubFor(
@@ -61,11 +54,13 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[Int] = citizenDetailsConnector.getEtag(fakeNino)
+      val result: Future[HttpResponse] = citizenDetailsConnector.getEtag(fakeNino)
 
       whenReady(result) {
-        result =>
-          result mustBe etag
+        res =>
+          res mustBe a[HttpResponse]
+          res.status mustBe 200
+          res.body mustBe validEtagJson.toString
       }
     }
 
@@ -78,7 +73,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[Int] = citizenDetailsConnector.getEtag(fakeNino)
+      val result: Future[HttpResponse] = citizenDetailsConnector.getEtag(fakeNino)
 
       whenReady(result.failed) {
         result =>
@@ -95,7 +90,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[Int] = citizenDetailsConnector.getEtag(fakeNino)
+      val result: Future[HttpResponse] = citizenDetailsConnector.getEtag(fakeNino)
 
       whenReady(result.failed) {
         result =>
@@ -116,17 +111,13 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[Address] = citizenDetailsConnector.getAddress(fakeNino)
+      val result: Future[HttpResponse] = citizenDetailsConnector.getAddress(fakeNino)
 
       whenReady(result) {
-        result =>
-          result.line1.value mustBe "6 Howsell Road"
-          result.line2.value mustBe "Llanddew"
-          result.line3.value mustBe "Line 3"
-          result.line4.value mustBe "Line 4"
-          result.line5.value mustBe "Line 5"
-          result.postcode.value mustBe "DN16 3FB"
-          result.country.value mustBe "GREAT BRITAIN"
+        res =>
+          res mustBe a[HttpResponse]
+          res.status mustBe 200
+          res.body mustBe validAddressJson.toString
       }
 
     }
@@ -140,7 +131,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[Address] = citizenDetailsConnector.getAddress(fakeNino)
+      val result: Future[HttpResponse] = citizenDetailsConnector.getAddress(fakeNino)
 
       whenReady(result.failed) {
         result =>
@@ -157,7 +148,7 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
           )
       )
 
-      val result: Future[Address] = citizenDetailsConnector.getAddress(fakeNino)
+      val result: Future[HttpResponse] = citizenDetailsConnector.getAddress(fakeNino)
 
       whenReady(result.failed) {
         result =>

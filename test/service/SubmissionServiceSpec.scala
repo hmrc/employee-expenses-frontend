@@ -130,10 +130,12 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(200)))
 
-        val result = submissionService.submitFRE(fakeNino, currentTaxYear, claimAmount)
+        val result: Future[Seq[HttpResponse]] = submissionService.submitFRE(fakeNino, currentTaxYear, claimAmount)
 
         whenReady(result) {
-          _ mustBe true
+          res =>
+            res mustBe a[Seq[_]]
+            res.head.status mustBe 204
         }
       }
 
@@ -147,7 +149,9 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         val result = submissionService.submitFRE(fakeNino, currentTaxYear, claimAmount)
 
         whenReady(result) {
-          _ mustBe false
+          res =>
+            res mustBe a[Seq[_]]
+            res.head.status mustBe 500
         }
       }
     }
@@ -163,7 +167,9 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         val result = submissionService.removeFRE(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
 
         whenReady(result) {
-          _ mustBe true
+          res =>
+            res mustBe a[Seq[_]]
+            res.head.status mustBe 204
         }
       }
 
@@ -177,35 +183,37 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         val result = submissionService.removeFRE(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
 
         whenReady(result) {
-          _ mustBe false
+          res =>
+            res mustBe a[Seq[_]]
+            res.head.status mustBe 500
         }
       }
     }
 
-    "submissionResult" must {
-      "return true when given 204 responses" in {
-        val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(204), HttpResponse(204))))
-
-        whenReady(result) {
-          _ mustBe true
-        }
-      }
-
-      "return false when given empty responses" in {
-        val result = submissionService.submissionResult(Future.successful(Seq()))
-
-        whenReady(result) {
-          _ mustBe false
-        }
-      }
-
-      "return false when not given 204 responses" in {
-        val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(500), HttpResponse(204))))
-
-        whenReady(result) {
-          _ mustBe false
-        }
-      }
-    }
+//    "submissionResult" must {
+//      "return true when given 204 responses" in {
+//        val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(204), HttpResponse(204))))
+//
+//        whenReady(result) {
+//          _ mustBe true
+//        }
+//      }
+//
+//      "return false when given empty responses" in {
+//        val result = submissionService.submissionResult(Future.successful(Seq()))
+//
+//        whenReady(result) {
+//          _ mustBe false
+//        }
+//      }
+//
+//      "return false when not given 204 responses" in {
+//        val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(500), HttpResponse(204))))
+//
+//        whenReady(result) {
+//          _ mustBe false
+//        }
+//      }
+//    }
   }
 }

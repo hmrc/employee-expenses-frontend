@@ -34,10 +34,12 @@ import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
 import play.api.data.Form
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import uk.gov.hmrc.http.HttpResponse
 import views.html.authenticated.YourAddressView
 
 import scala.concurrent.Future
@@ -67,7 +69,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
         .build()
 
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(HttpResponse(200, Some(Json.toJson(address))))
 
       val request = FakeRequest(GET, yourAddressRoute)
 
@@ -100,7 +102,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
         .build()
 
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(HttpResponse(200, Some(Json.toJson(address))))
 
       val request = FakeRequest(GET, yourAddressRoute)
 
@@ -124,7 +126,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
           .build()
 
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(emptyAddress)
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(HttpResponse(200, Some(Json.toJson(emptyAddress))))
 
       val request = FakeRequest(GET, yourAddressRoute)
 
