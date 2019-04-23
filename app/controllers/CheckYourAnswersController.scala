@@ -31,7 +31,7 @@ import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import service.SubmissionService
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.CheckYourAnswersHelper
@@ -117,17 +117,19 @@ class CheckYourAnswersController @Inject()(
       }
   }
 
-  def auditAndRedirect(result: Boolean,
+  def auditAndRedirect(result: Seq[HttpResponse],
                        auditData: AuditData,
                        userAnswers: UserAnswers
                       )(implicit hc: HeaderCarrier): Result = {
 
-    if (result) {
+    if (result.nonEmpty && result.forall(_.status == 204)) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
       Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers))
+    } else if (result.nonEmpty && result.exists(_.status == 423)) {
+      Redirect(PhoneUsController.onPageLoad())
     } else {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, auditData)
-      Redirect(routes.TechnicalDifficultiesController.onPageLoad())
+      Redirect(TechnicalDifficultiesController.onPageLoad())
     }
   }
 }
