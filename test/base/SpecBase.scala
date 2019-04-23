@@ -72,9 +72,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
   )
 
   lazy val taiEmployment: Seq[Employment] = Seq(Employment(
-    name = "HMRC LongBenton",
-    startDate = LocalDate.parse("2018-06-27"),
-    endDate = None
+    name = "HMRC LongBenton"
   ))
 
   lazy val emptyAddress = Address(

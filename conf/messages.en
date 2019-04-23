@@ -649,12 +649,12 @@ sameEmployerContributionAllYears.heading = Did your employer pay £{0} for each 
 sameEmployerContributionAllYears.checkYourAnswersLabel = Did your employer pay £{0} for each tax year you are claiming for?
 sameEmployerContributionAllYears.error.required = Select yes if your employer paid back the same amount in each tax year you are claiming for
 
-yourEmployer.title = Is this your employer?
-yourEmployer.heading = Is this your employer?
-yourEmployer.label = Is {0} your employer?
-yourEmployer.checkYourAnswersLabel = Is this your employer? {0}
-yourEmployer.checkYourAnswersLabel.hidden = Change is this your employer
-yourEmployer.error.required = Select yes if this is your employer
+yourEmployer.title = Is your employer shown?
+yourEmployer.heading = Is your employer shown?
+yourEmployer.label = Is your employer shown?
+yourEmployer.checkYourAnswersLabel = Is your employer shown? {0}
+yourEmployer.checkYourAnswersLabel.hidden = Change is your employer shown
+yourEmployer.error.required = Select yes if your employer is shown
 
 alreadyClaimingFRESameAmount.title = You are already claiming this
 alreadyClaimingFRESameAmount.heading = This amount is already in your tax code

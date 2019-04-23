@@ -251,7 +251,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
     "correct" must {
       "display the correct label, answer, and message args" in {
         val ua1 = emptyUserAnswers.set(YourEmployerPage, true).success.value
-        val ua2 = ua1.set(YourEmployerName, taiEmployment.head.name).success.value
+        val ua2 = ua1.set(YourEmployerNames, taiEmployment.head.name).success.value
         helper(ua2).yourEmployer.get.label mustBe "yourEmployer.checkYourAnswersLabel"
         helper(ua2).yourEmployer.get.answer mustBe "site.yes"
         helper(ua2).yourEmployer.get.labelArgs.head mustBe s"<p>${taiEmployment.head.name}</p>"
@@ -261,7 +261,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
     "incorrect" must {
       "display the correct label, answer, and message args" in {
         val ua1 = emptyUserAnswers.set(YourEmployerPage, false).success.value
-        val ua2 = ua1.set(YourEmployerName, taiEmployment.head.name).success.value
+        val ua2 = ua1.set(YourEmployerNames, taiEmployment.head.name).success.value
         helper(ua2).yourEmployer.get.label mustBe "yourEmployer.checkYourAnswersLabel"
         helper(ua2).yourEmployer.get.answer mustBe "site.no"
         helper(ua2).yourEmployer.get.labelArgs.head mustBe s"<p>${taiEmployment.head.name}</p>"

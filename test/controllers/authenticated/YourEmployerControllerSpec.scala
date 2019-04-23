@@ -29,7 +29,7 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
-import pages.YourEmployerName
+import pages.YourEmployerNames
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import play.api.http.Status.OK
 import play.api.inject.bind
@@ -112,12 +112,12 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val view = application.injector.instanceOf[YourEmployerView]
 
       val userAnswers2 = userAnswers
-          .set(YourEmployerName, "HMRC LongBenton").success.value
+          .set(YourEmployerNames, "HMRC LongBenton").success.value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, taiEmployment.head.name)(request, messages).toString
+        view(form, NormalMode, taiEmployment.head)(request, messages).toString
 
       whenReady(result) {
         _ =>
@@ -205,7 +205,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "redirect to the next page when valid data is submitted" in {
       val userAnswers = UserAnswers(userAnswersId)
-        .set(YourEmployerName, taiEmployment.head.name).success.value
+        .set(YourEmployerNames, taiEmployment.head.name).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -229,7 +229,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "return a Bad Request and errors when invalid data is submitted" in {
       val userAnswers = UserAnswers(userAnswersId)
-        .set(YourEmployerName, taiEmployment.head.name).success.value
+        .set(YourEmployerNames, taiEmployment.head.name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .build()

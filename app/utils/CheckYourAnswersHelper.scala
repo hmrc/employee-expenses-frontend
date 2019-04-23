@@ -23,7 +23,7 @@ import models.FirstIndustryOptions.{Engineering, FoodAndCatering, Healthcare, Re
 import models.FourthIndustryOptions.{Agriculture, FireService, Heating, Leisure, Prisons}
 import models.SecondIndustryOptions.{ClothingTextiles, Construction, Council, ManufacturingWarehousing, Police}
 import models.ThirdIndustryOptions.{BanksBuildingSocieties, Education, Electrical, Printing, Security}
-import models.{Address, CheckMode, TaxYearSelection, UserAnswers}
+import models.{Address, CheckMode, Employment, TaxYearSelection, UserAnswers}
 import pages._
 import pages.authenticated._
 import play.api.i18n.Messages
@@ -149,13 +149,13 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     case _ => None
   }
 
-  def yourEmployer: Option[AnswerRow] = (userAnswers.get(YourEmployerPage), userAnswers.get(YourEmployerName)) match {
-    case (Some(x), Some(employer)) =>
+  def yourEmployer: Option[AnswerRow] = (userAnswers.get(YourEmployerPage), userAnswers.get(YourEmployerNames)) match {
+    case (Some(x), Some(employers)) =>
       Some(AnswerRow("yourEmployer.checkYourAnswersLabel",
         if (x) "site.yes" else "site.no", true,
         Some(YourEmployerController.onPageLoad(CheckMode).url),
         Some("checkYourAnswers.editText"),
-        s"<p>$employer</p>"
+        Employment.asLabel(employers)
       ))
     case _ => None
   }
