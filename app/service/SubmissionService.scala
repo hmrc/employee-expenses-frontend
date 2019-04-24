@@ -21,7 +21,6 @@ import connectors.TaiConnector
 import models.{TaiTaxYear, TaxYearSelection}
 import org.joda.time.LocalDate
 import play.api.Logger
-import play.api.libs.json.JsResult
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.time.TaxYear
 
