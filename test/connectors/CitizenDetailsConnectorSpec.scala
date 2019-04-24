@@ -18,14 +18,12 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, urlEqualTo}
-import models.{Address, ETag}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
 import utils.WireMockHelper
 
@@ -75,9 +73,10 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getEtag(fakeNino)
 
-      whenReady(result.failed) {
+      whenReady(result) {
         result =>
-          result mustBe an[Exception]
+          result mustBe a[HttpResponse]
+          result.status mustBe 500
       }
     }
 
@@ -92,9 +91,28 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getEtag(fakeNino)
 
-      whenReady(result.failed) {
+      whenReady(result) {
         result =>
-          result mustBe an[Exception]
+          result mustBe a[HttpResponse]
+          result.status mustBe 404
+      }
+    }
+
+    "return 423 when manual correspondence indicator set" in {
+      server.stubFor(
+        get(urlEqualTo(s"/citizen-details/$fakeNino/etag"))
+          .willReturn(
+            aResponse()
+              .withStatus(LOCKED)
+          )
+      )
+
+      val result: Future[HttpResponse] = citizenDetailsConnector.getEtag(fakeNino)
+
+      whenReady(result) {
+        result =>
+          result mustBe a[HttpResponse]
+          result.status mustBe 423
       }
     }
 
@@ -133,9 +151,10 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getAddress(fakeNino)
 
-      whenReady(result.failed) {
+      whenReady(result) {
         result =>
-          result mustBe an[Exception]
+          result mustBe a[HttpResponse]
+          result.status mustBe 500
       }
     }
 
@@ -150,9 +169,28 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getAddress(fakeNino)
 
-      whenReady(result.failed) {
+      whenReady(result) {
         result =>
-          result mustBe an[Exception]
+          result mustBe a[HttpResponse]
+          result.status mustBe 404
+      }
+    }
+
+    "return 423 when record not found" in {
+      server.stubFor(
+        get(urlEqualTo(s"/citizen-details/$fakeNino/designatory-details"))
+          .willReturn(
+            aResponse()
+              .withStatus(LOCKED)
+          )
+      )
+
+      val result: Future[HttpResponse] = citizenDetailsConnector.getAddress(fakeNino)
+
+      whenReady(result) {
+        result =>
+          result mustBe a[HttpResponse]
+          result.status mustBe 423
       }
     }
   }

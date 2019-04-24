@@ -79,7 +79,7 @@ class YourAddressController @Inject()(
                   Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress][Json.parse] failed $e")
                   Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
               }
-            case 404 =>
+            case 404 | 500 =>
               Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
             case 423 =>
               Future.successful(Redirect(PhoneUsController.onPageLoad()))

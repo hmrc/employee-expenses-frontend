@@ -157,7 +157,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
     }
 
     "removeFRE" must {
-      "return true when give 204 response" in {
+      "return 204 when given 204 response" in {
         when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(204)))
 

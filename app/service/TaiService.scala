@@ -46,10 +46,10 @@ class TaiService @Inject()(taiConnector: TaiConnector,
         response.status match {
           case 200 =>
             Json.parse(response.body).validate[ETag] match {
-              case JsSuccess(etag, _) =>
-                taiConnector.taiFREUpdate(nino, year, etag.etag.toInt, grossAmount)
+              case JsSuccess(body, _) =>
+                taiConnector.taiFREUpdate(nino, year, body.etag.toInt, grossAmount)
               case JsError(e) =>
-                Logger.error(s"[TaiService.getAddress][Json.parse] failed $e")
+                Logger.error(s"[TaiService.updateFRE][CitizenDetailsConnector.getEtag][Json.parse] failed $e")
                 Future.successful(response)
             }
           case _ =>
