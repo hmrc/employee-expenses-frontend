@@ -29,7 +29,7 @@ class YourEmployerViewSpec extends YesNoViewBehaviours {
   val messageKeyPrefix = "yourEmployer"
 
   val form = new YourEmployerFormProvider()()
-  val employerName = "HMRC"
+  val employerName = Seq("HMRC Longbenton")
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -57,7 +57,7 @@ class YourEmployerViewSpec extends YesNoViewBehaviours {
       Some(messages(s"$messageKeyPrefix.label", employerName))
     )
 
-    behave like pageWithBodyText(applyView(form), employerName)
+    behave like pageWithBodyText(applyView(form), employerName.head.toString)
   }
 
   application.stop()
