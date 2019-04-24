@@ -24,7 +24,6 @@ import models.FirstIndustryOptions.{Healthcare, Retail}
 import models.FlatRateExpenseOptions.FRENoYears
 import models.TaxYearSelection.CurrentYear
 import models._
-import org.joda.time.LocalDate
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
