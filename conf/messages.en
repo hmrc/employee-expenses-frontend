@@ -82,9 +82,12 @@ employerContribution.list.heading = This is for:
 employerContribution.list.item1 = washing a uniform your employer gave to you
 employerContribution.list.item2 = repairing, replacing or cleaning any specialist or protective clothing you wear for your job
 employerContribution.list.item3 = repairing or replacing any small tools that you own, but use for your job
-employerContribution.hint = This does not include the cost of buying the first item.
+employerContribution.hint = This does not include the initial cost of buying any items.
 employerContribution.checkYourAnswersLabel = Has your employer paid back any of your expenses for uniform, work clothing or tools?
 employerContribution.error.required = Select yes if your employer paid back any of your expenses for uniform, work clothing or tools
+employerContribution.yesEmployerContribution = Yes, my employer has paid back part of these expenses
+employerContribution.noEmployerContribution = No, my employer has not paid back any of these expenses
+
 
 claimByAlternative.title = If you are claiming for more than one job you must use an online form or claim by post
 claimByAlternative.heading = If you are claiming for more than one job you must use an online form or claim by post
@@ -100,7 +103,7 @@ multipleEmployments.oneJob = One job
 multipleEmployments.moreThanOneJob = More than one job
 
 firstIndustryOptions.title = Industry list 1 of 5
-firstIndustryOptions.heading = Industry list 1 of 5
+firstIndustryOptions.heading = Industry list 1 of 5cyah
 firstIndustryOptions.listText = Select your industry.
 firstIndustryOptions.healthcare = Healthcare
 firstIndustryOptions.foodAndCatering = Food and catering

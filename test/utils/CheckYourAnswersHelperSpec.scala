@@ -99,7 +99,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
     "display the correct label and answer" in {
       forAll(Gen.posNum[Int]) {
         amount =>
-          val ua = emptyUserAnswers.set(EmployerContributionPage, true).success.value
+          val ua = emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
           val ua2 = ua.set(ExpensesEmployerPaidPage, amount).success.value
           helper(ua2).expensesEmployerPaid.get.label mustBe "expensesEmployerPaid.checkYourAnswersLabel"
           helper(ua2).expensesEmployerPaid.get.answer mustBe s"£$amount"
@@ -213,15 +213,15 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
 
   "employerContribution" when {
     "display the correct label and answer when 'True'" in {
-          val ua = emptyUserAnswers.set(EmployerContributionPage, true).success.value
+          val ua = emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
           helper(ua).employerContribution.get.label mustBe "employerContribution.checkYourAnswersLabel"
-          helper(ua).employerContribution.get.answer mustBe "site.yes"
+          helper(ua).employerContribution.get.answer mustBe "yesEmployerContribution"
     }
 
     "display the correct label and answer when 'False'" in {
-      val ua = emptyUserAnswers.set(EmployerContributionPage, false).success.value
+      val ua = emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.NoEmployerContribution).success.value
       helper(ua).employerContribution.get.label mustBe "employerContribution.checkYourAnswersLabel"
-      helper(ua).employerContribution.get.answer mustBe "site.no"
+      helper(ua).employerContribution.get.answer mustBe "noEmployerContribution"
     }
   }
 

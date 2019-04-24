@@ -20,7 +20,7 @@ import base.SpecBase
 import config.NavConstant
 import controllers.actions.UnAuthed
 import forms.EmployerContributionFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{EmployerContribution, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -71,7 +71,7 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(EmployerContributionPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(EmployerContributionPage,  EmployerContribution.YesEmployerContribution).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -84,7 +84,7 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(request, messages).toString
+        view(form.fill( EmployerContribution.YesEmployerContribution), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -99,7 +99,7 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
 
       val request =
         FakeRequest(POST, employerContributionRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+          .withFormUrlEncodedBody(("value", EmployerContribution.options.head.value))
 
       val result = route(application, request).value
 
@@ -163,17 +163,17 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
       application.stop()
     }
 
-    "save 'true' when selected" in {
+    "save 'YesEmployerContribution' when selected" in {
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = FakeRequest(POST, employerContributionRoute).withFormUrlEncodedBody(("value", "true"))
+      val request = FakeRequest(POST, employerContributionRoute).withFormUrlEncodedBody(("value", EmployerContribution.YesEmployerContribution.toString))
 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(EmployerContributionPage, true).success.value
+        .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
 
       whenReady(result) {
         _ =>
@@ -188,12 +188,12 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = FakeRequest(POST, employerContributionRoute).withFormUrlEncodedBody(("value", "false"))
+      val request = FakeRequest(POST, employerContributionRoute).withFormUrlEncodedBody(("value", EmployerContribution.NoEmployerContribution.toString))
 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(EmployerContributionPage,false).success.value
+        .set(EmployerContributionPage, EmployerContribution.NoEmployerContribution).success.value
 
       whenReady(result) {
         _ =>

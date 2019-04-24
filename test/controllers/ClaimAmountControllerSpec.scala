@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import controllers.actions.UnAuthed
-import models.{NormalMode, Rates, ScottishRate, StandardRate, UserAnswers}
+import models.{EmployerContribution, NormalMode, Rates, ScottishRate, StandardRate, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Matchers._
@@ -49,9 +49,9 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       val ua1 =
         emptyUserAnswers
           .set(ClaimAmount, claimAmount).success.value
-          .set(EmployerContributionPage, true).success.value
+          .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
       val userAnswers = emptyUserAnswers.set(ClaimAmount, claimAmount).success.value
-        .set(EmployerContributionPage, false).success.value
+        .set(EmployerContributionPage, EmployerContribution.NoEmployerContribution).success.value
 
       val mockSessionRepository = mock[SessionRepository]
 

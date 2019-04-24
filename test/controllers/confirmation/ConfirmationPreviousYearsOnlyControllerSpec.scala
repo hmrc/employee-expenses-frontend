@@ -58,7 +58,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
     "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with specific answers" in {
 
       val userAnswers = emptyUserAnswers
-        .set(EmployerContributionPage, false).success.value
+        .set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
         .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
         .set(YourAddressPage, true).success.value
         .set(YourEmployerPage, true).success.value

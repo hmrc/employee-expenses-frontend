@@ -46,10 +46,13 @@
 
         <p>@messages("employerContribution.hint")</p>
 
-        @components.input_yes_no(
+        @components.input_radio(
             field = form("value"),
-            label = messages("employerContribution.heading"),
-            labelClass = Some("visually-hidden")
+            legend = messages("employerContribution.heading"),
+            legendClass = Some("visually-hidden"),
+            inputs = EmployerContribution.options,
+            inline = false,
+            headingIsLegend = false
         )
 
         @components.submit_button()
