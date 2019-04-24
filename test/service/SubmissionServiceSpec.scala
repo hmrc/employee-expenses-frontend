@@ -189,31 +189,5 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         }
       }
     }
-
-//    "submissionResult" must {
-//      "return true when given 204 responses" in {
-//        val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(204), HttpResponse(204))))
-//
-//        whenReady(result) {
-//          _ mustBe true
-//        }
-//      }
-//
-//      "return false when given empty responses" in {
-//        val result = submissionService.submissionResult(Future.successful(Seq()))
-//
-//        whenReady(result) {
-//          _ mustBe false
-//        }
-//      }
-//
-//      "return false when not given 204 responses" in {
-//        val result = submissionService.submissionResult(Future.successful(Seq(HttpResponse(500), HttpResponse(204))))
-//
-//        whenReady(result) {
-//          _ mustBe false
-//        }
-//      }
-//    }
   }
 }
