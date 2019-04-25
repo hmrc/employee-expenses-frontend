@@ -239,7 +239,7 @@ typeOfTransport.publicTransport = Public transport
 typeOfTransport.railways = Railways
 typeOfTransport.seamanCarpenter = Seaman carpenter
 typeOfTransport.vehicles = Vehicles
-typeOfTransport.noneOfTheAbove = None of the above
+typeOfTransport.noneOfTheAbove = Transport or travel type not listed
 typeOfTransport.checkYourAnswersLabel = Which type of transport or travel do you work in?
 typeOfTransport.error.required = Select which type of transport or travel do you work in
 
