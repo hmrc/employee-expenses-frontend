@@ -222,6 +222,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
       val ua = emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.NoEmployerContribution).success.value
       helper(ua).employerContribution.get.label mustBe "employerContribution.checkYourAnswersLabel"
       helper(ua).employerContribution.get.answer mustBe "employerContribution.noEmployerContribution"
+
     }
   }
 

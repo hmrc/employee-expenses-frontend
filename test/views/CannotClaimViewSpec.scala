@@ -16,10 +16,12 @@
 
 package views
 
+
+import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.CannotClaimView
 
-class CannotClaimViewSpec extends ViewBehaviours {
+class CannotClaimViewSpec extends ViewBehaviours  {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -33,14 +35,12 @@ class CannotClaimViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyView)
 
-    "display page content" in {
-      val doc = asDocument(applyView)
-      assertContainsMessages(doc, "cannotClaim.para1", "cannotClaim.link")
-      doc.getElementById("link").attr("href") mustBe "https://www.gov.uk/guidance/job-expenses-for-uniforms-work-clothing-and-tools#if-your-employer-pays-towards-the-costs-of-your-expenses"
+    val link1: Html = Html(s"""<a id="link" href="${frontendAppConfig.jobExpensesLink}">${messages("cannotClaim.link")}</a>""")
 
-    }
-
+    behave like pageWithBodyText(
+                                applyView,
+                                Html(messages("cannotClaim.para1", link1)).toString
+                                )
   }
-
   application.stop()
 }
