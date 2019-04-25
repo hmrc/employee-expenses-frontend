@@ -23,9 +23,7 @@
 
 @()(implicit request: Request[_], messages: Messages)
 
-@link = {
-    <a id="link" href=@frontendAppConfig.jobExpensesLink>@messages("cannotClaim.link")</a>
-}
+@link = {<a id="link" href=@frontendAppConfig.jobExpensesLink>@messages("cannotClaim.link")</a>}
 
 @main_template(
     title = messages("cannotClaim.title")
@@ -35,7 +33,6 @@
 
     @components.heading("cannotClaim.heading")
 
-    <p>@messages("cannotClaim.para1")</p>
+    <p>@Html(messages("cannotClaim.para1", link))</p>
 
-    <p>@link</p>
 }

@@ -72,8 +72,9 @@ expensesEmployerPaid.error.outOfRange = Enter a whole number between {0} and {1}
 
 cannotClaim.title = You cannot claim tax relief for these expenses
 cannotClaim.heading = You cannot claim tax relief for these expenses
-cannotClaim.para1 = You cannot claim these expenses because your employer has already paid back the full amount that you can claim.
-cannotClaim.link = Your employer has already paid back all of your expenses
+cannotClaim.para1 =  You cannot claim these expenses because {0}.
+cannotClaim.link = your employer has already paid back the full amount that you can claim
+
 
 employerContribution.title = Has your employer paid back any of your expenses for uniform, work clothing or tools?
 employerContribution.heading = Has your employer paid back any of your expenses for uniform, work clothing or tools?
