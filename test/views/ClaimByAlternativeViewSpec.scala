@@ -16,9 +16,6 @@
 
 package views
 
-import play.twirl.api.Html
-import views.behaviours.ViewBehaviours
-import views.html.ClaimByAlternativeView
 
 class ClaimByAlternativeViewSpec extends ViewBehaviours {
 
@@ -45,5 +42,4 @@ class ClaimByAlternativeViewSpec extends ViewBehaviours {
     )
   }
 
-  application.stop()
 }
