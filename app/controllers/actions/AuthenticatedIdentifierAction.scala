@@ -24,6 +24,7 @@ import play.api.Logger
 import play.api.libs.json.Reads
 import play.api.mvc.Results._
 import play.api.mvc._
+import uk.gov.hmrc.auth.core.AuthProvider.Verify
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.OptionalRetrieval
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
@@ -32,23 +33,23 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthenticatedIdentifierActionImpl @Inject()(
-                                               override val authConnector: AuthConnector,
-                                               config: FrontendAppConfig,
-                                               val parser: BodyParsers.Default
-                                             )(implicit val executionContext: ExecutionContext) extends AuthenticatedIdentifierAction with AuthorisedFunctions {
+                                                   override val authConnector: AuthConnector,
+                                                   config: FrontendAppConfig,
+                                                   val parser: BodyParsers.Default
+                                                 )(implicit val executionContext: ExecutionContext) extends AuthenticatedIdentifierAction with AuthorisedFunctions {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    authorised(ConfidenceLevel.L200 and AffinityGroup.Individual)
+    authorised(AuthProviders(AuthProvider.Verify) or (AffinityGroup.Individual and ConfidenceLevel.L200))
       .retrieve(OptionalRetrieval("nino", Reads.StringReads) and OptionalRetrieval("internalId", Reads.StringReads)) {
-      x =>
-        val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
-        val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
+        x =>
+          val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
+          val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
 
-        block(IdentifierRequest(request, Authed(internalId), Some(nino)))
-    } recover {
+          block(IdentifierRequest(request, Authed(internalId), Some(nino)))
+      } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
         unauthorised(hc.sessionId.map(_.value))
       case _: InsufficientConfidenceLevel =>
