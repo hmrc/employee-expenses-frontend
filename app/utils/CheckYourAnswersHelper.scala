@@ -135,13 +135,18 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   }
 
   def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
-    x =>
-      AnswerRow("employerContribution.checkYourAnswersLabel", if (x) "site.yes" else "site.no", true,
-        Some(EmployerContributionController.onPageLoad(CheckMode).url), editText = None)
+    employerContributionOption =>
+            AnswerRow(
+              "employerContribution.checkYourAnswersLabel",
+              s"employerContribution.$employerContributionOption",
+              true,
+              Some(EmployerContributionController.onPageLoad(CheckMode).url),
+              None
+            )
   }
 
   def expensesEmployerPaid: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) match {
-    case Some(true) =>
+    case Some(EmployerContribution.YesEmployerContribution) =>
       userAnswers.get(ExpensesEmployerPaidPage) map {
         x =>
           AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"£$x", false,

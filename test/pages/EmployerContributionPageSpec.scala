@@ -17,7 +17,7 @@
 package pages
 
 import generators.Generators
-import models.UserAnswers
+import models.{EmployerContribution, UserAnswers}
 import pages.behaviours.PageBehaviours
 
 import scala.util.Try
@@ -30,15 +30,15 @@ class EmployerContributionPageSpec extends PageBehaviours with Generators {
 
   "EmployerContributionPage" must {
 
-    beRetrievable[Boolean](EmployerContributionPage)
+    beRetrievable[EmployerContribution](EmployerContributionPage)
 
-    beSettable[Boolean](EmployerContributionPage)
+    beSettable[EmployerContribution](EmployerContributionPage)
 
-    beRemovable[Boolean](EmployerContributionPage)
+    beRemovable[EmployerContribution](EmployerContributionPage)
 
     "remove ExpensesPaid and SameEmployerContributionAllYears when EmployerContribution is False" in {
 
-      val updatedUserAnswers = userAnswers.flatMap(_.set(EmployerContributionPage, false)).get
+      val updatedUserAnswers = userAnswers.flatMap(_.set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution)).get
 
       updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe None
       updatedUserAnswers.get(SameEmployerContributionAllYearsPage) mustBe None
@@ -46,7 +46,7 @@ class EmployerContributionPageSpec extends PageBehaviours with Generators {
 
 
     "keep ExpensesPaid amount when EmployerContribution is True" in {
-      val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage, true).get
+      val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage,  EmployerContribution.YesEmployerContribution).get
 
       updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe Some(100)
       updatedUserAnswers.get(SameEmployerContributionAllYearsPage) mustBe Some(true)

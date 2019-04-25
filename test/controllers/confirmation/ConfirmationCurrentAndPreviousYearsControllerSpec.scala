@@ -58,7 +58,7 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
     "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET with specific answers" in {
 
       val userAnswers = emptyUserAnswers
-        .set(EmployerContributionPage, false).success.value
+        .set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
         .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
         .set(YourAddressPage, true).success.value
         .set(YourEmployerPage, true).success.value
@@ -88,8 +88,8 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
         view(
           claimAmountsAndRates = Seq(claimAmountsAndRates),
           claimAmount = claimAmount,
-          employerInfoCorrect = true,
-          addressInfoCorrect = true,
+          employerInfoCorrect = Some(true),
+          addressInfoCorrect = Some(true),
           currentYearMinus1 =true,
           freResponse = FlatRateExpenseOptions.FRENoYears
         )(request, messages, frontendAppConfig).toString

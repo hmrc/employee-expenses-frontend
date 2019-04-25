@@ -20,6 +20,7 @@ import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.ClaimByAlternativeView
 
+
 class ClaimByAlternativeViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -44,6 +45,5 @@ class ClaimByAlternativeViewSpec extends ViewBehaviours {
       Html(messages("claimByAlternative.claimByPostLink", link2)).toString
     )
   }
-
-  application.stop()
+     application.stop()
 }

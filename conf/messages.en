@@ -72,8 +72,9 @@ expensesEmployerPaid.error.outOfRange = Enter a whole number between {0} and {1}
 
 cannotClaim.title = You cannot claim tax relief for these expenses
 cannotClaim.heading = You cannot claim tax relief for these expenses
-cannotClaim.para1 = You cannot claim these expenses because your employer has already paid back the full amount that you can claim.
-cannotClaim.link = Your employer has already paid back all of your expenses
+cannotClaim.para1 =  You cannot claim these expenses because {0}.
+cannotClaim.link = your employer has already paid back the full amount that you can claim
+
 
 employerContribution.title = Has your employer paid back any of your expenses for uniform, work clothing or tools?
 employerContribution.heading = Has your employer paid back any of your expenses for uniform, work clothing or tools?
@@ -82,9 +83,12 @@ employerContribution.list.heading = This is for:
 employerContribution.list.item1 = washing a uniform your employer gave to you
 employerContribution.list.item2 = repairing, replacing or cleaning any specialist or protective clothing you wear for your job
 employerContribution.list.item3 = repairing or replacing any small tools that you own, but use for your job
-employerContribution.hint = This does not include the cost of buying the first item.
+employerContribution.hint = This does not include the initial cost of buying any items.
 employerContribution.checkYourAnswersLabel = Has your employer paid back any of your expenses for uniform, work clothing or tools?
 employerContribution.error.required = Select yes if your employer paid back any of your expenses for uniform, work clothing or tools
+employerContribution.yesEmployerContribution = Yes, my employer has paid back part of these expenses
+employerContribution.noEmployerContribution = No, my employer has not paid back any of these expenses
+
 
 claimByAlternative.title = If you are claiming for more than one job you must use an online form or claim by post
 claimByAlternative.heading = If you are claiming for more than one job you must use an online form or claim by post
@@ -239,7 +243,7 @@ typeOfTransport.publicTransport = Public transport
 typeOfTransport.railways = Railways
 typeOfTransport.seamanCarpenter = Seaman carpenter
 typeOfTransport.vehicles = Vehicles
-typeOfTransport.noneOfTheAbove = None of the above
+typeOfTransport.noneOfTheAbove = Transport or travel type not listed
 typeOfTransport.checkYourAnswersLabel = Which type of transport or travel do you work in?
 typeOfTransport.error.required = Select which type of transport or travel do you work in
 
@@ -280,8 +284,8 @@ factoryEngineeringList1.occupation2 = maintenance engineers (rotary presses) and
 factoryEngineeringList1.occupation3 = pattern maker
 
 
-airlineJobList.title = Airline occupation list
-airlineJobList.heading = Airline occupation list
+airlineJobList.title = Airline occupations
+airlineJobList.heading = Airline occupations
 airlineJobList.listText = The occupations are:
 airlineJobList.radioLabel = Is your occupation listed?
 airlineJobList.occupation1 = co-pilot
@@ -392,9 +396,9 @@ aluminiumOccupationList2.occupation4 = drier
 aluminiumOccupationList2.occupation5 = drill puncher
 aluminiumOccupationList2.occupation6 = dross unloader
 
-ironSteelOccupationList.title = Iron and steel occupation list
-ironSteelOccupationList.heading = Iron and steel occupation list
-ironSteelOccupationList.checkYourAnswersLabel = Iron and steel occupation list
+ironSteelOccupationList.title = Iron and steel occupations
+ironSteelOccupationList.heading = Iron and steel occupations
+ironSteelOccupationList.checkYourAnswersLabel = Iron and steel occupations
 ironSteelOccupationList.error.required = Select yes if your occupation is listed
 ironSteelOccupationList.listText = The occupations are:
 ironSteelOccupationList.radioLabel = Is your occupation listed?
@@ -442,9 +446,9 @@ cateringStaffNHS.heading = Are you catering staff in the NHS?
 cateringStaffNHS.checkYourAnswersLabel = Are you catering staff in the NHS?
 cateringStaffNHS.error.required = Select yes if you are catering staff in the NHS
 
-clothing.title = Clothing and textiles occupation list
-clothing.heading = Clothing and textiles occupation list
-clothing.checkYourAnswersLabel = Clothing and textiles occupation list
+clothing.title = Clothing occupations
+clothing.heading = Clothing occupations
+clothing.checkYourAnswersLabel = Clothing occupations
 clothing.error.required = Select yes if your occupation is listed
 clothing.listText = The occupations are:
 clothing.radioLabel = Is your occupation listed?
@@ -602,7 +606,7 @@ constructionalEngineeringList3.occupation4 = slewers and straighteners
 updateEmployerInformation.title = You need to update your employer information
 updateEmployerInformation.heading = You need to update your employer information
 updateEmployerInformation.paragraph1 = You can still complete this claim but you must update your employer information with HMRC when you have finished.
-updateEmployerInformation.paragraph2 = We will give you the link to change your employer information after you have completed this claim.
+updateEmployerInformation.paragraph2 = After you have completed this claim, we will tell you how to do this.
 
 ironApprentice.title = Are you an apprentice in the iron and steel industry?
 ironApprentice.heading = Are you an apprentice in the iron and steel industry?
@@ -616,8 +620,8 @@ aluminiumApprentice.error.required = Select yes if you are an apprentice in the 
 
 updateYourAddress.title = You need to update your address
 updateYourAddress.heading = You need to update your address
-updateYourAddress.guidance1 = You can still complete this claim but you must update your address with HMRC when you have finished.
-updateYourAddress.guidance2 = We will give you the link to change your address after you have completed this claim.
+updateYourAddress.guidance1 = You can still complete this claim, but HMRC will not be able to send you any letters or amounts due unless you update your address.
+updateYourAddress.guidance2 = After you have completed this claim, we will tell you how to do this.
 
 noCodeChange.title = You do not need to do anything else
 noCodeChange.heading = You do not need to do anything else
@@ -713,12 +717,19 @@ confirmation.confirmationLetter = We will process your claim and send you a lett
 confirmation.additionalConfirmationLetter = We will process your claim and send you another letter to confirm any amounts due. This can take up to 10 working days.
 confirmation.noLongerGetAmount = You will no longer get this amount. You will get a letter to confirm this change to your tax-free Personal Allowance.
 confirmation.updateEmployerInfo = Update your employer information
-confirmation.employerChange = You told us that your employer information has changed. You must update this with HMRC.
+confirmation.employerChange = You must update your employer information with HMRC.
 confirmation.updateEmployerInfoNow = Update your employer information now
 confirmation.updateAddressInfoNow = Update your address now
 confirmation.updateAddressInfo = Update your address
-confirmation.addressChange = You told us that your address has changed. If you do not update it you may not receive any letters from HMRC.
+confirmation.addressChange = You must update your address, otherwise HMRC will not be able to send you any letters or amounts due.
 confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April {0} to 5 April {1}, this may take longer if your employer has not yet sent your information for that tax year.
+
+confirmationPreviousYears.englandHeading = Taxpayers in England, Northern Ireland and Wales
+confirmationPreviousYears.scotlandHeading = Taxpayers in Scotland
+confirmationPreviousYears.starterRate = You will get £{0} of this £{1} if you are a starter rate ({2}%) taxpayer.
+confirmationPreviousYears.basicRate = You will get £{0} of this £{1} if you are a basic rate ({2}%) taxpayer.
+confirmationPreviousYears.higherRate = You will get £{0} of this £{1} if you are a higher rate ({2}%) taxpayer.
+
 
 shipyardApprenticeStorekeeper.title = Are you an apprentice or storekeeper?
 shipyardApprenticeStorekeeper.heading = Are you an apprentice or storekeeper?

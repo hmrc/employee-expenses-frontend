@@ -20,16 +20,17 @@ import config.NavConstant
 import connectors.CitizenDetailsConnector
 import controllers.actions._
 import controllers.authenticated.routes._
-import controllers.routes.SessionExpiredController
+import controllers.routes._
 import forms.authenticated.YourAddressFormProvider
 import javax.inject.{Inject, Named}
-import models.Mode
+import models.{Address, Mode}
 import navigation.Navigator
 import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
 import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -61,19 +62,34 @@ class YourAddressController @Inject()(
       }
 
       citizenDetailsConnector.getAddress(request.nino.get).flatMap {
-        address =>
-          if (address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)) {
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CitizenDetailsAddress, address))
-              _ <- sessionRepository.set(request.identifier, updatedAnswers)
-            } yield Ok(view(preparedForm, mode, address))
-          } else {
-            Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+        response =>
+          response.status match {
+            case 200 =>
+              Json.parse(response.body).validate[Address] match {
+                case JsSuccess(address, _) =>
+                  if (address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)) {
+                    for {
+                      updatedAnswers <- Future.fromTry(request.userAnswers.set(CitizenDetailsAddress, address))
+                      _ <- sessionRepository.set(request.identifier, updatedAnswers)
+                    } yield Ok(view(preparedForm, mode, address))
+                  } else {
+                    Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+                  }
+                case JsError(e) =>
+                  Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress][Json.parse] failed $e")
+                  Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+              }
+            case 404 | 500 =>
+              Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+            case 423 =>
+              Future.successful(Redirect(PhoneUsController.onPageLoad()))
+            case _ =>
+              Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
           }
-      }.recoverWith{
+      }.recoverWith {
         case e =>
-        Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
-        Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
+          Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
+          Future.successful(Redirect(UpdateYourAddressController.onPageLoad()))
       }
   }
 

@@ -23,7 +23,7 @@
 @(
         claimAmountsAndRates: Seq[Rates],
         claimAmount: Int,
-        addressInfoCorrect: Boolean,
+        addressInfoCorrect: Option[Boolean],
         currentYearMinus1: Boolean,
         freResponse: FlatRateExpenseOptions
 )(implicit request: Request[_], messages: Messages, appConfig: config.FrontendAppConfig)
@@ -42,21 +42,23 @@
 
     <p>@messages("confirmation.actualAmount")</p>
 
-    @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
+    @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount, Some("confirmationPreviousYears"))
 
     <h2>@messages("confirmation.whatHappensNext")</h2>
 
     <p>@messages("confirmation.confirmationLetter")</p>
 
     @if(currentYearMinus1) {
-        <p>@messages(
-            "confirmation.currentYearMinusOneDelay",
-            TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
-            TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString)
+        <p>
+            @messages(
+                "confirmation.currentYearMinusOneDelay",
+                TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
+                TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString
+            )
         </p>
     }
 
-    @if(!addressInfoCorrect) {
+    @if(!addressInfoCorrect.getOrElse(false)) {
         @components.update_address_info()
     }
 }

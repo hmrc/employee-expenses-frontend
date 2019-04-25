@@ -70,6 +70,31 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
      """.stripMargin
   )
 
+  lazy val emptyAddressJson: JsValue = Json.parse(
+    s"""
+       |{
+       |  "address":{
+       |    "line1":"",
+       |    "line2":"",
+       |    "line3":"",
+       |    "line4":"",
+       |    "line5":"",
+       |    "postcode":"",
+       |    "country":""
+       |  }
+       |}
+     """.stripMargin
+  )
+
+  lazy val etag: Int = 123
+
+  lazy val validEtagJson: JsValue = Json.parse(
+    s"""
+       |{
+       |   "etag":"$etag"
+       |}
+    """.stripMargin)
+
   lazy val taiEmployment: Seq[Employment] = Seq(Employment(
     name = "HMRC LongBenton"
   ))
@@ -93,7 +118,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   def fullUserAnswers: UserAnswers = emptyUserAnswers
     .set(FirstIndustryOptionsPage, Healthcare).success.value
-    .set(EmployerContributionPage, true).success.value
+    .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
     .set(ExpensesEmployerPaidPage, 123).success.value
     .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
     .set(YourAddressPage, true).success.value
@@ -106,7 +131,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   def minimumUserAnswers: UserAnswers = emptyUserAnswers
     .set(FirstIndustryOptionsPage, Retail).success.value
-    .set(EmployerContributionPage, false).success.value
+    .set(EmployerContributionPage, EmployerContribution.NoEmployerContribution).success.value
     .set(ClaimAmountAndAnyDeductions, 60).success.value
     .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
     .set(AlreadyClaimingFRESameAmountPage, Remove).success.value

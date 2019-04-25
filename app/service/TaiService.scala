@@ -20,6 +20,8 @@ import com.google.inject.Inject
 import connectors.{CitizenDetailsConnector, TaiConnector}
 import models.FlatRateExpenseOptions._
 import models._
+import play.api.Logger
+import play.api.libs.json.{JsError, JsSuccess, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,9 +40,21 @@ class TaiService @Inject()(taiConnector: TaiConnector,
 
   def updateFRE(nino: String, year: TaiTaxYear, grossAmount: Int)
                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+
     citizenDetailsConnector.getEtag(nino).flatMap {
-      etag =>
-        taiConnector.taiFREUpdate(nino, year, etag, grossAmount)
+      response =>
+        response.status match {
+          case 200 =>
+            Json.parse(response.body).validate[ETag] match {
+              case JsSuccess(body, _) =>
+                taiConnector.taiFREUpdate(nino, year, body.etag.toInt, grossAmount)
+              case JsError(e) =>
+                Logger.error(s"[TaiService.updateFRE][CitizenDetailsConnector.getEtag][Json.parse] failed $e")
+                Future.successful(response)
+            }
+          case _ =>
+            Future.successful(response)
+        }
     }
   }
 

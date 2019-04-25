@@ -59,7 +59,7 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
                   currentYearMinus1: Boolean = true,
                   freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
                  )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(claimAmountsAndRates, claimAmount, updateAddress, currentYearMinus1, freResponse)(fakeRequest, messages, frontendAppConfig)
+      view.apply(claimAmountsAndRates, claimAmount, Some(updateAddress), currentYearMinus1, freResponse)(fakeRequest, messages, frontendAppConfig)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 
@@ -99,13 +99,13 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
       val doc = asDocument(viewWithAnswers)
 
       assertContainsText(doc, messages(
-        "confirmation.basicRate",
+        "confirmationPreviousYears.basicRate",
         claimAmountsRates.calculatedBasicRate,
         claimAmount,
         claimAmountsRates.basicRate
       ))
       assertContainsText(doc, messages(
-        "confirmation.higherRate",
+        "confirmationPreviousYears.higherRate",
         claimAmountsRates.calculatedHigherRate,
         claimAmount,
         claimAmountsRates.higherRate

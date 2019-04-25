@@ -16,25 +16,26 @@
 
 @(
         claimAmountsAndRates: Seq[Rates],
-        claimAmount: Int
+        claimAmount: Int,
+        keyPrefix: Option[String] = Some("confirmation")
 )(implicit messages: Messages)
 
 @for(rate <- claimAmountsAndRates) {
   @rate match {
     case standardRate: StandardRate => {
       @if(claimAmountsAndRates.length > 1) {
-        <h2 class="heading-small">@messages("confirmation.englandHeading")</h2>
+        <h2 class="heading-small">@messages(s"${keyPrefix.get}.englandHeading")</h2>
       }
-      <p>@messages("confirmation.basicRate", standardRate.calculatedBasicRate, claimAmount, standardRate.basicRate)</p>
-      <p>@messages("confirmation.higherRate", standardRate.calculatedHigherRate, claimAmount, standardRate.higherRate)</p>
+      <p>@messages(s"${keyPrefix.get}.basicRate", standardRate.calculatedBasicRate, claimAmount, standardRate.basicRate)</p>
+      <p>@messages(s"${keyPrefix.get}.higherRate", standardRate.calculatedHigherRate, claimAmount, standardRate.higherRate)</p>
     }
     case scottishRate: ScottishRate => {
       @if(claimAmountsAndRates.length > 1) {
-        <h2 class="heading-small">@messages("confirmation.scotlandHeading")</h2>
+        <h2 class="heading-small">@messages(s"${keyPrefix.get}.scotlandHeading")</h2>
       }
-      <p>@messages("confirmation.starterRate", scottishRate.calculatedStarterRate, claimAmount, scottishRate.starterRate)</p>
-      <p>@messages("confirmation.basicRate", scottishRate.calculatedBasicRate, claimAmount, scottishRate.basicRate)</p>
-      <p>@messages("confirmation.higherRate", scottishRate.calculatedHigherRate, claimAmount, scottishRate.higherRate)</p>
+      <p>@messages(s"${keyPrefix.get}.starterRate", scottishRate.calculatedStarterRate, claimAmount, scottishRate.starterRate)</p>
+      <p>@messages(s"${keyPrefix.get}.basicRate", scottishRate.calculatedBasicRate, claimAmount, scottishRate.basicRate)</p>
+      <p>@messages(s"${keyPrefix.get}.higherRate", scottishRate.calculatedHigherRate, claimAmount, scottishRate.higherRate)</p>
     }
   }
 }
