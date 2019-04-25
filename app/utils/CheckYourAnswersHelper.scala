@@ -137,14 +137,11 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     employerContributionOption =>
             AnswerRow(
               "employerContribution.checkYourAnswersLabel",
-              employerContributionOption.toString,
-              false,
+              s"employerContribution.$employerContributionOption",
+              true,
               Some(EmployerContributionController.onPageLoad(CheckMode).url),
               None
             )
-//    x =>
-//      AnswerRow("employerContribution.checkYourAnswersLabel", if (x) "employerContribution.yesEmployerContribution" else "employerContribution.noEmployerContribution", true,
-//        Some(EmployerContributionController.onPageLoad(CheckMode).url), editText = None)
   }
 
   def expensesEmployerPaid: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) match {

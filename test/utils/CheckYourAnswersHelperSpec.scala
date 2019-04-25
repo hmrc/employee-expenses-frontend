@@ -215,13 +215,13 @@ class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
     "display the correct label and answer when 'True'" in {
           val ua = emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
           helper(ua).employerContribution.get.label mustBe "employerContribution.checkYourAnswersLabel"
-          helper(ua).employerContribution.get.answer mustBe "yesEmployerContribution"
+          helper(ua).employerContribution.get.answer mustBe "employerContribution.yesEmployerContribution"
     }
 
     "display the correct label and answer when 'False'" in {
       val ua = emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.NoEmployerContribution).success.value
       helper(ua).employerContribution.get.label mustBe "employerContribution.checkYourAnswersLabel"
-      helper(ua).employerContribution.get.answer mustBe "noEmployerContribution"
+      helper(ua).employerContribution.get.answer mustBe "employerContribution.noEmployerContribution"
     }
   }
 
