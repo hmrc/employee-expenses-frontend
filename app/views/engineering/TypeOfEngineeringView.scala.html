@@ -38,7 +38,7 @@
 
         <p aria-hidden="true">@messages("typeOfEngineering.listText")</p>
 
-        @components.input_radio(
+        @components.input_radio_or(
             field = form("value"),
             legend = messages("typeOfEngineering.listText"),
             legendClass = Some("visually-hidden"),
