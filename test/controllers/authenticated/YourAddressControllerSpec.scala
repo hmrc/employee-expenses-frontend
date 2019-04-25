@@ -34,10 +34,12 @@ import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
 import play.api.data.Form
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import uk.gov.hmrc.http.HttpResponse
 import views.html.authenticated.YourAddressView
 
 import scala.concurrent.Future
@@ -67,7 +69,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
         .build()
 
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(HttpResponse(200, Some(Json.toJson(address))))
 
       val request = FakeRequest(GET, yourAddressRoute)
 
@@ -100,7 +102,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
         .build()
 
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(address)
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(HttpResponse(200, Some(Json.toJson(address))))
 
       val request = FakeRequest(GET, yourAddressRoute)
 
@@ -124,7 +126,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
           .build()
 
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(emptyAddress)
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(HttpResponse(200, Some(Json.toJson(emptyAddress))))
 
       val request = FakeRequest(GET, yourAddressRoute)
 
@@ -219,6 +221,111 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual UpdateYourAddressController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to UpdateYourAddressController if address line one and postcode missing" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
+
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(HttpResponse(200, Some(emptyAddressJson)))
+
+      val request =
+        FakeRequest(GET, yourAddressRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual UpdateYourAddressController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to UpdateYourAddressController if address not found" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
+
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(HttpResponse(404, None))
+
+      val request =
+        FakeRequest(GET, yourAddressRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual UpdateYourAddressController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to PhoneUsController if manual correspondence indicator set (423 returned from getAddress)" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
+
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(HttpResponse(423, None))
+
+      val request =
+        FakeRequest(GET, yourAddressRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual PhoneUsController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to UpdateYourAddressController if 500 returned from getAddress" in {
+
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(HttpResponse(500, None))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
+
+      val request =
+        FakeRequest(GET, yourAddressRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual UpdateYourAddressController.onPageLoad().url
+
+      application.stop()
+    }
+
+    "redirect to TechnicalDifficultiesController if any other status returned from getAddress" in {
+
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.successful(HttpResponse(123, None))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
+
+      val request =
+        FakeRequest(GET, yourAddressRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad().url
 
       application.stop()
     }

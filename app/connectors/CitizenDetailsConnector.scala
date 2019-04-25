@@ -19,36 +19,32 @@ package connectors
 import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
 import javax.inject.Singleton
-import models.{Address, ETag}
-import play.api.libs.json.Json
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import utils.HttpResponseHelper
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CitizenDetailsConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient) extends CitizenDetailsConnector {
-  override def getEtag(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Int] = {
+class CitizenDetailsConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient) extends CitizenDetailsConnector with HttpResponseHelper {
+  override def getEtag(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
-    val citizenDetailsUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/etag"
+    val etagUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/etag"
 
-    httpClient.GET(citizenDetailsUrl).map {
-      response =>
-        Json.parse(response.body).as[ETag].etag.toInt
-    }
+    httpClient.GET(etagUrl)
   }
 
-  override def getAddress(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Address] = {
+  override def getAddress(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
     val designatoryDetailsUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/designatory-details"
 
-    httpClient.GET[Address](designatoryDetailsUrl)
+    httpClient.GET(designatoryDetailsUrl)
   }
 }
 
 @ImplementedBy(classOf[CitizenDetailsConnectorImpl])
 trait CitizenDetailsConnector {
-  def getEtag(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Int]
+  def getEtag(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
 
-  def getAddress(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Address]
+  def getAddress(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
 }

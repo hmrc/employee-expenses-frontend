@@ -21,7 +21,6 @@ import connectors.TaiConnector
 import models.{TaiTaxYear, TaxYearSelection}
 import org.joda.time.LocalDate
 import play.api.Logger
-import play.api.libs.json.JsResult
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.time.TaxYear
 
@@ -56,9 +55,9 @@ class SubmissionService @Inject()(
   }
 
   def submitFRE(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int)
-               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
+               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[HttpResponse]] = {
 
-    val responses: Future[Seq[HttpResponse]] = getTaxYearsToUpdate(nino, taxYears).flatMap {
+    getTaxYearsToUpdate(nino, taxYears).flatMap {
       claimYears =>
         futureSequence(claimYears) {
           taxYearSelection =>
@@ -66,16 +65,14 @@ class SubmissionService @Inject()(
             taiService.updateFRE(nino, taiTaxYear, claimAmount)
         }
     }
-
-    submissionResult(responses)
   }
 
   def removeFRE(nino: String, taxYears: Seq[TaxYearSelection], removeYear: TaxYearSelection)
-               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
+               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[HttpResponse]] = {
 
     val removeTaxYears = taxYears.take(TaxYearSelection.values.indexOf(removeYear) + 1)
 
-    val responses: Future[Seq[HttpResponse]] = getTaxYearsToUpdate(nino, removeTaxYears).flatMap {
+    getTaxYearsToUpdate(nino, removeTaxYears).flatMap {
       claimYears =>
         futureSequence(claimYears) {
           taxYearSelection =>
@@ -83,8 +80,6 @@ class SubmissionService @Inject()(
             taiService.updateFRE(nino, taiTaxYear, 0)
         }
     }
-
-    submissionResult(responses)
   }
 
   private def futureSequence[I, O](inputs: Seq[I])(flatMapFunction: I => Future[O])
@@ -96,12 +91,4 @@ class SubmissionService @Inject()(
           future <- flatMapFunction(nextInput)
         } yield futureSeq :+ future
     )
-
-  def submissionResult(response: Future[Seq[HttpResponse]])
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
-    response.map {
-      responses =>
-        responses.nonEmpty && responses.forall(_.status == 204)
-    }
-  }
 }
