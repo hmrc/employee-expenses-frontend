@@ -34,6 +34,7 @@ import controllers.shipyard.routes._
 import controllers.textiles.routes._
 import controllers.transport.routes._
 import javax.inject.Inject
+import models.EmployerContribution.{NoEmployerContribution, YesEmployerContribution}
 import models.FifthIndustryOptions._
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions._
@@ -138,8 +139,8 @@ class GenericNavigator @Inject()() extends Navigator {
 
   private def employerContribution(mode: Mode)(userAnswers: UserAnswers): Call =
    userAnswers.get(EmployerContributionPage) match {
-     case Some(true) => ExpensesEmployerPaidController.onPageLoad(mode)
-     case Some(false) => ClaimAmountController.onPageLoad(mode)
+     case Some(YesEmployerContribution) => ExpensesEmployerPaidController.onPageLoad(mode)
+     case Some(NoEmployerContribution) => ClaimAmountController.onPageLoad(mode)
      case _ => SessionExpiredController.onPageLoad()
     }
 

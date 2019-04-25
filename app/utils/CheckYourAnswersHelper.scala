@@ -23,7 +23,7 @@ import models.FirstIndustryOptions.{Engineering, FoodAndCatering, Healthcare, Re
 import models.FourthIndustryOptions.{Agriculture, FireService, Heating, Leisure, Prisons}
 import models.SecondIndustryOptions.{ClothingTextiles, Construction, Council, ManufacturingWarehousing, Police}
 import models.ThirdIndustryOptions.{BanksBuildingSocieties, Education, Electrical, Printing, Security}
-import models.{Address, CheckMode, TaxYearSelection, UserAnswers}
+import models.{Address, CheckMode, EmployerContribution, TaxYearSelection, UserAnswers}
 import pages._
 import pages.authenticated._
 import play.api.i18n.Messages
@@ -134,13 +134,18 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   }
 
   def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
-    x =>
-      AnswerRow("employerContribution.checkYourAnswersLabel", if (x) "site.yes" else "site.no", true,
-        Some(EmployerContributionController.onPageLoad(CheckMode).url), editText = None)
+    employerContributionOption =>
+            AnswerRow(
+              "employerContribution.checkYourAnswersLabel",
+              s"employerContribution.$employerContributionOption",
+              true,
+              Some(EmployerContributionController.onPageLoad(CheckMode).url),
+              None
+            )
   }
 
   def expensesEmployerPaid: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) match {
-    case Some(true) =>
+    case Some(EmployerContribution.YesEmployerContribution) =>
       userAnswers.get(ExpensesEmployerPaidPage) map {
         x =>
           AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"£$x", false,

@@ -16,15 +16,15 @@
 
 package views
 
-import controllers.routes
 import forms.EmployerContributionFormProvider
-import models.NormalMode
+import models.{EmployerContribution, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
 import views.html.EmployerContributionView
+import views.behaviours.OptionsViewBehaviours
 
-class EmployerContributionViewSpec extends YesNoViewBehaviours {
+
+class EmployerContributionViewSpec extends OptionsViewBehaviours[EmployerContribution] {
 
   val messageKeyPrefix = "employerContribution"
 
@@ -32,47 +32,48 @@ class EmployerContributionViewSpec extends YesNoViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  val view = application.injector.instanceOf[EmployerContributionView]
+  "EmployerContribution view" must {
 
-  def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode)(fakeRequest, messages)
+    val view = application.injector.instanceOf[EmployerContributionView]
 
-  def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    def applyView(form: Form[_]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode)(fakeRequest, messages)
 
-  "EmployerContributionView" must {
+    def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+      behave like normalPage(applyView(form), messageKeyPrefix)
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+      behave like pageWithAccountMenu(applyViewWithAuth(form))
 
-    behave like pageWithBackLink(applyView(form))
+      behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithList(applyView(form), messageKeyPrefix, Seq("list.item1", "list.item2", "list.item3"))
+      behave like optionsPage(form, applyView, EmployerContribution.options)
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.EmployerContributionController.onSubmit(NormalMode).url)
+      behave like pageWithList(applyView(form), messageKeyPrefix, Seq("list.item1", "list.item2", "list.item3"))
+
   }
 
   application.stop()
 
-  override def pageWithList(view: HtmlFormat.Appendable,
+    override def pageWithList(view: HtmlFormat.Appendable,
                             pageKey: String,
                             bulletList: Seq[String]): Unit = {
 
-    "behave like a page with a list" must {
+      "behave like a page with a list" must {
 
-      "have a list" in {
+        "have a list" in {
 
-        val doc = asDocument(view)
-        assertContainsText(doc, "list list-bullet")
-      }
-
-      "have correct values" in {
-
-        val doc = asDocument(view)
-        bulletList.foreach {
-          x => assertContainsMessages(doc, s"$pageKey.$x")
+          val doc = asDocument(view)
+          assertContainsText(doc, "list list-bullet")
         }
+
+        "have correct values" in {
+
+          val doc = asDocument(view)
+          bulletList.foreach {
+            x => assertContainsMessages(doc, s"$pageKey.$x")
+          }
       }
     }
   }

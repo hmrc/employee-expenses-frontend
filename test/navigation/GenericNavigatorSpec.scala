@@ -331,14 +331,14 @@ class GenericNavigatorSpec extends SpecBase {
       //EmployerContributionPage
 
       "go to ClaimAmount from EmployerContributionPage when 'None' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, false).success.value
+        val answers = emptyUserAnswers.set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
           ClaimAmountController.onPageLoad(NormalMode)
       }
 
       "go to ExpensesEmployerPaidController from EmployerContributionPage when 'Some' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, true).success.value
+        val answers = emptyUserAnswers.set(EmployerContributionPage,  EmployerContribution.YesEmployerContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
           ExpensesEmployerPaidController.onPageLoad(NormalMode)
@@ -408,14 +408,14 @@ class GenericNavigatorSpec extends SpecBase {
       //EmployerContributionPage
 
       "go to ClaimAmount from EmployerContributionPage when 'None' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, false).success.value
+        val answers = emptyUserAnswers.set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, CheckMode)(answers) mustBe
           ClaimAmountController.onPageLoad(CheckMode)
       }
 
       "go to ExpensesEmployerPaidController from EmployerContributionPage when 'Some' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage, true).success.value
+        val answers = emptyUserAnswers.set(EmployerContributionPage,  EmployerContribution.YesEmployerContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, CheckMode)(answers) mustBe
           ExpensesEmployerPaidController.onPageLoad(CheckMode)
