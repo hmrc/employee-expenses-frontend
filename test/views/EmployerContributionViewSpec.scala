@@ -50,7 +50,31 @@ class EmployerContributionViewSpec extends OptionsViewBehaviours[EmployerContrib
 
       behave like optionsPage(form, applyView, EmployerContribution.options)
 
+      behave like pageWithList(applyView(form), messageKeyPrefix, Seq("list.item1", "list.item2", "list.item3"))
+
   }
 
   application.stop()
+
+    override def pageWithList(view: HtmlFormat.Appendable,
+                            pageKey: String,
+                            bulletList: Seq[String]): Unit = {
+
+      "behave like a page with a list" must {
+
+        "have a list" in {
+
+          val doc = asDocument(view)
+          assertContainsText(doc, "list list-bullet")
+        }
+
+        "have correct values" in {
+
+          val doc = asDocument(view)
+          bulletList.foreach {
+            x => assertContainsMessages(doc, s"$pageKey.$x")
+          }
+      }
+    }
+  }
 }

@@ -103,7 +103,7 @@ multipleEmployments.oneJob = One job
 multipleEmployments.moreThanOneJob = More than one job
 
 firstIndustryOptions.title = Industry list 1 of 5
-firstIndustryOptions.heading = Industry list 1 of 5cyah
+firstIndustryOptions.heading = Industry list 1 of 5
 firstIndustryOptions.listText = Select your industry.
 firstIndustryOptions.healthcare = Healthcare
 firstIndustryOptions.foodAndCatering = Food and catering
