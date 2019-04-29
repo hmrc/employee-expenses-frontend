@@ -129,7 +129,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       case Some(Forestry) => industryAnswerRow(s"fifthIndustryOptions.${Forestry.toString}")
       case Some(Shipyard) => industryAnswerRow(s"fifthIndustryOptions.${Shipyard.toString}")
       case Some(Textiles) => industryAnswerRow(s"fifthIndustryOptions.${Textiles.toString}")
-      case Some(FifthIndustryOptions.NoneOfAbove) => industryAnswerRow(s"fifthIndustryOptions.${FirstIndustryOptions.NoneOfAbove.toString}")
+      case Some(FifthIndustryOptions.NoneOfAbove) => industryAnswerRow(s"fifthIndustryOptions.${FifthIndustryOptions.NoneOfAbove.toString}")
       case _ => industryAnswerRow("default rate")
     }
   }

@@ -24,8 +24,7 @@ import forms.authenticated.YourEmployerFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
-import pages.YourEmployerNames
-import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
+import pages.authenticated.{TaxYearSelectionPage, YourEmployerNames, YourEmployerPage}
 import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
