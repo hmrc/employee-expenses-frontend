@@ -34,7 +34,7 @@
 
         @components.error_summary(form.errors)
 
-        @components.input_radio(
+        @components.input_radio_or(
             field = form("value"),
             legend = messages("ancillaryEngineeringWhichTrade.heading"),
             legendClass = Some("visually-hidden"),
