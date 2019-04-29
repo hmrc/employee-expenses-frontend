@@ -16,26 +16,17 @@
 
 package models
 
-import org.joda.time.LocalDate
 import play.api.libs.json._
 
-case class Employment(name: String,
-                      startDate: LocalDate,
-                      endDate: Option[LocalDate])
+case class Employment(name: String)
 
 object Employment {
 
-  val dateFormat: String = "yyyy-MM-dd"
-
-  implicit val dateTimeWriter: Writes[LocalDate] =
-    JodaWrites.jodaLocalDateWrites(dateFormat)
-
-  implicit val dateTimeJsReader: Reads[LocalDate] =
-    JodaReads.jodaLocalDateReads(dateFormat)
-
-  implicit val reads: Reads[Employment] =
+  implicit val formats: Format[Employment] =
     Json.format[Employment]
 
   implicit val listReads: Reads[Seq[Employment]] =
     (__ \ "data" \ "employments").read(Reads.seq[Employment])
+
+  def asLabel(names: Seq[String]): String = s"<p>${names.mkString("<br>")}</p>"
 }

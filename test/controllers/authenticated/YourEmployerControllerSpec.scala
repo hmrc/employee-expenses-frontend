@@ -29,8 +29,7 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
-import pages.YourEmployerName
-import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
+import pages.authenticated.{TaxYearSelectionPage, YourEmployerNames, YourEmployerPage}
 import play.api.http.Status.OK
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -49,48 +48,12 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   private val formProvider = new YourEmployerFormProvider()
   private val form = formProvider()
   private val mockTaiService = mock[TaiService]
-  private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
+  private val employmentSeq: Seq[String] = Seq("HMRC LongBenton")
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val yourEmployerRoute: String = YourEmployerController.onPageLoad(NormalMode).url
-
-  lazy val taiEmploymentsWithCurrent: Seq[Employment] = Seq(
-    Employment(
-      name = "ABC Co",
-      startDate = LocalDate.parse("2017-06-27"),
-      endDate = Some(LocalDate.parse("2018-06-27"))
-    ),
-    Employment(
-      name = "XYZ Co",
-      startDate = LocalDate.parse("2018-06-27"),
-      endDate = None
-    ),
-    Employment(
-      name = "123 Co",
-      startDate = LocalDate.parse("2014-06-27"),
-      endDate = None
-    )
-  )
-
-  lazy val taiEmploymentsWithoutCurrent: Seq[Employment] = Seq(
-    Employment(
-      name = "ABC Co",
-      startDate = LocalDate.parse("2017-06-27"),
-      endDate = Some(LocalDate.parse("2018-06-27"))
-    ),
-    Employment(
-      name = "XYZ Co",
-      startDate = LocalDate.parse("2017-06-27"),
-      endDate = Some(LocalDate.parse("2018-06-27"))
-    ),
-    Employment(
-      name = "123 Co",
-      startDate = LocalDate.parse("2014-06-27"),
-      endDate = Some(LocalDate.parse("2016-06-27"))
-    )
-  )
 
   "YourEmployer Controller" must {
 
@@ -112,67 +75,17 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val view = application.injector.instanceOf[YourEmployerView]
 
       val userAnswers2 = userAnswers
-          .set(YourEmployerName, "HMRC LongBenton").success.value
+          .set(YourEmployerNames, Seq("HMRC LongBenton")).success.value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, taiEmployment.head.name)(request, messages).toString
+        view(form, NormalMode, employmentSeq)(request, messages).toString
 
       whenReady(result) {
         _ =>
           verify(mockSessionRepository, times(1)).set(Authed(userAnswersId), userAnswers2)
       }
-
-      application.stop()
-    }
-
-    "return OK and the correct view for a GET and show correct employer name for employments with current active employment" in {
-      val userAnswers = UserAnswers(userAnswersId)
-        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .overrides(bind[TaiService].toInstance(mockTaiService))
-        .build()
-
-      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmploymentsWithCurrent))
-
-      val request = FakeRequest(GET, yourEmployerRoute)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[YourEmployerView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode, taiEmploymentsWithCurrent(1).name)(request, messages).toString
-
-      application.stop()
-    }
-
-    "return OK and the correct view for a GET and show first employer name for employments with no current active employment" in {
-      val userAnswers = UserAnswers(userAnswersId)
-        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .overrides(bind[TaiService].toInstance(mockTaiService))
-        .build()
-
-      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmploymentsWithoutCurrent))
-
-      val request = FakeRequest(GET, yourEmployerRoute)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[YourEmployerView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode, taiEmploymentsWithoutCurrent.head.name)(request, messages).toString
 
       application.stop()
     }
@@ -198,14 +111,14 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, taiEmployment.head.name)(request, messages).toString
+        view(form.fill(true), NormalMode, employmentSeq)(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
       val userAnswers = UserAnswers(userAnswersId)
-        .set(YourEmployerName, taiEmployment.head.name).success.value
+        .set(YourEmployerNames, employmentSeq).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -229,7 +142,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "return a Bad Request and errors when invalid data is submitted" in {
       val userAnswers = UserAnswers(userAnswersId)
-        .set(YourEmployerName, taiEmployment.head.name).success.value
+        .set(YourEmployerNames, employmentSeq).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .build()
@@ -247,7 +160,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, taiEmployment.head.name)(request, messages).toString
+        view(boundForm, NormalMode, employmentSeq)(request, messages).toString
 
       application.stop()
     }

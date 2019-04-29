@@ -24,7 +24,6 @@ import models.FirstIndustryOptions.{Healthcare, Retail}
 import models.FlatRateExpenseOptions.FRENoYears
 import models.TaxYearSelection.CurrentYear
 import models._
-import org.joda.time.LocalDate
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
@@ -97,9 +96,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     """.stripMargin)
 
   lazy val taiEmployment: Seq[Employment] = Seq(Employment(
-    name = "HMRC LongBenton",
-    startDate = LocalDate.parse("2018-06-27"),
-    endDate = None
+    name = "HMRC LongBenton"
   ))
 
   lazy val emptyAddress = Address(

@@ -24,8 +24,7 @@ import forms.authenticated.YourEmployerFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
-import pages.YourEmployerName
-import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
+import pages.authenticated.{TaxYearSelectionPage, YourEmployerNames, YourEmployerPage}
 import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -65,11 +64,11 @@ class YourEmployerController @Inject()(
           taiService.employments(request.nino.get, taxYears.head).flatMap {
             employments =>
               if (employments.nonEmpty) {
-                val employerName = if (employments.forall(p => p.endDate.isDefined)) employments.head.name else employments.filter(p => p.endDate.isEmpty).head.name
+                val employerNames: Seq[String] = employments.map(_.name)
                 for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerName, employerName))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerNames, employerNames))
                   _ <- sessionRepository.set(request.identifier, updatedAnswers)
-                } yield Ok(view(preparedForm, mode, employerName))
+                } yield Ok(view(preparedForm, mode, employerNames))
               } else {
                 Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(mode)))
               }
@@ -86,12 +85,12 @@ class YourEmployerController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      request.userAnswers.get(YourEmployerName) match {
-        case Some(employerName) =>
+      request.userAnswers.get(YourEmployerNames) match {
+        case Some(employerNames) =>
 
           form.bindFromRequest().fold(
             (formWithErrors: Form[_]) =>
-              Future.successful(BadRequest(view(formWithErrors, mode, employerName))),
+              Future.successful(BadRequest(view(formWithErrors, mode, employerNames))),
 
             value => {
               for {

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.authenticated
 
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-object YourEmployerName extends QuestionPage[String] {
+object YourEmployerNames extends QuestionPage[Seq[String]] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "yourEmployerName"
+  override def toString: String = "yourEmployerNames"
 }

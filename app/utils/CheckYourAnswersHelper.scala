@@ -18,12 +18,13 @@ package utils
 
 import controllers.authenticated.routes._
 import controllers.routes._
-import models.FifthIndustryOptions.{Armedforces, Dockswaterways, Forestry, NoneOfAbove, Shipyard, Textiles}
-import models.FirstIndustryOptions.{Engineering, FoodAndCatering, Healthcare, Retail, TransportAndDistribution}
-import models.FourthIndustryOptions.{Agriculture, FireService, Heating, Leisure, Prisons}
-import models.SecondIndustryOptions.{ClothingTextiles, Construction, Council, ManufacturingWarehousing, Police}
-import models.ThirdIndustryOptions.{BanksBuildingSocieties, Education, Electrical, Printing, Security}
-import models.{Address, CheckMode, EmployerContribution, TaxYearSelection, UserAnswers}
+import models.FifthIndustryOptions
+import models.FifthIndustryOptions._
+import models.FirstIndustryOptions._
+import models.FourthIndustryOptions._
+import models.SecondIndustryOptions._
+import models.ThirdIndustryOptions._
+import models._
 import pages._
 import pages.authenticated._
 import play.api.i18n.Messages
@@ -128,7 +129,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       case Some(Forestry) => industryAnswerRow(s"fifthIndustryOptions.${Forestry.toString}")
       case Some(Shipyard) => industryAnswerRow(s"fifthIndustryOptions.${Shipyard.toString}")
       case Some(Textiles) => industryAnswerRow(s"fifthIndustryOptions.${Textiles.toString}")
-      case Some(NoneOfAbove) => industryAnswerRow(s"fifthIndustryOptions.${NoneOfAbove.toString}")
+      case Some(FifthIndustryOptions.NoneOfAbove) => industryAnswerRow(s"fifthIndustryOptions.${FifthIndustryOptions.NoneOfAbove.toString}")
       case _ => industryAnswerRow("default rate")
     }
   }
@@ -154,13 +155,13 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     case _ => None
   }
 
-  def yourEmployer: Option[AnswerRow] = (userAnswers.get(YourEmployerPage), userAnswers.get(YourEmployerName)) match {
-    case (Some(x), Some(employer)) =>
+  def yourEmployer: Option[AnswerRow] = (userAnswers.get(YourEmployerPage), userAnswers.get(YourEmployerNames)) match {
+    case (Some(x), Some(employers)) =>
       Some(AnswerRow("yourEmployer.checkYourAnswersLabel",
         if (x) "site.yes" else "site.no", true,
         Some(YourEmployerController.onPageLoad(CheckMode).url),
         Some("checkYourAnswers.editText"),
-        s"<p>$employer</p>"
+        Employment.asLabel(employers)
       ))
     case _ => None
   }
