@@ -36,11 +36,9 @@
 
         @components.heading("fourthIndustryOptions.heading")
 
-        <p>@Messages("fourthIndustryOptions.listText")</p>
-
         @components.input_radio_or(
             field = form("value"),
-            legend = messages("fourthIndustryOptions.heading"),
+            legend = messages("fourthIndustryOptions.listText"),
             legendClass = Some("visually-hidden"),
             inputs = FourthIndustryOptions.options
         )
