@@ -380,8 +380,8 @@ policeOfficer.checkYourAnswersLabel = Are you a police officer with a rank of up
 policeOfficer.error.required = Select yes if you are a police officer with a rank of up to and including Chief Inspector
 
 aluminiumOccupationList2.title = Aluminium occupations (page 2 of 3)
-aluminiumOccupationList2.heading = Aluminium occupations (page 1 of 3)
-aluminiumOccupationList2.checkYourAnswersLabel = Aluminium occupations (page 1 of 3)
+aluminiumOccupationList2.heading = Aluminium occupations (page 2 of 3)
+aluminiumOccupationList2.checkYourAnswersLabel = Aluminium occupations (page 2 of 3)
 aluminiumOccupationList2.error.required = Select yes if your occupation is listed
 aluminiumOccupationList2.listText = The occupations are:
 aluminiumOccupationList2.radioLabel = Is your occupation listed?
@@ -452,9 +452,9 @@ clothing.occupation1 = fellmongering worker
 clothing.occupation2 = leather currier (wet worker)
 clothing.occupation3 = tanning operative (wet)
 
-aluminiumOccupationList3.title = Aluminium occupation list 3 of 3
-aluminiumOccupationList3.heading = Aluminium occupation list 3 of 3
-aluminiumOccupationList3.checkYourAnswersLabel = Aluminium occupation list 1 of 3
+aluminiumOccupationList3.title = Aluminium occupations (page 3 of 3)
+aluminiumOccupationList3.heading = Aluminium occupations (page 3 of 3)
+aluminiumOccupationList3.checkYourAnswersLabel = Aluminium occupations (page 3 of 3)
 aluminiumOccupationList3.error.required = Select yes if your occupation is listed
 aluminiumOccupationList3.listText = The occupations are:
 aluminiumOccupationList3.radioLabel = Is your occupation listed?
@@ -484,7 +484,7 @@ printingOccupationList1.occupation4 = machine minders (rotary)
 printingOccupationList1.occupation5 = maintenance engineers (rotary presses) and stereotypers
 
 printingOccupationList2.title = Printing occupations (page 2 of 2)
-printingOccupationList2.heading = PPrinting occupations (page 2 of 2)
+printingOccupationList2.heading = Printing occupations (page 2 of 2)
 printingOccupationList2.checkYourAnswersLabel = Printing occupations (page 2 of 2)
 printingOccupationList2.error.required = Select yes if your occupation is listed
 printingOccupationList2.listText = The occupations are:
