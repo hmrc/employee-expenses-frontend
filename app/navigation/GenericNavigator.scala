@@ -86,7 +86,7 @@ class GenericNavigator @Inject()() extends Navigator {
     userAnswers.get(FirstIndustryOptionsPage) match {
       case Some(Engineering)                         => TypeOfEngineeringController.onPageLoad(mode)
       case Some(FoodAndCatering)                     => CateringStaffNHSController.onPageLoad(mode)
-      case Some(Healthcare)                          => AmbulanceStaffController.onPageLoad(mode)
+      case Some(Healthcare)                          => HealthcareList1Controller.onPageLoad(mode)
       case Some(Retail)                              => EmployerContributionController.onPageLoad(mode)
       case Some(TransportAndDistribution)            => TypeOfTransportController.onPageLoad(mode)
       case Some(FirstIndustryOptions.NoneOfAbove)    => SecondIndustryOptionsController.onPageLoad(mode)

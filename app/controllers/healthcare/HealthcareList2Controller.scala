@@ -66,11 +66,14 @@ class HealthcareList2Controller @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
-          val claimAmount = if (value) ClaimAmounts.Healthcare.list2 else ClaimAmounts.Healthcare.allOther
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(HealthcareList2Page, value)
-              .flatMap(_.set(ClaimAmount, claimAmount))
-            )
+            updatedAnswers <- if (value) {
+              Future.fromTry(request.userAnswers.set(HealthcareList2Page, value)
+                .flatMap(_.set(ClaimAmount, ClaimAmounts.Healthcare.list2))
+              )
+            } else {
+              Future.fromTry(request.userAnswers.set(HealthcareList2Page, value))
+            }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(HealthcareList2Page, mode)(updatedAnswers))
         }

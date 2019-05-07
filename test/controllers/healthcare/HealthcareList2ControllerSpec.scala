@@ -212,7 +212,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
       application.stop()
     }
 
-    "save 'allOther' to ClaimAmount when 'No' is selected" in {
+    "dont save to ClaimAmount when 'No' is selected" in {
 
       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
@@ -225,7 +225,6 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
       val request = FakeRequest(POST, healthcareList2Route).withFormUrlEncodedBody(("value", "false"))
 
       val ua2 = ua1
-        .set(ClaimAmount, ClaimAmounts.Healthcare.allOther).success.value
         .set(HealthcareList2Page, false).success.value
 
       whenReady(route(application, request).value) {

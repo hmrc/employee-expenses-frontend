@@ -39,8 +39,7 @@ class HealthcareNavigator @Inject()() extends Navigator {
   }
 
   def ambulanceStaff(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(AmbulanceStaffPage) match {
-    case Some(true)  => EmployerContributionController.onPageLoad(mode)
-    case Some(false) => HealthcareList1Controller.onPageLoad(mode)
+    case Some(true) | Some(false)  => EmployerContributionController.onPageLoad(mode)
     case _           => SessionExpiredController.onPageLoad()
   }
 
@@ -51,7 +50,8 @@ class HealthcareNavigator @Inject()() extends Navigator {
   }
 
   def healthcareList2(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(HealthcareList2Page) match {
-    case Some(true) | Some(false) => EmployerContributionController.onPageLoad(mode)
-    case _                        => SessionExpiredController.onPageLoad()
+    case Some(true)  => EmployerContributionController.onPageLoad(mode)
+    case Some(false) => AmbulanceStaffController.onPageLoad(mode)
+    case _           => SessionExpiredController.onPageLoad()
   }
 }
