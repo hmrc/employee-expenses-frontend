@@ -66,14 +66,11 @@ class AmbulanceStaffController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, mode))),
 
         value => {
+          val claimAmount = if(value){ClaimAmounts.Healthcare.ambulanceStaff} else {ClaimAmounts.Healthcare.allOther}
           for {
-            updatedAnswers <- if (value) {
-              Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Healthcare.ambulanceStaff))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value))
-            }
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AmbulanceStaffPage, value)
+              .flatMap(_.set(ClaimAmount, claimAmount))
+            )
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(AmbulanceStaffPage, mode)(updatedAnswers))
         }

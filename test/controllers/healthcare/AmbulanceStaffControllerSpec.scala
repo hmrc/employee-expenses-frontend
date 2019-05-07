@@ -212,7 +212,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
       application.stop()
     }
 
-    "not save ClaimAmount when 'No' is selected" in {
+    "save 'allOther' to ClaimAmount when 'No' is selected" in {
 
       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
@@ -222,10 +222,10 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = FakeRequest(POST, ambulanceStaffRoute)
-        .withFormUrlEncodedBody(("value", "false"))
+      val request = FakeRequest(POST, ambulanceStaffRoute).withFormUrlEncodedBody(("value", "false"))
 
       val ua2 = ua1
+        .set(ClaimAmount, ClaimAmounts.Healthcare.allOther).success.value
         .set(AmbulanceStaffPage, false).success.value
 
       whenReady(route(application, request).value) {

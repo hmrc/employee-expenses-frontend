@@ -90,11 +90,11 @@ class GenericNavigatorSpec extends SpecBase {
           controllers.transport.routes.TypeOfTransportController.onPageLoad(NormalMode)
       }
 
-      "go to AmbulanceStaffController from FirstIndustryOptionsPage when Healthcare is selected" in {
+      "go to HealthcareList1Controller from FirstIndustryOptionsPage when Healthcare is selected" in {
         val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, Healthcare).success.value
 
         navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode)
+          controllers.healthcare.routes.HealthcareList1Controller.onPageLoad(NormalMode)
       }
 
       "go to EmployerContributionController from FirstIndustryOptionsPage when Retail is selected" in {
@@ -511,11 +511,11 @@ class GenericNavigatorSpec extends SpecBase {
           controllers.transport.routes.TypeOfTransportController.onPageLoad(CheckMode)
       }
 
-      "go to AmbulanceStaffController from FirstIndustryOptionsPage when Healthcare is selected" in {
+      "go to HealthcareList1Controller from FirstIndustryOptionsPage when Healthcare is selected" in {
         val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, Healthcare).success.value
 
         navigator.nextPage(FirstIndustryOptionsPage, CheckMode)(answers) mustBe
-          controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(CheckMode)
+          controllers.healthcare.routes.HealthcareList1Controller.onPageLoad(CheckMode)
       }
 
       "go to EmployerContributionController from FirstIndustryOptionsPage when Retail is selected" in {
