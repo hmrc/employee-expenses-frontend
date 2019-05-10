@@ -165,7 +165,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         }
       }
 
-      "return FREAllYearsAllAmountsSameAsClaimAmount when only 200 is returned and the grossAmount is the same as claimAmount for all tax years" in {
+      "return FREAllYearsAllAmountsSameAsClaimAmount grossAmount is the same as claimAmount for all tax years" in {
         when(mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(any[HeaderCarrier](), any[ExecutionContext]()))
           .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
           .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
@@ -178,7 +178,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         }
       }
 
-      "return FREAllYearsAllAmountsDifferent when only 200 is returned and the grossAmount is not the same as claimAmount for all tax years" in {
+      "return FREAllYearsAllAmountsDifferent when grossAmount is not the same as claimAmount for all tax years" in {
         when(mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(any[HeaderCarrier](), any[ExecutionContext]()))
           .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
           .thenReturn(Future.successful(Seq(FlatRateExpense(60))))
@@ -191,7 +191,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         }
       }
 
-      "return ComplexClaim when only 200 is returned and some tax years are defined and some are empty" in {
+      "return ComplexClaim when some FRE amounts are defined and greater than zero and some are empty" in {
         when(mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(any[HeaderCarrier](), any[ExecutionContext]()))
           .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
           .thenReturn(Future.successful(Seq.empty))
