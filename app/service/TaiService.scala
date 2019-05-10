@@ -77,24 +77,20 @@ class TaiService @Inject()(taiConnector: TaiConnector,
                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[FlatRateExpenseOptions] = {
 
     getFREAmount(taxYears, nino).map {
-      case freSeq if freSeq.forall(_.freAmount.isEmpty) || (freSeq.forall(_.freAmount.isDefined) && freSeq.forall(_.freAmount.get.grossAmount == 0)) =>
+      case freSeq if freSeq.forall(_.freAmount.isEmpty) =>
         FRENoYears
-      case freSeq if freSeq.forall(_.freAmount.isDefined) =>
-        freResponseLogic(freSeq.flatMap(_.freAmount), claimAmount)
+      case freSeq if freSeq.exists(_.freAmount.isEmpty) && freSeq.filterNot(_.freAmount.isEmpty).forall(_.freAmount.get.grossAmount == 0) =>
+        FRENoYears
+      case freSeq if freSeq.forall(_.freAmount.isDefined) && freSeq.forall(_.freAmount.get.grossAmount == 0) =>
+        FRENoYears
+      case freSeq if freSeq.forall(_.freAmount.isDefined) && freSeq.forall(_.freAmount.get.grossAmount == claimAmount) =>
+        FREAllYearsAllAmountsSameAsClaimAmount
+      case freSeq if freSeq.forall(_.freAmount.isDefined) && freSeq.forall(_.freAmount.get.grossAmount != claimAmount) =>
+        FREAllYearsAllAmountsDifferent
       case freSeq if freSeq.exists(_.freAmount.isDefined) && freSeq.exists(_.freAmount.isEmpty) =>
         ComplexClaim
       case _ =>
         TechnicalDifficulties
-    }
-  }
-
-  def freResponseLogic(flatRateExpenses: Seq[FlatRateExpense], claimAmount: Int)
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): FlatRateExpenseOptions = {
-
-    if (flatRateExpenses.forall(_.grossAmount == claimAmount)) {
-      FREAllYearsAllAmountsSameAsClaimAmount
-    } else {
-      FREAllYearsAllAmountsDifferent
     }
   }
 }
