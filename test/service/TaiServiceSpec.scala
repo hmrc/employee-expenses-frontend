@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
 import models.FlatRateExpenseOptions._
 import models.TaxYearSelection._
-import models.{FlatRateExpense, FlatRateExpenseAmounts, FlatRateExpenseOptions, TaiTaxYear}
+import models.{FlatRateExpense, FlatRateExpenseAmounts, TaiTaxYear}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
