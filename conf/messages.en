@@ -30,8 +30,8 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 
-index.title = Employee Expenses
-index.heading = Employee Expenses
+index.title = Claim for your work uniform and tools
+index.heading = Claim for your work uniform and tools
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
 session_expired.title = For your security, this service has been reset
@@ -49,7 +49,7 @@ site.continue = Continue
 site.acceptClaimExpenses = Accept and claim expenses
 site.acceptChangeClaim = Accept and change claim
 site.acceptStopClaim = Accept and stop claim
-site.service_name = Employee Expenses
+site.service_name = Claim for your work uniform and tools
 site.textarea.char_limit = (Limit is {0} characters)
 site.startAgain = Restart your expenses claim
 site.or = or
