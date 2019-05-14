@@ -71,7 +71,6 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case Some(TechnicalDifficulties) =>
       TechnicalDifficultiesController.onPageLoad()
     case _ =>
-      println(s"\n\n\n\nkjdfbvkjshdbvkjhsbdf\n\n")
       SessionExpiredController.onPageLoad()
   }
 
