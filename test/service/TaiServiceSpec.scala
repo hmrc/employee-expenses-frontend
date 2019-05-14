@@ -48,8 +48,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.employments(fakeNino, CurrentYear)
 
         whenReady(result) {
-          result =>
-            result mustBe taiEmployment
+          _ mustBe taiEmployment
         }
       }
 
@@ -60,8 +59,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.employments(fakeNino, CurrentYear)
 
         whenReady(result.failed) {
-          result =>
-            result mustBe a[RuntimeException]
+          _ mustBe a[RuntimeException]
         }
       }
     }
@@ -76,8 +74,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.updateFRE(fakeNino, taxYear, 100)
 
         whenReady(result) {
-          result =>
-            result.status mustBe NO_CONTENT
+          _.status mustBe NO_CONTENT
         }
       }
 
@@ -90,8 +87,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.updateFRE(fakeNino, taxYear, 100)
 
         whenReady(result.failed) {
-          result =>
-            result mustBe a[RuntimeException]
+          _ mustBe a[RuntimeException]
         }
       }
 
@@ -104,8 +100,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.updateFRE(fakeNino, taxYear, 100)
 
         whenReady(result.failed) {
-          result =>
-            result mustBe a[RuntimeException]
+          _ mustBe a[RuntimeException]
         }
       }
     }
@@ -119,8 +114,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result: Future[Seq[FlatRateExpenseAmounts]] = taiService.getFREAmount(Seq(CurrentYear), fakeNino)
 
         whenReady(result) {
-          result =>
-            result mustBe Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))
+          _ mustBe Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))
         }
       }
     }
@@ -134,21 +128,19 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1), fakeNino, claimAmount = 100)
 
         whenReady(result) {
-          result =>
-            result mustBe FRENoYears
+          _ mustBe FRENoYears
         }
       }
 
       "return FRENoYears when FRE amount 0 returned for all tax years" in {
         when(mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(any[HeaderCarrier](), any[ExecutionContext]()))
-          .thenReturn(Future.successful(Seq(FlatRateExpense(0), FlatRateExpense(0))))
-          .thenReturn(Future.successful(Seq(FlatRateExpense(0), FlatRateExpense(0))))
+          .thenReturn(Future.successful(Seq(FlatRateExpense(0))))
+          .thenReturn(Future.successful(Seq(FlatRateExpense(0))))
 
         val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1), fakeNino, claimAmount = 100)
 
         whenReady(result) {
-          result =>
-            result mustBe FRENoYears
+          _ mustBe FRENoYears
         }
       }
 
@@ -160,8 +152,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1), fakeNino, claimAmount = 100)
 
         whenReady(result) {
-          result =>
-            result mustBe FRENoYears
+          _ mustBe FRENoYears
         }
       }
 
@@ -173,8 +164,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1), fakeNino, claimAmount = 100)
 
         whenReady(result) {
-          result =>
-            result mustBe FREAllYearsAllAmountsSameAsClaimAmount
+          _ mustBe FREAllYearsAllAmountsSameAsClaimAmount
         }
       }
 
@@ -186,8 +176,19 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1), fakeNino, claimAmount = 200)
 
         whenReady(result) {
-          result =>
-            result mustBe FREAllYearsAllAmountsDifferent
+          _ mustBe FREAllYearsAllAmountsDifferent
+        }
+      }
+
+      "return FREAllYearsSomeAmountsDifferent when grossAmount is not the same as claimAmount for all tax years" in {
+        when(mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(any[HeaderCarrier](), any[ExecutionContext]()))
+          .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
+          .thenReturn(Future.successful(Seq(FlatRateExpense(60))))
+
+        val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1), fakeNino, claimAmount = 100)
+
+        whenReady(result) {
+          _ mustBe FREAllYearsSomeAmountsDifferent
         }
       }
 
@@ -199,8 +200,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1), fakeNino, claimAmount = 200)
 
         whenReady(result) {
-          result =>
-            result mustBe ComplexClaim
+          _ mustBe ComplexClaim
         }
       }
     }
@@ -215,8 +215,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         val result = taiService.employments(fakeNino, CurrentYear)
 
         whenReady(result) {
-          result =>
-            result.head.name mustBe "HMRC LongBenton"
+          _.head.name mustBe "HMRC LongBenton"
         }
       }
     }

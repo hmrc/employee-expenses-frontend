@@ -21,6 +21,7 @@ import controllers.confirmation.routes._
 import controllers.routes._
 import javax.inject.Inject
 import models.AlreadyClaimingFREDifferentAmounts._
+import models.FlatRateExpenseOptions._
 import models.TaxYearSelection.CurrentYear
 import models._
 import pages.authenticated._
@@ -53,20 +54,22 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
   }
 
   def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
-    case Some(FlatRateExpenseOptions.FRENoYears) =>
+    case Some(FRENoYears) =>
       if (userAnswers.get(TaxYearSelectionPage).get.contains(CurrentYear)) {
         YourEmployerController.onPageLoad(mode)
       } else {
         YourAddressController.onPageLoad(mode)
       }
-    case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount) =>
+    case Some(FREAllYearsAllAmountsSameAsClaimAmount) =>
       AlreadyClaimingFRESameAmountController.onPageLoad(mode)
-    case Some(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent) =>
+    case Some(FREAllYearsAllAmountsDifferent) =>
       AlreadyClaimingFREDifferentAmountsController.onPageLoad(mode)
-    case Some(FlatRateExpenseOptions.ComplexClaim) =>
+    case Some(FREAllYearsSomeAmountsDifferent) =>
+      AlreadyClaimingFREDifferentAmountsController.onPageLoad(mode)
+    case Some(ComplexClaim) =>
       PhoneUsController.onPageLoad()
-    case Some(FlatRateExpenseOptions.TechnicalDifficulties) =>
-      controllers.routes.TechnicalDifficultiesController.onPageLoad()
+    case Some(TechnicalDifficulties) =>
+      TechnicalDifficultiesController.onPageLoad()
     case _ =>
       SessionExpiredController.onPageLoad()
   }
