@@ -87,7 +87,10 @@ class TaiService @Inject()(taiConnector: TaiConnector,
         FREAllYearsAllAmountsSameAsClaimAmount
       case freSeq if freSeq.forall(_.freAmount.isDefined) && freSeq.forall(_.freAmount.get.grossAmount != claimAmount) =>
         FREAllYearsAllAmountsDifferent
+      case freSeq if freSeq.forall(_.freAmount.isDefined) && freSeq.exists(_.freAmount.get.grossAmount != claimAmount) =>
+        FREAllYearsSomeAmountsDifferent
       case freSeq if freSeq.exists(_.freAmount.isDefined) && freSeq.exists(_.freAmount.isEmpty) =>
+//      case freSeq if freSeq.exists(_.freAmount.isEmpty) && freSeq.filterNot(_.freAmount.isEmpty).forall(_.freAmount.get.grossAmount > 0) =>
         ComplexClaim
       case _ =>
         TechnicalDifficulties
