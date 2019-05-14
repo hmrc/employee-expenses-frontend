@@ -34,7 +34,7 @@ Port: 9334
 
 ## Tests and prototype
 
-Employee expenses prototype can be found [here](https://employee-expenses.herokuapp.com/)
+[View the prototype here](https://employee-expenses.herokuapp.com/)
 
 |Repositories     |Link                                                                   |
 |-----------------|-----------------------------------------------------------------------|
