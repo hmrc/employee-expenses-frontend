@@ -134,8 +134,8 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
       "return FRENoYears when FRE amount 0 returned for all tax years" in {
         when(mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(any[HeaderCarrier](), any[ExecutionContext]()))
-          .thenReturn(Future.successful(Seq(FlatRateExpense(0), FlatRateExpense(0))))
-          .thenReturn(Future.successful(Seq(FlatRateExpense(0), FlatRateExpense(0))))
+          .thenReturn(Future.successful(Seq(FlatRateExpense(0))))
+          .thenReturn(Future.successful(Seq(FlatRateExpense(0))))
 
         val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1), fakeNino, claimAmount = 100)
 

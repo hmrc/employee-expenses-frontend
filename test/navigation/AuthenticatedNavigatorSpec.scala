@@ -347,6 +347,13 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
             AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode)
         }
 
+        "go to AlreadyClaimingFREDifferentAmountsController when answered and freResponse returns FREAllYearsSomeAmountsDifferent" in {
+          val ua = emptyUserAnswers.set(FREResponse, FREAllYearsSomeAmountsDifferent).success.value
+
+          navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
+            AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode)
+        }
+
         "go to PhoneUsController when answered and freResponse returns ComplexClaim" in {
           val ua = emptyUserAnswers.set(FREResponse, ComplexClaim).success.value
 
