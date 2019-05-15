@@ -14,7 +14,13 @@
  * limitations under the License.
  *@
 
-@(columnValues: Seq[FlatRateExpenseAmounts], heading1: String, heading2: String)(implicit messages: Messages)
+@(
+        columnValues: Seq[FlatRateExpenseAmounts],
+        heading1: String,
+        heading2: String
+)(implicit
+        messages: Messages
+)
 <div class="form-group">
     <table>
         <thead>
@@ -24,20 +30,20 @@
             </tr>
         </thead>
         <tbody>
-            @for(columnValue <- columnValues) {
-                <tr>
-                    <th id="tax-year-@columnValue.taxYear.year" scope="row">
-                        @messages(
-                            s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(columnValue.taxYear.year)}",
-                            columnValue.taxYear.year.toString,
-                            (columnValue.taxYear.year + 1).toString
-                        )
-                    </th>
-                    <td id="fre-amount-@columnValue.taxYear.year" class="numeric">
-                        £@columnValue.freAmount.get.grossAmount
-                    </td>
-                </tr>
-            }
+        @for(columnValue <- columnValues) {
+            <tr>
+                <th id="tax-year-@columnValue.taxYear.year" scope="row">
+                    @messages(
+                        s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(columnValue.taxYear.year)}",
+                        columnValue.taxYear.year.toString,
+                        (columnValue.taxYear.year + 1).toString
+                    )
+                </th>
+                <td id="fre-amount-@columnValue.taxYear.year" class="numeric">
+                    £@{if(columnValue.freAmount.isDefined) columnValue.freAmount.get.grossAmount else 0}
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
 </div>
