@@ -62,14 +62,8 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       }
     case Some(FREAllYearsAllAmountsSameAsClaimAmount) =>
       AlreadyClaimingFRESameAmountController.onPageLoad(mode)
-    case Some(FREAllYearsAllAmountsDifferent) =>
+    case Some(FRESomeYears) =>
       AlreadyClaimingFREDifferentAmountsController.onPageLoad(mode)
-    case Some(FREAllYearsSomeAmountsDifferent) =>
-      AlreadyClaimingFREDifferentAmountsController.onPageLoad(mode)
-    case Some(ComplexClaim) =>
-      PhoneUsController.onPageLoad()
-    case Some(TechnicalDifficulties) =>
-      TechnicalDifficultiesController.onPageLoad()
     case _ =>
       SessionExpiredController.onPageLoad()
   }

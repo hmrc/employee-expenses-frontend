@@ -71,7 +71,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       }
 
       "claim has been changed" in {
-        val doc = asDocument(applyViewChangeClaim(FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent, removeFRE = false))
+        val doc = asDocument(applyViewChangeClaim(FlatRateExpenseOptions.FRESomeYears, removeFRE = false))
 
         assertContainsMessages(doc,
           "checkYourAnswers.heading.claimExpenses",
