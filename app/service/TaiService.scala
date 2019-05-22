@@ -85,8 +85,10 @@ class TaiService @Inject()(taiConnector: TaiConnector,
         FRENoYears
       case freSeq if freSeq.forall(_.freAmount.isDefined) && freSeq.forall(_.freAmount.get.grossAmount == claimAmount) =>
         FREAllYearsAllAmountsSameAsClaimAmount
-      case _ =>
+      case freSeq if freSeq.exists(_.freAmount.isDefined) && freSeq.exists(_.freAmount.get.grossAmount > 0) =>
         FRESomeYears
+      case _ =>
+        TechnicalDifficulties
     }
   }
 }

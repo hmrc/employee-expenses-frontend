@@ -324,6 +324,13 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
             AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode)
         }
+
+        "go to TechnicalDifficulties when answered and freResponse returns TechnicalDifficulties" in {
+          val ua = emptyUserAnswers.set(FREResponse, TechnicalDifficulties).success.value
+
+          navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
+            TechnicalDifficultiesController.onPageLoad()
+        }
       }
 
 
