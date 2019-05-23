@@ -26,7 +26,7 @@ import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, Upstream5xxResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
@@ -168,39 +168,17 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
         }
       }
 
-      "return FREAllYearsAllAmountsDifferent when grossAmount is not the same as claimAmount for all tax years" in {
+      "return FRESomeYears for all other combinations of freAmount (empty, 0, > 0)" in {
         when(mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(any[HeaderCarrier](), any[ExecutionContext]()))
           .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
           .thenReturn(Future.successful(Seq(FlatRateExpense(60))))
-
-        val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1), fakeNino, claimAmount = 200)
-
-        whenReady(result) {
-          _ mustBe FREAllYearsAllAmountsDifferent
-        }
-      }
-
-      "return FREAllYearsSomeAmountsDifferent when grossAmount is not the same as claimAmount for all tax years" in {
-        when(mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(any[HeaderCarrier](), any[ExecutionContext]()))
-          .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
-          .thenReturn(Future.successful(Seq(FlatRateExpense(60))))
-
-        val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1), fakeNino, claimAmount = 100)
-
-        whenReady(result) {
-          _ mustBe FREAllYearsSomeAmountsDifferent
-        }
-      }
-
-      "return ComplexClaim when some FRE amounts are defined and greater than zero and some are empty" in {
-        when(mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(any[HeaderCarrier](), any[ExecutionContext]()))
-          .thenReturn(Future.successful(Seq(FlatRateExpense(100))))
+          .thenReturn(Future.successful(Seq(FlatRateExpense(0))))
           .thenReturn(Future.successful(Seq.empty))
 
-        val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1), fakeNino, claimAmount = 200)
+        val result = taiService.freResponse(Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3), fakeNino, claimAmount = 200)
 
         whenReady(result) {
-          _ mustBe ComplexClaim
+          _ mustBe FRESomeYears
         }
       }
     }

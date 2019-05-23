@@ -21,17 +21,13 @@ sealed trait FlatRateExpenseOptions
 object FlatRateExpenseOptions extends Enumerable.Implicits {
   case object FRENoYears extends WithName("freNoYears") with FlatRateExpenseOptions
   case object FREAllYearsAllAmountsSameAsClaimAmount extends WithName("freAllYearsAllAmountsSameAsClaimAmount") with FlatRateExpenseOptions
-  case object FREAllYearsAllAmountsDifferent extends WithName("freAllYearsAllAmountsDifferentToClaimAmount") with FlatRateExpenseOptions
-  case object FREAllYearsSomeAmountsDifferent extends WithName("freAllYearsSomeAmountsDifferentToClaimAmount") with FlatRateExpenseOptions
-  case object ComplexClaim extends WithName("complexClaim") with FlatRateExpenseOptions
+  case object FRESomeYears extends WithName("freAllYearsAllAmountsDifferentToClaimAmount") with FlatRateExpenseOptions
   case object TechnicalDifficulties extends WithName("technicalDifficulties") with FlatRateExpenseOptions
 
   val values: Seq[FlatRateExpenseOptions] = Seq(
     FRENoYears,
     FREAllYearsAllAmountsSameAsClaimAmount,
-    FREAllYearsAllAmountsDifferent,
-    FREAllYearsSomeAmountsDifferent,
-    ComplexClaim,
+    FRESomeYears,
     TechnicalDifficulties
   )
 

@@ -124,7 +124,7 @@ class ConfirmationCurrentAndPreviousYearsViewSpec extends ViewBehaviours {
 
     "display correct title when freResponse is 'FREAllYearsAmountsDifferent'" in {
 
-      val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FREAllYearsAllAmountsDifferent)(fakeRequest, messages))
+      val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FRESomeYears)(fakeRequest, messages))
 
       doc.getElementsByTag("title").text mustBe "Claim changed - Claim for your work uniform and tools - GOV.UK"
     }

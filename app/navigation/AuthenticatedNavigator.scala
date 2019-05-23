@@ -55,19 +55,12 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
 
   def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
     case Some(FRENoYears) =>
-      if (userAnswers.get(TaxYearSelectionPage).get.contains(CurrentYear)) {
-        YourEmployerController.onPageLoad(mode)
-      } else {
-        YourAddressController.onPageLoad(mode)
-      }
+      if (userAnswers.get(TaxYearSelectionPage).get.contains(CurrentYear)) YourEmployerController.onPageLoad(mode)
+      else YourAddressController.onPageLoad(mode)
     case Some(FREAllYearsAllAmountsSameAsClaimAmount) =>
       AlreadyClaimingFRESameAmountController.onPageLoad(mode)
-    case Some(FREAllYearsAllAmountsDifferent) =>
+    case Some(FRESomeYears) =>
       AlreadyClaimingFREDifferentAmountsController.onPageLoad(mode)
-    case Some(FREAllYearsSomeAmountsDifferent) =>
-      AlreadyClaimingFREDifferentAmountsController.onPageLoad(mode)
-    case Some(ComplexClaim) =>
-      PhoneUsController.onPageLoad()
     case Some(TechnicalDifficulties) =>
       TechnicalDifficultiesController.onPageLoad()
     case _ =>
