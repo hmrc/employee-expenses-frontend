@@ -201,7 +201,7 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+        .set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.allOther).success.value
         .set(IronSteelOccupationListPage, false).success.value
 
       whenReady(result) {
