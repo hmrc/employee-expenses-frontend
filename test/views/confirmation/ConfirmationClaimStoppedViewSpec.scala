@@ -83,10 +83,10 @@ class ConfirmationClaimStoppedViewSpec extends ViewBehaviours {
           assertPageTitleEqualsMessage(doc, s"confirmation.heading.stoppedClaim")
         }
 
-        "display language toggles" in {
+        "not display language toggles" in {
 
           val doc = asDocument(viewWithAnswers)
-          assertRenderedById(doc, "langSelector")
+          assertNotRenderedById(doc, "langSelector")
         }
       }
     }
