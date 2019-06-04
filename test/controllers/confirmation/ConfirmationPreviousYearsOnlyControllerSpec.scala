@@ -22,6 +22,7 @@ import controllers.actions.Authed
 import controllers.confirmation.routes._
 import controllers.routes._
 import models.FlatRateExpenseOptions.FRENoYears
+import models.TaxCodeStatus.Live
 import models.TaxYearSelection._
 import models._
 import org.mockito.Matchers._
@@ -72,7 +73,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
       when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationPreviousYearsOnlyController.onPageLoad().url)
@@ -137,7 +138,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L"))))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
 
       val request = FakeRequest(GET, ConfirmationPreviousYearsOnlyController.onPageLoad().url)
 

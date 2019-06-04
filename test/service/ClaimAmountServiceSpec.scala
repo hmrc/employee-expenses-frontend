@@ -17,7 +17,8 @@
 package service
 
 import base.SpecBase
-import models.{Rates, ScottishRate, StandardRate, TaxCodeRecord}
+import models.TaxCodeStatus.{Ceased, Live, PotentiallyCeased}
+import models._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ExpensesEmployerPaidPage
@@ -84,7 +85,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
     "getRates" when {
       "english tax code record must return english rates" in {
         val claimAmount = 100
-        val rates = claimAmountService.getRates(Seq(TaxCodeRecord("850L")), claimAmount)
+        val rates = claimAmountService.getRates(Seq(TaxCodeRecord("850L", Live)), claimAmount)
 
         rates mustBe Seq(StandardRate(
           basicRate = frontendAppConfig.taxPercentageBand1,
@@ -96,7 +97,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
 
       "scottish tax code record must return scottish rates" in {
         val claimAmount = 100
-        val rates = claimAmountService.getRates(Seq(TaxCodeRecord("S850L")), claimAmount)
+        val rates = claimAmountService.getRates(Seq(TaxCodeRecord("S850L", Live)), claimAmount)
 
         rates mustBe Seq(ScottishRate(
           starterRate = frontendAppConfig.taxPercentageScotlandBand1,
@@ -106,6 +107,27 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
           calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
           calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount)
         ))
+      }
+
+      "non-live tax codes must return both rates" in {
+        val claimAmount = 100
+        val rates = claimAmountService.getRates(Seq(TaxCodeRecord("S850L", PotentiallyCeased), TaxCodeRecord("S850L", Ceased)), claimAmount)
+
+        rates mustBe Seq(
+          StandardRate(
+            basicRate = frontendAppConfig.taxPercentageBand1,
+            higherRate = frontendAppConfig.taxPercentageBand2,
+            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount)
+          ),
+          ScottishRate(
+            starterRate = frontendAppConfig.taxPercentageScotlandBand1,
+            basicRate = frontendAppConfig.taxPercentageScotlandBand2,
+            higherRate = frontendAppConfig.taxPercentageScotlandBand3,
+            calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
+            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount)
+          ))
       }
 
       "no tax code record must return both english and scottish rates" in {

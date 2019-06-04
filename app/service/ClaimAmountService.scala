@@ -18,6 +18,7 @@ package service
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
+import models.TaxCodeStatus.Live
 import models.{Rates, ScottishRate, StandardRate, TaxCodeRecord, UserAnswers}
 import pages.ExpensesEmployerPaidPage
 
@@ -36,7 +37,7 @@ class ClaimAmountService @Inject()(
         claimAmount
     }
   }
-  
+
   def calculateTax(percentage: Int, amount: Int): String = {
 
     val calculatedResult = BigDecimal((amount.toDouble / 100) * percentage).setScale(2, RoundingMode.DOWN)
@@ -69,7 +70,10 @@ class ClaimAmountService @Inject()(
   }
 
   def getRates(taxCodeRecords: Seq[TaxCodeRecord], claimAmount: Int): Seq[Rates] = {
-    taxCodeRecords.headOption match {
+
+    val liveRecords: Option[TaxCodeRecord] = taxCodeRecords.find(_.status == Live)
+
+    liveRecords match {
       case Some(taxCodeRecord) if taxCodeRecord.taxCode(0).toUpper != 'S' =>
         Seq(standardRate(claimAmount))
       case Some(taxCodeRecord) if taxCodeRecord.taxCode(0).toUpper == 'S' =>
@@ -78,4 +82,5 @@ class ClaimAmountService @Inject()(
         Seq(standardRate(claimAmount), scottishRate(claimAmount))
     }
   }
+
 }
