@@ -18,6 +18,7 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
+import models.TaxYearSelection.CurrentYear
 import models._
 import org.joda.time.LocalDate
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -69,7 +70,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   "taiTaxCodeRecords" must {
     "return a taxCodeRecord on success" in {
       server.stubFor(
-        get(urlEqualTo(s"/tai/$fakeNino/tax-account/tax-code-change"))
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/$currentTaxYearInt/income/tax-code-incomes"))
           .willReturn(
             aResponse()
               .withStatus(OK)
@@ -77,11 +78,11 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           )
       )
 
-      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino)
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino, currentTaxYearInt)
 
       whenReady(result) {
         result =>
-          result mustBe Seq(TaxCodeRecord(taxCode = "830L"))
+          result mustBe Seq(TaxCodeRecord("1150L"), TaxCodeRecord("1100L"), TaxCodeRecord("830L"))
       }
     }
   }
@@ -146,13 +147,13 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
   val validEmploymentsJson: JsValue = Json.parse(
     """{
-     |  "data" : {
-     |    "employments": [{
-     |      "name": "HMRC LongBenton",
-     |      "startDate": "2018-06-27"
-     |    }]
-     |  }
-     |}""".stripMargin)
+      |  "data" : {
+      |    "employments": [{
+      |      "name": "HMRC LongBenton",
+      |      "startDate": "2018-06-27"
+      |    }]
+      |  }
+      |}""".stripMargin)
 
   val validFlatRateJson: JsValue = Json.parse(
     """
@@ -174,33 +175,40 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
   val validTaxCodeJson: JsValue = Json.parse(
     """
-      | {
-      |   "data" : {
-      |     "current": [{
-      |       "taxCode": "830L",
-      |       "employerName": "Employer Name",
-      |       "operatedTaxCode": true,
-      |       "p2Issued": true,
-      |       "startDate": "2018-06-27",
-      |       "endDate": "2019-04-05",
-      |       "payrollNumber": "1",
-      |       "pensionIndicator": true,
-      |       "primary": true
-      |     }],
-      |     "previous": [{
-      |       "taxCode": "1150L",
-      |       "employerName": "Employer Name",
-      |       "operatedTaxCode": true,
-      |       "p2Issued": true,
-      |       "startDate": "2018-04-06",
-      |       "endDate": "2018-06-26",
-      |       "payrollNumber": "1",
-      |       "pensionIndicator": true,
-      |       "primary": true
-      |     }]
-      |   },
-      |   "links" : [ ]
-      | }
+      |{
+      |  "data" : [ {
+      |    "componentType" : "EmploymentIncome",
+      |    "employmentId" : 1,
+      |    "amount" : 1100,
+      |    "description" : "EmploymentIncome",
+      |    "taxCode" : "1150L",
+      |    "name" : "Employer1",
+      |    "basisOperation" : "Week1Month1BasisOperation",
+      |    "status" : "Live",
+      |    "inYearAdjustment" : 0
+      |  }, {
+      |    "componentType" : "EmploymentIncome",
+      |    "employmentId" : 2,
+      |    "amount" : 0,
+      |    "description" : "EmploymentIncome",
+      |    "taxCode" : "1100L",
+      |    "name" : "Employer2",
+      |    "basisOperation" : "OtherBasisOperation",
+      |    "status" : "PotentiallyCeased",
+      |    "inYearAdjustment" : 321.12
+      |  }, {
+      |    "componentType" : "EmploymentIncome",
+      |    "employmentId" : 3,
+      |    "amount" : 0,
+      |    "description" : "EmploymentIncome",
+      |    "taxCode" : "830L",
+      |    "name" : "Employer3",
+      |    "basisOperation" : "OtherBasisOperation",
+      |    "status" : "Ceased",
+      |    "inYearAdjustment" : 400.00
+      |  }  ],
+      |  "links" : [ ]
+      |}
     """.stripMargin
   )
 }

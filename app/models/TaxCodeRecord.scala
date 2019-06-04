@@ -24,5 +24,5 @@ object TaxCodeRecord {
   implicit val reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
 
   implicit val listReads: Reads[Seq[TaxCodeRecord]] =
-    (__ \ "data" \ "current").read(Reads.seq[TaxCodeRecord])
+    (__ \ "data").read(Reads.seq[TaxCodeRecord])
 }

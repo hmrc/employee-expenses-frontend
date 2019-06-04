@@ -55,14 +55,12 @@ class TaiConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpC
     httpClient.POST[IabdEditDataRequest, HttpResponse](taiUrl, body)
   }
 
-  override def taiTaxCodeRecords(nino: String)
+  override def taiTaxCodeRecords(nino: String, taxYear: Int)
                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
 
-    val taiUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/tax-code-change"
+    val taiTaxCodeIncomesUrl: String = s"${appConfig.taiUrl}/tai/$nino/tax-account/$taxYear/income/tax-code-incomes"
 
-    implicit val taxCodeReads: Reads[Seq[TaxCodeRecord]] = TaxCodeRecord.listReads
-
-    httpClient.GET[Seq[TaxCodeRecord]](taiUrl)
+    httpClient.GET[Seq[TaxCodeRecord]](taiTaxCodeIncomesUrl)
   }
 
   override def taiTaxAccountSummary(nino: String, year: TaiTaxYear)
@@ -85,7 +83,7 @@ trait TaiConnector {
   def taiFREUpdate(nino: String, year: TaiTaxYear, version: Int, grossAmount: Int)
                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
 
-  def taiTaxCodeRecords(nino: String)
+  def taiTaxCodeRecords(nino: String, year: Int)
                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]]
 
   def taiTaxAccountSummary(nino: String, year: TaiTaxYear)

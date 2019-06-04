@@ -55,7 +55,8 @@ class ConfirmationPreviousYearsOnlyController @Inject()(
         request.userAnswers.get(TaxYearSelectionPage)
       ) match {
         case (Some(freResponse), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
-          taiConnector.taiTaxCodeRecords(request.nino.get).map {
+          val taxYear = TaxYearSelection.getTaxYear(taxYears.head)
+          taiConnector.taiTaxCodeRecords(request.nino.get, taxYear).map {
             result =>
               val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
