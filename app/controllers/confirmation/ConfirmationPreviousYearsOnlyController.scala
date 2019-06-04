@@ -22,7 +22,7 @@ import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, D
 import controllers.routes._
 import controllers.routes.SessionExpiredController
 import javax.inject.Inject
-import models.{Rates, TaxYearSelection}
+import models.{Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.{TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.Logger
@@ -55,7 +55,7 @@ class ConfirmationPreviousYearsOnlyController @Inject()(
         request.userAnswers.get(TaxYearSelectionPage)
       ) match {
         case (Some(freResponse), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
-          val taxYear = TaxYearSelection.getTaxYear(taxYears.head)
+          val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYears.head))
           taiConnector.taiTaxCodeRecords(request.nino.get, taxYear).map {
             result =>
               val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
