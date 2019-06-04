@@ -38,19 +38,19 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
     val claimAmount: Int = 100
 
     val claimAmountsRates = StandardRate(
-      basicRate = frontendAppConfig.taxPercentageBand1,
-      higherRate = frontendAppConfig.taxPercentageBand2,
-      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount)
+      basicRate = frontendAppConfig.taxPercentageBasicRate,
+      higherRate = frontendAppConfig.taxPercentageHigherRate,
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBasicRate, claimAmount),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageHigherRate, claimAmount)
     )
 
     val scottishClaimAmountsRates = ScottishRate(
-      starterRate = frontendAppConfig.taxPercentageScotlandBand1,
-      basicRate = frontendAppConfig.taxPercentageScotlandBand2,
-      higherRate = frontendAppConfig.taxPercentageScotlandBand3,
-      calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
-      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount)
+      starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
+      basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
+      intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+      calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
+      calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount)
     )
 
     def applyView(claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
@@ -109,6 +109,12 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
         claimAmountsRates.calculatedHigherRate,
         claimAmount,
         claimAmountsRates.higherRate
+      ))
+      assertContainsText(doc, messages(
+        "confirmationPreviousYears.intermediateRate",
+        scottishClaimAmountsRates.calculatedIntermediateRate,
+        claimAmount,
+        scottishClaimAmountsRates.intermediateRate
       ))
       assertContainsText(doc, messages("claimAmount.englandHeading"))
       assertContainsText(doc, messages("claimAmount.scotlandHeading"))

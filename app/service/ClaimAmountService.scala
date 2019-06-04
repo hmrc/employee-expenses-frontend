@@ -50,21 +50,21 @@ class ClaimAmountService @Inject()(
 
   def standardRate(claimAmount: Int): StandardRate = {
     StandardRate(
-      basicRate = appConfig.taxPercentageBand1,
-      higherRate = appConfig.taxPercentageBand2,
-      calculatedBasicRate = calculateTax(appConfig.taxPercentageBand1, claimAmount),
-      calculatedHigherRate = calculateTax(appConfig.taxPercentageBand2, claimAmount)
+      basicRate = appConfig.taxPercentageBasicRate,
+      higherRate = appConfig.taxPercentageHigherRate,
+      calculatedBasicRate = calculateTax(appConfig.taxPercentageBasicRate, claimAmount),
+      calculatedHigherRate = calculateTax(appConfig.taxPercentageHigherRate, claimAmount)
     )
   }
 
   def scottishRate(claimAmount: Int): ScottishRate = {
     ScottishRate(
-      starterRate = appConfig.taxPercentageScotlandBand1,
-      basicRate = appConfig.taxPercentageScotlandBand2,
-      higherRate = appConfig.taxPercentageScotlandBand3,
-      calculatedStarterRate = calculateTax(appConfig.taxPercentageScotlandBand1, claimAmount),
-      calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBand2, claimAmount),
-      calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandBand3, claimAmount)
+      starterRate = appConfig.taxPercentageScotlandStarterRate,
+      basicRate = appConfig.taxPercentageScotlandBasicRate,
+      intermediateRate = appConfig.taxPercentageScotlandIntermediateRate,
+      calculatedStarterRate = calculateTax(appConfig.taxPercentageScotlandStarterRate, claimAmount),
+      calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBasicRate, claimAmount),
+      calculatedIntermediateRate = calculateTax(appConfig.taxPercentageScotlandIntermediateRate, claimAmount)
     )
   }
 

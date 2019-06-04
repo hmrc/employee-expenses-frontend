@@ -47,11 +47,10 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
   val claimAmountService = new ClaimAmountService(frontendAppConfig)
   val claimAmount: Int = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
   val claimAmountsAndRates = StandardRate(
-
-    frontendAppConfig.taxPercentageBand1,
-    frontendAppConfig.taxPercentageBand2,
-    claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
-    claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount)
+    frontendAppConfig.taxPercentageBasicRate,
+    frontendAppConfig.taxPercentageHigherRate,
+    claimAmountService.calculateTax(frontendAppConfig.taxPercentageBasicRate, claimAmount),
+    claimAmountService.calculateTax(frontendAppConfig.taxPercentageHigherRate, claimAmount)
   )
 
   "ConfirmationCurrentAndPreviousYearsController" must {

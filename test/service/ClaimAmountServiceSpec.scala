@@ -54,7 +54,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         actualClaimAmount mustBe 50
 
         claimAmountService.calculateTax(
-          percentage = frontendAppConfig.taxPercentageBand1,
+          percentage = frontendAppConfig.taxPercentageBasicRate,
           amount = actualClaimAmount
         ) mustBe "10"
       }
@@ -66,7 +66,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         actualClaimAmount mustBe 100
 
         claimAmountService.calculateTax(
-          percentage = frontendAppConfig.taxPercentageBand1,
+          percentage = frontendAppConfig.taxPercentageBasicRate,
           amount = actualClaimAmount
         ) mustBe "20"
       }
@@ -75,7 +75,7 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
     "band2" when {
       "return 40% of claim amount as a string" in {
         claimAmountService.calculateTax(
-          percentage = frontendAppConfig.taxPercentageBand2,
+          percentage = frontendAppConfig.taxPercentageHigherRate,
           amount = 180
         ) mustBe "72"
       }
@@ -87,10 +87,10 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         val rates = claimAmountService.getRates(Seq(TaxCodeRecord("850L")), claimAmount)
 
         rates mustBe Seq(StandardRate(
-          basicRate = frontendAppConfig.taxPercentageBand1,
-          higherRate = frontendAppConfig.taxPercentageBand2,
-          calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
-          calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount)
+          basicRate = frontendAppConfig.taxPercentageBasicRate,
+          higherRate = frontendAppConfig.taxPercentageHigherRate,
+          calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBasicRate, claimAmount),
+          calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageHigherRate, claimAmount)
         ))
       }
 
@@ -99,12 +99,12 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         val rates = claimAmountService.getRates(Seq(TaxCodeRecord("S850L")), claimAmount)
 
         rates mustBe Seq(ScottishRate(
-          starterRate = frontendAppConfig.taxPercentageScotlandBand1,
-          basicRate = frontendAppConfig.taxPercentageScotlandBand2,
-          higherRate = frontendAppConfig.taxPercentageScotlandBand3,
-          calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
-          calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
-          calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount)
+          starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
+          basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
+          intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+          calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
+          calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
+          calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount)
         ))
       }
 
@@ -114,18 +114,18 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
 
         rates mustBe Seq(
           StandardRate(
-            basicRate = frontendAppConfig.taxPercentageBand1,
-            higherRate = frontendAppConfig.taxPercentageBand2,
-            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
-            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount)
+            basicRate = frontendAppConfig.taxPercentageBasicRate,
+            higherRate = frontendAppConfig.taxPercentageHigherRate,
+            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBasicRate, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageHigherRate, claimAmount)
           ),
           ScottishRate(
-            starterRate = frontendAppConfig.taxPercentageScotlandBand1,
-            basicRate = frontendAppConfig.taxPercentageScotlandBand2,
-            higherRate = frontendAppConfig.taxPercentageScotlandBand3,
-            calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount),
-            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount),
-            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount)
+            starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
+            basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
+            intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+            calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
+            calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
+            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount)
           ))
       }
     }
