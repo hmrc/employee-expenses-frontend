@@ -172,5 +172,18 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
       }
     }
 
+    "english tax code record must return english rates when there is multiple Live codes and english code is the head" in {
+      val claimAmount = 100
+      val rates = claimAmountService.getRates(Seq(TaxCodeRecord("850L", Live), TaxCodeRecord("S850L", Live)), claimAmount)
+
+      rates mustBe Seq(StandardRate(
+        basicRate = frontendAppConfig.taxPercentageBand1,
+        higherRate = frontendAppConfig.taxPercentageBand2,
+        calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount),
+        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount)
+      ))
+    }
+
+
   }
 }
