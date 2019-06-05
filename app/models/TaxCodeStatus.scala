@@ -16,13 +16,17 @@
 
 package models
 
-import play.api.libs.json._
+sealed trait TaxCodeStatus
 
-case class TaxCodeRecord(taxCode: String, status: TaxCodeStatus)
+object TaxCodeStatus extends Enumerable.Implicits {
 
-object TaxCodeRecord {
-  implicit val reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
+  case object Live extends WithName("Live") with TaxCodeStatus
+  case object PotentiallyCeased extends WithName("PotentiallyCeased") with TaxCodeStatus
+  case object Ceased extends WithName("Ceased") with TaxCodeStatus
 
-  implicit val listReads: Reads[Seq[TaxCodeRecord]] =
-    (__ \ "data").read(Reads.seq[TaxCodeRecord])
+  val values: Seq[TaxCodeStatus] = Seq(Live, PotentiallyCeased, Ceased)
+
+  implicit val enumerable: Enumerable[TaxCodeStatus] =
+    Enumerable(values.map(v => v.toString -> v): _*)
+
 }

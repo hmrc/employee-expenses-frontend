@@ -21,7 +21,8 @@ import connectors.TaiConnector
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
 import controllers.routes._
 import javax.inject.Inject
-import models.Rates
+import models.TaxYearSelection.CurrentYear
+import models.{Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.{YourAddressPage, YourEmployerPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.Logger
@@ -54,7 +55,8 @@ class ConfirmationCurrentYearOnlyController @Inject()(
         request.userAnswers.get(ClaimAmountAndAnyDeductions)
       ) match {
         case (Some(freResponse), Some(employer), Some(claimAmountAndAnyDeductions)) =>
-          taiConnector.taiTaxCodeRecords(request.nino.get).map {
+          val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(CurrentYear))
+          taiConnector.taiTaxCodeRecords(request.nino.get, taxYear).map {
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
               val addressOption: Option[Boolean] = request.userAnswers.get(YourAddressPage)

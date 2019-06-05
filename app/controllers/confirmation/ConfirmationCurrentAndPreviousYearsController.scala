@@ -22,7 +22,7 @@ import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, D
 import controllers.routes._
 import controllers.routes.SessionExpiredController
 import javax.inject.Inject
-import models.{Rates, TaxYearSelection}
+import models.{Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.{TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.Logger
@@ -56,13 +56,21 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
         request.userAnswers.get(TaxYearSelectionPage)
       ) match {
         case (Some(freResponse), Some(employer), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
-          taiConnector.taiTaxCodeRecords(request.nino.get).map {
+          val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYears.head))
+          taiConnector.taiTaxCodeRecords(request.nino.get, taxYear).map {
             result =>
               val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
               val addressOption: Option[Boolean] = request.userAnswers.get(YourAddressPage)
               sessionRepository.remove(request.identifier)
-              Ok(confirmationCurrentAndPreviousYearsView(claimAmountsAndRates, claimAmountAndAnyDeductions, Some(employer), addressOption, currentYearMinus1, freResponse))
+              Ok(confirmationCurrentAndPreviousYearsView(
+                claimAmountsAndRates,
+                claimAmountAndAnyDeductions,
+                Some(employer),
+                addressOption,
+                currentYearMinus1,
+                freResponse)
+              )
           }.recoverWith {
             case e =>
               Logger.error(s"[ConfirmationCurrentAndPreviousYearsController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
