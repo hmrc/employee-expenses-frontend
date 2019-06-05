@@ -71,7 +71,7 @@ class ClaimAmountService @Inject()(
 
   def getRates(taxCodeRecords: Seq[TaxCodeRecord], claimAmount: Int): Seq[Rates] = {
 
-    val liveRecords: Option[TaxCodeRecord] = taxCodeRecords.find(_.status == Live)
+    val liveRecords = filterRecords(taxCodeRecords)
 
     liveRecords match {
       case Some(taxCodeRecord) if taxCodeRecord.taxCode(0).toUpper != 'S' =>
@@ -80,6 +80,14 @@ class ClaimAmountService @Inject()(
         Seq(scottishRate(claimAmount))
       case _ =>
         Seq(standardRate(claimAmount), scottishRate(claimAmount))
+    }
+  }
+
+  def filterRecords(taxCodeRecord: Seq[TaxCodeRecord]): Option[TaxCodeRecord] = {
+    taxCodeRecord.find(_.status == Live) match {
+      case Some(liveTaxCodeRecord) => Some(liveTaxCodeRecord)
+      case None if taxCodeRecord.nonEmpty => taxCodeRecord.headOption
+      case None if taxCodeRecord.isEmpty => None
     }
   }
 
