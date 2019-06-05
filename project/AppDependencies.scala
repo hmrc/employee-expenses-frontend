@@ -9,7 +9,7 @@ object AppDependencies {
     "uk.gov.hmrc"           %% "logback-json-logger"            % "4.4.0",
     "uk.gov.hmrc"           %% "govuk-template"                 % "5.33.0-play-26",
     "uk.gov.hmrc"           %% "play-health"                    % "3.14.0-play-26",
-    "uk.gov.hmrc"           %% "play-ui"                        % "7.39.0-play-26",
+    "uk.gov.hmrc"           %% "play-ui"                        % "7.40.0-play-26",
     "uk.gov.hmrc"           %% "play-conditional-form-mapping"  % "0.2.0",
     "uk.gov.hmrc"           %% "bootstrap-play-26"              % "0.37.0",
     "uk.gov.hmrc"           %% "play-whitelist-filter"          % "2.0.0",
@@ -21,7 +21,7 @@ object AppDependencies {
   )
 
   val test: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc"             %% "hmrctest"             % "3.8.0-play-26",
+    "uk.gov.hmrc"             %% "hmrctest"             % "3.9.0-play-26",
     "org.scalatest"           %% "scalatest"            % "3.0.4",
     "org.scalatestplus.play"  %% "scalatestplus-play"   % "2.0.1",
     "org.pegdown"             %  "pegdown"              % "1.6.0",
