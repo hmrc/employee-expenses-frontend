@@ -172,6 +172,7 @@ claimAmount.scotlandHeading = Taxpayers in Scotland
 claimAmount.starterRate = You will get £{0} of this £{1} per year if you are a starter rate ({2}%) taxpayer.
 claimAmount.basicRate = You will get £{0} of this £{1} per year if you are a basic rate ({2}%) taxpayer.
 claimAmount.higherRate = You will get £{0} of this £{1} per year if you are a higher rate ({2}%) taxpayer.
+claimAmount.intermediateRate = You will get £{0} of this £{1} per year if you are a intermediate rate ({2}%) taxpayer.
 claimAmount.checkYourAnswersLabel = Personal allowance increase
 
 typeOfEngineering.title = Select your engineering industry
@@ -702,6 +703,7 @@ confirmation.scotlandHeading = Taxpayers in Scotland
 confirmation.starterRate = You will get £{0} of this £{1} per year if you are a starter rate ({2}%) taxpayer.
 confirmation.basicRate = You will get £{0} of this £{1} per year if you are a basic rate ({2}%) taxpayer.
 confirmation.higherRate = You will get £{0} of this £{1} per year if you are a higher rate ({2}%) taxpayer.
+confirmation.intermediateRate = You will get £{0} of this £{1} per year if you are a intermediate rate ({2}%) taxpayer.
 confirmation.whatHappensNext = What happens next
 confirmation.currentTaxYear = Current tax year
 confirmation.taxCodeChanged.paragraph1 = We will increase your tax-free Personal Allowance by changing your tax code. This means you will pay less tax. You will get a letter to confirm this.
@@ -725,6 +727,7 @@ confirmationPreviousYears.scotlandHeading = Taxpayers in Scotland
 confirmationPreviousYears.starterRate = You will get £{0} of this £{1} if you are a starter rate ({2}%) taxpayer.
 confirmationPreviousYears.basicRate = You will get £{0} of this £{1} if you are a basic rate ({2}%) taxpayer.
 confirmationPreviousYears.higherRate = You will get £{0} of this £{1} if you are a higher rate ({2}%) taxpayer.
+confirmationPreviousYears.intermediateRate = You will get £{0} of this £{1} if you are a intermediate rate ({2}%) taxpayer.
 
 
 shipyardApprenticeStorekeeper.title = Are you an apprentice or storekeeper?

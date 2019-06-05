@@ -44,19 +44,19 @@ class ClaimAmountViewSpec extends ViewBehaviours {
     val claimAmountService = application.injector.instanceOf[ClaimAmountService]
 
     def claimAmountsAndRates(deduction: Option[Int]) = StandardRate(
-      basicRate = frontendAppConfig.taxPercentageBand1,
-      higherRate = frontendAppConfig.taxPercentageBand2,
-      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand1, claimAmount - deduction.getOrElse(0)),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBand2, claimAmount - deduction.getOrElse(0))
+      basicRate = frontendAppConfig.taxPercentageBasicRate,
+      higherRate = frontendAppConfig.taxPercentageHigherRate,
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBasicRate, claimAmount - deduction.getOrElse(0)),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageHigherRate, claimAmount - deduction.getOrElse(0))
     )
 
     def scottishClaimAmountsAndRates(deduction: Option[Int]) = ScottishRate(
-      starterRate = frontendAppConfig.taxPercentageScotlandBand1,
-      basicRate = frontendAppConfig.taxPercentageScotlandBand2,
-      higherRate = frontendAppConfig.taxPercentageScotlandBand3,
-      calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand1, claimAmount - deduction.getOrElse(0)),
-      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand2, claimAmount - deduction.getOrElse(0)),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBand3, claimAmount - deduction.getOrElse(0))
+      starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
+      basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
+      intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+      calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount - deduction.getOrElse(0)),
+      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount - deduction.getOrElse(0)),
+      calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount - deduction.getOrElse(0))
     )
 
     val applyView = view.apply(
@@ -110,10 +110,10 @@ class ClaimAmountViewSpec extends ViewBehaviours {
           scottishClaimAmountsAndRates(someEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.higherRate",
-          scottishClaimAmountsAndRates(someEmployerContribution).calculatedHigherRate,
+          "claimAmount.intermediateRate",
+          scottishClaimAmountsAndRates(someEmployerContribution).calculatedIntermediateRate,
           claimAmount,
-          scottishClaimAmountsAndRates(someEmployerContribution).higherRate
+          scottishClaimAmountsAndRates(someEmployerContribution).intermediateRate
         ))
       }
     }
@@ -138,16 +138,22 @@ class ClaimAmountViewSpec extends ViewBehaviours {
           claimAmountsAndRates(noEmployerContribution).higherRate
         ))
         assertContainsText(doc, messages(
+          "claimAmount.starterRate",
+          scottishClaimAmountsAndRates(noEmployerContribution).calculatedStarterRate,
+          claimAmount,
+          scottishClaimAmountsAndRates(noEmployerContribution).starterRate
+        ))
+        assertContainsText(doc, messages(
           "claimAmount.basicRate",
           scottishClaimAmountsAndRates(noEmployerContribution).calculatedBasicRate,
           claimAmount,
           scottishClaimAmountsAndRates(noEmployerContribution).basicRate
         ))
         assertContainsText(doc, messages(
-          "claimAmount.higherRate",
-          scottishClaimAmountsAndRates(noEmployerContribution).calculatedHigherRate,
+          "claimAmount.intermediateRate",
+          scottishClaimAmountsAndRates(noEmployerContribution).calculatedIntermediateRate,
           claimAmount,
-          scottishClaimAmountsAndRates(noEmployerContribution).higherRate
+          scottishClaimAmountsAndRates(noEmployerContribution).intermediateRate
         ))
       }
     }
