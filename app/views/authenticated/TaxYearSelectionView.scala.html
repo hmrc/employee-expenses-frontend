@@ -34,12 +34,15 @@
 
         @components.error_summary(form.errors)
 
-        @components.input_checkbox(
+        @components.heading(messages("taxYearSelection.heading"))
+
+        <p>@messages("taxYearSelection.paragraph")</p>
+
+        @components.input_tax_year(
             field = form("value"),
             legend = messages("taxYearSelection.heading"),
-            inputs = TaxYearSelection.options,
-            hint = Some(messages("taxYearSelection.paragraph")),
-            headingIsLegend = true
+            legendClass = Some("visually-hidden"),
+            inputs = TaxYearSelection.options
         )
 
         @components.submit_button()
