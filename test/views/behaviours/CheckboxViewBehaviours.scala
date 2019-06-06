@@ -52,7 +52,7 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
           (option, i) <- options.zipWithIndex
         } yield {
           val id = form(fieldKey)(s"[$i]").id
-          doc.select(s"label[for=$id]").text mustEqual option.message.html.toString
+          doc.select(s"label[for=$id]").text contains option.message.html.toString
         }
       }
 
