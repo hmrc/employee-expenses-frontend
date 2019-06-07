@@ -13,7 +13,7 @@ object AppDependencies {
     "uk.gov.hmrc"           %% "play-conditional-form-mapping"  % "0.2.0",
     "uk.gov.hmrc"           %% "bootstrap-play-26"              % "0.37.0",
     "uk.gov.hmrc"           %% "play-whitelist-filter"          % "2.0.0",
-    "uk.gov.hmrc"           %% "tax-year"                       % "0.4.0",
+    "uk.gov.hmrc"           %% "tax-year"                       % "0.5.0",
     "uk.gov.hmrc"           %% "play-partials"                  % "6.9.0-play-26",
     "com.typesafe.play"     %% "play-json-joda"                 % "2.7.1",
     "org.scalatra.scalate"  %% "play-scalate"                   % "0.5.0",
@@ -21,7 +21,6 @@ object AppDependencies {
   )
 
   val test: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc"             %% "hmrctest"             % "3.9.0-play-26",
     "org.scalatest"           %% "scalatest"            % "3.0.4",
     "org.scalatestplus.play"  %% "scalatestplus-play"   % "2.0.1",
     "org.pegdown"             %  "pegdown"              % "1.6.0",
