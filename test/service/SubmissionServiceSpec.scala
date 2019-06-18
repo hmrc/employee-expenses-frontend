@@ -56,7 +56,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(400)))
 
-        val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear, beforeApril)
+        val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear)
 
         whenReady(result) {
           result =>
@@ -70,7 +70,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(200)))
 
-        val result = submissionService.getTaxYearsToUpdate(fakeNino, taxYearsWithCurrentYear, beforeApril)
+        val result = submissionService.getTaxYearsToUpdate(fakeNino, taxYearsWithCurrentYear)
 
         whenReady(result) {
           result =>
@@ -85,7 +85,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(200)))
 
-        val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear, april5th)
+        val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear)
 
         whenReady(result) {
           result =>
@@ -97,7 +97,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
       "return correct data when date is after April, current year selected" in {
 
-        val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear, afterApril)
+        val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear)
 
         whenReady(result) {
           result =>
@@ -110,7 +110,7 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
         when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(500)))
 
-        val result = submissionService.getTaxYearsToUpdate(fakeNino, taxYearsWithoutCurrentYear, beforeApril)
+        val result = submissionService.getTaxYearsToUpdate(fakeNino, taxYearsWithoutCurrentYear)
 
         whenReady(result) {
           result =>

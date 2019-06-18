@@ -17,10 +17,8 @@
 package controllers.confirmation
 
 import config.FrontendAppConfig
-import connectors.TaiConnector
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
-import controllers.routes._
-import controllers.routes.SessionExpiredController
+import controllers.routes.{SessionExpiredController, _}
 import javax.inject.Inject
 import models.{Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.{TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
@@ -29,7 +27,7 @@ import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import service.ClaimAmountService
+import service.{ClaimAmountService, TaiService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.confirmation.ConfirmationCurrentAndPreviousYearsView
 
@@ -42,7 +40,7 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
                                                                requireData: DataRequiredAction,
                                                                val controllerComponents: MessagesControllerComponents,
                                                                claimAmountService: ClaimAmountService,
-                                                               taiConnector: TaiConnector,
+                                                               taiService: TaiService,
                                                                sessionRepository: SessionRepository,
                                                                confirmationCurrentAndPreviousYearsView: ConfirmationCurrentAndPreviousYearsView
                                                              )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
@@ -57,7 +55,7 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
       ) match {
         case (Some(freResponse), Some(employer), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
           val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYears.head))
-          taiConnector.taiTaxCodeRecords(request.nino.get, taxYear).map {
+          taiService.taxCodeRecords(request.nino.get, taxYear).map {
             result =>
               val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)

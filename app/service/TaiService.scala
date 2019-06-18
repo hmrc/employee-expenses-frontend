@@ -38,6 +38,12 @@ class TaiService @Inject()(taiConnector: TaiConnector,
     taiConnector.taiEmployments(nino, taxYear)
   }
 
+  def taxCodeRecords(nino: String, year: TaiTaxYear)
+                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
+
+    taiConnector.taiTaxCodeRecords(nino, year)
+  }
+
   def updateFRE(nino: String, year: TaiTaxYear, grossAmount: Int)
                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
@@ -57,7 +63,6 @@ class TaiService @Inject()(taiConnector: TaiConnector,
         }
     }
   }
-
 
   def getFREAmount(taxYearSelection: Seq[TaxYearSelection], nino: String)
                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[FlatRateExpenseAmounts]] = {

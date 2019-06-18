@@ -18,11 +18,11 @@ package service
 
 import com.google.inject.Inject
 import connectors.TaiConnector
+import models.TaxYearSelection._
 import models.{TaiTaxYear, TaxYearSelection}
 import org.joda.time.LocalDate
 import play.api.Logger
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.time.TaxYear
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,19 +31,20 @@ class SubmissionService @Inject()(
                                    taiConnector: TaiConnector
                                  ) {
 
-  def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection], currentDate: LocalDate = LocalDate.now)
+  def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection])
                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxYearSelection]] = {
 
-    if (taxYears.contains(TaxYearSelection.CurrentYear) &&
-      (currentDate.getMonthOfYear < 4 || (currentDate.getMonthOfYear == 4 && currentDate.getDayOfMonth < 6))) {
-      taiConnector.taiTaxAccountSummary(nino, TaiTaxYear(TaxYear.current.currentYear + 1)).map {
-        result =>
-          result.status match {
-            case 200 =>
-              taxYears :+ TaxYearSelection.NextYear
-            case _ =>
-              taxYears
-          }
+    val currentDate: LocalDate = LocalDate.now
+
+    if (taxYears.contains(CurrentYear) && (currentDate.getMonthOfYear < 4 || (currentDate.getMonthOfYear == 4 && currentDate.getDayOfMonth < 6))) {
+
+      taiConnector.taiTaxAccountSummary(nino, TaiTaxYear(getTaxYear(CurrentYear))).map {
+        _.status match {
+          case 200 =>
+            taxYears :+ NextYear
+          case _ =>
+            taxYears
+        }
       }.recoverWith {
         case e: Exception =>
           Logger.warn(s"[SubmissionService][getTaxYearsToUpdate] ${e.getMessage}")

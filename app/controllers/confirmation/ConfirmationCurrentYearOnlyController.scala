@@ -17,7 +17,6 @@
 package controllers.confirmation
 
 import config.FrontendAppConfig
-import connectors.TaiConnector
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
 import controllers.routes._
 import javax.inject.Inject
@@ -29,7 +28,7 @@ import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import service.ClaimAmountService
+import service.{ClaimAmountService, TaiService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.confirmation.ConfirmationCurrentYearOnlyView
 
@@ -42,7 +41,7 @@ class ConfirmationCurrentYearOnlyController @Inject()(
                                                        requireData: DataRequiredAction,
                                                        val controllerComponents: MessagesControllerComponents,
                                                        claimAmountService: ClaimAmountService,
-                                                       taiConnector: TaiConnector,
+                                                       taiService: TaiService,
                                                        sessionRepository: SessionRepository,
                                                        confirmationCurrentYearOnlyView: ConfirmationCurrentYearOnlyView
                                                      )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
@@ -56,7 +55,7 @@ class ConfirmationCurrentYearOnlyController @Inject()(
       ) match {
         case (Some(freResponse), Some(employer), Some(claimAmountAndAnyDeductions)) =>
           val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(CurrentYear))
-          taiConnector.taiTaxCodeRecords(request.nino.get, taxYear).map {
+          taiService.taxCodeRecords(request.nino.get, taxYear).map {
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
               val addressOption: Option[Boolean] = request.userAnswers.get(YourAddressPage)
