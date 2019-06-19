@@ -119,7 +119,6 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
             result.contains(CurrentYearMinus2) mustBe true
         }
       }
-
     }
 
     "submitFRE" must {
