@@ -31,10 +31,8 @@ class SubmissionService @Inject()(
                                    taiConnector: TaiConnector
                                  ) {
 
-  def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection])
+  def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection], currentDate: LocalDate = LocalDate.now)
                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxYearSelection]] = {
-
-    val currentDate: LocalDate = LocalDate.now
 
     if (taxYears.contains(CurrentYear) && (currentDate.getMonthOfYear < 4 || (currentDate.getMonthOfYear == 4 && currentDate.getDayOfMonth < 6))) {
 
