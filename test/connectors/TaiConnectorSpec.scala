@@ -64,6 +64,59 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           result mustBe taiEmployment
       }
     }
+
+    "return an empty sequence on failure" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
+          .willReturn(
+            aResponse()
+              .withStatus(NOT_FOUND)
+          )
+      )
+
+      val result: Future[Seq[Employment]] = taiConnector.taiEmployments(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence when empty array returned" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withBody(emptyEmploymentsSeqJson.toString)
+          )
+      )
+
+      val result: Future[Seq[Employment]] = taiConnector.taiEmployments(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence on Json parse error" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
+          .willReturn(
+            aResponse()
+              .withStatus(NOT_FOUND)
+              .withBody(invalidEmploymentsJson.toString)
+          )
+      )
+
+      val result: Future[Seq[Employment]] = taiConnector.taiEmployments(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
   }
 
   "taiTaxCodeRecords" must {
@@ -84,6 +137,59 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           result mustBe Seq(TaxCodeRecord("1150L", Live), TaxCodeRecord("1100L", PotentiallyCeased), TaxCodeRecord("830L", Ceased))
       }
     }
+
+    "return an empty sequence on failure" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/income/tax-code-incomes"))
+          .willReturn(
+            aResponse()
+              .withStatus(NOT_FOUND)
+          )
+      )
+
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence when empty array returned" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/income/tax-code-incomes"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withBody(emptySeqJson.toString)
+          )
+      )
+
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence on Json parse error" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/income/tax-code-incomes"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withBody(invalidJson.toString)
+          )
+      )
+
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
   }
 
   "getFlatRateExpense" must {
@@ -102,6 +208,59 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       whenReady(result) {
         result =>
           result mustBe Seq(FlatRateExpense(120))
+      }
+    }
+
+    "return an empty sequence on failure" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
+          .willReturn(
+            aResponse()
+              .withStatus(NOT_FOUND)
+          )
+      )
+
+      val result: Future[Seq[FlatRateExpense]] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence when empty array returned" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withBody(emptySeqJson.toString)
+          )
+      )
+
+      val result: Future[Seq[FlatRateExpense]] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence on Json parse error" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+              .withBody(invalidJson.toString)
+          )
+      )
+
+      val result: Future[Seq[FlatRateExpense]] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
       }
     }
   }
@@ -144,10 +303,37 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     }
   }
 
+  val emptySeqJson: JsValue = Json.parse(
+    """{
+      |  "data" : []
+      |}""".stripMargin)
+
+  val invalidJson: JsValue = Json.parse(
+    """{
+      |  "x" : []
+      |}""".stripMargin)
+
+  val emptyEmploymentsSeqJson: JsValue = Json.parse(
+    """{
+      |  "data" : {
+      |    "employments": []
+      |  }
+      |}""".stripMargin)
+
   val validEmploymentsJson: JsValue = Json.parse(
     """{
       |  "data" : {
       |    "employments": [{
+      |      "name": "HMRC LongBenton",
+      |      "startDate": "2018-06-27"
+      |    }]
+      |  }
+      |}""".stripMargin)
+
+  val invalidEmploymentsJson: JsValue = Json.parse(
+    """{
+      |  "data" : {
+      |    "x": [{
       |      "name": "HMRC LongBenton",
       |      "startDate": "2018-06-27"
       |    }]
