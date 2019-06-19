@@ -36,7 +36,7 @@ class SubmissionService @Inject()(
 
     if (taxYears.contains(CurrentYear) && (currentDate.getMonthOfYear < 4 || (currentDate.getMonthOfYear == 4 && currentDate.getDayOfMonth < 6))) {
 
-      taiConnector.taiTaxAccountSummary(nino, TaiTaxYear(getTaxYear(CurrentYear))).map {
+      taiConnector.taiTaxAccountSummary(nino, TaiTaxYear(getTaxYear(CurrentYear) + 1)).map {
         _.status match {
           case 200 =>
             taxYears :+ NextYear
