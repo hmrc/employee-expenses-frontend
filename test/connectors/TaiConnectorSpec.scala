@@ -337,7 +337,12 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
   val invalidEmploymentsJson: JsValue = Json.parse(
     """{
-      |  "x" : {}
+      |  "data" : {
+      |     "x": [{
+      |       "name": "HMRC LongBenton",
+      |       "startDate": "2018-06-27"
+      |     }]
+      |  }
       |}""".stripMargin)
 
   val validFlatRateJson: JsValue = Json.parse(
