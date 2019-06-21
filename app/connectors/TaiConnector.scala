@@ -40,7 +40,7 @@ trait Defaulting {
             records
           case JsError(e) =>
             val typeName: String = implicitly[ClassTag[T]].runtimeClass.getCanonicalName
-            Logger.error(s"[TaiService][$typeName][Json.parse] failed $e")
+            Logger.error(s"[TaiConnector][$typeName][Json.parse] failed $e")
             Seq.empty
         }
       case _ =>

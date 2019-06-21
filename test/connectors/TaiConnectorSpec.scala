@@ -47,7 +47,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   private val taxYear = TaiTaxYear()
 
   "taiEmployments" must {
-    "return a taiEmployment on success" in {
+    "return a sequence of Employment on OK" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
           .willReturn(
@@ -65,7 +65,24 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       }
     }
 
-    "return an empty sequence on failure" in {
+    "return an empty sequence on INTERNAL_SERVER_ERROR" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
+          .willReturn(
+            aResponse()
+              .withStatus(INTERNAL_SERVER_ERROR)
+          )
+      )
+
+      val result: Future[Seq[Employment]] = taiConnector.taiEmployments(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence on NOT_FOUND" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
           .willReturn(
@@ -82,7 +99,24 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       }
     }
 
-    "return an empty sequence when empty array returned" in {
+    "return an empty sequence on UNAUTHORIZED" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
+          .willReturn(
+            aResponse()
+              .withStatus(UNAUTHORIZED)
+          )
+      )
+
+      val result: Future[Seq[Employment]] = taiConnector.taiEmployments(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence on OK when empty array returned" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
           .willReturn(
@@ -100,7 +134,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       }
     }
 
-    "return an empty sequence on Json parse error" in {
+    "return an empty sequence on OK for Json parse error" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
           .willReturn(
@@ -120,7 +154,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   }
 
   "taiTaxCodeRecords" must {
-    "return a taxCodeRecord on success" in {
+    "return a sequence of TaxCodeRecord on OK" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/income/tax-code-incomes"))
           .willReturn(
@@ -138,7 +172,24 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       }
     }
 
-    "return an empty sequence on failure" in {
+    "return an empty sequence on INTERNAL_SERVER_ERROR" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/income/tax-code-incomes"))
+          .willReturn(
+            aResponse()
+              .withStatus(INTERNAL_SERVER_ERROR)
+          )
+      )
+
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence on NOT_FOUND" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/income/tax-code-incomes"))
           .willReturn(
@@ -155,7 +206,24 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       }
     }
 
-    "return an empty sequence when empty array returned" in {
+    "return an empty sequence on UNAUTHORIZED" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/income/tax-code-incomes"))
+          .willReturn(
+            aResponse()
+              .withStatus(UNAUTHORIZED)
+          )
+      )
+
+      val result: Future[Seq[TaxCodeRecord]] = taiConnector.taiTaxCodeRecords(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence on OK when empty array returned" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/income/tax-code-incomes"))
           .willReturn(
@@ -173,7 +241,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       }
     }
 
-    "return an empty sequence on Json parse error" in {
+    "return an empty sequence on OK for Json parse error" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/income/tax-code-incomes"))
           .willReturn(
@@ -193,7 +261,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
   }
 
   "getFlatRateExpense" must {
-    "return a flatRateExpense on a 200 response" in {
+    "return a sequence of FlatRateExpense on OK" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
           .willReturn(
@@ -211,7 +279,24 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       }
     }
 
-    "return an empty sequence on failure" in {
+    "return an empty sequence on INTERNAL_SERVER_ERROR" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
+          .willReturn(
+            aResponse()
+              .withStatus(INTERNAL_SERVER_ERROR)
+          )
+      )
+
+      val result: Future[Seq[FlatRateExpense]] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence on NOT_FOUND" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
           .willReturn(
@@ -228,7 +313,24 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       }
     }
 
-    "return an empty sequence when empty array returned" in {
+    "return an empty sequence on UNAUTHORIZED" in {
+      server.stubFor(
+        get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
+          .willReturn(
+            aResponse()
+              .withStatus(UNAUTHORIZED)
+          )
+      )
+
+      val result: Future[Seq[FlatRateExpense]] = taiConnector.getFlatRateExpense(fakeNino, taxYear)
+
+      whenReady(result) {
+        result =>
+          result mustBe Seq.empty
+      }
+    }
+
+    "return an empty sequence on OK when empty array returned" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
           .willReturn(
@@ -246,7 +348,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
       }
     }
 
-    "return an empty sequence on Json parse error" in {
+    "return an empty sequence on OK for Json parse error" in {
       server.stubFor(
         get(urlEqualTo(s"/tai/$fakeNino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"))
           .willReturn(
