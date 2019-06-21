@@ -105,7 +105,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
         get(urlEqualTo(s"/tai/$fakeNino/employments/years/${taxYear.year}"))
           .willReturn(
             aResponse()
-              .withStatus(NOT_FOUND)
+              .withStatus(OK)
               .withBody(invalidEmploymentsJson.toString)
           )
       )
@@ -161,7 +161,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
           .willReturn(
             aResponse()
               .withStatus(OK)
-              .withBody(emptySeqJson.toString)
+              .withBody(emptySeqInObjectJson.toString)
           )
       )
 
@@ -303,10 +303,15 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
     }
   }
 
-  val emptySeqJson: JsValue = Json.parse(
+  val emptySeqInObjectJson: JsValue = Json.parse(
     """{
       |  "data" : []
       |}""".stripMargin)
+
+  val emptySeqJson: JsValue = Json.parse(
+    """
+      |[]
+      |""".stripMargin)
 
   val invalidJson: JsValue = Json.parse(
     """{
@@ -332,12 +337,7 @@ class TaiConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper wi
 
   val invalidEmploymentsJson: JsValue = Json.parse(
     """{
-      |  "data" : {
-      |    "x": [{
-      |      "name": "HMRC LongBenton",
-      |      "startDate": "2018-06-27"
-      |    }]
-      |  }
+      |  "x" : {}
       |}""".stripMargin)
 
   val validFlatRateJson: JsValue = Json.parse(
