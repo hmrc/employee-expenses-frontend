@@ -39,7 +39,7 @@ class NoCodeChangeViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyViewWithAuth)
 
-    val link: Html = Html(s"""<a href="${frontendAppConfig.incomeTaxSummary}">${messages("noCodeChange.link")}</a>.""")
+    val link: Html = Html(s"""<a href="${frontendAppConfig.incomeTaxSummary}">${messages("noCodeChange.link")}</a>""")
 
     behave like pageWithBodyText(applyViewWithAuth, Html(messages("noCodeChange.guidance2", link)).toString)
 

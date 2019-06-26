@@ -23,9 +23,7 @@
 
 @()(implicit request: Request[_], messages: Messages)
 
-@link = {
-    <a href=@frontendAppConfig.incomeTaxSummary>@messages("noCodeChange.link")</a>.
-}
+@link = {<a href=@frontendAppConfig.incomeTaxSummary>@messages("noCodeChange.link")</a>}
 
 @main_template(
     title = messages("noCodeChange.title")
