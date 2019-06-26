@@ -624,7 +624,7 @@ updateYourAddress.guidance2 = After you have completed this claim, we will tell 
 noCodeChange.title = You do not need to do anything else
 noCodeChange.heading = You do not need to do anything else
 noCodeChange.guidance1 = This amount will stay in your tax code until you tell us that your employment circumstances have changed.
-noCodeChange.guidance2 = You can see this in your {0}.
+noCodeChange.guidance2 = You can see this in your {0}
 noCodeChange.link = PAYE Income Tax summary
 
 yourAddress.title = Is this your address?

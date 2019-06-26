@@ -16,13 +16,14 @@
 
 package views.authenticated
 
+import play.api.Application
 import play.twirl.api.Html
 import views.behaviours.ViewBehaviours
 import views.html.authenticated.NoCodeChangeView
 
 class NoCodeChangeViewSpec extends ViewBehaviours {
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "NoCodeChange view" must {
 
@@ -38,7 +39,7 @@ class NoCodeChangeViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyViewWithAuth)
 
-    val link: Html = Html(s"""<a href="${frontendAppConfig.incomeTaxSummary}">${messages("noCodeChange.link")}</a>""")
+    val link: Html = Html(s"""<a href="${frontendAppConfig.incomeTaxSummary}">${messages("noCodeChange.link")}</a>.""")
 
     behave like pageWithBodyText(applyViewWithAuth, Html(messages("noCodeChange.guidance2", link)).toString)
 
@@ -46,3 +47,4 @@ class NoCodeChangeViewSpec extends ViewBehaviours {
 
   application.stop()
 }
+
