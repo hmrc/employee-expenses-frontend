@@ -1,7 +1,7 @@
 checkYourAnswers.title = Check your answers
 checkYourAnswers.heading = Check your answers
-checkYourAnswers.title.claimExpenses = Check your answers before claiming your expenses
-checkYourAnswers.heading.claimExpenses = Check your answers before claiming your expenses
+checkYourAnswers.title.claimExpenses = Check your answers
+checkYourAnswers.heading.claimExpenses = Check your answers
 checkYourAnswers.guidance = Guidance for check your answers
 checkYourAnswers.claimExpenses = Claim your expenses
 checkYourAnswers.changeClaim = Change this claim
