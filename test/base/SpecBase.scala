@@ -110,11 +110,11 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
   )
 
   lazy val checkYourAnswersTextNoFre: CheckYourAnswersText =
-    CheckYourAnswersText(heading = "title.claimExpenses", disclaimerHeading = "claimExpenses", disclaimer = "confirmInformationNoFre", button = "acceptClaimExpenses")
+    CheckYourAnswersText(heading = "title", disclaimerHeading = "claimExpenses", disclaimer = "confirmInformationNoFre", button = "acceptClaimExpenses")
   lazy val checkYourAnswersTextStopFre: CheckYourAnswersText =
     CheckYourAnswersText(heading = "heading", disclaimerHeading = "stopClaim", disclaimer = "confirmInformationChangeFre", button = "acceptStopClaim")
   lazy val checkYourAnswersTextChangeFre: CheckYourAnswersText =
-    CheckYourAnswersText(heading = "title.claimExpenses", disclaimerHeading = "changeClaim", disclaimer = "confirmInformationChangeFre", button = "acceptChangeClaim")
+    CheckYourAnswersText(heading = "title", disclaimerHeading = "changeClaim", disclaimer = "confirmInformationChangeFre", button = "acceptChangeClaim")
 
   def fullUserAnswers: UserAnswers = emptyUserAnswers
     .set(FirstIndustryOptionsPage, Healthcare).success.value

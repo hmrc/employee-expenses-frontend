@@ -84,11 +84,11 @@ class CheckYourAnswersController @Inject()(
       case (true, _) =>
         CheckYourAnswersText(heading = "heading", disclaimerHeading = "stopClaim", disclaimer = "confirmInformationChangeFre", button = "acceptStopClaim")
       case (false, FRENoYears) =>
-        CheckYourAnswersText(heading = "title.claimExpenses", disclaimerHeading = "claimExpenses", disclaimer = "confirmInformationNoFre", button = "acceptClaimExpenses")
+        CheckYourAnswersText(heading = "title", disclaimerHeading = "claimExpenses", disclaimer = "confirmInformationNoFre", button = "acceptClaimExpenses")
       case (false, FREAllYearsAllAmountsSameAsClaimAmount | FRESomeYears) =>
-        CheckYourAnswersText(heading = "title.claimExpenses", disclaimerHeading = "changeClaim", disclaimer = "confirmInformationChangeFre", button = "acceptChangeClaim")
+        CheckYourAnswersText(heading = "title", disclaimerHeading = "changeClaim", disclaimer = "confirmInformationChangeFre", button = "acceptChangeClaim")
       case _ =>
-        CheckYourAnswersText(heading = "title.claimExpenses", disclaimerHeading = "claimExpenses", disclaimer = "confirmInformationNoFre", button = "acceptClaimExpenses")
+        CheckYourAnswersText(heading = "title", disclaimerHeading = "claimExpenses", disclaimer = "confirmInformationNoFre", button = "acceptClaimExpenses")
     }
   }
 

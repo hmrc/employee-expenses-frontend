@@ -62,7 +62,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
         val doc = asDocument(applyViewNewClaim(FlatRateExpenseOptions.FRENoYears, removeFRE = false))
 
         assertContainsMessages(doc,
-          "checkYourAnswers.heading.claimExpenses",
+          "checkYourAnswers.heading",
           "checkYourAnswers.confirmInformationNoFre",
           "checkYourAnswers.claimExpenses"
         )
@@ -74,7 +74,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
         val doc = asDocument(applyViewChangeClaim(FlatRateExpenseOptions.FRESomeYears, removeFRE = false))
 
         assertContainsMessages(doc,
-          "checkYourAnswers.heading.claimExpenses",
+          "checkYourAnswers.heading",
           "checkYourAnswers.confirmInformationChangeFre",
           "checkYourAnswers.changeClaim"
         )
