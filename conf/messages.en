@@ -103,6 +103,7 @@ multipleEmployments.moreThanOneJob = More than one job
 
 firstIndustryOptions.title = Select your industry (page 1 of 5)
 firstIndustryOptions.heading = Select your industry (page 1 of 5)
+firstIndustryOptions.listText = Select your industry.
 firstIndustryOptions.healthcare = Healthcare
 firstIndustryOptions.foodAndCatering = Food and catering
 firstIndustryOptions.retail = Retail
@@ -138,6 +139,7 @@ thirdIndustryOptions.error.required = Select the industry you work in
 
 fourthIndustryOptions.title = Select your industry (page 4 of 5)
 fourthIndustryOptions.heading = Select your industry (page 4 of 5)
+fourthIndustryOptions.listText = Select your industry.
 fourthIndustryOptions.agriculture = Agriculture
 fourthIndustryOptions.fireService = Fire service
 fourthIndustryOptions.heating = Heating
@@ -312,6 +314,7 @@ factoryEngineeringList2.occupation7 = wire drawers in the wire drawing industry
 
 whichRailwayTrade.title = Select your railway occupation
 whichRailwayTrade.heading = Select your railway occupation
+whichRailwayTrade.listText = Select your railway occupation
 whichRailwayTrade.vehiclePainters = Railway vehicle painters
 whichRailwayTrade.vehicleRepairersWagonLifters = Railway vehicle repairers or railway wagon lifters
 whichRailwayTrade.noneOfTheAbove = Occupation not listed
