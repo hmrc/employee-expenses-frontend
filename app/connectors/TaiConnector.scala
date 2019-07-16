@@ -63,7 +63,7 @@ class TaiConnector @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClien
   def getFlatRateExpense(nino: String, taxYear: TaiTaxYear)
                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[FlatRateExpense]] = {
 
-    val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"
+    val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/expenses/employee-expenses/${appConfig.flatRateExpenseId}"
 
     httpClient.GET(taiUrl).map(withDefaultToEmptySeq[FlatRateExpense])
   }
@@ -71,7 +71,7 @@ class TaiConnector @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClien
   def taiFREUpdate(nino: String, taxYear: TaiTaxYear, version: Int, grossAmount: Int)
                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
-    val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/expenses/flat-rate-expenses"
+    val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/expenses/employee-expenses/${appConfig.flatRateExpenseId}"
 
     val body: IabdEditDataRequest = IabdEditDataRequest(version, grossAmount)
 
