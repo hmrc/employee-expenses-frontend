@@ -23,8 +23,8 @@ import forms.shipyard.LabourerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{times, verify, when}
-import org.scalatest.OptionValues
+import org.mockito.Mockito.{reset, times, verify, when}
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
@@ -39,15 +39,17 @@ import views.html.shipyard.LabourerView
 import scala.concurrent.Future
 
 class LabourerControllerSpec extends SpecBase  with ScalaFutures
-  with IntegrationPatience with OptionValues with MockitoSugar {
+  with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new LabourerFormProvider()
   val form = formProvider()
-  val mockSessionRepository: SessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+  override def beforeEach(): Unit = {
+    reset(mockSessionRepository)
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  }
 
   lazy val labourerRoute = routes.LabourerController.onPageLoad(NormalMode).url
 
@@ -95,8 +97,10 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.shipyard).toInstance(new FakeNavigator(onwardRoute)))
-          .build()
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.shipyard).toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          ).build()
 
       val request =
         FakeRequest(POST, labourerRoute)

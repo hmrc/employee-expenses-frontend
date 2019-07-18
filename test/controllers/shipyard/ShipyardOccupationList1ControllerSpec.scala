@@ -23,12 +23,13 @@ import forms.shipyard.ShipyardOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{times, verify, when}
-import org.scalatest.OptionValues
+import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import pages.ClaimAmount
 import pages.shipyard.ShipyardOccupationList1Page
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -39,17 +40,19 @@ import views.html.shipyard.ShipyardOccupationList1View
 import scala.concurrent.Future
 
 class ShipyardOccupationList1ControllerSpec extends SpecBase with ScalaFutures
-  with IntegrationPatience with OptionValues with MockitoSugar  {
+  with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ShipyardOccupationList1FormProvider()
-  val form = formProvider()
-  val mockSessionRepository: SessionRepository = mock[SessionRepository]
+  val form: Form[Boolean] = formProvider()
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+  override def beforeEach(): Unit = {
+    reset(mockSessionRepository)
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  }
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
-  lazy val shipyardOccupationList1Route = routes.ShipyardOccupationList1Controller.onPageLoad(NormalMode).url
+  lazy val shipyardOccupationList1Route: String = routes.ShipyardOccupationList1Controller.onPageLoad(NormalMode).url
 
   "ShipyardOccupationList1 Controller" must {
 
@@ -95,8 +98,10 @@ class ShipyardOccupationList1ControllerSpec extends SpecBase with ScalaFutures
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.shipyard).toInstance(new FakeNavigator(onwardRoute)))
-          .build()
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.shipyard).toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          ).build()
 
       val request =
         FakeRequest(POST, shipyardOccupationList1Route)

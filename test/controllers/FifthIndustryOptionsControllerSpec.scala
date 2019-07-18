@@ -25,8 +25,8 @@ import models.{FifthIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import org.scalatest.OptionValues
+import org.mockito.Mockito.{reset, when}
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.PropertyChecks
@@ -42,15 +42,19 @@ import views.html.FifthIndustryOptionsView
 import scala.concurrent.Future
 
 class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures
-  with IntegrationPatience with PropertyChecks with Generators with OptionValues {
+  with IntegrationPatience with PropertyChecks with Generators with OptionValues with BeforeAndAfterEach {
+
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+  override def beforeEach(): Unit = {
+    reset(mockSessionRepository)
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  }
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val fifthIndustryOptionsRoute = routes.FifthIndustryOptionsController.onPageLoad(NormalMode).url
   private val formProvider = new FifthIndustryOptionsFormProvider()
   private val form = formProvider()
-  private val mockSessionRepository = mock[SessionRepository]
-  private val userAnswers = emptyUserAnswers
 
   "FifthIndustryOptions Controller" must {
 
@@ -96,8 +100,10 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
-          .build()
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          ).build()
 
       val request =
         FakeRequest(POST, fifthIndustryOptionsRoute)
