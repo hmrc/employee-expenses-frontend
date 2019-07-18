@@ -32,10 +32,10 @@
             <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
         }
     </label>
-    <div class="form-control-wrapper">
-        <span class="govuk-currency-input__inner__unit">£</span>
+    <div class="hmrc-currency-input__wrapper form-control-wrapper">
+        <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
         <input
-        class="form-control govuk-currency-input__inner__input @inputClass"
+        class="form-control govuk-input @inputClass"
         type="text"
         id="@{field.id}"
         name="@{field.name}"

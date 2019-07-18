@@ -9,17 +9,3 @@
 @import 'partials/heading';
 
 @import 'partials/_shame';
-
-.govuk-currency-input__inner__unit {
-  position: absolute;
-  bottom: 5px;
-  left: 10px;
-  font-weight: bold;
-}
-.form-control.govuk-currency-input__inner__input {
-  padding-left: 25px;
-}
-
-.form-control-wrapper {
-  position: relative;
-}
