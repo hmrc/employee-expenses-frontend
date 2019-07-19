@@ -24,7 +24,7 @@ import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
-import org.scalatest.OptionValues
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
@@ -39,7 +39,7 @@ import views.html.transport.CabinCrewView
 
 import scala.concurrent.Future
 
-class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -47,9 +47,11 @@ class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSug
   private val form = formProvider()
 
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+  override def beforeEach(): Unit = {
+    reset(mockSessionRepository)
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  }
 
   lazy val cabinCrewRoute = routes.CabinCrewController.onPageLoad(NormalMode).url
 
@@ -97,8 +99,10 @@ class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSug
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)))
-          .build()
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          ).build()
 
       val request =
         FakeRequest(POST, cabinCrewRoute)

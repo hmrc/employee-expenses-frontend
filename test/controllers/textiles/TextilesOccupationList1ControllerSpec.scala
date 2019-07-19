@@ -23,8 +23,8 @@ import forms.TextilesOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{times, verify, when}
-import org.scalatest.OptionValues
+import org.mockito.Mockito.{reset, times, verify, when}
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
@@ -38,15 +38,20 @@ import views.html.textiles.TextilesOccupationList1View
 
 import scala.concurrent.Future
 
-class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
+class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues
+  with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new TextilesOccupationList1FormProvider()
   val form = formProvider()
 
-  private val mockSessionRepository = mock[SessionRepository]
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
+  override def beforeEach(): Unit = {
+    reset(mockSessionRepository)
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  }
 
   lazy val textilesOccupationList1Route = routes.TextilesOccupationList1Controller.onPageLoad(NormalMode).url
 
@@ -94,8 +99,10 @@ class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.textiles).toInstance(new FakeNavigator(onwardRoute)))
-          .build()
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.textiles).toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          ).build()
 
       val request =
         FakeRequest(POST, textilesOccupationList1Route)

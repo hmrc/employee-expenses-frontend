@@ -23,8 +23,8 @@ import forms.shipyard.ShipyardApprenticeStorekeeperFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{times, verify, when}
-import org.scalatest.OptionValues
+import org.mockito.Mockito.{reset, times, verify, when}
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.ClaimAmount
@@ -40,16 +40,18 @@ import views.html.shipyard.ShipyardApprenticeStoreKeeperView
 import scala.concurrent.Future
 
 class ShipyardApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
-  with IntegrationPatience with OptionValues with MockitoSugar {
+  with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ShipyardApprenticeStorekeeperFormProvider()
   val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+  override def beforeEach(): Unit = {
+    reset(mockSessionRepository)
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  }
 
   lazy val shipyardApprenticeStorekeeperRoute = routes.ShipyardApprenticeStorekeeperController.onPageLoad(NormalMode).url
 
@@ -97,9 +99,10 @@ class ShipyardApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFut
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.shipyard).toInstance(new FakeNavigator(onwardRoute)))
-          .build()
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.shipyard).toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          ).build()
 
       val request =
         FakeRequest(POST, shipyardApprenticeStorekeeperRoute)
