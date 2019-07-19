@@ -54,7 +54,7 @@ class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
 
     "contain the '£' symbol" in {
       val doc = asDocument(applyView(form))
-      doc.getElementsByClass("govuk-currency-input__inner__unit").text mustBe "£"
+      doc.getElementsByClass("hmrc-currency-input__unit").text mustBe "£"
     }
   }
 
