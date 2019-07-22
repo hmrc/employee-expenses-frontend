@@ -31,8 +31,7 @@ class ConstructionNavigatorSpec extends SpecBase with MockitoSugar {
     for (mode <- modes) {
       s"in $mode" must {
 
-        //from JoinerCarpenter
-
+        //from ConstructionOccupations
         "go to EmployerContribution from ConstructionOccupations" in {
           val answers = emptyUserAnswers.set(ConstructionOccupationsPage, ConstructionOccupations.BuildingMaterials).success.value
 
