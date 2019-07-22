@@ -390,3 +390,8 @@ GET         /cabin-crew                                          controllers.tra
 POST        /cabin-crew                                          controllers.transport.CabinCrewController.onSubmit(mode: Mode = NormalMode)
 GET         /change-cabin-crew                                   controllers.transport.CabinCrewController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-cabin-crew                                   controllers.transport.CabinCrewController.onSubmit(mode: Mode = CheckMode)
+
+GET         /construction-occupations                            controllers.construction.ConstructionOccupationsController.onPageLoad(mode: Mode = NormalMode)
+POST        /construction-occupations                            controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = CheckMode)

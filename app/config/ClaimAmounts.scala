@@ -17,6 +17,7 @@
 package config
 
 import javax.inject.Singleton
+import models.ConstructionOccupations
 
 sealed trait ClaimAmounts
 
@@ -117,8 +118,19 @@ object ClaimAmounts {
     lazy val stoneMasons: Int = 120
     lazy val list1: Int = 80
     lazy val list2: Int = 60
+    lazy val asphaltCement: Int = 80
+    lazy val roofingFelt: Int = 80
+    lazy val labourerNavvy: Int = 60
+    lazy val tileMaker: Int = 60
     lazy val buildingMaterials: Int = 80
     lazy val allOther: Int = 120
+  }
+
+  object Construction2 {
+    lazy val amounts: Map[ConstructionOccupations, Int] =
+      Map(
+        ConstructionOccupations.StoneMason -> 120
+      )
   }
 
   object Electrical {

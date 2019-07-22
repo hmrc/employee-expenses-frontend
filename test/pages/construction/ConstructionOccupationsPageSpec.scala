@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package pages.construction
 
-import models.UserAnswers
-import play.api.libs.json.JsPath
+import models.ConstructionOccupations
+import pages.behaviours.PageBehaviours
 
-import scala.util.{Success, Try}
+class ConstructionOccupationsPageSpec extends PageBehaviours {
 
-trait QuestionPage[A] extends Page {
+  "ConstructionOccupationsPage" must {
 
-  def path: JsPath
+    beRetrievable[ConstructionOccupations](ConstructionOccupationsPage)
 
-  lazy val industryPath: String = "industry"
+    beSettable[ConstructionOccupations](ConstructionOccupationsPage)
 
-  def cleanup(value: Option[A], userAnswers: UserAnswers): Try[UserAnswers] =
-    Success(userAnswers)
+    beRemovable[ConstructionOccupations](ConstructionOccupationsPage)
+  }
 }

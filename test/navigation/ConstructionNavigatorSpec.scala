@@ -18,7 +18,7 @@ package navigation
 
 import base.SpecBase
 import controllers.construction.routes
-import models.{CheckMode, NormalMode}
+import models.{CheckMode, ConstructionOccupations, NormalMode}
 import org.scalatest.mockito.MockitoSugar
 import pages.Page
 import pages.construction._
@@ -30,6 +30,15 @@ class ConstructionNavigatorSpec extends SpecBase with MockitoSugar {
   "Construction Navigator" when {
     for (mode <- modes) {
       s"in $mode" must {
+
+        //from JoinerCarpenter
+
+        "go to EmployerContribution from ConstructionOccupations" in {
+          val answers = emptyUserAnswers.set(ConstructionOccupationsPage, ConstructionOccupations.BuildingMaterials).success.value
+
+          navigator.nextPage(ConstructionOccupationsPage, mode)(answers) mustBe
+            controllers.routes.EmployerContributionController.onPageLoad(mode)
+        }
 
         //from JoinerCarpenter
 
