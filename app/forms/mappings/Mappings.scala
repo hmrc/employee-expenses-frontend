@@ -30,6 +30,11 @@ trait Mappings extends Formatters with Constraints {
                     nonNumericKey: String = "error.nonNumeric"): FieldMapping[Int] =
     of(intFormatter(requiredKey, wholeNumberKey, nonNumericKey))
 
+  protected def intCurrency(requiredKey: String = "error.required",
+                            wholeNumberKey: String = "error.wholeNumber",
+                            nonNumericKey: String = "error.nonNumeric"): FieldMapping[Int] =
+    of(intCurrencyFormatter(requiredKey, wholeNumberKey, nonNumericKey))
+
   protected def boolean(requiredKey: String = "error.required",
                         invalidKey: String = "error.boolean"): FieldMapping[Boolean] =
     of(booleanFormatter(requiredKey, invalidKey))
