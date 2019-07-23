@@ -1,0 +1,61 @@
+/*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package views.construction
+
+import forms.construction.ConstructionOccupationsFormProvider
+import models.{ConstructionOccupations, NormalMode}
+import play.api.data.Form
+import play.twirl.api.HtmlFormat
+import views.behaviours.OptionsViewBehaviours
+import views.html.construction.ConstructionOccupationsView
+
+class ConstructionOccupationsViewSpec extends OptionsViewBehaviours[ConstructionOccupations] {
+
+  val messageKeyPrefix = "constructionOccupations"
+
+  val form = new ConstructionOccupationsFormProvider()()
+
+  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+  val view = application.injector.instanceOf[ConstructionOccupationsView]
+
+  def applyView(form: Form[_]): HtmlFormat.Appendable =
+    view.apply(form, NormalMode)(fakeRequest, messages)
+
+  def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+
+  "ConstructionOccupationsView" must {
+
+    behave like normalPage(applyView(form), messageKeyPrefix)
+
+    behave like pageWithAccountMenu(applyViewWithAuth(form))
+
+    behave like pageWithBackLink(applyView(form))
+
+    behave like optionsPage(form, applyView, ConstructionOccupations.options)
+
+    "must have the correct text of 'or' between last 2 radioButtons" in {
+
+      val doc = asDocument(applyView(form))
+
+      doc.getElementsByClass("form-block").text() mustBe messages("site.or")
+    }
+  }
+
+  application.stop()
+}

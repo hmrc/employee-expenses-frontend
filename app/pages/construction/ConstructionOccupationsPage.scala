@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package pages.construction
 
-import models.UserAnswers
+import models.ConstructionOccupations
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-import scala.util.{Success, Try}
+case object ConstructionOccupationsPage extends QuestionPage[ConstructionOccupations] {
 
-trait QuestionPage[A] extends Page {
+  override def path: JsPath = JsPath \ industryPath \ toString
 
-  def path: JsPath
-
-  lazy val industryPath: String = "industry"
-
-  def cleanup(value: Option[A], userAnswers: UserAnswers): Try[UserAnswers] =
-    Success(userAnswers)
+  override def toString: String = "constructionOccupations"
 }

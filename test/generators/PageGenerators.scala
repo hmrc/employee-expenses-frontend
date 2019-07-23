@@ -37,6 +37,9 @@ import pages.textiles.TextilesOccupationList1Page
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryConstructionOccupationsPage: Arbitrary[ConstructionOccupationsPage.type] =
+    Arbitrary(ConstructionOccupationsPage)
+
   implicit lazy val arbitraryCabinCrewPage: Arbitrary[CabinCrewPage.type] =
     Arbitrary(CabinCrewPage)
 

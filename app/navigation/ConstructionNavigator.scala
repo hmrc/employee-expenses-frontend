@@ -31,6 +31,7 @@ class ConstructionNavigator @Inject()() extends Navigator {
     case ConstructionOccupationList1Page  => constructionOccupationList1(NormalMode)
     case ConstructionOccupationList2Page  => constructionOccupationList2(NormalMode)
     case BuildingMaterialsPage            => buildingMaterials(NormalMode)
+    case ConstructionOccupationsPage      => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case _                                => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 
@@ -40,6 +41,7 @@ class ConstructionNavigator @Inject()() extends Navigator {
     case ConstructionOccupationList1Page  => constructionOccupationList1(CheckMode)
     case ConstructionOccupationList2Page  => constructionOccupationList2(CheckMode)
     case BuildingMaterialsPage            => buildingMaterials(CheckMode)
+    case ConstructionOccupationsPage      => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 

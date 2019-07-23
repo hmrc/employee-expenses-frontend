@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms.construction
 
-import models.UserAnswers
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.ConstructionOccupations
+import play.api.data.Form
 
-import scala.util.{Success, Try}
+class ConstructionOccupationsFormProvider @Inject() extends Mappings {
 
-trait QuestionPage[A] extends Page {
-
-  def path: JsPath
-
-  lazy val industryPath: String = "industry"
-
-  def cleanup(value: Option[A], userAnswers: UserAnswers): Try[UserAnswers] =
-    Success(userAnswers)
+  def apply(): Form[ConstructionOccupations] =
+    Form(
+      "value" -> enumerable[ConstructionOccupations]("constructionOccupations.error.required")
+    )
 }

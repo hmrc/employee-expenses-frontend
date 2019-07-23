@@ -792,3 +792,16 @@ cabinCrew.title = Are you airline cabin crew?
 cabinCrew.heading = Are you airline cabin crew?
 cabinCrew.checkYourAnswersLabel = Are you airline cabin crew?
 cabinCrew.error.required = Select yes if you are cabin crew
+
+constructionOccupations.title = Select your construction occupation
+constructionOccupations.heading = Select your construction occupation
+constructionOccupations.checkYourAnswersLabel = Select your construction occupation
+constructionOccupations.error.required = Select your construction occupation
+constructionOccupations.joinerOrCarpenter = Joiner or carpenter
+constructionOccupations.stoneMason = Stone mason
+constructionOccupations.asphaltOrCement = Asphalt labourer or cement works
+constructionOccupations.roofingFelt = Roofing felt
+constructionOccupations.labourerOrNavvy = Labourer or navvy
+constructionOccupations.tilemaker = Tilemaker
+constructionOccupations.buildingMaterials = Occupation within building materials
+constructionOccupations.none = Construction occupation not listed
