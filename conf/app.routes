@@ -52,6 +52,21 @@ POST        /second-industry-type                                controllers.Sec
 GET         /change-second-industry-type                         controllers.SecondIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-second-industry-type                         controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
+GET         /third-industry-type                                 controllers.ThirdIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST        /third-industry-type                                 controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-third-industry-type                          controllers.ThirdIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-third-industry-type                          controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+
+GET         /fourth-industry-type                                controllers.FourthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST        /fourth-industry-type                                controllers.FourthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-fourth-industry-type                         controllers.FourthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-fourth-industry-type                         controllers.FourthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+
+GET         /fifth-industry-type                                 controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
+POST        /fifth-industry-type                                 controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+GET         /change-fifth-industry-type                          controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-fifth-industry-type                          controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+
 GET         /type-of-engineering                                 controllers.engineering.TypeOfEngineeringController.onPageLoad(mode: Mode = NormalMode)
 POST        /type-of-engineering                                 controllers.engineering.TypeOfEngineeringController.onSubmit(mode: Mode = NormalMode)
 GET         /change-type-of-engineering                          controllers.engineering.TypeOfEngineeringController.onPageLoad(mode: Mode = CheckMode)
@@ -240,11 +255,6 @@ POST        /electrical                                          controllers.ele
 GET         /change-electrical                                   controllers.electrical.ElectricalController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-electrical                                   controllers.electrical.ElectricalController.onSubmit(mode: Mode = CheckMode)
 
-GET         /third-industry-options                              controllers.ThirdIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
-POST        /third-industry-options                              controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
-GET         /change-third-industry-options                       controllers.ThirdIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-third-industry-options                       controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
-
 GET         /metropolitan-police                                 controllers.police.MetropolitanPoliceController.onPageLoad(mode: Mode = NormalMode)
 POST        /metropolitan-police                                 controllers.police.MetropolitanPoliceController.onSubmit(mode: Mode = NormalMode)
 GET         /change-metropolitan-police                          controllers.police.MetropolitanPoliceController.onPageLoad(mode: Mode = CheckMode)
@@ -291,11 +301,6 @@ GET         /heating-occupation-list                             controllers.hea
 POST        /heating-occupation-list                             controllers.heating.HeatingOccupationListController.onSubmit(mode: Mode = NormalMode)
 GET         /change-heating-occupation-list                      controllers.heating.HeatingOccupationListController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-heating-occupation-list                      controllers.heating.HeatingOccupationListController.onSubmit(mode: Mode = CheckMode)
-
-GET         /fourth-industry-type                                controllers.FourthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
-POST        /fourth-industry-type                                controllers.FourthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
-GET         /change-fourth-industry-type                         controllers.FourthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-fourth-industry-type                         controllers.FourthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
 GET         /constructional-engineering-list-3                   controllers.engineering.ConstructionalEngineeringList3Controller.onPageLoad(mode: Mode = NormalMode)
 POST        /constructional-engineering-list-3                   controllers.engineering.ConstructionalEngineeringList3Controller.onSubmit(mode: Mode = NormalMode)
@@ -350,11 +355,6 @@ GET         /confirmation-claim-stopped                          controllers.con
 GET         /confirmation-current-year                           controllers.confirmation.ConfirmationCurrentYearOnlyController.onPageLoad()
 GET         /confirmation-current-and-previous-year              controllers.confirmation.ConfirmationCurrentAndPreviousYearsController.onPageLoad()
 GET         /confirmation-previous-year                          controllers.confirmation.ConfirmationPreviousYearsOnlyController.onPageLoad()
-
-GET         /fifth-industry-options                              controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
-POST        /fifth-industry-options                              controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
-GET         /change-fifth-industry-options                       controllers.FifthIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-fifth-industry-options                       controllers.FifthIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
 GET         /shipyard-occupation-list-1                          controllers.shipyard.ShipyardOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
 POST        /shipyard-occupation-list-1                          controllers.shipyard.ShipyardOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
