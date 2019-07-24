@@ -139,6 +139,44 @@ class MappingsSpec extends WordSpec with MustMatchers with OptionValues with Map
     }
   }
 
+  "intCurrency" must {
+
+    val testForm: Form[Int] =
+      Form(
+        "value" -> intCurrency()
+      )
+
+    "bind a valid integer" in {
+      val result = testForm.bind(Map("value" -> "1"))
+      result.get mustEqual 1
+    }
+
+    "bind a valid integer with a pound sign" in {
+      val result = testForm.bind(Map("value" -> "£1"))
+      result.get mustEqual 1
+    }
+
+    "not bind a decimal number with a pound sign" in {
+      val result = testForm.bind(Map("value" -> "£1.10"))
+      result.errors must contain(FormError("value", "error.wholeNumber"))
+    }
+
+    "not bind an empty value" in {
+      val result = testForm.bind(Map("value" -> ""))
+      result.errors must contain(FormError("value", "error.required"))
+    }
+
+    "not bind an empty map" in {
+      val result = testForm.bind(Map.empty[String, String])
+      result.errors must contain(FormError("value", "error.required"))
+    }
+
+    "unbind a valid value" in {
+      val result = testForm.fill(123)
+      result.apply("value").value.value mustEqual "123"
+    }
+  }
+
   "enumerable" must {
 
     val testForm = Form(

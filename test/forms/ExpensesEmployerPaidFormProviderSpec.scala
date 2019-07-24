@@ -45,6 +45,13 @@ class ExpensesEmployerPaidFormProviderSpec extends IntFieldBehaviours {
       wholeNumberError = FormError(fieldName, "expensesEmployerPaid.error.wholeNumber")
     )
 
+    behave like intCurrencyField(
+      form,
+      fieldName,
+      nonNumericError  = FormError(fieldName, "expensesEmployerPaid.error.nonNumeric"),
+      wholeNumberError = FormError(fieldName, "expensesEmployerPaid.error.wholeNumber")
+    )
+
     behave like intFieldWithRange(
       form,
       fieldName,

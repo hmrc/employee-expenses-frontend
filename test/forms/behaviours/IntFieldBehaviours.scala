@@ -107,4 +107,28 @@ trait IntFieldBehaviours extends FieldBehaviours {
       }
     }
   }
+
+  def intCurrencyField(form: Form[_],
+                       fieldName: String,
+                       nonNumericError: FormError,
+                       wholeNumberError: FormError): Unit = {
+
+    "not bind non-numeric numbers with pound symbol" in {
+
+      forAll(nonNumerics -> "nonNumeric") {
+        nonNumeric =>
+          val result = form.bind(Map(fieldName -> s"£$nonNumeric")).apply(fieldName)
+          result.errors shouldEqual Seq(nonNumericError)
+      }
+    }
+
+    "not bind decimals with pound symbol" in {
+
+      forAll(decimals -> "decimal") {
+        decimal =>
+          val result = form.bind(Map(fieldName -> s"£$decimal")).apply(fieldName)
+          result.errors shouldEqual Seq(wholeNumberError)
+      }
+    }
+  }
 }

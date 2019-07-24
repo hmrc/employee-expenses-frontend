@@ -24,7 +24,7 @@ class ExpensesEmployerPaidFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Int] =
     Form(
-      "value" -> int(
+      "value" -> intCurrency(
         "expensesEmployerPaid.error.required",
         "expensesEmployerPaid.error.wholeNumber",
         "expensesEmployerPaid.error.nonNumeric")
