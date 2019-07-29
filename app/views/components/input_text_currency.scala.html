@@ -19,7 +19,8 @@
         label: String,
         inputClass: Option[String] = None,
         hint: Option[String] = None,
-        labelClass: Option[String] = None
+        labelClass: Option[String] = None,
+        inputType: Option[String] = Some("text")
 )(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-group-error}">
@@ -36,7 +37,7 @@
         <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
         <input
         class="form-control govuk-input @inputClass"
-        type="text"
+        type="@{inputType}"
         id="@{field.id}"
         name="@{field.name}"
         value="@{field.value}"
