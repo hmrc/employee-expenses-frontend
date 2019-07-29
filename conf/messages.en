@@ -62,7 +62,7 @@ technicalDifficulties.message = Try again in a few minutes. We did not save your
 
 expensesEmployerPaid.title = What is the amount that your employer has paid back?
 expensesEmployerPaid.heading = What is the amount that your employer has paid back?
-expensesEmployerPaid.hint = The amount must not include pence, like 20 or 40
+expensesEmployerPaid.hint = This must be an amount of money, like 100. Round up the amount to the next whole pound, for example £12.34 rounds up to £13.
 expensesEmployerPaid.checkYourAnswersLabel = What is the amount that your employer has paid back?
 expensesEmployerPaid.error.nonNumeric = Enter a whole number using characters 0 to 9
 expensesEmployerPaid.error.required = Enter the amount that your employer has paid back
@@ -74,10 +74,8 @@ cannotClaim.heading = You cannot claim tax relief for these expenses
 cannotClaim.para1 =  You cannot claim these expenses because {0}.
 cannotClaim.link = your employer has already paid back the full amount that you can claim
 
-
 employerContribution.title = Has your employer paid back any of your expenses for uniform, work clothing or tools?
 employerContribution.heading = Has your employer paid back any of your expenses for uniform, work clothing or tools?
-
 employerContribution.list.heading = This is for:
 employerContribution.list.item1 = washing a uniform your employer gave to you
 employerContribution.list.item2 = repairing, replacing or cleaning any specialist or protective clothing you wear for your job
@@ -87,7 +85,6 @@ employerContribution.checkYourAnswersLabel = Has your employer paid back any of 
 employerContribution.error.required = Select yes if your employer paid back any of your expenses for uniform, work clothing or tools
 employerContribution.yesEmployerContribution = Yes, my employer has paid back part of these expenses
 employerContribution.noEmployerContribution = No, my employer has not paid back any of these expenses
-
 
 claimByAlternative.title = If you are claiming for more than one job you must use an online form or claim by post
 claimByAlternative.heading = If you are claiming for more than one job you must use an online form or claim by post
