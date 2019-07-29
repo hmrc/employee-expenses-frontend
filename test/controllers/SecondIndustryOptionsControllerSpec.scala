@@ -21,8 +21,9 @@ import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import forms.SecondIndustryOptionsFormProvider
 import generators.Generators
+import models.ExperimentalVariant.IndustryTypesVariant
 import models.SecondIndustryOptions.Council
-import models.{NormalMode, SecondIndustryOptions, UserAnswers}
+import models.{ExperimentalVariant, Mode, NormalMode, SecondIndustryOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
@@ -31,7 +32,7 @@ import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.PropertyChecks
-import pages.{ClaimAmount, SecondIndustryOptionsPage}
+import pages.{ClaimAmount, Page, SecondIndustryOptionsPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -120,6 +121,31 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
       }
 
       application.stop()
+    }
+
+    "use the alternative navigator under experimental Variant" in {
+      val mockNavigator = mock[Navigator]
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(mockNavigator))
+          .build()
+
+      val secondIndustryOptions: Gen[SecondIndustryOptions] = Gen.oneOf(SecondIndustryOptions.values)
+
+      forAll(secondIndustryOptions) {
+        secondIndustryOption =>
+          reset(mockNavigator)
+          when(mockNavigator.variant(any[ExperimentalVariant])).thenReturn(mockNavigator)
+          when(mockNavigator.nextPage(any[Page], any[Mode])).thenReturn((_:UserAnswers) => Call("GET", "/foo"))
+
+          val request = FakeRequest(POST, routes.SecondIndustryOptionsController.onSubmit(NormalMode, IndustryTypesVariant).url)
+            .withFormUrlEncodedBody(("value", secondIndustryOption.toString))
+          whenReady(route(application, request).value) { result =>
+            result.header.status mustEqual SEE_OTHER
+            verify(mockNavigator).variant(IndustryTypesVariant)
+          }
+      }
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {

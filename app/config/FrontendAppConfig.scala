@@ -61,6 +61,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val incomeSummary: String = configuration.get[String]("incomeSummary.url")
   lazy val personalDetails: String = configuration.get[String]("personalDetails.url")
 
+  lazy val optimizelyProjectId: String = configuration.get[String]("optimizely.projectId")
+
   lazy val updateAddressInfoUrl: String = configuration.get[String]("updateAddressInfo.url")
   lazy val updateEmployerInfoUrl: String = configuration.get[String]("updateEmployerInfo.url")
 

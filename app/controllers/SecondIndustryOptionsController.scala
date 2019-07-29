@@ -21,7 +21,7 @@ import com.google.inject.name.Named
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.SecondIndustryOptionsFormProvider
-import models.{Enumerable, Mode, SecondIndustryOptions}
+import models.{Enumerable, ExperimentalVariant, Mode, SecondIndustryOptions}
 import navigation.Navigator
 import pages.{ClaimAmount, SecondIndustryOptionsPage}
 import play.api.data.Form
@@ -58,7 +58,7 @@ class SecondIndustryOptionsController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode, experimentalVariant: ExperimentalVariant): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -76,7 +76,7 @@ class SecondIndustryOptionsController @Inject()(
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
 
-          } yield Redirect(navigator.nextPage(SecondIndustryOptionsPage, mode)(updatedAnswers))
+          } yield Redirect(navigator.variant(experimentalVariant).nextPage(SecondIndustryOptionsPage, mode)(updatedAnswers))
         }
       )
   }

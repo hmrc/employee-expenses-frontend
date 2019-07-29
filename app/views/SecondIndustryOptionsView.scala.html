@@ -28,7 +28,7 @@
     title = s"${errorPrefix(form)} ${messages("secondIndustryOptions.title")}"
     ) {
 
-    @formHelper(action = SecondIndustryOptionsController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = SecondIndustryOptionsController.onSubmit(mode, ExperimentalVariant.Standard), 'autoComplete -> "off") {
 
         @components.back_link()
 
