@@ -48,9 +48,11 @@ GET         /change-first-industry-type                          controllers.Fir
 POST        /change-first-industry-type                          controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
 GET         /second-industry-type                                controllers.SecondIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
-POST        /second-industry-type                                controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+POST        /second-industry-type/:variant                       controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = NormalMode,  variant : ExperimentalVariant)
+POST        /second-industry-type                                controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = NormalMode,  variant: ExperimentalVariant = ExperimentalVariant.Standard)
 GET         /change-second-industry-type                         controllers.SecondIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-second-industry-type                         controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+POST        /change-second-industry-type/:variant                controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = CheckMode, variant: ExperimentalVariant)
+POST        /change-second-industry-type                         controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = CheckMode, variant: ExperimentalVariant = ExperimentalVariant.Standard)
 
 GET         /third-industry-type                                 controllers.ThirdIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
 POST        /third-industry-type                                 controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = NormalMode)

@@ -44,10 +44,34 @@ import models.ThirdIndustryOptions._
 import models._
 import pages._
 import play.api.mvc.Call
+import ExperimentalVariant.IndustryTypesVariant
+
+class IndustryVariantGenericNavigator extends GenericNavigator {
+  override protected def routeMap = PartialFunction[Page, UserAnswers => Call] {
+    case SecondIndustryOptionsPage => secondIndustryOptions(NormalMode)
+  }.orElse(super.routeMap)
+
+  private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(SecondIndustryOptionsPage) match {
+      case Some(Construction)                      => ConstructionOccupationsController.onPageLoad(mode)
+      case Some(ManufacturingWarehousing)          => TypeOfManufacturingController.onPageLoad(mode)
+      case Some(Council)                           => EmployerContributionController.onPageLoad(mode)
+      case Some(Police)                            => SpecialConstableController.onPageLoad(mode)
+      case Some(ClothingTextiles)                  => ClothingController.onPageLoad(mode)
+      case Some(SecondIndustryOptions.NoneOfAbove) => ThirdIndustryOptionsController.onPageLoad(mode)
+      case _                                       => SessionExpiredController.onPageLoad()
+    }
+}
 
 class GenericNavigator @Inject()() extends Navigator {
 
-  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
+  override def variant(variant: ExperimentalVariant): Navigator = {variant  match {
+      case IndustryTypesVariant => new IndustryVariantGenericNavigator
+      case _ => super.variant(variant)
+    }
+  }
+
+  protected def routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case MultipleEmploymentsPage   => multipleEmployments(NormalMode)
     case FirstIndustryOptionsPage  => firstIndustryOptions(NormalMode)
     case SecondIndustryOptionsPage => secondIndustryOptions(NormalMode)

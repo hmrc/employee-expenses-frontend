@@ -52,6 +52,7 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
   val formProvider = new ConstructionOccupationsFormProvider()
   val form = formProvider()
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "ConstructionOccupations Controller" must {
 
@@ -97,8 +98,13 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+
           .build()
+
 
       val request =
         FakeRequest(POST, constructionOccupationsRoute)
