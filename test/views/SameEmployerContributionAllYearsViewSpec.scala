@@ -79,10 +79,10 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
           assertPageTitleEqualsMessage(doc, messages(s"$messageKeyPrefix.heading", contribution))
         }
 
-        "not display language toggles" in {
+        "display language toggles" in {
 
           val doc = asDocument(applyView(form))
-          assertNotRenderedById(doc, "langSelector")
+          assertRenderedById(doc, "langSelector")
         }
       }
     }
