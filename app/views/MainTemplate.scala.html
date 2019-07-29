@@ -82,6 +82,10 @@
         "mainClass" -> mainClass,
         "article" -> articleContent,
         "getHelpForm" -> helpForm,
+        "langSelector" -> {
+            Map("enUrl" -> appConfig.routeToSwitchLanguage("english"),
+                "cyUrl" -> appConfig.routeToSwitchLanguage("cymraeg"))
+        },
         "isWelsh" -> {
             messages.lang.code == "cy"
         },
