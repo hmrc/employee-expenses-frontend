@@ -20,7 +20,7 @@ import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.ThirdIndustryOptionsFormProvider
 import javax.inject.{Inject, Named}
-import models.ThirdIndustryOptions.{BanksBuildingSocieties, Education, NoneOfAbove}
+import models.ThirdIndustryOptions.{BanksBuildingSocieties, Leisure, Prisons}
 import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.{ClaimAmount, ThirdIndustryOptionsPage}
@@ -69,9 +69,14 @@ class ThirdIndustryOptionsController @Inject()(
           for {
             updatedAnswers <-
               value match {
-                case Education =>
-                  Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, Education)
-                                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))
+                case Leisure =>
+                  Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.leisure))
+                  )
+                case Prisons =>
+                  Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.prisons))
+                  )
                 case BanksBuildingSocieties =>
                   Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, BanksBuildingSocieties)
                                  .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))

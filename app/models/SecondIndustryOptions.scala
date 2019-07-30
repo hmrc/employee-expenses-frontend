@@ -22,15 +22,15 @@ sealed trait SecondIndustryOptions
 
 object SecondIndustryOptions extends Enumerable.Implicits {
 
-  case object ManufacturingWarehousing extends WithName("manufacturingWarehousing") with SecondIndustryOptions
-  case object Council extends WithName("council") with SecondIndustryOptions
-  case object Police extends WithName("police") with SecondIndustryOptions
-  case object ClothingTextiles extends WithName("clothingTextiles") with SecondIndustryOptions
   case object Construction extends WithName("construction") with SecondIndustryOptions
+  case object Council extends WithName("council") with SecondIndustryOptions
+  case object Education extends WithName("education") with SecondIndustryOptions
+  case object ManufacturingWarehousing extends WithName("manufacturingWarehousing") with SecondIndustryOptions
+  case object Police extends WithName("police") with SecondIndustryOptions
   case object NoneOfAbove extends WithName("none") with SecondIndustryOptions
 
   val values: Seq[SecondIndustryOptions] = Seq(
-    ClothingTextiles, Construction, Council, ManufacturingWarehousing, Police, NoneOfAbove
+    Construction, Council, Education, ManufacturingWarehousing, Police, NoneOfAbove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {
