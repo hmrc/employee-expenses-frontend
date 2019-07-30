@@ -177,12 +177,6 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
         case FireService => userAnswers
           .set(FourthIndustryOptionsPage, trade).success.value
           .set(ClaimAmount, ClaimAmounts.fireService).success.value
-        case Leisure => userAnswers
-          .set(FourthIndustryOptionsPage, trade).success.value
-          .set(ClaimAmount, ClaimAmounts.leisure).success.value
-        case Prisons => userAnswers
-          .set(FourthIndustryOptionsPage, trade).success.value
-          .set(ClaimAmount, ClaimAmounts.prisons).success.value
         case _ => userAnswers.set(FourthIndustryOptionsPage, trade).success.value
       }
 

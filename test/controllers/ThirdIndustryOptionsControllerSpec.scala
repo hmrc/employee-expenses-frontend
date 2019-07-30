@@ -181,9 +181,12 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
         case BanksBuildingSocieties => userAnswers
           .set(ThirdIndustryOptionsPage, choice).success.value
           .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-        case Education  => userAnswers
+        case Leisure  => userAnswers
           .set(ThirdIndustryOptionsPage, choice).success.value
-          .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+          .set(ClaimAmount, ClaimAmounts.leisure).success.value
+        case Prisons  => userAnswers
+          .set(ThirdIndustryOptionsPage, choice).success.value
+          .set(ClaimAmount, ClaimAmounts.prisons).success.value
         case _ => userAnswers
           .set(ThirdIndustryOptionsPage, choice).success.value
       }

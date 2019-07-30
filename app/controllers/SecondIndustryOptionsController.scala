@@ -21,14 +21,15 @@ import com.google.inject.name.Named
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.SecondIndustryOptionsFormProvider
+import models.SecondIndustryOptions.{Council, Education}
 import models.{Enumerable, ExperimentalVariant, Mode, SecondIndustryOptions}
 import navigation.Navigator
 import pages.{ClaimAmount, SecondIndustryOptionsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import repositories.SessionRepository
+import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.SecondIndustryOptionsView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -67,12 +68,11 @@ class SecondIndustryOptionsController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- if (value == SecondIndustryOptions.Council) {
-              Future.fromTry(request.userAnswers.set(SecondIndustryOptionsPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(SecondIndustryOptionsPage, value))
+            updatedAnswers <- value match {
+              case Education | Council =>
+                Future.fromTry(request.userAnswers.set(SecondIndustryOptionsPage, value)
+                  .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))
+              case _ => Future.fromTry(request.userAnswers.set(SecondIndustryOptionsPage, value))
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
 

@@ -91,22 +91,22 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
 
   def secondaryIndustryList: Option[AnswerRow] = {
     userAnswers.get(SecondIndustryOptionsPage) match {
-      case Some(ManufacturingWarehousing) => industryAnswerRow(s"secondIndustryOptions.${ManufacturingWarehousing.toString}")
-      case Some(Council) => industryAnswerRow(s"secondIndustryOptions.${Council.toString}")
-      case Some(Police) => industryAnswerRow(s"secondIndustryOptions.${Police.toString}")
-      case Some(ClothingTextiles) => industryAnswerRow(s"secondIndustryOptions.${ClothingTextiles.toString}")
       case Some(Construction) => industryAnswerRow(s"secondIndustryOptions.${Construction.toString}")
+      case Some(Council) => industryAnswerRow(s"secondIndustryOptions.${Council.toString}")
+      case Some(Education) => industryAnswerRow(s"secondIndustryOptions.${Education.toString}")
+      case Some(ManufacturingWarehousing) => industryAnswerRow(s"secondIndustryOptions.${ManufacturingWarehousing.toString}")
+      case Some(Police) => industryAnswerRow(s"secondIndustryOptions.${Police.toString}")
       case _ => thirdIndustryList
     }
   }
 
   def thirdIndustryList: Option[AnswerRow] = {
     userAnswers.get(ThirdIndustryOptionsPage) match {
-      case Some(Electrical) => industryAnswerRow(s"thirdIndustryOptions.${Electrical.toString}")
-      case Some(Education) => industryAnswerRow(s"thirdIndustryOptions.${Education.toString}")
       case Some(BanksBuildingSocieties) => industryAnswerRow(s"thirdIndustryOptions.${BanksBuildingSocieties.toString}")
+      case Some(Electrical) => industryAnswerRow(s"thirdIndustryOptions.${Electrical.toString}")
+      case Some(Leisure) => industryAnswerRow(s"thirdIndustryOptions.${Leisure.toString}")
+      case Some(Prisons) => industryAnswerRow(s"thirdIndustryOptions.${Prisons.toString}")
       case Some(Security) => industryAnswerRow(s"thirdIndustryOptions.${Security.toString}")
-      case Some(Printing) => industryAnswerRow(s"thirdIndustryOptions.${Printing.toString}")
       case _ => fourthIndustryList
     }
   }
@@ -114,10 +114,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def fourthIndustryList: Option[AnswerRow] = {
     userAnswers.get(FourthIndustryOptionsPage) match {
       case Some(Agriculture) => industryAnswerRow(s"fourthIndustryOptions.${Agriculture.toString}")
+      case Some(ClothingTextiles) => industryAnswerRow(s"fourthIndustryOptions.${ClothingTextiles.toString}")
       case Some(FireService) => industryAnswerRow(s"fourthIndustryOptions.${FireService.toString}")
       case Some(Heating) => industryAnswerRow(s"fourthIndustryOptions.${Heating.toString}")
-      case Some(Leisure) => industryAnswerRow(s"fourthIndustryOptions.${Leisure.toString}")
-      case Some(Prisons) => industryAnswerRow(s"fourthIndustryOptions.${Prisons.toString}")
+      case Some(Printing) => industryAnswerRow(s"fourthIndustryOptions.${Printing.toString}")
       case _ => fifthIndustryList
     }
   }

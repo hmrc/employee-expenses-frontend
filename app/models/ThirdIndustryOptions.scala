@@ -23,15 +23,15 @@ sealed trait ThirdIndustryOptions
 
 object ThirdIndustryOptions extends Enumerable.Implicits {
 
-  case object Electrical extends WithName("electrical") with ThirdIndustryOptions
-  case object Education extends WithName("education") with ThirdIndustryOptions
   case object BanksBuildingSocieties extends WithName("banksBuildingSocieties") with ThirdIndustryOptions
+  case object Electrical extends WithName("electrical") with ThirdIndustryOptions
+  case object Leisure extends WithName("leisure") with ThirdIndustryOptions
+  case object Prisons extends WithName("prisons") with ThirdIndustryOptions
   case object Security extends WithName("security") with ThirdIndustryOptions
-  case object Printing extends WithName("printing") with ThirdIndustryOptions
   case object NoneOfAbove extends WithName("none") with ThirdIndustryOptions
 
   val values: Seq[ThirdIndustryOptions] = Seq(
-    BanksBuildingSocieties, Education, Electrical, Printing, Security, NoneOfAbove
+    BanksBuildingSocieties, Electrical, Leisure, Prisons, Security, NoneOfAbove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {

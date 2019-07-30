@@ -22,7 +22,7 @@ import controllers.actions.UnAuthed
 import forms.SecondIndustryOptionsFormProvider
 import generators.Generators
 import models.ExperimentalVariant.IndustryTypesVariant
-import models.SecondIndustryOptions.Council
+import models.SecondIndustryOptions.{Council, Education}
 import models.{ExperimentalVariant, Mode, NormalMode, SecondIndustryOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -204,7 +204,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
     for (choice <- SecondIndustryOptions.values) {
 
       val userAnswers2 = choice match {
-        case Council => userAnswers
+        case Council | Education => userAnswers
           .set(SecondIndustryOptionsPage, choice).success.value
           .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
         case _ => userAnswers
