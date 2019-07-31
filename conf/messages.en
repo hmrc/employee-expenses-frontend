@@ -671,7 +671,7 @@ alreadyClaimingFRESameAmount.radioLabel = What do you want to do?
 alreadyClaimingFRESameAmount.noChange = Keep this amount in your tax code
 alreadyClaimingFRESameAmount.remove = Remove this amount from your tax code
 alreadyClaimingFRESameAmount.tableTaxYearHeading = Tax year
-alreadyClaimingFRESameAmount.tableAmountHeading = Personal allowance increase
+alreadyClaimingFRESameAmount.tableAmountHeading = Personal allowance increase {0}
 alreadyClaimingFRESameAmount.label = What do you want to do?
 
 alreadyClaimingFREDifferentAmounts.title = The amount you are claiming is different to the amount you are entitled to
