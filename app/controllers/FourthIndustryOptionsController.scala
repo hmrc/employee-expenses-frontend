@@ -27,8 +27,8 @@ import pages.{ClaimAmount, FourthIndustryOptionsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import repositories.SessionRepository
+import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.FourthIndustryOptionsView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -75,14 +75,6 @@ class FourthIndustryOptionsController @Inject()(
               case FireService =>
                 Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value)
                   .flatMap(_.set(ClaimAmount, ClaimAmounts.fireService))
-                )
-              case Leisure =>
-                Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value)
-                  .flatMap(_.set(ClaimAmount, ClaimAmounts.leisure))
-                )
-              case Prisons =>
-                Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value)
-                  .flatMap(_.set(ClaimAmount, ClaimAmounts.prisons))
                 )
               case _ => Future.fromTry(request.userAnswers.set(FourthIndustryOptionsPage, value))
             }

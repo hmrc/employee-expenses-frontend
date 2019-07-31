@@ -23,14 +23,14 @@ sealed trait FourthIndustryOptions
 object FourthIndustryOptions extends Enumerable.Implicits {
 
   case object Agriculture extends WithName("agriculture") with FourthIndustryOptions
+  case object ClothingTextiles extends WithName("clothingTextiles") with FourthIndustryOptions
   case object FireService extends WithName("fireService") with FourthIndustryOptions
   case object Heating extends WithName("heating") with FourthIndustryOptions
-  case object Leisure extends WithName("leisure") with FourthIndustryOptions
-  case object Prisons extends WithName("prisons") with FourthIndustryOptions
+  case object Printing extends WithName("printing") with FourthIndustryOptions
   case object NoneOfAbove extends WithName("none") with FourthIndustryOptions
 
   val values: Seq[FourthIndustryOptions] = Seq(
-    Agriculture, FireService, Heating, Leisure, Prisons, NoneOfAbove
+    Agriculture, ClothingTextiles, FireService, Heating, Printing, NoneOfAbove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {

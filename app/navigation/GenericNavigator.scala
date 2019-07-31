@@ -54,10 +54,10 @@ class IndustryVariantGenericNavigator extends GenericNavigator {
   private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(SecondIndustryOptionsPage) match {
       case Some(Construction)                      => ConstructionOccupationsController.onPageLoad(mode)
-      case Some(ManufacturingWarehousing)          => TypeOfManufacturingController.onPageLoad(mode)
       case Some(Council)                           => EmployerContributionController.onPageLoad(mode)
+      case Some(Education)                         => EmployerContributionController.onPageLoad(mode)
+      case Some(ManufacturingWarehousing)          => TypeOfManufacturingController.onPageLoad(mode)
       case Some(Police)                            => SpecialConstableController.onPageLoad(mode)
-      case Some(ClothingTextiles)                  => ClothingController.onPageLoad(mode)
       case Some(SecondIndustryOptions.NoneOfAbove) => ThirdIndustryOptionsController.onPageLoad(mode)
       case _                                       => SessionExpiredController.onPageLoad()
     }
@@ -120,20 +120,20 @@ class GenericNavigator @Inject()() extends Navigator {
   private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(SecondIndustryOptionsPage) match {
       case Some(Construction)                      => JoinerCarpenterController.onPageLoad(mode)
-      case Some(ManufacturingWarehousing)          => TypeOfManufacturingController.onPageLoad(mode)
       case Some(Council)                           => EmployerContributionController.onPageLoad(mode)
+      case Some(Education)                         => EmployerContributionController.onPageLoad(mode)
+      case Some(ManufacturingWarehousing)          => TypeOfManufacturingController.onPageLoad(mode)
       case Some(Police)                            => SpecialConstableController.onPageLoad(mode)
-      case Some(ClothingTextiles)                  => ClothingController.onPageLoad(mode)
       case Some(SecondIndustryOptions.NoneOfAbove) => ThirdIndustryOptionsController.onPageLoad(mode)
       case _                                       => SessionExpiredController.onPageLoad()
     }
 
   private def thirdIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(ThirdIndustryOptionsPage) match {
-      case Some(Education)                        => EmployerContributionController.onPageLoad(mode)
       case Some(BanksBuildingSocieties)           => EmployerContributionController.onPageLoad(mode)
       case Some(Electrical)                       => ElectricalController.onPageLoad(mode)
-      case Some(Printing)                         => PrintingOccupationList1Controller.onPageLoad(mode)
+      case Some(Leisure)                          => EmployerContributionController.onPageLoad(mode)
+      case Some(Prisons)                          => EmployerContributionController.onPageLoad(mode)
       case Some(Security)                         => SecurityGuardNHSController.onPageLoad(mode)
       case Some(ThirdIndustryOptions.NoneOfAbove) => FourthIndustryOptionsController.onPageLoad(mode)
       case _                                      => SessionExpiredController.onPageLoad()
@@ -142,10 +142,10 @@ class GenericNavigator @Inject()() extends Navigator {
   private def fourthIndustryOptions(mode:Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(FourthIndustryOptionsPage) match {
       case Some(Agriculture)                          => EmployerContributionController.onPageLoad(mode)
+      case Some(ClothingTextiles)                     => ClothingController.onPageLoad(mode)
       case Some(FireService)                          => EmployerContributionController.onPageLoad(mode)
       case Some(Heating)                              => HeatingOccupationListController.onPageLoad(mode)
-      case Some(Leisure)                              => EmployerContributionController.onPageLoad(mode)
-      case Some(Prisons)                              => EmployerContributionController.onPageLoad(mode)
+      case Some(Printing)                             => PrintingOccupationList1Controller.onPageLoad(mode)
       case Some(FourthIndustryOptions.NoneOfAbove)    => FifthIndustryOptionsController.onPageLoad(mode)
       case _                                          => SessionExpiredController.onPageLoad()
     }
