@@ -684,7 +684,7 @@ alreadyClaimingFREDifferentAmounts.error.required = Select if you want to keep, 
 alreadyClaimingFREDifferentAmounts.bodyText1 = You are eligible to claim £{0} based on your industry and occupation.
 alreadyClaimingFREDifferentAmounts.bodyText1.singleYearOnly = Based on the information HMRC holds, you are already claiming £{0} for the tax year {1}.
 alreadyClaimingFREDifferentAmounts.tableTaxYearHeading = Tax year
-alreadyClaimingFREDifferentAmounts.tableAmountHeading = Amount you are currently claiming
+alreadyClaimingFREDifferentAmounts.tableAmountHeading = Amount you are currently claiming {0}
 alreadyClaimingFREDifferentAmounts.label = What do you want to do?
 
 changeWhichTaxYears.title = Tell us which years you want to change the claim amount for
