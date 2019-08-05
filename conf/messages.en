@@ -64,6 +64,7 @@ expensesEmployerPaid.title = What is the amount that your employer has paid back
 expensesEmployerPaid.heading = What is the amount that your employer has paid back?
 expensesEmployerPaid.hint = This must be an amount of money, like 100. Round up the amount to the next whole pound, for example £12.34 rounds up to £13.
 expensesEmployerPaid.checkYourAnswersLabel = What is the amount that your employer has paid back?
+expensesEmployerPaid.checkYourAnswersLabel.hidden = Change the amount that your employer has paid back
 expensesEmployerPaid.error.nonNumeric = Enter a whole number using characters 0 to 9
 expensesEmployerPaid.error.required = Enter the amount that your employer has paid back
 expensesEmployerPaid.error.wholeNumber = Enter a whole number
@@ -82,6 +83,7 @@ employerContribution.list.item2 = repairing, replacing or cleaning any specialis
 employerContribution.list.item3 = repairing or replacing any small tools that you own, but use for your job
 employerContribution.hint = This does not include the initial cost of buying any items.
 employerContribution.checkYourAnswersLabel = Has your employer paid back any of your expenses for uniform, work clothing or tools?
+employerContribution.checkYourAnswersLabel.hidden = Change whether your employer paid back any of your expenses for uniform, work clothing or tools
 employerContribution.error.required = Select yes if your employer paid back any of your expenses for uniform, work clothing or tools
 employerContribution.yesEmployerContribution = Yes, my employer has paid back part of these expenses
 employerContribution.noEmployerContribution = No, my employer has not paid back any of these expenses
@@ -586,6 +588,7 @@ taxYearSelection.currentYearMinus2 = 6 April {0} to 5 April {1}
 taxYearSelection.currentYearMinus3 = 6 April {0} to 5 April {1}
 taxYearSelection.currentYearMinus4 = 6 April {0} to 5 April {1}
 taxYearSelection.checkYourAnswersLabel = Which tax years do you want to claim for?
+taxYearSelection.checkYourAnswersLabel.hidden = Change the tax years you want to claim for
 taxYearSelection.error.required = Select which tax years you want to claim for
 taxYearSelection.currentYearHint = You can claim for the current tax year even if it has not ended
 
@@ -630,12 +633,13 @@ yourAddress.title = Is this your address?
 yourAddress.heading = Is this your address?
 yourAddress.label = Is {0} your address?
 yourAddress.checkYourAnswersLabel = Is this your address? {0}
-yourAddress.checkYourAnswersLabel.hidden = Change is this your address
+yourAddress.checkYourAnswersLabel.hidden = Change whether your address is shown
 yourAddress.error.required = Select yes if this is your address
 
 removeFRECode.title = Which tax year did this expense end?
 removeFRECode.heading = Which tax year did this expense end?
 removeFRECode.checkYourAnswersLabel = Which tax year did this expense end?
+removeFRECode.checkYourAnswersLabel.hidden = Change which tax year this expense ended
 removeFRECode.error.required = Select the tax year that your expense ended
 
 phoneUs.title = You cannot make this change online
@@ -644,17 +648,19 @@ phoneUs.paragraph = You need to {0} to provide more information so that we can c
 phoneUs.paragraph.linkText = contact HMRC
 
 industryType.checkYourAnswersLabel = Which industry do you work in?
+industryType.checkYourAnswersLabel.hidden = Change the industry you work in
 
 sameEmployerContributionAllYears.title = Did your employer pay £{0} for each tax year you are claiming for?
 sameEmployerContributionAllYears.heading = Did your employer pay £{0} for each tax year you are claiming for?
 sameEmployerContributionAllYears.checkYourAnswersLabel = Did your employer pay £{0} for each tax year you are claiming for?
+sameEmployerContributionAllYears.checkYourAnswersLabel.hidden = Change the amount your employer paid for each tax year you are claiming for
 sameEmployerContributionAllYears.error.required = Select yes if your employer paid back the same amount in each tax year you are claiming for
 
 yourEmployer.title = Is your employer shown?
 yourEmployer.heading = Is your employer shown?
 yourEmployer.label = Is your employer shown?
 yourEmployer.checkYourAnswersLabel = Is your employer shown? {0}
-yourEmployer.checkYourAnswersLabel.hidden = Change is your employer shown
+yourEmployer.checkYourAnswersLabel.hidden = Change whether your employer is shown
 yourEmployer.error.required = Select yes if your employer is shown
 
 alreadyClaimingFRESameAmount.title = You are already claiming this
@@ -674,6 +680,7 @@ alreadyClaimingFRESameAmount.label = What do you want to do?
 alreadyClaimingFREDifferentAmounts.title = The amount you are claiming is different to the amount you are entitled to
 alreadyClaimingFREDifferentAmounts.heading = The amount you are claiming is different to the amount you are entitled to
 alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel = The amount you are claiming is different to the amount you are entitled to
+alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel.hidden = Change whether the amount you are claiming is different to the amount you are entitled to
 alreadyClaimingFREDifferentAmounts.change = Change the amount you are claiming
 alreadyClaimingFREDifferentAmounts.noChange = Keep this amount in your tax code
 alreadyClaimingFREDifferentAmounts.remove = Remove this amount from your tax code
@@ -689,6 +696,7 @@ changeWhichTaxYears.heading = Tell us which years you want to change the claim a
 changeWhichTaxYears.columnHeading1 = Tax year you want to claim for
 changeWhichTaxYears.columnHeading2 = Amount you were claiming
 changeWhichTaxYears.checkYourAnswersLabel = Tell us which years you want to change the claim amount for
+changeWhichTaxYears.checkYourAnswersLabel.hidden = Change the tax years you want to change the claim amount for
 changeWhichTaxYears.error.required = Select which years you want to change the claim amount for
 
 confirmation.title = Claim completed
