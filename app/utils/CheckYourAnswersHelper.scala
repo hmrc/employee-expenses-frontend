@@ -64,7 +64,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
         answerIsMessageKey = true,
         changeUrl = Some(AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode).url),
         editText = None,
-        hiddenText = None
+        hiddenText = Some("alreadyClaimingFRESameAmount.checkYourAnswersLabel.hidden")
       )
   }
 
