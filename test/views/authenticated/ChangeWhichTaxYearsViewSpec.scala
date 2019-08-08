@@ -49,13 +49,20 @@ class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelectio
 
     behave like pageWithBackLink(applyView(form))
 
-    "contains correct values for list" in {
+    "contains correct headings for table" in {
+      val doc = asDocument(applyView(form))
+
+      doc.getElementById("tax-year-heading").text mustBe messages(s"$messageKeyPrefix.columnHeading1")
+      doc.getElementById("amount-heading").text mustBe messages(s"$messageKeyPrefix.columnHeading2")
+    }
+
+    "contains correct column values for table" in {
       val doc = asDocument(applyView(form))
 
       taxYearsAndAmounts.map{
         options =>
-          doc.getElementById(s"tax-year-${options._1.value}").text contains s"${options._1.message.html}"
-          doc.getElementById(s"fre-amount-${options._1.value}").text contains s"£${options._2}"
+          doc.getElementById(s"tax-year-${options._1.value}").text mustBe s"${options._1.message.html}"
+          doc.getElementById(s"fre-amount-${options._1.value}").text mustBe s"£${options._2}"
       }
     }
 
@@ -82,7 +89,7 @@ class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelectio
           (option, i) <- taxYearsAndAmounts.zipWithIndex
         } yield {
           val id = form("value")(s"[$i]").id
-          doc.select(s"label[for=$id]").text contains option._1.message.html.toString
+          doc.select(s"label[for=$id]").text mustEqual option._1.message.html.toString
         }
       }
 
@@ -134,7 +141,7 @@ class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelectio
 
       "show an error in the value field's label" in {
         val doc = asDocument(applyView(form.withError(FormError("value", "error.invalid"))))
-        val errorSpan = doc.getElementsByClass("error-message").first
+        val errorSpan = doc.getElementsByClass("error-notification").first
         errorSpan.text mustBe messages("error.invalid")
       }
     }
