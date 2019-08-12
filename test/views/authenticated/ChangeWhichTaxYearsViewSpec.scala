@@ -50,7 +50,7 @@ class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelectio
     behave like pageWithBackLink(applyView(form))
 
 
-    "contains correct column values for table" in {
+    "contains correct values for list" in {
       val doc = asDocument(applyView(form))
 
       taxYearsAndAmounts.map{
