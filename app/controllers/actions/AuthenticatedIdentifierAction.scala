@@ -21,11 +21,10 @@ import config.FrontendAppConfig
 import controllers.routes._
 import models.requests.IdentifierRequest
 import play.api.Logger
-import play.api.libs.json.Reads
 import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.OptionalRetrieval
+import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
@@ -42,18 +41,19 @@ class AuthenticatedIdentifierActionImpl @Inject()(
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
     authorised(AuthProviders(AuthProvider.Verify) or (AffinityGroup.Individual and ConfidenceLevel.L200))
-      .retrieve(OptionalRetrieval("nino", Reads.StringReads) and OptionalRetrieval("internalId", Reads.StringReads)) {
-        x =>
-          val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
-          val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
-
+      .retrieve(v2.Retrievals.nino and v2.Retrievals.internalId) {
+        case Some(nino) ~ Some(internalId) =>
           block(IdentifierRequest(request, Authed(internalId), Some(nino)))
+        case _ =>
+          throw new UnauthorizedException("Unauthorized exception: missing nino or internal id")
       } recover {
       case _: UnauthorizedException | _: NoActiveSession =>
         unauthorised(hc.sessionId.map(_.value))
       case _: InsufficientConfidenceLevel =>
-        insufficientConfidence(request.getQueryString("key"))
-      case _: InsufficientEnrolments | _: UnsupportedAuthProvider | _: UnsupportedAffinityGroup | _: UnsupportedCredentialRole =>
+        println(s"\n\n\n ${request.getQueryString("key")} \n\n")
+        println(s"\n\n\n ${hc.sessionId.map(_.value)} \n\n")
+        insufficientConfidence(request.getQueryString("key").getOrElse(""))
+      case _: AuthorisationException =>
         Redirect(UnauthorisedController.onPageLoad())
       case e =>
         Logger.error(s"[AuthenticatedIdentifierAction][authorised] failed $e", e)
@@ -70,15 +70,10 @@ class AuthenticatedIdentifierActionImpl @Inject()(
     }
   }
 
-  def insufficientConfidence(queryString: Option[String]): Result = {
-    queryString match {
-      case Some(key) =>
-        Redirect(s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200" +
-          s"&completionURL=${config.authorisedCallback + key}" +
-          s"&failureURL=${config.unauthorisedCallback}")
-      case _ =>
-        Redirect(UnauthorisedController.onPageLoad())
-    }
+  def insufficientConfidence(queryString: String): Result = {
+    Redirect(s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200" +
+      s"&completionURL=${config.authorisedCallback + queryString}" +
+      s"&failureURL=${config.unauthorisedCallback}")
   }
 
 }
