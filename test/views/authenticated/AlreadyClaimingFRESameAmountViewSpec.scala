@@ -57,21 +57,17 @@ class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[Already
 
     behave like optionsPage(form, applyView, AlreadyClaimingFRESameAmount.options)
 
-    "contain table and correct headings for multiple years" in {
+    "contain list for multiple years" in {
       val doc = asDocument(applyView(form))
-
-      doc.getElementById("tax-year-heading").text mustBe messages("alreadyClaimingFRESameAmount.tableTaxYearHeading")
-      doc.getElementById("amount-heading").text mustBe messages("alreadyClaimingFRESameAmount.tableAmountHeading")
+      doc.getElementsByClass("govuk-check-your-answers").size == 1
     }
 
-    "not contain table for  for single year" in {
+    "not contain list for single year" in {
       val doc = asDocument(applyViewSingleYear(form))
-
-      doc.getElementById("tax-year-heading") mustBe null
-      doc.getElementById("amount-heading") mustBe null
+      doc.getElementsByClass("govuk-check-your-answers").size == 0
     }
 
-    "contains correct column values for table" in {
+    "contains correct values for list" in {
       val doc = asDocument(applyView(form))
 
       doc.getElementById(s"tax-year-${TaiTaxYear().year}").text mustBe messages(
@@ -80,7 +76,7 @@ class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[Already
         (TaiTaxYear().year + 1).toString
       )
 
-      doc.getElementById(s"fre-amount-${TaiTaxYear().year}").text mustBe "£100"
+      doc.getElementById(s"fre-amount-${TaiTaxYear().year}").text mustBe messages("alreadyClaimingFRESameAmount.tableAmountHeading", "£100")
     }
 
   }

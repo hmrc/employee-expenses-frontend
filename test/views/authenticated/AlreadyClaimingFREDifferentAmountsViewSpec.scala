@@ -73,13 +73,6 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
       assertContainsText(doc, messages("alreadyClaimingFREDifferentAmounts.bodyText1", fullUserAnswers.get(ClaimAmountAndAnyDeductions).get))
     }
 
-    "contains correct headings for table" in {
-      val doc = asDocument(applyViewMultipleYears(form))
-
-      doc.getElementById("tax-year-heading").text mustBe messages("alreadyClaimingFREDifferentAmounts.tableTaxYearHeading")
-      doc.getElementById("amount-heading").text mustBe messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading")
-    }
-
     "contains correct column values for table" in {
       val doc = asDocument(applyViewMultipleYears(form))
 
@@ -89,7 +82,7 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
         (TaiTaxYear().year + 1).toString
       )
 
-      doc.getElementById(s"fre-amount-${TaiTaxYear().year}").text mustBe "£100"
+      doc.getElementById(s"fre-amount-${TaiTaxYear().year}").text mustBe messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading","£100")
     }
   }
 

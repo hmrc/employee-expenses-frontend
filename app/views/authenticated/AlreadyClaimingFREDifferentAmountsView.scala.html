@@ -60,11 +60,22 @@
             }
 
             @if(freAmounts.length > 1) {
-                @components.numeric_table(
-                    freAmounts,
-                    messages("alreadyClaimingFREDifferentAmounts.tableTaxYearHeading"),
-                    messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading")
-                )
+                <ul role="list" class="govuk-check-your-answers section">
+                            @for(freAmounts <- freAmounts) {
+                                <li>
+                                <div class="cya-question" id="tax-year-@freAmounts.taxYear.year">
+                                @messages(
+                                    s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(freAmounts.taxYear.year)}",
+                                    freAmounts.taxYear.year.toString,
+                                    (freAmounts.taxYear.year + 1).toString
+                                )
+                                </div>
+                                <div class="cya-answer" id="fre-amount-@freAmounts.taxYear.year">
+                                    @messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading", {if(freAmounts.freAmount.isDefined) "£" + freAmounts.freAmount.get.grossAmount else "£" + 0})
+                                </div>
+                                </li>
+                            }
+                </ul>
             }
 
             @components.input_radio(

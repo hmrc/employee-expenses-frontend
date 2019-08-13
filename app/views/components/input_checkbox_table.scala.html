@@ -27,84 +27,47 @@
 )(implicit
         messages: Messages
 )
-
-@hintBlock = {
-@hint.map { hint =>
-    <span class="form-hint">
-        @hint
-    </span>
-}
-}
-
-@errorBlock = {
-@field.errors.map { error =>
-    <span class="error-notification" id="error-message-@field.id-input">
-    @messages(error.message, error.args: _*)
-    </span>
-}
-}
-
-@divClass = @{
-    if(field.hasErrors) "form-group form-field--error" else "form-group"
-}
-
-@legendBlock = {
-    @if(headingIsLegend) {
-        <legend class="@lgndClass"><h1 class="heading-xlarge">@legend</h1></legend>
-    } else {
-        <legend class="@lgndClass">@legend</legend>
-    }
-}
-
-@lgndClass = @{
-    legendClass match {
-        case Some(str) => s"bold-small $str"
-        case None => "bold-small"
-    }
-}
-
-<div class="@divClass">
-    <fieldset id="@{field.id}">
-        @legendBlock
-        @hintBlock
-        @errorBlock
-
-        <table id="change-table">
-            <thead>
-                <tr>
-                    <th id="tax-year-heading" scope="col">@columnHeading1</th>
-                    <th id="amount-heading" class="numeric" scope="col">@columnHeading2</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for(((RadioCheckboxOption(id, value, messageKey), amount), index) <- inputs.zipWithIndex) {
-                    @defining(
-                        inputs.indices.flatMap { i =>
-                            field(s"[$i]").value
-                        }
-                    ) { answers =>
-                        <tr>
-                            <th id="tax-year-@{value}" scope="row">
-                                <div class="multiple-choice">
-                                    <input
-                                        id="@field(s"[$index]").id"
-                                        type="checkbox"
-                                        name="@field(s"[$index]").name"
-                                        value="@value"
-                                        @if(answers.contains(value)){checked="checked"}
-                                    />
-                                    <label for="@field(s"[$index]").id">
-                                        @inputs(index)._1.message.html
-                                    </label>
-                                </div>
-                            </th>
-                            <td id="fre-amount-@{value}" class="numeric">
-                                £@inputs(index)._2
-                            </td>
-                        </tr>
-                    }
+<div class="form-group @if(field.hasErrors){form-group-error}">
+        <fieldset id="@{field.id}">
+            <legend>
+                @if(headingIsLegend){
+                    <h1 class="heading-xlarge">@legend</h1>
+                } else {
+                    <span @if(legendClass.nonEmpty){class="@{legendClass.get}"}>@legend</span>
                 }
-            </tbody>
-        </table>
-    </fieldset>
+
+                @if(hint.nonEmpty){
+                    <span class="form-hint">@{hint.get}</span>
+                }
+
+                @field.errors.map { error =>
+                    <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
+                }
+            </legend>
+            @for(((RadioCheckboxOption(id, value, messageKey), amount), index) <- inputs.zipWithIndex) {
+                @defining(
+                    inputs.indices.flatMap { i =>
+                        field(s"[$i]").value
+                    }
+                ) { answers =>
+                <div class="multiple-choice">
+                            <input
+                                    id="@field(s"[$index]").id"
+                                    type="checkbox"
+                                    name="@field(s"[$index]").name"
+                                    value="@value"
+                                    @if(answers.contains(value)) {
+                                        checked="checked"
+                                    }
+                            />
+                            <label for="@field(s"[$index]").id" class="bold" id="tax-year-@{value}">
+                                @inputs(index)._1.message.html
+                                <div class="form-hint" id="fre-amount-@{value}">
+                                    @messages("changeWhichTaxYears.columnHeading2") £@inputs(index)._2
+                                </div>
+                            </label>
+                </div>
+                }
+            }
+        </fieldset>
 </div>
