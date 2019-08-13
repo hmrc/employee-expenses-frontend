@@ -50,9 +50,10 @@ class AuthenticatedIdentifierActionImpl @Inject()(
       case _: UnauthorizedException | _: NoActiveSession =>
         unauthorised(hc.sessionId.map(_.value))
       case _: InsufficientConfidenceLevel =>
-        println(s"\n\n\n ${request.getQueryString("key")} \n\n")
-        println(s"\n\n\n ${hc.sessionId.map(_.value)} \n\n")
-        insufficientConfidence(request.getQueryString("key").getOrElse(""))
+        hc.sessionId.map(_.value) match {
+          case Some(id) => insufficientConfidence(request.getQueryString("key").getOrElse(id))
+          case _ => Redirect(SessionExpiredController.onPageLoad())
+        }
       case _: AuthorisationException =>
         Redirect(UnauthorisedController.onPageLoad())
       case e =>

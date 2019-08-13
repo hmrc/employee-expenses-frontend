@@ -19,6 +19,7 @@ package controllers.authenticated
 import com.google.inject.{Inject, Singleton}
 import controllers.actions._
 import controllers.authenticated.routes._
+import controllers.routes._
 import models.{NormalMode, UserAnswers}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -35,28 +36,26 @@ class AuthRedirectController @Inject()(
 
   def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify.async {
     implicit request =>
+      val id: Authed = request.identifier.asInstanceOf[Authed]
 
-      val authed: Authed = request.identifier.asInstanceOf[Authed]
-
-      sessionRepository.get(UnAuthed(key)).flatMap{
-        unua =>
-          println(s"\n\n $unua \n\n")
-          sessionRepository.get(authed).flatMap{
-            authua =>
-              println(s"\n\n $authua \n\n")
-              (unua, authua) match {
-                case (Some(ua), None)  =>
-                  for {
-                    _ <- sessionRepository.set(request.identifier, UserAnswers(authed.internalId, ua.data))
-                    _ <- sessionRepository.remove(UnAuthed(key))
-                  } yield {
-                    Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
-                  }
-                case _  =>
-                  Future.successful(Redirect(TaxYearSelectionController.onPageLoad(NormalMode)))
-              }
-          }
+      sessionRepository.get(UnAuthed(key)).flatMap {
+        unAuthUA =>
+        sessionRepository.get(id).flatMap {
+          authUA =>
+            (unAuthUA, authUA) match {
+              case (Some(unAuthUA), _) =>
+                for {
+                  _ <- sessionRepository.set(request.identifier, UserAnswers(id.internalId, unAuthUA.data))
+                  _ <- sessionRepository.remove(UnAuthed(key))
+                } yield {
+                  Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
+                }
+              case (_, Some(authUA)) =>
+                Future.successful(Redirect(TaxYearSelectionController.onPageLoad(NormalMode)))
+              case _ =>
+                Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+            }
+        }
       }
   }
-
 }
