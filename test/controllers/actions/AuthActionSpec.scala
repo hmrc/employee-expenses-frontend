@@ -28,6 +28,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
+import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys, UnauthorizedException}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -160,15 +161,14 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
     "session Id present: the user doesn't have sufficient confidence level" must {
 
-      "redirect the user to IV" in {
-
+      "redirect the user to I.V." in {
         val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
         val authAction = new AuthenticatedIdentifierActionImpl(new FakeFailingAuthConnector(new InsufficientConfidenceLevel), frontendAppConfig, bodyParsers)
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(FakeRequest("", "?key=key"))
+        val result = controller.onPageLoad()(FakeRequest("", "?key=id").withSession(SessionKeys.sessionId -> "id"))
 
         status(result) mustBe SEE_OTHER
 
@@ -176,7 +176,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "http://localhost:9948/mdtp/uplift?" +
             "origin=EE&" +
             "confidenceLevel=200&" +
-            "completionURL=http://localhost:9334/employee-expenses/session-key?key=key&" +
+            "completionURL=http://localhost:9334/employee-expenses/session-key?key=id&" +
             "failureURL=http://localhost:9334/employee-expenses/unauthorised"
         )
 
@@ -186,7 +186,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
     "session Id absent: the user doesn't have sufficient confidence level" must {
 
-      "redirect the user to unauthenticated" in {
+      "redirect the user to session expired" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
@@ -198,7 +198,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
         status(result) mustBe SEE_OTHER
 
-        redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad().url)
+        redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
 
         application.stop()
       }

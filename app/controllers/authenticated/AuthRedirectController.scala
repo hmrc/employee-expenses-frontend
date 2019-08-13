@@ -34,20 +34,28 @@ class AuthRedirectController @Inject()(
                                         sessionRepository: SessionRepository
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController {
 
-  def onPageLoad(key: String, journeyId: Option[String]): Action[AnyContent] = identify.async {
+  def onPageLoad(key: String): Action[AnyContent] = identify.async {
     implicit request =>
       val id: Authed = request.identifier.asInstanceOf[Authed]
 
       sessionRepository.get(UnAuthed(key)).flatMap {
-        case Some(ua) =>
-          for {
-            _ <- sessionRepository.set(request.identifier, UserAnswers(id.internalId, ua.data))
-            _ <- sessionRepository.remove(UnAuthed(key))
-          } yield {
-            Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
-          }
-        case _ =>
-          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+        unAuthUA =>
+        sessionRepository.get(id).flatMap {
+          authUA =>
+            (unAuthUA, authUA) match {
+              case (Some(unAuthUA), None) =>
+                for {
+                  _ <- sessionRepository.set(request.identifier, UserAnswers(id.internalId, unAuthUA.data))
+                  _ <- sessionRepository.remove(UnAuthed(key))
+                } yield {
+                  Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
+                }
+              case (_, Some(authUA)) =>
+                Future.successful(Redirect(TaxYearSelectionController.onPageLoad(NormalMode)))
+              case _ =>
+                Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+            }
+        }
       }
   }
 }
