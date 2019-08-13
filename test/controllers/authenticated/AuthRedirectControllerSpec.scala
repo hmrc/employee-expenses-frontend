@@ -50,14 +50,15 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
       val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
 
       when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
-      when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(userAnswers))
+      when(mockSessionRepository.get(eqTo(UnAuthed(userAnswersId)))) thenReturn Future.successful(Some(userAnswers))
+      when(mockSessionRepository.get(eqTo(Authed(userAnswersId)))) thenReturn Future.successful(None)
       when(mockSessionRepository.remove(any())) thenReturn Future.successful(Some(userAnswers))
 
       val application = applicationBuilder(Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
+      val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId).url), UnAuthed(userAnswersId), Some(fakeNino))
 
       val result = route(application, request).value
 
@@ -67,12 +68,31 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
 
       whenReady(result) {
         _ =>
-          verify(mockSessionRepository, times(1)).remove(UnAuthed(userAnswersId))
           verify(mockSessionRepository, times(1)).set(eqTo(Authed(userAnswersId)), any())
+          verify(mockSessionRepository, times(1)).remove(UnAuthed(userAnswersId))
           assert(argCaptor.getValue.data == userAnswers.data)
       }
 
       application.stop()
+    }
+
+    "redirect to TaxYearSelectionController when already authed" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.get(any())) thenReturn Future.successful(Some(minimumUserAnswers))
+
+      val application = applicationBuilder(Some(minimumUserAnswers))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
+
+      val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId).url), Authed(userAnswersId), Some(fakeNino))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual 303
+
+      redirectLocation(result).get mustBe TaxYearSelectionController.onPageLoad(NormalMode).url
     }
 
     "redirect to SessionExpiredController on sessionRepository.get failure" in {
@@ -85,7 +105,7 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId, None).url), Authed(userAnswersId), Some(fakeNino))
+      val request = IdentifierRequest(FakeRequest(GET, AuthRedirectController.onPageLoad(userAnswersId).url), Authed(userAnswersId), Some(fakeNino))
 
       val result = route(application, request).value
 
