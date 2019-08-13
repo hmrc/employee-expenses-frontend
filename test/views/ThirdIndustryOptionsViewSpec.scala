@@ -49,6 +49,8 @@ class ThirdIndustryOptionsViewSpec extends OptionsViewBehaviours[ThirdIndustryOp
 
     behave like optionsPage(form, applyView, ThirdIndustryOptions.options)
 
+    behave like pageWithBodyText(applyView(form), "thirdIndustryOptions.heading")
+
     "must have the correct text of 'or' between last 2 radioButtons" in {
 
       val doc = asDocument(applyView(form))

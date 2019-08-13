@@ -34,11 +34,10 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("fourthIndustryOptions.heading")
-
         @components.input_radio_or(
             field = form("value"),
-            legend = messages("fourthIndustryOptions.listText"),
+            legend = messages("fourthIndustryOptions.heading"),
+            headingIsLegend = true,
             legendClass = Some("visually-hidden"),
             inputs = FourthIndustryOptions.options
         )

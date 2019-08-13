@@ -101,7 +101,6 @@ multipleEmployments.moreThanOneJob = More than one job
 
 firstIndustryOptions.title = Select your industry (page 1 of 5)
 firstIndustryOptions.heading = Select your industry (page 1 of 5)
-firstIndustryOptions.listText = Select your industry.
 firstIndustryOptions.healthcare = Healthcare
 firstIndustryOptions.foodAndCatering = Food and catering
 firstIndustryOptions.retail = Retail
@@ -113,7 +112,6 @@ firstIndustryOptions.error.required = Select the industry you work in
 
 secondIndustryOptions.title = Select your industry (page 2 of 5)
 secondIndustryOptions.heading = Select your industry (page 2 of 5)
-secondIndustryOptions.listText = Select your industry.
 secondIndustryOptions.construction = Construction (including building and building materials)
 secondIndustryOptions.council = Council
 secondIndustryOptions.education = Education
@@ -125,7 +123,6 @@ secondIndustryOptions.error.required = Select the industry you work in
 
 thirdIndustryOptions.title = Select your industry (page 3 of 5)
 thirdIndustryOptions.heading = Select your industry (page 3 of 5)
-thirdIndustryOptions.listText = Select your industry.
 thirdIndustryOptions.banksBuildingSocieties = Banks and building societies
 thirdIndustryOptions.electrical = Electrical
 thirdIndustryOptions.leisure = Leisure
@@ -137,7 +134,6 @@ thirdIndustryOptions.error.required = Select the industry you work in
 
 fourthIndustryOptions.title = Select your industry (page 4 of 5)
 fourthIndustryOptions.heading = Select your industry (page 4 of 5)
-fourthIndustryOptions.listText = Select your industry.
 fourthIndustryOptions.agriculture = Agriculture
 fourthIndustryOptions.clothingTextiles = Clothing and textiles (including leather)
 fourthIndustryOptions.fireService = Fire service
@@ -149,7 +145,6 @@ fourthIndustryOptions.error.required = Select the industry you work in
 
 fifthIndustryOptions.title = Select your industry (page 5 of 5)
 fifthIndustryOptions.heading = Select your industry (page 5 of 5)
-fifthIndustryOptions.listText = Select your industry.
 fifthIndustryOptions.armedForces = Armed Forces
 fifthIndustryOptions.docksWaterways = Docks and inland waterways
 fifthIndustryOptions.forestry = Forestry
@@ -175,7 +170,6 @@ claimAmount.checkYourAnswersLabel = Personal allowance increase
 
 typeOfEngineering.title = Select your engineering industry
 typeOfEngineering.heading = Select your engineering industry
-typeOfEngineering.listText = Select your engineering industry.
 typeOfEngineering.constructionalEngineering = Constructional engineering including buildings, shipyards, bridges and roads
 typeOfEngineering.tradesRelatingToEngineering = Trades relating to engineering
 typeOfEngineering.factoryOrWorkshopEngineering = Factory or workshop engineering
@@ -312,7 +306,6 @@ factoryEngineeringList2.occupation7 = wire drawers in the wire drawing industry
 
 whichRailwayTrade.title = Select your railway occupation
 whichRailwayTrade.heading = Select your railway occupation
-whichRailwayTrade.listText = Select your railway occupation
 whichRailwayTrade.vehiclePainters = Railway vehicle painters
 whichRailwayTrade.vehicleRepairersWagonLifters = Railway vehicle repairers or railway wagon lifters
 whichRailwayTrade.noneOfTheAbove = Occupation not listed
