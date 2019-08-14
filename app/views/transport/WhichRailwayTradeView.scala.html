@@ -34,11 +34,10 @@
 
         @components.error_summary(form.errors)
 
-        @components.heading("whichRailwayTrade.heading")
-
         @components.input_radio_or(
             field = form("value"),
-            legend = messages("whichRailwayTrade.listText"),
+            legend = messages("whichRailwayTrade.heading"),
+            headingIsLegend = true,
             legendClass = Some("visually-hidden"),
             inputs = WhichRailwayTrade.options
         )

@@ -49,7 +49,7 @@ class FifthIndustryOptionsViewSpec extends OptionsViewBehaviours[FifthIndustryOp
 
     behave like optionsPage(form, applyView, FifthIndustryOptions.options)
 
-    behave like pageWithBodyText(applyView(form), "fifthIndustryOptions.listText")
+    behave like pageWithBodyText(applyView(form), "fifthIndustryOptions.heading")
 
     "must have the correct text of 'or' between last 2 radioButtons" in {
 

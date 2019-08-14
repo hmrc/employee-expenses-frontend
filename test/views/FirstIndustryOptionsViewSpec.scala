@@ -47,7 +47,7 @@ class FirstIndustryOptionsViewSpec extends OptionsViewBehaviours[FirstIndustryOp
 
     behave like optionsPage(form, applyView, FirstIndustryOptions.options)
 
-    behave like pageWithBodyText(applyView(form), "firstIndustryOptions.listText")
+    behave like pageWithBodyText(applyView(form), "firstIndustryOptions.heading")
 
     "must have the correct text of 'or' between last 2 radioButtons" in {
 
