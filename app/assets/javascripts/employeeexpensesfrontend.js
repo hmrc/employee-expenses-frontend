@@ -158,3 +158,5 @@ $(document).ready(function() {
               e.preventDefault();
       });
   }
+
+$.timeoutDialog({timeout: 900, countdown: 60, keep_alive_url: window.location.href, logout_url: '/employee-expenses'});
