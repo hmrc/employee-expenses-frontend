@@ -1,63 +1,7 @@
-//See https://github.com/alphagov/govuk_elements/issues/221
+@import 'shame/_progressive-disclosure';
+@import 'shame/_cya';
+@import 'shame/_hmrc-currency';
 
-// Show the summary arrow in Firefox
-// The current Firefox implementation uses display: list-item to show the arrow marker.
-// We want to use display: inline-block to shrink-wrap the focus outline around the text.
-// This will turn off inline-block for Firefox only.
-// @-moz-document is going away: https://bugzilla.mozilla.org/show_bug.cgi?id=1035091 .
-// Hopefully they’ll fix <summary> first but if not it’ll fall back to no arrow:
-// https://bugzilla.mozilla.org/show_bug.cgi?id=1270163
-// If Mozilla add display: revert and remove list-item from summary then this will fall through.
-@-moz-document regexp('.*') {
-  details summary:not([tabindex]) {
-    display: list-item;
-    display: revert;
-  }
-}
-
-// =========================
-// CYA modifier to move edit links below question/answer on small screens
-// prevents text overflow with longer edit link copy
-// =========================
-.govuk-check-your-answers .cya-change {
-  text-align: left;
-  position: static;
-  padding-bottom: .47368em;
-}
-@media (min-width: 769px) {
-  .govuk-check-your-answers .cya-change {
-    text-align: right;
-  }
-}
-
-// =========================
-// Currency input
-// =========================
-.hmrc-currency-input__wrapper {
-  position: relative;
-}
-.hmrc-currency-input__unit {
-  position: absolute;
-  bottom: 2px;
-  left: 2px;
-  font-weight: bold;
-  top: 2px;
-  width: 20px;
-  width: 2rem;
-  text-align: center;
-  background: #dee0e2;
-  border-right: 2px solid;
-  font-size: 19px;
-}
-.hmrc-currency-input__unit:after {
-  content: "";
-  height: 100%;
-  display: inline-block;
-  vertical-align: middle;
-}
-.hmrc-currency-input__wrapper .govuk-input {
-  padding-left: 30px;
-  padding-left: 3rem;
-  outline-offset: 0;
-  margin: 0;
-}
+// WCAG 2.1 updates
+@import 'shame/_palette';
+@import 'shame/_focus';

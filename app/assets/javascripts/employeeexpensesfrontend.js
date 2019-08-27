@@ -158,3 +158,17 @@ $(document).ready(function() {
               e.preventDefault();
       });
   }
+
+  // =====================================================
+  // Polyfill for focus-within on HMRC currency input
+  // =====================================================
+  var currencyInputs = $('.hmrc-currency-input__wrapper');
+  currencyInputs.each(function(){
+    var _this = $(this);
+    _this.find("input").on("focus", function(){
+        _this.addClass('hmrc-currency-input__wrapper--has-focus');
+    });
+    _this.find("input").on("blur", function(){
+        _this.removeClass('hmrc-currency-input__wrapper--has-focus');
+    });
+  })
