@@ -23,9 +23,9 @@ frontendAppConfig: FrontendAppConfig
 
 @()(implicit request: Request[_], messages: Messages)
 
-    @printAndPostLink = {<a href=@frontendAppConfig.p87ClaimByPostUrl id="">@messages("unauthorised.printAndPost")</a>}
-    @helplineLink = {<a href=@frontendAppConfig.contactHMRC id="">@messages("uanuthorised.helpline")</a>}
-    @claimOnlineLink = {<a href=@frontendAppConfig.claimOnlineUrl id="">@messages("unauthorised.confirmIdentity")</a>}
+    @printAndPostLink = {<a href=@frontendAppConfig.p87ClaimByPostUrl >@messages("unauthorised.printAndPost")</a>}
+    @helplineLink = {<a href=@frontendAppConfig.contactHMRC >@messages("unauthorised.helpline")</a>}
+    @claimOnlineLink = {<a href=@frontendAppConfig.claimOnlineUrl >@messages("unauthorised.confirmIdentity")</a>}
 
     @main_template(
         title = messages("unauthorised.title")

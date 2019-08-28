@@ -33,9 +33,9 @@ class UnauthorisedViewSpec extends ViewBehaviours {
 
     behave like normalPage(applyView, "unauthorised")
 
-    val printAndPostLink = Html(s"""<a href="${frontendAppConfig.p87ClaimByPostUrl}">${messages("unauthorised.printAndPost")}</a>""")
-    val helplineLink = Html(s"""<a href="${frontendAppConfig.contactHMRC}">${messages("unauthorised.helpline")}</a>""")
-    val claimOnlineLink = Html(s"""<a href="${frontendAppConfig.claimOnlineUrl}">${messages("unauthorised.claimOnline")}</a>""")
+    val printAndPostLink: Html = Html(s"""<a href="${frontendAppConfig.p87ClaimByPostUrl}">${messages("unauthorised.printAndPost")}</a>""")
+    val helplineLink: Html = Html(s"""<a href="${frontendAppConfig.contactHMRC}">${messages("unauthorised.helpline")}</a>""")
+    val claimOnlineLink: Html = Html(s"""<a href="${frontendAppConfig.claimOnlineUrl}">${messages("unauthorised.confirmIdentity")}</a>""")
 
     behave like pageWithBodyText(applyView,
       "unauthorised.cannotContinue",

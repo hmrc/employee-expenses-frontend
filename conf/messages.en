@@ -60,7 +60,7 @@ unauthorised.makeYourClaim = You can make your claim:
 unauthorised.byPost = by post, using the {0}
 unauthorised.printAndPost = print and post form
 unauthorised.byPhone = by phone, by calling the {0}
-uanuthorised.helpline = Income Tax: general enquiries helpline
+unauthorised.helpline = Income Tax: general enquiries helpline
 unauthorised.claimOnline = If you want to claim online, you must {0}.
 unauthorised.confirmIdentity = confirm your identity
 
