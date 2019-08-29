@@ -14,15 +14,32 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
-    main_template: MainTemplate
+main_template: MainTemplate,
+frontendAppConfig: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("unauthorised.title")
+    @printAndPostLink = {<a href=@frontendAppConfig.p87ClaimByPostUrl >@messages("unauthorised.printAndPost")</a>}
+    @helplineLink = {<a href=@frontendAppConfig.contactHMRC >@messages("unauthorised.helpline")</a>}
+    @claimOnlineLink = {<a href=@frontendAppConfig.claimOnlineUrl >@messages("unauthorised.confirmIdentity")</a>}
+
+    @main_template(
+        title = messages("unauthorised.title")
     ) {
 
-    @components.heading("unauthorised.heading")
-}
+        @components.heading("unauthorised.heading")
+
+        <p>@messages("unauthorised.cannotContinue")</p>
+
+        <p>@messages("unauthorised.makeYourClaim") <a></a></p>
+        <ul class="list list-bullet">
+            <li>@Html(messages("unauthorised.byPost", printAndPostLink))</li>
+            <li>@Html(messages("unauthorised.byPhone", helplineLink))</li>
+        </ul>
+
+        <p>@Html(messages("unauthorised.claimOnline", claimOnlineLink))</p>
+    }
