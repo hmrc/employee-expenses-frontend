@@ -18,7 +18,7 @@ package service
 
 import base.SpecBase
 import connectors.TaiConnector
-import models.TaxYearSelection
+import models.{TaiTaxYear, TaxYearSelection}
 import models.TaxYearSelection._
 import org.joda.time.LocalDate
 import org.mockito.Matchers._
@@ -63,6 +63,8 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
             result.length mustBe 1
             result.contains(CurrentYear) mustBe true
         }
+
+        verify(mockTaiConnector, times(1)).taiTaxAccountSummary(fakeNino, TaiTaxYear(getTaxYear(CurrentYear) + 1))
       }
 
       "return correct taxYear when date is before April 6th and currentYear is passed in and next year record available" in {
@@ -79,6 +81,8 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
             result.contains(NextYear) mustBe true
             result.contains(CurrentYearMinus1) mustBe true
         }
+
+        verify(mockTaiConnector, times(1)).taiTaxAccountSummary(fakeNino, TaiTaxYear(getTaxYear(CurrentYear) + 1))
       }
 
       "return correct data when date is in April, current year and next year record is available" in {
@@ -93,6 +97,8 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
             result.contains(CurrentYear) mustBe true
             result.contains(NextYear) mustBe true
         }
+
+        verify(mockTaiConnector, times(1)).taiTaxAccountSummary(fakeNino, TaiTaxYear(getTaxYear(CurrentYear) + 1))
       }
 
       "return correct data when date is after April, current year selected" in {
@@ -104,6 +110,8 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
             result.length mustBe 1
             result.contains(CurrentYear) mustBe true
         }
+
+        verify(mockTaiConnector, times(0)).taiTaxAccountSummary(fakeNino, TaiTaxYear(getTaxYear(CurrentYear) + 1))
       }
 
       "return correct data when no current year in selection" in {
