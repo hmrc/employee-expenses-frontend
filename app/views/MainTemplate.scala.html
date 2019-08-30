@@ -43,18 +43,6 @@
         messages: Messages
 )
 
-@sessionTimeout = @{
-
-    request match {
-        case dataRequest: DataRequest[AnyContent] => if(dataRequest.identifier.isInstanceOf[Authed]) {
-            "inlineScript -> (”            <script type=text/javascript>\n                $.timeoutDialog({timeout: 60, countdown: 30, keep_alive_url: " + appConfig.keepAliveUrl + ", logout_url: "  + appConfig.signOutUrl + "});</script>),"
-        } else {
-            false
-        }
-        case _ => false
-    }
-}
-
 @sidebarContent = @{
     sidebarLinks.map {
         links =>
@@ -106,7 +94,7 @@
         "showPropositionLinks" -> true,
         "betaBanner" -> true,
         "googleTagManager" -> true,
-        "sessionTimeout" -> sessionTimeout,
+        "sessionTimeout" -> request.session.get("authToken").isDefined,
         "keepAliveUrl" -> appConfig.keepAliveUrl,
         "logoutUrl" -> appConfig.signOutUrl,
         "optimizelyProjectId" -> appConfig.optimizelyProjectId
