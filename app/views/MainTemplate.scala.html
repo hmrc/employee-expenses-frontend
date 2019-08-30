@@ -18,6 +18,8 @@
 @import config.FrontendAppConfig
 @import scalate._
 @import uk.gov.hmrc.play.partials.FormPartialRetriever
+@import models.requests._
+@import controllers.actions.Authed
 
 @this(
         appConfig: FrontendAppConfig,
@@ -40,6 +42,18 @@
         request: Request[_],
         messages: Messages
 )
+
+@sessionTimeout = @{
+
+    request match {
+        case dataRequest: DataRequest[AnyContent] => if(dataRequest.identifier.isInstanceOf[Authed]) {
+            "inlineScript -> (”            <script type=text/javascript>\n                $.timeoutDialog({timeout: 60, countdown: 30, keep_alive_url: " + appConfig.keepAliveUrl + ", logout_url: "  + appConfig.signOutUrl + "});</script>),"
+        } else {
+            false
+        }
+        case _ => false
+    }
+}
 
 @sidebarContent = @{
     sidebarLinks.map {
@@ -92,6 +106,9 @@
         "showPropositionLinks" -> true,
         "betaBanner" -> true,
         "googleTagManager" -> true,
+        "sessionTimeout" -> sessionTimeout,
+        "keepAliveUrl" -> appConfig.keepAliveUrl,
+        "logoutUrl" -> appConfig.signOutUrl,
         "optimizelyProjectId" -> appConfig.optimizelyProjectId
     )
 )

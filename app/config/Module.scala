@@ -35,7 +35,6 @@ class Module extends AbstractModule {
     bind(classOf[AuthenticatedIdentifierAction]).to(classOf[AuthenticatedIdentifierActionImpl]).asEagerSingleton()
     bind(classOf[UnauthenticatedIdentifierAction]).to(classOf[UnauthenticatedIdentifierActionImpl]).asEagerSingleton()
 
-    bind(classOf[SessionRepository]).to(classOf[DefaultSessionRepository]).asEagerSingleton()
     bind(classOf[ScalateEngineBoot]).asEagerSingleton()
     bind(classOf[FormPartialRetriever]).to(classOf[EeFormPartialRetriever])
 

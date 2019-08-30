@@ -21,6 +21,7 @@ import controllers.actions._
 import forms.foodCatering.CateringStaffNHSFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.ClaimAmount
 import pages.foodCatering.CateringStaffNHSPage
@@ -48,7 +49,7 @@ class CateringStaffNHSController @Inject()(
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+    implicit request: DataRequest[AnyContent] =>
 
       val preparedForm = request.userAnswers.get(CateringStaffNHSPage) match {
         case None => form
