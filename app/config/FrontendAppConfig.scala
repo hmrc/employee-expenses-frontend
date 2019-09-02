@@ -53,6 +53,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val p87Url: String = configuration.get[String]("p87.url")
   lazy val p87ClaimOnlineUrl: String = configuration.get[String]("p87.claimOnlineUrl")
   lazy val p87ClaimByPostUrl: String = configuration.get[String]("p87.claimByPostUrl")
+  lazy val claimOnlineUrl: String = configuration.get[String]("claimOnline.url")
   lazy val govUkUrl: String = configuration.get[String]("govUk.url")
   lazy val jobExpensesLink: String = configuration.get[String]("jobExpenses.url")
   lazy val contactHMRC: String = configuration.get[String]("contactHMRC.url")

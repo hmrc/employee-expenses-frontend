@@ -53,8 +53,16 @@ site.textarea.char_limit = (Limit is {0} characters)
 site.startAgain = Restart your expenses claim
 site.or = or
 
-unauthorised.title = You can’t access this service with this account
-unauthorised.heading = You can’t access this service with this account
+unauthorised.title = We cannot confirm your identity
+unauthorised.heading = We cannot confirm your identity
+unauthorised.cannotContinue = We have been unable to confirm your identity, so you cannot continue claiming these expenses online.
+unauthorised.makeYourClaim = You can make your claim:
+unauthorised.byPost = by post, using the {0}
+unauthorised.printAndPost = print and post form
+unauthorised.byPhone = by phone, by calling the {0}
+unauthorised.helpline = Income Tax: general enquiries helpline
+unauthorised.claimOnline = If you want to claim online, you must {0}.
+unauthorised.confirmIdentity = confirm your identity
 
 technicalDifficulties.pageTitle = Sorry, there is a problem with the service
 technicalDifficulties.heading = Sorry, there is a problem with the service
