@@ -48,13 +48,14 @@
                             "occupation6"
             )
         )
+        <div class="section">
+            @components.input_yes_no(
+                field = form("value"),
+                label = messages("heatingOccupationList.radioLabel"),
+                labelClass = Some("heading-medium u-margin-top--0-5em")
+            )
 
-        @components.input_yes_no(
-            field = form("value"),
-            label = messages("heatingOccupationList.radioLabel"),
-            labelClass = Some("heading-medium")
-        )
-
-        @components.submit_button()
+            @components.submit_button()
+        </div>
     }
 }

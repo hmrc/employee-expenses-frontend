@@ -78,13 +78,15 @@
                 </ul>
             }
 
-            @components.input_radio(
-                field = form("value"),
-                legend = messages(s"alreadyClaimingFREDifferentAmounts.label"),
-                legendClass = Some("heading-medium"),
-                inputs = AlreadyClaimingFREDifferentAmounts.options
-            )
+            <div class="section">
+                @components.input_radio(
+                    field = form("value"),
+                    legend = messages(s"alreadyClaimingFREDifferentAmounts.label"),
+                    legendClass = Some("heading-medium u-margin-top--0-5em"),
+                    inputs = AlreadyClaimingFREDifferentAmounts.options
+                )
 
-            @components.submit_button()
+                @components.submit_button()
+            </div>
         }
     }

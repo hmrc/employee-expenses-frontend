@@ -72,14 +72,15 @@
                 }
             </ul>
         }
+        <div class="section">
+            @components.input_radio(
+                field = form("value"),
+                legend = messages(s"alreadyClaimingFRESameAmount.label"),
+                legendClass = Some("heading-medium u-margin-top--0-5em"),
+                inputs = AlreadyClaimingFRESameAmount.options
+            )
 
-        @components.input_radio(
-            field = form("value"),
-            legend = messages(s"alreadyClaimingFRESameAmount.label"),
-            legendClass = Some("heading-medium"),
-            inputs = AlreadyClaimingFRESameAmount.options
-        )
-
-        @components.submit_button()
+            @components.submit_button()
+        </div>
     }
 }

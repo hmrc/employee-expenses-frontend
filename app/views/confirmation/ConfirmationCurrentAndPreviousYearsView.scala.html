@@ -41,15 +41,15 @@
         <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
     </div>
 
-    <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
+    <h2 class="heading-medium">@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
 
     <p>@messages("confirmation.actualAmount")</p>
 
     @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
 
-    <h2>@messages("confirmation.whatHappensNext")</h2>
+    <h2 class="heading-medium">@messages("confirmation.whatHappensNext")</h2>
 
-    <h3>@messages("confirmation.currentTaxYear")</h3>
+    <h3 class="heading-small">@messages("confirmation.currentTaxYear")</h3>
 
     <p>@messages("confirmation.taxCodeChanged.paragraph1")</p>
 
@@ -59,7 +59,7 @@
 
     <p>@messages("confirmation.continueToClaim.paragraph2")</p>
 
-    <h3>@messages("confirmation.previousTaxYears")</h3>
+    <h3 class="heading-small">@messages("confirmation.previousTaxYears")</h3>
 
     <p>@messages("confirmation.additionalConfirmationLetter")</p>
 
