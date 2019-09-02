@@ -1,0 +1,92 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.time.TaxYear
+
+@this(
+    main_template: MainTemplate
+)
+
+@(href: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    title = messages("howYouWillGetYourExpenses.title")
+    ) {
+
+    @components.back_link()
+
+    @components.heading("howYouWillGetYourExpenses.heading")
+
+    <p class="lede">
+        @messages(
+            "howYouWillGetYourExpensesCurrentAndPreviousYear.paragraph1",
+            TaxYear.current.back(1).starts.toString("d MMMM yyyy"),
+            TaxYear.current.back(1).finishes.toString("d MMMM yyyy")
+        )
+    </p>
+
+    <h2>@messages("howYouWillGetYourExpensesCurrentAndPreviousYear.subHeading1")</h2>
+
+
+    <p>@messages("howYouWillGetYourExpensesCurrent.para1")</p>
+    <p>@messages("howYouWillGetYourExpensesCurrent.para2")</p>
+
+    <ul class="list list-bullet" role="list">
+        <li>@messages("howYouWillGetYourExpensesCurrent.item1")</li>
+        <li>@messages("howYouWillGetYourExpensesCurrent.item2")</li>
+        <li>@messages("howYouWillGetYourExpensesCurrent.item3")</li>
+        <li>@messages("howYouWillGetYourExpensesCurrent.item4")</li>
+
+    </ul>
+
+    <p>@messages("howYouWillGetYourExpensesCurrentAndPreviousYear.paragraph2")</p>
+
+    <h2>@messages("howYouWillGetYourExpensesCurrentAndPreviousYear.subHeading2")</h2>
+
+    <p>@messages("howYouWillGetYourExpensesPrevious.para1")</p>
+
+    <ul class="list list-bullet" role="list">
+        <li>@messages("howYouWillGetYourExpensesPrevious.item1")</li>
+        <li>@messages("howYouWillGetYourExpensesPrevious.item2")</li>
+
+    </ul>
+
+    <p>
+        @messages(
+            "howYouWillGetYourExpensesPrevious.para2",
+            TaxYear.current.back(1).starts.toString("d MMMM yyyy"),
+            TaxYear.current.back(1).finishes.toString("d MMMM yyyy")
+        )
+    </p>
+
+
+    <h2>@messages("howYouWillGetYourExpenses.subheading")</h2>
+
+    <p>@messages("howYouWillGetYourExpenses.expensesDeclaration")</p>
+
+    <div class="notice">
+        <i class="icon icon-important">
+            <span class="visually-hidden">@messages("howYouWillGetYourExpenses.expensesDeclarationWarning")</span>
+        </i>
+        <strong class="bold-small">
+            @messages("howYouWillGetYourExpenses.expensesDeclarationProsecuted")
+        </strong>
+    </div>
+
+    @components.button_link(messages("howYouWillGetYourExpenses.button"), href)
+
+
+}
