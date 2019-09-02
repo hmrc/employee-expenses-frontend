@@ -25,7 +25,7 @@ import views.html.{HowYouWillGetYourExpensesCurrentView, HowYouWillGetYourExpens
 
 import scala.concurrent.ExecutionContext
 
-class HowYouWillGetYourExpensesCurrentController @Inject()(
+class HowYouWillGetYourExpensesController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        identify: AuthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,

@@ -21,7 +21,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.HowYouWillGetYourExpensesCurrentView
 
-class HowYouWillGetYourExpensesCurrentControllerSpec extends SpecBase {
+class HowYouWillGetYourExpensesControllerSpec extends SpecBase {
 
   "HowYouWillGetYourExpensesCurrent Controller" must {
 
