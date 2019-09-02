@@ -18,10 +18,12 @@ package controllers
 
 import controllers.actions._
 import javax.inject.Inject
+import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
+import pages.authenticated.TaxYearSelectionPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.{HowYouWillGetYourExpensesCurrentView, HowYouWillGetYourExpensesPreviousView, HowYouWillGetYourExpensesCurrentAndPreviousYearView}
+import views.html.{HowYouWillGetYourExpensesCurrentAndPreviousYearView, HowYouWillGetYourExpensesCurrentView, HowYouWillGetYourExpensesPreviousView}
 
 import scala.concurrent.ExecutionContext
 
@@ -38,6 +40,12 @@ class HowYouWillGetYourExpensesController @Inject()(
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(currentView(""))
+
+      request.userAnswers.get(TaxYearSelectionPage) match {
+        case Some(x) if x.contains(CurrentYear) => Ok(currentView(""))
+        case Some(x) if x.contains(CurrentYearMinus1) => Ok(previousView(""))
+      }
+
+
   }
 }

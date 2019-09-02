@@ -17,23 +17,71 @@
 package controllers
 
 import base.SpecBase
+import models.TaxYearSelection
+import models.TaxYearSelection._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.HowYouWillGetYourExpensesCurrentView
+import views.html.{HowYouWillGetYourExpensesCurrentAndPreviousYearView, HowYouWillGetYourExpensesCurrentView, HowYouWillGetYourExpensesPreviousView}
+import org.scalacheck.Gen
+import org.scalatest.prop.PropertyChecks
 
-class HowYouWillGetYourExpensesControllerSpec extends SpecBase {
+class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChecks {
 
   "HowYouWillGetYourExpensesCurrent Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK and the current year view when user has only selected current year for changes" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers)).build()
 
-      val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesCurrentController.onPageLoad().url)
+      val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
 
       val result = route(application, request).value
 
       val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view("")(request, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the previous year view when user has only selected previous year for changes" in {
+      val previousYearGen: Gen[TaxYearSelection] =
+        Gen.oneOf(CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)
+
+      forAll(previousYearGen) {
+        previousYear =>
+
+          val application = applicationBuilder(userAnswers = Some(previousYearUserAnswers(previousYear))).build()
+
+          val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[HowYouWillGetYourExpensesPreviousView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view("")(request, messages).toString
+
+          application.stop()
+
+      }
+    }
+
+
+    "return OK and the current and previous year view when user has only selected current and previous years for changes" ignore {
+
+      val application = applicationBuilder(userAnswers = Some(currentYearAndCurrentYearMinus1UserAnswers)).build()
+
+      val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
 
       status(result) mustEqual OK
 

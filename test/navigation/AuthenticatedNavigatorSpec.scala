@@ -207,7 +207,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
         }
 
         "go to ConfirmationCurrentAndPreviousYearsController" in {
-          val ua = fullUserAnswers
+          val ua = currentYearFullUserAnswers
             .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
 
           navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
@@ -215,12 +215,12 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
         }
 
         "go to ConfirmationCurrentYearOnlyController" in {
-          navigator.nextPage(CheckYourAnswersPage, NormalMode)(fullUserAnswers) mustBe
+          navigator.nextPage(CheckYourAnswersPage, NormalMode)(currentYearFullUserAnswers) mustBe
             ConfirmationCurrentYearOnlyController.onPageLoad()
         }
 
         "go to ConfirmationPreviousYearsOnlyController" in {
-          val ua = fullUserAnswers
+          val ua = currentYearFullUserAnswers
             .set(TaxYearSelectionPage, Seq(CurrentYearMinus1, CurrentYearMinus2)).success.value
 
           navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe

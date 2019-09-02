@@ -97,7 +97,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
     "redirect to the next page when valid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(fullUserAnswers))
+        applicationBuilder(userAnswers = Some(currentYearFullUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)))
           .build()
