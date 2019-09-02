@@ -44,7 +44,7 @@ class KeepAliveControllerSpec extends SpecBase with MockitoSugar with ScalaFutur
 
   "KeepAlive Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK and the correct view for a GET and update TTL" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -66,13 +66,13 @@ class KeepAliveControllerSpec extends SpecBase with MockitoSugar with ScalaFutur
       application.stop()
     }
 
-    "Redirect to Session Expired when updateTimeToLive fails" in {
+    "Redirect to Technical Difficulties when updateTimeToLive fails" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      when(mockSessionRepository.updateTimeToLive(any())).thenReturn(Future.failed(new Exception))
+      when(mockSessionRepository.updateTimeToLive(any())).thenReturn(Future.successful(false))
 
       val request = FakeRequest(GET, routes.KeepAliveController.keepAlive().url)
 
@@ -80,7 +80,7 @@ class KeepAliveControllerSpec extends SpecBase with MockitoSugar with ScalaFutur
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual routes.TechnicalDifficultiesController.onPageLoad().url
 
       application.stop()
     }

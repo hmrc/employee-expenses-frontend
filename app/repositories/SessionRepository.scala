@@ -107,7 +107,7 @@ class SessionRepository @Inject()(
   def updateTimeToLive(id: Authed): Future[Boolean] = {
     get(id).flatMap {
       case Some(ua) => set(id, ua)
-      case _ => throw new Exception(s"UserAnswers not found")
+      case _ => Future.successful(false)
     }
   }
 

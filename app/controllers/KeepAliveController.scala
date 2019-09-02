@@ -17,7 +17,6 @@
 package controllers
 
 import controllers.actions.{Authed, AuthenticatedIdentifierAction}
-import controllers.routes.SessionExpiredController
 import javax.inject.Inject
 import models.requests.IdentifierRequest
 import play.api.i18n.I18nSupport
@@ -39,10 +38,8 @@ class KeepAliveController @Inject()(
       val id = request.identifier.asInstanceOf[Authed]
 
       sessionRepository.updateTimeToLive(id).map {
-        _ => Ok("OK")
-      }.recover {
-        case _ => Redirect(SessionExpiredController.onPageLoad())
+        case true => Ok("OK")
+        case _ => Redirect(routes.TechnicalDifficultiesController.onPageLoad())
       }
   }
-
 }
