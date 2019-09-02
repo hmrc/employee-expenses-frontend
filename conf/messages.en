@@ -6,6 +6,7 @@ checkYourAnswers.changeClaim = Change this claim
 checkYourAnswers.stopClaim = Stop this claim
 checkYourAnswers.confirmInformationNoFre = By claiming these expenses, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
 checkYourAnswers.confirmInformationChangeFre = By making this change, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
+checkYourAnswers.warning = Warning
 checkYourAnswers.prosecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
 checkYourAnswers.editText = Change your answer
 
@@ -805,5 +806,16 @@ constructionOccupations.tilemaker = Tilemaker
 constructionOccupations.buildingMaterials = Occupation within building materials
 constructionOccupations.none = Construction occupation not listed
 
-howYouWillGetYourExpensesCurrent.title = howYouWillGetYourExpensesCurrent
-howYouWillGetYourExpensesCurrent.heading = howYouWillGetYourExpensesCurrent
+howYouWillGetYourExpensesCurrent.title = How you will get your expenses
+howYouWillGetYourExpensesCurrent.heading = How you will get your expenses
+howYouWillGetYourExpensesCurrent.para1 = We will increase your tax-free Personal Allowance by changing your tax code.
+howYouWillGetYourExpensesCurrent.para2 = This means you will:
+howYouWillGetYourExpensesCurrent.item1 = pay less tax
+howYouWillGetYourExpensesCurrent.item2 = get a letter about the change
+howYouWillGetYourExpensesCurrent.item3 = automatically continue claiming each year
+howYouWillGetYourExpensesCurrent.item4 = need to tell HMRC if anything changes
+howYouWillGetYourExpensesCurrent.subHeading = Claim your expenses
+howYouWillGetYourExpensesCurrent.para3 = By claiming these expenses, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
+howYouWillGetYourExpensesCurrent.warning = Warning
+howYouWillGetYourExpensesCurrent.prosecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
+howYouWillGetYourExpenses.button =  Accept and claim expenses

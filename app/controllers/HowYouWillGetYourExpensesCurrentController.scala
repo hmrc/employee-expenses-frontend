@@ -27,7 +27,7 @@ import scala.concurrent.ExecutionContext
 
 class HowYouWillGetYourExpensesCurrentController @Inject()(
                                        override val messagesApi: MessagesApi,
-                                       identify: IdentifierAction,
+                                       identify: AuthenticatedIdentifierAction,
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
                                        val controllerComponents: MessagesControllerComponents,
@@ -36,6 +36,6 @@ class HowYouWillGetYourExpensesCurrentController @Inject()(
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view())
+      Ok(view(""))
   }
 }

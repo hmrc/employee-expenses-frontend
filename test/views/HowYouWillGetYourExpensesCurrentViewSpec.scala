@@ -27,9 +27,9 @@ class HowYouWillGetYourExpensesCurrentViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
 
-    val applyView = view.apply()(fakeRequest, messages)
+    val applyView = view.apply("onwardRoute")(fakeRequest, messages)
 
-    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth = view.apply("onwardRoute")(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(applyView, "howYouWillGetYourExpensesCurrent")
 
