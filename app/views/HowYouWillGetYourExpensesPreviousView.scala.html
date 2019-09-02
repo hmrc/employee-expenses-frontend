@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.time.TaxYear
+
 @this(
     main_template: MainTemplate
 )
@@ -28,16 +30,22 @@
 
     @components.heading("howYouWillGetYourExpenses.heading")
 
-    <p>@messages("howYouWillGetYourExpensesCurrent.para1")</p>
-    <p>@messages("howYouWillGetYourExpensesCurrent.para2")</p>
+    <p>@messages("howYouWillGetYourExpensesPrevious.para1")</p>
 
     <ul class="list list-bullet" role="list">
-        <li>@messages("howYouWillGetYourExpensesCurrent.item1")</li>
-        <li>@messages("howYouWillGetYourExpensesCurrent.item2")</li>
-        <li>@messages("howYouWillGetYourExpensesCurrent.item3")</li>
-        <li>@messages("howYouWillGetYourExpensesCurrent.item4")</li>
+        <li>@messages("howYouWillGetYourExpensesPrevious.item1")</li>
+        <li>@messages("howYouWillGetYourExpensesPrevious.item2")</li>
 
     </ul>
+
+    <p>
+        @messages(
+            "howYouWillGetYourExpensesPrevious.para2",
+            TaxYear.current.back(1).starts.toString("d MMMM yyyy"),
+            TaxYear.current.back(1).finishes.toString("d MMMM yyyy")
+        )
+    </p>
+
 
     <h2>@messages("howYouWillGetYourExpenses.subheading")</h2>
 

@@ -806,16 +806,23 @@ constructionOccupations.tilemaker = Tilemaker
 constructionOccupations.buildingMaterials = Occupation within building materials
 constructionOccupations.none = Construction occupation not listed
 
-howYouWillGetYourExpensesCurrent.title = How you will get your expenses
-howYouWillGetYourExpensesCurrent.heading = How you will get your expenses
+howYouWillGetYourExpenses.title = How you will get your expenses
+howYouWillGetYourExpenses.heading = How you will get your expenses
+howYouWillGetYourExpenses.subheading = Claim your expenses
+howYouWillGetYourExpenses.expensesDeclaration = By claiming these expenses, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
+howYouWillGetYourExpenses.expensesDeclarationWarning = Warning
+howYouWillGetYourExpenses.expensesDeclarationProsecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
+howYouWillGetYourExpenses.button =  Accept and claim expenses
+
 howYouWillGetYourExpensesCurrent.para1 = We will increase your tax-free Personal Allowance by changing your tax code.
 howYouWillGetYourExpensesCurrent.para2 = This means you will:
 howYouWillGetYourExpensesCurrent.item1 = pay less tax
 howYouWillGetYourExpensesCurrent.item2 = get a letter about the change
 howYouWillGetYourExpensesCurrent.item3 = automatically continue claiming each year
 howYouWillGetYourExpensesCurrent.item4 = need to tell HMRC if anything changes
-howYouWillGetYourExpensesCurrent.subHeading = Claim your expenses
-howYouWillGetYourExpensesCurrent.para3 = By claiming these expenses, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
-howYouWillGetYourExpensesCurrent.warning = Warning
-howYouWillGetYourExpensesCurrent.prosecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
-howYouWillGetYourExpenses.button =  Accept and claim expenses
+
+howYouWillGetYourExpensesPrevious.para1 =We will process your claim and send you a letter, which will:
+howYouWillGetYourExpensesPrevious.item1 = confirm any refunds
+howYouWillGetYourExpensesPrevious.item2 = tell you how you will receive or claim the refund (cheque or BACS payment)
+howYouWillGetYourExpensesPrevious.para2 = For claims that include tax year {0} to {1}, this may take longer if your employer has not yet sent your information for that tax year.
+

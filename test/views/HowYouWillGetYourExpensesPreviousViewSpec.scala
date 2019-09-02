@@ -17,15 +17,15 @@
 package views
 
 import views.behaviours.ViewBehaviours
-import views.html.HowYouWillGetYourExpensesCurrentView
+import views.html.HowYouWillGetYourExpensesPreviousView
 
-class HowYouWillGetYourExpensesCurrentViewSpec extends ViewBehaviours {
+class HowYouWillGetYourExpensesPreviousViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "HowYouWillGetYourExpensesCurrent view" must {
 
-    val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
+    val view = application.injector.instanceOf[HowYouWillGetYourExpensesPreviousView]
 
     val applyView = view.apply("onwardRoute")(fakeRequest, messages)
 
