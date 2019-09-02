@@ -804,3 +804,6 @@ constructionOccupations.labourerOrNavvy = Labourer or navvy
 constructionOccupations.tilemaker = Tilemaker
 constructionOccupations.buildingMaterials = Occupation within building materials
 constructionOccupations.none = Construction occupation not listed
+
+howYouWillGetYourExpensesCurrent.title = howYouWillGetYourExpensesCurrent
+howYouWillGetYourExpensesCurrent.heading = howYouWillGetYourExpensesCurrent

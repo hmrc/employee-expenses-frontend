@@ -397,3 +397,5 @@ GET         /construction-occupations                            controllers.con
 POST        /construction-occupations                            controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = NormalMode)
 GET         /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /howYouWillGetYourExpensesCurrent                       controllers.HowYouWillGetYourExpensesCurrentController.onPageLoad()
