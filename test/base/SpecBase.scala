@@ -22,7 +22,7 @@ import controllers.actions._
 import models.AlreadyClaimingFRESameAmount.Remove
 import models.FirstIndustryOptions.{Healthcare, Retail}
 import models.FlatRateExpenseOptions.FRENoYears
-import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
+import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, CurrentYearMinus2}
 import models._
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
@@ -160,6 +160,15 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     .set(FREResponse, FRENoYears).success.value
     .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
+  val currentYearAndCurrentYearMinus2UserAnswers = emptyUserAnswers
+    .set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
+    .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus2)).success.value
+    .set(YourAddressPage, true).success.value
+    .set(YourEmployerPage, true).success.value
+    .set(ClaimAmount, 100).success.value
+    .set(ClaimAmountAndAnyDeductions, 80).success.value
+    .set(FREResponse, FRENoYears).success.value
+    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
 
   def minimumUserAnswers: UserAnswers = emptyUserAnswers

@@ -73,22 +73,42 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
     }
 
 
-    "return OK and the current and previous year view when user has only selected current and previous years for changes" in {
+    "user has only selected current and previous years for changes" must {
+      "and includes CY-1 then return OK and the current and previous year view" in {
 
-      val application = applicationBuilder(userAnswers = Some(currentYearAndCurrentYearMinus1UserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(currentYearAndCurrentYearMinus1UserAnswers)).build()
 
-      val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
 
-      val result = route(application, request).value
+        val result = route(application, request).value
 
-      val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
+        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
 
-      status(result) mustEqual OK
+        status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view("")(request, messages).toString
+        contentAsString(result) mustEqual
+          view("", true)(request, messages).toString
 
-      application.stop()
+        application.stop()
+      }
+
+      "and does not include CY-1 then return OK and the current and previous year view" in {
+
+        val application = applicationBuilder(userAnswers = Some(currentYearAndCurrentYearMinus2UserAnswers)).build()
+
+        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view("", false)(request, messages).toString
+
+        application.stop()
+      }
     }
   }
 }

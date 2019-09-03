@@ -18,6 +18,7 @@ package controllers
 
 import controllers.actions._
 import javax.inject.Inject
+import models.TaxYearSelection
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
 import pages.authenticated.TaxYearSelectionPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -42,9 +43,14 @@ class HowYouWillGetYourExpensesController @Inject()(
     implicit request =>
 
       request.userAnswers.get(TaxYearSelectionPage) match {
-        case Some(x) if x.contains(CurrentYear) && x.length>1 => Ok(currentAndPreviousYearView(""))
+        case Some(x) if x.contains(CurrentYear) && x.length>1 => Ok(currentAndPreviousYearView("", containsCurrentYearMinus1(x)))
         case Some(x) if x.contains(CurrentYear) => Ok(currentView(""))
         case _ => Ok(previousView(""))
       }
+  }
+
+  private def containsCurrentYearMinus1(taxYearSelections: Seq[TaxYearSelection]): Boolean = {
+    taxYearSelections.contains(CurrentYearMinus1)
+
   }
 }
