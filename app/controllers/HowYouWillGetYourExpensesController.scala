@@ -45,7 +45,7 @@ class HowYouWillGetYourExpensesController @Inject()(
       request.userAnswers.get(TaxYearSelectionPage) match {
         case Some(x) if x.contains(CurrentYear) && x.length>1 => Ok(currentAndPreviousYearView("", containsCurrentYearMinus1(x)))
         case Some(x) if x.contains(CurrentYear) => Ok(currentView(""))
-        case _ => Ok(previousView(""))
+        case Some(x) => Ok(previousView("",containsCurrentYearMinus1(x)))
       }
   }
 

@@ -20,7 +20,7 @@
     main_template: MainTemplate
 )
 
-@(href: String)(implicit request: Request[_], messages: Messages)
+@(href: String, currentYearMinus1Selected: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("howYouWillGetYourExpenses.title")
@@ -38,6 +38,8 @@
 
     </ul>
 
+    @if(currentYearMinus1Selected){
+
     <p>
         @messages(
             "howYouWillGetYourExpensesPrevious.para2",
@@ -45,7 +47,7 @@
             TaxYear.current.back(1).finishes.toString("d MMMM yyyy")
         )
     </p>
-
+    }
 
     <h2>@messages("howYouWillGetYourExpenses.subheading")</h2>
 

@@ -139,9 +139,9 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     .set(FREResponse, FRENoYears).success.value
     .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
-  def previousYearUserAnswers(year: TaxYearSelection) = emptyUserAnswers
+  def previousYearUserAnswers(years: Seq[TaxYearSelection]) = emptyUserAnswers
     .set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
-    .set(TaxYearSelectionPage, Seq(year)).success.value
+    .set(TaxYearSelectionPage, years).success.value
     .set(YourAddressPage, true).success.value
     .set(YourEmployerPage, true).success.value
     .set(ClaimAmount, 100).success.value

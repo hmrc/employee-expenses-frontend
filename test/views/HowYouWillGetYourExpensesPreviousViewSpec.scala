@@ -16,6 +16,7 @@
 
 package views
 
+import uk.gov.hmrc.time.TaxYear
 import views.behaviours.ViewBehaviours
 import views.html.HowYouWillGetYourExpensesPreviousView
 
@@ -23,20 +24,45 @@ class HowYouWillGetYourExpensesPreviousViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-  "HowYouWillGetYourExpensesCurrent view" must {
+  "HowYouWillGetYourExpensesPreviousYearView" must {
 
     val view = application.injector.instanceOf[HowYouWillGetYourExpensesPreviousView]
 
-    val applyView = view.apply("onwardRoute")(fakeRequest, messages)
+    def applyView(currentYearMinus1: Boolean, authorised: Boolean = true) = {
+      val request = if (authorised) fakeRequest.withSession(("authToken", "SomeAuthToken")) else fakeRequest
+      view.apply("onwardRoute", currentYearMinus1)(request, messages)
+    }
 
-    val applyViewWithAuth = view.apply("onwardRoute")(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    behave like normalPage(applyView(true, false), "howYouWillGetYourExpenses")
 
-    behave like normalPage(applyView, "howYouWillGetYourExpenses")
+    behave like pageWithAccountMenu(applyView(true))
 
-    behave like pageWithAccountMenu(applyViewWithAuth)
+    behave like pageWithBackLink(applyView(true))
 
-    behave like pageWithBackLink(applyView)
+    "does show paragraph when CY-1 is selected" must {
+      val wantedMessage = messages(
+        "howYouWillGetYourExpensesPrevious.para2",
+        TaxYear.current.back(1).starts.toString("d MMMM yyyy"),
+        TaxYear.current.back(1).finishes.toString("d MMMM yyyy")
+      )
+
+      behave like pageWithBodyText(
+        applyView(true),
+        wantedMessage
+      )
+    }
+
+    "does not show paragraph when CY-1 is not selected" in {
+      val doc = asDocument(applyView(false))
+
+      val unwantedMessage = messages(
+        "howYouWillGetYourExpensesPrevious.para2",
+        TaxYear.current.back(1).starts.toString("d MMMM yyyy"),
+        TaxYear.current.back(1).finishes.toString("d MMMM yyyy")
+      )
+
+      assertTextNotRendered(doc, unwantedMessage)
+    }
   }
-
   application.stop()
-}
+ }
