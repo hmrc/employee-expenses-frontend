@@ -35,17 +35,16 @@ class HowYouWillGetYourExpensesController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        currentView: HowYouWillGetYourExpensesCurrentView,
                                        previousView: HowYouWillGetYourExpensesPreviousView,
-                                       currentAndPreviousYearsView: HowYouWillGetYourExpensesCurrentAndPreviousYearView
+                                       currentAndPreviousYearView: HowYouWillGetYourExpensesCurrentAndPreviousYearView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       request.userAnswers.get(TaxYearSelectionPage) match {
+        case Some(x) if x.contains(CurrentYear) && x.length>1 => Ok(currentAndPreviousYearView(""))
         case Some(x) if x.contains(CurrentYear) => Ok(currentView(""))
-        case Some(x) if x.contains(CurrentYearMinus1) => Ok(previousView(""))
+        case _ => Ok(previousView(""))
       }
-
-
   }
 }

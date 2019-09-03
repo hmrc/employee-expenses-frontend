@@ -73,7 +73,7 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
     }
 
 
-    "return OK and the current and previous year view when user has only selected current and previous years for changes" ignore {
+    "return OK and the current and previous year view when user has only selected current and previous years for changes" in {
 
       val application = applicationBuilder(userAnswers = Some(currentYearAndCurrentYearMinus1UserAnswers)).build()
 
