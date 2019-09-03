@@ -17,6 +17,8 @@ GET         /unauthorised                                        controllers.Una
 
 GET         /technical-difficulties                              controllers.TechnicalDifficultiesController.onPageLoad
 
+GET         /keep-alive                                          controllers.KeepAliveController.keepAlive
+
 GET         /session-key                                         controllers.authenticated.AuthRedirectController.onPageLoad(key: String)
 
 GET         /expenses-employer-paid                              controllers.ExpensesEmployerPaidController.onPageLoad(mode: Mode = NormalMode)

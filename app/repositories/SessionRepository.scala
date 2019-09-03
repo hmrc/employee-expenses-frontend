@@ -32,10 +32,10 @@ import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DefaultSessionRepository @Inject()(
-                                          mongo: ReactiveMongoApi,
-                                          config: Configuration
-                                        )(implicit ec: ExecutionContext, m: Materializer) extends SessionRepository {
+class SessionRepository @Inject()(
+                                   mongo: ReactiveMongoApi,
+                                   config: Configuration
+                                 )(implicit ec: ExecutionContext, m: Materializer) {
 
 
   private val unauthCollectionName: String = "unauth-user-answers"
@@ -47,8 +47,8 @@ class DefaultSessionRepository @Inject()(
     mongo.database.map(_.collection[JSONCollection](collectionName))
 
   private val lastUpdatedIndex = Index(
-    key     = Seq("lastUpdated" -> IndexType.Ascending),
-    name    = Some("user-answers-last-updated-index"),
+    key = Seq("lastUpdated" -> IndexType.Ascending),
+    name = Some("user-answers-last-updated-index"),
     options = BSONDocument("expireAfterSeconds" -> cacheTtl)
   )
 
@@ -62,14 +62,14 @@ class DefaultSessionRepository @Inject()(
         }
     }.map(_ => ())
 
-  override def get(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
+  def get(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
     identifierType match {
       case id: Authed => collection(authCollectionName).flatMap(_.find(Json.obj("_id" -> id.internalId), None).one[UserAnswers])
       case id: UnAuthed => collection(unauthCollectionName).flatMap(_.find(Json.obj("_id" -> id.sessionId), None).one[UserAnswers])
     }
   }
 
-  override def set(identifierType: IdentifierType, userAnswers: UserAnswers): Future[Boolean] = {
+  def set(identifierType: IdentifierType, userAnswers: UserAnswers): Future[Boolean] = {
 
     val selector = Json.obj(
       "_id" -> userAnswers.id
@@ -97,23 +97,18 @@ class DefaultSessionRepository @Inject()(
     }
   }
 
-  override def remove(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
+  def remove(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
     identifierType match {
       case id: Authed => collection(authCollectionName).flatMap(_.findAndRemove(Json.obj("_id" -> id.internalId)).map(_.result[UserAnswers]))
       case id: UnAuthed => collection(unauthCollectionName).flatMap(_.findAndRemove(Json.obj("_id" -> id.sessionId)).map(_.result[UserAnswers]))
     }
   }
 
-}
-
-trait SessionRepository {
-
-  val started: Future[Unit]
-
-  def get(identifierType: IdentifierType): Future[Option[UserAnswers]]
-
-  def set(identifierType: IdentifierType, userAnswers: UserAnswers): Future[Boolean]
-
-  def remove(identifierType: IdentifierType): Future[Option[UserAnswers]]
+  def updateTimeToLive(id: Authed): Future[Boolean] = {
+    get(id).flatMap {
+      case Some(ua) => set(id, ua)
+      case _ => Future.successful(false)
+    }
+  }
 
 }

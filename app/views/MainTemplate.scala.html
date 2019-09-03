@@ -18,6 +18,8 @@
 @import config.FrontendAppConfig
 @import scalate._
 @import uk.gov.hmrc.play.partials.FormPartialRetriever
+@import models.requests._
+@import controllers.actions.Authed
 
 @this(
         appConfig: FrontendAppConfig,
@@ -92,6 +94,9 @@
         "showPropositionLinks" -> true,
         "betaBanner" -> true,
         "googleTagManager" -> true,
+        "sessionTimeout" -> request.session.get("authToken").isDefined,
+        "keepAliveUrl" -> appConfig.keepAliveUrl,
+        "logoutUrl" -> appConfig.signOutUrl,
         "optimizelyProjectId" -> appConfig.optimizelyProjectId
     )
 )
