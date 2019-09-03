@@ -17,7 +17,7 @@
 @import config.FrontendAppConfig
 @()(implicit messages: Messages, appConfig: FrontendAppConfig)
 
-<h2>@messages("confirmation.updateAddressInfo")</h2>
+<h2 class="heading-medium">@messages("confirmation.updateAddressInfo")</h2>
 <p>@messages("confirmation.addressChange")</p>
 <a role="button" class="button" id="updateAddressInfoBtn" href="@appConfig.updateAddressInfoUrl" target="_blank">
     @messages("confirmation.updateAddressInfoNow")
