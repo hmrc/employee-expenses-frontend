@@ -68,6 +68,15 @@
     formPartialRetriever.getPartialContent(appConfig.reportAProblemPartialUrl)
 }
 
+@languageToggle = @{
+    if (appConfig.languageTranslationEnabled) {
+        Map("enUrl" -> appConfig.routeToSwitchLanguage("english"),
+        "cyUrl" -> appConfig.routeToSwitchLanguage("cymraeg"))
+    } else {
+        Map[String, String]()
+    }
+}
+
 @scalate.render(
     "/templates/mustache/production/govuk-template.mustache.html",
     Map(
@@ -84,10 +93,7 @@
         "mainClass" -> mainClass,
         "article" -> articleContent,
         "getHelpForm" -> helpForm,
-        "langSelector" -> {
-            Map("enUrl" -> appConfig.routeToSwitchLanguage("english"),
-                "cyUrl" -> appConfig.routeToSwitchLanguage("cymraeg"))
-        },
+        "langSelector" -> languageToggle,
         "isWelsh" -> {
             messages.lang.code == "cy"
         },
