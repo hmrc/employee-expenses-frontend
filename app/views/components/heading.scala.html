@@ -20,11 +20,13 @@
         secondaryHeaderKey: Option[String] = None
 )(implicit messages: Messages)
 
+@if(secondaryHeaderKey.isDefined) {
 <header class="page-header">
- <h1 class=@headingSize>@messages(headingKey)</h1>
- @if(secondaryHeaderKey.isDefined) {
-   <p class="heading-secondary">
-     <span class="visuallyhidden">This section is: </span> @messages(secondaryHeaderKey.get)
-   </p>
- }
+  <h1 class=@headingSize>@messages(headingKey)</h1>
+  <p class="heading-secondary">
+    <span class="visually-hidden">This section is: </span> @messages(secondaryHeaderKey.get)
+  </p>
 </header>
+}else{
+  <h1 class=@headingSize>@messages(headingKey)</h1>
+}
