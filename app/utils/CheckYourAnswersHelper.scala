@@ -34,47 +34,78 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
 
   def removeFRECode: Option[AnswerRow] = userAnswers.get(RemoveFRECodePage) map {
     x =>
-      AnswerRow("removeFRECode.checkYourAnswersLabel",
-        messages(s"taxYearSelection.$x", TaxYearSelection.getTaxYear(x).toString, (TaxYearSelection.getTaxYear(x) + 1).toString),
-        true, Some(RemoveFRECodeController.onPageLoad(CheckMode).url), editText = None)
+      AnswerRow(
+        label = "removeFRECode.checkYourAnswersLabel",
+        answer = messages(s"taxYearSelection.$x", TaxYearSelection.getTaxYear(x).toString, (TaxYearSelection.getTaxYear(x) + 1).toString),
+        answerIsMessageKey = true,
+        changeUrl = Some(RemoveFRECodeController.onPageLoad(CheckMode).url),
+        editText = None,
+        hiddenText = Some("removeFRECode.checkYourAnswersLabel.hidden")
+      )
   }
 
   def alreadyClaimingFREDifferentAmounts: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) map {
     x =>
-      AnswerRow("alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel", s"alreadyClaimingFREDifferentAmounts.$x", true,
-        Some(AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode).url), editText = None)
+      AnswerRow(
+        label = "alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel",
+        answer = s"alreadyClaimingFREDifferentAmounts.$x",
+        answerIsMessageKey = true,
+        changeUrl = Some(AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode).url),
+        editText = None,
+        hiddenText = Some("alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel.hidden")
+      )
   }
 
   def alreadyClaimingFRESameAmount: Option[AnswerRow] = userAnswers.get(AlreadyClaimingFRESameAmountPage) map {
     x =>
-      AnswerRow("alreadyClaimingFRESameAmount.checkYourAnswersLabel", s"alreadyClaimingFRESameAmount.$x", true,
-        Some(AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode).url), editText = None)
+      AnswerRow(
+        label = "alreadyClaimingFRESameAmount.checkYourAnswersLabel",
+        answer = s"alreadyClaimingFRESameAmount.$x",
+        answerIsMessageKey = true,
+        changeUrl = Some(AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode).url),
+        editText = None,
+        hiddenText = Some("alreadyClaimingFRESameAmount.checkYourAnswersLabel.hidden")
+      )
   }
 
   def sameEmployerContributionAllYears: Option[AnswerRow] = userAnswers.get(SameEmployerContributionAllYearsPage) map {
     x =>
-      AnswerRow("sameEmployerContributionAllYears.checkYourAnswersLabel", if (x) "site.yes" else "site.no", true,
-        Some(SameEmployerContributionAllYearsController.onPageLoad(CheckMode).url), editText = None)
+      AnswerRow(
+        label = "sameEmployerContributionAllYears.checkYourAnswersLabel",
+        answer = if (x) "site.yes" else "site.no",
+        answerIsMessageKey = true,
+        changeUrl = Some(SameEmployerContributionAllYearsController.onPageLoad(CheckMode).url),
+        editText = None,
+        hiddenText = Some("sameEmployerContributionAllYears.checkYourAnswersLabel.hidden")
+      )
   }
 
   def changeWhichTaxYears: Option[AnswerRow] = userAnswers.get(ChangeWhichTaxYearsPage) map {
     taxYears =>
-      AnswerRow("changeWhichTaxYears.checkYourAnswersLabel",
-        taxYears.map {
-          taxYear =>
-            messages(s"taxYearSelection.$taxYear",
-              TaxYearSelection.getTaxYear(taxYear).toString,
-              (TaxYearSelection.getTaxYear(taxYear) + 1).toString
-            )
-        }.mkString("<br>"),
-        false,
-        Some(ChangeWhichTaxYearsController.onPageLoad(CheckMode).url), editText = None
+      AnswerRow(
+        label = "changeWhichTaxYears.checkYourAnswersLabel",
+        answer = taxYears.map {
+                  taxYear =>
+                    messages(s"taxYearSelection.$taxYear",
+                      TaxYearSelection.getTaxYear(taxYear).toString,
+                      (TaxYearSelection.getTaxYear(taxYear) + 1).toString
+                    )
+                }.mkString("<br>"),
+        answerIsMessageKey = false,
+        changeUrl = Some(ChangeWhichTaxYearsController.onPageLoad(CheckMode).url),
+        editText = None,
+        hiddenText = Some("changeWhichTaxYears.checkYourAnswersLabel.hidden")
       )
   }
 
   def industryAnswerRow(industry: String): Option[AnswerRow] = {
-    Some(AnswerRow("industryType.checkYourAnswersLabel", industry, true,
-      Some(FirstIndustryOptionsController.onPageLoad(CheckMode).url), editText = None
+    Some(AnswerRow(
+      label = "industryType.checkYourAnswersLabel",
+      answer = industry,
+      answerIsMessageKey = true,
+      changeUrl = Some(FirstIndustryOptionsController.onPageLoad(CheckMode).url),
+      editText = None,
+      hiddenText = Some("industryType.checkYourAnswersLabel.hidden")
     ))
   }
 
@@ -137,11 +168,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def employerContribution: Option[AnswerRow] = userAnswers.get(EmployerContributionPage) map {
     employerContributionOption =>
             AnswerRow(
-              "employerContribution.checkYourAnswersLabel",
-              s"employerContribution.$employerContributionOption",
-              true,
-              Some(EmployerContributionController.onPageLoad(CheckMode).url),
-              None
+              label = "employerContribution.checkYourAnswersLabel",
+              answer = s"employerContribution.$employerContributionOption",
+              answerIsMessageKey = true,
+              changeUrl = Some(EmployerContributionController.onPageLoad(CheckMode).url),
+              editText = None,
+              hiddenText = Some("employerContribution.checkYourAnswersLabel.hidden")
             )
   }
 
@@ -149,45 +181,60 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     case Some(EmployerContribution.YesEmployerContribution) =>
       userAnswers.get(ExpensesEmployerPaidPage) map {
         x =>
-          AnswerRow("expensesEmployerPaid.checkYourAnswersLabel", s"£$x", false,
-            Some(ExpensesEmployerPaidController.onPageLoad(CheckMode).url), editText = None)
+          AnswerRow(
+            label = "expensesEmployerPaid.checkYourAnswersLabel",
+            answer = s"£$x",
+            answerIsMessageKey = false,
+            changeUrl = Some(ExpensesEmployerPaidController.onPageLoad(CheckMode).url),
+            editText = None,
+            hiddenText = Some("expensesEmployerPaid.checkYourAnswersLabel.hidden")
+          )
       }
     case _ => None
   }
 
   def yourEmployer: Option[AnswerRow] = (userAnswers.get(YourEmployerPage), userAnswers.get(YourEmployerNames)) match {
     case (Some(x), Some(employers)) =>
-      Some(AnswerRow("yourEmployer.checkYourAnswersLabel",
-        if (x) "site.yes" else "site.no", true,
-        Some(YourEmployerController.onPageLoad(CheckMode).url),
-        Some("checkYourAnswers.editText"),
-        Employment.asLabel(employers)
+      Some(AnswerRow(
+        label = "yourEmployer.checkYourAnswersLabel",
+        answer = if (x) "site.yes" else "site.no",
+        answerIsMessageKey = true,
+        changeUrl = Some(YourEmployerController.onPageLoad(CheckMode).url),
+        editText = Some("checkYourAnswers.editText"),
+        hiddenText = Some("yourEmployer.checkYourAnswersLabel.hidden"),
+        labelArgs = Employment.asLabel(employers)
       ))
     case _ => None
   }
 
   def taxYearSelection: Option[AnswerRow] = userAnswers.get(TaxYearSelectionPage) map {
     taxYears =>
-      AnswerRow("taxYearSelection.checkYourAnswersLabel",
-        taxYears.map {
-          taxYear =>
-            messages(s"taxYearSelection.$taxYear",
-              TaxYearSelection.getTaxYear(taxYear).toString,
-              (TaxYearSelection.getTaxYear(taxYear) + 1).toString
-            )
-        }.mkString("<br>"),
-        false,
-        Some(TaxYearSelectionController.onPageLoad(CheckMode).url), editText = None
+      AnswerRow(
+        label = "taxYearSelection.checkYourAnswersLabel",
+        answer = taxYears.map {
+                    taxYear =>
+                      messages(s"taxYearSelection.$taxYear",
+                        TaxYearSelection.getTaxYear(taxYear).toString,
+                        (TaxYearSelection.getTaxYear(taxYear) + 1).toString
+                      )
+                  }.mkString("<br>"),
+        answerIsMessageKey = false,
+        changeUrl = Some(TaxYearSelectionController.onPageLoad(CheckMode).url),
+        editText = None,
+        hiddenText = Some("taxYearSelection.checkYourAnswersLabel.hidden")
       )
   }
 
   def yourAddress: Option[AnswerRow] = (userAnswers.get(YourAddressPage), userAnswers.get(CitizenDetailsAddress)) match {
     case (Some(x), Some(address)) =>
-      Some(AnswerRow("yourAddress.checkYourAnswersLabel",
-        if (x) "site.yes" else "site.no", true,
-        Some(YourAddressController.onPageLoad(CheckMode).url),
-        Some("checkYourAnswers.editText"),
-        Address.asString(address)
+      Some(AnswerRow(
+        label = "yourAddress.checkYourAnswersLabel",
+        answer = if (x) "site.yes" else "site.no",
+        answerIsMessageKey = true,
+        changeUrl = Some(YourAddressController.onPageLoad(CheckMode).url),
+        editText = Some("checkYourAnswers.editText"),
+        hiddenText = Some("yourAddress.checkYourAnswersLabel.hidden"),
+        labelArgs = Address.asString(address)
       ))
     case _ => None
   }
