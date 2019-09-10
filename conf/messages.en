@@ -808,18 +808,21 @@ constructionOccupations.none = Construction occupation not listed
 
 howYouWillGetYourExpenses.title = How you will get your expenses
 howYouWillGetYourExpenses.heading = How you will get your expenses
+howYouWillGetYourExpenses.button = Submit your claim
+
+
 howYouWillGetYourExpenses.subheading = Claim your expenses
 howYouWillGetYourExpenses.expensesDeclaration = By claiming these expenses, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
 howYouWillGetYourExpenses.expensesDeclarationWarning = Warning
 howYouWillGetYourExpenses.expensesDeclarationProsecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
-howYouWillGetYourExpenses.button = Submit your claim
 
-howYouWillGetYourExpensesCurrent.para1 = We will increase your tax-free Personal Allowance by changing your tax code.
-howYouWillGetYourExpensesCurrent.para2 = This means you will:
-howYouWillGetYourExpensesCurrent.item1 = pay less tax
-howYouWillGetYourExpensesCurrent.item2 = get a letter about the change
-howYouWillGetYourExpensesCurrent.item3 = automatically continue claiming each year
-howYouWillGetYourExpensesCurrent.item4 = need to tell HMRC if anything changes
+howYouWillGetYourExpenses.para1 = We will increase your tax-free Personal Allowance by changing your tax code.
+howYouWillGetYourExpenses.para2 = This means you will:
+
+howYouWillGetYourExpenses.item1 = pay less tax
+howYouWillGetYourExpenses.item2 = get a letter about the change
+howYouWillGetYourExpenses.item3 = automatically continue claiming each year
+howYouWillGetYourExpenses.item4 = need to tell HMRC if anything changes
 
 howYouWillGetYourExpensesPrevious.para1 =We will process your claim and send you a letter, which will:
 howYouWillGetYourExpensesPrevious.item1 = confirm any refunds
