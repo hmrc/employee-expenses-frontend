@@ -27,14 +27,12 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
-import org.scalacheck.Gen
-import org.scalatest.prop.PropertyChecks
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
+import org.scalatest.prop.PropertyChecks
 import pages.ClaimAmount
-import pages.construction.{ConstructionOccupationList2Page, ConstructionOccupationsPage}
+import pages.construction.ConstructionOccupationsPage
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

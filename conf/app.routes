@@ -50,11 +50,11 @@ GET         /change-first-industry-type                          controllers.Fir
 POST        /change-first-industry-type                          controllers.FirstIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
 GET         /second-industry-type                                controllers.SecondIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
-POST        /second-industry-type/:variant                       controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = NormalMode,  variant : ExperimentalVariant)
-POST        /second-industry-type                                controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = NormalMode,  variant: ExperimentalVariant = ExperimentalVariant.Standard)
+POST        /second-industry-type                                controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
+POST        /second-industry-type                                controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
 GET         /change-second-industry-type                         controllers.SecondIndustryOptionsController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-second-industry-type/:variant                controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = CheckMode, variant: ExperimentalVariant)
-POST        /change-second-industry-type                         controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = CheckMode, variant: ExperimentalVariant = ExperimentalVariant.Standard)
+POST        /change-second-industry-type                         controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
+POST        /change-second-industry-type                         controllers.SecondIndustryOptionsController.onSubmit(mode: Mode = CheckMode)
 
 GET         /third-industry-type                                 controllers.ThirdIndustryOptionsController.onPageLoad(mode: Mode = NormalMode)
 POST        /third-industry-type                                 controllers.ThirdIndustryOptionsController.onSubmit(mode: Mode = NormalMode)
@@ -270,31 +270,6 @@ GET         /community-support-officer                           controllers.pol
 POST        /community-support-officer                           controllers.police.CommunitySupportOfficerController.onSubmit(mode: Mode = NormalMode)
 GET         /change-community-support-officer                    controllers.police.CommunitySupportOfficerController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-community-support-officer                    controllers.police.CommunitySupportOfficerController.onSubmit(mode: Mode = CheckMode)
-
-GET         /joiner-carpenter                                    controllers.construction.JoinerCarpenterController.onPageLoad(mode: Mode = NormalMode)
-POST        /joiner-carpenter                                    controllers.construction.JoinerCarpenterController.onSubmit(mode: Mode = NormalMode)
-GET         /change-joiner-carpenter                             controllers.construction.JoinerCarpenterController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-joiner-carpenter                             controllers.construction.JoinerCarpenterController.onSubmit(mode: Mode = CheckMode)
-
-GET         /building-materials                                  controllers.construction.BuildingMaterialsController.onPageLoad(mode: Mode = NormalMode)
-POST        /building-materials                                  controllers.construction.BuildingMaterialsController.onSubmit(mode: Mode = NormalMode)
-GET         /change-building-materials                           controllers.construction.BuildingMaterialsController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-building-materials                           controllers.construction.BuildingMaterialsController.onSubmit(mode: Mode = CheckMode)
-
-GET         /stone-mason                                         controllers.construction.StoneMasonController.onPageLoad(mode: Mode = NormalMode)
-POST        /stone-mason                                         controllers.construction.StoneMasonController.onSubmit(mode: Mode = NormalMode)
-GET         /change-stone-mason                                  controllers.construction.StoneMasonController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-stone-mason                                  controllers.construction.StoneMasonController.onSubmit(mode: Mode = CheckMode)
-
-GET         /construction-occupation-list-1                      controllers.construction.ConstructionOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
-POST        /construction-occupation-list-1                      controllers.construction.ConstructionOccupationList1Controller.onSubmit(mode: Mode = NormalMode)
-GET         /change-construction-occupation-list-1               controllers.construction.ConstructionOccupationList1Controller.onPageLoad(mode: Mode = CheckMode)
-POST        /change-construction-occupation-list-1               controllers.construction.ConstructionOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
-
-GET         /construction-occupation-list-2                      controllers.construction.ConstructionOccupationList2Controller.onPageLoad(mode: Mode = NormalMode)
-POST        /construction-occupation-list-2                      controllers.construction.ConstructionOccupationList2Controller.onSubmit(mode: Mode = NormalMode)
-GET         /change-construction-occupation-list-2               controllers.construction.ConstructionOccupationList2Controller.onPageLoad(mode: Mode = CheckMode)
-POST        /change-construction-occupation-list-2               controllers.construction.ConstructionOccupationList2Controller.onSubmit(mode: Mode = CheckMode)
 
 GET         /which-tax-year                                      controllers.authenticated.TaxYearSelectionController.onPageLoad(mode: Mode = NormalMode)
 POST        /which-tax-year                                      controllers.authenticated.TaxYearSelectionController.onSubmit(mode: Mode = NormalMode)
