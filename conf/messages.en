@@ -632,7 +632,7 @@ noCodeChange.link = PAYE Income Tax summary
 
 yourAddress.title = Is this your address?
 yourAddress.heading = Is this your address?
-yourAddress.label = Is {0} your address?
+yourAddress.label = Is this your address?
 yourAddress.checkYourAnswersLabel = Is this your address? {0}
 yourAddress.checkYourAnswersLabel.hidden = Change whether your address is shown
 yourAddress.error.required = Select yes if this is your address
