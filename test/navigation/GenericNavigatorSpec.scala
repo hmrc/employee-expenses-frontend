@@ -23,6 +23,7 @@ import controllers.foodCatering.routes._
 import controllers.routes._
 import controllers.shipyard.routes._
 import controllers.textiles.routes._
+import controllers.construction.routes._
 import models.FifthIndustryOptions._
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions._
@@ -124,6 +125,13 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       //SecondIndustryOptionsPage
+
+      "go to ConstructionOccupationsController from SecondIndustryOptionsPage when 'Construction' is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
+          ConstructionOccupationsController.onPageLoad(NormalMode)
+      }
 
       "go to EmployersContributionsController from SecondIndustryOptionsPage when 'Council' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Council).success.value
@@ -530,6 +538,13 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       //SecondIndustryOptionsPage
+
+      "go to ConstructionOccupationsController from SecondIndustryOptionsPage when 'Construction' is selected" in {
+        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
+
+        navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
+          ConstructionOccupationsController.onPageLoad(CheckMode)
+      }
 
       "go to EmployersContributionsController from SecondIndustryOptionsPage when 'Council' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Council).success.value

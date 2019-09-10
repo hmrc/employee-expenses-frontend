@@ -185,7 +185,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
           .set(SecondIndustryOptionsPage, choice).success.value
       }
 
-     s"save correct data when $choice' is selected " in {
+     s"save correct data when '$choice' is selected " in {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

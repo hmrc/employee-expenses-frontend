@@ -31,6 +31,6 @@ class ConstructionNavigator @Inject()() extends Navigator {
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case ConstructionOccupationsPage      => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+    case _                                => _ => controllers.routes.SessionExpiredController.onPageLoad()
   }
 }
