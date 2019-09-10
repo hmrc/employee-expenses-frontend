@@ -109,21 +109,6 @@ trait PageGenerators {
   implicit lazy val arbitraryIronMiningListPage: Arbitrary[IronMiningListPage.type] =
     Arbitrary(IronMiningListPage)
 
-  implicit lazy val arbitraryConstructionOccupationList2Page: Arbitrary[ConstructionOccupationList2Page.type] =
-    Arbitrary(ConstructionOccupationList2Page)
-
-  implicit lazy val arbitraryConstructionOccupationList1Page: Arbitrary[ConstructionOccupationList1Page.type] =
-    Arbitrary(ConstructionOccupationList1Page)
-
-  implicit lazy val arbitraryBuildingMaterialsPage: Arbitrary[BuildingMaterialsPage.type] =
-    Arbitrary(BuildingMaterialsPage)
-
-  implicit lazy val arbitraryStoneMasonPage: Arbitrary[StoneMasonPage.type] =
-    Arbitrary(StoneMasonPage)
-
-  implicit lazy val arbitraryJoinerCarpenterPage: Arbitrary[JoinerCarpenterPage.type] =
-    Arbitrary(JoinerCarpenterPage)
-
   implicit lazy val arbitraryCommunitySupportOfficerPage: Arbitrary[CommunitySupportOfficerPage.type] =
     Arbitrary(CommunitySupportOfficerPage)
 
