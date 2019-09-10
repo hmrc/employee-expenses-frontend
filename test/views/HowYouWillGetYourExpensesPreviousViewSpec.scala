@@ -19,6 +19,8 @@ package views
 import uk.gov.hmrc.time.TaxYear
 import views.behaviours.ViewBehaviours
 import views.html.HowYouWillGetYourExpensesPreviousView
+import models.TaxYearSelection.taxYearString
+
 
 class HowYouWillGetYourExpensesPreviousViewSpec extends ViewBehaviours {
 
@@ -41,9 +43,7 @@ class HowYouWillGetYourExpensesPreviousViewSpec extends ViewBehaviours {
 
     "does show paragraph when CY-1 is selected" must {
       val wantedMessage = messages(
-        "howYouWillGetYourExpensesPrevious.para2",
-        TaxYear.current.back(1).starts.toString("d MMMM yyyy"),
-        TaxYear.current.back(1).finishes.toString("d MMMM yyyy")
+        "howYouWillGetYourExpensesPrevious.para2",taxYearString(1)
       )
 
       behave like pageWithBodyText(
@@ -56,9 +56,8 @@ class HowYouWillGetYourExpensesPreviousViewSpec extends ViewBehaviours {
       val doc = asDocument(applyView(false))
 
       val unwantedMessage = messages(
-        "howYouWillGetYourExpensesPrevious.para2",
-        TaxYear.current.back(1).starts.toString("d MMMM yyyy"),
-        TaxYear.current.back(1).finishes.toString("d MMMM yyyy")
+        "howYouWillGetYourExpensesPrevious.para2",taxYearString(1)
+
       )
 
       assertTextNotRendered(doc, unwantedMessage)

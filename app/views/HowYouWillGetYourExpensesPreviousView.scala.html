@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.time.TaxYear
+@import models.TaxYearSelection.taxYearString
 
 @this(
     main_template: MainTemplate
@@ -40,14 +41,8 @@
 
     @if(currentYearMinus1Selected){
 
-    <p>
-        @messages(
-            "howYouWillGetYourExpensesPrevious.para2",
-            TaxYear.current.back(1).starts.toString("d MMMM yyyy"),
-            TaxYear.current.back(1).finishes.toString("d MMMM yyyy")
-        )
-    </p>
-    }
+             <p>@messages("howYouWillGetYourExpensesPrevious.para2",taxYearString(1))</p>
+                                   }
 
 
     @components.button_link(messages("howYouWillGetYourExpenses.button"), href)

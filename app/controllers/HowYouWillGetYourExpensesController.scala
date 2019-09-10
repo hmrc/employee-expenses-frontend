@@ -28,23 +28,23 @@ import views.html.{HowYouWillGetYourExpensesCurrentAndPreviousYearView, HowYouWi
 import scala.concurrent.ExecutionContext
 
 class HowYouWillGetYourExpensesController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       identify: AuthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       currentView: HowYouWillGetYourExpensesCurrentView,
-                                       previousView: HowYouWillGetYourExpensesPreviousView,
-                                       currentAndPreviousYearView: HowYouWillGetYourExpensesCurrentAndPreviousYearView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                     override val messagesApi: MessagesApi,
+                                                     identify: AuthenticatedIdentifierAction,
+                                                     getData: DataRetrievalAction,
+                                                     requireData: DataRequiredAction,
+                                                     val controllerComponents: MessagesControllerComponents,
+                                                     currentView: HowYouWillGetYourExpensesCurrentView,
+                                                     previousView: HowYouWillGetYourExpensesPreviousView,
+                                                     currentAndPreviousYearView: HowYouWillGetYourExpensesCurrentAndPreviousYearView
+                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       request.userAnswers.get(TaxYearSelectionPage) match {
-        case Some(x) if x.contains(CurrentYear) && x.length>1 => Ok(currentAndPreviousYearView("", containsCurrentYearMinus1(x)))
-        case Some(x) if x.contains(CurrentYear) => Ok(currentView(""))
-        case Some(x) => Ok(previousView("",containsCurrentYearMinus1(x)))
+        case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) && taxYearSelection.length > 1 => Ok(currentAndPreviousYearView("", containsCurrentYearMinus1(taxYearSelection)))
+        case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) => Ok(currentView(""))
+        case Some(taxYearSelection) => Ok(previousView("", containsCurrentYearMinus1(taxYearSelection)))
       }
   }
 
