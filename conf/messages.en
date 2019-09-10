@@ -519,41 +519,6 @@ communitySupportOfficer.heading = Are you a community support officer?
 communitySupportOfficer.checkYourAnswersLabel = Are you a community support officer?
 communitySupportOfficer.error.required = Select yes if you are a community support officer
 
-joinerCarpenter.title = Are you a joiner or carpenter?
-joinerCarpenter.heading = Are you a joiner or carpenter?
-joinerCarpenter.checkYourAnswersLabel = Are you a joiner or carpenter?
-joinerCarpenter.error.required = Select yes if you are a joiner or carpenter
-
-buildingMaterials.title = Do you work in building materials?
-buildingMaterials.heading = Do you work in building materials?
-buildingMaterials.checkYourAnswersLabel = Do you work in building materials?
-buildingMaterials.error.required = Select yes if you work in building materials
-
-stoneMason.title = Are you a stone mason?
-stoneMason.heading = Are you a stone mason?
-stoneMason.checkYourAnswersLabel = Are you a stone mason?
-stoneMason.error.required = Select yes if you are a stone mason
-
-constructionOccupationList1.title = Construction occupations (page 1 of 2)
-constructionOccupationList1.heading = Construction occupations (page 1 of 2)
-constructionOccupationList1.checkYourAnswersLabel = Construction occupations (page 1 of 2)
-constructionOccupationList1.error.required = Select yes if your occupation is listed
-constructionOccupationList1.radioLabel = Is your occupation listed?
-constructionOccupationList1.listText = The occupations are:
-constructionOccupationList1.occupation1 = asphalt labourer
-constructionOccupationList1.occupation2 = cement works
-constructionOccupationList1.occupation3 = roofing felt
-
-constructionOccupationList2.title = Construction occupations (page 2 of 2)
-constructionOccupationList2.heading =Construction occupations (page 2 of 2)
-constructionOccupationList2.checkYourAnswersLabel = Construction occupations (page 2 of 2)
-constructionOccupationList2.error.required = Select yes if your occupation is listed
-constructionOccupationList2.radioLabel = Is your occupation listed?
-constructionOccupationList2.listText = The occupations are:
-constructionOccupationList2.occupation1 = labourer
-constructionOccupationList2.occupation2 = navvy
-constructionOccupationList2.occupation3 = tilemaker
-
 heatingOccupationList.title = Heating occupations
 heatingOccupationList.heading = Heating occupations
 heatingOccupationList.checkYourAnswersLabel = Heating Occupations

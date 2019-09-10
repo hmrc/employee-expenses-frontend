@@ -77,8 +77,7 @@ class GenericNavigator @Inject()() extends Navigator {
     case SecondIndustryOptionsPage => secondIndustryOptions(NormalMode)
     case ThirdIndustryOptionsPage  => thirdIndustryOptions(NormalMode)
     case FourthIndustryOptionsPage => fourthIndustryOptions(NormalMode)
-    case FifthIndustryOptionsPage => fifthIndustryOptions(NormalMode)
-
+    case FifthIndustryOptionsPage  => fifthIndustryOptions(NormalMode)
     case EmployerContributionPage  => employerContribution(NormalMode)
     case ExpensesEmployerPaidPage  => expensesEmployerPaid(NormalMode)
     case SameEmployerContributionAllYearsPage  => sameEmployerContributionAllYears(NormalMode)
@@ -119,7 +118,7 @@ class GenericNavigator @Inject()() extends Navigator {
 
   private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(SecondIndustryOptionsPage) match {
-      case Some(Construction)                      => JoinerCarpenterController.onPageLoad(mode)
+      case Some(Construction)                      => ???
       case Some(Council)                           => EmployerContributionController.onPageLoad(mode)
       case Some(Education)                         => EmployerContributionController.onPageLoad(mode)
       case Some(ManufacturingWarehousing)          => TypeOfManufacturingController.onPageLoad(mode)
