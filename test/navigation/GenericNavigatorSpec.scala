@@ -719,14 +719,6 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad()
       }
     }
-
-    "asked for variant" must {
-      "return navigator that routes construction users differently" in {
-        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
-
-        navigator.variant(ExperimentalVariant.IndustryTypesVariant).nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.construction.routes.ConstructionOccupationsController.onPageLoad(NormalMode)
-      }
-    }
   }
+
 }
