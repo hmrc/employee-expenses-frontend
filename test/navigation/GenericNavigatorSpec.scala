@@ -125,13 +125,6 @@ class GenericNavigatorSpec extends SpecBase {
 
       //SecondIndustryOptionsPage
 
-      "go JoinerCarpenterController from SecondIndustryOptionsPage when 'Construction' is selected" in {
-        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
-
-        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.construction.routes.JoinerCarpenterController.onPageLoad(NormalMode)
-      }
-
       "go to EmployersContributionsController from SecondIndustryOptionsPage when 'Council' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Council).success.value
 
@@ -537,13 +530,6 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       //SecondIndustryOptionsPage
-
-      "go JoinerCarpenterController from SecondIndustryOptionsPage when 'Construction' is selected" in {
-        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
-
-        navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
-          controllers.construction.routes.JoinerCarpenterController.onPageLoad(CheckMode)
-      }
 
       "go to EmployersContributionsController from SecondIndustryOptionsPage when 'Council' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Council).success.value
