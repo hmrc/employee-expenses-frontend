@@ -812,7 +812,7 @@ howYouWillGetYourExpenses.subheading = Claim your expenses
 howYouWillGetYourExpenses.expensesDeclaration = By claiming these expenses, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
 howYouWillGetYourExpenses.expensesDeclarationWarning = Warning
 howYouWillGetYourExpenses.expensesDeclarationProsecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
-howYouWillGetYourExpenses.button =  Accept and claim expenses
+howYouWillGetYourExpenses.button = Submit your claim
 
 howYouWillGetYourExpensesCurrent.para1 = We will increase your tax-free Personal Allowance by changing your tax code.
 howYouWillGetYourExpensesCurrent.para2 = This means you will:

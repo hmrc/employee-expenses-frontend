@@ -33,8 +33,8 @@
     <p class="lede">
         @messages(
             "howYouWillGetYourExpensesCurrentAndPreviousYear.paragraph1",
-            TaxYear.current.back(1).starts.toString("d MMMM yyyy"),
-            TaxYear.current.back(1).finishes.toString("d MMMM yyyy")
+            TaxYear.current.back(0).starts.toString("d MMMM yyyy"),
+            TaxYear.current.back(0).finishes.toString("d MMMM yyyy")
         )
     </p>
 
@@ -73,19 +73,6 @@
         )
     </p>
     }
-
-    <h2>@messages("howYouWillGetYourExpenses.subheading")</h2>
-
-    <p>@messages("howYouWillGetYourExpenses.expensesDeclaration")</p>
-
-    <div class="notice">
-        <i class="icon icon-important">
-            <span class="visually-hidden">@messages("howYouWillGetYourExpenses.expensesDeclarationWarning")</span>
-        </i>
-        <strong class="bold-small">
-            @messages("howYouWillGetYourExpenses.expensesDeclarationProsecuted")
-        </strong>
-    </div>
 
     @components.button_link(messages("howYouWillGetYourExpenses.button"), href)
 
