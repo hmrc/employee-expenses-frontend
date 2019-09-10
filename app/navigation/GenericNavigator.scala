@@ -94,7 +94,7 @@ class GenericNavigator @Inject()() extends Navigator {
 
   private def secondIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(SecondIndustryOptionsPage) match {
-      case Some(Construction) => ???
+      case Some(Construction) => ConstructionOccupationsController.onPageLoad(mode)
       case Some(Council) => EmployerContributionController.onPageLoad(mode)
       case Some(Education) => EmployerContributionController.onPageLoad(mode)
       case Some(ManufacturingWarehousing) => TypeOfManufacturingController.onPageLoad(mode)
