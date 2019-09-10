@@ -18,7 +18,8 @@ package controllers
 
 import controllers.actions._
 import javax.inject.Inject
-import models.TaxYearSelection
+imp                                                     getData: DataRetrievalAction,
+ort models.TaxYearSelection
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
 import pages.authenticated.TaxYearSelectionPage
 import play.api.i18n.{I18nSupport, MessagesApi}
