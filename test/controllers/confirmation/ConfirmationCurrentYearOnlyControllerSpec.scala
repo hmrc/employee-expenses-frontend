@@ -43,7 +43,7 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
   val mockTaiConnector: TaiConnector = mock[TaiConnector]
   val mockClaimAmountService: ClaimAmountService = mock[ClaimAmountService]
   val claimAmountService = new ClaimAmountService(frontendAppConfig)
-  val claimAmount: Int = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
+  val claimAmount: Int = currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get
   val claimAmountsAndRates = StandardRate(
     frontendAppConfig.taxPercentageBasicRate,
     frontendAppConfig.taxPercentageHigherRate,
@@ -55,7 +55,7 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
 
     "return OK and the correct ConfirmationCurrentYearOnlyView for a GET with specific answers" in {
 
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
@@ -85,7 +85,7 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
 
     "Redirect to TechnicalDifficulties when call to Tai fails" in {
 
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
@@ -120,7 +120,7 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
 
     "Remove session on page load" in {
 
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()

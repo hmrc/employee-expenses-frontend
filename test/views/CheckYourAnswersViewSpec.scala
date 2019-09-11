@@ -30,7 +30,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
   "Index view" must {
 
-    val cyaHelper = new CheckYourAnswersHelper(fullUserAnswers)
+    val cyaHelper = new CheckYourAnswersHelper(currentYearFullUserAnswers)
 
     val sections = Seq(AnswerSection(None, Seq(
       cyaHelper.industryType,
