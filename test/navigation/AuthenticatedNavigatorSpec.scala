@@ -145,11 +145,11 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           CheckYourAnswersController.onPageLoad()
       }
 
-      "go to YourAddress from YourEmployer when answered true" in {
+      "go to HowYouWillGetYourExpenses from YourEmployer when answered true" in {
         val ua = emptyUserAnswers.set(YourEmployerPage, true).success.value
 
         navigator.nextPage(YourEmployerPage, NormalMode)(ua) mustBe
-          YourAddressController.onPageLoad(NormalMode)
+          HowYouWillGetYourExpensesController.onPageLoad()
       }
 
       "go to UpdateEmployerInformation from YourEmployer when answered false" in {
@@ -159,9 +159,9 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           UpdateEmployerInformationController.onPageLoad(NormalMode)
       }
 
-      "go to YourAddress from UpdateEmployerInformation" in {
+      "go to HowYouWillGetYourExpenses from UpdateEmployerInformation" in {
         navigator.nextPage(UpdateYourEmployerInformationPage, NormalMode)(emptyUserAnswers) mustBe
-          YourAddressController.onPageLoad(NormalMode)
+          HowYouWillGetYourExpensesController.onPageLoad()
       }
 
       "go to CheckYourAnswers from YourAddress when answered true" in {
@@ -203,7 +203,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           val ua = minimumUserAnswers.set(FREResponse, FRENoYears).success.value
 
           navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
-            ConfirmationClaimStoppedController.onPageLoad()
+            HowYouWillGetYourExpensesController.onPageLoad()
         }
 
         "go to ConfirmationCurrentAndPreviousYearsController" in {
@@ -211,12 +211,12 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
             .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
 
           navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
-            ConfirmationCurrentAndPreviousYearsController.onPageLoad()
+            HowYouWillGetYourExpensesController.onPageLoad()
         }
 
         "go to ConfirmationCurrentYearOnlyController" in {
           navigator.nextPage(CheckYourAnswersPage, NormalMode)(currentYearFullUserAnswers) mustBe
-            ConfirmationCurrentYearOnlyController.onPageLoad()
+            HowYouWillGetYourExpensesController.onPageLoad()
         }
 
         "go to ConfirmationPreviousYearsOnlyController" in {
@@ -224,7 +224,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
             .set(TaxYearSelectionPage, Seq(CurrentYearMinus1, CurrentYearMinus2)).success.value
 
           navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
-            ConfirmationPreviousYearsOnlyController.onPageLoad()
+            HowYouWillGetYourExpensesController.onPageLoad()
         }
       }
     }
@@ -258,14 +258,15 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           UpdateEmployerInformationController.onPageLoad(CheckMode)
       }
 
-      "go to CheckYourAnswersController from UpdateEmployerInformation when YourAddress is defined" in {
+      "go to HowYouWillGetYourExpenses from UpdateEmployerInformation when YourAddress is defined" in {
         val userAnswers = emptyUserAnswers.set(YourAddressPage, true).success.value
 
         navigator.nextPage(UpdateYourEmployerInformationPage, CheckMode)(userAnswers) mustBe
-          CheckYourAnswersController.onPageLoad()
+          HowYouWillGetYourExpensesController.onPageLoad()
+
       }
 
-      "go to YourAddress from UpdateEmployerInformation when YourAddress is not defined" in {
+      "go to YourAddress from UpdateEmployerInformation when YourAddress is not defined" ignore {
         navigator.nextPage(UpdateYourEmployerInformationPage, CheckMode)(emptyUserAnswers) mustBe
           YourAddressController.onPageLoad(CheckMode)
       }

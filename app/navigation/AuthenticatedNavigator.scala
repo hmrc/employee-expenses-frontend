@@ -36,7 +36,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case YourAddressPage => yourAddress(NormalMode)
     case UpdateYourAddressPage => _ => CheckYourAnswersController.onPageLoad()
     case YourEmployerPage => yourEmployer(NormalMode)
-    case UpdateYourEmployerInformationPage => updateEmployerInformation(NormalMode)
+    case UpdateYourEmployerInformationPage =>  _ => HowYouWillGetYourExpensesController.onPageLoad()
     case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
     case CheckYourAnswersPage => checkYourAnswers(NormalMode)
@@ -48,7 +48,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(CheckMode)
     case YourAddressPage => yourAddress(CheckMode)
     case YourEmployerPage => yourEmployer(CheckMode)
-    case UpdateYourEmployerInformationPage => updateEmployerInformation(CheckMode)
+    case UpdateYourEmployerInformationPage =>  _ => HowYouWillGetYourExpensesController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
     case _ => _ => CheckYourAnswersController.onPageLoad()
   }
@@ -103,7 +103,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     if (mode == NormalMode) {
       userAnswers.get(YourEmployerPage) match {
         case Some(true) =>
-          YourAddressController.onPageLoad(mode)
+          HowYouWillGetYourExpensesController.onPageLoad()
         case Some(false) =>
           UpdateEmployerInformationController.onPageLoad(mode)
         case _ =>
@@ -122,30 +122,16 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       }
     }
   }
-
-  def updateEmployerInformation(mode: Mode)(userAnswers: UserAnswers): Call = {
-    if (mode == CheckMode) {
-      userAnswers.get(YourAddressPage) match {
-        case Some(_) =>
-          CheckYourAnswersController.onPageLoad()
-        case None =>
-          YourAddressController.onPageLoad(mode)
-      }
-    } else {
-      YourAddressController.onPageLoad(mode)
-    }
-  }
-
   def checkYourAnswers(mode: Mode)(userAnswers: UserAnswers): Call = {
     (mode, userAnswers.get(YourEmployerPage), userAnswers.get(ChangeWhichTaxYearsPage)) match {
       case (NormalMode, None, Some(selectedYears)) =>
-        if (selectedYears.contains(CurrentYear)) YourEmployerController.onPageLoad(mode) else .onPageLoad(mode)
+        if (selectedYears.contains(CurrentYear)) YourEmployerController.onPageLoad(mode) else HowYouWillGetYourExpensesController.onPageLoad()
       case (NormalMode, _, None) =>
-        YourAddressController.onPageLoad(mode)
+        HowYouWillGetYourExpensesController.onPageLoad()
       case (CheckMode, None, Some(selectedYears)) =>
-        if (selectedYears.contains(CurrentYear)) YourEmployerController.onPageLoad(mode) else CheckYourAnswersController.onPageLoad()
+        if (selectedYears.contains(CurrentYear)) YourEmployerController.onPageLoad(mode) else HowYouWillGetYourExpensesController.onPageLoad()
       case _ =>
-        CheckYourAnswersController.onPageLoad()
+        HowYouWillGetYourExpensesController.onPageLoad()
     }
   }
 }

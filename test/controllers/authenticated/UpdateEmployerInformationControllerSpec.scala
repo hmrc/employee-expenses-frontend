@@ -23,9 +23,9 @@ import play.api.test.Helpers._
 import views.html.authenticated.UpdateEmployerInformationView
 
 class UpdateEmployerInformationControllerSpec extends SpecBase {
-  val nextPageURL = "/employee-expenses/your-address"
+  val nextPageURL = "/employee-expenses/how-you-will-get-your-expenses"
 
-  "UpdateEmployerDetails Controller" must {
+  "UpdateEmployerInformation Controller" must {
 
     "return OK and the correct view for a GET" in {
 
