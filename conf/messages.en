@@ -548,7 +548,7 @@ ironMiningList.occupation2 = miners and underground workers
 
 taxYearSelection.title = Which tax years do you want to claim for?
 taxYearSelection.heading = Which tax years do you want to claim for?
-taxYearSelection.paragraph = You can claim for the current tax year and previous 4 tax years.
+taxYearSelection.paragraph = Select all that apply.
 taxYearSelection.currentYear = 6 April {0} to 5 April {1} (the current tax year)
 taxYearSelection.currentYearMinus1 = 6 April {0} to 5 April {1}
 taxYearSelection.currentYearMinus2 = 6 April {0} to 5 April {1}
