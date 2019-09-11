@@ -37,7 +37,7 @@ class ConfirmationClaimStoppedControllerSpec extends SpecBase with MockitoSugar 
 
     "return OK and ConfirmationClaimStoppedView for a GET with specific answers" in {
 
-      val userAnswers = fullUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYearMinus1).success.value
+      val userAnswers = currentYearFullUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYearMinus1).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -57,7 +57,7 @@ class ConfirmationClaimStoppedControllerSpec extends SpecBase with MockitoSugar 
 
     "Remove session on page load" in {
 
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers))
         .build()
 
       val request = FakeRequest(GET, ConfirmationClaimStoppedController.onPageLoad().url)

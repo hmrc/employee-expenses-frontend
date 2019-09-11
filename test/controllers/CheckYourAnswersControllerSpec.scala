@@ -50,7 +50,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
   private val mockSubmissionService = mock[SubmissionService]
   private val mockAuditConnector = mock[AuditConnector]
   private val cyaHelperMinimumUa = new CheckYourAnswersHelper(minimumUserAnswers)
-  private val cyaHelperFullUa = new CheckYourAnswersHelper(fullUserAnswers)
+  private val cyaHelperFullUa = new CheckYourAnswersHelper(currentYearFullUserAnswers)
 
   private val minimumSections = Seq(AnswerSection(None, Seq(
     cyaHelperMinimumUa.industryType,
@@ -97,7 +97,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
       "return OK and the correct view for a GET for a changed claim" in {
 
         val userAnswers =
-          fullUserAnswers
+          currentYearFullUserAnswers
             .set(FREResponse, FlatRateExpenseOptions.FRESomeYears).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -118,7 +118,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
       "return OK and the correct view for a GET for a new claim" in {
 
-        val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers)).build()
 
         val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
 
@@ -209,11 +209,11 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(204))))
 
-        val application = applicationBuilder(Some(fullUserAnswers))
+        val application = applicationBuilder(Some(currentYearFullUserAnswers))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, fullUserAnswers.data))
+            bind[AuditData].toInstance(AuditData(fakeNino, currentYearFullUserAnswers.data))
           ).build()
 
         val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
@@ -230,7 +230,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
             val auditData = captor.getValue
 
             auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual fullUserAnswers.data
+            auditData.userAnswers mustEqual currentYearFullUserAnswers.data
             auditData.userAnswers mustBe a[JsObject]
 
             status(result) mustEqual SEE_OTHER
@@ -363,11 +363,11 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(500))))
 
-        val application = applicationBuilder(Some(fullUserAnswers))
+        val application = applicationBuilder(Some(currentYearFullUserAnswers))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, fullUserAnswers.data))
+            bind[AuditData].toInstance(AuditData(fakeNino, currentYearFullUserAnswers.data))
           ).build()
 
         val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
@@ -384,7 +384,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
             val auditData = captor.getValue
 
             auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual fullUserAnswers.data
+            auditData.userAnswers mustEqual currentYearFullUserAnswers.data
             auditData.userAnswers mustBe a[JsObject]
 
             status(result) mustEqual SEE_OTHER

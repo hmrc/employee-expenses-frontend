@@ -30,7 +30,7 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
 
   val form = new AlreadyClaimingFREDifferentAmountsFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+  val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers)).build()
 
   val view = application.injector.instanceOf[AlreadyClaimingFREDifferentAmountsView]
 
@@ -38,15 +38,15 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
     view.apply(
       form,
       NormalMode,
-      fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
-      fullUserAnswers.get(FREAmounts).get
+      currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+      currentYearFullUserAnswers.get(FREAmounts).get
     )(fakeRequest, messages)
 
   def applyViewMultipleYears(form: Form[_]): HtmlFormat.Appendable =
     view.apply(
       form,
       NormalMode,
-      fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+      currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
       Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()), FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear().prev))
     )(fakeRequest, messages)
 
@@ -54,8 +54,8 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
     view.apply(
       form,
       NormalMode,
-      fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
-      fullUserAnswers.get(FREAmounts).get
+      currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
+      currentYearFullUserAnswers.get(FREAmounts).get
     )(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "AlreadyClaimingFREDifferentAmountsView" must {
@@ -70,7 +70,7 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
 
     "display correct body text" in {
       val doc = asDocument(applyView(form))
-      assertContainsText(doc, messages("alreadyClaimingFREDifferentAmounts.bodyText1", fullUserAnswers.get(ClaimAmountAndAnyDeductions).get))
+      assertContainsText(doc, messages("alreadyClaimingFREDifferentAmounts.bodyText1", currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get))
     }
 
     "contains correct column values for table" in {

@@ -366,7 +366,7 @@ GET         /change-textiles-occupation-list1                    controllers.tex
 POST        /change-textiles-occupation-list1                    controllers.textiles.TextilesOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
 
 GET         /cabin-crew                                          controllers.transport.CabinCrewController.onPageLoad(mode: Mode = NormalMode)
-POST        /cabin-crew                                          controllers.transport.CabinCrewController.onSubmit(mode: Mode = NormalMode)
+POST        /cabin-crew                                            controllers.transport.CabinCrewController.onSubmit(mode: Mode = NormalMode)
 GET         /change-cabin-crew                                   controllers.transport.CabinCrewController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-cabin-crew                                   controllers.transport.CabinCrewController.onSubmit(mode: Mode = CheckMode)
 
@@ -374,3 +374,5 @@ GET         /construction-occupations                            controllers.con
 POST        /construction-occupations                            controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = NormalMode)
 GET         /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /how-you-will-get-your-expenses                       controllers.HowYouWillGetYourExpensesController.onPageLoad()

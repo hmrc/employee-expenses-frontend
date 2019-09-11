@@ -18,6 +18,6 @@ package controllers.actions
 
 sealed trait IdentifierType
 
-case class Authed(internalId: String) extends IdentifierType
+final case class Authed(internalId: String) extends IdentifierType
 
-case class UnAuthed(sessionId: String) extends IdentifierType
+final case class UnAuthed(sessionId: String) extends IdentifierType
