@@ -150,10 +150,20 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
   }
 
   def checkYourAnswers()(userAnswers: UserAnswers): Call = {
-    (userAnswers.get(TaxYearSelectionPage), userAnswers.get(RemoveFRECodePage)) match {
-      case (Some(_), Some(_)) =>
+    (
+      userAnswers.get(TaxYearSelectionPage),
+      userAnswers.get(RemoveFRECodePage),
+      userAnswers.get(ChangeWhichTaxYearsPage)
+    ) match {
+      case (Some(_), Some(_), None) =>
         ConfirmationClaimStoppedController.onPageLoad()
-      case (Some(taxYears), None) =>
+      case (Some(taxYearsSelection), None, changeYears) =>
+
+        val taxYears = changeYears match {
+          case Some(changeYear) => changeYear
+          case _ => taxYearsSelection
+        }
+
         if (taxYears.forall(_ == TaxYearSelection.CurrentYear)) {
           ConfirmationCurrentYearOnlyController.onPageLoad()
         } else if (!taxYears.contains(TaxYearSelection.CurrentYear)) {

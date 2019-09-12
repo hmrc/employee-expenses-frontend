@@ -41,7 +41,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
         "go to YourEmployer when answered and freResponse returns FRENoYears and currentTax has been selected" in {
 
           val ua = emptyUserAnswers.set(FREResponse, FRENoYears).success.value
-              .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
+            .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
             YourEmployerController.onPageLoad(NormalMode)
@@ -139,7 +139,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
 
       "go to YourAddressfrom ChangeWhichTaxYearsPage when not using currentTaxYear" in {
         val ua = emptyUserAnswers.set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
-            .set(ChangeWhichTaxYearsPage, Seq(CurrentYearMinus1)).success.value
+          .set(ChangeWhichTaxYearsPage, Seq(CurrentYearMinus1)).success.value
 
         navigator.nextPage(ChangeWhichTaxYearsPage, NormalMode)(ua) mustBe
           YourAddressController.onPageLoad(NormalMode)
@@ -284,7 +284,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
 
       "go to CheckYourAnswers from ChangeWhichTaxYear when YourEmployer is defined and CurrentYear is selected" in {
         val userAnswers = emptyUserAnswers.set(YourEmployerPage, true).success.value
-            .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
+          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
 
         navigator.nextPage(ChangeWhichTaxYearsPage, CheckMode)(userAnswers) mustBe
           CheckYourAnswersController.onPageLoad()
