@@ -63,9 +63,11 @@ class ClaimAmountService @Inject()(
       starterRate = appConfig.taxPercentageScotlandStarterRate,
       basicRate = appConfig.taxPercentageScotlandBasicRate,
       intermediateRate = appConfig.taxPercentageScotlandIntermediateRate,
+      higherRate = appConfig.taxPercentageScotlandHigherRate,
       calculatedStarterRate = calculateTax(appConfig.taxPercentageScotlandStarterRate, claimAmount),
       calculatedBasicRate = calculateTax(appConfig.taxPercentageScotlandBasicRate, claimAmount),
-      calculatedIntermediateRate = calculateTax(appConfig.taxPercentageScotlandIntermediateRate, claimAmount)
+      calculatedIntermediateRate = calculateTax(appConfig.taxPercentageScotlandIntermediateRate, claimAmount),
+      calculatedHigherRate = calculateTax(appConfig.taxPercentageScotlandHigherRate, claimAmount)
     )
   }
 

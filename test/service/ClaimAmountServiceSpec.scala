@@ -117,10 +117,13 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
             starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
             basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
             intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+            higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
             calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
             calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
-            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount)
-          ))
+            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount)
+          )
+        )
       }
 
       "non-live tax codes that are scottish must return scottish rates" in {
@@ -132,10 +135,13 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
             starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
             basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
             intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+            higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
             calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
             calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
-            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount)
-          ))
+            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount)
+          )
+        )
       }
 
       "non-live tax codes that are english and scottish must return head value" in {
@@ -166,10 +172,13 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
             starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
             basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
             intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+            higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
             calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
             calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
-            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount)
-          ))
+            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount)
+          )
+        )
       }
     }
 
