@@ -778,3 +778,6 @@ constructionOccupations.labourerOrNavvy = Labourer or navvy
 constructionOccupations.tilemaker = Tilemaker
 constructionOccupations.buildingMaterials = Occupation within building materials
 constructionOccupations.none = Construction occupation not listed
+
+accessibilityStatement.title = accessibilityStatement
+accessibilityStatement.heading = accessibilityStatement
