@@ -17,11 +17,12 @@
 package controllers
 
 import base.SpecBase
+import connectors.{CitizenDetailsConnector, TaiConnector}
 import controllers.confirmation.routes._
 import controllers.authenticated.routes._
 import controllers.routes._
 import models.FlatRateExpenseOptions._
-import models.{FlatRateExpenseOptions, TaxYearSelection}
+import models.{AlreadyClaimingFREDifferentAmounts, FlatRateExpenseOptions, TaxYearSelection}
 import models.TaxYearSelection._
 import models.auditing._
 import org.mockito.ArgumentCaptor
@@ -30,7 +31,7 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.authenticated.{RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated.{AlreadyClaimingFREDifferentAmountsPage, ChangeWhichTaxYearsPage, RemoveFRECodePage, TaxYearSelectionPage}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.inject.bind
 import play.api.libs.json.JsObject
@@ -49,6 +50,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
   private val mockSubmissionService = mock[SubmissionService]
   private val mockAuditConnector = mock[AuditConnector]
+  private val mockTaiConnector = mock[TaiConnector]
+  private val mockCitizenDetailsConnector = mock[CitizenDetailsConnector]
   private val cyaHelperMinimumUa = new CheckYourAnswersHelper(minimumUserAnswers)
   private val cyaHelperFullUa = new CheckYourAnswersHelper(fullUserAnswers)
 
@@ -70,7 +73,12 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     cyaHelperFullUa.yourEmployer
   ).flatten))
 
-  override def beforeEach(): Unit = reset(mockAuditConnector)
+  override def beforeEach(): Unit = {
+    reset(mockAuditConnector)
+    reset(mockSubmissionService)
+    reset(mockTaiConnector)
+    reset(mockCitizenDetailsConnector)
+  }
 
   "Check Your Answers Controller" when {
     "onPageLoad" must {
@@ -469,7 +477,6 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         }
 
         application.stop()
-
       }
 
       "redirect to tech difficulties when given no data" in {
@@ -485,8 +492,96 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad().url
 
         application.stop()
-
       }
+    }
+
+
+
+    "submit the correct number of time for new claims" in {
+      when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
+          .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
+
+      when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(200)))
+
+      val userAnswers = minimumUserAnswers
+        .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
+        .set(ClaimAmountAndAnyDeductions, 100).success.value
+
+      val application = applicationBuilder(Some(userAnswers))
+        .overrides(
+          bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector),
+          bind[TaiConnector].toInstance(mockTaiConnector)
+        ).build()
+
+      val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
+      val result = route(application, request).value
+
+      whenReady(result) {
+        _ =>
+          verify(mockTaiConnector, times(5)).taiFREUpdate(any(), any(), any(), any())(any(), any())
+      }
+
+      application.stop()
+    }
+
+    "submit the correct number of time for change claims" in {
+      when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
+          .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
+
+      when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(200)))
+
+      val userAnswers = minimumUserAnswers
+        .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
+        .set(ClaimAmountAndAnyDeductions, 100).success.value
+        .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change).success.value
+        .set(ChangeWhichTaxYearsPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
+
+      val application = applicationBuilder(Some(userAnswers))
+        .overrides(
+          bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector),
+          bind[TaiConnector].toInstance(mockTaiConnector)
+        ).build()
+
+      val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
+      val result = route(application, request).value
+
+      whenReady(result) {
+        _ =>
+          verify(mockTaiConnector, times(2)).taiFREUpdate(any(), any(), any(), any())(any(), any())
+      }
+
+      application.stop()
+    }
+
+    "submit the correct number of time for remove claims" in {
+      when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
+
+      when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(200)))
+
+      val userAnswers = minimumUserAnswers
+        .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
+        .set(RemoveFRECodePage, CurrentYearMinus2).success.value
+
+      val application = applicationBuilder(Some(userAnswers))
+        .overrides(
+          bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector),
+          bind[TaiConnector].toInstance(mockTaiConnector)
+        ).build()
+
+      val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
+
+      val result = route(application, request).value
+
+      whenReady(result) {
+        _ =>
+          verify(mockTaiConnector, times(3)).taiFREUpdate(any(), any(), any(), any())(any(), any())
+      }
+
+      application.stop()
     }
   }
 }
