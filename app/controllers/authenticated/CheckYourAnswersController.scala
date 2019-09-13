@@ -79,7 +79,7 @@ class CheckYourAnswersController @Inject()(
       }
   }
 
-  def checkYourAnswersText(removeFre: Boolean, freResponse: FlatRateExpenseOptions): CheckYourAnswersText = {
+  private def checkYourAnswersText(removeFre: Boolean, freResponse: FlatRateExpenseOptions): CheckYourAnswersText = {
     (removeFre, freResponse) match {
       case (true, _) =>
         CheckYourAnswersText(heading = "heading", disclaimerHeading = "stopClaim", disclaimer = "confirmInformationChangeFre", button = "acceptStopClaim")
@@ -123,7 +123,7 @@ class CheckYourAnswersController @Inject()(
       }
   }
 
-  def auditAndRedirect(result: Seq[HttpResponse],
+  private def auditAndRedirect(result: Seq[HttpResponse],
                        auditData: AuditData,
                        userAnswers: UserAnswers
                       )(implicit hc: HeaderCarrier): Result = {
