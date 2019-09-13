@@ -28,6 +28,7 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.authenticated._
 import pages.FREResponse
+import play.api.Mode
 
 class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
@@ -47,16 +48,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
             CheckYourAnswersController.onPageLoad()
         }
 
-        "go to YourAddress when answered and freResponse returns FRENoYears and currentTax has not been selected" in {
-
-          val ua = emptyUserAnswers.set(FREResponse, FRENoYears).success.value
-            .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
-
-          navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
-            YourAddressController.onPageLoad(NormalMode)
-        }
-
-        "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
+       "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
           val ua = emptyUserAnswers.set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
@@ -254,20 +246,6 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           CheckYourAnswersController.onPageLoad()
       }
 
-      "go to CheckYourAnswers from YourEmployerController when 'true' and when YourAddress is defined" ignore {
-        val ua = emptyUserAnswers.set(YourEmployerPage, true).success.value
-          .set(YourAddressPage, true).success.value
-
-        navigator.nextPage(YourEmployerPage, CheckMode)(ua) mustBe
-          CheckYourAnswersController.onPageLoad()
-      }
-
-      "go to YourAddress from YourEmployerController when 'true' and when YourAddress is not defined" ignore {
-        val userAnswers = emptyUserAnswers.set(YourEmployerPage, true).success.value
-
-        navigator.nextPage(YourEmployerPage, CheckMode)(userAnswers) mustBe
-          YourAddressController.onPageLoad(CheckMode)
-      }
 
       "go to UpdateEmployerInformationController from YourEmployerController when 'false'" in {
         val userAnswers = emptyUserAnswers.set(YourEmployerPage, false).success.value
@@ -282,11 +260,6 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
         navigator.nextPage(UpdateYourEmployerInformationPage, CheckMode)(userAnswers) mustBe
           HowYouWillGetYourExpensesController.onPageLoad()
 
-      }
-
-      "go to YourAddress from UpdateEmployerInformation when YourAddress is not defined" ignore {
-        navigator.nextPage(UpdateYourEmployerInformationPage, CheckMode)(emptyUserAnswers) mustBe
-          YourAddressController.onPageLoad(CheckMode)
       }
 
       "go to CheckYourAnswers from ChangeWhichTaxYear when YourEmployer is not defined and CurrentYear is selected" in {
@@ -308,7 +281,6 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
         navigator.nextPage(ChangeWhichTaxYearsPage, CheckMode)(userAnswers) mustBe
           CheckYourAnswersController.onPageLoad()
       }
-
 
       "from TaxYearSelection" must {
 
@@ -334,24 +306,23 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           val ua = emptyUserAnswers.set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
-            CheckYourAnswersController.onPageLoad()
+            AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode)
         }
 
         "go to Check your answers when answered and freResponse returns FREAllYearsAllAmountsDifferent" in {
           val ua = emptyUserAnswers.set(FREResponse, FRESomeYears).success.value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
-            CheckYourAnswersController.onPageLoad()
+            AlreadyClaimingFREDifferentAmountsController.onPageLoad(CheckMode)
         }
 
-        "go to TechnicalDifficulties when answered and freResponse returns TechnicalDifficulties" ignore {
+        "go to TechnicalDifficulties when answered and freResponse returns TechnicalDifficulties" in {
           val ua = emptyUserAnswers.set(FREResponse, TechnicalDifficulties).success.value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
             TechnicalDifficultiesController.onPageLoad()
         }
       }
-
 
       "from AlreadyClaimingFRESameAmount" must {
 

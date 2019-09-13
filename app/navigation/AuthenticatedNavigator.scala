@@ -44,7 +44,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => _ => CheckYourAnswersController.onPageLoad()
+    case TaxYearSelectionPage => taxYearSelection(CheckMode)
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(CheckMode)
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(CheckMode)
     case YourAddressPage => yourAddress(CheckMode)
@@ -55,9 +55,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
   }
 
   def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
-    case Some(FRENoYears) =>
-      if (userAnswers.get(TaxYearSelectionPage).get.contains(CurrentYear)) YourEmployerController.onPageLoad(mode)
-      else YourAddressController.onPageLoad(mode)
+    case Some(FRENoYears) =>  CheckYourAnswersController.onPageLoad()
     case Some(FREAllYearsAllAmountsSameAsClaimAmount) =>
       AlreadyClaimingFRESameAmountController.onPageLoad(mode)
     case Some(FRESomeYears) =>
