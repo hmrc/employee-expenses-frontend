@@ -52,7 +52,10 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
     "return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+      val userAnswers = fullUserAnswers
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, alreadyClaimingFRESameAmountRoute)
 
@@ -66,8 +69,8 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
         view(
           form,
           NormalMode,
-          fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
-          fullUserAnswers.get(FREAmounts).get
+          userAnswers.get(ClaimAmountAndAnyDeductions).value,
+          userAnswers.get(FREAmounts).value
         )(request, messages).toString
 
       application.stop()
@@ -75,7 +78,9 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = fullUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.values.head).success.value
+      val userAnswers = fullUserAnswers
+        .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.values.head).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,8 +96,8 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
         view(
           form.fill(AlreadyClaimingFRESameAmount.values.head),
           NormalMode,
-          fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
-          fullUserAnswers.get(FREAmounts).get
+          userAnswers.get(ClaimAmountAndAnyDeductions).get,
+          userAnswers.get(FREAmounts).get
         )(request, messages).toString
 
       application.stop()
@@ -100,8 +105,11 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
     "redirect to the next page when valid data is submitted" in {
 
+      val userAnswers = fullUserAnswers
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
       val application =
-        applicationBuilder(userAnswers = Some(fullUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .build()
@@ -120,8 +128,10 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
+      val userAnswers = fullUserAnswers
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         FakeRequest(POST, alreadyClaimingFRESameAmountRoute)
@@ -139,8 +149,8 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
         view(
           boundForm,
           NormalMode,
-          fullUserAnswers.get(ClaimAmountAndAnyDeductions).get,
-          fullUserAnswers.get(FREAmounts).get
+          userAnswers.get(ClaimAmountAndAnyDeductions).get,
+          userAnswers.get(FREAmounts).get
         )(request, messages).toString
 
       application.stop()

@@ -19,12 +19,13 @@ package controllers.authenticated
 import base.SpecBase
 import config.NavConstant
 import forms.authenticated.ChangeWhichTaxYearsFormProvider
-import models.{NormalMode, TaxYearSelection}
+import models.{FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, TaxYearSelection}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
+import pages.FREAmounts
 import pages.authenticated.ChangeWhichTaxYearsPage
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -52,7 +53,10 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
   "ChangeWhichTaxYears Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+      val userAnswers = fullUserAnswers
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, changeWhichTaxYearsRoute)
 
@@ -69,7 +73,9 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = fullUserAnswers.set(ChangeWhichTaxYearsPage, TaxYearSelection.values).success.value
+      val userAnswers = fullUserAnswers
+        .set(ChangeWhichTaxYearsPage, TaxYearSelection.values).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -88,8 +94,11 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val userAnswers = fullUserAnswers
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
       val application =
-        applicationBuilder(userAnswers = Some(fullUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
@@ -108,7 +117,10 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+      val userAnswers = fullUserAnswers
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         FakeRequest(POST, changeWhichTaxYearsRoute)
