@@ -36,10 +36,11 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case YourAddressPage => yourAddress(NormalMode)
     case UpdateYourAddressPage => _ => CheckYourAnswersController.onPageLoad()
     case YourEmployerPage => yourEmployer(NormalMode)
-    case UpdateYourEmployerInformationPage =>  _ => HowYouWillGetYourExpensesController.onPageLoad()
+    case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
     case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
     case CheckYourAnswersPage => checkYourAnswers(NormalMode)
+    case HowYouWillGetYourExpensesPage => howYouWillGetYourExpenses(NormalMode)
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -48,7 +49,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(CheckMode)
     case YourAddressPage => yourAddress(CheckMode)
     case YourEmployerPage => yourEmployer(CheckMode)
-    case UpdateYourEmployerInformationPage =>  _ => HowYouWillGetYourExpensesController.onPageLoad()
+    case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
     case _ => _ => CheckYourAnswersController.onPageLoad()
   }
@@ -122,6 +123,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       }
     }
   }
+
   def checkYourAnswers(mode: Mode)(userAnswers: UserAnswers): Call = {
     (mode, userAnswers.get(YourEmployerPage), userAnswers.get(ChangeWhichTaxYearsPage)) match {
       case (NormalMode, None, Some(selectedYears)) =>
@@ -134,4 +136,32 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
         HowYouWillGetYourExpensesController.onPageLoad()
     }
   }
+
+  def howYouWillGetYourExpenses(mode: Mode)(userAnswers: UserAnswers): Call = {
+    (
+      userAnswers.get(TaxYearSelectionPage),
+      userAnswers.get(RemoveFRECodePage),
+      userAnswers.get(ChangeWhichTaxYearsPage)
+    ) match {
+      case (Some(_), Some(_), None) =>
+        ConfirmationClaimStoppedController.onPageLoad()
+      case (Some(taxYearsSelection), None, changeYears) =>
+
+        val taxYears = changeYears match {
+          case Some(changeYear) => changeYear
+          case _ => taxYearsSelection
+        }
+
+        if (taxYears.forall(_ == TaxYearSelection.CurrentYear)) {
+          ConfirmationCurrentYearOnlyController.onPageLoad()
+        } else if (!taxYears.contains(TaxYearSelection.CurrentYear)) {
+          ConfirmationPreviousYearsOnlyController.onPageLoad()
+        } else {
+          ConfirmationCurrentAndPreviousYearsController.onPageLoad()
+        }
+      case _ =>
+        SessionExpiredController.onPageLoad()
+    }
+  }
+
 }

@@ -21,16 +21,13 @@ import connectors.TaiConnector
 import controllers.actions.Authed
 import controllers.confirmation.routes._
 import controllers.routes._
-import models.FlatRateExpenseOptions.FRENoYears
 import models.TaxCodeStatus.Live
-import models.TaxYearSelection._
 import models._
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages._
-import pages.authenticated._
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -57,13 +54,17 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
   "ConfirmationCurrentAndPreviousYearsController" must {
     "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET with specific answers" in {
 
-      val application = applicationBuilder(userAnswers = Some(currentYearAndCurrentYearMinus1UserAnswers))
+      val application = applicationBuilder(userAnswers =
+        Some(yearsUserAnswers(Seq
+        (TaxYearSelection.CurrentYear,
+          TaxYearSelection.CurrentYearMinus1)
+        )))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
       when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
-      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+      when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationCurrentAndPreviousYearsController.onPageLoad().url)
 
@@ -79,7 +80,7 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
           claimAmount = claimAmount,
           employerInfoCorrect = Some(true),
           addressInfoCorrect = Some(true),
-          currentYearMinus1 =true,
+          currentYearMinus1 = true,
           freResponse = FlatRateExpenseOptions.FRENoYears
         )(request, messages, frontendAppConfig).toString
 
