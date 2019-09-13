@@ -82,6 +82,12 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val flatRateExpenseId: Int = configuration.get[Int]("flatRateExpenseId")
 
+  lazy val accessibilityStatementUrl: String = configuration.get[String]("accessibilityStatement.url")
+  lazy val abilityNettUrl: String = configuration.get[String]("abilityNet.url")
+  lazy val w3StandardsUrl: String = configuration.get[String]("w3Standards.url")
+  lazy val equalityAdvisoryServiceUrl: String = configuration.get[String]("equalityAdvisoryService.url")
+  lazy val equalityNIUrl: String = configuration.get[String]("equalityNI.url")
+
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")
