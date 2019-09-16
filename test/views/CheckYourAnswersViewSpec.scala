@@ -16,8 +16,11 @@
 
 package views
 
+import config.NavConstant
 import models.FlatRateExpenseOptions
+import navigation.{FakeNavigator, Navigator}
 import play.api.Application
+import play.api.inject.bind
 import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import utils.CheckYourAnswersHelper
@@ -27,11 +30,12 @@ import views.html.CheckYourAnswersView
 
 class CheckYourAnswersViewSpec extends ViewBehaviours {
 
-  val application: Application = applicationBuilder().build()
+  val onwardRoute = Call("GET", "/foo")
+
+  val application: Application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers),onwardRoute = Some(onwardRoute))
+    .build()
 
   "Index view" must {
-
-    val onwardRoute = Call("GET", "/foo").url
 
     val cyaHelper = new CheckYourAnswersHelper(currentYearFullUserAnswers)
 
@@ -44,16 +48,16 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     ).flatten))
 
     def applyView(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre, onwardRoute)(fakeRequest, messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre, onwardRoute.url)(fakeRequest, messages)
 
     def applyViewWithAuth(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre, onwardRoute)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre, onwardRoute.url)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     def applyViewNewClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextNoFre, onwardRoute)(fakeRequest, messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextNoFre, onwardRoute.url)(fakeRequest, messages)
 
     def applyViewChangeClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextChangeFre, onwardRoute)(fakeRequest, messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextChangeFre, onwardRoute.url)(fakeRequest, messages)
 
     behave like normalPage(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true), "checkYourAnswers")
 
@@ -70,7 +74,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
           "checkYourAnswers.claimExpenses"
         )
 
-        doc.getElementById("submit").text mustBe messages("site.acceptClaimExpenses")
+        doc.getElementById("continue").text mustBe messages("site.acceptClaimExpenses")
       }
 
       "claim has been changed" in {
@@ -82,7 +86,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
           "checkYourAnswers.changeClaim"
         )
 
-        doc.getElementById("submit").text mustBe messages("site.acceptChangeClaim")
+        doc.getElementById("continue").text mustBe messages("site.acceptChangeClaim")
       }
 
       "claim has been stopped" in {
@@ -94,7 +98,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
           "checkYourAnswers.stopClaim"
         )
 
-        doc.getElementById("submit").text mustBe messages("site.acceptStopClaim")
+        doc.getElementById("continue").text mustBe messages("site.acceptStopClaim")
       }
     }
   }

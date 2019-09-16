@@ -17,13 +17,14 @@
 package base
 
 import com.github.tototoshi.play2.scalate.Scalate
-import config.FrontendAppConfig
+import config.{FrontendAppConfig, NavConstant}
 import controllers.actions._
 import models.AlreadyClaimingFRESameAmount.Remove
 import models.FirstIndustryOptions.{Healthcare, Retail}
 import models.FlatRateExpenseOptions.FRENoYears
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, CurrentYearMinus2}
 import models._
+import navigation.{FakeNavigator, Navigator}
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
@@ -34,6 +35,7 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
 import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.FormPartialRetriever
@@ -195,8 +197,10 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 
-  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
-    new GuiceApplicationBuilder()
+  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None,
+                                   onwardRoute: Option[Call] = None): GuiceApplicationBuilder = {
+
+    val default = new GuiceApplicationBuilder()
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[AuthenticatedIdentifierAction].to[FakeAuthedIdentifierAction],
@@ -205,4 +209,11 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
         bind[Scalate].to[MockScalate],
         bind[FormPartialRetriever].to[MockEeFormPartialRetriever]
       )
+
+    onwardRoute match {
+      case Some(onward) =>
+        default.overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onward)))
+      case None => default
+    }
+  }
 }

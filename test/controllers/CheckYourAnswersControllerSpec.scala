@@ -23,13 +23,11 @@ import controllers.routes._
 import models.FlatRateExpenseOptions
 import models.FlatRateExpenseOptions._
 import models.TaxYearSelection._
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.FREResponse
-import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -73,8 +71,6 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     reset(mockCitizenDetailsConnector)
   }
 
-  private val onwardRoute: Call = Call("GET", "/foo")
-
   "Check Your Answers Controller" when {
     "onPageLoad" must {
       "return OK and the correct view for a GET for a stopped claim" in {
@@ -92,7 +88,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(minimumSections, checkYourAnswersTextStopFre, onwardRoute.url)(request, messages).toString
+          view(minimumSections, checkYourAnswersTextStopFre, CheckYourAnswersController.onPageLoad().url)(request, messages).toString
 
         application.stop()
       }
@@ -114,7 +110,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(fullSections, checkYourAnswersTextChangeFre, onwardRoute.url)(request, messages).toString
+          view(fullSections, checkYourAnswersTextChangeFre, CheckYourAnswersController.onPageLoad().url)(request, messages).toString
 
         application.stop()
       }
@@ -132,7 +128,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(fullSections, checkYourAnswersTextNoFre, onwardRoute.url)(request, messages).toString
+          view(fullSections, checkYourAnswersTextNoFre, CheckYourAnswersController.onPageLoad().url)(request, messages).toString
 
         application.stop()
       }
@@ -169,11 +165,11 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     "onSubmit" must {
       "redirect to next page" in {
 
-        val application = applicationBuilder(Some(emptyUserAnswers))
-          .overrides(bind[Navigator].toInstance(new FakeNavigator(onwardRoute)))
-          .build()
+        val onwardRoute: Call = Call("GET", "/foo")
 
-        val request = FakeRequest(GET, CheckYourAnswersController.onSubmit().url)
+        val application = applicationBuilder(Some(emptyUserAnswers), onwardRoute = Some(onwardRoute)).build()
+
+        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
 
         val result = route(application, request).value
 
