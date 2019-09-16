@@ -19,8 +19,8 @@ package controllers
 import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
 import controllers.authenticated.routes.SubmissionController
-import controllers.confirmation.routes.{ConfirmationClaimStoppedController, ConfirmationCurrentAndPreviousYearsController, ConfirmationCurrentYearOnlyController, ConfirmationPreviousYearsOnlyController}
-import controllers.routes.{PhoneUsController, TechnicalDifficultiesController}
+import controllers.confirmation.routes._
+import controllers.routes.{PhoneUsController, TechnicalDifficultiesController, SessionExpiredController}
 import models.FlatRateExpenseOptions.{FREAllYearsAllAmountsSameAsClaimAmount, _}
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4, _}
 import models.auditing.AuditData
@@ -181,7 +181,7 @@ class SubmissionControllerSpec extends SpecBase with PropertyChecks with Mockito
       }
     }
 
-    "submit" ignore {
+    "submit" must {
 
       "submitFRE and redirect to ConfirmationCurrentYearOnlyController when submission success" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
@@ -478,10 +478,9 @@ class SubmissionControllerSpec extends SpecBase with PropertyChecks with Mockito
 
         application.stop()
       }
-
     }
 
-    "redirect to tech difficulties when given no data" in {
+    "redirect to SessionExpired when data is missing" in {
       val application = applicationBuilder(Some(emptyUserAnswers))
         .build()
 
@@ -491,10 +490,10 @@ class SubmissionControllerSpec extends SpecBase with PropertyChecks with Mockito
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
 
       application.stop()
     }
-
   }
+
 }

@@ -16,13 +16,14 @@
 
 package controllers.authenticated
 
+import config.NavConstant
 import controllers.actions._
-import controllers.routes.{PhoneUsController, TechnicalDifficultiesController}
-import javax.inject.Inject
-import models.{NormalMode, TaxYearSelection, UserAnswers}
-import models.TaxYearSelection.CurrentYearMinus1
+import controllers.routes.{PhoneUsController, SessionExpiredController, TechnicalDifficultiesController}
+import javax.inject.{Inject, Named}
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
+import models.{NormalMode, UserAnswers}
+import navigation.Navigator
 import pages.ClaimAmountAndAnyDeductions
 import pages.authenticated.{ChangeWhichTaxYearsPage, CheckYourAnswersPage, RemoveFRECodePage, TaxYearSelectionPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,7 +33,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class SubmissionController @Inject()(override val messagesApi: MessagesApi,
                                      identify: AuthenticatedIdentifierAction,
@@ -40,7 +41,8 @@ class SubmissionController @Inject()(override val messagesApi: MessagesApi,
                                      requireData: DataRequiredAction,
                                      submissionService: SubmissionService,
                                      auditConnector: AuditConnector,
-                                     val controllerComponents: MessagesControllerComponents
+                                     val controllerComponents: MessagesControllerComponents,
+                                     @Named(NavConstant.authenticated) navigator: Navigator
                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -59,6 +61,18 @@ class SubmissionController @Inject()(override val messagesApi: MessagesApi,
             result =>
               auditAndRedirect(result, dataToAudit, request.userAnswers)
           )
+        case (Some(taxYearsSelection), Some(claimAmountAndAnyDeductions), None, changeYears) =>
+          val taxYears = changeYears match {
+            case Some(changeYears) => changeYears
+            case _ => taxYearsSelection
+          }
+          submissionService.submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions).map(
+            result => {
+              auditAndRedirect(result, dataToAudit, request.userAnswers)
+            }
+          )
+        case _ =>
+          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
   }
 
