@@ -48,11 +48,12 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
+  private val userAnswers = currentYearFullUserAnswers
+    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
   "AlreadyClaimingFREDifferentAmounts Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -77,11 +78,10 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = currentYearFullUserAnswers
+      val ua = userAnswers
         .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.values.head).success.value
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(ua)).build()
 
       val request = FakeRequest(GET, alreadyClaimingFREDifferentAmountsRoute)
 
@@ -95,17 +95,14 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
         view(
           form.fill(AlreadyClaimingFREDifferentAmounts.values.head),
           NormalMode,
-          userAnswers.get(ClaimAmountAndAnyDeductions).value,
-          userAnswers.get(FREAmounts).value
+          ua.get(ClaimAmountAndAnyDeductions).value,
+          ua.get(FREAmounts).value
         )(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
-
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -127,8 +124,6 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
