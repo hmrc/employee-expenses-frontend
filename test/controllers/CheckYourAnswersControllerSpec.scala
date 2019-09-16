@@ -18,36 +18,26 @@ package controllers
 
 import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
-import controllers.confirmation.routes._
 import controllers.authenticated.routes._
 import controllers.routes._
-import models.FirstIndustryOptions.Healthcare
+import models.FlatRateExpenseOptions
 import models.FlatRateExpenseOptions._
-import models.{AlreadyClaimingFREDifferentAmounts, EmployerContribution, FlatRateExpense, FlatRateExpenseAmounts, FlatRateExpenseOptions, TaiTaxYear, TaxYearSelection}
 import models.TaxYearSelection._
-import models.auditing.AuditEventType.UpdateFlatRateExpenseSuccess
-import models.auditing._
-import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.{eq => eqTo, _}
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
-import pages.authenticated.{AlreadyClaimingFREDifferentAmountsPage, ChangeWhichTaxYearsPage, RemoveFRECodePage, TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
-import pages.healthcare.HealthcareList1Page
-import pages.{CitizenDetailsAddress, ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage, ExpensesEmployerPaidPage, FREAmounts, FREResponse, FirstIndustryOptionsPage, SameEmployerContributionAllYearsPage}
+import pages.FREResponse
 import play.api.inject.bind
-import play.api.libs.json.JsObject
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.SubmissionService
-import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.html.CheckYourAnswersView
-
-import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with BeforeAndAfterEach {
 
@@ -83,6 +73,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     reset(mockCitizenDetailsConnector)
   }
 
+  private val onwardRoute: Call = Call("GET", "/foo")
+
   "Check Your Answers Controller" when {
     "onPageLoad" must {
       "return OK and the correct view for a GET for a stopped claim" in {
@@ -100,7 +92,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(minimumSections, checkYourAnswersTextStopFre)(request, messages).toString
+          view(minimumSections, checkYourAnswersTextStopFre, onwardRoute.url)(request, messages).toString
 
         application.stop()
       }
@@ -122,7 +114,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(fullSections, checkYourAnswersTextChangeFre)(request, messages).toString
+          view(fullSections, checkYourAnswersTextChangeFre, onwardRoute.url)(request, messages).toString
 
         application.stop()
       }
@@ -140,7 +132,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(fullSections, checkYourAnswersTextNoFre)(request, messages).toString
+          view(fullSections, checkYourAnswersTextNoFre, onwardRoute.url)(request, messages).toString
 
         application.stop()
       }
@@ -175,432 +167,23 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     }
 
     "onSubmit" must {
-      "removeFRE and redirect to ConfirmationClaimStoppedController when submission success" in {
-        when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(204))))
+      "redirect to next page" in {
 
-        val userAnswers = minimumUserAnswers
-          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
-          .set(RemoveFRECodePage, CurrentYear).success.value
-
-        val application = applicationBuilder(Some(userAnswers))
-          .overrides(
-            bind[SubmissionService].toInstance(mockSubmissionService),
-            bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
-
-        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-
-        val result = route(application, request).value
-
-        whenReady(result) {
-          _ =>
-
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
-
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseSuccess"), captor.capture())(any(), any(), any())
-
-            val auditData = captor.getValue
-
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual userAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
-
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual ConfirmationClaimStoppedController.onPageLoad().url
-        }
-
-        application.stop()
-
-      }
-
-      "submitFRE and redirect to ConfirmationCurrentYearOnlyController when submission success" in {
-        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(204))))
-
-        val application = applicationBuilder(Some(currentYearFullUserAnswers))
-          .overrides(
-            bind[SubmissionService].toInstance(mockSubmissionService),
-            bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, currentYearFullUserAnswers.data))
-          ).build()
-
-        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-
-        val result = route(application, request).value
-
-        whenReady(result) {
-          _ =>
-
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
-
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseSuccess"), captor.capture())(any(), any(), any())
-
-            val auditData = captor.getValue
-
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual currentYearFullUserAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
-
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual ConfirmationCurrentYearOnlyController.onPageLoad().url
-        }
-
-        application.stop()
-
-      }
-
-      "submitFRE and redirect to ConfirmationCurrentAndPreviousYearsController when submission success" in {
-        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(204))))
-
-        val userAnswers = minimumUserAnswers
-          .set(ClaimAmountAndAnyDeductions, 100).success.value
-          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
-
-        val application = applicationBuilder(Some(userAnswers))
-          .overrides(
-            bind[SubmissionService].toInstance(mockSubmissionService),
-            bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
-
-        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-
-        val result = route(application, request).value
-
-        whenReady(result) {
-          _ =>
-
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
-
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseSuccess"), captor.capture())(any(), any(), any())
-
-            val auditData = captor.getValue
-
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual userAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
-
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual ConfirmationCurrentAndPreviousYearsController.onPageLoad().url
-        }
-
-        application.stop()
-
-      }
-
-      "not submitFRE and not audit and redirect to PhoneUsController when citizen details returns 423" in {
-        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(423))))
-
-        val userAnswers = minimumUserAnswers
-          .set(ClaimAmountAndAnyDeductions, 100).success.value
-          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
-
-        val application = applicationBuilder(Some(userAnswers))
-          .overrides(
-            bind[SubmissionService].toInstance(mockSubmissionService),
-            bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
-
-        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-
-        val result = route(application, request).value
-
-        whenReady(result) {
-          _ =>
-
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
-
-            verify(mockAuditConnector, times(0)).sendExplicitAudit(eqTo("updateFlatRateExpenseSuccess"), captor.capture())(any(), any(), any())
-
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual PhoneUsController.onPageLoad().url
-        }
-
-        application.stop()
-
-      }
-
-      "submitFRE and redirect to ConfirmationPreviousYearsOnlyController when submission success" in {
-        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(204))))
-
-        val userAnswers = minimumUserAnswers
-          .set(ClaimAmountAndAnyDeductions, 100).success.value
-          .set(TaxYearSelectionPage, Seq(CurrentYearMinus2, CurrentYearMinus3)).success.value
-
-        val application = applicationBuilder(Some(userAnswers))
-          .overrides(
-            bind[SubmissionService].toInstance(mockSubmissionService),
-            bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
-
-        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-
-        val result = route(application, request).value
-
-        whenReady(result) {
-          _ =>
-
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
-
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseSuccess"), captor.capture())(any(), any(), any())
-
-            val auditData = captor.getValue
-
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual userAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
-
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual ConfirmationPreviousYearsOnlyController.onPageLoad().url
-        }
-
-        application.stop()
-
-      }
-
-      "redirect to tech difficulties when submitFRE fails" in {
-        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(500))))
-
-        val application = applicationBuilder(Some(currentYearFullUserAnswers))
-          .overrides(
-            bind[SubmissionService].toInstance(mockSubmissionService),
-            bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, currentYearFullUserAnswers.data))
-          ).build()
-
-        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-
-        val result = route(application, request).value
-
-        whenReady(result) {
-          _ =>
-
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
-
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseFailure"), captor.capture())(any(), any(), any())
-
-            val auditData = captor.getValue
-
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual currentYearFullUserAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
-
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad().url
-        }
-
-        application.stop()
-
-      }
-
-      "redirect to tech difficulties when removeFRE fails" in {
-        when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(500))))
-
-        val userAnswers = minimumUserAnswers
-          .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
-          .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
-
-        val application = applicationBuilder(Some(userAnswers))
-          .overrides(
-            bind[SubmissionService].toInstance(mockSubmissionService),
-            bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
-
-        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-
-        val result = route(application, request).value
-
-        whenReady(result) {
-          _ =>
-
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
-
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("updateFlatRateExpenseFailure"), captor.capture())(any(), any(), any())
-
-            val auditData = captor.getValue
-
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual userAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
-
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad().url
-        }
-
-        application.stop()
-
-      }
-
-      "not removeFRE and not audit and redirect to PhoneUsController when citizen details returns 423" in {
-        when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(423))))
-
-        val userAnswers = minimumUserAnswers
-          .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
-          .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
-
-        val application = applicationBuilder(Some(userAnswers))
-          .overrides(
-            bind[SubmissionService].toInstance(mockSubmissionService),
-            bind[AuditConnector].toInstance(mockAuditConnector),
-            bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
-
-        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-
-        val result = route(application, request).value
-
-        whenReady(result) {
-          _ =>
-
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
-
-            verify(mockAuditConnector, times(0)).sendExplicitAudit(eqTo("updateFlatRateExpenseFailure"), captor.capture())(any(), any(), any())
-
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual PhoneUsController.onPageLoad().url
-        }
-
-        application.stop()
-      }
-
-      "redirect to tech difficulties when given no data" in {
         val application = applicationBuilder(Some(emptyUserAnswers))
+          .overrides(bind[Navigator].toInstance(new FakeNavigator(onwardRoute)))
           .build()
 
-        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
+        val request = FakeRequest(GET, CheckYourAnswersController.onSubmit().url)
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad().url
+        redirectLocation(result).value mustEqual onwardRoute.url
 
         application.stop()
       }
     }
 
-    "submit the correct number of time for new claims" in {
-      when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
-
-      when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
-        .thenReturn(Future.successful(HttpResponse(204)))
-
-      val userAnswers = currentYearFullUserAnswers
-        .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
-        .set(ClaimAmountAndAnyDeductions, 100).success.value
-
-      val application = applicationBuilder(Some(userAnswers))
-        .overrides(
-          bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector),
-          bind[TaiConnector].toInstance(mockTaiConnector),
-          bind[AuditConnector].toInstance(mockAuditConnector)
-        ).build()
-
-      val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-      val result = route(application, request).value
-
-      whenReady(result) {
-        _ =>
-          verify(mockTaiConnector, times(5)).taiFREUpdate(any(), any(), any(), any())(any(), any())
-
-          verify(mockAuditConnector, times(1)).sendExplicitAudit(
-            eqTo(UpdateFlatRateExpenseSuccess.toString),
-            eqTo(AuditData(fakeNino, userAnswers.data))
-          )(any(), any(), any())
-      }
-
-      application.stop()
-    }
-
-    "submit the correct number of time for change claims" in {
-      when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
-
-      when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
-        .thenReturn(Future.successful(HttpResponse(204)))
-
-      val userAnswers = minimumUserAnswers
-        .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
-        .set(ClaimAmountAndAnyDeductions, 100).success.value
-        .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change).success.value
-        .set(ChangeWhichTaxYearsPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
-
-      val application = applicationBuilder(Some(userAnswers))
-        .overrides(
-          bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector),
-          bind[TaiConnector].toInstance(mockTaiConnector),
-          bind[AuditConnector].toInstance(mockAuditConnector)
-        ).build()
-
-      val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-      val result = route(application, request).value
-
-      whenReady(result) {
-        _ =>
-          verify(mockTaiConnector, times(2)).taiFREUpdate(any(), any(), any(), any())(any(), any())
-
-          verify(mockAuditConnector, times(1)).sendExplicitAudit(
-            eqTo(UpdateFlatRateExpenseSuccess.toString),
-            eqTo(AuditData(fakeNino, userAnswers.data))
-          )(any(), any(), any())
-      }
-
-      application.stop()
-    }
-
-    "submit the correct number of time for remove claims" in {
-      when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
-        .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
-
-      when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
-        .thenReturn(Future.successful(HttpResponse(204)))
-
-      val userAnswers = minimumUserAnswers
-        .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
-        .set(RemoveFRECodePage, CurrentYearMinus2).success.value
-
-      val application = applicationBuilder(Some(userAnswers))
-        .overrides(
-          bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector),
-          bind[TaiConnector].toInstance(mockTaiConnector),
-          bind[AuditConnector].toInstance(mockAuditConnector)
-        ).build()
-
-      val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-
-      val result = route(application, request).value
-
-      whenReady(result) {
-        _ =>
-          verify(mockTaiConnector, times(3)).taiFREUpdate(any(), any(), any(), any())(any(), any())
-
-          verify(mockAuditConnector, times(1)).sendExplicitAudit(
-            eqTo(UpdateFlatRateExpenseSuccess.toString),
-            eqTo(AuditData(fakeNino, userAnswers.data))
-          )(any(), any(), any())
-      }
-
-      application.stop()
-    }
   }
 }

@@ -18,6 +18,7 @@ package views
 
 import models.FlatRateExpenseOptions
 import play.api.Application
+import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
@@ -30,6 +31,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
   "Index view" must {
 
+    val onwardRoute = Call("GET", "/foo").url
+
     val cyaHelper = new CheckYourAnswersHelper(currentYearFullUserAnswers)
 
     val sections = Seq(AnswerSection(None, Seq(
@@ -41,16 +44,16 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     ).flatten))
 
     def applyView(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre)(fakeRequest, messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre, onwardRoute)(fakeRequest, messages)
 
     def applyViewWithAuth(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre, onwardRoute)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     def applyViewNewClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextNoFre)(fakeRequest, messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextNoFre, onwardRoute)(fakeRequest, messages)
 
     def applyViewChangeClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextChangeFre)(fakeRequest, messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextChangeFre, onwardRoute)(fakeRequest, messages)
 
     behave like normalPage(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true), "checkYourAnswers")
 
