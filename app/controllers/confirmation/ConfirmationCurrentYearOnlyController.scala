@@ -21,9 +21,9 @@ import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, D
 import controllers.routes._
 import javax.inject.Inject
 import models.TaxYearSelection.CurrentYear
-import models.{Rates, TaiTaxYear, TaxYearSelection}
+import models.{Address, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.{YourAddressPage, YourEmployerPage}
-import pages.{ClaimAmountAndAnyDeductions, FREResponse}
+import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -58,7 +58,7 @@ class ConfirmationCurrentYearOnlyController @Inject()(
           taiService.taxCodeRecords(request.nino.get, taxYear).map {
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
-              val addressOption: Option[Boolean] = request.userAnswers.get(YourAddressPage)
+              val addressOption: Option[Address] = request.userAnswers.get(CitizenDetailsAddress)
               sessionRepository.remove(request.identifier)
               Ok(confirmationCurrentYearOnlyView(claimAmountsAndRates, claimAmountAndAnyDeductions, Some(employer), addressOption, freResponse))
           }.recoverWith {
