@@ -44,6 +44,13 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         claimAmountService.calculateTax(15, 10) mustBe "1.50"
         claimAmountService.calculateTax(5, 125) mustBe "6.25"
       }
+
+      "rounds up correctly" in {
+
+        claimAmountService.calculateTax(41, 60) mustBe "24.60"
+        claimAmountService.calculateTax(21, 60) mustBe "12.60"
+        claimAmountService.calculateTax(21, 1022) mustBe "214.62"
+      }
     }
 
 
