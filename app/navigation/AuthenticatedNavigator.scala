@@ -53,14 +53,14 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case _ => _ => CheckYourAnswersController.onPageLoad()
   }
 
-  def yourAddress()(userAnswers: UserAnswers): Call = userAnswers.get(TaxYearSelectionPage) match {
+ private def yourAddress()(userAnswers: UserAnswers): Call = userAnswers.get(TaxYearSelectionPage) match {
     case Some(selectedYears) if selectedYears.contains(CurrentYear) =>
       YourEmployerController.onPageLoad(NormalMode)
     case _ =>
       HowYouWillGetYourExpensesController.onPageLoad()
   }
 
-  def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
+ private def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
     case Some(FRENoYears) =>  CheckYourAnswersController.onPageLoad()
     case Some(FREAllYearsAllAmountsSameAsClaimAmount) =>
       AlreadyClaimingFRESameAmountController.onPageLoad(mode)
@@ -72,7 +72,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       SessionExpiredController.onPageLoad()
   }
 
-  def alreadyClaimingFRESameAmount(mode: Mode)(userAnswers: UserAnswers): Call =
+ private def alreadyClaimingFRESameAmount(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(AlreadyClaimingFRESameAmountPage) match {
       case Some(AlreadyClaimingFRESameAmount.NoChange) =>
         NoCodeChangeController.onPageLoad()
@@ -82,7 +82,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
         SessionExpiredController.onPageLoad()
     }
 
-  def alreadyClaimingFREDifferentAmount(mode: Mode)(userAnswers: UserAnswers): Call =
+  private def alreadyClaimingFREDifferentAmount(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) match {
       case Some(NoChange) =>
         NoCodeChangeController.onPageLoad()
@@ -94,7 +94,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
         SessionExpiredController.onPageLoad()
     }
 
-  def yourEmployer(mode: Mode)(userAnswers: UserAnswers): Call = {
+  private def yourEmployer(mode: Mode)(userAnswers: UserAnswers): Call = {
 
     if (mode == NormalMode) {
       userAnswers.get(YourEmployerPage) match {
@@ -119,7 +119,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     }
   }
 
-  def howYouWillGetYourExpenses(mode: Mode)(userAnswers: UserAnswers): Call = {
+  private def howYouWillGetYourExpenses(mode: Mode)(userAnswers: UserAnswers): Call = {
     (
       userAnswers.get(TaxYearSelectionPage),
       userAnswers.get(RemoveFRECodePage),

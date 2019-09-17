@@ -21,7 +21,6 @@ import connectors.CitizenDetailsConnector
 import controllers.actions.Authed
 import controllers.authenticated.routes._
 import controllers.routes._
-import forms.authenticated.YourAddressFormProvider
 import models.NormalMode
 import org.mockito.Matchers._
 import org.mockito.Mockito._
@@ -43,8 +42,6 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
   def onwardRoute = HowYouWillGetYourExpensesController.onPageLoad().url
 
-  private val formProvider = new YourAddressFormProvider()
-  private val form: Form[Boolean] = formProvider()
   private val mockSessionRepository = mock[SessionRepository]
   private val userAnswers = emptyUserAnswers
 
