@@ -28,8 +28,6 @@ trait Navigator {
 
   protected def checkRouteMap: PartialFunction[Page, UserAnswers => Call]
 
-  def variant(variant : ExperimentalVariant) : Navigator = this
-
   def nextPage(page: Page, mode: Mode): UserAnswers => Call = mode match {
     case NormalMode =>
       routeMap.lift(page).getOrElse(_ => IndexController.onPageLoad())

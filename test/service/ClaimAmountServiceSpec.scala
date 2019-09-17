@@ -44,6 +44,13 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
         claimAmountService.calculateTax(15, 10) mustBe "1.50"
         claimAmountService.calculateTax(5, 125) mustBe "6.25"
       }
+
+      "rounds up correctly" in {
+
+        claimAmountService.calculateTax(41, 60) mustBe "24.60"
+        claimAmountService.calculateTax(21, 60) mustBe "12.60"
+        claimAmountService.calculateTax(21, 1022) mustBe "214.62"
+      }
     }
 
 
@@ -117,10 +124,13 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
             starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
             basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
             intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+            higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
             calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
             calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
-            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount)
-          ))
+            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount)
+          )
+        )
       }
 
       "non-live tax codes that are scottish must return scottish rates" in {
@@ -132,10 +142,13 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
             starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
             basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
             intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+            higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
             calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
             calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
-            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount)
-          ))
+            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount)
+          )
+        )
       }
 
       "non-live tax codes that are english and scottish must return head value" in {
@@ -166,10 +179,13 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
             starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
             basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
             intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+            higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
             calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
             calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
-            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount)
-          ))
+            calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount)
+          )
+        )
       }
     }
 

@@ -224,46 +224,6 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryConstructionOccupationList2UserAnswersEntry: Arbitrary[(ConstructionOccupationList2Page.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[ConstructionOccupationList2Page.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitraryBuildingMaterialsUserAnswersEntry: Arbitrary[(BuildingMaterialsPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[BuildingMaterialsPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitraryConstructionOccupationList1UserAnswersEntry: Arbitrary[(ConstructionOccupationList1Page.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[ConstructionOccupationList1Page.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitraryStoneMasonUserAnswersEntry: Arbitrary[(StoneMasonPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[StoneMasonPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitraryJoinerCarpenterUserAnswersEntry: Arbitrary[(JoinerCarpenterPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[JoinerCarpenterPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
   implicit lazy val arbitraryCommunitySupportOfficerUserAnswersEntry: Arbitrary[(CommunitySupportOfficerPage.type, JsValue)] =
     Arbitrary {
       for {
