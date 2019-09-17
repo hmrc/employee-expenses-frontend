@@ -30,7 +30,6 @@ class ClaimAmountViewSpec extends ViewBehaviours {
   "ClaimAmount view" must {
 
     val claimAmount: Int = 180
-    val noEmployerContribution: Option[Int] = None
     val someEmployerContribution: Option[Int] = Some(10)
 
     val onwardRoute: String = "/employee-expenses/which-tax-year"
@@ -43,24 +42,26 @@ class ClaimAmountViewSpec extends ViewBehaviours {
 
     val claimAmountService = application.injector.instanceOf[ClaimAmountService]
 
-    def claimAmountsAndRates(deduction: Option[Int]) = StandardRate(
+    def claimAmountsAndRates(deduction: Option[Int] = None) = StandardRate(
       basicRate = frontendAppConfig.taxPercentageBasicRate,
       higherRate = frontendAppConfig.taxPercentageHigherRate,
       calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageBasicRate, claimAmount - deduction.getOrElse(0)),
       calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageHigherRate, claimAmount - deduction.getOrElse(0))
     )
 
-    def scottishClaimAmountsAndRates(deduction: Option[Int]) = ScottishRate(
+    def scottishClaimAmountsAndRates(deduction: Option[Int] = None) = ScottishRate(
       starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
       basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
       intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+      higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
       calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount - deduction.getOrElse(0)),
       calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount - deduction.getOrElse(0)),
-      calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount - deduction.getOrElse(0))
+      calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount - deduction.getOrElse(0)),
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount - deduction.getOrElse(0))
     )
 
     val applyView = view.apply(
-      claimAmount, noEmployerContribution, claimAmountsAndRates(noEmployerContribution), scottishClaimAmountsAndRates(noEmployerContribution), onwardRoute
+      claimAmount, None, claimAmountsAndRates(), scottishClaimAmountsAndRates(), onwardRoute
     )(fakeRequest, messages)
 
     val applyViewWithEmployerContribution = view.apply(
@@ -68,7 +69,7 @@ class ClaimAmountViewSpec extends ViewBehaviours {
     )(fakeRequest, messages)
 
     val applyViewWithAuth = view.apply(
-      claimAmount, noEmployerContribution, claimAmountsAndRates(noEmployerContribution), scottishClaimAmountsAndRates(someEmployerContribution), onwardRoute
+      claimAmount, None, claimAmountsAndRates(), scottishClaimAmountsAndRates(), onwardRoute
     )(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave like normalPage(applyView, "claimAmount")
@@ -77,93 +78,54 @@ class ClaimAmountViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyView)
 
-    "Some employer contribution" when {
-      "display correct text when" in {
-        val doc = asDocument(applyViewWithEmployerContribution)
-        assertContainsText(doc, messages("claimAmount.someContributionDescription", claimAmount))
-        assertContainsText(doc, messages("claimAmount.employerContributionDescription"))
-      }
-      "display relevant data" in {
-        val doc = asDocument(applyViewWithEmployerContribution)
-        assertContainsText(doc, messages(
-          "claimAmount.basicRate",
-          claimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
-          claimAmount,
-          claimAmountsAndRates(someEmployerContribution).basicRate
-        ))
-        assertContainsText(doc, messages(
-          "claimAmount.higherRate",
-          claimAmountsAndRates(someEmployerContribution).calculatedHigherRate,
-          claimAmount,
-          claimAmountsAndRates(someEmployerContribution).higherRate
-        ))
-        assertContainsText(doc, messages(
-          "claimAmount.starterRate",
-          scottishClaimAmountsAndRates(someEmployerContribution).calculatedStarterRate,
-          claimAmount,
-          scottishClaimAmountsAndRates(someEmployerContribution).starterRate
-        ))
-        assertContainsText(doc, messages(
-          "claimAmount.basicRate",
-          scottishClaimAmountsAndRates(someEmployerContribution).calculatedBasicRate,
-          claimAmount,
-          scottishClaimAmountsAndRates(someEmployerContribution).basicRate
-        ))
-        assertContainsText(doc, messages(
-          "claimAmount.intermediateRate",
-          scottishClaimAmountsAndRates(someEmployerContribution).calculatedIntermediateRate,
-          claimAmount,
-          scottishClaimAmountsAndRates(someEmployerContribution).intermediateRate
-        ))
-      }
-    }
-
-    "No employer contribution" when {
-      "display correct text when" in {
-        val doc = asDocument(applyView)
-        assertContainsText(doc, messages("claimAmount.noContributionDescription", claimAmount))
-      }
-      "display relevant data" in {
-        val doc = asDocument(applyView)
-        assertContainsText(doc, messages(
-          "claimAmount.basicRate",
-          claimAmountsAndRates(noEmployerContribution).calculatedBasicRate,
-          claimAmount,
-          claimAmountsAndRates(noEmployerContribution).basicRate
-        ))
-        assertContainsText(doc, messages(
-          "claimAmount.higherRate",
-          claimAmountsAndRates(noEmployerContribution).calculatedHigherRate,
-          claimAmount,
-          claimAmountsAndRates(noEmployerContribution).higherRate
-        ))
-        assertContainsText(doc, messages(
-          "claimAmount.starterRate",
-          scottishClaimAmountsAndRates(noEmployerContribution).calculatedStarterRate,
-          claimAmount,
-          scottishClaimAmountsAndRates(noEmployerContribution).starterRate
-        ))
-        assertContainsText(doc, messages(
-          "claimAmount.basicRate",
-          scottishClaimAmountsAndRates(noEmployerContribution).calculatedBasicRate,
-          claimAmount,
-          scottishClaimAmountsAndRates(noEmployerContribution).basicRate
-        ))
-        assertContainsText(doc, messages(
-          "claimAmount.intermediateRate",
-          scottishClaimAmountsAndRates(noEmployerContribution).calculatedIntermediateRate,
-          claimAmount,
-          scottishClaimAmountsAndRates(noEmployerContribution).intermediateRate
-        ))
-      }
-    }
-
     behave like pageWithBodyText(
-      applyView,
-      "claimAmount.description",
+      applyViewWithEmployerContribution,
+      messages("claimAmount.increasePA", claimAmount),
       "claimAmount.englandHeading",
-      "claimAmount.scotlandHeading"
+      messages(
+        "claimAmount.basicRate",
+        claimAmountsAndRates(someEmployerContribution).basicRate,
+        claimAmount,
+        claimAmountsAndRates(someEmployerContribution).calculatedBasicRate
+      ),
+      messages(
+        "claimAmount.higherRate",
+        claimAmountsAndRates(someEmployerContribution).higherRate,
+        claimAmount,
+        claimAmountsAndRates(someEmployerContribution).calculatedHigherRate
+      ),
+      "claimAmount.scotlandHeading",
+      messages(
+        "claimAmount.starterRate",
+        scottishClaimAmountsAndRates(someEmployerContribution).starterRate,
+        claimAmount,
+        scottishClaimAmountsAndRates(someEmployerContribution).calculatedStarterRate
+      ),
+      messages(
+        "claimAmount.basicRate",
+        scottishClaimAmountsAndRates(someEmployerContribution).basicRate,
+        claimAmount,
+        scottishClaimAmountsAndRates(someEmployerContribution).calculatedBasicRate
+      ),
+      messages(
+        "claimAmount.higherRate",
+        scottishClaimAmountsAndRates(someEmployerContribution).higherRate,
+        claimAmount,
+        scottishClaimAmountsAndRates(someEmployerContribution).calculatedHigherRate
+      ),
+      "claimAmount.howThisIsCalculated",
+      "claimAmount.amountDepends",
+      "claimAmount.industry",
+      "claimAmount.whereYouLive",
+      "claimAmount.rateOfTax",
+      "claimAmount.employerContribution"
     )
+
+    "hide employer contribution bullet point when no employer contribution has been applied" in {
+      val doc = asDocument(applyView)
+
+      assertTextNotRendered(doc, "claimAmount.employerContribution")
+    }
 
     behave like pageWithButtonLink(applyView, onwardRoute, "site.continue")
   }

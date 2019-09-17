@@ -79,7 +79,7 @@ class CheckYourAnswersController @Inject()(
       }
   }
 
-  def checkYourAnswersText(removeFre: Boolean, freResponse: FlatRateExpenseOptions): CheckYourAnswersText = {
+  private def checkYourAnswersText(removeFre: Boolean, freResponse: FlatRateExpenseOptions): CheckYourAnswersText = {
     (removeFre, freResponse) match {
       case (true, _) =>
         CheckYourAnswersText(heading = "heading", disclaimerHeading = "stopClaim", disclaimer = "confirmInformationChangeFre", button = "acceptStopClaim")
@@ -100,14 +100,19 @@ class CheckYourAnswersController @Inject()(
       (
         request.userAnswers.get(TaxYearSelectionPage),
         request.userAnswers.get(ClaimAmountAndAnyDeductions),
-        request.userAnswers.get(RemoveFRECodePage)
+        request.userAnswers.get(RemoveFRECodePage),
+        request.userAnswers.get(ChangeWhichTaxYearsPage)
       ) match {
-        case (Some(taxYears), Some(_), Some(removeYear)) =>
+        case (Some(taxYears), Some(_), Some(removeYear), None) =>
           submissionService.removeFRE(request.nino.get, taxYears, removeYear).map(
             result =>
               auditAndRedirect(result, dataToAudit, request.userAnswers)
           )
-        case (Some(taxYears), Some(claimAmountAndAnyDeductions), None) =>
+        case (Some(taxYearsSelection), Some(claimAmountAndAnyDeductions), None, changeYears) =>
+          val taxYears = changeYears match {
+            case Some(changeYears) => changeYears
+            case _ => taxYearsSelection
+          }
           submissionService.submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions).map(
             result => {
               auditAndRedirect(result, dataToAudit, request.userAnswers)
@@ -118,7 +123,7 @@ class CheckYourAnswersController @Inject()(
       }
   }
 
-  def auditAndRedirect(result: Seq[HttpResponse],
+  private def auditAndRedirect(result: Seq[HttpResponse],
                        auditData: AuditData,
                        userAnswers: UserAnswers
                       )(implicit hc: HeaderCarrier): Result = {
