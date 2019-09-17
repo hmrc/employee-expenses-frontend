@@ -32,7 +32,6 @@ import pages.CitizenDetailsAddress
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
@@ -42,7 +41,7 @@ import scala.concurrent.Future
 
 class YourAddressControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar with BeforeAndAfterEach {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute = HowYouWillGetYourExpensesController.onPageLoad().url
 
   private val formProvider = new YourAddressFormProvider()
   private val form: Form[Boolean] = formProvider()
@@ -83,7 +82,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result) mustBe Some(CheckYourAnswersController.onPageLoad().url)
+      redirectLocation(result).value mustBe onwardRoute
 
       val newUserAnswers = userAnswers.set(CitizenDetailsAddress, address).success.value
 
@@ -95,7 +94,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       application.stop()
     }
 
-    "redirect to CheckYourAnswers if address line one and postcode missing" in {
+    "redirect to HowWillYouGetYourExpenses if address line one and postcode missing" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
@@ -111,12 +110,12 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual CheckYourAnswersController.onPageLoad().url
+      redirectLocation(result).value mustEqual onwardRoute
 
       application.stop()
     }
 
-    "redirect to CheckYourAnswers if 404 returned from getAddress" in {
+    "redirect to HowWillYouGetYourExpenses if 404 returned from getAddress" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
@@ -132,7 +131,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual CheckYourAnswersController.onPageLoad().url
+      redirectLocation(result).value mustEqual onwardRoute
       application.stop()
 
     }
@@ -159,7 +158,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       application.stop()
     }
 
-    "redirect to CheckYourAnswers if 500 returned from getAddress" in {
+    "redirect to HowWillYouGetYourExpenses if 500 returned from getAddress" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
@@ -176,12 +175,12 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual CheckYourAnswersController.onPageLoad().url
+      redirectLocation(result).value mustEqual onwardRoute
 
       application.stop()
     }
 
-    "redirect to CheckYourAnswers if any other status returned from getAddress" in {
+    "redirect to HowWillYouGetYourExpenses if any other status returned from getAddress" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
@@ -198,7 +197,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual CheckYourAnswersController.onPageLoad().url
+      redirectLocation(result).value mustEqual onwardRoute
 
       application.stop()
     }
@@ -240,7 +239,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual CheckYourAnswersController.onPageLoad().url
+      redirectLocation(result).value mustEqual onwardRoute
 
       application.stop()
     }

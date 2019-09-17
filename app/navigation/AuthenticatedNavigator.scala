@@ -33,13 +33,12 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case TaxYearSelectionPage => taxYearSelection(NormalMode)
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(NormalMode)
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(NormalMode)
-    case YourAddressPage => _ => CheckYourAnswersController.onPageLoad()
-    case UpdateYourAddressPage => _ => CheckYourAnswersController.onPageLoad()
+    case YourAddressPage => yourAddress()
     case YourEmployerPage => yourEmployer(NormalMode)
     case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
     case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
-    case CheckYourAnswersPage => checkYourAnswers(NormalMode)
+    case CheckYourAnswersPage =>  _ => YourAddressController.onPageLoad(NormalMode)
     case HowYouWillGetYourExpensesPage => howYouWillGetYourExpenses(NormalMode)
   }
 
@@ -52,6 +51,13 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
     case _ => _ => CheckYourAnswersController.onPageLoad()
+  }
+
+  def yourAddress()(userAnswers: UserAnswers) = userAnswers.get(TaxYearSelectionPage) match {
+    case Some(selectedYears) if selectedYears.contains(CurrentYear) =>
+      YourEmployerController.onPageLoad(NormalMode)
+    case _ =>
+      HowYouWillGetYourExpensesController.onPageLoad()
   }
 
   def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
@@ -110,16 +116,6 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
         case _ =>
           SessionExpiredController.onPageLoad()
       }
-    }
-  }
-
-  def checkYourAnswers(mode: Mode)(userAnswers: UserAnswers): Call = {
-    (mode, userAnswers.get(YourEmployerPage), userAnswers.get(ChangeWhichTaxYearsPage)) match {
-      case (_, None, Some(selectedYears)) =>
-        if (selectedYears.contains(CurrentYear)) YourEmployerController.onPageLoad(mode) else HowYouWillGetYourExpensesController.onPageLoad()
-      case (_, _, None) =>
-        HowYouWillGetYourExpensesController.onPageLoad()
-
     }
   }
 

@@ -47,7 +47,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
             CheckYourAnswersController.onPageLoad()
         }
 
-       "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
+        "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
           val ua = emptyUserAnswers.set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
@@ -139,12 +139,24 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           UpdateEmployerInformationController.onPageLoad(NormalMode)
       }
 
-      "go to CheckYourAnswers from YourAddressController" in {
-        val ua = emptyUserAnswers.set(CitizenDetailsAddress, address).success.value
+      "go to YourEmployerController from YourAddressController for when current year selected" in {
+        val ua = emptyUserAnswers
+          .set(CitizenDetailsAddress, address).success.value
+          .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
 
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
-          CheckYourAnswersController.onPageLoad()
+          YourEmployerController.onPageLoad(NormalMode)
       }
+
+      "go to YourEmployerController from YourAddressController when current year is not selected" in {
+        val ua = emptyUserAnswers
+          .set(CitizenDetailsAddress, address).success.value
+          .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
+
+        navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
+          HowYouWillGetYourExpensesController.onPageLoad()
+      }
+
 
       "go to HowYouWillGetYourExpenses from UpdateEmployerInformation" in {
         navigator.nextPage(UpdateYourEmployerInformationPage, NormalMode)(emptyUserAnswers) mustBe
@@ -162,53 +174,29 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           SessionExpiredController.onPageLoad()
       }
 
-      "from CYA" must {
-        "go to HowYouWillGetYourExpensesController" in {
-          val ua = minimumUserAnswers.set(FREResponse, FRENoYears).success.value
-
-          navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
-            HowYouWillGetYourExpensesController.onPageLoad()
-        }
-
-        "go to HowYouWillGetYourExpensesController from tax year selection page for current year and prev year" in {
-          val ua = currentYearFullUserAnswers
-            .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
-
-          navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
-            HowYouWillGetYourExpensesController.onPageLoad()
-        }
-
-        "go to HowYouWillGetYourExpensesController from tax year selection page for current year" in {
-          navigator.nextPage(CheckYourAnswersPage, NormalMode)(currentYearFullUserAnswers) mustBe
-            HowYouWillGetYourExpensesController.onPageLoad()
-        }
-
-        "go to HowYouWillGetYourExpensesController from tax year selection page for prev years" in {
-          val ua = currentYearFullUserAnswers
-            .set(TaxYearSelectionPage, Seq(CurrentYearMinus1, CurrentYearMinus2)).success.value
-
-          navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
-            HowYouWillGetYourExpensesController.onPageLoad()
-        }
+      "go to YourAddressController from CheckYourAnswers" in {
+        navigator.nextPage(CheckYourAnswersPage, NormalMode)(emptyUserAnswers) mustBe
+          YourAddressController.onPageLoad(NormalMode)
       }
-    }
-    "go from 'HowYouWillGetYourExpenses' to 'Confirmation page' for current year" in {
-      navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(currentYearFullUserAnswers)
-        .mustBe(ConfirmationCurrentYearOnlyController.onPageLoad())
-    }
 
-    "go from 'HowYouWillGetYourExpenses' to 'Confirmation page' for previous year" in {
+      "go from 'HowYouWillGetYourExpenses' to 'Confirmation page' for current year" in {
+        navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(currentYearFullUserAnswers)
+          .mustBe(ConfirmationCurrentYearOnlyController.onPageLoad())
+      }
 
-      navigator.nextPage(HowYouWillGetYourExpensesPage,
-        NormalMode)(yearsUserAnswers(Seq(TaxYearSelection.CurrentYearMinus1)))
-        .mustBe(ConfirmationPreviousYearsOnlyController.onPageLoad())
-    }
+      "go from 'HowYouWillGetYourExpenses' to 'Confirmation page' for previous year" in {
 
-    "go from 'HowYouWillGetYourExpenses' to 'Confirmation page' for current and previous year" in {
-      navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(yearsUserAnswers(Seq
-      (TaxYearSelection.CurrentYear,
-        TaxYearSelection.CurrentYearMinus1)))
-        .mustBe(ConfirmationCurrentAndPreviousYearsController.onPageLoad())
+        navigator.nextPage(HowYouWillGetYourExpensesPage,
+          NormalMode)(yearsUserAnswers(Seq(TaxYearSelection.CurrentYearMinus1)))
+          .mustBe(ConfirmationPreviousYearsOnlyController.onPageLoad())
+      }
+
+      "go from 'HowYouWillGetYourExpenses' to 'Confirmation page' for current and previous year" in {
+        navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(yearsUserAnswers(Seq
+        (TaxYearSelection.CurrentYear,
+          TaxYearSelection.CurrentYearMinus1)))
+          .mustBe(ConfirmationCurrentAndPreviousYearsController.onPageLoad())
+      }
     }
 
     "in CheckMode" must {
