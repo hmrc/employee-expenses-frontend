@@ -29,15 +29,13 @@ import org.scalatest.mockito.MockitoSugar
 import pages.authenticated._
 import pages.{CitizenDetailsAddress, FREResponse}
 
-class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
+class AuthenticatedNavigatorSpec extends SpecBase {
 
   val navigator = new AuthenticatedNavigator
 
   "Authenticated Navigator" when {
     "in Normal mode" must {
-
       "from TaxYearSelection" must {
-
         "go to CheckYourAnswers when answered and freResponse returns FRENoYears and currentTax has been selected" in {
 
           val ua = emptyUserAnswers.set(FREResponse, FRENoYears).success.value
@@ -157,12 +155,10 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           HowYouWillGetYourExpensesController.onPageLoad()
       }
 
-
       "go to HowYouWillGetYourExpenses from UpdateEmployerInformation" in {
         navigator.nextPage(UpdateYourEmployerInformationPage, NormalMode)(emptyUserAnswers) mustBe
           HowYouWillGetYourExpensesController.onPageLoad()
       }
-
 
       "go to SessionExpired from YourEmployer when YourEmployerPage is not in UserAnswers" in {
         navigator.nextPage(YourEmployerPage, NormalMode)(emptyUserAnswers) mustBe
@@ -179,20 +175,24 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           YourAddressController.onPageLoad(NormalMode)
       }
 
-      "go from 'HowYouWillGetYourExpenses' to 'Confirmation page' for current year" in {
+      "go from 'HowYouWillGetYourExpenses' to 'SubmissionController.onSubmit'" in {
         navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(currentYearFullUserAnswers)
+          .mustBe(SubmissionController.onSubmit())
+      }
+
+      "go from 'SubmissionController' to 'Confirmation page' for current year" in {
+        navigator.nextPage(Submission, NormalMode)(currentYearFullUserAnswers)
           .mustBe(ConfirmationCurrentYearOnlyController.onPageLoad())
       }
 
-      "go from 'HowYouWillGetYourExpenses' to 'Confirmation page' for previous year" in {
-
-        navigator.nextPage(HowYouWillGetYourExpensesPage,
+      "go from 'SubmissionController' to 'Confirmation page' for previous year" in {
+        navigator.nextPage(Submission,
           NormalMode)(yearsUserAnswers(Seq(TaxYearSelection.CurrentYearMinus1)))
           .mustBe(ConfirmationPreviousYearsOnlyController.onPageLoad())
       }
 
-      "go from 'HowYouWillGetYourExpenses' to 'Confirmation page' for current and previous year" in {
-        navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(yearsUserAnswers(Seq
+      "go from 'SubmissionController' to 'Confirmation page' for current and previous year" in {
+        navigator.nextPage(Submission, NormalMode)(yearsUserAnswers(Seq
         (TaxYearSelection.CurrentYear,
           TaxYearSelection.CurrentYearMinus1)))
           .mustBe(ConfirmationCurrentAndPreviousYearsController.onPageLoad())
@@ -243,9 +243,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
       }
 
       "from TaxYearSelection" must {
-
         "go to Check your answers when answered and freResponse returns FRENoYears and has currentYear" in {
-
           val ua = emptyUserAnswers.set(FREResponse, FRENoYears).success.value
             .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
 
@@ -254,7 +252,6 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
         }
 
         "go to Check your answers when answered and freResponse returns FRENoYears and doesn't have  currentYear" in {
-
           val ua = emptyUserAnswers.set(FREResponse, FRENoYears).success.value
             .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
 
@@ -285,7 +282,6 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
       }
 
       "from AlreadyClaimingFRESameAmount" must {
-
         "go to NoCodeChange when answer is NoChange" in {
           val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.NoChange).success.value
 
@@ -307,7 +303,6 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
       }
 
       "from AlreadyClaimingFREDifferentAmounts" must {
-
         "go to NoCodeChange when answer is true" in {
           val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, NoChange).success.value
 
@@ -354,5 +349,4 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
       }
     }
   }
-
 }

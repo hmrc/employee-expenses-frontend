@@ -27,7 +27,7 @@ import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatR
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.ClaimAmountAndAnyDeductions
-import pages.authenticated.{ChangeWhichTaxYearsPage, CheckYourAnswersPage, RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated.{ChangeWhichTaxYearsPage, CheckYourAnswersPage, RemoveFRECodePage, Submission, TaxYearSelectionPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.SubmissionService
@@ -85,15 +85,7 @@ class SubmissionController @Inject()(override val messagesApi: MessagesApi,
 
     if (result.nonEmpty && result.forall(_.status == 204)) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
-
-      userAnswers.get(TaxYearSelectionPage) match {
-        case None => ???
-        case Some(selectedYears) if selectedYears.contains(CurrentYear) => ???
-
-      }
-
-
-//      Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers))
+      Redirect(navigator.nextPage(Submission, NormalMode)(userAnswers))
     } else if (result.nonEmpty && result.exists(_.status == 423)) {
       Redirect(PhoneUsController.onPageLoad())
     } else {

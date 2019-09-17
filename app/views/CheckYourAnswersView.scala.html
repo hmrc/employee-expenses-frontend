@@ -25,8 +25,7 @@
 
 @(
         answerSections: Seq[Section],
-        checkYourAnswersText: CheckYourAnswersText,
-        redirectUrl: String
+        checkYourAnswersText: CheckYourAnswersText
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
@@ -57,6 +56,5 @@
         </strong>
     </div>
 
-    @components.button_link(messages(s"site.${checkYourAnswersText.button}"), redirectUrl)
-
+    @components.button_link(messages(s"site.${checkYourAnswersText.button}"), CheckYourAnswersController.acceptAndClaim().url)
 }

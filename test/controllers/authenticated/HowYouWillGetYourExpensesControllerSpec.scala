@@ -18,7 +18,7 @@ package controllers.authenticated
 
 import base.SpecBase
 import generators.Generators
-import models.TaxYearSelection
+import models.TaxYearSelection._
 import org.scalatest.MustMatchers
 import org.scalatest.prop.PropertyChecks
 import play.api.test.FakeRequest
@@ -28,163 +28,100 @@ import views.html.{HowYouWillGetYourExpensesCurrentAndPreviousYearView, HowYouWi
 class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChecks with MustMatchers with Generators {
 
   "HowYouWillGetYourExpensesController" must {
-
     "return OK and the correct view for a GET when" when {
-
       "user has selected current year only for changes" in {
-
-        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(TaxYearSelection.CurrentYear)))).build()
-
+        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(CurrentYear)))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual
-          view(controllers.confirmation.routes.ConfirmationCurrentYearOnlyController.onPageLoad().url)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url)(request, messages).toString
 
         application.stop()
       }
 
       "user has selected CY-1 only for changes" in {
-
-        val application = applicationBuilder(userAnswers =
-          Some(yearsUserAnswers(Seq(TaxYearSelection.CurrentYearMinus1)))).build()
-
+        val taxYearSelection = Seq(CurrentYearMinus1)
+        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[HowYouWillGetYourExpensesPreviousView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual
-          view(controllers.confirmation.routes.ConfirmationPreviousYearsOnlyController.onPageLoad().url,
-          true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true)(request, messages).toString
 
         application.stop()
-
       }
 
       "user has selected CY and CY-1 for changes" in {
-
-        val application = applicationBuilder(userAnswers =
-          Some(yearsUserAnswers(Seq
-          (TaxYearSelection.CurrentYear,
-           TaxYearSelection.CurrentYearMinus1)
-           ))).build()
-
+        val taxYearSelection = Seq(CurrentYear, CurrentYearMinus1)
+        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual
-          view(controllers.confirmation.routes.ConfirmationCurrentAndPreviousYearsController.onPageLoad().url,
-            true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true)(request, messages).toString
 
         application.stop()
-
       }
 
       "user has selected CY, CY-1 and previous year for changes" in {
-
-        val application = applicationBuilder(userAnswers =
-          Some(yearsUserAnswers(Seq
-          (TaxYearSelection.CurrentYear,
-           TaxYearSelection.CurrentYearMinus1,
-           TaxYearSelection.CurrentYearMinus1)
-           ))).build()
-
+        val taxYearSelection = Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus1)
+        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual
-          view(controllers.confirmation.routes.ConfirmationCurrentAndPreviousYearsController.onPageLoad().url,
-            true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true)(request, messages).toString
 
         application.stop()
       }
 
       "user has selected CY and CY-2 for changes" in {
-
-        val application = applicationBuilder(userAnswers =
-          Some(yearsUserAnswers(Seq
-          (TaxYearSelection.CurrentYear,
-           TaxYearSelection.CurrentYearMinus2)
-           ))).build()
-
+        val taxYearSelection = Seq(CurrentYear, CurrentYearMinus2)
+        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual
-          view(controllers.confirmation.routes.ConfirmationCurrentAndPreviousYearsController.onPageLoad().url,
-            false)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, false)(request, messages).toString
 
         application.stop()
       }
 
       "user has selected CY-1 and CY-2 for changes" in {
-
-        val application = applicationBuilder(userAnswers =
-          Some(yearsUserAnswers(Seq
-          (TaxYearSelection.CurrentYearMinus1,
-           TaxYearSelection.CurrentYearMinus2)
-           ))).build()
-
+        val taxYearSelection = Seq(CurrentYearMinus1, CurrentYearMinus2)
+        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[HowYouWillGetYourExpensesPreviousView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual
-          view(controllers.confirmation.routes.ConfirmationPreviousYearsOnlyController.onPageLoad().url,
-            currentYearMinus1Selected = true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, currentYearMinus1Selected = true)(request, messages).toString
 
         application.stop()
       }
 
       "user has selected CY-2 and CY-3 for changes" in {
-
-        val taxYearSelection: Seq[TaxYearSelection] = Seq(TaxYearSelection.CurrentYearMinus2, TaxYearSelection.CurrentYearMinus3)
-
-        val application = applicationBuilder(userAnswers =
-          Some(yearsUserAnswers(Seq
-          (TaxYearSelection.CurrentYearMinus2,
-           TaxYearSelection.CurrentYearMinus3)
-           ))).build()
-
+        val taxYearSelection = Seq(CurrentYearMinus2, CurrentYearMinus3)
+        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[HowYouWillGetYourExpensesPreviousView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual
-          view(controllers.confirmation.routes.ConfirmationPreviousYearsOnlyController.onPageLoad().url,
-          currentYearMinus1Selected = false)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, currentYearMinus1Selected = false)(request, messages).toString
 
         application.stop()
       }

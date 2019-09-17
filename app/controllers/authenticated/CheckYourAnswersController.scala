@@ -51,7 +51,6 @@ class CheckYourAnswersController @Inject()(
     implicit request =>
       val cyaHelper = new CheckYourAnswersHelper(request.userAnswers)
       val removeFre: Boolean = request.userAnswers.get(RemoveFRECodePage).isDefined
-      val redirectUrl: String = controllers.authenticated.routes.CheckYourAnswersController.onSubmit().url
 
       request.userAnswers.get(FREResponse) match {
         case Some(freResponse) =>
@@ -68,7 +67,7 @@ class CheckYourAnswersController @Inject()(
             cyaHelper.yourAddress
           ).flatten))
 
-          Ok(view(sections, checkYourAnswersText(removeFre, freResponse), redirectUrl))
+          Ok(view(sections, checkYourAnswersText(removeFre, freResponse)))
         case _ =>
           Redirect(SessionExpiredController.onPageLoad())
       }
@@ -87,7 +86,7 @@ class CheckYourAnswersController @Inject()(
     }
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def acceptAndClaim(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
       Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(request.userAnswers))
   }

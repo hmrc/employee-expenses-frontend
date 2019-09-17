@@ -33,13 +33,14 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case TaxYearSelectionPage => taxYearSelection(NormalMode)
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(NormalMode)
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(NormalMode)
-    case YourAddressPage => yourAddress()
-    case YourEmployerPage => yourEmployer(NormalMode)
     case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
     case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
     case CheckYourAnswersPage =>  _ => YourAddressController.onPageLoad(NormalMode)
-    case HowYouWillGetYourExpensesPage => howYouWillGetYourExpenses(NormalMode)
+    case YourAddressPage => yourAddress()
+    case YourEmployerPage => yourEmployer(NormalMode)
+    case HowYouWillGetYourExpensesPage => _ => SubmissionController.onSubmit()
+    case Submission => submission()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -118,7 +119,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     }
   }
 
-  private def howYouWillGetYourExpenses(mode: Mode)(userAnswers: UserAnswers): Call = {
+  private def submission()(userAnswers: UserAnswers): Call = {
     (
       userAnswers.get(TaxYearSelectionPage),
       userAnswers.get(RemoveFRECodePage),

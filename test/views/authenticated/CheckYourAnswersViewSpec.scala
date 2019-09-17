@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package views
+package views.authenticated
 
-import config.NavConstant
 import models.FlatRateExpenseOptions
-import navigation.{FakeNavigator, Navigator}
 import play.api.Application
-import play.api.inject.bind
 import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import utils.CheckYourAnswersHelper
@@ -30,15 +27,11 @@ import views.html.CheckYourAnswersView
 
 class CheckYourAnswersViewSpec extends ViewBehaviours {
 
-  val onwardRoute = Call("GET", "/foo")
-
-  val application: Application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers),onwardRoute = Some(onwardRoute))
+  val application: Application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers))
     .build()
 
   "Index view" must {
-
     val cyaHelper = new CheckYourAnswersHelper(currentYearFullUserAnswers)
-
     val sections = Seq(AnswerSection(None, Seq(
       cyaHelper.industryType,
       cyaHelper.employerContribution,
@@ -48,23 +41,22 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     ).flatten))
 
     def applyView(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre, onwardRoute.url)(fakeRequest, messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre)(fakeRequest, messages)
 
     def applyViewWithAuth(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre, onwardRoute.url)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     def applyViewNewClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextNoFre, onwardRoute.url)(fakeRequest, messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextNoFre)(fakeRequest, messages)
 
     def applyViewChangeClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextChangeFre, onwardRoute.url)(fakeRequest, messages)
+      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextChangeFre)(fakeRequest, messages)
 
     behave like normalPage(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true), "checkYourAnswers")
 
     behave like pageWithAccountMenu(applyViewWithAuth(FlatRateExpenseOptions.FRENoYears, removeFRE = true))
 
     "display correct content" when {
-
       "new claim has been made" in {
         val doc = asDocument(applyViewNewClaim(FlatRateExpenseOptions.FRENoYears, removeFRE = false))
 

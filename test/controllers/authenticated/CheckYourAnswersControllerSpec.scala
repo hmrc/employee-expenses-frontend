@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.authenticated
 
 import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
@@ -74,71 +74,50 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
   "Check Your Answers Controller" when {
     "onPageLoad" must {
       "return OK and the correct view for a GET for a stopped claim" in {
-
         val userAnswers = minimumUserAnswers.set(FREResponse, FRENoYears).success.value
-
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
         val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[CheckYourAnswersView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual
-          view(minimumSections, checkYourAnswersTextStopFre, CheckYourAnswersController.onPageLoad().url)(request, messages).toString
+          view(minimumSections, checkYourAnswersTextStopFre)(request, messages).toString
 
         application.stop()
       }
 
       "return OK and the correct view for a GET for a changed claim" in {
-
-        val userAnswers =
-          currentYearFullUserAnswers
+        val userAnswers = currentYearFullUserAnswers
             .set(FREResponse, FlatRateExpenseOptions.FRESomeYears).success.value
-
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
         val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[CheckYourAnswersView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual
-          view(fullSections, checkYourAnswersTextChangeFre, CheckYourAnswersController.onPageLoad().url)(request, messages).toString
+          view(fullSections, checkYourAnswersTextChangeFre)(request, messages).toString
 
         application.stop()
       }
 
       "return OK and the correct view for a GET for a new claim" in {
-
         val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers)).build()
-
         val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[CheckYourAnswersView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual
-          view(fullSections, checkYourAnswersTextNoFre, CheckYourAnswersController.onPageLoad().url)(request, messages).toString
+          view(fullSections, checkYourAnswersTextNoFre)(request, messages).toString
 
         application.stop()
       }
 
       "redirect to session expired when no freResponse is found" in {
-
         val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
-
         val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
-
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
@@ -147,39 +126,29 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
       }
 
       "redirect to Session Expired for a GET if no existing data is found" in {
-
         val application = applicationBuilder(userAnswers = None).build()
-
         val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
-
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-
         redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
 
         application.stop()
       }
     }
 
-    "onSubmit" must {
+    "acceptAndClaim" must {
       "redirect to next page" in {
-
         val onwardRoute: Call = Call("GET", "/foo")
-
         val application = applicationBuilder(Some(emptyUserAnswers), onwardRoute = Some(onwardRoute)).build()
-
-        val request = FakeRequest(POST, CheckYourAnswersController.onSubmit().url)
-
+        val request = FakeRequest(GET, CheckYourAnswersController.acceptAndClaim().url)
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-
         redirectLocation(result).value mustEqual onwardRoute.url
 
         application.stop()
       }
     }
-
   }
 }
