@@ -498,5 +498,4 @@ class SubmissionControllerSpec extends SpecBase with PropertyChecks with Mockito
       application.stop()
     }
   }
-
 }

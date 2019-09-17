@@ -90,5 +90,4 @@ class CheckYourAnswersController @Inject()(
     implicit request =>
       Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(request.userAnswers))
   }
-
 }

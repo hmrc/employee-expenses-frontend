@@ -37,7 +37,6 @@ class AuthenticatedNavigatorSpec extends SpecBase {
     "in Normal mode" must {
       "from TaxYearSelection" must {
         "go to CheckYourAnswers when answered and freResponse returns FRENoYears and currentTax has been selected" in {
-
           val ua = emptyUserAnswers.set(FREResponse, FRENoYears).success.value
             .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
 

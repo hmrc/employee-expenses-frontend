@@ -30,10 +30,10 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
 
   val form = new AlreadyClaimingFREDifferentAmountsFormProvider()()
 
-  val userAnswers = currentYearFullUserAnswers
-    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
   val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+  val userAnswers = currentYearFullUserAnswers
+    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
   val view = application.injector.instanceOf[AlreadyClaimingFREDifferentAmountsView]
 
@@ -41,8 +41,8 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
     view.apply(
       form,
       NormalMode,
-      userAnswers.get(ClaimAmountAndAnyDeductions).value,
-      userAnswers.get(FREAmounts).value
+      userAnswers.get(ClaimAmountAndAnyDeductions).get,
+      userAnswers.get(FREAmounts).get
     )(fakeRequest, messages)
 
   def applyViewMultipleYears(form: Form[_]): HtmlFormat.Appendable =
