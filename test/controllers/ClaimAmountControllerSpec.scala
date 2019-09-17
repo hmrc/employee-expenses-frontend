@@ -50,8 +50,6 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         emptyUserAnswers
           .set(ClaimAmount, claimAmount).success.value
           .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
-      val userAnswers = emptyUserAnswers.set(ClaimAmount, claimAmount).success.value
-        .set(EmployerContributionPage, EmployerContribution.NoEmployerContribution).success.value
 
       val mockSessionRepository = mock[SessionRepository]
 
@@ -78,9 +76,11 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         starterRate = frontendAppConfig.taxPercentageScotlandStarterRate,
         basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
         intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
+        higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
         calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
         calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
-        calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount)
+        calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
+        calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount)
       )
 
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)

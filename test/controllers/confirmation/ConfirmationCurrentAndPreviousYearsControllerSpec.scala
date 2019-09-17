@@ -21,16 +21,13 @@ import connectors.TaiConnector
 import controllers.actions.Authed
 import controllers.confirmation.routes._
 import controllers.routes._
-import models.FlatRateExpenseOptions.FRENoYears
 import models.TaxCodeStatus.Live
-import models.TaxYearSelection._
 import models._
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages._
-import pages.authenticated._
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -55,9 +52,12 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
   )
 
   "ConfirmationCurrentAndPreviousYearsController" must {
-    "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET with specific answers" in {
+    "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET with address" in {
 
-      val application = applicationBuilder(userAnswers = Some(currentYearAndCurrentYearMinus1UserAnswers))
+      val answers = yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))
+        .set(CitizenDetailsAddress, address).success.value
+
+      val application = applicationBuilder(userAnswers = Some(answers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
@@ -77,9 +77,39 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
         view(
           claimAmountsAndRates = Seq(claimAmountsAndRates),
           claimAmount = claimAmount,
-          employerInfoCorrect = Some(true),
-          addressInfoCorrect = Some(true),
+          employerCorrect = Some(true),
+          address = Some(address),
           currentYearMinus1 =true,
+          freResponse = FlatRateExpenseOptions.FRENoYears
+        )(request, messages, frontendAppConfig).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET without address" in {
+      val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))))
+        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+        .build()
+
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
+
+      val request = FakeRequest(GET, ConfirmationCurrentAndPreviousYearsController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ConfirmationCurrentAndPreviousYearsView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(
+          claimAmountsAndRates = Seq(claimAmountsAndRates),
+          claimAmount = claimAmount,
+          employerCorrect = Some(true),
+          address = None,
+          currentYearMinus1 = true,
           freResponse = FlatRateExpenseOptions.FRENoYears
         )(request, messages, frontendAppConfig).toString
 

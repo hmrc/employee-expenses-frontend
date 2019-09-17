@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.authenticated
 
+import config.NavConstant
 import controllers.actions._
-import javax.inject.Inject
-import models.TaxYearSelection
+import controllers.routes.SessionExpiredController
+import javax.inject.{Inject, Named}
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
-import pages.authenticated.TaxYearSelectionPage
+import models.{NormalMode, TaxYearSelection}
+import navigation.Navigator
+import pages.authenticated.{HowYouWillGetYourExpensesPage, TaxYearSelectionPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.{HowYouWillGetYourExpensesCurrentAndPreviousYearView, HowYouWillGetYourExpensesCurrentView, HowYouWillGetYourExpensesPreviousView}
+
 import scala.concurrent.ExecutionContext
 
 class HowYouWillGetYourExpensesController @Inject()(
@@ -33,6 +37,7 @@ class HowYouWillGetYourExpensesController @Inject()(
                                                      getData: DataRetrievalAction,
                                                      requireData: DataRequiredAction,
                                                      val controllerComponents: MessagesControllerComponents,
+                                                     @Named(NavConstant.authenticated) navigator: Navigator,
                                                      currentView: HowYouWillGetYourExpensesCurrentView,
                                                      previousView: HowYouWillGetYourExpensesPreviousView,
                                                      currentAndPreviousYearView: HowYouWillGetYourExpensesCurrentAndPreviousYearView
@@ -41,10 +46,17 @@ class HowYouWillGetYourExpensesController @Inject()(
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      request.userAnswers.get(TaxYearSelectionPage) match {
-        case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) && taxYearSelection.length > 1 => Ok(currentAndPreviousYearView("", containsCurrentYearMinus1(taxYearSelection)))
-        case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) => Ok(currentView(""))
-        case Some(taxYearSelection) => Ok(previousView("", containsCurrentYearMinus1(taxYearSelection)))
+      val redirectUrl = navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(request.userAnswers).url
+      val taxYearSelection: Option[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage)
+
+      taxYearSelection match {
+        case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) && taxYearSelection.length > 1 =>
+          Ok(currentAndPreviousYearView(redirectUrl, containsCurrentYearMinus1(taxYearSelection)))
+        case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) =>
+          Ok(currentView(redirectUrl))
+        case Some(taxYearSelection) =>
+          Ok(previousView(redirectUrl, containsCurrentYearMinus1(taxYearSelection)))
+        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
       }
   }
 

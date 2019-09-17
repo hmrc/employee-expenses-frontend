@@ -15,7 +15,7 @@
  *@
 
 @this(
-    main_template: MainTemplate
+        main_template: MainTemplate
 )
 
 @(
@@ -26,33 +26,40 @@
         onwardRoute: String
 )(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("claimAmount.title", amount)
+    @main_template(
+        title = messages("claimAmount.title", amount)
     ) {
 
-    @components.back_link()
+        @components.back_link()
 
-    @components.heading(messages("claimAmount.heading", amount))
+        @components.heading(messages("claimAmount.heading"))
 
-    @if(contribution){
-        <p>@messages("claimAmount.someContributionDescription", amount)</p>
-        <p>@messages("claimAmount.employerContributionDescription")</p>
-    }else{
-        <p>@messages("claimAmount.noContributionDescription", amount)</p>
+        <p class="lede">@messages("claimAmount.increasePA", amount)</p>
+
+        <h2 class="heading-small">@messages("claimAmount.englandHeading")</h2>
+
+        <p>@messages("claimAmount.basicRate", standardRate.basicRate, amount, standardRate.calculatedBasicRate)</p>
+        <p>@messages("claimAmount.higherRate", standardRate.higherRate, amount, standardRate.calculatedHigherRate)</p>
+
+        <h2 class="heading-small">@messages("claimAmount.scotlandHeading")</h2>
+
+        <p>@messages("claimAmount.starterRate", scottishRate.starterRate, amount, scottishRate.calculatedStarterRate)</p>
+        <p>@messages("claimAmount.basicRate", scottishRate.basicRate, amount, scottishRate.calculatedBasicRate)</p>
+        <p>@messages("claimAmount.higherRate", scottishRate.higherRate, amount, scottishRate.calculatedHigherRate)</p>
+
+        <h2 class="heading-large">@messages("claimAmount.howThisIsCalculated")</h2>
+
+        <p>@messages("claimAmount.amountDepends")</p>
+
+        <ul class="list list-bullet">
+            <li>@messages("claimAmount.industry")</li>
+            <li>@messages("claimAmount.whereYouLive")</li>
+            <li>@messages("claimAmount.rateOfTax")</li>
+
+            @if(contribution) {
+                <li>@messages("claimAmount.employerContribution")</li>
+            }
+        </ul>
+
+        @components.button_link(messages("site.continue"), onwardRoute)
     }
-
-    <p>@messages("claimAmount.description")</p>
-
-    <h2 class="heading-small">@messages("claimAmount.englandHeading")</h2>
-
-    <p>@messages("claimAmount.basicRate", standardRate.calculatedBasicRate, amount, standardRate.basicRate)</p>
-    <p>@messages("claimAmount.higherRate", standardRate.calculatedHigherRate, amount, standardRate.higherRate)</p>
-
-    <h2 class="heading-small">@messages("claimAmount.scotlandHeading")</h2>
-
-    <p>@messages("claimAmount.starterRate", scottishRate.calculatedStarterRate, amount, scottishRate.starterRate)</p>
-    <p>@messages("claimAmount.basicRate", scottishRate.calculatedBasicRate, amount, scottishRate.basicRate)</p>
-    <p>@messages("claimAmount.intermediateRate", scottishRate.calculatedIntermediateRate, amount, scottishRate.intermediateRate)</p>
-
-    @components.button_link(messages("site.continue"), onwardRoute)
-}

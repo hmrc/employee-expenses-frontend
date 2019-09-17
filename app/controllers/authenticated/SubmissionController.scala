@@ -18,8 +18,10 @@ package controllers.authenticated
 
 import config.NavConstant
 import controllers.actions._
+import controllers.authenticated.routes.{HowYouWillGetYourExpensesController, YourEmployerController}
 import controllers.routes.{PhoneUsController, SessionExpiredController, TechnicalDifficultiesController}
 import javax.inject.{Inject, Named}
+import models.TaxYearSelection.CurrentYear
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
 import models.{NormalMode, UserAnswers}
@@ -83,7 +85,15 @@ class SubmissionController @Inject()(override val messagesApi: MessagesApi,
 
     if (result.nonEmpty && result.forall(_.status == 204)) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
-      Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers))
+
+      userAnswers.get(TaxYearSelectionPage) match {
+        case None => ???
+        case Some(selectedYears) if selectedYears.contains(CurrentYear) => ???
+
+      }
+
+
+//      Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers))
     } else if (result.nonEmpty && result.exists(_.status == 423)) {
       Redirect(PhoneUsController.onPageLoad())
     } else {
