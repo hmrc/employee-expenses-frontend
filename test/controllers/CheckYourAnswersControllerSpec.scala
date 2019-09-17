@@ -23,6 +23,7 @@ import controllers.authenticated.routes._
 import controllers.routes._
 import models.FirstIndustryOptions.Healthcare
 import models.FlatRateExpenseOptions._
+import models.{FlatRateExpenseOptions, NormalMode, TaxYearSelection}
 import models.{AlreadyClaimingFREDifferentAmounts, EmployerContribution, FlatRateExpense, FlatRateExpenseAmounts, FlatRateExpenseOptions, TaiTaxYear, TaxYearSelection}
 import models.TaxYearSelection._
 import models.auditing.AuditEventType.UpdateFlatRateExpenseSuccess
@@ -175,7 +176,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     }
 
     "onSubmit" must {
-      "removeFRE and redirect to ConfirmationClaimStoppedController when submission success" in {
+      "removeFRE and redirect to YourEmployerController when submission success" in {
         when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(204))))
 
@@ -209,14 +210,14 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
             status(result) mustEqual SEE_OTHER
 
-            redirectLocation(result).value mustEqual ConfirmationClaimStoppedController.onPageLoad().url
+            redirectLocation(result).value mustEqual YourAddressController.onPageLoad(NormalMode).url
         }
 
         application.stop()
 
       }
 
-      "submitFRE and redirect to ConfirmationCurrentYearOnlyController when submission success" in {
+      "submitFRE and redirect to HowYouWillGetYourExpensesController when submission success" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(204))))
 
@@ -246,14 +247,14 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
             status(result) mustEqual SEE_OTHER
 
-            redirectLocation(result).value mustEqual ConfirmationCurrentYearOnlyController.onPageLoad().url
+            redirectLocation(result).value mustEqual YourAddressController.onPageLoad(NormalMode).url
         }
 
         application.stop()
 
       }
 
-      "submitFRE and redirect to ConfirmationCurrentAndPreviousYearsController when submission success" in {
+      "redirect to HowYouWillGetYourExpensesController when submission success" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(204))))
 
@@ -287,7 +288,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
             status(result) mustEqual SEE_OTHER
 
-            redirectLocation(result).value mustEqual ConfirmationCurrentAndPreviousYearsController.onPageLoad().url
+            redirectLocation(result).value mustEqual YourAddressController.onPageLoad(NormalMode).url
         }
 
         application.stop()
@@ -329,7 +330,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
       }
 
-      "submitFRE and redirect to ConfirmationPreviousYearsOnlyController when submission success" in {
+      "redirect to the HowYouWillGetYourExpensesController when submission success" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(204))))
 
@@ -363,7 +364,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
             status(result) mustEqual SEE_OTHER
 
-            redirectLocation(result).value mustEqual ConfirmationPreviousYearsOnlyController.onPageLoad().url
+            redirectLocation(result).value mustEqual YourAddressController.onPageLoad(NormalMode).url
         }
 
         application.stop()

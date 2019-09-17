@@ -14,32 +14,8 @@
  * limitations under the License.
  */
 
-package forms.authenticated
+package pages.authenticated
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import pages.Page
 
-class YourAddressFormProviderSpec extends BooleanFieldBehaviours {
-
-  val requiredKey = "yourAddress.error.required"
-  val invalidKey = "error.boolean"
-
-  val form = new YourAddressFormProvider()()
-
-  ".value" must {
-
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
-}
+case object HowYouWillGetYourExpensesPage extends Page

@@ -290,11 +290,7 @@ GET         /update-employer-information                         controllers.aut
 GET         /change-update-employer-information                  controllers.authenticated.UpdateEmployerInformationController.onPageLoad(mode: Mode = CheckMode)
 
 GET         /your-address                                        controllers.authenticated.YourAddressController.onPageLoad(mode: Mode = NormalMode)
-POST        /your-address                                        controllers.authenticated.YourAddressController.onSubmit(mode: Mode = NormalMode)
 GET         /change-your-address                                 controllers.authenticated.YourAddressController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-your-address                                 controllers.authenticated.YourAddressController.onSubmit(mode: Mode = CheckMode)
-
-GET         /update-your-address                                 controllers.authenticated.UpdateYourAddressController.onPageLoad()
 
 GET         /no-code-change                                      controllers.authenticated.NoCodeChangeController.onPageLoad()
 
@@ -366,7 +362,7 @@ GET         /change-textiles-occupation-list1                    controllers.tex
 POST        /change-textiles-occupation-list1                    controllers.textiles.TextilesOccupationList1Controller.onSubmit(mode: Mode = CheckMode)
 
 GET         /cabin-crew                                          controllers.transport.CabinCrewController.onPageLoad(mode: Mode = NormalMode)
-POST        /cabin-crew                                            controllers.transport.CabinCrewController.onSubmit(mode: Mode = NormalMode)
+POST        /cabin-crew                                          controllers.transport.CabinCrewController.onSubmit(mode: Mode = NormalMode)
 GET         /change-cabin-crew                                   controllers.transport.CabinCrewController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-cabin-crew                                   controllers.transport.CabinCrewController.onSubmit(mode: Mode = CheckMode)
 
@@ -375,4 +371,4 @@ POST        /construction-occupations                            controllers.con
 GET         /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = CheckMode)
 
-GET        /how-you-will-get-your-expenses                       controllers.HowYouWillGetYourExpensesController.onPageLoad()
+GET        /how-you-will-get-your-expenses                       controllers.authenticated.HowYouWillGetYourExpensesController.onPageLoad()
