@@ -292,8 +292,6 @@ GET         /change-update-employer-information                  controllers.aut
 GET         /your-address                                        controllers.authenticated.YourAddressController.onPageLoad(mode: Mode = NormalMode)
 GET         /change-your-address                                 controllers.authenticated.YourAddressController.onPageLoad(mode: Mode = CheckMode)
 
-GET         /update-your-address                                 controllers.authenticated.UpdateYourAddressController.onPageLoad()
-
 GET         /no-code-change                                      controllers.authenticated.NoCodeChangeController.onPageLoad()
 
 GET         /tax-year-expense-end                                controllers.authenticated.RemoveFRECodeController.onPageLoad(mode: Mode = NormalMode)

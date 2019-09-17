@@ -129,7 +129,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
         val ua = emptyUserAnswers.set(YourEmployerPage, true).success.value
 
         navigator.nextPage(YourEmployerPage, NormalMode)(ua) mustBe
-          YourAddressController.onPageLoad(NormalMode)
+          HowYouWillGetYourExpensesController.onPageLoad()
       }
 
       "go to UpdateEmployerInformation from YourEmployer when answered false" in {

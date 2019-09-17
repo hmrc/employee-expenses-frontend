@@ -53,7 +53,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case _ => _ => CheckYourAnswersController.onPageLoad()
   }
 
-  def yourAddress()(userAnswers: UserAnswers) = userAnswers.get(TaxYearSelectionPage) match {
+  def yourAddress()(userAnswers: UserAnswers): Call = userAnswers.get(TaxYearSelectionPage) match {
     case Some(selectedYears) if selectedYears.contains(CurrentYear) =>
       YourEmployerController.onPageLoad(NormalMode)
     case _ =>
@@ -99,7 +99,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     if (mode == NormalMode) {
       userAnswers.get(YourEmployerPage) match {
         case Some(true) =>
-          YourAddressController.onPageLoad(mode)
+          HowYouWillGetYourExpensesController.onPageLoad()
         case Some(false) =>
           UpdateEmployerInformationController.onPageLoad(mode)
         case _ =>
@@ -108,7 +108,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     } else {
       (userAnswers.get(YourEmployerPage), userAnswers.get(YourAddressPage)) match {
         case (Some(true), None) =>
-          YourAddressController.onPageLoad(mode)
+          HowYouWillGetYourExpensesController.onPageLoad()
         case (Some(true), Some(_)) =>
           CheckYourAnswersController.onPageLoad()
         case (Some(false), _) =>
