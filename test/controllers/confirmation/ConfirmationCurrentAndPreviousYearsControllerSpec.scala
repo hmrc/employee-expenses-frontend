@@ -54,13 +54,17 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
   "ConfirmationCurrentAndPreviousYearsController" must {
     "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET with specific answers" in {
 
-      val application = applicationBuilder(userAnswers = Some(currentYearAndCurrentYearMinus1UserAnswers))
+      val application = applicationBuilder(userAnswers =
+        Some(yearsUserAnswers(Seq
+        (TaxYearSelection.CurrentYear,
+          TaxYearSelection.CurrentYearMinus1)
+        )))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
       when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
-      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+      when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationCurrentAndPreviousYearsController.onPageLoad().url)
 
@@ -76,7 +80,7 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
           claimAmount = claimAmount,
           employerCorrect = Some(true),
           address = None,
-          currentYearMinus1 =true,
+          currentYearMinus1 = true,
           freResponse = FlatRateExpenseOptions.FRENoYears
         )(request, messages, frontendAppConfig).toString
 

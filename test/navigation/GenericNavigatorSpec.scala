@@ -23,6 +23,7 @@ import controllers.foodCatering.routes._
 import controllers.routes._
 import controllers.shipyard.routes._
 import controllers.textiles.routes._
+import controllers.construction.routes._
 import models.FifthIndustryOptions._
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions._
@@ -125,11 +126,11 @@ class GenericNavigatorSpec extends SpecBase {
 
       //SecondIndustryOptionsPage
 
-      "go JoinerCarpenterController from SecondIndustryOptionsPage when 'Construction' is selected" in {
+      "go to ConstructionOccupationsController from SecondIndustryOptionsPage when 'Construction' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
 
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.construction.routes.JoinerCarpenterController.onPageLoad(NormalMode)
+          ConstructionOccupationsController.onPageLoad(NormalMode)
       }
 
       "go to EmployersContributionsController from SecondIndustryOptionsPage when 'Council' is selected" in {
@@ -538,11 +539,11 @@ class GenericNavigatorSpec extends SpecBase {
 
       //SecondIndustryOptionsPage
 
-      "go JoinerCarpenterController from SecondIndustryOptionsPage when 'Construction' is selected" in {
+      "go to ConstructionOccupationsController from SecondIndustryOptionsPage when 'Construction' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
 
         navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
-          controllers.construction.routes.JoinerCarpenterController.onPageLoad(CheckMode)
+          ConstructionOccupationsController.onPageLoad(CheckMode)
       }
 
       "go to EmployersContributionsController from SecondIndustryOptionsPage when 'Council' is selected" in {
@@ -733,14 +734,6 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad()
       }
     }
-
-    "asked for variant" must {
-      "return navigator that routes construction users differently" in {
-        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
-
-        navigator.variant(ExperimentalVariant.IndustryTypesVariant).nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
-          controllers.construction.routes.ConstructionOccupationsController.onPageLoad(NormalMode)
-      }
-    }
   }
+
 }

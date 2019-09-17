@@ -58,7 +58,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
   "ConfirmationPreviousYearsOnlyController" must {
     "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with specific answers" in {
 
-      val application = applicationBuilder(userAnswers = Some(currentYearMinus1UserAnswers))
+      val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(TaxYearSelection.CurrentYearMinus1))))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()

@@ -35,10 +35,7 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
       val userAnswers = new UserAnswers(userAnswersId)
         .set(FirstIndustryOptionsPage, FirstIndustryOptions.NoneOfAbove).success.value
         .set(SecondIndustryOptionsPage, SecondIndustryOptions.Construction).success.value
-        .set(JoinerCarpenterPage, false).success.value
-        .set(StoneMasonPage, false).success.value
-        .set(ConstructionOccupationList1Page, false).success.value
-        .set(ConstructionOccupationList2Page, true).success.value
+        .set(ConstructionOccupationsPage, ConstructionOccupations.LabourerOrNavvy).success.value
         .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
         .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
         .set(ExpensesEmployerPaidPage, 20).success.value

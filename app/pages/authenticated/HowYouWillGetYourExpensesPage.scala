@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-package pages.construction
+package pages.authenticated
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import pages.Page
 
-case object JoinerCarpenterPage extends QuestionPage[Boolean] {
-
-  override def path: JsPath = JsPath \ industryPath \ toString
-
-  override def toString: String = "joinerCarpenter"
-}
+case object HowYouWillGetYourExpensesPage extends Page
