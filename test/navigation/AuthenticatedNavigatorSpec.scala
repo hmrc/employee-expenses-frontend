@@ -27,8 +27,7 @@ import models.{AlreadyClaimingFRESameAmount, CheckMode, NormalMode, TaxYearSelec
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.authenticated._
-import pages.FREResponse
-import play.api.Mode
+import pages.{CitizenDetailsAddress, FREResponse}
 
 class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
@@ -44,7 +43,7 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           val ua = emptyUserAnswers.set(FREResponse, FRENoYears).success.value
             .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
 
-          navigator.nextPage(ChangeWhichTaxYearsPage, NormalMode)(ua) mustBe
+          navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
             CheckYourAnswersController.onPageLoad()
         }
 
@@ -121,27 +120,16 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           CheckYourAnswersController.onPageLoad()
       }
 
-      "go to Check Your Answers from ChangeWhichTaxYearsPage when using currentTaxYear" in {
-        val ua = emptyUserAnswers.set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
-          .set(ChangeWhichTaxYearsPage, Seq(CurrentYear)).success.value
-
-        navigator.nextPage(ChangeWhichTaxYearsPage, NormalMode)(ua) mustBe
+      "go to Check Your Answers from ChangeWhichTaxYearsPage" in {
+        navigator.nextPage(ChangeWhichTaxYearsPage, NormalMode)(emptyUserAnswers) mustBe
           CheckYourAnswersController.onPageLoad()
       }
 
-      "go to Check Your Answers from ChangeWhichTaxYearsPage when not using currentTaxYear" in {
-        val ua = emptyUserAnswers.set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
-          .set(ChangeWhichTaxYearsPage, Seq(CurrentYearMinus1)).success.value
-
-        navigator.nextPage(ChangeWhichTaxYearsPage, NormalMode)(ua) mustBe
-          CheckYourAnswersController.onPageLoad()
-      }
-
-      "go to HowYouWillGetYourExpenses from YourEmployer when answered true" in {
+      "go to YourAddressController from YourEmployer when answered true" in {
         val ua = emptyUserAnswers.set(YourEmployerPage, true).success.value
 
         navigator.nextPage(YourEmployerPage, NormalMode)(ua) mustBe
-          HowYouWillGetYourExpensesController.onPageLoad()
+          YourAddressController.onPageLoad(NormalMode)
       }
 
       "go to UpdateEmployerInformation from YourEmployer when answered false" in {
@@ -151,34 +139,18 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           UpdateEmployerInformationController.onPageLoad(NormalMode)
       }
 
+      "go to CheckYourAnswers from YourAddressController" in {
+        val ua = emptyUserAnswers.set(CitizenDetailsAddress, address).success.value
+
+        navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
+          CheckYourAnswersController.onPageLoad()
+      }
+
       "go to HowYouWillGetYourExpenses from UpdateEmployerInformation" in {
         navigator.nextPage(UpdateYourEmployerInformationPage, NormalMode)(emptyUserAnswers) mustBe
           HowYouWillGetYourExpensesController.onPageLoad()
       }
 
-      "go to CheckYourAnswers from YourAddress when answered true" in {
-        val ua = emptyUserAnswers.set(YourAddressPage, true).success.value
-
-        navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
-          CheckYourAnswersController.onPageLoad()
-      }
-
-      "go to UpdateYourAddress from YourAddress when answered false" in {
-        val ua = emptyUserAnswers.set(YourAddressPage, false).success.value
-
-        navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
-          UpdateYourAddressController.onPageLoad()
-      }
-
-      "go to CheckYourAnswers from UpdateYourAddressPage" in {
-        navigator.nextPage(UpdateYourAddressPage, NormalMode)(emptyUserAnswers) mustBe
-          CheckYourAnswersController.onPageLoad()
-      }
-
-      "go to SessionExpired from YourAddress when YourAddressPage is not in UserAnswers" in {
-        navigator.nextPage(YourAddressPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
-      }
 
       "go to SessionExpired from YourEmployer when YourEmployerPage is not in UserAnswers" in {
         navigator.nextPage(YourEmployerPage, NormalMode)(emptyUserAnswers) mustBe
@@ -302,14 +274,14 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
             CheckYourAnswersController.onPageLoad()
         }
 
-        "go to Check your answers when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
+        "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
           val ua = emptyUserAnswers.set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
             AlreadyClaimingFRESameAmountController.onPageLoad(CheckMode)
         }
 
-        "go to Check your answers when answered and freResponse returns FREAllYearsAllAmountsDifferent" in {
+        "go to AlreadyClaimingFREDifferentAmounts when answered and freResponse returns FREAllYearsAllAmountsDifferent" in {
           val ua = emptyUserAnswers.set(FREResponse, FRESomeYears).success.value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
@@ -373,36 +345,26 @@ class AuthenticatedNavigatorSpec extends SpecBase with MockitoSugar with ScalaFu
           navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, CheckMode)(emptyUserAnswers) mustBe
             SessionExpiredController.onPageLoad()
         }
+
+
+        "go to SessionExpired from YourEmployer when YourEmployerPage is not in UserAnswers" in {
+          navigator.nextPage(YourEmployerPage, CheckMode)(emptyUserAnswers) mustBe
+            SessionExpiredController.onPageLoad()
+        }
+
+        "go to SessionExpired from TaxYearSelectionPage when FREResponse is not in UserAnswers" in {
+          navigator.nextPage(TaxYearSelectionPage, CheckMode)(emptyUserAnswers) mustBe
+            SessionExpiredController.onPageLoad()
+        }
       }
 
-      "go to CheckYourAnswers from YourAddress when answered true" in {
-        val ua = emptyUserAnswers.set(YourAddressPage, true).success.value
+      "go to CheckYourAnswers from YourAddressController" in {
+        val ua = emptyUserAnswers.set(CitizenDetailsAddress, address).success.value
 
         navigator.nextPage(YourAddressPage, CheckMode)(ua) mustBe
           CheckYourAnswersController.onPageLoad()
       }
-
-      "go to UpdateYourAddress from YourAddress when answered false" in {
-        val ua = emptyUserAnswers.set(YourAddressPage, false).success.value
-
-        navigator.nextPage(YourAddressPage, CheckMode)(ua) mustBe
-          UpdateYourAddressController.onPageLoad()
-      }
-
-      "go to SessionExpired from YourAddress when YourAddressPage is not in UserAnswers" in {
-        navigator.nextPage(YourAddressPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
-      }
-
-      "go to SessionExpired from YourEmployer when YourEmployerPage is not in UserAnswers" in {
-        navigator.nextPage(YourEmployerPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
-      }
-
-      "go to SessionExpired from TaxYearSelectionPage when FREResponse is not in UserAnswers" ignore {
-        navigator.nextPage(TaxYearSelectionPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
-      }
     }
   }
+
 }

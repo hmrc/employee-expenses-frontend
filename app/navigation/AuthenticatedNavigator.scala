@@ -33,7 +33,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case TaxYearSelectionPage => taxYearSelection(NormalMode)
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(NormalMode)
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(NormalMode)
-    case YourAddressPage => yourAddress(NormalMode)
+    case YourAddressPage => _ => CheckYourAnswersController.onPageLoad()
     case UpdateYourAddressPage => _ => CheckYourAnswersController.onPageLoad()
     case YourEmployerPage => yourEmployer(NormalMode)
     case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
@@ -47,7 +47,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case TaxYearSelectionPage => taxYearSelection(CheckMode)
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(CheckMode)
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(CheckMode)
-    case YourAddressPage => yourAddress(CheckMode)
+    case YourAddressPage => _ => CheckYourAnswersController.onPageLoad()
     case YourEmployerPage => yourEmployer(CheckMode)
     case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
@@ -88,21 +88,12 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
         SessionExpiredController.onPageLoad()
     }
 
-  def yourAddress(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(YourAddressPage) match {
-    case Some(true) =>
-      CheckYourAnswersController.onPageLoad()
-    case Some(false) =>
-      UpdateYourAddressController.onPageLoad()
-    case _ =>
-      SessionExpiredController.onPageLoad()
-  }
-
   def yourEmployer(mode: Mode)(userAnswers: UserAnswers): Call = {
 
     if (mode == NormalMode) {
       userAnswers.get(YourEmployerPage) match {
         case Some(true) =>
-          HowYouWillGetYourExpensesController.onPageLoad()
+          YourAddressController.onPageLoad(mode)
         case Some(false) =>
           UpdateEmployerInformationController.onPageLoad(mode)
         case _ =>
@@ -124,14 +115,11 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
 
   def checkYourAnswers(mode: Mode)(userAnswers: UserAnswers): Call = {
     (mode, userAnswers.get(YourEmployerPage), userAnswers.get(ChangeWhichTaxYearsPage)) match {
-      case (NormalMode, None, Some(selectedYears)) =>
+      case (_, None, Some(selectedYears)) =>
         if (selectedYears.contains(CurrentYear)) YourEmployerController.onPageLoad(mode) else HowYouWillGetYourExpensesController.onPageLoad()
-      case (NormalMode, _, None) =>
+      case (_, _, None) =>
         HowYouWillGetYourExpensesController.onPageLoad()
-      case (CheckMode, None, Some(selectedYears)) =>
-        if (selectedYears.contains(CurrentYear)) YourEmployerController.onPageLoad(mode) else HowYouWillGetYourExpensesController.onPageLoad()
-      case _ =>
-        HowYouWillGetYourExpensesController.onPageLoad()
+
     }
   }
 

@@ -56,6 +56,7 @@ class HowYouWillGetYourExpensesController @Inject()(
           Ok(currentView(redirectUrl))
         case Some(taxYearSelection) =>
           Ok(previousView(redirectUrl, containsCurrentYearMinus1(taxYearSelection)))
+        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
       }
   }
 
