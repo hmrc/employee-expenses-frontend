@@ -56,7 +56,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
   )
 
   "ConfirmationPreviousYearsOnlyController" must {
-    "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with specific answers" in {
+    "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with no address" in {
 
       val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(TaxYearSelection.CurrentYearMinus1))))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
@@ -85,6 +85,39 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
 
       application.stop()
     }
+
+    "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with with address" in {
+      val answers = yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))
+        .set(CitizenDetailsAddress, address).success.value
+
+      val application = applicationBuilder(userAnswers = Some(answers))
+        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+        .build()
+
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+
+      val request = FakeRequest(GET, ConfirmationPreviousYearsOnlyController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ConfirmationPreviousYearsOnlyView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(
+          claimAmountsAndRates = Seq(claimAmountsAndRates),
+          claimAmount = claimAmount,
+          address = Some(address),
+          currentYearMinus1 =true,
+          freResponse = FlatRateExpenseOptions.FRENoYears
+        )(request, messages, frontendAppConfig).toString
+
+      application.stop()
+    }
+
 
     "Redirect to TechnicalDifficulties when call to Tai fails" in {
 
