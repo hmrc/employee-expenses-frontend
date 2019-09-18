@@ -694,7 +694,7 @@ confirmation.taxCodeChanged.paragraph2 = This change will take effect as soon as
 confirmation.continueToClaim.paragraph1 = You do not need to claim this expense each year, it will automatically continue.
 confirmation.continueToClaim.paragraph2 = If your employment circumstances change, you will need to tell HMRC.
 confirmation.previousTaxYears = Claims for any previous years
-confirmation.confirmationLetter = We will process your claim and send you a letter to confirm any amounts due. This can take up to 10 working days.
+confirmation.confirmationLetter = We will send you a letter to confirm any refunds you are due.
 confirmation.additionalConfirmationLetter = We will send you a letter to confirm any refunds you are due.
 confirmation.noLongerGetAmount = You will no longer get this amount. You will get a letter to confirm this change to your tax-free Personal Allowance.
 confirmation.updateEmployerInfo = Update your employer information
@@ -792,7 +792,7 @@ constructionOccupations.none = Construction occupation not listed
 
 howYouWillGetYourExpenses.title = How you will get your expenses
 howYouWillGetYourExpenses.heading = How you will get your expenses
-howYouWillGetYourExpenses.button = Submit your claim
+howYouWillGetYourExpenses.button = Accept and claim expenses
 
 
 howYouWillGetYourExpenses.subheading = Claim your expenses
@@ -808,7 +808,7 @@ howYouWillGetYourExpenses.item2 = get a letter about the change
 howYouWillGetYourExpenses.item3 = automatically continue claiming each year
 howYouWillGetYourExpenses.item4 = need to tell HMRC if anything changes
 
-howYouWillGetYourExpensesPrevious.para1 =We will process your claim and send you a letter, which will:
+howYouWillGetYourExpensesPrevious.para1 = We will process your claim and send you a letter, which will:
 howYouWillGetYourExpensesPrevious.item1 = confirm any refunds
 howYouWillGetYourExpensesPrevious.item2 = give you a choice of receiving refunds by either online payment or cheque
 howYouWillGetYourExpensesPrevious.para2 = For claims that include tax year {0}, this may take longer if your employer has not yet sent your information for that tax year.
