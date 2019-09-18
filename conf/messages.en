@@ -551,7 +551,7 @@ ironMiningList.occupation2 = miners and underground workers
 
 taxYearSelection.title = Which tax years do you want to claim for?
 taxYearSelection.heading = Which tax years do you want to claim for?
-taxYearSelection.paragraph = Select all that apply.
+taxYearSelection.listHint = Select all that apply.
 taxYearSelection.currentYear = 6 April {0} to 5 April {1} (the current tax year)
 taxYearSelection.currentYearMinus1 = 6 April {0} to 5 April {1}
 taxYearSelection.currentYearMinus2 = 6 April {0} to 5 April {1}
@@ -561,6 +561,7 @@ taxYearSelection.checkYourAnswersLabel = Which tax years do you want to claim fo
 taxYearSelection.checkYourAnswersLabel.hidden = Change the tax years you want to claim for
 taxYearSelection.error.required = Select which tax years you want to claim for
 taxYearSelection.currentYearHint = You can claim for the current tax year even if it has not ended
+taxYearSelection.bodyText = You can claim for the current tax year and previous 4 tax years.
 
 constructionalEngineeringList3.title = Constructional engineering occupations (page 3 of 3)
 constructionalEngineeringList3.heading = Constructional engineering occupations (page 3 of 3)
