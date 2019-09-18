@@ -145,7 +145,27 @@ class AuthenticatedNavigatorSpec extends SpecBase {
           YourEmployerController.onPageLoad(NormalMode)
       }
 
-      "go to YourEmployerController from YourAddressController when current year is not selected" in {
+      "go to YourEmployerController from YourAddressController for when current year selected in Change year" in {
+        val ua = emptyUserAnswers
+          .set(CitizenDetailsAddress, address).success.value
+          .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
+          .set(ChangeWhichTaxYearsPage, Seq(CurrentYear)).success.value
+
+        navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
+          YourEmployerController.onPageLoad(NormalMode)
+      }
+
+      "go to HowYouWillGetYourExpensesController from YourAddressController for when current year selected in tax year selection but not in Change year" in {
+        val ua = emptyUserAnswers
+          .set(CitizenDetailsAddress, address).success.value
+          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus2)).success.value
+          .set(ChangeWhichTaxYearsPage, Seq(CurrentYearMinus2)).success.value
+
+        navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
+          HowYouWillGetYourExpensesController.onPageLoad()
+      }
+
+      "go to HowYouWillGetYourExpensesController from YourAddressController when current year is not selected" in {
         val ua = emptyUserAnswers
           .set(CitizenDetailsAddress, address).success.value
           .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value

@@ -51,7 +51,7 @@ case _ => {
 
 <p><a href="@updateAddressInfoUrl" id="updateAddressBtn">@messages("confirmation.updateAddressInfoNow")</a></p>
 
-@if(!employerCorrect.getOrElse(false)) {
+@if(!employerCorrect.getOrElse(true)) {
 
 <h2>@messages("confirmation.updateEmployerInfo")</h2>
 
