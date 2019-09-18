@@ -40,10 +40,9 @@ import scala.concurrent.Future
 
 class YourAddressControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar with BeforeAndAfterEach {
 
-  def onwardRoute = HowYouWillGetYourExpensesController.onPageLoad().url
+  def onwardRoute = YourEmployerController.onPageLoad(NormalMode).url
 
   private val mockSessionRepository = mock[SessionRepository]
-  private val userAnswers = emptyUserAnswers
 
   lazy val incorrectJson: JsValue = Json.parse(
     s"""
@@ -64,18 +63,18 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
   "YourAddress Controller" must {
 
     "redirect to next page and the correct view for a GET and save address to CitizensDetailsAddress" in {
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(200, Some(Json.toJson(address)))))
+      when(mockSessionRepository.set(any(), any()))
+        .thenReturn(Future.successful(true))
+
+      val userAnswers = minimumUserAnswers
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .build()
-
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(200, Some(Json.toJson(address))))
-      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
-
+          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
       val request = FakeRequest(GET, yourAddressRoute)
-
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
@@ -93,7 +92,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "redirect to HowWillYouGetYourExpenses if address line one and postcode missing" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
         .build()
 
@@ -113,133 +112,109 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
     }
 
     "redirect to HowWillYouGetYourExpenses if 404 returned from getAddress" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-        .build()
-
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
         Future.successful(HttpResponse(404, None))
 
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+          .build()
       val request =
         FakeRequest(GET, yourAddressRoute).withFormUrlEncodedBody(("value", "true"))
-
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual onwardRoute
-      application.stop()
 
+      application.stop()
     }
 
     "redirect to Phone Us if 423 returned from getAddress" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-        .build()
-
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
         Future.successful(HttpResponse(423, None))
 
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+          .build()
       val request =
         FakeRequest(GET, yourAddressRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual PhoneUsController.onPageLoad().url
 
       application.stop()
     }
 
-    "redirect to HowWillYouGetYourExpenses if 500 returned from getAddress" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-        .build()
-
+    "redirect to NextPage if 500 returned from getAddress" in {
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
         Future.successful(HttpResponse(500, None))
 
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+          .build()
       val request =
         FakeRequest(GET, yourAddressRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual onwardRoute
 
       application.stop()
     }
 
-    "redirect to HowWillYouGetYourExpenses if any other status returned from getAddress" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-        .build()
-
+    "redirect to NextPage if any other status returned from getAddress" in {
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
         Future.successful(HttpResponse(123, None))
 
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+          .build()
       val request =
         FakeRequest(GET, yourAddressRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual onwardRoute
 
       application.stop()
     }
 
     "redirect to Technical Difficulties when call to CitizensDetails fails" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-        .build()
-
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.failed(new Exception)
 
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
       val request =
         FakeRequest(GET, yourAddressRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad().url
 
       application.stop()
     }
 
     "redirect to CheckYourAnswers when could not parse Json to Address model" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-        .build()
-
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
         Future.successful(HttpResponse(200, Some(incorrectJson)))
 
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+          .build()
       val request =
         FakeRequest(GET, yourAddressRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result).value mustEqual onwardRoute
 
       application.stop()
     }
-
   }
 }
