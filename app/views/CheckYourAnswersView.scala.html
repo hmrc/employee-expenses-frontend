@@ -43,20 +43,18 @@
         }
     }
 
-    @formHelper(action = CheckYourAnswersController.onSubmit, 'autoComplete -> "off") {
 
-        <h2>@messages(s"checkYourAnswers.${checkYourAnswersText.disclaimerHeading}")</h2>
-        <p>@messages(s"checkYourAnswers.${checkYourAnswersText.disclaimer}")</p>
+    <h2>@messages(s"checkYourAnswers.${checkYourAnswersText.disclaimerHeading}")</h2>
+    <p>@messages(s"checkYourAnswers.${checkYourAnswersText.disclaimer}")</p>
 
-        <div class="notice">
-            <i class="icon icon-important">
-                <span class="visually-hidden">@messages("checkYourAnswers.warning")</span>
-            </i>
-            <strong class="bold-small">
-                @messages("checkYourAnswers.prosecuted")
-            </strong>
-        </div>
+    <div class="notice">
+        <i class="icon icon-important">
+            <span class="visually-hidden">@messages("checkYourAnswers.warning")</span>
+        </i>
+        <strong class="bold-small">
+        @messages("checkYourAnswers.prosecuted")
+        </strong>
+    </div>
 
-        @components.submit_button(messages(s"site.${checkYourAnswersText.button}"))
-    }
+    @components.button_link(messages(s"site.${checkYourAnswersText.button}"), CheckYourAnswersController.acceptAndClaim().url)
 }

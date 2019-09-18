@@ -48,6 +48,9 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
+  private val userAnswers = currentYearFullUserAnswers
+    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
   "AlreadyClaimingFREDifferentAmounts Controller" must {
 
     "return OK and the correct view for a GET" in {

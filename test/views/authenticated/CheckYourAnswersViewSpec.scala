@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package views
+package views.authenticated
 
 import models.FlatRateExpenseOptions
 import play.api.Application
+import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
@@ -26,12 +27,11 @@ import views.html.CheckYourAnswersView
 
 class CheckYourAnswersViewSpec extends ViewBehaviours {
 
-  val application: Application = applicationBuilder().build()
+  val application: Application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers))
+    .build()
 
   "Index view" must {
-
     val cyaHelper = new CheckYourAnswersHelper(currentYearFullUserAnswers)
-
     val sections = Seq(AnswerSection(None, Seq(
       cyaHelper.industryType,
       cyaHelper.employerContribution,
@@ -57,7 +57,6 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     behave like pageWithAccountMenu(applyViewWithAuth(FlatRateExpenseOptions.FRENoYears, removeFRE = true))
 
     "display correct content" when {
-
       "new claim has been made" in {
         val doc = asDocument(applyViewNewClaim(FlatRateExpenseOptions.FRENoYears, removeFRE = false))
 
@@ -67,7 +66,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
           "checkYourAnswers.claimExpenses"
         )
 
-        doc.getElementById("submit").text mustBe messages("site.acceptClaimExpenses")
+        doc.getElementById("continue").text mustBe messages("site.acceptClaimExpenses")
       }
 
       "claim has been changed" in {
@@ -79,7 +78,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
           "checkYourAnswers.changeClaim"
         )
 
-        doc.getElementById("submit").text mustBe messages("site.acceptChangeClaim")
+        doc.getElementById("continue").text mustBe messages("site.acceptChangeClaim")
       }
 
       "claim has been stopped" in {
@@ -91,7 +90,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
           "checkYourAnswers.stopClaim"
         )
 
-        doc.getElementById("submit").text mustBe messages("site.acceptStopClaim")
+        doc.getElementById("continue").text mustBe messages("site.acceptStopClaim")
       }
     }
   }

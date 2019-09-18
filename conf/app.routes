@@ -11,7 +11,9 @@ GET         /sign-out                                            controllers.aut
 GET         /this-service-has-been-reset                         controllers.SessionExpiredController.onPageLoad
 
 GET         /check-your-answers                                  controllers.authenticated.CheckYourAnswersController.onPageLoad
-POST        /check-your-answers                                  controllers.authenticated.CheckYourAnswersController.onSubmit
+GET         /accept-and-claim                                    controllers.authenticated.CheckYourAnswersController.acceptAndClaim
+
+GET         /submit                                              controllers.authenticated.SubmissionController.onSubmit
 
 GET         /unauthorised                                        controllers.UnauthorisedController.onPageLoad
 

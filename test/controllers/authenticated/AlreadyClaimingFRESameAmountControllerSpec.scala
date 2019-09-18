@@ -51,7 +51,6 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
   "AlreadyClaimingFRESameAmount Controller" must {
 
     "return OK and the correct view for a GET" in {
-
       val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
@@ -96,15 +95,14 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
         view(
           form.fill(AlreadyClaimingFRESameAmount.values.head),
           NormalMode,
-          userAnswers.get(ClaimAmountAndAnyDeductions).get,
-          userAnswers.get(FREAmounts).get
+          userAnswers.get(ClaimAmountAndAnyDeductions).value,
+          userAnswers.get(FREAmounts).value
         )(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
-
       val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
@@ -149,8 +147,8 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
         view(
           boundForm,
           NormalMode,
-          userAnswers.get(ClaimAmountAndAnyDeductions).get,
-          userAnswers.get(FREAmounts).get
+          userAnswers.get(ClaimAmountAndAnyDeductions).value,
+          userAnswers.get(FREAmounts).value
         )(request, messages).toString
 
       application.stop()

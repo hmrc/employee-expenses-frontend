@@ -62,6 +62,5 @@ class HowYouWillGetYourExpensesController @Inject()(
 
   private def containsCurrentYearMinus1(taxYearSelections: Seq[TaxYearSelection]): Boolean = {
     taxYearSelections.contains(CurrentYearMinus1)
-
   }
 }
