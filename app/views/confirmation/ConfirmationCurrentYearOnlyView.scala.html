@@ -41,30 +41,18 @@
 
     <div class="govuk-box-highlight">
         <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
+        <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
     </div>
-
-    <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
-
-    <p>@messages("confirmation.actualAmount")</p>
-
-    @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
 
     <h2>@messages("confirmation.whatHappensNext")</h2>
 
-    <p>@messages("confirmation.taxCodeChanged.paragraph1")</p>
+    <h3>@messages("confirmation.currentTaxYear")</h3>
 
-    <p>@messages("confirmation.taxCodeChanged.paragraph2")</p>
+    <p>@messages("confirmation.taxCodeChanged.currentYear.paragraph1")</p>
 
-    <p>@messages("confirmation.continueToClaim.paragraph1")</p>
+    <p>@messages("confirmation.taxCodeChanged.currentYear.paragraph2")</p>
 
-    <p>@messages("confirmation.continueToClaim.paragraph2")</p>
+    @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
 
-@components.confirmation_footer(address, employerCorrect, frontendAppConfig.updateAddressInfoUrl, frontendAppConfig.updateEmployerInfoUrl)
-
-
-    @if(!employerCorrect.getOrElse(false)) {
-        @components.update_employer_info()
-    }
-
-
+    @components.confirmation_footer(address, employerCorrect, frontendAppConfig.updateAddressInfoUrl, frontendAppConfig.updateEmployerInfoUrl)
 }

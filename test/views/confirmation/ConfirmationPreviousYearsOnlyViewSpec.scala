@@ -78,13 +78,8 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
 
       assertContainsMessages(doc,
         "confirmation.heading",
-        "confirmation.actualAmount",
         "confirmation.whatHappensNext",
-        "confirmation.confirmationLetter",
-        messages("confirmation.currentYearMinusOneDelay",
-          TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
-          TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString
-        )
+        "confirmation.confirmationLetter"
       )
     }
 

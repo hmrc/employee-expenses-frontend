@@ -78,12 +78,13 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
       assertContainsMessages(doc,
         "confirmation.heading",
-        "confirmation.actualAmount",
+        messages("confirmation.personalAllowanceIncrease", claimAmount),
         "confirmation.whatHappensNext",
-        "confirmation.taxCodeChanged.paragraph1",
-        "confirmation.taxCodeChanged.paragraph2",
-        "confirmation.continueToClaim.paragraph1",
-        "confirmation.continueToClaim.paragraph2"
+        "confirmation.taxCodeChanged.currentYear.paragraph1",
+        "confirmation.taxCodeChanged.currentYear.paragraph2",
+        "confirmation.checkAddress.heading",
+        "confirmation.checkAddress.paragraph1",
+        "confirmation.checkAddress.paragraph2"
       )
     }
 

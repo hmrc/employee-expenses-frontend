@@ -42,42 +42,22 @@ frontendAppConfig:FrontendAppConfig
 
     <div class="govuk-box-highlight">
         <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
+        <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
     </div>
 
-    <h2 class="heading-medium">@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
+    <h2>@messages("confirmation.whatHappensNext")</h2>
 
-    <p>@messages("confirmation.actualAmount")</p>
+    <h3>@messages("confirmation.currentTaxYear")</h3>
+
+    <p>@messages("confirmation.taxCodeChanged.currentYear.paragraph1")</p>
+
+    <p>@messages("confirmation.taxCodeChanged.currentYear.paragraph2")</p>
 
     @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
 
-    <h2 class="heading-medium">@messages("confirmation.whatHappensNext")</h2>
-
-    <h3 class="heading-small">@messages("confirmation.currentTaxYear")</h3>
-
-    <p>@messages("confirmation.taxCodeChanged.paragraph1")</p>
-
-    <p>@messages("confirmation.taxCodeChanged.paragraph2")</p>
-
-    <p>@messages("confirmation.continueToClaim.paragraph1")</p>
-
-    <p>@messages("confirmation.continueToClaim.paragraph2")</p>
-
-    <h3 class="heading-small">@messages("confirmation.previousTaxYears")</h3>
+    <h3>@messages("confirmation.previousTaxYears")</h3>
 
     <p>@messages("confirmation.additionalConfirmationLetter")</p>
 
-    @if(currentYearMinus1) {
-        <p>@messages(
-            "confirmation.currentYearMinusOneDelay",
-            TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
-            TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString)
-        </p>
-    }
-
     @components.confirmation_footer(address, employerCorrect, frontendAppConfig.updateAddressInfoUrl, frontendAppConfig.updateEmployerInfoUrl)
-
-
-    @if(!employerCorrect.getOrElse(false)) {
-         @components.update_employer_info()
-    }
 }
