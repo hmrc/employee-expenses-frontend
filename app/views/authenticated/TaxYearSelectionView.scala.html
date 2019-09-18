@@ -34,13 +34,13 @@
 
         @components.error_summary(form.errors)
 
-
         @components.input_tax_year(
             field = form("value"),
             legend = messages("taxYearSelection.heading"),
             headingIsLegend = true,
-            hint = Some(s"""<p>${messages("taxYearSelection.paragraph")}</p>"""),
-            inputs = TaxYearSelection.options
+            hint = Some(messages("taxYearSelection.listHint")),
+            inputs = TaxYearSelection.options,
+            textBlock = Some(messages("taxYearSelection.bodyText"))
         )
 
         @components.submit_button()

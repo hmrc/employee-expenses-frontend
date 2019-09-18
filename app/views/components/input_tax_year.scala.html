@@ -21,6 +21,7 @@
         legendClass: Option[String] = None,
         hint: Option[String] = None,
         inputs: Seq[RadioCheckboxOption],
+        textBlock: Option[String] = None,
         headingIsLegend: Boolean = false
 )(implicit
         messages: Messages
@@ -29,7 +30,7 @@
 @hintBlock = {
     @hint.map { hint =>
         <div id="@{field.id}-hint">
-        @Html(hint)
+        <p class="form-hint">@hint</p>
         </div>
     }
 }
@@ -48,6 +49,9 @@
             <legend class="@legendClass.map(x => x)"><h1 class="heading-xlarge">@legend</h1></legend>
         } else {
             <legend class="bold-small @legendClass.map(x => x)">@legend</legend>
+        }
+        @if(textBlock.isDefined) {
+            <p>@textBlock.get</p>
         }
         @hintBlock
         @errorBlock
