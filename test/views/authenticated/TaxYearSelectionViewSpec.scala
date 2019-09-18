@@ -51,8 +51,8 @@ class TaxYearSelectionViewSpec extends CheckboxViewBehaviours[TaxYearSelection] 
     behave like checkboxPage(form, applyView, messageKeyPrefix, options)
 
     behave like pageWithBodyText(applyView(form),
-      messageKeyPrefix + ".bodyText",
-      messageKeyPrefix + ".listHint")
+      "taxYearSelection.bodyText",
+      "taxYearSelection.listHint")
   }
 
   application.stop()
