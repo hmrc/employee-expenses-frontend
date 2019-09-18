@@ -23,7 +23,7 @@ import javax.inject.{Inject, Named}
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
 import models.{NormalMode, TaxYearSelection}
 import navigation.Navigator
-import pages.authenticated.{HowYouWillGetYourExpensesPage, TaxYearSelectionPage}
+import pages.authenticated._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -47,7 +47,12 @@ class HowYouWillGetYourExpensesController @Inject()(
     implicit request =>
 
       val redirectUrl = navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(request.userAnswers).url
-      val taxYearSelection: Option[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage)
+
+      val taxYearSelection = (request.userAnswers.get(TaxYearSelectionPage), request.userAnswers.get(ChangeWhichTaxYearsPage)) match {
+        case (Some(_), Some(changeYears)) => Some(changeYears)
+        case (Some(taxYearSelection), None) => Some(taxYearSelection)
+        case _ => None
+      }
 
       taxYearSelection match {
         case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) && taxYearSelection.length > 1 =>

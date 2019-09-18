@@ -810,7 +810,7 @@ howYouWillGetYourExpenses.item4 = need to tell HMRC if anything changes
 
 howYouWillGetYourExpensesPrevious.para1 =We will process your claim and send you a letter, which will:
 howYouWillGetYourExpensesPrevious.item1 = confirm any refunds
-howYouWillGetYourExpensesPrevious.item2 = tell you how you will receive or claim the refund (cheque or BACS payment)
+howYouWillGetYourExpensesPrevious.item2 = give you a choice of receiving refunds by either online payment or cheque
 howYouWillGetYourExpensesPrevious.para2 = For claims that include tax year {0}, this may take longer if your employer has not yet sent your information for that tax year.
 
 howYouWillGetYourExpensesCurrentAndPreviousYear.subHeading1 = Claims for the current year
