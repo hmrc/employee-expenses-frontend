@@ -92,6 +92,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   val accessibilityStatementLastTested: String = configuration.get[String]("accessibilityStatement.lastTested")
   val accessibilityStatementFirstPublished: String = configuration.get[String]("accessibilityStatement.firstPublished")
+  lazy val accessibilityStatementEnabled: Boolean = configuration.get[Boolean]("accessibilityStatement.enabled")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),

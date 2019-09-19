@@ -102,6 +102,9 @@
         "googleTagManager" -> true,
         "sessionTimeout" -> request.session.get("authToken").isDefined,
         "keepAliveUrl" -> appConfig.keepAliveUrl,
-        "logoutUrl" -> appConfig.signOutUrl
+        "logoutUrl" -> appConfig.signOutUrl,
+        "accessibilityFooterUrl" -> {
+            if(appConfig.accessibilityStatementEnabled) appConfig.accessibilityStatementUrl else false
+        }
     )
 )
