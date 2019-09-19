@@ -31,7 +31,16 @@ class AccessibilityStatementViewSpec extends ViewBehaviours {
 
     val applyViewWithAuth = view.apply("", "")(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    val introductionLink = s"""<a href=${frontendAppConfig.accessibilityStatementUrl}>${messages("accessibilityStatement.introduction.paragraph2.linkText")}</a>"""
+    val introductionLink = s"""<a href="${frontendAppConfig.accessibilityStatementUrl}">${messages("accessibilityStatement.introduction.paragraph2.linkText")}</a>"""
+    val serviceLink = s"""<a href=@serviceUrl>@subDomain</a>}"""
+    val usingThisServiceLink = s"""<a href="${frontendAppConfig.accessibilityStatementUrl}">${messages("accessibilityStatement.usingThisService.paragraph3.linkText")}</a>"""
+    val howAccessibleThisServiceIsLink = s"""<a href="${frontendAppConfig.w3StandardsUrl}">${messages("accessibilityStatement.howAccessibleThisServiceIs.paragraph1.linkText")}</a>"""
+    val reportingAccessibilityProblemsWithThisServiceLink = s"""<a href="${frontendAppConfig.reportAProblemNonJSUrl}">${messages("accessibilityStatement.reportingAccessibilityProblemsWithThisService.paragraph1.linkText")}</a>"""
+    val whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaintLink1 = s"""<a href="${frontendAppConfig.equalityAdvisoryServiceUrl}">${messages("accessibilityStatement.whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaint.paragraph1.linkText1")}</a>"""
+    val whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaintLink2 = s"""<a href="${frontendAppConfig.equalityNIUrl}">${messages("accessibilityStatement.whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaint.paragraph1.linkText2")}</a>"""
+    val contactUsLink = s"""<a href="${frontendAppConfig.dealingHmrcAdditionalNeedsUrl}">${messages("accessibilityStatement.contactingUsByPhoneOrGettingAVisitFromUsInPerson.paragraph3.linkText")}</a>"""
+    val technicalInformationLink = s"""<a href="${frontendAppConfig.w3StandardsUrl}">${messages("accessibilityStatement.technicalInformationAboutThisServicesAccessibility.paragraph2.linkText")}</a>"""
+    val dacLink = s"""<a href="${frontendAppConfig.dacUrl}">${messages("accessibilityStatement.howWeTestedThisService.paragraph2.linkText")}</a>"""
 
     val expectedGuidanceKeys = Seq(
       messages("accessibilityStatement.title", messages("site.service_name")),
@@ -48,53 +57,42 @@ class AccessibilityStatementViewSpec extends ViewBehaviours {
       "accessibilityStatement.usingThisService.listItem4",
       "accessibilityStatement.usingThisService.listItem5",
       "accessibilityStatement.usingThisService.paragraph2",
-      messages("accessibilityStatement.usingThisService.paragraph3", messages("accessibilityStatement.usingThisService.paragraph3.linkText")),
+      messages("accessibilityStatement.usingThisService.paragraph3", usingThisServiceLink),
       "accessibilityStatement.howAccessibleThisServiceIs.heading",
-      "accessibilityStatement.howAccessibleThisServiceIs.paragraph1",
-      "accessibilityStatement.howAccessibleThisServiceIs.paragraph1.linkText",
+      messages("accessibilityStatement.howAccessibleThisServiceIs.paragraph1", howAccessibleThisServiceIsLink),
       "accessibilityStatement.whatToDoIfYouHaveDifficultyUsingThisService.heading",
       "accessibilityStatement.reportingAccessibilityProblemsWithThisService.heading",
-      "accessibilityStatement.reportingAccessibilityProblemsWithThisService.paragraph1",
-      "accessibilityStatement.reportingAccessibilityProblemsWithThisService.paragraph1.linkText",
+      messages("accessibilityStatement.reportingAccessibilityProblemsWithThisService.paragraph1", reportingAccessibilityProblemsWithThisServiceLink),
       "accessibilityStatement.whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaint.heading",
-      "accessibilityStatement.whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaint.paragraph1",
-      "accessibilityStatement.whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaint.paragraph1.linkText1",
-      "accessibilityStatement.whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaint.paragraph1.linkText2",
+      messages("accessibilityStatement.whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaint.paragraph1", whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaintLink1, whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaintLink2),
       "accessibilityStatement.contactingUsByPhoneOrGettingAVisitFromUsInPerson.heading",
       "accessibilityStatement.contactingUsByPhoneOrGettingAVisitFromUsInPerson.paragraph1",
       "accessibilityStatement.contactingUsByPhoneOrGettingAVisitFromUsInPerson.paragraph2",
-      "accessibilityStatement.contactingUsByPhoneOrGettingAVisitFromUsInPerson.paragraph3",
-      "accessibilityStatement.contactingUsByPhoneOrGettingAVisitFromUsInPerson.paragraph3.linkText",
+      messages("accessibilityStatement.contactingUsByPhoneOrGettingAVisitFromUsInPerson.paragraph3", contactUsLink),
       "accessibilityStatement.technicalInformationAboutThisServicesAccessibility.heading",
       "accessibilityStatement.technicalInformationAboutThisServicesAccessibility.paragraph1",
-      "accessibilityStatement.technicalInformationAboutThisServicesAccessibility.compliant",
-      "accessibilityStatement.technicalInformationAboutThisServicesAccessibility.nonCompliant",
-      "accessibilityStatement.technicalInformationAboutThisServicesAccessibility.paragraph2.linkText",
-      "accessibilityStatement.technicalInformationAboutThisServicesAccessibility.nonCompliant.heading",
-      "accessibilityStatement.technicalInformationAboutThisServicesAccessibility.nonCompliant.paragraph1",
-      "accessibilityStatement.technicalInformationAboutThisServicesAccessibility.nonCompliant.subHeading",
+      messages("accessibilityStatement.technicalInformationAboutThisServicesAccessibility.compliant", howAccessibleThisServiceIsLink),
+      //messages("accessibilityStatement.technicalInformationAboutThisServicesAccessibility.nonCompliant", technicalInformationLink),
+      //messages("accessibilityStatement.technicalInformationAboutThisServicesAccessibility.nonCompliant.heading", technicalInformationLink),
+      //"accessibilityStatement.technicalInformationAboutThisServicesAccessibility.nonCompliant.paragraph1",
+      //"accessibilityStatement.technicalInformationAboutThisServicesAccessibility.nonCompliant.subHeading",
       "accessibilityStatement.howWeTestedThisService.heading",
-      "accessibilityStatement.howWeTestedThisService.paragraph1",
-      "accessibilityStatement.howWeTestedThisService.paragraph2",
-      "accessibilityStatement.howWeTestedThisService.paragraph2.linkText",
-      "accessibilityStatement.howWeTestedThisService.paragraph3"
+      messages("accessibilityStatement.howWeTestedThisService.paragraph1", frontendAppConfig.accessibilityStatementLastTested),
+      messages("accessibilityStatement.howWeTestedThisService.paragraph2", dacLink),
+      messages("accessibilityStatement.howWeTestedThisService.paragraph3", frontendAppConfig.accessibilityStatementLastTested, frontendAppConfig.accessibilityStatementFirstPublished)
     )
 
-    //behave like normalPage(applyView, "accessibilityStatement")
-
     "behave like a normal page" when {
-
       "rendered" must {
-
         "have the correct banner title" in {
-
           val doc = asDocument(applyView)
+
           assertRenderedById(doc, "pageTitle")
         }
 
         "hide account menu when user not logged in" in {
-
           val doc = asDocument(applyView)
+
           doc.getElementById("hideAccountMenu").text mustBe "true"
         }
 
@@ -109,20 +107,21 @@ class AccessibilityStatementViewSpec extends ViewBehaviours {
         }
 
         "display the correct page title" in {
-
           val doc = asDocument(applyView)
-          assertPageTitleEqualsMessage(doc, s"accessibilityStatement.heading")
+
+          assertPageTitleEqualsMessage(doc, messages("accessibilityStatement.heading", messages("site.service_name")))
         }
 
         "display the correct guidance" in {
-
           val doc = asDocument(applyView)
-          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$key"))
+
+          for (key <- expectedGuidanceKeys)
+            assertContainsText(doc, messages(s"$key"))
         }
 
         "display language toggles" in {
-
           val doc = asDocument(applyView)
+
           assertRenderedById(doc, "langSelector")
         }
       }

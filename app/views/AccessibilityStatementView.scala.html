@@ -58,7 +58,7 @@
         <a href=@frontendAppConfig.dacUrl>@messages("accessibilityStatement.howWeTestedThisService.paragraph2.linkText")</a>}
 
 @main_template(
-    title = messages("accessibilityStatement.title", messages("site.service_name"))
+    title = messages("accessibilityStatement.title")
     ) {
 
     @components.back_link()
@@ -67,9 +67,7 @@
 
     <div id="introduction">
         <p class="lede">@messages("accessibilityStatement.introduction.paragraph1")</p>
-
         <p>@Html(messages("accessibilityStatement.introduction.paragraph2", introductionLink))</p>
-
         <p>@Html(messages("accessibilityStatement.introduction.paragraph3", messages("site.service_name"), serviceLink))</p>
     </div>
 
