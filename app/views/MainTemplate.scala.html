@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.play.partials.FormPartialRetriever
 @import models.requests._
 @import controllers.actions.Authed
+@import controllers.AccessibilityStatementController
 
 @this(
         appConfig: FrontendAppConfig,
@@ -104,7 +105,7 @@
         "keepAliveUrl" -> appConfig.keepAliveUrl,
         "logoutUrl" -> appConfig.signOutUrl,
         "accessibilityFooterUrl" -> {
-            if(appConfig.accessibilityStatementEnabled) appConfig.accessibilityStatementUrl else false
+            if(appConfig.accessibilityStatementEnabled) AccessibilityStatementController.onPageLoad().url else false
         }
     )
 )
