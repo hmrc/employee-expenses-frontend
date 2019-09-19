@@ -374,3 +374,5 @@ GET         /construction-occupations                            controllers.con
 POST        /construction-occupations                            controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = NormalMode)
 GET         /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /accessibility-statement                              controllers.AccessibilityStatementController.onPageLoad()
