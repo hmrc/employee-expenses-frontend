@@ -36,6 +36,6 @@ class AccessibilityStatementController @Inject()(
 
   def onPageLoad: Action[AnyContent] = (identify) {
     implicit request =>
-      Ok(view(routes.IndexController.onPageLoad().url, "employee-expenses", false))
+      Ok(view(routes.IndexController.onPageLoad().url, "https://www.tax.service.gov.uk/employee-expenses", true))
   }
 }

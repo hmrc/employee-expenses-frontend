@@ -16,6 +16,8 @@
 
 package config
 
+import java.time.LocalDate
+
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import play.api.Configuration
@@ -90,9 +92,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val equalityNIUrl: String = configuration.get[String]("accessibilityStatement.equalityNIUrl")
   lazy val dealingHmrcAdditionalNeedsUrl: String = configuration.get[String]("accessibilityStatement.dealingHmrcAdditionalNeedsUrl")
   lazy val dacUrl: String = configuration.get[String]("accessibilityStatement.dacUrl")
-
-  val accessibilityStatementLastTested: String = configuration.get[String]("accessibilityStatement.lastTested")
-  val accessibilityStatementFirstPublished: String = configuration.get[String]("accessibilityStatement.firstPublished")
+  lazy val contactUsEmailAddress = configuration.get[String]("accessibilityStatement.contactUsEmailAddress")
+  lazy val accessibilityStatementLastTested: String = configuration.get[String]("accessibilityStatement.lastTested")
+  lazy val accessibilityStatementFirstPublished: String = configuration.get[String]("accessibilityStatement.firstPublished")
   lazy val accessibilityStatementEnabled: Boolean = configuration.get[Boolean]("accessibilityStatement.enabled")
 
   def languageMap: Map[String, Lang] = Map(
