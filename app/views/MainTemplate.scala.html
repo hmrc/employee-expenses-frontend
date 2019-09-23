@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.play.partials.FormPartialRetriever
 @import models.requests._
 @import controllers.actions.Authed
+@import controllers.AccessibilityStatementController
 
 @this(
         appConfig: FrontendAppConfig,
@@ -102,6 +103,9 @@
         "googleTagManager" -> true,
         "sessionTimeout" -> request.session.get("authToken").isDefined,
         "keepAliveUrl" -> appConfig.keepAliveUrl,
-        "logoutUrl" -> appConfig.signOutUrl
+        "logoutUrl" -> appConfig.signOutUrl,
+        "accessibilityFooterUrl" -> {
+            if(appConfig.accessibilityStatementEnabled) AccessibilityStatementController.onPageLoad().url else false
+        }
     )
 )
