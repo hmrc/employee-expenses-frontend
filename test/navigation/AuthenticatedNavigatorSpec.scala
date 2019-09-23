@@ -189,9 +189,18 @@ class AuthenticatedNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad()
       }
 
-      "go to YourAddressController from CheckYourAnswers" in {
-        navigator.nextPage(CheckYourAnswersPage, NormalMode)(emptyUserAnswers) mustBe
+      "go to YourAddressController from CheckYourAnswers " in {
+        val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
+
+        navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
           YourAddressController.onPageLoad(NormalMode)
+      }
+
+      "go to ConfirmationClaimStoppedController from CheckYourAnswers for when current year selected" in {
+        val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Remove).success.value
+
+        navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
+          SubmissionController.onSubmit()
       }
 
       "go from 'HowYouWillGetYourExpenses' to 'SubmissionController.onSubmit'" in {

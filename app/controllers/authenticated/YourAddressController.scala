@@ -54,7 +54,7 @@ class YourAddressController @Inject()(
           response.status match {
             case OK =>
               Json.parse(response.body).validate[Address] match {
-                case JsSuccess(address, _) if address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty) =>
+                case JsSuccess(address, _) if validAddress(address) =>
                     for {
                       updatedAnswers <- Future.fromTry(request.userAnswers.set(CitizenDetailsAddress, address))
                       _ <- sessionRepository.set(request.identifier, updatedAnswers)
@@ -73,4 +73,8 @@ class YourAddressController @Inject()(
           Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
       }
   }
+
+  private def validAddress(address: Address): Boolean =
+    address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)
+
 }
