@@ -16,6 +16,8 @@
 
 package config
 
+import java.time.LocalDate
+
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import play.api.Configuration
@@ -83,17 +85,17 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val flatRateExpenseId: Int = configuration.get[Int]("flatRateExpenseId")
 
-  lazy val accessibilityStatementUrl: String = configuration.get[String]("accessibilityStatement.govAccessibilityStatementUrl")
-  lazy val abilityNettUrl: String = configuration.get[String]("accessibilityStatement.abilityNetUrl")
-  lazy val w3StandardsUrl: String = configuration.get[String]("accessibilityStatement.w3StandardsUrl")
-  lazy val equalityAdvisoryServiceUrl: String = configuration.get[String]("accessibilityStatement.equalityAdvisoryServiceUrl")
-  lazy val equalityNIUrl: String = configuration.get[String]("accessibilityStatement.equalityNIUrl")
-  lazy val dealingHmrcAdditionalNeedsUrl: String = configuration.get[String]("accessibilityStatement.dealingHmrcAdditionalNeedsUrl")
-  lazy val dacUrl: String = configuration.get[String]("accessibilityStatement.dacUrl")
-
+  val accessibilityStatementUrl: String = configuration.get[String]("accessibilityStatement.govAccessibilityStatementUrl")
+  val abilityNettUrl: String = configuration.get[String]("accessibilityStatement.abilityNetUrl")
+  val w3StandardsUrl: String = configuration.get[String]("accessibilityStatement.w3StandardsUrl")
+  val equalityAdvisoryServiceUrl: String = configuration.get[String]("accessibilityStatement.equalityAdvisoryServiceUrl")
+  val equalityNIUrl: String = configuration.get[String]("accessibilityStatement.equalityNIUrl")
+  val dealingHmrcAdditionalNeedsUrl: String = configuration.get[String]("accessibilityStatement.dealingHmrcAdditionalNeedsUrl")
+  val dacUrl: String = configuration.get[String]("accessibilityStatement.dacUrl")
+  val contactUsEmailAddress = configuration.get[String]("accessibilityStatement.contactUsEmailAddress")
   val accessibilityStatementLastTested: String = configuration.get[String]("accessibilityStatement.lastTested")
   val accessibilityStatementFirstPublished: String = configuration.get[String]("accessibilityStatement.firstPublished")
-  lazy val accessibilityStatementEnabled: Boolean = configuration.get[Boolean]("accessibilityStatement.enabled")
+  val accessibilityStatementEnabled: Boolean = configuration.get[Boolean]("accessibilityStatement.enabled")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
