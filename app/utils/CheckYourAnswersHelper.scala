@@ -199,7 +199,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
         label = "yourEmployer.checkYourAnswersLabel",
         answer = if (x) "site.yes" else "site.no",
         answerIsMessageKey = true,
-        changeUrl = Some(YourEmployerController.onPageLoad(CheckMode).url),
+        changeUrl = Some(YourEmployerController.onPageLoad().url),
         editText = Some("checkYourAnswers.editText"),
         hiddenText = Some("yourEmployer.checkYourAnswersLabel.hidden"),
         labelArgs = Employment.asLabel(employers)

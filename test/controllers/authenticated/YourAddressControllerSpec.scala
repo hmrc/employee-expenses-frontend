@@ -31,6 +31,7 @@ import pages.CitizenDetailsAddress
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
@@ -40,7 +41,7 @@ import scala.concurrent.Future
 
 class YourAddressControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar with BeforeAndAfterEach {
 
-  def onwardRoute = YourEmployerController.onPageLoad(NormalMode).url
+  private def onwardRoute = Call("method", "route")
 
   private val mockSessionRepository = mock[SessionRepository]
 
@@ -70,7 +71,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       val userAnswers = minimumUserAnswers
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(userAnswers), onwardRoute = Some(onwardRoute))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
@@ -78,7 +79,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustBe onwardRoute
+      redirectLocation(result).value mustBe onwardRoute.url
 
       val newUserAnswers = userAnswers.set(CitizenDetailsAddress, address).success.value
 
@@ -92,7 +93,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "redirect to HowWillYouGetYourExpenses if address line one and postcode missing" in {
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
         .build()
 
@@ -106,7 +107,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual onwardRoute
+      redirectLocation(result).value mustEqual onwardRoute.url
 
       application.stop()
     }
@@ -115,7 +116,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
         Future.successful(HttpResponse(404, None))
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
           .build()
       val request =
@@ -123,7 +124,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual onwardRoute
+      redirectLocation(result).value mustEqual onwardRoute.url
 
       application.stop()
     }
@@ -132,7 +133,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
         Future.successful(HttpResponse(423, None))
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
           .build()
       val request =
@@ -150,7 +151,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
         Future.successful(HttpResponse(500, None))
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
           .build()
       val request =
@@ -159,7 +160,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual onwardRoute
+      redirectLocation(result).value mustEqual onwardRoute.url
 
       application.stop()
     }
@@ -168,7 +169,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
         Future.successful(HttpResponse(123, None))
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
           .build()
       val request =
@@ -177,15 +178,15 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual onwardRoute
+      redirectLocation(result).value mustEqual onwardRoute.url
 
       application.stop()
     }
 
     "redirect to Technical Difficulties when call to CitizensDetails fails" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.failed(new Exception)
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.failed(new Exception("error"))
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
         .build()
       val request =
@@ -203,7 +204,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
         Future.successful(HttpResponse(200, Some(incorrectJson)))
 
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
           .build()
       val request =
@@ -212,7 +213,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual onwardRoute
+      redirectLocation(result).value mustEqual onwardRoute.url
 
       application.stop()
     }

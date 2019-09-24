@@ -53,7 +53,8 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  lazy val yourEmployerRoute: String = YourEmployerController.onPageLoad(NormalMode).url
+
+  lazy val yourEmployerRoute: String = YourEmployerController.onPageLoad().url
 
   "YourEmployer Controller" must {
 

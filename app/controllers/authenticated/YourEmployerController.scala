@@ -22,7 +22,7 @@ import controllers.authenticated.routes._
 import controllers.routes._
 import forms.authenticated.YourEmployerFormProvider
 import javax.inject.{Inject, Named}
-import models.Mode
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerNames, YourEmployerPage}
 import play.api.Logger
@@ -51,7 +51,7 @@ class YourEmployerController @Inject()(
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(YourEmployerPage) match {
@@ -68,14 +68,14 @@ class YourEmployerController @Inject()(
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerNames, employerNames))
                   _ <- sessionRepository.set(request.identifier, updatedAnswers)
-                } yield Ok(view(preparedForm, mode, employerNames))
+                } yield Ok(view(preparedForm, NormalMode, employerNames))
               } else {
-                Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(mode)))
+                Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(NormalMode)))
               }
           }.recoverWith {
             case e =>
               Logger.error(s"[YourEmployerController][taiService.employments] failed $e", e)
-              Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(mode)))
+              Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(NormalMode)))
           }
         case _ =>
           Future.successful(Redirect(SessionExpiredController.onPageLoad()))

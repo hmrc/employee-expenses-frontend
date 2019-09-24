@@ -36,9 +36,9 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
     case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
-    case CheckYourAnswersPage => checkYourAnswers(NormalMode)
+    case CheckYourAnswersPage => _ => YourAddressController.onPageLoad(NormalMode)
     case YourAddressPage => yourAddress
-    case YourEmployerPage => yourEmployer(NormalMode)
+    case YourEmployerPage => yourEmployer
     case HowYouWillGetYourExpensesPage => _ => SubmissionController.onSubmit()
     case Submission => submission
   }
@@ -47,21 +47,31 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case TaxYearSelectionPage => taxYearSelection(CheckMode)
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(CheckMode)
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(CheckMode)
-    case YourEmployerPage => yourEmployer(CheckMode)
     case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
     case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
     case _ => _ => CheckYourAnswersController.onPageLoad()
   }
 
-  private def yourAddress(userAnswers: UserAnswers): Call = (userAnswers.get(TaxYearSelectionPage), userAnswers.get(ChangeWhichTaxYearsPage)) match {
-    case (Some(selectedYears), None) if selectedYears.contains(CurrentYear) =>
-      YourEmployerController.onPageLoad(NormalMode)
-    case (Some(_), Some(changeYears)) if changeYears.contains(CurrentYear) =>
-      YourEmployerController.onPageLoad(NormalMode)
-    case (None, _) =>
-      TechnicalDifficultiesController.onPageLoad()
-    case _ =>
-      HowYouWillGetYourExpensesController.onPageLoad()
+  private def yourAddress(userAnswers: UserAnswers): Call = {
+    val routeIfRemoveDifferent = userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) flatMap {
+      case AlreadyClaimingFREDifferentAmounts.Remove => Some(SubmissionController.onSubmit())
+      case _                                         => None
+    }
+
+    val routeIfRemoveSame = userAnswers.get(AlreadyClaimingFRESameAmountPage) flatMap {
+      case AlreadyClaimingFRESameAmount.Remove => Some(SubmissionController.onSubmit())
+      case _                                   => None
+    }
+
+    val routeIfCurrentYear = (userAnswers.get(TaxYearSelectionPage), userAnswers.get(ChangeWhichTaxYearsPage)) match {
+      case (Some(selectedYears), None) if selectedYears.contains(CurrentYear) => Some(YourEmployerController.onPageLoad())
+      case (Some(_), Some(changeYears)) if changeYears.contains(CurrentYear)  => Some(YourEmployerController.onPageLoad())
+      case (None, _) => Some(TechnicalDifficultiesController.onPageLoad())
+      case _         => None
+    }
+
+    (routeIfRemoveDifferent orElse routeIfRemoveSame orElse routeIfCurrentYear)
+      .getOrElse(HowYouWillGetYourExpensesController.onPageLoad())
   }
 
   private def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
@@ -91,30 +101,11 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       case _ => SessionExpiredController.onPageLoad()
     }
 
-  private def yourEmployer(mode: Mode)(userAnswers: UserAnswers): Call = {
-    mode match {
-      case NormalMode => {
-        userAnswers.get(YourEmployerPage) match {
-          case Some(true) =>
-            HowYouWillGetYourExpensesController.onPageLoad()
-          case Some(false) =>
-            UpdateEmployerInformationController.onPageLoad(mode)
-          case _ =>
-            SessionExpiredController.onPageLoad()
-        }
-      }
-      case CheckMode => {
-        (userAnswers.get(YourEmployerPage), userAnswers.get(YourAddressPage)) match {
-          case (Some(true), None) =>
-            HowYouWillGetYourExpensesController.onPageLoad()
-          case (Some(true), Some(_)) =>
-            CheckYourAnswersController.onPageLoad()
-          case (Some(false), _) =>
-            UpdateEmployerInformationController.onPageLoad(mode)
-          case _ =>
-            SessionExpiredController.onPageLoad()
-        }
-      }
+  private def yourEmployer(userAnswers: UserAnswers): Call = {
+    userAnswers.get(YourEmployerPage) match {
+      case Some(true)   => HowYouWillGetYourExpensesController.onPageLoad()
+      case Some(false)  => UpdateEmployerInformationController.onPageLoad(NormalMode)
+      case            _ => SessionExpiredController.onPageLoad()
     }
   }
 
@@ -133,7 +124,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
           case _ => taxYearsSelection
         }
 
-        if (taxYear s.forall(_ == TaxYearSelection.CurrentYear)) {
+        if (taxYears.forall(_ == TaxYearSelection.CurrentYear)) {
           ConfirmationCurrentYearOnlyController.onPageLoad()
         } else if (!taxYears.contains(TaxYearSelection.CurrentYear)) {
           ConfirmationPreviousYearsOnlyController.onPageLoad()
@@ -144,11 +135,5 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
         SessionExpiredController.onPageLoad()
     }
   }
-
-  private def checkYourAnswers(mode: NormalMode.type)(userAnswers: UserAnswers): Call =
-    userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) match {
-      case Some(Remove) => SubmissionController.onSubmit()
-      case _ => YourAddressController.onPageLoad(mode)
-    }
 
 }

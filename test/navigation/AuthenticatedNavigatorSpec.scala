@@ -23,7 +23,7 @@ import controllers.routes._
 import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove, _}
 import models.FlatRateExpenseOptions._
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, _}
-import models.{AlreadyClaimingFRESameAmount, CheckMode, NormalMode, TaxYearSelection}
+import models.{AlreadyClaimingFREDifferentAmounts, AlreadyClaimingFRESameAmount, CheckMode, NormalMode, TaxYearSelection}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.mockito.MockitoSugar
 import pages.authenticated._
@@ -136,13 +136,47 @@ class AuthenticatedNavigatorSpec extends SpecBase {
           UpdateEmployerInformationController.onPageLoad(NormalMode)
       }
 
+      "go to HowYouWillGetYourExpenses from UpdateEmployerInformation" in {
+        navigator.nextPage(UpdateYourEmployerInformationPage, NormalMode)(emptyUserAnswers) mustBe
+          HowYouWillGetYourExpensesController.onPageLoad()
+      }
+
+      "go to SessionExpired from YourEmployer when YourEmployerPage is not in UserAnswers" in {
+        navigator.nextPage(YourEmployerPage, NormalMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      "go to SessionExpired from TaxYearSelectionPage when FREResponse is not in UserAnswers" in {
+        navigator.nextPage(TaxYearSelectionPage, NormalMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad()
+      }
+
+      "go to YourAddressController from CheckYourAnswers for when remove selected" in {
+        navigator.nextPage(CheckYourAnswersPage, NormalMode)(emptyUserAnswers) mustBe
+          YourAddressController.onPageLoad(NormalMode)
+      }
+
+      "go to YourAddressController from CheckYourAnswers for when current year selected" in {
+        val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
+
+        navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
+          YourAddressController.onPageLoad(NormalMode)
+      }
+
+      "go to SubmissionController from YourAddressPage for when current year selected" in {
+        val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Remove).success.value
+
+        navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
+          SubmissionController.onSubmit()
+      }
+
       "go to YourEmployerController from YourAddressController for when current year selected" in {
         val ua = emptyUserAnswers
           .set(CitizenDetailsAddress, address).success.value
           .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
 
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
-          YourEmployerController.onPageLoad(NormalMode)
+          YourEmployerController.onPageLoad()
       }
 
       "go to YourEmployerController from YourAddressController for when current year selected in Change year" in {
@@ -152,7 +186,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
           .set(ChangeWhichTaxYearsPage, Seq(CurrentYear)).success.value
 
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
-          YourEmployerController.onPageLoad(NormalMode)
+          YourEmployerController.onPageLoad()
       }
 
       "go to HowYouWillGetYourExpensesController from YourAddressController for when current year selected in tax year selection but not in Change year" in {
@@ -172,35 +206,6 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
           HowYouWillGetYourExpensesController.onPageLoad()
-      }
-
-      "go to HowYouWillGetYourExpenses from UpdateEmployerInformation" in {
-        navigator.nextPage(UpdateYourEmployerInformationPage, NormalMode)(emptyUserAnswers) mustBe
-          HowYouWillGetYourExpensesController.onPageLoad()
-      }
-
-      "go to SessionExpired from YourEmployer when YourEmployerPage is not in UserAnswers" in {
-        navigator.nextPage(YourEmployerPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
-      }
-
-      "go to SessionExpired from TaxYearSelectionPage when FREResponse is not in UserAnswers" in {
-        navigator.nextPage(TaxYearSelectionPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
-      }
-
-      "go to YourAddressController from CheckYourAnswers " in {
-        val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
-
-        navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
-          YourAddressController.onPageLoad(NormalMode)
-      }
-
-      "go to ConfirmationClaimStoppedController from CheckYourAnswers for when current year selected" in {
-        val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Remove).success.value
-
-        navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
-          SubmissionController.onSubmit()
       }
 
       "go from 'HowYouWillGetYourExpenses' to 'SubmissionController.onSubmit'" in {
@@ -232,14 +237,6 @@ class AuthenticatedNavigatorSpec extends SpecBase {
       "go to CheckYourAnswers from UpdateYourAddressPage" in {
         navigator.nextPage(UpdateYourAddressPage, CheckMode)(emptyUserAnswers) mustBe
           CheckYourAnswersController.onPageLoad()
-      }
-
-
-      "go to UpdateEmployerInformationController from YourEmployerController when 'false'" in {
-        val userAnswers = emptyUserAnswers.set(YourEmployerPage, false).success.value
-
-        navigator.nextPage(YourEmployerPage, CheckMode)(userAnswers) mustBe
-          UpdateEmployerInformationController.onPageLoad(CheckMode)
       }
 
       "go to HowYouWillGetYourExpenses from UpdateEmployerInformation when YourAddress is defined" in {
@@ -354,12 +351,6 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
         "go to SessionExpired if no answer" in {
           navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, CheckMode)(emptyUserAnswers) mustBe
-            SessionExpiredController.onPageLoad()
-        }
-
-
-        "go to SessionExpired from YourEmployer when YourEmployerPage is not in UserAnswers" in {
-          navigator.nextPage(YourEmployerPage, CheckMode)(emptyUserAnswers) mustBe
             SessionExpiredController.onPageLoad()
         }
 
