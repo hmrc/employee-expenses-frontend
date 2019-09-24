@@ -14,32 +14,28 @@
  * limitations under the License.
  */
 
-package views.authenticated
+package views
 
 import views.behaviours.ViewBehaviours
-import views.html.authenticated.UpdateYourAddressView
+import views.html.HowYouWillGetYourExpensesCurrentView
 
-class UpdateYourAddressViewSpec extends ViewBehaviours {
+class HowYouWillGetYourExpensesCurrentViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-  val nextPageURL = "/foo"
 
-  "UpdateYourAddress view" must {
+  "HowYouWillGetYourExpensesCurrent view" must {
 
-    val view = application.injector.instanceOf[UpdateYourAddressView]
+    val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
 
-    val applyViewWithAuth = view.apply(nextPageURL)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyView = view.apply("onwardRoute")(fakeRequest, messages)
+
+    val applyViewWithAuth = view.apply("onwardRoute")(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+
+    behave like normalPage(applyView, "howYouWillGetYourExpenses")
 
     behave like pageWithAccountMenu(applyViewWithAuth)
 
-    behave like pageWithBackLink(applyViewWithAuth)
-
-    behave like pageWithButtonLink(applyViewWithAuth, nextPageURL, "continue")
-
-    "display page content" in {
-      val doc = asDocument(applyViewWithAuth)
-      assertContainsMessages(doc, "updateYourAddress.guidance1", "updateYourAddress.guidance2")
-    }
+    behave like pageWithBackLink(applyView)
   }
 
   application.stop()

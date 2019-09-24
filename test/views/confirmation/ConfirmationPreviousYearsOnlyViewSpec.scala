@@ -16,7 +16,7 @@
 
 package views.confirmation
 
-import models.{FlatRateExpenseOptions, Rates, ScottishRate, StandardRate, TaxYearSelection}
+import models.{Address, FlatRateExpenseOptions, Rates, ScottishRate, StandardRate, TaxYearSelection}
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
@@ -59,9 +59,10 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
                   claimAmount: Int = claimAmount,
                   updateAddress: Boolean = false,
                   currentYearMinus1: Boolean = true,
+                  address: Option[Address] = None,
                   freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
                  )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(claimAmountsAndRates, claimAmount, Some(updateAddress), currentYearMinus1, freResponse)(fakeRequest, messages, frontendAppConfig)
+      view.apply(claimAmountsAndRates, claimAmount, address, currentYearMinus1, freResponse)(fakeRequest, messages, frontendAppConfig)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 
@@ -77,13 +78,8 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
 
       assertContainsMessages(doc,
         "confirmation.heading",
-        "confirmation.actualAmount",
         "confirmation.whatHappensNext",
-        "confirmation.confirmationLetter",
-        messages("confirmation.currentYearMinusOneDelay",
-          TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYearMinus1).toString,
-          TaxYearSelection.getTaxYear(TaxYearSelection.CurrentYear).toString
-        )
+        "confirmation.confirmationLetter"
       )
     }
 
@@ -145,19 +141,19 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
 
     "YourAddress" must {
 
-      "display update address button and content when 'false'" in {
+      "display address" in {
+
+        val doc = asDocument(applyView(address = Some(address))(fakeRequest, messages))
+
+        assertRenderedById(doc, "citizenDetailsAddress")
+      }
+
+      "display correct content when no address" in {
 
         val doc = asDocument(applyView()(fakeRequest, messages))
 
-        assertContainsMessages(doc, "confirmation.updateAddressInfo", "confirmation.addressChange")
-        doc.getElementById("updateAddressInfoBtn").text mustBe messages("confirmation.updateAddressInfoNow")
-      }
-
-      "not display update address button and content when 'true'" in {
-
-        val doc = asDocument(applyView(updateAddress = true)(fakeRequest, messages))
-
-        assertNotRenderedById(doc, "updateAddressInfoBtn")
+        assertNotRenderedById(doc, "citizenDetailsAddress")
+        assertRenderedById(doc, "no-address")
       }
     }
   }

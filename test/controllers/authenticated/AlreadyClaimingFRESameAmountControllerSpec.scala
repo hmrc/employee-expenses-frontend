@@ -51,8 +51,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
   "AlreadyClaimingFRESameAmount Controller" must {
 
     "return OK and the correct view for a GET" in {
-
-      val userAnswers = fullUserAnswers
+      val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -78,7 +77,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = fullUserAnswers
+      val userAnswers = currentYearFullUserAnswers
         .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.values.head).success.value
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
@@ -96,16 +95,15 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
         view(
           form.fill(AlreadyClaimingFRESameAmount.values.head),
           NormalMode,
-          userAnswers.get(ClaimAmountAndAnyDeductions).get,
-          userAnswers.get(FREAmounts).get
+          userAnswers.get(ClaimAmountAndAnyDeductions).value,
+          userAnswers.get(FREAmounts).value
         )(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
-
-      val userAnswers = fullUserAnswers
+      val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
       val application =
@@ -128,7 +126,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = fullUserAnswers
+      val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -149,8 +147,8 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
         view(
           boundForm,
           NormalMode,
-          userAnswers.get(ClaimAmountAndAnyDeductions).get,
-          userAnswers.get(FREAmounts).get
+          userAnswers.get(ClaimAmountAndAnyDeductions).value,
+          userAnswers.get(FREAmounts).value
         )(request, messages).toString
 
       application.stop()

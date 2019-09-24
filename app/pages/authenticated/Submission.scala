@@ -14,16 +14,8 @@
  * limitations under the License.
  */
 
-package forms.authenticated
+package pages.authenticated
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import pages.Page
 
-class YourAddressFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("yourAddress.error.required")
-    )
-}
+case object Submission extends Page

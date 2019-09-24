@@ -22,24 +22,18 @@ import controllers.actions._
 import controllers.routes._
 import javax.inject.Named
 import models.FlatRateExpenseOptions._
-import models.auditing.AuditData
-import models.auditing.AuditEventType._
-import models.{CheckYourAnswersText, FlatRateExpenseOptions, NormalMode, UserAnswers}
+import models.{CheckYourAnswersText, FlatRateExpenseOptions, NormalMode}
 import navigation.Navigator
+import pages.FREResponse
 import pages.authenticated._
-import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import service.SubmissionService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
-import views.html.CheckYourAnswersView
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import views.html.authenticated.CheckYourAnswersView
 
 class CheckYourAnswersController @Inject()(
                                             override val messagesApi: MessagesApi,
@@ -68,9 +62,7 @@ class CheckYourAnswersController @Inject()(
             cyaHelper.alreadyClaimingFRESameAmount,
             cyaHelper.alreadyClaimingFREDifferentAmounts,
             cyaHelper.changeWhichTaxYears,
-            cyaHelper.removeFRECode,
-            cyaHelper.yourEmployer,
-            cyaHelper.yourAddress
+            cyaHelper.removeFRECode
           ).flatten))
 
           Ok(view(sections, checkYourAnswersText(removeFre, freResponse)))
@@ -92,50 +84,8 @@ class CheckYourAnswersController @Inject()(
     }
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def acceptAndClaim(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      val dataToAudit: AuditData =
-        AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
-
-      (
-        request.userAnswers.get(TaxYearSelectionPage),
-        request.userAnswers.get(ClaimAmountAndAnyDeductions),
-        request.userAnswers.get(RemoveFRECodePage),
-        request.userAnswers.get(ChangeWhichTaxYearsPage)
-      ) match {
-        case (Some(taxYears), Some(_), Some(removeYear), None) =>
-          submissionService.removeFRE(request.nino.get, taxYears, removeYear).map(
-            result =>
-              auditAndRedirect(result, dataToAudit, request.userAnswers)
-          )
-        case (Some(taxYearsSelection), Some(claimAmountAndAnyDeductions), None, changeYears) =>
-          val taxYears = changeYears match {
-            case Some(changeYears) => changeYears
-            case _ => taxYearsSelection
-          }
-          submissionService.submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions).map(
-            result => {
-              auditAndRedirect(result, dataToAudit, request.userAnswers)
-            }
-          )
-        case _ =>
-          Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
-      }
-  }
-
-  private def auditAndRedirect(result: Seq[HttpResponse],
-                       auditData: AuditData,
-                       userAnswers: UserAnswers
-                      )(implicit hc: HeaderCarrier): Result = {
-
-    if (result.nonEmpty && result.forall(_.status == 204)) {
-      auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
-      Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(userAnswers))
-    } else if (result.nonEmpty && result.exists(_.status == 423)) {
-      Redirect(PhoneUsController.onPageLoad())
-    } else {
-      auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, auditData)
-      Redirect(TechnicalDifficultiesController.onPageLoad())
-    }
+      Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(request.userAnswers))
   }
 }

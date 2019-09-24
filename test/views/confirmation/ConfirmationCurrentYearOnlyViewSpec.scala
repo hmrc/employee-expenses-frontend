@@ -62,7 +62,7 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
                    updateAddress: Boolean = false,
                    freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
                  )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(claimAmountsAndRates, claimAmount, Some(updateEmployer), Some(updateAddress), freResponse)(fakeRequest, messages, frontendAppConfig)
+      view.apply(claimAmountsAndRates, claimAmount, Some(updateEmployer), Option(address), freResponse)(fakeRequest, messages, frontendAppConfig)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 
@@ -78,12 +78,13 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
       assertContainsMessages(doc,
         "confirmation.heading",
-        "confirmation.actualAmount",
+        messages("confirmation.personalAllowanceIncrease", claimAmount),
         "confirmation.whatHappensNext",
-        "confirmation.taxCodeChanged.paragraph1",
-        "confirmation.taxCodeChanged.paragraph2",
-        "confirmation.continueToClaim.paragraph1",
-        "confirmation.continueToClaim.paragraph2"
+        "confirmation.taxCodeChanged.currentYear.paragraph1",
+        "confirmation.taxCodeChanged.currentYear.paragraph2",
+        "confirmation.checkAddress.heading",
+        "confirmation.checkAddress.paragraph1",
+        "confirmation.checkAddress.paragraph2"
       )
     }
 
@@ -137,12 +138,11 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
     "YourAddress" must {
 
-      "display update address button and content when 'false'" in {
+      "display update content when 'false'" in {
 
         val doc = asDocument(applyView()(fakeRequest, messages))
 
-        assertContainsMessages(doc, "confirmation.updateAddressInfo", "confirmation.addressChange")
-        doc.getElementById("updateAddressInfoBtn").text mustBe messages("confirmation.updateAddressInfoNow")
+        assertContainsMessages(doc, "confirmation.checkAddress.paragraph1")
       }
 
       "not display update address button and content when 'true'" in {

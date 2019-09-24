@@ -11,7 +11,9 @@ GET         /sign-out                                            controllers.aut
 GET         /this-service-has-been-reset                         controllers.SessionExpiredController.onPageLoad
 
 GET         /check-your-answers                                  controllers.authenticated.CheckYourAnswersController.onPageLoad
-POST        /check-your-answers                                  controllers.authenticated.CheckYourAnswersController.onSubmit
+GET         /accept-and-claim                                    controllers.authenticated.CheckYourAnswersController.acceptAndClaim
+
+GET         /submit                                              controllers.authenticated.SubmissionController.onSubmit
 
 GET         /unauthorised                                        controllers.UnauthorisedController.onPageLoad
 
@@ -290,11 +292,7 @@ GET         /update-employer-information                         controllers.aut
 GET         /change-update-employer-information                  controllers.authenticated.UpdateEmployerInformationController.onPageLoad(mode: Mode = CheckMode)
 
 GET         /your-address                                        controllers.authenticated.YourAddressController.onPageLoad(mode: Mode = NormalMode)
-POST        /your-address                                        controllers.authenticated.YourAddressController.onSubmit(mode: Mode = NormalMode)
 GET         /change-your-address                                 controllers.authenticated.YourAddressController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-your-address                                 controllers.authenticated.YourAddressController.onSubmit(mode: Mode = CheckMode)
-
-GET         /update-your-address                                 controllers.authenticated.UpdateYourAddressController.onPageLoad()
 
 GET         /no-code-change                                      controllers.authenticated.NoCodeChangeController.onPageLoad()
 
@@ -310,10 +308,8 @@ POST        /same-employer-contribution-all-years                controllers.Sam
 GET         /change-same-employer-contribution-all-years         controllers.SameEmployerContributionAllYearsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-same-employer-contribution-all-years         controllers.SameEmployerContributionAllYearsController.onSubmit(mode: Mode = CheckMode)
 
-GET         /your-employer                                       controllers.authenticated.YourEmployerController.onPageLoad(mode: Mode = NormalMode)
+GET         /your-employer                                       controllers.authenticated.YourEmployerController.onPageLoad()
 POST        /your-employer                                       controllers.authenticated.YourEmployerController.onSubmit(mode: Mode = NormalMode)
-GET         /change-your-employer                                controllers.authenticated.YourEmployerController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-your-employer                                controllers.authenticated.YourEmployerController.onSubmit(mode: Mode = CheckMode)
 
 GET         /already-claiming-same-amount                        controllers.authenticated.AlreadyClaimingFRESameAmountController.onPageLoad(mode: Mode = NormalMode)
 POST        /already-claiming-same-amount                        controllers.authenticated.AlreadyClaimingFRESameAmountController.onSubmit(mode: Mode = NormalMode)
@@ -376,3 +372,5 @@ GET         /change-construction-occupations                     controllers.con
 POST        /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = CheckMode)
 
 GET        /accessibility-statement                              controllers.AccessibilityStatementController.onPageLoad()
+
+GET        /how-you-will-get-your-expenses                       controllers.authenticated.HowYouWillGetYourExpensesController.onPageLoad()

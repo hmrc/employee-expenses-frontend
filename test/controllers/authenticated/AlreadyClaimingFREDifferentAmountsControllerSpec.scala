@@ -48,10 +48,13 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
+  private val userAnswers = currentYearFullUserAnswers
+    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
   "AlreadyClaimingFREDifferentAmounts Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val userAnswers = fullUserAnswers
+      val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -77,7 +80,7 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = fullUserAnswers
+      val userAnswers = currentYearFullUserAnswers
         .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.values.head).success.value
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
@@ -103,7 +106,7 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val userAnswers = fullUserAnswers
+      val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
 
@@ -127,7 +130,7 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = fullUserAnswers
+      val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

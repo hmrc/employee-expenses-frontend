@@ -46,7 +46,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
   val mockTaiConnector: TaiConnector = mock[TaiConnector]
   val mockClaimAmountService: ClaimAmountService = mock[ClaimAmountService]
   val claimAmountService = new ClaimAmountService(frontendAppConfig)
-  val claimAmount: Int = fullUserAnswers.get(ClaimAmountAndAnyDeductions).get
+  val claimAmount: Int = currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get
   val claimAmountsAndRates = StandardRate(
 
     frontendAppConfig.taxPercentageBasicRate,
@@ -56,19 +56,9 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
   )
 
   "ConfirmationPreviousYearsOnlyController" must {
-    "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with specific answers" in {
+    "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with no address" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
-        .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
-        .set(YourAddressPage, true).success.value
-        .set(YourEmployerPage, true).success.value
-        .set(ClaimAmount, 100).success.value
-        .set(ClaimAmountAndAnyDeductions, 80).success.value
-        .set(FREResponse, FRENoYears).success.value
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(TaxYearSelection.CurrentYearMinus1))))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
@@ -88,7 +78,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
         view(
           claimAmountsAndRates = Seq(claimAmountsAndRates),
           claimAmount = claimAmount,
-          addressInfoCorrect = Some(true),
+          address = None,
           currentYearMinus1 =true,
           freResponse = FlatRateExpenseOptions.FRENoYears
         )(request, messages, frontendAppConfig).toString
@@ -96,9 +86,42 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
       application.stop()
     }
 
+    "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with with address" in {
+      val answers = yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))
+        .set(CitizenDetailsAddress, address).success.value
+
+      val application = applicationBuilder(userAnswers = Some(answers))
+        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+        .build()
+
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+
+      val request = FakeRequest(GET, ConfirmationPreviousYearsOnlyController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ConfirmationPreviousYearsOnlyView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(
+          claimAmountsAndRates = Seq(claimAmountsAndRates),
+          claimAmount = claimAmount,
+          address = Some(address),
+          currentYearMinus1 =true,
+          freResponse = FlatRateExpenseOptions.FRENoYears
+        )(request, messages, frontendAppConfig).toString
+
+      application.stop()
+    }
+
+
     "Redirect to TechnicalDifficulties when call to Tai fails" in {
 
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
@@ -133,7 +156,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
 
     "Remove session on page load" in {
 
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
+      val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()

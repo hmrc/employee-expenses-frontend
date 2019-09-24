@@ -6,6 +6,7 @@ checkYourAnswers.changeClaim = Change this claim
 checkYourAnswers.stopClaim = Stop this claim
 checkYourAnswers.confirmInformationNoFre = By claiming these expenses, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
 checkYourAnswers.confirmInformationChangeFre = By making this change, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
+checkYourAnswers.warning = Warning
 checkYourAnswers.prosecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
 checkYourAnswers.editText = Change your answer
 
@@ -46,7 +47,7 @@ site.no = No
 site.yes = Yes
 site.continue = Continue
 site.acceptClaimExpenses = Accept and claim expenses
-site.acceptChangeClaim = Accept and change claim
+site.acceptChangeClaim = Accept and continue
 site.acceptStopClaim = Accept and stop claim
 site.service_name = Claim for your work uniform and tools
 site.textarea.char_limit = (Limit is {0} characters)
@@ -676,28 +677,34 @@ confirmation.titleChanged = Claim changed
 confirmation.titleStopped = Claim stopped
 confirmation.heading = Claim completed
 confirmation.heading.stoppedClaim = Your claim has been stopped
-confirmation.personalAllowanceIncrease = Your tax-free Personal Allowance has been increased by £{0} per year based on your industry and occupation
+confirmation.personalAllowanceIncrease = Your tax-free Personal Allowance has increased by £{0} per year
 confirmation.actualAmount = The actual amount you will get depends on the rate of tax you pay.
 confirmation.englandHeading = Taxpayers in England, Northern Ireland and Wales
 confirmation.scotlandHeading = Taxpayers in Scotland
-confirmation.starterRate = You will get £{0} of this £{1} per year if you are a starter rate ({2}%) taxpayer.
-confirmation.basicRate = You will get £{0} of this £{1} per year if you are a basic rate ({2}%) taxpayer.
-confirmation.higherRate = You will get £{0} of this £{1} per year if you are a higher rate ({2}%) taxpayer.
-confirmation.intermediateRate = You will get £{0} of this £{1} per year if you are a intermediate rate ({2}%) taxpayer.
+confirmation.starterRate = If you are a starter rate ({2}%) taxpayer, you can claim {2}% of this £{1} increase. This means you will save up to £{0} in tax each year.
+confirmation.basicRate = If you are a basic rate ({2}%) taxpayer, you can claim {2}% of this £{1} increase. This means you will save up to £{0} in tax each year.
+confirmation.higherRate = If you are a higher rate ({2}%) taxpayer, you can claim {2}% of this £{1} increase. This means you will save up to £{0} in tax each year.
+confirmation.intermediateRate = If you are a intermediate rate ({2}%) taxpayer, you can claim {2}% of this £{1} increase. This means you will save up to £{0} in tax each year.
 confirmation.whatHappensNext = What happens next
-confirmation.currentTaxYear = Current tax year
+confirmation.currentTaxYear = Claims for the current year
+confirmation.taxCodeChanged.currentYear.paragraph1 = We will send you a letter to confirm this change to your tax code. This change will also be shown in your Personal Tax Account after 48 hours.
+confirmation.taxCodeChanged.currentYear.paragraph2 = Your claim will continue automatically each year. You will need to tell HMRC if anything changes.
+
 confirmation.taxCodeChanged.paragraph1 = We will increase your tax-free Personal Allowance by changing your tax code. This means you will pay less tax. You will get a letter to confirm this.
 confirmation.taxCodeChanged.paragraph2 = This change will take effect as soon as your employer starts to use your new tax code.
 confirmation.continueToClaim.paragraph1 = You do not need to claim this expense each year, it will automatically continue.
 confirmation.continueToClaim.paragraph2 = If your employment circumstances change, you will need to tell HMRC.
-confirmation.previousTaxYears = Previous tax years
-confirmation.confirmationLetter = We will process your claim and send you a letter to confirm any amounts due. This can take up to 10 working days.
-confirmation.additionalConfirmationLetter = We will process your claim and send you another letter to confirm any amounts due. This can take up to 10 working days.
+confirmation.previousTaxYears = Claims for any previous years
+confirmation.confirmationLetter = We will send you a letter to confirm any refunds you are due.
+confirmation.additionalConfirmationLetter = We will send you a letter to confirm any refunds you are due.
 confirmation.noLongerGetAmount = You will no longer get this amount. You will get a letter to confirm this change to your tax-free Personal Allowance.
 confirmation.updateEmployerInfo = Update your employer information
+confirmation.checkAddress.heading = Check your address is correct
+confirmation.checkAddress.paragraph1 = We will be sending your letters to the address shown.
+confirmation.checkAddress.paragraph2 = If it is not correct, you must update it in your Personal Tax Account. Otherwise HMRC will not be able to send you any letters or amounts due.
 confirmation.employerChange = You must update your employer information with HMRC.
 confirmation.updateEmployerInfoNow = Update your employer information now (opens in a new window)
-confirmation.updateAddressInfoNow = Update your address now (opens in a new window)
+confirmation.updateAddressInfoNow = Leave this service and update your address in your Personal Tax Account (opens in a new window or tab)
 confirmation.updateAddressInfo = Update your address
 confirmation.addressChange = You must update your address, otherwise HMRC will not be able to send you any letters or amounts due.
 confirmation.currentYearMinusOneDelay = For claims that include tax year 6 April {0} to 5 April {1}, this may take longer if your employer has not yet sent your information for that tax year.
@@ -783,6 +790,34 @@ constructionOccupations.labourerOrNavvy = Labourer or navvy
 constructionOccupations.tilemaker = Tilemaker
 constructionOccupations.buildingMaterials = Occupation within building materials
 constructionOccupations.none = Construction occupation not listed
+
+howYouWillGetYourExpenses.title = How you will get your expenses
+howYouWillGetYourExpenses.heading = How you will get your expenses
+howYouWillGetYourExpenses.button = Accept and claim expenses
+
+
+howYouWillGetYourExpenses.subheading = Claim your expenses
+howYouWillGetYourExpenses.expensesDeclaration = By claiming these expenses, you confirm the information you have provided is correct and complete to the best of your knowledge and belief.
+howYouWillGetYourExpenses.expensesDeclarationWarning = Warning
+howYouWillGetYourExpenses.expensesDeclarationProsecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
+
+howYouWillGetYourExpenses.para1 = We will increase your tax-free Personal Allowance by changing your tax code.
+howYouWillGetYourExpenses.para2 = This means you will:
+
+howYouWillGetYourExpenses.item1 = pay less tax
+howYouWillGetYourExpenses.item2 = get a letter about the change
+howYouWillGetYourExpenses.item3 = automatically continue claiming each year
+howYouWillGetYourExpenses.item4 = need to tell HMRC if anything changes
+
+howYouWillGetYourExpensesPrevious.para1 = We will process your claim and send you a letter, which will:
+howYouWillGetYourExpensesPrevious.item1 = confirm any refunds
+howYouWillGetYourExpensesPrevious.item2 = give you a choice of receiving refunds by either online payment or cheque
+howYouWillGetYourExpensesPrevious.para2 = For claims that include tax year {0}, this may take longer if your employer has not yet sent your information for that tax year.
+
+howYouWillGetYourExpensesCurrentAndPreviousYear.subHeading1 = Claims for the current year
+howYouWillGetYourExpensesCurrentAndPreviousYear.subHeading2 = Claims for any previous years
+howYouWillGetYourExpensesCurrentAndPreviousYear.paragraph1 = The way you will get your expenses for the current year ({0}) is different to how you will get them for previous tax years.
+howYouWillGetYourExpensesCurrentAndPreviousYear.paragraph2 = This change will take effect as soon as your employer starts to use your new tax code.
 
 accessibilityStatement.title = Accessibility statement for {0}
 accessibilityStatement.heading = Accessibility statement for {0}

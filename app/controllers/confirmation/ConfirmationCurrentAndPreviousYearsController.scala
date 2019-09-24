@@ -20,9 +20,9 @@ import config.FrontendAppConfig
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
 import controllers.routes.{SessionExpiredController, _}
 import javax.inject.Inject
-import models.{Rates, TaiTaxYear, TaxYearSelection}
+import models.{Address, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.{TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
-import pages.{ClaimAmountAndAnyDeductions, FREResponse}
+import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -59,7 +59,7 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
             result =>
               val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
-              val addressOption: Option[Boolean] = request.userAnswers.get(YourAddressPage)
+              val addressOption: Option[Address] = request.userAnswers.get(CitizenDetailsAddress)
               sessionRepository.remove(request.identifier)
               Ok(confirmationCurrentAndPreviousYearsView(
                 claimAmountsAndRates,

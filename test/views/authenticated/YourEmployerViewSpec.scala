@@ -53,7 +53,7 @@ class YourEmployerViewSpec extends YesNoViewBehaviours {
       form,
       applyView,
       messageKeyPrefix,
-      routes.YourEmployerController.onSubmit(NormalMode).url,
+      routes.YourEmployerController.onSubmit().url,
       Some(messages(s"$messageKeyPrefix.label", employerName))
     )
 

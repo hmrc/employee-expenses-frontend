@@ -29,12 +29,11 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
   val messageKeyPrefix = "alreadyClaimingFREDifferentAmounts"
 
   val form = new AlreadyClaimingFREDifferentAmountsFormProvider()()
-  val x = Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()), FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear().prev))
 
-  val userAnswers = fullUserAnswers
-    .set(FREAmounts, x).success.value
 
   val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+  val userAnswers = currentYearFullUserAnswers
+    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
   val view = application.injector.instanceOf[AlreadyClaimingFREDifferentAmountsView]
 
@@ -50,16 +49,16 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
     view.apply(
       form,
       NormalMode,
-      userAnswers.get(ClaimAmountAndAnyDeductions).get,
-      x
+      userAnswers.get(ClaimAmountAndAnyDeductions).value,
+      Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()), FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear().prev))
     )(fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
     view.apply(
       form,
       NormalMode,
-      userAnswers.get(ClaimAmountAndAnyDeductions).get,
-      userAnswers.get(FREAmounts).get
+      userAnswers.get(ClaimAmountAndAnyDeductions).value,
+      userAnswers.get(FREAmounts).value
     )(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "AlreadyClaimingFREDifferentAmountsView" must {
@@ -74,7 +73,7 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
 
     "display correct body text" in {
       val doc = asDocument(applyView(form))
-      assertContainsText(doc, messages("alreadyClaimingFREDifferentAmounts.bodyText1", userAnswers.get(ClaimAmountAndAnyDeductions).get))
+      assertContainsText(doc, messages("alreadyClaimingFREDifferentAmounts.bodyText1", userAnswers.get(ClaimAmountAndAnyDeductions).value))
     }
 
     "contains correct column values for table" in {

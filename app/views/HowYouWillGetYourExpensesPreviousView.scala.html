@@ -1,0 +1,49 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.time.TaxYear
+@import models.TaxYearSelection.taxYearString
+
+@this(
+    main_template: MainTemplate
+)
+
+@(href: String, currentYearMinus1Selected: Boolean)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    title = messages("howYouWillGetYourExpenses.title")
+    ) {
+
+    @components.back_link()
+
+    @components.heading("howYouWillGetYourExpenses.heading")
+
+    <p>@messages("howYouWillGetYourExpensesPrevious.para1")</p>
+
+    <ul class="list list-bullet" role="list">
+        <li>@messages("howYouWillGetYourExpensesPrevious.item1")</li>
+        <li>@messages("howYouWillGetYourExpensesPrevious.item2")</li>
+
+    </ul>
+
+    @if(currentYearMinus1Selected){
+        <p>@messages("howYouWillGetYourExpensesPrevious.para2",taxYearString(1))</p>
+    }
+
+
+    @components.button_link(messages("howYouWillGetYourExpenses.button"), href)
+
+}

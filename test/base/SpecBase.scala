@@ -17,13 +17,14 @@
 package base
 
 import com.github.tototoshi.play2.scalate.Scalate
-import config.FrontendAppConfig
+import config.{FrontendAppConfig, NavConstant}
 import controllers.actions._
 import models.AlreadyClaimingFRESameAmount.Remove
 import models.FirstIndustryOptions.{Healthcare, Retail}
 import models.FlatRateExpenseOptions.FRENoYears
-import models.TaxYearSelection.CurrentYear
+import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
 import models._
+import navigation.{FakeNavigator, Navigator}
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
@@ -34,6 +35,7 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.inject.{Injector, bind}
 import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.FormPartialRetriever
@@ -117,7 +119,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
   lazy val checkYourAnswersTextChangeFre: CheckYourAnswersText =
     CheckYourAnswersText(heading = "title", disclaimerHeading = "changeClaim", disclaimer = "confirmInformationChangeFre", button = "acceptChangeClaim")
 
-  def fullUserAnswers: UserAnswers = emptyUserAnswers
+  def currentYearFullUserAnswers: UserAnswers = emptyUserAnswers
     .set(FirstIndustryOptionsPage, Healthcare).success.value
     .set(HealthcareList1Page , true).success.value
     .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
@@ -130,6 +132,26 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     .set(ClaimAmount, 200).success.value
     .set(ClaimAmountAndAnyDeductions, 80).success.value
     .set(FREResponse, FRENoYears).success.value
+
+  val currentYearMinus1UserAnswers = emptyUserAnswers
+    .set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
+    .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
+    .set(YourAddressPage, true).success.value
+    .set(YourEmployerPage, true).success.value
+    .set(ClaimAmount, 100).success.value
+    .set(ClaimAmountAndAnyDeductions, 80).success.value
+    .set(FREResponse, FRENoYears).success.value
+
+  def yearsUserAnswers(years: Seq[TaxYearSelection]) = emptyUserAnswers
+    .set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
+    .set(TaxYearSelectionPage, years).success.value
+    .set(YourAddressPage, true).success.value
+    .set(YourEmployerPage, true).success.value
+    .set(ClaimAmount, 100).success.value
+    .set(ClaimAmountAndAnyDeductions, 80).success.value
+    .set(FREResponse, FRENoYears).success.value
+    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+
 
   def minimumUserAnswers: UserAnswers = emptyUserAnswers
     .set(FirstIndustryOptionsPage, Retail).success.value
@@ -153,8 +175,10 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 
-  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
-    new GuiceApplicationBuilder()
+  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None,
+                                   onwardRoute: Option[Call] = None): GuiceApplicationBuilder = {
+
+    val default = new GuiceApplicationBuilder()
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[AuthenticatedIdentifierAction].to[FakeAuthedIdentifierAction],
@@ -163,4 +187,11 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
         bind[Scalate].to[MockScalate],
         bind[FormPartialRetriever].to[MockEeFormPartialRetriever]
       )
+
+    onwardRoute match {
+      case Some(onward) =>
+        default.overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onward)))
+      case None => default
+    }
+  }
 }

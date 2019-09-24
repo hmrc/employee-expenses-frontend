@@ -14,30 +14,29 @@
  * limitations under the License.
  */
 
-package views
+package views.authenticated
 
 import models.FlatRateExpenseOptions
 import play.api.Application
+import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.behaviours.ViewBehaviours
-import views.html.CheckYourAnswersView
+import views.html.authenticated.CheckYourAnswersView
 
 class CheckYourAnswersViewSpec extends ViewBehaviours {
 
-  val application: Application = applicationBuilder().build()
+  val application: Application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers))
+    .build()
 
   "Index view" must {
-
-    val cyaHelper = new CheckYourAnswersHelper(fullUserAnswers)
-
+    val cyaHelper = new CheckYourAnswersHelper(currentYearFullUserAnswers)
     val sections = Seq(AnswerSection(None, Seq(
       cyaHelper.industryType,
       cyaHelper.employerContribution,
       cyaHelper.expensesEmployerPaid,
-      cyaHelper.taxYearSelection,
-      cyaHelper.yourAddress
+      cyaHelper.taxYearSelection
     ).flatten))
 
     def applyView(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
@@ -57,7 +56,6 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     behave like pageWithAccountMenu(applyViewWithAuth(FlatRateExpenseOptions.FRENoYears, removeFRE = true))
 
     "display correct content" when {
-
       "new claim has been made" in {
         val doc = asDocument(applyViewNewClaim(FlatRateExpenseOptions.FRENoYears, removeFRE = false))
 

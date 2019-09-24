@@ -15,16 +15,19 @@
  *@
 
 @import models.FlatRateExpenseOptions._
+@import models.Address
+@import config.FrontendAppConfig
 
 @this(
-        main_template: MainTemplate
+        main_template: MainTemplate,
+        frontendAppConfig:FrontendAppConfig
 )
 
 @(
         claimAmountsAndRates: Seq[Rates],
         claimAmount: Int,
-        employerInfoCorrect: Option[Boolean],
-        addressInfoCorrect: Option[Boolean],
+        employerCorrect: Option[Boolean],
+        address: Option[Address],
         freResponse: FlatRateExpenseOptions
 )(implicit request: Request[_], messages: Messages, appConfig: config.FrontendAppConfig)
 
@@ -38,29 +41,18 @@
 
     <div class="govuk-box-highlight">
         <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
+        <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
     </div>
-
-    <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
-
-    <p>@messages("confirmation.actualAmount")</p>
-
-    @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
 
     <h2>@messages("confirmation.whatHappensNext")</h2>
 
-    <p>@messages("confirmation.taxCodeChanged.paragraph1")</p>
+    <h3>@messages("confirmation.currentTaxYear")</h3>
 
-    <p>@messages("confirmation.taxCodeChanged.paragraph2")</p>
+    <p>@messages("confirmation.taxCodeChanged.currentYear.paragraph1")</p>
 
-    <p>@messages("confirmation.continueToClaim.paragraph1")</p>
+    <p>@messages("confirmation.taxCodeChanged.currentYear.paragraph2")</p>
 
-    <p>@messages("confirmation.continueToClaim.paragraph2")</p>
+    @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
 
-    @if(!employerInfoCorrect.getOrElse(false)) {
-        @components.update_employer_info()
-    }
-
-    @if(!addressInfoCorrect.getOrElse(false)) {
-        @components.update_address_info()
-    }
+    @components.confirmation_footer(address, employerCorrect, frontendAppConfig.updateAddressInfoUrl, frontendAppConfig.updateEmployerInfoUrl)
 }
