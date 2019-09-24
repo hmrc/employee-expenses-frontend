@@ -193,20 +193,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     case _ => None
   }
 
-  def yourEmployer: Option[AnswerRow] = (userAnswers.get(YourEmployerPage), userAnswers.get(YourEmployerNames)) match {
-    case (Some(x), Some(employers)) =>
-      Some(AnswerRow(
-        label = "yourEmployer.checkYourAnswersLabel",
-        answer = if (x) "site.yes" else "site.no",
-        answerIsMessageKey = true,
-        changeUrl = Some(YourEmployerController.onPageLoad().url),
-        editText = Some("checkYourAnswers.editText"),
-        hiddenText = Some("yourEmployer.checkYourAnswersLabel.hidden"),
-        labelArgs = Employment.asLabel(employers)
-      ))
-    case _ => None
-  }
-
   def taxYearSelection: Option[AnswerRow] = userAnswers.get(TaxYearSelectionPage) map {
     taxYears =>
       AnswerRow(
@@ -223,19 +209,5 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
         editText = None,
         hiddenText = Some("taxYearSelection.checkYourAnswersLabel.hidden")
       )
-  }
-
-  def yourAddress: Option[AnswerRow] = (userAnswers.get(YourAddressPage), userAnswers.get(CitizenDetailsAddress)) match {
-    case (Some(x), Some(address)) =>
-      Some(AnswerRow(
-        label = "yourAddress.checkYourAnswersLabel",
-        answer = if (x) "site.yes" else "site.no",
-        answerIsMessageKey = true,
-        changeUrl = Some(YourAddressController.onPageLoad(CheckMode).url),
-        editText = Some("checkYourAnswers.editText"),
-        hiddenText = Some("yourAddress.checkYourAnswersLabel.hidden"),
-        labelArgs = Address.asString(address)
-      ))
-    case _ => None
   }
 }

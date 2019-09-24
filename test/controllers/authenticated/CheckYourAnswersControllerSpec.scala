@@ -59,9 +59,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     cyaHelperFullUa.industryType,
     cyaHelperFullUa.employerContribution,
     cyaHelperFullUa.expensesEmployerPaid,
-    cyaHelperFullUa.taxYearSelection,
-    cyaHelperFullUa.yourAddress,
-    cyaHelperFullUa.yourEmployer
+    cyaHelperFullUa.taxYearSelection
   ).flatten))
 
   override def beforeEach(): Unit = {

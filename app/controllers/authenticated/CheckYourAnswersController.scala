@@ -62,9 +62,7 @@ class CheckYourAnswersController @Inject()(
             cyaHelper.alreadyClaimingFRESameAmount,
             cyaHelper.alreadyClaimingFREDifferentAmounts,
             cyaHelper.changeWhichTaxYears,
-            cyaHelper.removeFRECode,
-            cyaHelper.yourEmployer,
-            cyaHelper.yourAddress
+            cyaHelper.removeFRECode
           ).flatten))
 
           Ok(view(sections, checkYourAnswersText(removeFre, freResponse)))

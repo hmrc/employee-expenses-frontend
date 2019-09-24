@@ -36,8 +36,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       cyaHelper.industryType,
       cyaHelper.employerContribution,
       cyaHelper.expensesEmployerPaid,
-      cyaHelper.taxYearSelection,
-      cyaHelper.yourAddress
+      cyaHelper.taxYearSelection
     ).flatten))
 
     def applyView(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
