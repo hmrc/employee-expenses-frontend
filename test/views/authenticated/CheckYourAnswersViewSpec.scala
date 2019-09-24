@@ -23,7 +23,7 @@ import play.twirl.api.HtmlFormat
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
 import views.behaviours.ViewBehaviours
-import views.html.CheckYourAnswersView
+import views.html.authenticated.CheckYourAnswersView
 
 class CheckYourAnswersViewSpec extends ViewBehaviours {
 
@@ -65,7 +65,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
           "checkYourAnswers.claimExpenses"
         )
 
-        doc.getElementById("continue").text mustBe messages("site.acceptClaimExpenses")
+        doc.getElementById("submit").text mustBe messages("site.acceptClaimExpenses")
       }
 
       "claim has been changed" in {
@@ -77,7 +77,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
           "checkYourAnswers.changeClaim"
         )
 
-        doc.getElementById("continue").text mustBe messages("site.acceptChangeClaim")
+        doc.getElementById("submit").text mustBe messages("site.acceptChangeClaim")
       }
 
       "claim has been stopped" in {
@@ -89,7 +89,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
           "checkYourAnswers.stopClaim"
         )
 
-        doc.getElementById("continue").text mustBe messages("site.acceptStopClaim")
+        doc.getElementById("submit").text mustBe messages("site.acceptStopClaim")
       }
     }
   }

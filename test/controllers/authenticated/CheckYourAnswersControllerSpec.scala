@@ -35,7 +35,7 @@ import service.SubmissionService
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
-import views.html.CheckYourAnswersView
+import views.html.authenticated.CheckYourAnswersView
 
 class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with BeforeAndAfterEach {
 
