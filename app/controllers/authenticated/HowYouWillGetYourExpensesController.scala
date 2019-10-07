@@ -18,12 +18,12 @@ package controllers.authenticated
 
 import config.NavConstant
 import controllers.actions._
-import controllers.routes.SessionExpiredController
 import javax.inject.{Inject, Named}
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
-import models.{NormalMode, TaxYearSelection}
+import models.{FlatRateExpenseAmounts, NormalMode, TaxYearSelection}
 import navigation.Navigator
 import pages.authenticated._
+import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -48,11 +48,25 @@ class HowYouWillGetYourExpensesController @Inject()(
 
       val redirectUrl = navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(request.userAnswers).url
 
-      val taxYearSelection = (request.userAnswers.get(TaxYearSelectionPage), request.userAnswers.get(ChangeWhichTaxYearsPage)) match {
+      val taxYearSelection = (request.userAnswers.get(TaxYearSelectionPage),request.userAnswers.get(ChangeWhichTaxYearsPage)) match {
         case (Some(_), Some(changeYears)) => Some(changeYears)
         case (Some(taxYearSelection), None) => Some(taxYearSelection)
         case _ => None
       }
+
+      val npsFreAmount: Option[FlatRateExpenseAmounts] = request.userAnswers.get(FREAmounts)
+        .flatMap(_.filterNot(_.taxYear.year == TaxYearSelection.getTaxYear(CurrentYear))).headOption
+
+      val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmountAndAnyDeductions)
+
+
+      def hasClaimIncreased(nspFreAmount: Option[FlatRateExpenseAmounts], claimAmount:Option[Int]): Boolean = {
+      (npsFreAmount,claimAmount) match {
+        case (Some(retrievedNpsAmount), Some(claimAmount)) => claimAmount >= retrievedNpsAmount
+        case _ => true
+      }
+    }
+
 
       taxYearSelection match {
         case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) && taxYearSelection.length > 1 =>

@@ -801,7 +801,8 @@ howYouWillGetYourExpenses.expensesDeclaration = By claiming these expenses, you 
 howYouWillGetYourExpenses.expensesDeclarationWarning = Warning
 howYouWillGetYourExpenses.expensesDeclarationProsecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
 
-howYouWillGetYourExpenses.para1 = We will increase your tax-free Personal Allowance by changing your tax code.
+howYouWillGetYourExpenses.para1.increase = We will increase your tax-free Personal Allowance by changing your tax code.
+howYouWillGetYourExpenses.para1.decreased = We will decrease your tax-free Personal Allowance by changing your tax code.
 howYouWillGetYourExpenses.para2 = This means you will:
 
 howYouWillGetYourExpenses.item1 = pay less tax
