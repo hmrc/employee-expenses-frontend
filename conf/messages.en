@@ -802,10 +802,11 @@ howYouWillGetYourExpenses.expensesDeclarationWarning = Warning
 howYouWillGetYourExpenses.expensesDeclarationProsecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
 
 howYouWillGetYourExpenses.para1.increase = We will increase your tax-free Personal Allowance by changing your tax code.
-howYouWillGetYourExpenses.para1.decreased = We will decrease your tax-free Personal Allowance by changing your tax code.
+howYouWillGetYourExpenses.para1.decrease = We will decrease your tax-free Personal Allowance by changing your tax code.
 howYouWillGetYourExpenses.para2 = This means you will:
 
-howYouWillGetYourExpenses.item1 = pay less tax
+howYouWillGetYourExpenses.item1less = pay less tax
+howYouWillGetYourExpenses.item1more = pay more tax
 howYouWillGetYourExpenses.item2 = get a letter about the change
 howYouWillGetYourExpenses.item3 = automatically continue claiming each year
 howYouWillGetYourExpenses.item4 = need to tell HMRC if anything changes

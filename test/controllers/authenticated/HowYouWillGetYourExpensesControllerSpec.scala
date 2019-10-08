@@ -41,12 +41,12 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url)(request, messages).toString
+        view(controllers.authenticated.routes.SubmissionController.onSubmit().url, hasClaimIncreased = true)(request, messages).toString
 
         application.stop()
       }
 
-      "user has selected CY-1 only for changes" in {
+       "user has selected CY-1 only for changes" in {
         val taxYearSelection = Seq(CurrentYearMinus1)
         val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
@@ -69,7 +69,7 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true, true)(request, messages).toString
 
         application.stop()
       }
@@ -83,7 +83,7 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true, true)(request, messages).toString
 
         application.stop()
       }
@@ -97,7 +97,7 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, false)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, false, true)(request, messages).toString
 
         application.stop()
       }
@@ -152,7 +152,7 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true)(request, messages).toString
 
         application.stop()
       }
@@ -180,7 +180,7 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true, true)(request, messages).toString
 
         application.stop()
       }

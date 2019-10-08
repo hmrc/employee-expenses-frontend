@@ -49,7 +49,7 @@ class HowYouWillGetYourExpensesCurrentAndPreviousYearViewSpec extends ViewBehavi
 
     def applyView(currentYearMinus1: Boolean, authorised: Boolean = true) = {
       val request = if (authorised) fakeRequest.withSession(("authToken", "SomeAuthToken")) else fakeRequest
-      view.apply("onwardRoute", currentYearMinus1)(request, messages)
+      view.apply("onwardRoute", currentYearMinus1, true)(request, messages)
     }
 
 

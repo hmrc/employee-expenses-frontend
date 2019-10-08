@@ -16,6 +16,7 @@
 
 package views
 
+import org.scalacheck.Prop.False
 import views.behaviours.ViewBehaviours
 import views.html.HowYouWillGetYourExpensesCurrentView
 
@@ -27,16 +28,30 @@ class HowYouWillGetYourExpensesCurrentViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
 
-    val applyView = view.apply("onwardRoute")(fakeRequest, messages)
+    def applyView(hasClaimIncreased: Boolean = true) = view.apply("onwardRoute", hasClaimIncreased)(fakeRequest, messages)
 
-    val applyViewWithAuth = view.apply("onwardRoute")(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth = view.apply("onwardRoute", true)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView, "howYouWillGetYourExpenses")
+    behave like normalPage(applyView(), "howYouWillGetYourExpenses")
 
     behave like pageWithAccountMenu(applyViewWithAuth)
 
-    behave like pageWithBackLink(applyView)
-  }
+    behave like pageWithBackLink(applyView())
 
+
+    "displays corrects text when claim amount increases" in {
+
+      val doc = asDocument(applyView())
+
+      assertContainsMessages(doc, "howYouWillGetYourExpenses.item1less")
+    }
+
+    "displays corrects text when claim amount decreases" in {
+
+      val doc = asDocument(applyView(false))
+
+      assertContainsMessages(doc, "howYouWillGetYourExpenses.item1more")
+    }
+  }
   application.stop()
 }
