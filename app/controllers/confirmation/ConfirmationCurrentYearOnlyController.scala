@@ -22,7 +22,7 @@ import controllers.routes._
 import javax.inject.Inject
 import models.TaxYearSelection.CurrentYear
 import models.{Address, FlatRateExpenseAmounts, Rates, TaiTaxYear, TaxYearSelection}
-import pages.authenticated.{YourAddressPage, YourEmployerPage}
+import pages.authenticated.YourEmployerPage
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,7 +32,6 @@ import service.{ClaimAmountService, TaiService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.confirmation.ConfirmationCurrentYearOnlyView
 
-import scala.collection.JavaConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmationCurrentYearOnlyController @Inject()(
@@ -87,11 +86,5 @@ class ConfirmationCurrentYearOnlyController @Inject()(
         case _ =>
           Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
-  }
-  private def hasClaimIncreased(nspFreAmount: Option[FlatRateExpenseAmounts], claimAmount: Int): Boolean = {
-    (nspFreAmount, claimAmount) match {
-      case (Some(FlatRateExpenseAmounts(Some(npsAmount), _)), claimAmount) => npsAmount.grossAmount < claimAmount
-      case _ => true
-    }
   }
 }

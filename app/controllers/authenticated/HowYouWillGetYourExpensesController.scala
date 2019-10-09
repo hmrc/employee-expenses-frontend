@@ -61,8 +61,6 @@ class HowYouWillGetYourExpensesController @Inject()(
 
       val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmountAndAnyDeductions)
 
-
-
       taxYearSelection match {
         case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) && taxYearSelection.length > 1 =>
           Ok(currentAndPreviousYearView(redirectUrl, containsCurrentYearMinus1(taxYearSelection), hasClaimIncreased(npsFreAmount,claimAmount)))
