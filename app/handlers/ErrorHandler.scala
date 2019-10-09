@@ -17,11 +17,16 @@
 package handlers
 
 import javax.inject.{Inject, Singleton}
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.Request
+import play.api.mvc.Results.Forbidden
+import play.api.http.Status.FORBIDDEN
+import play.api.mvc.{Request, RequestHeader, Result}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 import views.html.ErrorTemplate
+
+import scala.concurrent.Future
 
 @Singleton
 class ErrorHandler @Inject()(
@@ -31,4 +36,24 @@ class ErrorHandler @Inject()(
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
     view(pageTitle, heading, message)
+
+  override def onClientError(request: RequestHeader, statusCode: Int, message: String): Future[Result] = {
+
+    if (statusCode == FORBIDDEN) {
+
+      implicit val rhToRequest: Request[String] = Request(request, "")
+
+      Logger.warn(s"[ErrorHandler.onClientError] Forbidden request with message: $message")
+
+      Future.successful(
+        Forbidden(standardErrorTemplate(
+          "technicalDifficulties.pageTitle",
+          "technicalDifficulties.heading",
+          "technicalDifficulties.message"))
+      )
+    } else {
+      super.onClientError(request, statusCode, message)
+    }
+  }
+
 }
