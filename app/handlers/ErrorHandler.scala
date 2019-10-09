@@ -34,6 +34,8 @@ class ErrorHandler @Inject()(
                               view: ErrorTemplate
                             ) extends FrontendErrorHandler with I18nSupport {
 
+  private val logger = Logger(getClass)
+
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
     view(pageTitle, heading, message)
 
@@ -43,7 +45,7 @@ class ErrorHandler @Inject()(
 
       implicit val rhToRequest: Request[String] = Request(request, "")
 
-      Logger.warn(s"[ErrorHandler.onClientError] Forbidden request with message: $message")
+      logger.info(s"Forbidden request with message: $message")
 
       Future.successful(
         Forbidden(standardErrorTemplate(
