@@ -41,7 +41,37 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-        view(controllers.authenticated.routes.SubmissionController.onSubmit().url, hasClaimIncreased = true)(request, messages).toString
+        view(controllers.authenticated.routes.SubmissionController.onSubmit().url, hasClaimIncreased = false)(request, messages).toString
+
+        application.stop()
+      }
+
+      "user has selected current year only for changes with an increase" in {
+        val ua = yearsUserAnswers(Seq(CurrentYear))
+          .set(ClaimAmountAndAnyDeductions, 120).success.value
+        val application = applicationBuilder(userAnswers = Some(ua)).build()
+        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, hasClaimIncreased = true)(request, messages).toString
+
+        application.stop()
+      }
+
+      "user has selected current year only for changes with a decrease" in {
+        val ua = yearsUserAnswers(Seq(CurrentYear))
+          .set(ClaimAmountAndAnyDeductions, 40).success.value
+        val application = applicationBuilder(userAnswers = Some(ua)).build()
+        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -55,7 +85,7 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, currentYearMinus1Selected = true)(request, messages).toString
 
         application.stop()
       }
@@ -69,7 +99,37 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true, true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, currentYearMinus1Selected = true, hasClaimIncreased = false)(request, messages).toString
+
+        application.stop()
+      }
+
+      "user has selected CY and CY-1 for changes with an increase" in {
+        val ua = yearsUserAnswers(Seq(CurrentYear, CurrentYearMinus1))
+          .set(ClaimAmountAndAnyDeductions, 120).success.value
+        val application = applicationBuilder(userAnswers = Some(ua)).build()
+        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, currentYearMinus1Selected = true, hasClaimIncreased = true)(request, messages).toString
+
+        application.stop()
+      }
+
+      "user has selected CY and CY-1 for changes with a decrease" in {
+        val ua = yearsUserAnswers(Seq(CurrentYear, CurrentYearMinus1))
+          .set(ClaimAmountAndAnyDeductions, 40).success.value
+        val application = applicationBuilder(userAnswers = Some(ua)).build()
+        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, currentYearMinus1Selected = true, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -83,7 +143,7 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true, true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -97,7 +157,7 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, false, true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, false, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -152,7 +212,7 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -180,7 +240,7 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true, true)(request, messages).toString
+          view(controllers.authenticated.routes.SubmissionController.onSubmit().url, true, false)(request, messages).toString
 
         application.stop()
       }

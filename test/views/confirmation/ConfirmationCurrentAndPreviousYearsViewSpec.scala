@@ -57,13 +57,23 @@ class ConfirmationCurrentAndPreviousYearsViewSpec extends ViewBehaviours {
 
     def applyView(claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
                   claimAmount: Int = claimAmount,
-                  updateEmployer: Boolean = false,
+                  updateEmployer: Option[Boolean] = Some(false),
                   updateAddress: Boolean = false,
                   currentYearMinus1: Boolean = true,
                   freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears,
-                  address: Option[Address] = None
+                  address: Option[Address] = None,
+                  hasClaimIncreased: Boolean = true,
+                  npsFreAmount: Int = 0
                  )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(claimAmountsAndRates, claimAmount, Some(updateEmployer), address, currentYearMinus1, freResponse)(fakeRequest, messages, frontendAppConfig)
+      view.apply(
+        claimAmountsAndRates,
+        claimAmount,
+        updateEmployer,
+        address,
+        hasClaimIncreased,
+        freResponse,
+        npsFreAmount
+      )(fakeRequest, messages, frontendAppConfig)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 
@@ -79,7 +89,7 @@ class ConfirmationCurrentAndPreviousYearsViewSpec extends ViewBehaviours {
 
       assertContainsMessages(doc,
         "confirmation.heading",
-        messages("confirmation.personalAllowanceIncrease", claimAmount),
+        messages("confirmation.newPersonalAllowance", claimAmount),
         "confirmation.whatHappensNext",
         "confirmation.currentTaxYear",
         "confirmation.taxCodeChanged.currentYear.paragraph1",
@@ -177,7 +187,7 @@ class ConfirmationCurrentAndPreviousYearsViewSpec extends ViewBehaviours {
 
       "not display update employer button and content when 'true'" in {
 
-        val viewWithSpecificAnswers = applyView(updateEmployer = true)(fakeRequest, messages)
+        val viewWithSpecificAnswers = applyView()(fakeRequest, messages)
 
         val doc = asDocument(viewWithSpecificAnswers)
 

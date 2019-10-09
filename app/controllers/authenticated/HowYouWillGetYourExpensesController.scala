@@ -56,13 +56,18 @@ class HowYouWillGetYourExpensesController @Inject()(
       }
 
       val npsFreAmount: Option[FlatRateExpenseAmounts] = request.userAnswers.get(FREAmounts)
-        .flatMap(_.filterNot(_.taxYear.year == TaxYearSelection.getTaxYear(CurrentYear)).headOption)
+        .flatMap(_.find(_.taxYear.year == TaxYearSelection.getTaxYear(CurrentYear)))
+
+
       val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmountAndAnyDeductions)
+
+
 
       taxYearSelection match {
         case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) && taxYearSelection.length > 1 =>
           Ok(currentAndPreviousYearView(redirectUrl, containsCurrentYearMinus1(taxYearSelection), hasClaimIncreased(npsFreAmount,claimAmount)))
         case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) =>
+
           Ok(currentView(redirectUrl, hasClaimIncreased(npsFreAmount,claimAmount)))
         case Some(taxYearSelection) =>
           Ok(previousView(redirectUrl, containsCurrentYearMinus1(taxYearSelection)))

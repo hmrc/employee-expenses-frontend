@@ -24,12 +24,13 @@ frontendAppConfig:FrontendAppConfig
 )
 
 @(
-        claimAmountsAndRates: Seq[Rates],
-        claimAmount: Int,
-        employerCorrect: Option[Boolean],
-        address: Option[Address],
-        currentYearMinus1: Boolean,
-        freResponse: FlatRateExpenseOptions
+    claimAmountsAndRates: Seq[Rates],
+    claimAmount: Int,
+    employerCorrect: Option[Boolean],
+    address: Option[Address],
+    hasClaimIncreased: Boolean,
+    freResponse: FlatRateExpenseOptions,
+    npsFreAmount: Int
 )(implicit request: Request[_], messages: Messages, appConfig: config.FrontendAppConfig)
 
 @title = @{
@@ -42,8 +43,20 @@ frontendAppConfig:FrontendAppConfig
 
     <div class="govuk-box-highlight">
         <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
-        <h2>@messages("confirmation.personalAllowanceIncrease", claimAmount)</h2>
-    </div>
+
+    @{
+        (hasClaimIncreased, npsFreAmount > 0) match {
+        case (true, true) => {
+        <h2>{messages("confirmation.personalAllowanceIncrease", npsFreAmount, claimAmount)}</h2>
+        }
+        case (false, true) => {
+        <h2>{messages("confirmation.personalAllowanceDecrease", npsFreAmount, claimAmount)}</h2>
+        }
+        case _ => {
+        <h2>{messages("confirmation.newPersonalAllowance", claimAmount)}</h2>
+        }
+        }
+        }    </div>
 
     <h2>@messages("confirmation.whatHappensNext")</h2>
 

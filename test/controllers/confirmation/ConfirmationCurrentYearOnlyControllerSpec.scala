@@ -21,6 +21,7 @@ import connectors.TaiConnector
 import controllers.actions.Authed
 import controllers.confirmation.routes._
 import controllers.routes._
+import models.FlatRateExpenseOptions.FRENoYears
 import models.TaxCodeStatus.Live
 import models._
 import org.mockito.Matchers._
@@ -53,7 +54,76 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
 
   "ConfirmationCurrentYearOnlyController" must {
 
-    "return OK and the correct ConfirmationCurrentYearOnlyView for a GET with specific answers" in {
+    "return OK and the correct ConfirmationCurrentYearOnlyView for a GET for an increase" in {
+      val ua = currentYearFullUserAnswers
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(70)), TaiTaxYear()))).success.value
+
+      val application = applicationBuilder(userAnswers = Some(ua))
+        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+        .build()
+
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+
+      val request = FakeRequest(GET, ConfirmationCurrentYearOnlyController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ConfirmationCurrentYearOnlyView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(
+          claimAmountsAndRates = Seq(claimAmountsAndRates),
+          claimAmount = claimAmount,
+          employerCorrect = Some(true),
+          address = Some(address),
+          hasClaimIncreased = true,
+          freResponse = FRENoYears,
+          npsFreAmount = 70
+        )(request, messages, frontendAppConfig).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct ConfirmationCurrentYearOnlyView for a GET for a decrease" in {
+
+      val ua = currentYearFullUserAnswers
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(120)), TaiTaxYear()))).success.value
+
+      val application = applicationBuilder(userAnswers = Some(ua))
+        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+        .build()
+
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+
+      val request = FakeRequest(GET, ConfirmationCurrentYearOnlyController.onPageLoad().url)
+
+      val result = route(application, request).value
+
+      val view = application.injector.instanceOf[ConfirmationCurrentYearOnlyView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(
+          claimAmountsAndRates = Seq(claimAmountsAndRates),
+          claimAmount = claimAmount,
+          employerCorrect = Some(true),
+          address = Some(address),
+          hasClaimIncreased = false,
+          freResponse = FRENoYears,
+          npsFreAmount = 120
+        )(request, messages, frontendAppConfig).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct ConfirmationCurrentYearOnlyView for a GET when no previous claim on NPS " in {
 
       val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
@@ -76,8 +146,10 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
           claimAmountsAndRates = Seq(claimAmountsAndRates),
           claimAmount = claimAmount,
           employerCorrect = Some(true),
-          address= Option(address),
-          freResponse = FlatRateExpenseOptions.FRENoYears
+          address = Some(address),
+          hasClaimIncreased = true,
+          freResponse = FRENoYears,
+          npsFreAmount = 0
         )(request, messages, frontendAppConfig).toString
 
       application.stop()
