@@ -677,7 +677,9 @@ confirmation.titleChanged = Claim changed
 confirmation.titleStopped = Claim stopped
 confirmation.heading = Claim completed
 confirmation.heading.stoppedClaim = Your claim has been stopped
-confirmation.personalAllowanceIncrease = Your tax-free Personal Allowance has increased by £{0} per year
+confirmation.personalAllowanceIncrease = You have increased your claim amount from £{0} to £{1} each year
+confirmation.personalAllowanceDecrease = You have decreased your claim amount from £{0} to £{1} each year
+confirmation.newPersonalAllowance = Your tax-free Personal Allowance has been increased by £{0} per year
 confirmation.actualAmount = The actual amount you will get depends on the rate of tax you pay.
 confirmation.englandHeading = Taxpayers in England, Northern Ireland and Wales
 confirmation.scotlandHeading = Taxpayers in Scotland
@@ -801,10 +803,12 @@ howYouWillGetYourExpenses.expensesDeclaration = By claiming these expenses, you 
 howYouWillGetYourExpenses.expensesDeclarationWarning = Warning
 howYouWillGetYourExpenses.expensesDeclarationProsecuted = You may be prosecuted if you deliberately give incorrect or misleading information.
 
-howYouWillGetYourExpenses.para1 = We will increase your tax-free Personal Allowance by changing your tax code.
+howYouWillGetYourExpenses.para1.increase = We will increase your tax-free Personal Allowance by changing your tax code.
+howYouWillGetYourExpenses.para1.decrease = We will decrease your tax-free Personal Allowance by changing your tax code.
 howYouWillGetYourExpenses.para2 = This means you will:
 
-howYouWillGetYourExpenses.item1 = pay less tax
+howYouWillGetYourExpenses.item1less = pay less tax
+howYouWillGetYourExpenses.item1more = pay more tax
 howYouWillGetYourExpenses.item2 = get a letter about the change
 howYouWillGetYourExpenses.item3 = automatically continue claiming each year
 howYouWillGetYourExpenses.item4 = need to tell HMRC if anything changes

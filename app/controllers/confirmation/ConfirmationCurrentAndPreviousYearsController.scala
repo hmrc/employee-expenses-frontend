@@ -20,9 +20,10 @@ import config.FrontendAppConfig
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
 import controllers.routes.{SessionExpiredController, _}
 import javax.inject.Inject
-import models.{Address, Rates, TaiTaxYear, TaxYearSelection}
+import models.TaxYearSelection.CurrentYear
+import models.{Address, FlatRateExpenseAmounts, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.{TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
-import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREResponse}
+import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -47,6 +48,11 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
+      val npsFreAmount = request.userAnswers.get(FREAmounts)
+        .flatMap(_.find(_.taxYear.year == TaxYearSelection.getTaxYear(CurrentYear))) match {
+        case Some(FlatRateExpenseAmounts(Some(npsAmount), _)) => npsAmount.grossAmount
+        case _ => 0
+      }
       (
         request.userAnswers.get(FREResponse),
         request.userAnswers.get(YourEmployerPage),
@@ -57,17 +63,21 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
           val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYears.head))
           taiService.taxCodeRecords(request.nino.get, taxYear).map {
             result =>
+
+              val freHasIncreased = npsFreAmount < claimAmountAndAnyDeductions
+
               val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
               val addressOption: Option[Address] = request.userAnswers.get(CitizenDetailsAddress)
               sessionRepository.remove(request.identifier)
               Ok(confirmationCurrentAndPreviousYearsView(
-                claimAmountsAndRates,
-                claimAmountAndAnyDeductions,
-                Some(employer),
-                addressOption,
-                currentYearMinus1,
-                freResponse)
+                claimAmountsAndRates = claimAmountsAndRates,
+                claimAmount = claimAmountAndAnyDeductions,
+                employerCorrect = Some(employer),
+                address = addressOption,
+                hasClaimIncreased = freHasIncreased,
+                freResponse = freResponse,
+                npsFreAmount = npsFreAmount)
               )
           }.recoverWith {
             case e =>
@@ -77,5 +87,6 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
         case _ =>
           Future.successful(Redirect(SessionExpiredController.onPageLoad()))
       }
+
   }
 }

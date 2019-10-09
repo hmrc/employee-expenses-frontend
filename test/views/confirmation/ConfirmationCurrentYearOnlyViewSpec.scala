@@ -60,9 +60,19 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
                    claimAmount: Int = claimAmount,
                    updateEmployer: Boolean = false,
                    updateAddress: Boolean = false,
-                   freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
+                   hasClaimIncreased: Boolean = true,
+                   freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears,
+                   npsFreAmount: Int = 0
                  )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(claimAmountsAndRates, claimAmount, Some(updateEmployer), Option(address), freResponse)(fakeRequest, messages, frontendAppConfig)
+      view.apply(
+        claimAmountsAndRates = claimAmountsAndRates,
+        claimAmount = claimAmount,
+        employerCorrect = Some(updateEmployer),
+        address = Option(address),
+        hasClaimIncreased = hasClaimIncreased,
+        freResponse = freResponse,
+        npsFreAmount = npsFreAmount
+      )(fakeRequest, messages, frontendAppConfig)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 
@@ -72,13 +82,47 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
     behave like pageWithAccountMenu(applyViewWithAuth)
 
-    "display correct static text" in {
-
-      val doc = asDocument(viewWithAnswers)
+    "display correct static text for an increase in FRE" in {
+      val doc = asDocument(applyView(npsFreAmount = 1)(fakeRequest, messages))
 
       assertContainsMessages(doc,
         "confirmation.heading",
-        messages("confirmation.personalAllowanceIncrease", claimAmount),
+        messages("confirmation.personalAllowanceIncrease", 1, claimAmount),
+        "confirmation.whatHappensNext",
+        "confirmation.taxCodeChanged.currentYear.paragraph1",
+        "confirmation.taxCodeChanged.currentYear.paragraph2",
+        "confirmation.checkAddress.heading",
+        "confirmation.checkAddress.paragraph1",
+        "confirmation.checkAddress.paragraph2"
+      )
+    }
+
+    "display correct static text for an decrease in FRE" in {
+
+      val doc = asDocument(applyView(
+        hasClaimIncreased = false,
+        npsFreAmount = 200
+      )(fakeRequest, messages))
+
+      assertContainsMessages(doc,
+        "confirmation.heading",
+        messages("confirmation.personalAllowanceDecrease", 200, claimAmount),
+        "confirmation.whatHappensNext",
+        "confirmation.taxCodeChanged.currentYear.paragraph1",
+        "confirmation.taxCodeChanged.currentYear.paragraph2",
+        "confirmation.checkAddress.heading",
+        "confirmation.checkAddress.paragraph1",
+        "confirmation.checkAddress.paragraph2"
+      )
+    }
+
+    "display correct static text for no previous  FRE" in {
+
+      val doc = asDocument(applyView()(fakeRequest, messages))
+
+      assertContainsMessages(doc,
+        "confirmation.heading",
+        messages("confirmation.newPersonalAllowance", claimAmount),
         "confirmation.whatHappensNext",
         "confirmation.taxCodeChanged.currentYear.paragraph1",
         "confirmation.taxCodeChanged.currentYear.paragraph2",
@@ -92,7 +136,6 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
       val doc = asDocument(viewWithAnswers)
 
-      assertContainsText(doc, messages("confirmation.personalAllowanceIncrease", claimAmount))
       assertContainsText(doc, messages(
         "confirmation.basicRate",
         claimAmountsRates.calculatedBasicRate,

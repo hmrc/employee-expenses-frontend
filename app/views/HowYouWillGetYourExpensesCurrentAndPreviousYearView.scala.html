@@ -21,7 +21,7 @@
     main_template: MainTemplate
 )
 
-@(href: String, currentYearMinus1Selected: Boolean)(implicit request: Request[_], messages: Messages)
+@(href: String, currentYearMinus1Selected: Boolean, hasClaimIncreased: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = messages("howYouWillGetYourExpenses.title")
@@ -39,12 +39,20 @@
 
     <h2>@messages("howYouWillGetYourExpensesCurrentAndPreviousYear.subHeading1")</h2>
 
+    @if(hasClaimIncreased) {
+        <p>@messages("howYouWillGetYourExpenses.para1.increase")</p>
+     } else {
+        <p>@messages("howYouWillGetYourExpenses.para1.decrease")</p>
+     }
 
-    <p>@messages("howYouWillGetYourExpenses.para1")</p>
     <p>@messages("howYouWillGetYourExpenses.para2")</p>
 
     <ul class="list list-bullet" role="list">
-        <li>@messages("howYouWillGetYourExpenses.item1")</li>
+        @if(hasClaimIncreased) {
+        <li>@messages("howYouWillGetYourExpenses.item1less")</li>
+        } else {
+        <li>@messages("howYouWillGetYourExpenses.item1more")</li>
+        }
         <li>@messages("howYouWillGetYourExpenses.item2")</li>
         <li>@messages("howYouWillGetYourExpenses.item3")</li>
         <li>@messages("howYouWillGetYourExpenses.item4")</li>
