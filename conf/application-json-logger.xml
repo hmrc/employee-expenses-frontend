@@ -9,6 +9,8 @@
 
     <logger name="play.api.mvc.LegacySessionCookieBaker" level="OFF"/>
 
+    <logger name="handlers.ErrorHandler" level="${logger.errorHandler:-INFO}"/>
+
     <root level="WARN">
         <appender-ref ref="STDOUT"/>
     </root>
