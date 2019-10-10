@@ -21,23 +21,22 @@ import views.html.AccessibilityStatementView
 
 class AccessibilityStatementViewSpec extends ViewBehaviours {
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  private val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "AccessibilityStatement view" must {
     val serviceUrl = "url"
     val subDomain = "domain"
-
     val view = application.injector.instanceOf[AccessibilityStatementView]
-
     val applyView = view.apply(serviceUrl, subDomain)(fakeRequest, messages)
-
     val applyViewWithAuth = view.apply(serviceUrl, subDomain)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     val introductionLink = s"""<a href="${frontendAppConfig.accessibilityStatementUrl}">${messages("accessibilityStatement.introduction.paragraph2.linkText")}</a>"""
     val serviceLink = s"""<a href="$serviceUrl">$subDomain</a>"""
     val usingThisServiceLink = s"""<a href="${frontendAppConfig.accessibilityStatementUrl}">${messages("accessibilityStatement.usingThisService.paragraph3.linkText")}</a>"""
     val howAccessibleThisServiceIsLink = s"""<a href="${frontendAppConfig.w3StandardsUrl}">${messages("accessibilityStatement.howAccessibleThisServiceIs.paragraph1.linkText")}</a>"""
-    val reportingAccessibilityProblemsWithThisServiceLink = s"""<a href="mailto:${frontendAppConfig.contactUsEmailAddress}">${frontendAppConfig.contactUsEmailAddress}</a>"""
+
+    val reportingAccessibilityProblemsWithThisServiceLink = s"""<a href="${frontendAppConfig.contactAccessibilityUrl}">${messages("accessibilityStatement.reportingAccessibilityProblemsWithThisService.paragraph1.linkText")}</a>"""
+
     val whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaintLink1 = s"""<a href="${frontendAppConfig.equalityAdvisoryServiceUrl}">${messages("accessibilityStatement.whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaint.paragraph1.linkText1")}</a>"""
     val whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaintLink2 = s"""<a href="${frontendAppConfig.equalityNIUrl}">${messages("accessibilityStatement.whatToDoIfYouAreNotHappyWithHowWeRespondToYourComplaint.paragraph1.linkText2")}</a>"""
     val contactUsLink = s"""<a href="${frontendAppConfig.dealingHmrcAdditionalNeedsUrl}">${messages("accessibilityStatement.contactingUsByPhoneOrGettingAVisitFromUsInPerson.paragraph3.linkText")}</a>"""
