@@ -384,6 +384,9 @@ class SubmissionControllerSpec extends SpecBase with PropertyChecks with Mockito
         when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(204)))
 
+        when(mockTaiConnector.taiTaxAccountSummary(any(),any())(any(),any()))
+          .thenReturn(Future.successful(HttpResponse(204)))
+
         val userAnswers = currentYearFullUserAnswers
           .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
           .set(ClaimAmountAndAnyDeductions, 100).success.value
@@ -416,6 +419,9 @@ class SubmissionControllerSpec extends SpecBase with PropertyChecks with Mockito
           .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
 
         when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(HttpResponse(204)))
+
+        when(mockTaiConnector.taiTaxAccountSummary(any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(204)))
 
         val userAnswers = minimumUserAnswers
@@ -452,6 +458,9 @@ class SubmissionControllerSpec extends SpecBase with PropertyChecks with Mockito
           .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
 
         when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
+          .thenReturn(Future.successful(HttpResponse(204)))
+
+        when(mockTaiConnector.taiTaxAccountSummary(any(),any())(any(),any()))
           .thenReturn(Future.successful(HttpResponse(204)))
 
         val userAnswers = minimumUserAnswers
