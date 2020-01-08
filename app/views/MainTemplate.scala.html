@@ -99,7 +99,8 @@
             messages.lang.code == "cy"
         },
         "showPropositionLinks" -> true,
-        "googleTagManager" -> true,
+        "googleTagManager" -> {appConfig.googleTagManagerId != "N/A"},
+        "gtmId" -> appConfig.googleTagManagerId,
         "sessionTimeout" -> request.session.get("authToken").isDefined,
         "keepAliveUrl" -> appConfig.keepAliveUrl,
         "logoutUrl" -> appConfig.signOutUrl,

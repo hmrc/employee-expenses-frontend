@@ -85,6 +85,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   lazy val flatRateExpenseId: Int = configuration.get[Int]("flatRateExpenseId")
 
+  lazy val googleTagManagerId = configuration.get[String](s"google-tag-manager.id")
+
   val accessibilityStatementUrl: String = configuration.get[String]("accessibilityStatement.govAccessibilityStatementUrl")
   val abilityNettUrl: String = configuration.get[String]("accessibilityStatement.abilityNetUrl")
   val w3StandardsUrl: String = configuration.get[String]("accessibilityStatement.w3StandardsUrl")
