@@ -29,8 +29,8 @@ import org.mockito.Mockito._
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.{ClaimAmount, SecondIndustryOptionsPage}
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -42,7 +42,7 @@ import views.html.SecondIndustryOptionsView
 import scala.concurrent.Future
 
 class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
-  with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
+  with ScalaFutures with IntegrationPatience with ScalaCheckPropertyChecks with Generators with OptionValues {
 
   private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]

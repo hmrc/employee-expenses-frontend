@@ -25,7 +25,7 @@ import models.FlatRateExpenseOptions._
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, _}
 import models.{AlreadyClaimingFREDifferentAmounts, AlreadyClaimingFRESameAmount, CheckMode, NormalMode, TaxYearSelection}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.authenticated._
 import pages.{CitizenDetailsAddress, FREResponse}
 

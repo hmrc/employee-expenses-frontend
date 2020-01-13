@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.manufacturing.routes
 import models.TypeOfManufacturing._
 import models._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
 import pages.manufacturing._
 

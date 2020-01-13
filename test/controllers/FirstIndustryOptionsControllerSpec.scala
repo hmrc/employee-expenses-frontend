@@ -29,8 +29,8 @@ import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.{ClaimAmount, FirstIndustryOptionsPage}
 import play.api.Application
 import play.api.inject.bind
@@ -44,7 +44,7 @@ import scala.concurrent.Future
 
 
 class FirstIndustryOptionsControllerSpec
-  extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with PropertyChecks with Generators with OptionValues {
+  extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with ScalaCheckPropertyChecks with Generators with OptionValues {
 
   def onwardRoute = Call("GET", "/FOO")
 

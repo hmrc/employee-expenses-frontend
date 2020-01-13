@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.authenticated.AlreadyClaimingFRESameAmountPage
 import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.inject.bind

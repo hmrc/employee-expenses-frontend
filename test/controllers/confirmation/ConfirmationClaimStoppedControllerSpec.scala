@@ -22,7 +22,7 @@ import controllers.confirmation.routes._
 import models.TaxYearSelection._
 import models._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.authenticated._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

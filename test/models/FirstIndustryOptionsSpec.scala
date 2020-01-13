@@ -17,12 +17,12 @@
 package models
 
 import org.scalacheck.Gen
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.libs.json.{JsError, JsString, Json}
 import org.scalacheck.Arbitrary.arbitrary
 
-class FirstIndustryOptionsSpec extends WordSpec with MustMatchers with PropertyChecks with OptionValues {
+class FirstIndustryOptionsSpec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues {
 
   "FirstIndustryOptionsPage" must {
 

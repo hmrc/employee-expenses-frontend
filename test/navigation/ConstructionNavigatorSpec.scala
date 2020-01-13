@@ -18,7 +18,7 @@ package navigation
 
 import base.SpecBase
 import models.{CheckMode, ConstructionOccupations, NormalMode}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.construction._
 
 class ConstructionNavigatorSpec extends SpecBase with MockitoSugar {

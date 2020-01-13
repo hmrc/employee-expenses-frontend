@@ -18,7 +18,7 @@ package utils
 
 import com.google.inject.Inject
 import config.EeFormPartialRetriever
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.RequestHeader
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.filters.frontend.crypto.SessionCookieCrypto

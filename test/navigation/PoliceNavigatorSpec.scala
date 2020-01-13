@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.police.routes
 import controllers.routes._
 import models.{CheckMode, NormalMode}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
 import pages.police._
 

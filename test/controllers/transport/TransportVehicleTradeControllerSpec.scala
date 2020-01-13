@@ -27,7 +27,7 @@ import org.mockito.Mockito.when
 import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.transport.TransportVehicleTradePage
 import play.api.Application

@@ -31,8 +31,8 @@ import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.authenticated.{AlreadyClaimingFREDifferentAmountsPage, ChangeWhichTaxYearsPage, RemoveFRECodePage, TaxYearSelectionPage}
 import pages.{ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
 import play.api.inject.bind
@@ -46,7 +46,7 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
 import scala.concurrent.Future
 
-class SubmissionControllerSpec extends SpecBase with PropertyChecks with MockitoSugar with BeforeAndAfterEach
+class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks with MockitoSugar with BeforeAndAfterEach
   with ScalaFutures with IntegrationPatience {
 
   private val mockSubmissionService = mock[SubmissionService]

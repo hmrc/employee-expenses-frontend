@@ -26,7 +26,7 @@ import models.TaxYearSelection._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.FREResponse
 import play.api.mvc.Call
 import play.api.test.FakeRequest

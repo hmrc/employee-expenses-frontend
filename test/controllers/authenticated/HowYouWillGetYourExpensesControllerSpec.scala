@@ -22,14 +22,14 @@ import models.FlatRateExpenseOptions.FRENoYears
 import models.{EmployerContribution, FlatRateExpense, FlatRateExpenseAmounts, TaiTaxYear, TaxYearSelection}
 import models.TaxYearSelection._
 import org.scalatest.MustMatchers
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage, FREAmounts, FREResponse}
 import pages.authenticated._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.{HowYouWillGetYourExpensesCurrentAndPreviousYearView, HowYouWillGetYourExpensesCurrentView, HowYouWillGetYourExpensesPreviousView}
 
-class HowYouWillGetYourExpensesControllerSpec extends SpecBase with PropertyChecks with MustMatchers with Generators {
+class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPropertyChecks with MustMatchers with Generators {
 
   "HowYouWillGetYourExpensesController" must {
     "return OK and the correct view for a GET when" when {
