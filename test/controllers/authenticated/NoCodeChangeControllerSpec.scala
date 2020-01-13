@@ -22,7 +22,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.{eq => eqTo, _}
 import org.mockito.Mockito.{times, verify}
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.libs.json.JsObject
 import play.api.test.FakeRequest

@@ -25,7 +25,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import pages.ClaimAmount
 import pages.shipyard.ShipyardOccupationList1Page

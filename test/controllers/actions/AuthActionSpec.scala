@@ -21,7 +21,7 @@ import com.google.inject.Inject
 import controllers.routes
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{BodyParsers, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

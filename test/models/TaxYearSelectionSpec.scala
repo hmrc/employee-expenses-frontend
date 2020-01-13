@@ -18,7 +18,7 @@ package models
 
 import base.SpecBase
 import models.TaxYearSelection._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.time.TaxYear
 import viewmodels.RadioCheckboxOption
 

@@ -20,11 +20,11 @@ import base.SpecBase
 import models.AlreadyClaimingFREDifferentAmounts._
 import models._
 import org.scalacheck.Gen
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 import pages.authenticated._
 
-class CheckYourAnswersHelperSpec extends SpecBase with PropertyChecks {
+class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks {
 
   private def helper(ua: UserAnswers) = new CheckYourAnswersHelper(ua)
 

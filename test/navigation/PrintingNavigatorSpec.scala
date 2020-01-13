@@ -20,7 +20,7 @@ import base.SpecBase
 import models.{CheckMode, NormalMode}
 import controllers.printing.routes
 import controllers.routes.SessionExpiredController
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
 import pages.printing._
 

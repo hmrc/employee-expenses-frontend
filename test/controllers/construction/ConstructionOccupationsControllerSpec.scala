@@ -28,8 +28,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.ClaimAmount
 import pages.construction.ConstructionOccupationsPage
 import play.api.inject.bind
@@ -41,7 +41,7 @@ import views.html.construction.ConstructionOccupationsView
 
 import scala.concurrent.Future
 
-class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with PropertyChecks {
+class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with ScalaCheckPropertyChecks {
 
   def onwardRoute = Call("GET", "/foo")
 

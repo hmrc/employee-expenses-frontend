@@ -26,7 +26,7 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.transport.TransportCarpenterPage
 import play.api.Application

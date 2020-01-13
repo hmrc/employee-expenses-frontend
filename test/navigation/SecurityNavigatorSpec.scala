@@ -19,7 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.routes.SessionExpiredController
 import models.{CheckMode, NormalMode}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
 import pages.security.SecurityGuardNHSPage
 

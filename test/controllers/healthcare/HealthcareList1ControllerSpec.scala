@@ -26,7 +26,7 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.healthcare.HealthcareList1Page
 import play.api.inject.bind

@@ -26,7 +26,7 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.shipyard.ShipyardApprenticeStorekeeperPage
 import play.api.Application

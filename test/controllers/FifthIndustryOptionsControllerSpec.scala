@@ -28,8 +28,8 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.{ClaimAmount, FifthIndustryOptionsPage}
 import play.api.Application
 import play.api.inject.bind
@@ -42,7 +42,7 @@ import views.html.FifthIndustryOptionsView
 import scala.concurrent.Future
 
 class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures
-  with IntegrationPatience with PropertyChecks with Generators with OptionValues with BeforeAndAfterEach {
+  with IntegrationPatience with ScalaCheckPropertyChecks with Generators with OptionValues with BeforeAndAfterEach {
 
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
   override def beforeEach(): Unit = {

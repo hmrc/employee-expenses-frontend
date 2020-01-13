@@ -18,7 +18,7 @@ package navigation
 
 import base.SpecBase
 import models.{CheckMode, NormalMode}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
 import pages.docks.DocksOccupationList1Page
 

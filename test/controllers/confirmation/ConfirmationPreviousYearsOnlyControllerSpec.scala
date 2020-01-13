@@ -28,7 +28,7 @@ import models._
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages._
 import pages.authenticated._
 import play.api.inject.bind
@@ -86,7 +86,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
       application.stop()
     }
 
-    "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with with address" in {
+    "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with address" in {
       val answers = yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))
         .set(CitizenDetailsAddress, address).success.value
 

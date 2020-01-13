@@ -27,7 +27,7 @@ import org.mockito.Matchers._
 import org.mockito.Matchers.{eq => eqTo}
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

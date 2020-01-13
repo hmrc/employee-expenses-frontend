@@ -23,7 +23,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.mvc.{BodyParsers, MessagesControllerComponents}
 import play.api.test.FakeRequest

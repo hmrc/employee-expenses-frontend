@@ -20,7 +20,7 @@ import base.SpecBase
 import models.AncillaryEngineeringWhichTrade._
 import models.TypeOfEngineering._
 import models._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
 import pages.engineering._
 

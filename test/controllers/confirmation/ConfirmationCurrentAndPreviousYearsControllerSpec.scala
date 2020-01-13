@@ -27,7 +27,7 @@ import models._
 import org.mockito.Matchers._
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages._
 import play.api.inject.bind
 import play.api.test.FakeRequest
