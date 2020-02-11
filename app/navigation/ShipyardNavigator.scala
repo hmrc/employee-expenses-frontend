@@ -18,12 +18,13 @@ package navigation
 
 import controllers.routes
 import controllers.routes._
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import pages.shipyard._
 import play.api.mvc.Call
 
+@Singleton
 class ShipyardNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {

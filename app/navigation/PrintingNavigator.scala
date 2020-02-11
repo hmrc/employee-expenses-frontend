@@ -17,12 +17,13 @@
 package navigation
 
 import controllers.printing.routes
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import pages.printing._
 import play.api.mvc.Call
 
+@Singleton
 class PrintingNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {

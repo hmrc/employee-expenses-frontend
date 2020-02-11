@@ -17,12 +17,13 @@
 package navigation
 
 import controllers.police._
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import pages.police._
 import play.api.mvc.Call
 
+@Singleton
 class PoliceNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {

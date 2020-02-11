@@ -16,91 +16,34 @@
 
 package repositories
 
-import java.time.LocalDateTime
-
-import akka.stream.Materializer
 import controllers.actions.{Authed, IdentifierType, UnAuthed}
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.UserAnswers
-import play.api.Configuration
-import play.api.libs.json._
-import play.modules.reactivemongo.ReactiveMongoApi
-import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.bson.BSONDocument
-import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
-import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SessionRepository @Inject()(
-                                   mongo: ReactiveMongoApi,
-                                   config: Configuration
-                                 )(implicit ec: ExecutionContext, m: Materializer) {
-
-
-  private val unauthCollectionName: String = "unauth-user-answers"
-  private val authCollectionName: String = "auth-user-answers"
-
-  private val cacheTtl = config.get[Int]("mongodb.timeToLiveInSeconds")
-
-  private def collection(collectionName: String): Future[JSONCollection] =
-    mongo.database.map(_.collection[JSONCollection](collectionName))
-
-  private val lastUpdatedIndex = Index(
-    key = Seq("lastUpdated" -> IndexType.Ascending),
-    name = Some("user-answers-last-updated-index"),
-    options = BSONDocument("expireAfterSeconds" -> cacheTtl)
-  )
-
-  val started: Future[Unit] =
-    collection(unauthCollectionName).flatMap {
-      _.indexesManager.ensure(lastUpdatedIndex)
-    }.flatMap {
-      _ =>
-        collection(authCollectionName).flatMap {
-          _.indexesManager.ensure(lastUpdatedIndex)
-        }
-    }.map(_ => ())
+@Singleton
+class SessionRepository @Inject()(authSessionRepository: UnAuthSessionRepository,
+                                  unAuthSessionRepository: UnAuthSessionRepository)(implicit ec: ExecutionContext) {
 
   def get(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
     identifierType match {
-      case id: Authed => collection(authCollectionName).flatMap(_.find(Json.obj("_id" -> id.internalId), None).one[UserAnswers])
-      case id: UnAuthed => collection(unauthCollectionName).flatMap(_.find(Json.obj("_id" -> id.sessionId), None).one[UserAnswers])
+      case id: Authed => authSessionRepository.get(id.internalId)
+      case id: UnAuthed => unAuthSessionRepository.get(id.sessionId)
     }
   }
 
   def set(identifierType: IdentifierType, userAnswers: UserAnswers): Future[Boolean] = {
-
-    val selector = Json.obj(
-      "_id" -> userAnswers.id
-    )
-
-    val modifier = Json.obj(
-      "$set" -> (userAnswers copy (lastUpdated = LocalDateTime.now))
-    )
-
     identifierType match {
-      case _: Authed =>
-        collection(authCollectionName).flatMap {
-          _.update(selector, modifier, upsert = true).map {
-            lastError =>
-              lastError.ok
-          }
-        }
-      case _: UnAuthed =>
-        collection(unauthCollectionName).flatMap {
-          _.update(selector, modifier, upsert = true).map {
-            lastError =>
-              lastError.ok
-          }
-        }
+      case _: Authed => authSessionRepository.set(userAnswers)
+      case _: UnAuthed => unAuthSessionRepository.set(userAnswers)
     }
   }
 
   def remove(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
     identifierType match {
-      case id: Authed => collection(authCollectionName).flatMap(_.findAndRemove(Json.obj("_id" -> id.internalId)).map(_.result[UserAnswers]))
-      case id: UnAuthed => collection(unauthCollectionName).flatMap(_.findAndRemove(Json.obj("_id" -> id.sessionId)).map(_.result[UserAnswers]))
+      case id: Authed => authSessionRepository.remove(id.internalId)
+      case id: UnAuthed => unAuthSessionRepository.remove(id.sessionId)
     }
   }
 

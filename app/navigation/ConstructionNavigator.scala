@@ -16,12 +16,13 @@
 
 package navigation
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.{CheckMode, NormalMode, UserAnswers}
 import pages.Page
 import pages.construction._
 import play.api.mvc.Call
 
+@Singleton
 class ConstructionNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {

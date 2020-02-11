@@ -19,7 +19,7 @@ package navigation
 import controllers.authenticated.routes._
 import controllers.confirmation.routes._
 import controllers.routes._
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.AlreadyClaimingFREDifferentAmounts._
 import models.FlatRateExpenseOptions._
 import models.TaxYearSelection.CurrentYear
@@ -28,6 +28,7 @@ import pages.authenticated._
 import pages.{FREResponse, Page}
 import play.api.mvc.Call
 
+@Singleton
 class AuthenticatedNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case TaxYearSelectionPage => taxYearSelection(NormalMode)

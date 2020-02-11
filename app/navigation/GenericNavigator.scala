@@ -33,7 +33,7 @@ import controllers.security.routes._
 import controllers.shipyard.routes._
 import controllers.textiles.routes._
 import controllers.transport.routes._
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.EmployerContribution.{NoEmployerContribution, YesEmployerContribution}
 import models.FifthIndustryOptions._
 import models.FirstIndustryOptions._
@@ -45,6 +45,7 @@ import models._
 import pages._
 import play.api.mvc.Call
 
+@Singleton
 class GenericNavigator @Inject()() extends Navigator {
 
   protected def routeMap: PartialFunction[Page, UserAnswers => Call] = {

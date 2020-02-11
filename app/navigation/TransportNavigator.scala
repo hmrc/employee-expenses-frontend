@@ -17,14 +17,14 @@
 package navigation
 
 import controllers.transport.routes
-import javax.inject.Inject
-
+import javax.inject.{Inject, Singleton}
 import models.TypeOfTransport._
 import models._
 import pages.Page
 import pages.transport._
 import play.api.mvc.Call
 
+@Singleton
 class TransportNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
