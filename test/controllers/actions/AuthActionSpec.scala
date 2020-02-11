@@ -28,13 +28,13 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
-import uk.gov.hmrc.http.logging.SessionId
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys, UnauthorizedException}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthActionSpec extends SpecBase with MockitoSugar {
+  implicit val executionContext = scala.concurrent.ExecutionContext.Implicits.global
+
 
   class Harness(authAction: AuthenticatedIdentifierAction) {
     def onPageLoad() = authAction { _ => Results.Ok }

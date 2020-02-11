@@ -17,13 +17,14 @@
 package navigation
 
 import controllers.manufacturing.routes
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.TypeOfManufacturing._
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import pages.manufacturing._
 import play.api.mvc.Call
 
+@Singleton
 class ManufacturingNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {

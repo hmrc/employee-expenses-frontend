@@ -18,12 +18,13 @@ package navigation
 
 import controllers.routes._
 import controllers.healthcare.routes._
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
 import pages.healthcare._
 import play.api.mvc.Call
 
+@Singleton
 class HealthcareNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {

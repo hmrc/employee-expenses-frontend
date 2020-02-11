@@ -17,12 +17,13 @@
 package navigation
 
 import controllers.routes
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.{CheckMode, NormalMode, UserAnswers}
 import pages.Page
 import pages.docks.DocksOccupationList1Page
 import play.api.mvc.Call
 
+@Singleton
 class DocksNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
