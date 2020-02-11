@@ -16,7 +16,7 @@ object AppDependencies {
     "uk.gov.hmrc"           %% "play-whitelist-filter"          % "3.1.0-play-26",
     "uk.gov.hmrc"           %% "tax-year"                       % "1.0.0",
     "uk.gov.hmrc"           %% "play-partials"                  % "6.9.0-play-26",
-    "com.typesafe.play"     %% "play-json-joda"                 % "2.7.4",
+    "com.typesafe.play"     %% "play-json-joda"                 % "2.8.1",
     "org.scalatra.scalate"  %% "play-scalate"                   % "0.6.0",
     "org.scalatra.scalate"  %% "scalate-core"                   % "1.9.5"
   )
