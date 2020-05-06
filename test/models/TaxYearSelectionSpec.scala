@@ -106,19 +106,23 @@ class TaxYearSelectionSpec extends SpecBase with MockitoSugar {
 
   "taxYearStartString" must {
     "return the year the tax year started as a String" in {
-      taxYearStartString(0) mustBe "2019"
-      taxYearStartString(1) mustBe "2018"
-      taxYearStartString(2) mustBe "2017"
-      taxYearStartString(3) mustBe "2016"
+      taxYearStartString(0) mustBe "2020"
+      taxYearStartString(1) mustBe "2019"
+      taxYearStartString(2) mustBe "2018"
+      taxYearStartString(3) mustBe "2017"
+      taxYearStartString(4) mustBe "2016"
+
     }
   }
 
   "taxYearEndString" must {
     "return the year the tax year ended as a String" in {
-      taxYearEndString(0) mustBe "2020"
-      taxYearEndString(1) mustBe "2019"
-      taxYearEndString(2) mustBe "2018"
-      taxYearEndString(3) mustBe "2017"
+      taxYearEndString(0) mustBe "2021"
+      taxYearEndString(1) mustBe "2020"
+      taxYearEndString(2) mustBe "2019"
+      taxYearEndString(3) mustBe "2018"
+      taxYearEndString(4) mustBe "2017"
+
     }
   }
 }
