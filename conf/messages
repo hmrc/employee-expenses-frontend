@@ -124,7 +124,6 @@ firstIndustryOptions.error.required = Select the industry you work in
 secondIndustryOptions.title = Select your industry (page 2 of 5)
 secondIndustryOptions.heading = Select your industry (page 2 of 5)
 secondIndustryOptions.construction = Construction (including building and building materials)
-secondIndustryOptions.council = Council
 secondIndustryOptions.education = Education
 secondIndustryOptions.manufacturingWarehousing = Manufacturing and warehousing (including wood, furniture and metals)
 secondIndustryOptions.police = Police

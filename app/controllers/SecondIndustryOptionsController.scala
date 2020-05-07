@@ -21,7 +21,7 @@ import com.google.inject.name.Named
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.SecondIndustryOptionsFormProvider
-import models.SecondIndustryOptions.{Council, Education}
+import models.SecondIndustryOptions.Education
 import models.{Enumerable, Mode, SecondIndustryOptions}
 import navigation.Navigator
 import pages.{ClaimAmount, SecondIndustryOptionsPage}
@@ -69,7 +69,7 @@ class SecondIndustryOptionsController @Inject()(
         value => {
           for {
             updatedAnswers <- value match {
-              case Education | Council =>
+              case Education =>
                 Future.fromTry(request.userAnswers.set(SecondIndustryOptionsPage, value)
                   .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))
               case _ => Future.fromTry(request.userAnswers.set(SecondIndustryOptionsPage, value))

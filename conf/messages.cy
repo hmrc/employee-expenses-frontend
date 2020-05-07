@@ -110,7 +110,6 @@ firstIndustryOptions.error.required=Dewiswch y diwydiant yr ydych yn gweithio yn
 secondIndustryOptions.title=Dewiswch eich diwydiant (tudalen 2 o 5)
 secondIndustryOptions.heading=Dewiswch eich diwydiant (tudalen 2 o 5)
 secondIndustryOptions.construction=Adeiladu (yn cynnwys adeiladu a deunydd adeiladu)
-secondIndustryOptions.council=Cyngor
 secondIndustryOptions.education=Addysg
 secondIndustryOptions.manufacturingWarehousing=Gweithgynhyrchu ac warysu (yn cynnwys pren, dodrefn a metelau)
 secondIndustryOptions.police=Yr Heddlu

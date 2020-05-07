@@ -133,13 +133,6 @@ class GenericNavigatorSpec extends SpecBase {
           ConstructionOccupationsController.onPageLoad(NormalMode)
       }
 
-      "go to EmployersContributionsController from SecondIndustryOptionsPage when 'Council' is selected" in {
-        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Council).success.value
-
-        navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
-          EmployerContributionController.onPageLoad(NormalMode)
-      }
-
       "go EmployerContributionController from SecondIndustryOptionsPage when Education is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Education).success.value
 
@@ -544,13 +537,6 @@ class GenericNavigatorSpec extends SpecBase {
 
         navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
           ConstructionOccupationsController.onPageLoad(CheckMode)
-      }
-
-      "go to EmployersContributionsController from SecondIndustryOptionsPage when 'Council' is selected" in {
-        val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Council).success.value
-
-        navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
-          EmployerContributionController.onPageLoad(CheckMode)
       }
 
       "go EmployerContributionController from SecondIndustryOptionsPage when Education is selected" in {
