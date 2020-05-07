@@ -123,7 +123,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def secondaryIndustryList: Option[AnswerRow] = {
     userAnswers.get(SecondIndustryOptionsPage) match {
       case Some(Construction) => industryAnswerRow(s"secondIndustryOptions.${Construction.toString}")
-      case Some(Council) => industryAnswerRow(s"secondIndustryOptions.${Council.toString}")
       case Some(Education) => industryAnswerRow(s"secondIndustryOptions.${Education.toString}")
       case Some(ManufacturingWarehousing) => industryAnswerRow(s"secondIndustryOptions.${ManufacturingWarehousing.toString}")
       case Some(Police) => industryAnswerRow(s"secondIndustryOptions.${Police.toString}")
