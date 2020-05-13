@@ -16,18 +16,14 @@
 
 package controllers
 
-import java.time.LocalDateTime
-
 import base.SpecBase
 import controllers.actions.Authed
-import models.UserAnswers
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository

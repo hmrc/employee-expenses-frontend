@@ -59,7 +59,7 @@ class AuthSessionRepository @Inject()(config: Configuration, mongo: ReactiveMong
       "$set" -> (userAnswers copy (lastUpdated = LocalDateTime.now))
     )
 
-    collection.update(selector, modifier, upsert = true).map {
+    collection.update(ordered = false).one(selector, modifier, upsert = true).map {
       lastError =>
         lastError.ok
     }
@@ -67,5 +67,4 @@ class AuthSessionRepository @Inject()(config: Configuration, mongo: ReactiveMong
 
   def remove(id: String): Future[Option[UserAnswers]] =
     collection.findAndRemove(Json.obj("_id" -> id)).map(_.result[UserAnswers])
-
 }

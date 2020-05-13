@@ -17,7 +17,6 @@
 package pages
 
 import models.FifthIndustryOptions
-import play.api.libs.json
 import play.api.libs.json.JsPath
 
 case object FifthIndustryOptionsPage extends QuestionPage[FifthIndustryOptions] {

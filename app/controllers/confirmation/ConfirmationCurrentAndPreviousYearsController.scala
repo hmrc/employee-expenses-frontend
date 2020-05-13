@@ -22,7 +22,7 @@ import controllers.routes.{SessionExpiredController, _}
 import javax.inject.Inject
 import models.TaxYearSelection.CurrentYear
 import models.{Address, FlatRateExpenseAmounts, Rates, TaiTaxYear, TaxYearSelection}
-import pages.authenticated.{TaxYearSelectionPage, YourAddressPage, YourEmployerPage}
+import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -66,7 +66,6 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
 
               val freHasIncreased = npsFreAmount < claimAmountAndAnyDeductions
 
-              val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
               val addressOption: Option[Address] = request.userAnswers.get(CitizenDetailsAddress)
               sessionRepository.remove(request.identifier)

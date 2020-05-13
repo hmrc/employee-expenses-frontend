@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import controllers.actions.UnAuthed
-import models.{EmployerContribution, NormalMode, Rates, ScottishRate, StandardRate, UserAnswers}
+import models.{EmployerContribution, NormalMode, ScottishRate, StandardRate, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.mockito.Matchers._

@@ -24,8 +24,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.police.ClaimByPostOrOnlineView
 
-import scala.concurrent.ExecutionContext
-
 class ClaimByPostOrOnlineController @Inject()(
                                                override val messagesApi: MessagesApi,
                                                identify: UnauthenticatedIdentifierAction,
@@ -34,7 +32,7 @@ class ClaimByPostOrOnlineController @Inject()(
                                                val controllerComponents: MessagesControllerComponents,
                                                frontendAppConfig: FrontendAppConfig,
                                                view: ClaimByPostOrOnlineView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>

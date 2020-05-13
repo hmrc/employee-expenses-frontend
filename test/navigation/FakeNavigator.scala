@@ -16,7 +16,6 @@
 
 package navigation
 
-import controllers.routes
 import play.api.mvc.Call
 import pages._
 import models.{Mode, NormalMode, UserAnswers}

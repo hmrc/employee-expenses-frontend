@@ -19,7 +19,6 @@ package pages
 import java.time.LocalDateTime
 
 import models.{FirstIndustryOptions, UserAnswers}
-import pages.authenticated._
 import play.api.libs.json._
 
 import scala.util.Try

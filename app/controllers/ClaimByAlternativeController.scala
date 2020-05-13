@@ -23,8 +23,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.ClaimByAlternativeView
 
-import scala.concurrent.ExecutionContext
-
 class ClaimByAlternativeController @Inject()(
                                               override val messagesApi: MessagesApi,
                                               identify: UnauthenticatedIdentifierAction,
@@ -32,7 +30,7 @@ class ClaimByAlternativeController @Inject()(
                                               requireData: DataRequiredAction,
                                               val controllerComponents: MessagesControllerComponents,
                                               view: ClaimByAlternativeView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
@@ -41,7 +39,6 @@ class ClaimByAlternativeController @Inject()(
 
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
       Redirect("https://www.gov.uk/guidance/claim-income-tax-relief-for-your-employment-expenses-p87")
   }
 }

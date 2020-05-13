@@ -19,7 +19,6 @@ package generators
 import org.scalacheck.{Arbitrary, Gen, Shrink}
 import Gen._
 import Arbitrary._
-import play.api.libs.json.{JsBoolean, JsNumber, JsString}
 
 trait Generators extends UserAnswersGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators {
 
