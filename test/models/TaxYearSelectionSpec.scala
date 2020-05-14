@@ -16,6 +16,7 @@
 
 package models
 
+import java.time.LocalDate
 import base.SpecBase
 import models.TaxYearSelection._
 import org.scalatestplus.mockito.MockitoSugar
@@ -106,23 +107,19 @@ class TaxYearSelectionSpec extends SpecBase with MockitoSugar {
 
   "taxYearStartString" must {
     "return the year the tax year started as a String" in {
-      taxYearStartString(0) mustBe "2020"
-      taxYearStartString(1) mustBe "2019"
-      taxYearStartString(2) mustBe "2018"
-      taxYearStartString(3) mustBe "2017"
-      taxYearStartString(4) mustBe "2016"
-
+      val currentTaxYear = TaxYear.current.startYear
+      for (yearsBack <- 0 to 4) {
+        taxYearStartString(yearsBack) mustBe (currentTaxYear - yearsBack).toString
+      }
     }
   }
 
   "taxYearEndString" must {
     "return the year the tax year ended as a String" in {
-      taxYearEndString(0) mustBe "2021"
-      taxYearEndString(1) mustBe "2020"
-      taxYearEndString(2) mustBe "2019"
-      taxYearEndString(3) mustBe "2018"
-      taxYearEndString(4) mustBe "2017"
-
+      val currentTaxYear = TaxYear.current.finishYear
+      for (yearsBack <- 0 to 4) {
+        taxYearEndString(yearsBack) mustBe (currentTaxYear - yearsBack).toString
+      }
     }
   }
 }
