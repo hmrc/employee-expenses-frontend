@@ -23,8 +23,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.CannotClaimView
 
-import scala.concurrent.ExecutionContext
-
 class CannotClaimController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        identify: UnauthenticatedIdentifierAction,
@@ -32,7 +30,7 @@ class CannotClaimController @Inject()(
                                        requireData: DataRequiredAction,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: CannotClaimView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>

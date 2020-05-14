@@ -16,8 +16,6 @@
 
 package config
 
-import java.time.LocalDate
-
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import play.api.Configuration

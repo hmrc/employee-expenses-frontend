@@ -59,7 +59,7 @@ class UnAuthSessionRepository @Inject()(config: Configuration, mongo: ReactiveMo
       "$set" -> (userAnswers copy (lastUpdated = LocalDateTime.now))
     )
 
-    collection.update(selector, modifier, upsert = true).map {
+    collection.update(ordered = false).one(selector, modifier, upsert = true).map {
       lastError =>
         lastError.ok
     }

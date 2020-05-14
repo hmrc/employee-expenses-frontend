@@ -22,12 +22,11 @@ import models.TaxCodeStatus.Live
 import models.{Rates, ScottishRate, StandardRate, TaxCodeRecord, UserAnswers}
 import pages.ExpensesEmployerPaidPage
 
-import scala.concurrent.ExecutionContext
 import scala.math.BigDecimal.RoundingMode
 
 class ClaimAmountService @Inject()(
                                     appConfig: FrontendAppConfig
-                                  )(implicit ec: ExecutionContext) {
+                                  ) {
 
   def calculateClaimAmount(userAnswers: UserAnswers, claimAmount: Int): Int = {
     userAnswers.get(ExpensesEmployerPaidPage) match {

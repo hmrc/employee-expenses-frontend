@@ -47,7 +47,6 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
   private val formProvider = new TaxYearSelectionFormProvider()
   private val form: Form[Seq[TaxYearSelection]] = formProvider()
-  private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)

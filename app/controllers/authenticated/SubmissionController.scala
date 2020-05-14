@@ -18,16 +18,14 @@ package controllers.authenticated
 
 import config.NavConstant
 import controllers.actions._
-import controllers.authenticated.routes.{HowYouWillGetYourExpensesController, YourEmployerController}
 import controllers.routes.{PhoneUsController, SessionExpiredController, TechnicalDifficultiesController}
 import javax.inject.{Inject, Named}
-import models.TaxYearSelection.CurrentYear
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.ClaimAmountAndAnyDeductions
-import pages.authenticated.{ChangeWhichTaxYearsPage, CheckYourAnswersPage, RemoveFRECodePage, Submission, TaxYearSelectionPage}
+import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage, Submission, TaxYearSelectionPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import service.SubmissionService

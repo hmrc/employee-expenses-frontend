@@ -18,7 +18,6 @@ package controllers
 
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
-import controllers.actions.UnAuthed
 import forms.FourthIndustryOptionsFormProvider
 import models.{FourthIndustryOptions, NormalMode, UserAnswers}
 import models.FourthIndustryOptions._
@@ -48,7 +47,6 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
   private val formProvider = new FourthIndustryOptionsFormProvider()
   private val form = formProvider()
-  private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)

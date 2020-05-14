@@ -19,7 +19,6 @@ package controllers.authenticated
 import config.NavConstant
 import connectors.CitizenDetailsConnector
 import controllers.actions._
-import controllers.authenticated.routes._
 import controllers.routes._
 import javax.inject.{Inject, Named}
 import models.{Address, Mode}

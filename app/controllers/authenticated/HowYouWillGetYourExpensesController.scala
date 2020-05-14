@@ -29,8 +29,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.{HowYouWillGetYourExpensesCurrentAndPreviousYearView, HowYouWillGetYourExpensesCurrentView, HowYouWillGetYourExpensesPreviousView}
 
-import scala.concurrent.ExecutionContext
-
 class HowYouWillGetYourExpensesController @Inject()(
                                                      override val messagesApi: MessagesApi,
                                                      identify: AuthenticatedIdentifierAction,
@@ -41,7 +39,7 @@ class HowYouWillGetYourExpensesController @Inject()(
                                                      currentView: HowYouWillGetYourExpensesCurrentView,
                                                      previousView: HowYouWillGetYourExpensesPreviousView,
                                                      currentAndPreviousYearView: HowYouWillGetYourExpensesCurrentAndPreviousYearView
-                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                   ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>

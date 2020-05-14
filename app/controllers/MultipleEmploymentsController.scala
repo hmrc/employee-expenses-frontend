@@ -20,7 +20,7 @@ import config.NavConstant
 import controllers.actions._
 import forms.MultipleEmploymentsFormProvider
 import javax.inject.{Inject, Named}
-import models.{Mode, MultipleEmployments}
+import models.Mode
 import navigation.Navigator
 import pages.MultipleEmploymentsPage
 import play.api.data.Form

@@ -22,9 +22,8 @@ import controllers.actions.Authed
 import controllers.authenticated.routes._
 import controllers.routes._
 import forms.authenticated.YourEmployerFormProvider
-import models.{Employment, NormalMode, TaxYearSelection, UserAnswers}
+import models.{NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.joda.time.LocalDate
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures

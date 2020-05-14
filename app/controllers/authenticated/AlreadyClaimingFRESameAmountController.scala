@@ -23,7 +23,7 @@ import javax.inject.{Inject, Named}
 import models.Mode
 import navigation.Navigator
 import pages.authenticated.AlreadyClaimingFRESameAmountPage
-import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, FREAmounts}
+import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

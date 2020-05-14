@@ -16,7 +16,6 @@
 
 package models
 
-import play.api.libs.json._
 import viewmodels.RadioCheckboxOption
 
 sealed trait ThirdIndustryOptions

@@ -21,7 +21,7 @@ import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, D
 import controllers.routes.{SessionExpiredController, _}
 import javax.inject.Inject
 import models.{Address, Rates, TaiTaxYear, TaxYearSelection}
-import pages.authenticated.{TaxYearSelectionPage, YourAddressPage}
+import pages.authenticated.TaxYearSelectionPage
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}

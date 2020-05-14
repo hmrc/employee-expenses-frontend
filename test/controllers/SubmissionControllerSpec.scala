@@ -25,7 +25,7 @@ import models.FlatRateExpenseOptions.{FREAllYearsAllAmountsSameAsClaimAmount, _}
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4, _}
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
-import models.{AlreadyClaimingFREDifferentAmounts, FlatRateExpense, FlatRateExpenseAmounts, TaiTaxYear, TaxYearSelection}
+import models.{AlreadyClaimingFREDifferentAmounts, TaxYearSelection}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, times, verify, when}
@@ -34,12 +34,12 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.authenticated.{AlreadyClaimingFREDifferentAmountsPage, ChangeWhichTaxYearsPage, RemoveFRECodePage, TaxYearSelectionPage}
-import pages.{ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
+import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.inject.bind
 import play.api.libs.json.JsObject
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{POST, redirectLocation, route, status, _}
+import play.api.test.Helpers.{redirectLocation, route, status, _}
 import service.SubmissionService
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector

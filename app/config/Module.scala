@@ -20,7 +20,6 @@ import com.google.inject.AbstractModule
 import com.google.inject.name.Names
 import controllers.actions._
 import navigation._
-import repositories._
 import scalate.ScalateEngineBoot
 import uk.gov.hmrc.play.partials.FormPartialRetriever
 

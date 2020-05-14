@@ -20,12 +20,10 @@ import base.SpecBase
 import controllers.authenticated.routes._
 import controllers.confirmation.routes._
 import controllers.routes._
-import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove, _}
+import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove}
 import models.FlatRateExpenseOptions._
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, _}
 import models.{AlreadyClaimingFREDifferentAmounts, AlreadyClaimingFRESameAmount, CheckMode, NormalMode, TaxYearSelection}
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatestplus.mockito.MockitoSugar
 import pages.authenticated._
 import pages.{CitizenDetailsAddress, FREResponse}
 

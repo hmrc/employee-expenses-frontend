@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import controllers.actions.{Authed, FakeDataRetrievalAction, UnAuthed, UnauthenticatedIdentifierActionImpl}
+import controllers.actions.{FakeDataRetrievalAction, UnauthenticatedIdentifierActionImpl}
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
