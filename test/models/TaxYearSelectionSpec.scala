@@ -16,7 +16,6 @@
 
 package models
 
-import java.time.LocalDate
 import base.SpecBase
 import models.TaxYearSelection._
 import org.scalatestplus.mockito.MockitoSugar
