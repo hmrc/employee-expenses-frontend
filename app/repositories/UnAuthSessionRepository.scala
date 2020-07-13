@@ -27,6 +27,7 @@ import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
 import uk.gov.hmrc.mongo.ReactiveRepository
+import reactivemongo.api.WriteConcern
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -66,6 +67,15 @@ class UnAuthSessionRepository @Inject()(config: Configuration, mongo: ReactiveMo
   }
 
   def remove(id: String): Future[Option[UserAnswers]] =
-    collection.findAndRemove(Json.obj("_id" -> id)).map(_.result[UserAnswers])
+    collection.findAndRemove(
+      selector = Json.obj("_id" -> id),
+      sort = None,
+      fields = None,
+      writeConcern = WriteConcern.Default,
+      maxTime = None,
+      collation = None,
+      arrayFilters = Seq.empty
+    ).map(_.result[UserAnswers])
+
 
 }
