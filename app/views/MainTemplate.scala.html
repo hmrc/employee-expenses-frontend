@@ -78,6 +78,9 @@
     }
 }
 
+@trackingConsentSnippet()
+
+
 @scalate.render(
     "/templates/mustache/production/govuk-template.mustache.html",
     Map(
@@ -99,9 +102,8 @@
             messages.lang.code == "cy"
         },
         "showPropositionLinks" -> true,
-        "googleTagManager" -> {appConfig.googleTagManagerId != "N/A"},
-        "gtmId" -> appConfig.googleTagManagerId,
         "sessionTimeout" -> request.session.get("authToken").isDefined,
+        "trackingConsent" -> trackingConsentSnippet,
         "keepAliveUrl" -> appConfig.keepAliveUrl,
         "logoutUrl" -> appConfig.signOutUrl,
         "accessibilityFooterUrl" -> {
