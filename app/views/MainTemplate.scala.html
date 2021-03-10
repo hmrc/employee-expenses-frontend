@@ -1,5 +1,5 @@
 @*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,6 +78,9 @@
     }
 }
 
+@trackingConsentSnippet()
+
+
 @scalate.render(
     "/templates/mustache/production/govuk-template.mustache.html",
     Map(
@@ -99,9 +102,8 @@
             messages.lang.code == "cy"
         },
         "showPropositionLinks" -> true,
-        "googleTagManager" -> {appConfig.googleTagManagerId != "N/A"},
-        "gtmId" -> appConfig.googleTagManagerId,
         "sessionTimeout" -> request.session.get("authToken").isDefined,
+        "trackingConsent" -> trackingConsentSnippet,
         "keepAliveUrl" -> appConfig.keepAliveUrl,
         "logoutUrl" -> appConfig.signOutUrl,
         "accessibilityFooterUrl" -> {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   private val contactFormServiceIdentifier = "employeeExpensesFrontend"
 
   val assetsPath: String = configuration.get[String]("assets.url") + configuration.get[String]("assets.version") + "/"
-  val analyticsToken: String = configuration.get[String](s"google-analytics.token")
-  val analyticsHost: String = configuration.get[String](s"google-analytics.host")
   val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports?service=$contactFormServiceIdentifier"
   val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   val betaFeedbackUrl = s"$contactHost/contact/beta-feedback"
@@ -82,8 +80,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val taxPercentageScotlandHigherRate: Int = configuration.get[Int]("scottish-tax-percentage.higherRate")
 
   lazy val flatRateExpenseId: Int = configuration.get[Int]("flatRateExpenseId")
-
-  lazy val googleTagManagerId = configuration.get[String](s"google-tag-manager.id")
 
   val accessibilityStatementUrl: String = configuration.get[String]("accessibilityStatement.govAccessibilityStatementUrl")
   val abilityNettUrl: String = configuration.get[String]("accessibilityStatement.abilityNetUrl")
