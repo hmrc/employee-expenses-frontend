@@ -17,9 +17,8 @@
 package models
 
 import org.joda.time.{DateTime, DateTimeZone}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{Format, JsValue, Json}
 import uk.gov.hmrc.http.cache.client.CacheMap
-import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
 
 case class DatedCacheMap(id: String,
                          data: Map[String, JsValue],
@@ -27,7 +26,7 @@ case class DatedCacheMap(id: String,
                         )
 
 object DatedCacheMap extends MongoDateTimeFormats {
-  implicit val dateFormat = ReactiveMongoFormats.dateTimeFormats
+  implicit val dateTimeFormats = Format(dateTimeRead, dateTimeWrite)
   implicit val formats = Json.format[DatedCacheMap]
 
   def apply(cacheMap: CacheMap): DatedCacheMap = DatedCacheMap(cacheMap.id, cacheMap.data)

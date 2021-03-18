@@ -17,10 +17,20 @@
 package models
 
 import java.time.{Instant, LocalDateTime, ZoneOffset}
-
 import play.api.libs.json._
 
 trait MongoDateTimeFormats {
+
+  implicit val dateTimeRead: Reads[org.joda.time.DateTime] =
+    (__ \ "$date").read[Long].map { dateTime =>
+      new org.joda.time.DateTime(dateTime, org.joda.time.DateTimeZone.UTC)
+    }
+
+  implicit val dateTimeWrite: Writes[org.joda.time.DateTime] = new Writes[org.joda.time.DateTime] {
+    def writes(dateTime: org.joda.time.DateTime): JsValue = Json.obj(
+      "$date" -> dateTime.getMillis
+    )
+  }
 
   implicit val localDateTimeRead: Reads[LocalDateTime] =
     (__ \ "$date").read[Long].map {
