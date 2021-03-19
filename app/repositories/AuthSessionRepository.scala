@@ -83,7 +83,7 @@ class AuthSessionRepository @Inject()(
       }
     }}
 
-    override def remove(id: String): Future[Option[UserAnswers]] = {
+    override def remove(id: String): Future[Option[Boolean]] = {
       collection.flatMap(_.delete(false, WriteConcern.Default).one(Json.obj("_id" -> id))).map {
        lastError =>
          lastError.ok
@@ -108,5 +108,5 @@ trait AuthSessionRepositoryTrait {
 
   def set(userAnswers: UserAnswers): Future[Boolean]
 
-  def remove(id: String): Future[Option[UserAnswers]]
+  def remove(id: String): Future[Option[Boolean]]
 }
