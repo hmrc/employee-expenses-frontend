@@ -40,7 +40,7 @@ class SessionRepository @Inject()(authSessionRepository: UnAuthSessionRepository
     }
   }
 
-  def remove(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
+  def remove(identifierType: IdentifierType): Future[Boolean] = {
     identifierType match {
       case id: Authed => authSessionRepository.remove(id.internalId)
       case id: UnAuthed => unAuthSessionRepository.remove(id.sessionId)

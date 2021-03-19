@@ -81,28 +81,22 @@ class UnAuthSessionRepository @Inject()(
         }
       }
     }
+  }
 
-    /*def remove(id: String): Future[Option[UserAnswers]] = {
-
-  def remove(id: String): Future[Option[UserAnswers]] =
-    collection.findAndRemove(
-      selector = Json.obj("_id" -> id),
-      sort = None,
-      fields = None,
-      writeConcern = WriteConcern.Default,
-      maxTime = None,
-      collation = None,
-      arrayFilters = Seq.empty
-    ).map(_.result[UserAnswers])
-*/
+  override def remove(id: String): Future[Boolean] = {
+    collection.flatMap(_.delete(false, WriteConcern.Default).one(Json.obj("_id" -> id))).map {
+      lastError =>
+        lastError.ok
+    }
   }
 }
 
-  trait UnAuthSessionRepositoryTrait {
+trait UnAuthSessionRepositoryTrait {
+  val started: Future[Unit]
 
-    val started: Future[Unit]
+  def get(id: String): Future[Option[UserAnswers]]
 
-    def get(id: String): Future[Option[UserAnswers]]
+  def set(userAnswers: UserAnswers): Future[Boolean]
 
-    def set(userAnswers: UserAnswers): Future[Boolean]
-  }
+  def remove(id: String): Future[Boolean]
+}

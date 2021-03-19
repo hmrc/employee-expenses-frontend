@@ -81,23 +81,15 @@ class AuthSessionRepository @Inject()(
             lastError.ok
         }
       }
-    }}
-
-    override def remove(id: String): Future[Option[Boolean]] = {
-      collection.flatMap(_.delete(false, WriteConcern.Default).one(Json.obj("_id" -> id))).map {
-       lastError =>
-         lastError.ok
-     }
     }
+  }
 
-    /*def _remove(id: String): Future[Option[UserAnswers]] = {
-
-       val x: Future[Option[UserAnswers]] = collection.flatMap(_.delete(false, WriteConcern.Default)
-          .one(Json.obj("_id" -> id))
-   //   null#
-      ???
-    }*/
-
+  override def remove(id: String): Future[Boolean] = {
+    collection.flatMap(_.delete(false, WriteConcern.Default).one(Json.obj("_id" -> id))).map {
+      lastError =>
+        lastError.ok
+    }
+  }
 }
 
 trait AuthSessionRepositoryTrait {
@@ -108,5 +100,5 @@ trait AuthSessionRepositoryTrait {
 
   def set(userAnswers: UserAnswers): Future[Boolean]
 
-  def remove(id: String): Future[Option[Boolean]]
+  def remove(id: String): Future[Boolean]
 }

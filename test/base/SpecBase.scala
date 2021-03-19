@@ -41,6 +41,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.FormPartialRetriever
 import utils.{MockEeFormPartialRetriever, MockScalate}
 
+
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   lazy val userAnswersId = "id"
