@@ -26,8 +26,9 @@
         appConfig: FrontendAppConfig,
         article: Article,
         sidebar: Sidebar,
+        headUi: HeadWithTrackingConsent,
         scalate: Scalate,
-        formPartialRetriever: FormPartialRetriever
+        formPartialRetriever: FormPartialRetriever,
 )
 
 @(
@@ -43,6 +44,13 @@
         request: Request[_],
         messages: Messages
 )
+
+@head = {
+    @headUi(
+        linkElem = None,
+        headScripts = None)
+}
+
 
 @sidebarContent = @{
     sidebarLinks.map {
@@ -78,14 +86,12 @@
     }
 }
 
-@trackingConsentSnippet()
-
-
 @scalate.render(
     "/templates/mustache/production/govuk-template.mustache.html",
     Map(
         "pageTitle" -> s"$title - ${appConfig.serviceTitle}",
         "navTitle" -> messages("site.service_name"),
+        "headInlineScript" -> head,
         "hideAccountMenu" -> request.session.get("authToken").isEmpty,
         "signOutUrl" -> {
             if (request.session.get("authToken").isDefined) appConfig.signOutUrl else false
@@ -103,7 +109,6 @@
         },
         "showPropositionLinks" -> true,
         "sessionTimeout" -> request.session.get("authToken").isDefined,
-        "trackingConsent" -> trackingConsentSnippet,
         "keepAliveUrl" -> appConfig.keepAliveUrl,
         "logoutUrl" -> appConfig.signOutUrl,
         "accessibilityFooterUrl" -> {
