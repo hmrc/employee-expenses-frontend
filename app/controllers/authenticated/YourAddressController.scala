@@ -25,12 +25,12 @@ import models.{Address, Mode}
 import navigation.Navigator
 import pages.CitizenDetailsAddress
 import pages.authenticated.YourAddressPage
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsSuccess, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,7 +43,7 @@ class YourAddressController @Inject()(
                                        getData: DataRetrievalAction,
                                        requireData: DataRequiredAction,
                                        val controllerComponents: MessagesControllerComponents
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
@@ -68,7 +68,7 @@ class YourAddressController @Inject()(
           }
       }.recoverWith {
         case e =>
-          Logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
+          logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
           Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
       }
   }

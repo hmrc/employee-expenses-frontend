@@ -23,7 +23,7 @@ import play.api.mvc.Results.Forbidden
 import play.api.http.Status.FORBIDDEN
 import play.api.mvc.{Request, RequestHeader, Result}
 import play.twirl.api.Html
-import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
+import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.ErrorTemplate
 
 import scala.concurrent.Future

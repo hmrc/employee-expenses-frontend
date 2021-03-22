@@ -20,16 +20,15 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import javax.inject.Singleton
 import models._
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json.{JsError, JsSuccess, Json, Reads}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import utils.HttpResponseHelper
-import scala.reflect.ClassTag
 
+import scala.reflect.ClassTag
 import scala.concurrent.{ExecutionContext, Future}
 
-trait Defaulting {
+trait Defaulting extends Logging {
   def withDefaultToEmptySeq[T: ClassTag](response: HttpResponse)
                                         (implicit reads: Reads[Seq[T]]): Seq[T] = {
 
@@ -40,7 +39,7 @@ trait Defaulting {
             records
           case JsError(e) =>
             val typeName: String = implicitly[ClassTag[T]].runtimeClass.getCanonicalName
-            Logger.error(s"[TaiConnector][$typeName][Json.parse] failed $e")
+            logger.error(s"[TaiConnector][$typeName][Json.parse] failed $e")
             Seq.empty
         }
       case _ =>

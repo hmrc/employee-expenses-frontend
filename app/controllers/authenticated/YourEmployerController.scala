@@ -25,13 +25,13 @@ import javax.inject.{Inject, Named}
 import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerNames, YourEmployerPage}
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import service.TaiService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.authenticated.YourEmployerView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,7 +47,7 @@ class YourEmployerController @Inject()(
                                         val controllerComponents: MessagesControllerComponents,
                                         taiService: TaiService,
                                         view: YourEmployerView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   val form: Form[Boolean] = formProvider()
 
@@ -74,7 +74,7 @@ class YourEmployerController @Inject()(
               }
           }.recoverWith {
             case e =>
-              Logger.error(s"[YourEmployerController][taiService.employments] failed $e", e)
+              logger.error(s"[YourEmployerController][taiService.employments] failed $e", e)
               Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(NormalMode)))
           }
         case _ =>
