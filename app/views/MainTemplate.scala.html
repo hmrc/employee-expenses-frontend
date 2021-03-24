@@ -21,6 +21,9 @@
 @import models.requests._
 @import controllers.actions.Authed
 @import controllers.AccessibilityStatementController
+@import uk.gov.hmrc.renderer.TemplateRenderer
+@import play.twirl.api.Html
+
 
 @this(
         appConfig: FrontendAppConfig,
@@ -42,7 +45,8 @@
         mainContent: Html
 )(implicit
         request: Request[_],
-        messages: Messages
+        messages: Messages,
+        templateRenderer: TemplateRenderer
 )
 
 @head = {
@@ -50,7 +54,6 @@
         linkElem = None,
         headScripts = None)
 }
-
 
 @sidebarContent = @{
     sidebarLinks.map {
@@ -86,9 +89,7 @@
     }
 }
 
-@scalate.render(
-    "/templates/mustache/production/govuk-template.mustache.html",
-    Map(
+@templateRenderer.renderDefaultTemplate(appConfig.frontendTemplatePath, article, (Map[String, Any](
         "pageTitle" -> s"$title - ${appConfig.serviceTitle}",
         "navTitle" -> messages("site.service_name"),
         "headInlineScript" -> head,
@@ -113,6 +114,7 @@
         "logoutUrl" -> appConfig.signOutUrl,
         "accessibilityFooterUrl" -> {
             if(appConfig.accessibilityStatementEnabled) AccessibilityStatementController.onPageLoad().url else false
-        }
+            }
+        )
     )
 )
