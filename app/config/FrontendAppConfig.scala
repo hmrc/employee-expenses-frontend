@@ -21,12 +21,16 @@ import controllers.routes
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.Call
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import scala.util.Try
 
 @Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration) {
+class FrontendAppConfig @Inject() (val servicesConfig: ServicesConfig, configuration: Configuration) {
 
   lazy val serviceTitle = "Claim for your work uniform and tools - GOV.UK"
 
+  private def loadConfig(key: String): String = Try(servicesConfig.getString(key)).getOrElse(throw new Exception(s"Missing configuration key: $key"))
   private val contactHost = configuration.get[Service]("microservice.services.contact-frontend").baseUrl
   private val contactFormServiceIdentifier = "employeeExpensesFrontend"
 
@@ -92,6 +96,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val accessibilityStatementLastTested: String = configuration.get[String]("accessibilityStatement.lastTested")
   val accessibilityStatementFirstPublished: String = configuration.get[String]("accessibilityStatement.firstPublished")
   val accessibilityStatementEnabled: Boolean = configuration.get[Boolean]("accessibilityStatement.enabled")
+
+  lazy val frontendTemplatePath: String = loadConfig("microservice.services.frontend-template-provider.path")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
