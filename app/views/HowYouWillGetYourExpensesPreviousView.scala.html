@@ -16,9 +16,14 @@
 
 @import uk.gov.hmrc.time.TaxYear
 @import models.TaxYearSelection._
+@import uk.gov.hmrc.renderer.TemplateRenderer
+
 
 @this(
     main_template: MainTemplate
+)(
+    implicit
+    templateRenderer: TemplateRenderer
 )
 
 @(href: String, currentYearMinus1Selected: Boolean)(implicit request: Request[_], messages: Messages)

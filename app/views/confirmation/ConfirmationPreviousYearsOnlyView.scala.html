@@ -17,11 +17,17 @@
 @import models.FlatRateExpenseOptions._
 @import models.Address
 @import config.FrontendAppConfig
+@import uk.gov.hmrc.renderer.TemplateRenderer
+
 
 @this(
     main_template: MainTemplate,
     frontendAppConfig:FrontendAppConfig
+)(
+    implicit
+    templateRenderer: TemplateRenderer
 )
+
 @(
         claimAmountsAndRates: Seq[Rates],
         claimAmount: Int,

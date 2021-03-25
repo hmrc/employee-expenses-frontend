@@ -16,10 +16,15 @@
 
 @import controllers.authenticated.routes._
 @import models.{Mode, AlreadyClaimingFREDifferentAmounts}
+@import uk.gov.hmrc.renderer.TemplateRenderer
+
 
 @this(
         main_template: MainTemplate,
         formHelper: FormWithCSRF
+)(
+        implicit
+        templateRenderer: TemplateRenderer
 )
 
 @(

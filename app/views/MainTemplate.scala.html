@@ -89,7 +89,7 @@
     }
 }
 
-@templateRenderer.renderDefaultTemplate(appConfig.frontendTemplatePath, article, (Map[String, Any](
+@templateRenderer.renderDefaultTemplate(appConfig.frontendTemplatePath, mainContent, (Map[String, Any](
         "pageTitle" -> s"$title - ${appConfig.serviceTitle}",
         "navTitle" -> messages("site.service_name"),
         "headInlineScript" -> head,

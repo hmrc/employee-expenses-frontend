@@ -17,10 +17,15 @@
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
 @import models.CheckYourAnswersText
 @import controllers.authenticated.routes._
+@import uk.gov.hmrc.renderer.TemplateRenderer
+
 
 @this(
         main_template: MainTemplate,
         formHelper: FormWithCSRF
+)(
+        implicit
+        templateRenderer: TemplateRenderer
 )
 
 @(

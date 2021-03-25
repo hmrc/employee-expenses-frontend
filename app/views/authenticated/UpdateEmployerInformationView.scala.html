@@ -15,9 +15,14 @@
  *@
 
 @import controllers.authenticated.routes._
+@import uk.gov.hmrc.renderer.TemplateRenderer
+
 
 @this(
         main_template: MainTemplate
+)(
+        implicit
+        templateRenderer: TemplateRenderer
 )
 
 @(nextPageURL: String)(implicit request: Request[_], messages: Messages)

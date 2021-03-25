@@ -16,10 +16,15 @@
 
 @import controllers.routes._
 @import models.{Mode, FourthIndustryOptions}
+@import uk.gov.hmrc.renderer.TemplateRenderer
+
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
+)(
+    implicit
+    templateRenderer: TemplateRenderer
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)

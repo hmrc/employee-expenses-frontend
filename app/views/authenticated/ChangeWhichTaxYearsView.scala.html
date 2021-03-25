@@ -17,10 +17,15 @@
 @import controllers.authenticated.routes._
 @import models.Mode
 @import viewmodels.RadioCheckboxOption
+@import uk.gov.hmrc.renderer.TemplateRenderer
+
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
+)(
+    implicit
+    templateRenderer: TemplateRenderer
 )
 
 @(form: Form[Seq[TaxYearSelection]], mode: Mode, yearsAndAmounts: Seq[(RadioCheckboxOption, Int)])(implicit request: Request[_], messages: Messages)
