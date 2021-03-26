@@ -93,6 +93,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val accessibilityStatementFirstPublished: String = configuration.get[String]("accessibilityStatement.firstPublished")
   val accessibilityStatementEnabled: Boolean = configuration.get[Boolean]("accessibilityStatement.enabled")
 
+  val frontendTemplatePath: String = configuration.get[String]("microservice.services.frontend-template-provider.path")
+
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")

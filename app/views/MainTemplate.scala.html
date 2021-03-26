@@ -16,18 +16,16 @@
 
 @import com.github.tototoshi.play2.scalate._
 @import config.FrontendAppConfig
-@import scalate._
 @import uk.gov.hmrc.play.partials.FormPartialRetriever
-@import models.requests._
-@import controllers.actions.Authed
-@import controllers.AccessibilityStatementController
+@import uk.gov.hmrc.renderer.TemplateRenderer
 
 @this(
         appConfig: FrontendAppConfig,
         article: Article,
         sidebar: Sidebar,
         scalate: Scalate,
-        formPartialRetriever: FormPartialRetriever
+        formPartialRetriever: FormPartialRetriever,
+        templateRenderer: TemplateRenderer
 )
 
 @(
@@ -81,33 +79,39 @@
 @trackingConsentSnippet()
 
 
-@scalate.render(
-    "/templates/mustache/production/govuk-template.mustache.html",
-    Map(
-        "pageTitle" -> s"$title - ${appConfig.serviceTitle}",
-        "navTitle" -> messages("site.service_name"),
-        "hideAccountMenu" -> request.session.get("authToken").isEmpty,
-        "signOutUrl" -> {
-            if (request.session.get("authToken").isDefined) appConfig.signOutUrl else false
-        },
-        "assetsPath" -> appConfig.assetsPath,
-        "sidebar" -> sidebarContent,
-        "linkElems" -> linkElem,
-        "scriptElems" -> scriptElem,
-        "mainClass" -> mainClass,
-        "article" -> articleContent,
-        "getHelpForm" -> helpForm,
-        "langSelector" -> languageToggle,
-        "isWelsh" -> {
-            messages.lang.code == "cy"
-        },
-        "showPropositionLinks" -> true,
-        "sessionTimeout" -> request.session.get("authToken").isDefined,
-        "trackingConsent" -> trackingConsentSnippet,
-        "keepAliveUrl" -> appConfig.keepAliveUrl,
-        "logoutUrl" -> appConfig.signOutUrl,
-        "accessibilityFooterUrl" -> {
-            if(appConfig.accessibilityStatementEnabled) AccessibilityStatementController.onPageLoad().url else false
-        }
+@{
+    templateRenderer.renderDefaultTemplate(
+        appConfig.frontendTemplatePath,
+        articleContent,
+        Map(
+            "pageTitle" -> s"$title - ${appConfig.serviceTitle}",
+            "navTitle" -> messages("site.service_name"),
+            "hideAccountMenu" -> request.session.get("authToken").isEmpty,
+            "signOutUrl" -> {
+                if (request.session.get("authToken").isDefined) appConfig.signOutUrl else false
+            },
+            "assetsPath" -> appConfig.assetsPath,
+            "sidebar" -> sidebarContent,
+            "linkElems" -> linkElem,
+            "scriptElems" -> scriptElem,
+            "mainClass" -> mainClass,
+            "getHelpForm" -> helpForm,
+            "langSelector" -> languageToggle,
+            "isWelsh" -> {
+                messages.lang.code == "cy"
+            },
+            "showPropositionLinks" -> true,
+            "sessionTimeout" -> request.session.get("authToken").isDefined,
+            "trackingConsent" -> trackingConsentSnippet,
+            "keepAliveUrl" -> appConfig.keepAliveUrl,
+            "logoutUrl" -> appConfig.signOutUrl,
+            "accessibilityFooterUrl" -> {
+                if(appConfig.accessibilityStatementEnabled) AccessibilityStatementController.onPageLoad().url else false
+            }
+        )
     )
+}
+
+
+
 )
