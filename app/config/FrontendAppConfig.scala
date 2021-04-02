@@ -23,7 +23,7 @@ import play.api.i18n.Lang
 import play.api.mvc.Call
 
 @Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration) {
+class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
   lazy val serviceTitle = "Claim for your work uniform and tools - GOV.UK"
 

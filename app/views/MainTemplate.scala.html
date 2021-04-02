@@ -14,16 +14,14 @@
  * limitations under the License.
  *@
 
-@import com.github.tototoshi.play2.scalate._
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.play.partials.FormPartialRetriever
 @import uk.gov.hmrc.renderer.TemplateRenderer
 
 @this(
         appConfig: FrontendAppConfig,
-        article: Article,
-        sidebar: Sidebar,
-        scalate: Scalate,
+        articleLayout: Article,
+        headUi: HeadWithTrackingConsent,
         formPartialRetriever: FormPartialRetriever,
         templateRenderer: TemplateRenderer
 )
@@ -42,16 +40,6 @@
         messages: Messages
 )
 
-@sidebarContent = @{
-    sidebarLinks.map {
-        links =>
-            sidebar(links, Some("sidebar"))
-    }
-}
-
-@articleContent = @{
-    article(mainContent)
-}
 
 @linkElem = @{
     Map("url" -> controllers.routes.Assets.versioned("stylesheets/employeeexpensesfrontend-app.css"))
@@ -60,6 +48,13 @@
 @scriptElem = @{
     Seq(
         Map("url" -> controllers.routes.Assets.versioned("javascripts/employeeexpensesfrontend.js"))
+    )
+}
+
+@head = {
+    @headUi(
+        linkElem = None,
+        headScripts = None
     )
 }
 
@@ -76,13 +71,10 @@
     }
 }
 
-@trackingConsentSnippet()
-
-
 @{
     templateRenderer.renderDefaultTemplate(
         appConfig.frontendTemplatePath,
-        articleContent,
+        articleLayout(mainContent),
         Map(
             "pageTitle" -> s"$title - ${appConfig.serviceTitle}",
             "navTitle" -> messages("site.service_name"),
@@ -91,7 +83,6 @@
                 if (request.session.get("authToken").isDefined) appConfig.signOutUrl else false
             },
             "assetsPath" -> appConfig.assetsPath,
-            "sidebar" -> sidebarContent,
             "linkElems" -> linkElem,
             "scriptElems" -> scriptElem,
             "mainClass" -> mainClass,
@@ -102,12 +93,12 @@
             },
             "showPropositionLinks" -> true,
             "sessionTimeout" -> request.session.get("authToken").isDefined,
-            "trackingConsent" -> trackingConsentSnippet,
             "keepAliveUrl" -> appConfig.keepAliveUrl,
             "logoutUrl" -> appConfig.signOutUrl,
             "accessibilityFooterUrl" -> {
                 if(appConfig.accessibilityStatementEnabled) AccessibilityStatementController.onPageLoad().url else false
-            }
+            },
+            "headInlineScript" -> head
         )
     )
 }
