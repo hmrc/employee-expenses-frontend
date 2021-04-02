@@ -19,7 +19,7 @@ package connectors
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import models._
-import play.api.Logger
+import play.api.Logger.logger
 import play.api.libs.json.{JsError, JsSuccess, Json, Reads}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import utils.HttpResponseHelper
@@ -29,6 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.reflect.ClassTag
 
 trait Defaulting {
+
+
   def withDefaultToEmptySeq[T: ClassTag](response: HttpResponse)
                                         (implicit reads: Reads[Seq[T]]): Seq[T] = {
 
@@ -39,7 +41,7 @@ trait Defaulting {
             records
           case JsError(e) =>
             val typeName: String = implicitly[ClassTag[T]].runtimeClass.getCanonicalName
-            Logger.error(s"[TaiConnector][$typeName][Json.parse] failed $e")
+            logger.error(s"[TaiConnector][$typeName][Json.parse] failed $e")
             Seq.empty
         }
       case _ =>

@@ -22,7 +22,7 @@ import controllers.routes.TechnicalDifficultiesController
 
 import javax.inject.Singleton
 import models.requests.IdentifierRequest
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json.Reads
 import play.api.mvc.Results.Redirect
 import play.api.mvc._
@@ -38,7 +38,7 @@ class UnauthenticatedIdentifierActionImpl @Inject()(
                                                      override val authConnector: AuthConnector,
                                                      config: FrontendAppConfig,
                                                      val parser: BodyParsers.Default
-                                                   )(implicit val executionContext: ExecutionContext) extends UnauthenticatedIdentifierAction with AuthorisedFunctions {
+                                                   )(implicit val executionContext: ExecutionContext) extends UnauthenticatedIdentifierAction with AuthorisedFunctions with Logging {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
@@ -56,7 +56,7 @@ class UnauthenticatedIdentifierActionImpl @Inject()(
         val sessionId: String = hc.sessionId.map(_.value).getOrElse(throw new Exception("no sessionId"))
         block(IdentifierRequest(request, UnAuthed(sessionId)))
       case e =>
-        Logger.error(s"[UnauthenticatedIdentifierAction][authorised] failed $e", e)
+        logger.error(s"[UnauthenticatedIdentifierAction][authorised] failed $e", e)
         Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
     }
   }

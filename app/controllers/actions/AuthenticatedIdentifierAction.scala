@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import controllers.routes._
 import models.requests.IdentifierRequest
-import play.api.Logger
+import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
@@ -34,7 +34,7 @@ class AuthenticatedIdentifierActionImpl @Inject()(
                                                    override val authConnector: AuthConnector,
                                                    config: FrontendAppConfig,
                                                    val parser: BodyParsers.Default
-                                                 )(implicit val executionContext: ExecutionContext) extends AuthenticatedIdentifierAction with AuthorisedFunctions {
+                                                 )(implicit val executionContext: ExecutionContext) extends AuthenticatedIdentifierAction with AuthorisedFunctions with Logging {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
@@ -57,7 +57,7 @@ class AuthenticatedIdentifierActionImpl @Inject()(
       case _: AuthorisationException =>
         Redirect(UnauthorisedController.onPageLoad())
       case e =>
-        Logger.error(s"[AuthenticatedIdentifierAction][authorised] failed $e", e)
+        logger.error(s"[AuthenticatedIdentifierAction][authorised] failed $e", e)
         Redirect(TechnicalDifficultiesController.onPageLoad())
     }
   }

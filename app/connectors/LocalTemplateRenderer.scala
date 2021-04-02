@@ -16,13 +16,15 @@
 
 package connectors
 
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.renderer.TemplateRenderer
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
+import scala.language.postfixOps
 
 @Singleton
 class LocalTemplateRenderer @Inject()(
@@ -37,6 +39,6 @@ class LocalTemplateRenderer @Inject()(
   private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   override def fetchTemplate(path: String): Future[String] =  {
-    http.GET(path).map(_.body)
+    http.GET[HttpResponse](path).map(_.body)
   }
 }
