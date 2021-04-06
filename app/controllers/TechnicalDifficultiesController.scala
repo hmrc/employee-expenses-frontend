@@ -28,6 +28,15 @@ class TechnicalDifficultiesController @Inject()(
                                                ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    Ok(view("technicalDifficulties.pageTitle", "technicalDifficulties.heading", "technicalDifficulties.message"))
+
+    val messages = messagesApi.preferred(request)
+
+    Ok(
+      view(
+        messages("technicalDifficulties.pageTitle"),
+        messages("technicalDifficulties.heading"),
+        messages("technicalDifficulties.message")
+      )
+    )
   }
 }

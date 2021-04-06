@@ -39,9 +39,9 @@ class TechnicalDifficultiesControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view(
-          "technicalDifficulties.pageTitle",
-          "technicalDifficulties.heading",
-          "technicalDifficulties.message"
+          messages("technicalDifficulties.pageTitle"),
+          messages("technicalDifficulties.heading"),
+          messages("technicalDifficulties.message")
         )(fakeRequest, messages).toString
 
       application.stop()
