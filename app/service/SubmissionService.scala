@@ -21,7 +21,7 @@ import connectors.TaiConnector
 import models.TaxYearSelection._
 import models.{TaiTaxYear, TaxYearSelection}
 import org.joda.time.LocalDate
-import play.api.Logger
+import play.api.Logging
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SubmissionService @Inject()(
                                    taiService: TaiService,
                                    taiConnector: TaiConnector
-                                 ) {
+                                 ) extends Logging {
 
   def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection], currentDate: LocalDate = LocalDate.now)
                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxYearSelection]] = {
@@ -45,7 +45,7 @@ class SubmissionService @Inject()(
         }
       }.recoverWith {
         case e: Exception =>
-          Logger.warn(s"[SubmissionService][getTaxYearsToUpdate] ${e.getMessage}")
+          logger.warn(s"[SubmissionService][getTaxYearsToUpdate] ${e.getMessage}")
           Future.successful(taxYears)
       }
     } else {

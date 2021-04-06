@@ -19,17 +19,18 @@ package controllers.confirmation
 import config.FrontendAppConfig
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
 import controllers.routes.{SessionExpiredController, _}
+
 import javax.inject.Inject
 import models.TaxYearSelection.CurrentYear
 import models.{Address, FlatRateExpenseAmounts, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import service.{ClaimAmountService, TaiService}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.confirmation.ConfirmationCurrentAndPreviousYearsView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,7 +45,7 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
                                                                taiService: TaiService,
                                                                sessionRepository: SessionRepository,
                                                                confirmationCurrentAndPreviousYearsView: ConfirmationCurrentAndPreviousYearsView
-                                                             )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
+                                                             )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
@@ -80,7 +81,7 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
               )
           }.recoverWith {
             case e =>
-              Logger.error(s"[ConfirmationCurrentAndPreviousYearsController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
+              logger.error(s"[ConfirmationCurrentAndPreviousYearsController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
               Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
           }
         case _ =>

@@ -18,11 +18,10 @@ package connectors
 
 import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
-import javax.inject.Singleton
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import utils.HttpResponseHelper
 
+import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

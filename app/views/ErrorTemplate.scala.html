@@ -17,18 +17,19 @@
 @import config.FrontendAppConfig
 
 @this(
-    govuk_wrapper: GovukWrapper,
+    main_template: MainTemplate,
     appConfig: FrontendAppConfig
 )
 
 @(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
-@contentHeader = {
-  <h1>@messages(heading)</h1>
-}
-
 @mainContent = {
-  <p>@messages(message)</p>
+ <h1 class="heading-xlarge">@heading</h1>
+ <p>@message</p>
 }
 
-@govuk_wrapper(appConfig = appConfig, title = messages(pageTitle), contentHeader = Some(contentHeader), mainContent = mainContent)
+@main_template(
+ title = pageTitle
+) {
+ @mainContent
+}

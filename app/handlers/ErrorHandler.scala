@@ -17,13 +17,13 @@
 package handlers
 
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results.Forbidden
 import play.api.http.Status.FORBIDDEN
 import play.api.mvc.{Request, RequestHeader, Result}
 import play.twirl.api.Html
-import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
+import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.ErrorTemplate
 
 import scala.concurrent.Future
@@ -32,9 +32,7 @@ import scala.concurrent.Future
 class ErrorHandler @Inject()(
                               val messagesApi: MessagesApi,
                               view: ErrorTemplate
-                            ) extends FrontendErrorHandler with I18nSupport {
-
-  private val logger = Logger(getClass)
+                            ) extends FrontendErrorHandler with I18nSupport with Logging {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
     view(pageTitle, heading, message)

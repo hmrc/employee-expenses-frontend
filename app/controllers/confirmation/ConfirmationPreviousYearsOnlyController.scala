@@ -19,16 +19,17 @@ package controllers.confirmation
 import config.FrontendAppConfig
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
 import controllers.routes.{SessionExpiredController, _}
+
 import javax.inject.Inject
 import models.{Address, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.TaxYearSelectionPage
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREResponse}
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import service.{ClaimAmountService, TaiService}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.confirmation.ConfirmationPreviousYearsOnlyView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,7 +44,7 @@ class ConfirmationPreviousYearsOnlyController @Inject()(
                                                          taiService: TaiService,
                                                          sessionRepository: SessionRepository,
                                                          confirmationPreviousYearsOnlyView: ConfirmationPreviousYearsOnlyView
-                                                       )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport {
+                                                       )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
@@ -63,7 +64,7 @@ class ConfirmationPreviousYearsOnlyController @Inject()(
               Ok(confirmationPreviousYearsOnlyView(claimAmountsAndRates, claimAmountAndAnyDeductions, addressOption, currentYearMinus1, freResponse))
           }.recoverWith {
             case e =>
-              Logger.error(s"[ConfirmationPreviousYearsOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
+              logger.error(s"[ConfirmationPreviousYearsOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
               Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
           }
         case _ =>
