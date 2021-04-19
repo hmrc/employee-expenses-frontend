@@ -81,18 +81,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
 
   lazy val flatRateExpenseId: Int = configuration.get[Int]("flatRateExpenseId")
 
-  val accessibilityStatementUrl: String = configuration.get[String]("accessibilityStatement.govAccessibilityStatementUrl")
-  val abilityNettUrl: String = configuration.get[String]("accessibilityStatement.abilityNetUrl")
-  val w3StandardsUrl: String = configuration.get[String]("accessibilityStatement.w3StandardsUrl")
-  val equalityAdvisoryServiceUrl: String = configuration.get[String]("accessibilityStatement.equalityAdvisoryServiceUrl")
-  val equalityNIUrl: String = configuration.get[String]("accessibilityStatement.equalityNIUrl")
-  val dealingHmrcAdditionalNeedsUrl: String = configuration.get[String]("accessibilityStatement.dealingHmrcAdditionalNeedsUrl")
-  val dacUrl: String = configuration.get[String]("accessibilityStatement.dacUrl")
-  val contactAccessibilityUrl = configuration.get[String]("accessibilityStatement.contactAccessibilityUrl")
-  val accessibilityStatementLastTested: String = configuration.get[String]("accessibilityStatement.lastTested")
-  val accessibilityStatementFirstPublished: String = configuration.get[String]("accessibilityStatement.firstPublished")
-  val accessibilityStatementEnabled: Boolean = configuration.get[Boolean]("accessibilityStatement.enabled")
-
   val frontendTemplatePath: String = configuration.get[String]("microservice.services.frontend-template-provider.path")
 
   def languageMap: Map[String, Lang] = Map(

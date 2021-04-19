@@ -17,13 +17,15 @@
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.play.partials.FormPartialRetriever
 @import uk.gov.hmrc.renderer.TemplateRenderer
+@import uk.gov.hmrc.play.config.AccessibilityStatementConfig
 
 @this(
         appConfig: FrontendAppConfig,
         articleLayout: Article,
         headUi: HeadWithTrackingConsent,
         formPartialRetriever: FormPartialRetriever,
-        templateRenderer: TemplateRenderer
+        templateRenderer: TemplateRenderer,
+        accessibilityStatementConfig: AccessibilityStatementConfig
 )
 
 @(
@@ -95,9 +97,7 @@
             "sessionTimeout" -> request.session.get("authToken").isDefined,
             "keepAliveUrl" -> appConfig.keepAliveUrl,
             "logoutUrl" -> appConfig.signOutUrl,
-            "accessibilityFooterUrl" -> {
-                if(appConfig.accessibilityStatementEnabled) AccessibilityStatementController.onPageLoad().url else false
-            },
+            "accessibilityFooterUrl" -> accessibilityStatementConfig.url(request),
             "headInlineScript" -> head
         )
     )
