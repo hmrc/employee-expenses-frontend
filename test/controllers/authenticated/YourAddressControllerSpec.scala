@@ -64,7 +64,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "redirect to next page and the correct view for a GET and save address to CitizensDetailsAddress" in {
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
-        .thenReturn(Future.successful(HttpResponse(200, Some(Json.toJson(address)))))
+        .thenReturn(Future.successful(HttpResponse(OK, validAddressJson.toString)))
       when(mockSessionRepository.set(any(), any()))
         .thenReturn(Future.successful(true))
 
@@ -97,7 +97,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
         .build()
 
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(200, Some(emptyAddressJson)))
+        Future.successful(HttpResponse(OK, emptyAddressJson.toString))
 
       val request =
         FakeRequest(GET, yourAddressRoute).withFormUrlEncodedBody(("value", "true"))
@@ -113,7 +113,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "redirect to HowWillYouGetYourExpenses if 404 returned from getAddress" in {
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(404, None))
+        Future.successful(HttpResponse(NOT_FOUND, ""))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
@@ -130,7 +130,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "redirect to Phone Us if 423 returned from getAddress" in {
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(423, None))
+        Future.successful(HttpResponse(LOCKED, ""))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
@@ -148,7 +148,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "redirect to NextPage if 500 returned from getAddress" in {
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(500, None))
+        Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, ""))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
@@ -166,7 +166,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "redirect to NextPage if any other status returned from getAddress" in {
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(123, None))
+        Future.successful(HttpResponse(123, ""))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
@@ -201,7 +201,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
     "redirect to CheckYourAnswers when could not parse Json to Address model" in {
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(200, Some(incorrectJson)))
+        Future.successful(HttpResponse(OK, incorrectJson.toString))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
           .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))

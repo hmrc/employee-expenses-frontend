@@ -16,6 +16,8 @@
 
 package models
 
+import java.time.format.DateTimeFormatter
+
 import uk.gov.hmrc.time.TaxYear
 import viewmodels.RadioCheckboxOption
 
@@ -73,8 +75,9 @@ object TaxYearSelection extends Enumerable.Implicits {
   }
 
   def taxYearString(yearsBack: Int): String = {
-    val start: String = TaxYear.current.back(yearsBack).starts.toString("d MMMM yyyy")
-    val end: String = TaxYear.current.back(yearsBack).finishes.toString("d MMMM yyyy")
+    val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+    val start: String = TaxYear.current.back(yearsBack).starts.format(formatter)
+    val end: String = TaxYear.current.back(yearsBack).finishes.format(formatter)
 
     s"$start to $end"
   }

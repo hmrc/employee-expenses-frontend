@@ -67,9 +67,9 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
     "updateFRE" when {
       "must return a 204 on successful update" in {
         when(mockCitizenDetailsConnector.getEtag(fakeNino))
-          .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
+          .thenReturn(Future.successful(HttpResponse(OK, validEtagJson.toString)))
         when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, 100))
-          .thenReturn(Future.successful(HttpResponse(NO_CONTENT)))
+          .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         val result = taiService.updateFRE(fakeNino, taxYear, 100)
 
@@ -80,7 +80,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
       "must exception on failed tai FRE update" in {
         when(mockCitizenDetailsConnector.getEtag(fakeNino))
-          .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
+          .thenReturn(Future.successful(HttpResponse(OK, validEtagJson.toString)))
         when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, 100))
           .thenReturn(Future.failed(new RuntimeException))
 
@@ -93,7 +93,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
 
       "must exception on failed citizen details ETag request" in {
         when(mockTaiConnector.taiFREUpdate(fakeNino, taxYear, etag, 100))
-          .thenReturn(Future.successful(HttpResponse(NO_CONTENT)))
+          .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
         when(mockCitizenDetailsConnector.getEtag(fakeNino))
           .thenReturn(Future.failed(new RuntimeException))
 

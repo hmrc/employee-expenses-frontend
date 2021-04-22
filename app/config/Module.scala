@@ -22,7 +22,6 @@ import connectors.LocalTemplateRenderer
 import controllers.actions._
 import navigation._
 import scalate.ScalateEngineBoot
-import uk.gov.hmrc.play.partials.FormPartialRetriever
 import uk.gov.hmrc.renderer.TemplateRenderer
 
 class Module extends AbstractModule {
@@ -37,7 +36,6 @@ class Module extends AbstractModule {
     bind(classOf[UnauthenticatedIdentifierAction]).to(classOf[UnauthenticatedIdentifierActionImpl]).asEagerSingleton()
 
     bind(classOf[ScalateEngineBoot]).asEagerSingleton()
-    bind(classOf[FormPartialRetriever]).to(classOf[EeFormPartialRetriever])
 
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.generic)).to(classOf[GenericNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.engineering)).to(classOf[EngineeringNavigator])

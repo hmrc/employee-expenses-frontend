@@ -18,6 +18,7 @@
 @import uk.gov.hmrc.play.partials.FormPartialRetriever
 @import uk.gov.hmrc.renderer.TemplateRenderer
 @import uk.gov.hmrc.play.config.AccessibilityStatementConfig
+@import scala.concurrent.ExecutionContext
 
 @this(
         appConfig: FrontendAppConfig,
@@ -25,7 +26,8 @@
         headUi: HeadWithTrackingConsent,
         formPartialRetriever: FormPartialRetriever,
         templateRenderer: TemplateRenderer,
-        accessibilityStatementConfig: AccessibilityStatementConfig
+        accessibilityStatementConfig: AccessibilityStatementConfig,
+        implicit val ec: ExecutionContext
 )
 
 @(
