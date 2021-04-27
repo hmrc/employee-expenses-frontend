@@ -18,7 +18,6 @@ package base
 
 import com.github.tototoshi.play2.scalate.Scalate
 import config.{FrontendAppConfig, NavConstant}
-import connectors.LocalTemplateRenderer
 import controllers.actions._
 import mocks.MockTemplateRenderer
 import models.AlreadyClaimingFRESameAmount.Remove

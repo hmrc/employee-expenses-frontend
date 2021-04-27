@@ -69,7 +69,7 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "removeFRE and redirect to ConfirmationClaimStoppedController when submission success" in {
         when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(204))))
+          .thenReturn(Future.successful(Seq(HttpResponse(NO_CONTENT, ""))))
 
         val userAnswers = minimumUserAnswers
           .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
@@ -110,7 +110,7 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "redirect to tech difficulties when removeFRE fails" in {
         when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(500))))
+          .thenReturn(Future.successful(Seq(HttpResponse(INTERNAL_SERVER_ERROR, ""))))
 
         val userAnswers = minimumUserAnswers
           .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
@@ -151,7 +151,7 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "not removeFRE and not audit and redirect to PhoneUsController when citizen details returns 423" in {
         when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(423))))
+          .thenReturn(Future.successful(Seq(HttpResponse(LOCKED, ""))))
 
         val userAnswers = minimumUserAnswers
           .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
@@ -188,7 +188,7 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "submitFRE and redirect to ConfirmationCurrentYearOnlyController when submission success" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(204))))
+          .thenReturn(Future.successful(Seq(HttpResponse(NO_CONTENT, ""))))
 
         val application = applicationBuilder(Some(currentYearFullUserAnswers))
           .overrides(
@@ -225,7 +225,7 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "submitFRE and redirect to ConfirmationCurrentAndPreviousYearsController when submission success" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(204))))
+          .thenReturn(Future.successful(Seq(HttpResponse(NO_CONTENT, ""))))
 
         val userAnswers = minimumUserAnswers
           .set(ClaimAmountAndAnyDeductions, 100).success.value
@@ -266,7 +266,7 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "not submitFRE and not audit and redirect to PhoneUsController when citizen details returns 423" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(423))))
+          .thenReturn(Future.successful(Seq(HttpResponse(LOCKED, ""))))
 
         val userAnswers = minimumUserAnswers
           .set(ClaimAmountAndAnyDeductions, 100).success.value
@@ -301,7 +301,7 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "submitFRE and redirect to ConfirmationPreviousYearsOnlyController when submission success" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(204))))
+          .thenReturn(Future.successful(Seq(HttpResponse(NO_CONTENT, ""))))
 
         val userAnswers = minimumUserAnswers
           .set(ClaimAmountAndAnyDeductions, 100).success.value
@@ -342,7 +342,7 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "redirect to tech difficulties when submitFRE fails" in {
         when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(Seq(HttpResponse(500))))
+          .thenReturn(Future.successful(Seq(HttpResponse(INTERNAL_SERVER_ERROR, ""))))
 
         val application = applicationBuilder(Some(currentYearFullUserAnswers))
           .overrides(
@@ -379,13 +379,13 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "submit the correct number of time for new claims" in {
         when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
+          .thenReturn(Future.successful(HttpResponse(OK, validEtagJson.toString)))
 
         when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
+          .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         when(mockTaiConnector.taiTaxAccountSummary(any(),any())(any(),any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
+          .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         val userAnswers = currentYearFullUserAnswers
           .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
@@ -416,13 +416,13 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "submit the correct number of time for change claims" in {
         when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
+          .thenReturn(Future.successful(HttpResponse(OK, validEtagJson.toString)))
 
         when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
+          .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         when(mockTaiConnector.taiTaxAccountSummary(any(),any())(any(),any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
+          .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         val userAnswers = minimumUserAnswers
           .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
@@ -455,13 +455,13 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       "submit the correct number of time for remove claims" in {
         when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(200, Some(validEtagJson))))
+          .thenReturn(Future.successful(HttpResponse(OK, validEtagJson.toString)))
 
         when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
+          .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         when(mockTaiConnector.taiTaxAccountSummary(any(),any())(any(),any()))
-          .thenReturn(Future.successful(HttpResponse(204)))
+          .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         val userAnswers = minimumUserAnswers
           .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
