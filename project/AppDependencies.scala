@@ -12,10 +12,10 @@ object AppDependencies {
     "uk.gov.hmrc"           %% "play-ui"                        % "9.1.0-play-27",
     "uk.gov.hmrc"           %% "http-caching-client"            % "9.2.0-play-27",
     "uk.gov.hmrc"           %% "play-conditional-form-mapping"  % "1.6.0-play-27",
-    "uk.gov.hmrc"           %% "bootstrap-frontend-play-27"     % "4.2.0",
+    "uk.gov.hmrc"           %% "bootstrap-frontend-play-27"     % "5.3.0",
     "uk.gov.hmrc"           %% "tax-year"                       % "1.3.0",
     "uk.gov.hmrc"           %% "play-partials"                  % "8.1.0-play-27",
-    "uk.gov.hmrc"           %% "local-template-renderer"        % "2.10.0-play-26",
+    "uk.gov.hmrc"           %% "local-template-renderer"        % "2.14.0-play-27" excludeAll(ExclusionRule(organization="org.scalactic")),
     "com.typesafe.play"     %% "play-json-joda"                 % "2.9.0",
     "org.scalatra.scalate"  %% "play-scalate"                   % "0.6.0",
     "org.scalatra.scalate"  %% "scalate-core"                   % "1.9.6"
