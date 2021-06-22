@@ -18,11 +18,13 @@ package models
 
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.{MustMatchers, OptionValues, WordSpec}
+import org.scalatest.OptionValues
 import play.api.libs.json.{JsError, JsString, Json}
 
-class ThirdIndustryOptionsSpec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues {
+class ThirdIndustryOptionsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
 
   "ThirdIndustryOptions" must {
 
