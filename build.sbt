@@ -25,6 +25,9 @@ lazy val root = (project in file("."))
     // ***************
   )
   .settings(
+    isPublicArtefact := true
+  )
+  .settings(
     name := appName,
     scalaVersion := "2.12.11",
     RoutesKeys.routesImport += "models._",

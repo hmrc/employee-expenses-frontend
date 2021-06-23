@@ -19,7 +19,7 @@ package connectors
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import models._
-import play.api.Logger.logger
+import play.api.Logging
 import play.api.libs.json.{JsError, JsSuccess, Json, Reads}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import utils.HttpResponseHelper
@@ -28,7 +28,7 @@ import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 import scala.reflect.ClassTag
 
-trait Defaulting {
+trait Defaulting extends Logging{
 
 
   def withDefaultToEmptySeq[T: ClassTag](response: HttpResponse)

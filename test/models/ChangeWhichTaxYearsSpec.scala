@@ -18,11 +18,13 @@ package models
 
 import generators.ModelGenerators
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.{MustMatchers, OptionValues, WordSpec}
+import org.scalatest.OptionValues
 import play.api.libs.json.{JsError, JsString, Json}
 
-class ChangeWhichTaxYearsSpec extends WordSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues with ModelGenerators {
+class ChangeWhichTaxYearsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with OptionValues with ModelGenerators {
 
   "ChangeWhichTaxYears" must {
 
