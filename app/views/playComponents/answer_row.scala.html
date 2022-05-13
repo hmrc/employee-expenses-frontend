@@ -30,28 +30,28 @@
     }
 }
 
-<li>
-    <div class="cya-question">@Html(messages(row.label, row.labelArgs: _*))</div>
-    <div class="cya-answer">@rowAnswer</div>
-    <div class="cya-change">
+<div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">@Html(messages(row.label, row.labelArgs: _*))</dt>
+    <dd class="govuk-summary-list__value">@rowAnswer</dd>
+    <dd class="govuk-summary-list__actions">
         @if(row.changeUrl) {
-        <a href='@row.changeUrl'>
+        <a class="govuk-link" href='@row.changeUrl'>
             @if(row.editText) {
                 <span aria-hidden="true"> @messages(row.editText.get)</span>
                 @if(row.hiddenText){
-                    <span class="visually-hidden">@messages(row.hiddenText.get)</span>
+                    <span class="govuk-visually-hidden">@messages(row.hiddenText.get)</span>
                 } else {
-                    <span class="visually-hidden">@messages(hiddenLabel)</span>
+                    <span class="govuk-visually-hidden">@messages(hiddenLabel)</span>
                 }
             } else {
                 <span aria-hidden="true">@messages("site.edit")</span>
                 @if(row.hiddenText){
-                    <span class="visually-hidden">@messages(row.hiddenText.get)</span>
+                    <span class="govuk-visually-hidden">@messages(row.hiddenText.get)</span>
                 } else {
-                    <span class="visually-hidden">@messages("site.hidden-edit", messages(row.label, row.labelArgs: _*).toLowerCase)</span>
+                    <span class="govuk-visually-hidden">@messages("site.hidden-edit", messages(row.label, row.labelArgs: _*).toLowerCase)</span>
                 }
             }
         </a>
         }
-    </div>
-</li>
+    </dd>
+</div>

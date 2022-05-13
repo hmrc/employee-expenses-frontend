@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,9 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+        layout: Layout,
+        formHelper: FormWithCSRF,
+        heading: playComponents.heading
 )
 
 @(
@@ -29,33 +30,32 @@
         checkYourAnswersText: CheckYourAnswersText
 )(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("checkYourAnswers.title")
+@layout(
+    pageTitle = messages("checkYourAnswers.title")
 ) {
 
-    @components.heading(s"checkYourAnswers.${checkYourAnswersText.heading}")
+    @heading(headingKey = s"checkYourAnswers.${checkYourAnswersText.heading}")
 
     @for(section <- answerSections) {
         @{
             section match {
-                case a: AnswerSection => components.answer_section(a)
-                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
+                case a: AnswerSection => playComponents.answer_section(a)
+                case r: RepeaterAnswerSection => playComponents.repeater_answer_section(r)
             }
         }
     }
 
 
-    <h2>@messages(s"checkYourAnswers.${checkYourAnswersText.disclaimerHeading}")</h2>
-    <p>@messages(s"checkYourAnswers.${checkYourAnswersText.disclaimer}")</p>
+    <h2 class="govuk-heading-m">@messages(s"checkYourAnswers.${checkYourAnswersText.disclaimerHeading}")</h2>
+    <p class="govuk-body">@messages(s"checkYourAnswers.${checkYourAnswersText.disclaimer}")</p>
 
-    <div class="notice">
-        <i class="icon icon-important">
-            <span class="visually-hidden">@messages("checkYourAnswers.warning")</span>
-        </i>
-        <strong class="bold-small">
-        @messages("checkYourAnswers.prosecuted")
+    <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+            <span class="govuk-warning-text__assistive">>@messages("checkYourAnswers.warning")</span>
+            @messages("checkYourAnswers.prosecuted")
         </strong>
     </div>
 
-    @components.button_link(messages(s"site.${checkYourAnswersText.button}"), CheckYourAnswersController.acceptAndClaim.url, id="submit")
+    @playComponents.button_link(messageKey = s"site.${checkYourAnswersText.button}", href = CheckYourAnswersController.acceptAndClaim.url, id="submit", classes="govuk-button")
 }

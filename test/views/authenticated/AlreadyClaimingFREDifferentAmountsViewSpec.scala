@@ -21,7 +21,7 @@ import models.{AlreadyClaimingFREDifferentAmounts, FlatRateExpense, FlatRateExpe
 import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.authenticated.AlreadyClaimingFREDifferentAmountsView
 
 class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[AlreadyClaimingFREDifferentAmounts] {
@@ -79,13 +79,13 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
     "contains correct column values for table" in {
       val doc = asDocument(applyViewMultipleYears(form))
 
-      doc.getElementById(s"tax-year-${TaiTaxYear().year}").text mustBe messages(
+      doc.getElementsByClass(s"tax-year-${TaiTaxYear().year}").text mustBe messages(
         s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(TaiTaxYear().year)}",
         TaiTaxYear().year.toString,
         (TaiTaxYear().year + 1).toString
       )
 
-      doc.getElementById(s"fre-amount-${TaiTaxYear().year}").text mustBe messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading","£100")
+      doc.getElementsByClass(s"fre-amount-${TaiTaxYear().year}").text mustBe messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading","£100")
     }
   }
 
