@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@
 package views
 
 import forms.MultipleEmploymentsFormProvider
-import models.{MultipleEmployments, NormalMode}
+import models.{CheckMode, MultipleEmployments, NormalMode}
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.OptionsViewBehaviours
@@ -29,7 +30,7 @@ class MultipleEmploymentsViewSpec extends OptionsViewBehaviours[MultipleEmployme
 
   val form = new MultipleEmploymentsFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "MultipleEmployments view" must {
 
@@ -51,8 +52,7 @@ class MultipleEmploymentsViewSpec extends OptionsViewBehaviours[MultipleEmployme
 
     "display RadioButtons inline" in {
       val doc = asDocument(applyView(form))
-
-      doc.getElementById("value").attr("class") mustBe "inline"
+      doc.select("fieldset > div").attr("class") mustBe "govuk-radios govuk-radios--inline"
     }
 
   }

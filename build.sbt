@@ -38,7 +38,12 @@ lazy val root = (project in file("."))
       "uk.gov.hmrc.play.views.html.layouts._",
       "views.ViewUtils._",
       "models.Mode",
-      "controllers.routes._"
+      "controllers.routes._",
+      "uk.gov.hmrc.govukfrontend.views.html.components._",
+      "uk.gov.hmrc.govukfrontend.views.html.helpers._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.components._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.helpers._",
+      "uk.gov.hmrc.govukfrontend.views.html.components.implicits._"
     ),
     PlayKeys.playDefaultPort := 9334,
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*filters.*;.*handlers.*;.*components.*;.*repositories.*;" +
