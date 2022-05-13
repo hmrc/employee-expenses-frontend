@@ -33,13 +33,13 @@ trait ViewBehaviours extends ViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "pageTitle")
+          assertRenderedByCssSelector(doc, "div.govuk-header__content")
         }
 
         "hide account menu when user not logged in" in {
 
           val doc = asDocument(view)
-          doc.getElementById("hideAccountMenu").text mustBe "true"
+          assertNotRenderedById(doc, "secondary-nav")
         }
 
         "display the correct browser title" in {
@@ -67,7 +67,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "langSelector")
+          assertRenderedByCssSelector(doc, "nav.hmrc-language-select")
         }
       }
     }
@@ -82,13 +82,13 @@ trait ViewBehaviours extends ViewSpecBase {
         "show account menu when user logged in" in {
 
           val doc = asDocument(view)
-          doc.getElementById("hideAccountMenu").text mustBe "false"
+          assertRenderedById(doc, "secondary-nav")
         }
 
         "have the sign-out option rendered" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, id = "signOutUrl")
+          doc.select("ul.hmrc-account-menu__main > li:nth-child(5)").text() mustBe "Sign out"
         }
       }
     }
