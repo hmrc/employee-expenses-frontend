@@ -65,8 +65,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
   lazy val ptaBaseUrl = servicesConfig.baseUrl("frontend")
   lazy val ptaHomeUrl = s"$ptaBaseUrl${servicesConfig.getConfString("frontend.urls.home","/personal-account")}"
   lazy val messagesUrl = s"$ptaBaseUrl${servicesConfig.getConfString("frontend.urls.messages","/messages")}"
-  lazy val paperlessSettingsUrl = s"$ptaBaseUrl${servicesConfig.getConfString("frontend.urls.paperlessSettings","/preferences")}"
-  lazy val personalDetailsUrl = s"$ptaBaseUrl${servicesConfig.getConfString("frontend.urls.personalDetails","/personal-details")}"
+  lazy val yourProfileUrl = s"$ptaBaseUrl${servicesConfig.getConfString("frontend.urls.yourProfile","/your-profile")}"
 
   lazy val trackBaseUrl: String = servicesConfig.baseUrl("track-frontend")
   lazy val trackingHomeUrl = s"$trackBaseUrl${servicesConfig.getConfString("track-frontend.urls.home","/track")}"
