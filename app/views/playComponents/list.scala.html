@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@this()
+
 @(
         pageKey: Option[String] = None,
         addCssClass: Option[String] = None,
@@ -30,11 +32,11 @@
 }
 
 @if(listText.isDefined) {
-    <p>@messages(listText.get)</p>
+    <p class="govuk-body">@messages(listText.get)</p>
 }
 
 @list = {
-    <ul class="list list-bullet">
+    <ul class="govuk-list govuk-list--bullet">
     @for(bullet <- bulletList) {
         <li id="bullet-@bullet">@text(bullet)</li>
     }
@@ -42,13 +44,13 @@
 }
 
 @single = {
-    <p id="bullet-@{bulletList.head}">@text(bulletList.head)</p>
+    <p class="govuk-body" id=bullet-@{bulletList.head}">@text(bulletList.head)</p>
 }
 
 <div class="@cssClass" id="component-bullet-list">
-@if(bulletList.size == 1) {
-    @single
-} else {
-    @list
-}
+    @if(bulletList.size == 1) {
+        @single
+    } else {
+        @list
+    }
 </div>
