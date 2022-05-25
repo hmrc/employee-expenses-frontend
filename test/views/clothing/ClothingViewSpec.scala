@@ -22,7 +22,7 @@ import models.NormalMode
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.clothing.ClothingView
 
 class ClothingViewSpec extends YesNoViewBehaviours {
