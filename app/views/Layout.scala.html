@@ -40,17 +40,18 @@ accountMenuEnabled: Boolean = true)(contentBlock: Html)(implicit request: Reques
     @if(request.session.get("authToken")){
         @hmrcAccountMenu(AccountMenu(
             accountHome = AccountHome(
-            href = "#",
+            href = appConfig.ptaHomeUrl,
             active = true
             ),
             messages = AccountMessages(
-            href = "#",
+            href = appConfig.messagesUrl,
             messageCount = None
             ),
             checkProgress = CheckProgress(
-            href = "#"
+            href = appConfig.trackingHomeUrl
             ),
-            personalDetails = PersonalDetails(appConfig.personalDetails),
+            paperlessSettings = PaperlessSettings(appConfig.paperlessSettingsUrl),
+            personalDetails = PersonalDetails(appConfig.personalDetailsUrl),
             signOut = SignOut(appConfig.signOutUrl),
             language = if (messages.lang.code == "cy") Cy else En
         ))
