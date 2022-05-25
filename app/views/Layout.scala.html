@@ -16,6 +16,7 @@
 
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcReportTechnicalIssue
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accountmenu.YourProfile
 
 @this(
     govukLayout: GovukLayout,
@@ -40,17 +41,20 @@ accountMenuEnabled: Boolean = true)(contentBlock: Html)(implicit request: Reques
     @if(request.session.get("authToken")){
         @hmrcAccountMenu(AccountMenu(
             accountHome = AccountHome(
-            href = "#",
-            active = true
+                href = appConfig.ptaHomeUrl,
+                active = true
             ),
             messages = AccountMessages(
-            href = "#",
-            messageCount = None
+                href = appConfig.messagesUrl,
+                messageCount = None
+            ),
+            yourProfile = YourProfile(
+                href = appConfig.yourProfileUrl,
+                active = true
             ),
             checkProgress = CheckProgress(
-            href = "#"
+                href = appConfig.trackingHomeUrl
             ),
-            personalDetails = PersonalDetails(appConfig.personalDetails),
             signOut = SignOut(appConfig.signOutUrl),
             language = if (messages.lang.code == "cy") Cy else En
         ))

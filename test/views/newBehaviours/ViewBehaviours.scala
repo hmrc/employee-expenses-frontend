@@ -23,8 +23,8 @@ import views.NewViewSpecBase
 trait ViewBehaviours extends NewViewSpecBase {
 
   def normalPage(view: HtmlFormat.Appendable,
-                 messageKeyPrefix: String,
-                 expectedGuidanceKeys: String*): Unit = {
+    messageKeyPrefix: String,
+    expectedGuidanceKeys: String*): Unit = {
 
     "behave like a normal page" when {
 
