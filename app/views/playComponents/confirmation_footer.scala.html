@@ -20,17 +20,16 @@
 
 @(address: Option[Address], employerCorrect: Option[Boolean], updateAddressInfoUrl: String, updateEmployerInfoUrl: String)(implicit messages: Messages)
 
-<h2>@messages("confirmation.checkAddress.heading")</h2>
+<h2 class="govuk-heading-l">@messages("confirmation.checkAddress.heading")</h2>
 
 @address match {
 case Some(addr) => {
 
-<p>@messages("confirmation.checkAddress.paragraph1")</p>
+<p class="govuk-body">@messages("confirmation.checkAddress.paragraph1")</p>
 
-<p>@messages("confirmation.checkAddress.paragraph2")</p>
+<p class="govuk-body">@messages("confirmation.checkAddress.paragraph2")</p>
 
-<div class="govuk-inset-text">
-    <div class="form-group panel panel-border-wide" id="citizenDetailsAddress">
+<div class="govuk-inset-text" id="citizenDetailsAddress">
         @if(addr.line1.exists(_.trim.nonEmpty)){@addr.line1<br>}
         @if(addr.line2.exists(_.trim.nonEmpty)){@addr.line2<br>}
         @if(addr.line3.exists(_.trim.nonEmpty)){@addr.line3<br>}
@@ -38,24 +37,23 @@ case Some(addr) => {
         @if(addr.line5.exists(_.trim.nonEmpty)){@addr.line5<br>}
         @if(addr.postcode.exists(_.trim.nonEmpty)){@addr.postcode<br>}
         @if(addr.country.exists(_.trim.nonEmpty)){@addr.country<br>}
-    </div>
 </div>
 }
 case _ => {
 <div id="no-address">
-    <p>@messages("confirmation.checkAddress.noAddress.paragraph1")</p>
-    <p>@messages("confirmation.checkAddress.noAddress.paragraph2")</p>
+    <p class="govuk-body">@messages("confirmation.checkAddress.noAddress.paragraph1")</p>
+    <p class="govuk-body">@messages("confirmation.checkAddress.noAddress.paragraph2")</p>
 </div>
 }
 }
 
-<p><a href="@updateAddressInfoUrl" id="updateAddressBtn">@messages("confirmation.updateAddressInfoNow")</a></p>
+<p><a class="govuk-link" href="@updateAddressInfoUrl" id="updateAddressBtn" target="_blank">@messages("confirmation.updateAddressInfoNow")</a></p>
 
 @if(!employerCorrect.getOrElse(true)) {
 
-<h2>@messages("confirmation.updateEmployerInfo")</h2>
+<h2 class="govuk-heading-l">@messages("confirmation.updateEmployerInfo")</h2>
 
-<p>@messages("confirmation.employerChange")</p>
+<p class="govuk-body">@messages("confirmation.employerChange")</p>
 
-@components.button_link( "confirmation.updateEmployerInfoNow",updateEmployerInfoUrl, true, "updateEmployerInfoBtn")
+@playComponents.button_link( "confirmation.updateEmployerInfoNow",updateEmployerInfoUrl, true, "updateEmployerInfoBtn")
 }
