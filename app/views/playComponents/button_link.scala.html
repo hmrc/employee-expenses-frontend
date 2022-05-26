@@ -16,6 +16,6 @@
 
 @(messageKey: String = "site.continue", href: String, newWindow: Boolean = false, id: String ="continue")(implicit messages: Messages)
 
-<div class="section">
- <a id="@id" href="@href" role="button" class="button" @if(newWindow){target="_blank"}>@messages(messageKey)</a>
-</div>
+<p>
+ <a id="@id" href="@href" role="button" class="govuk-link" @if(newWindow){target="_blank"}>@messages(messageKey)</a>
+<p>

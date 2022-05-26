@@ -15,18 +15,19 @@
  *@
 
 @this(
-        main_template: MainTemplate
+        layout: Layout
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
-    @main_template(
-        title = messages("confirmation.titleStopped")
-    ) {
+@layout(
+    pageTitle = messages("confirmation.titleStopped"),
+    backLinkEnabled = false
+) {
 
-        <div class="govuk-box-highlight">
-            <h1 class="heading-xlarge">@messages("confirmation.heading.stoppedClaim")</h1>
-        </div>
+    <div class="govuk-panel govuk-panel--confirmation">
+        <h1 class="govuk-panel__title">@messages("confirmation.heading.stoppedClaim")</h1>
+    </div>
 
-        <p>@messages("confirmation.noLongerGetAmount")</p>
-    }
+    <p class="govuk-body">@messages("confirmation.noLongerGetAmount")</p>
+}

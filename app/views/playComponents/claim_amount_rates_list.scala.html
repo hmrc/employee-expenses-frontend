@@ -24,18 +24,18 @@
   @rate match {
     case standardRate: StandardRate => {
       @if(claimAmountsAndRates.length > 1) {
-        <h2 class="heading-small">@messages(s"${keyPrefix.get}.englandHeading")</h2>
+        <h3 class="govuk-heading-m">@messages(s"${keyPrefix.get}.englandHeading")</h3>
       }
-      <p>@messages(s"${keyPrefix.get}.basicRate", standardRate.calculatedBasicRate, claimAmount, standardRate.basicRate)</p>
-      <p>@messages(s"${keyPrefix.get}.higherRate", standardRate.calculatedHigherRate, claimAmount, standardRate.higherRate)</p>
+      <p class="govuk-body">@messages(s"${keyPrefix.get}.basicRate", standardRate.calculatedBasicRate, claimAmount, standardRate.basicRate)</p>
+      <p class="govuk-body">@messages(s"${keyPrefix.get}.higherRate", standardRate.calculatedHigherRate, claimAmount, standardRate.higherRate)</p>
     }
     case scottishRate: ScottishRate => {
       @if(claimAmountsAndRates.length > 1) {
-        <h2 class="heading-small">@messages(s"${keyPrefix.get}.scotlandHeading")</h2>
+        <h3 class="govuk-heading-m">@messages(s"${keyPrefix.get}.scotlandHeading")</h3>
       }
-      <p>@messages(s"${keyPrefix.get}.starterRate", scottishRate.calculatedStarterRate, claimAmount, scottishRate.starterRate)</p>
-      <p>@messages(s"${keyPrefix.get}.basicRate", scottishRate.calculatedBasicRate, claimAmount, scottishRate.basicRate)</p>
-      <p>@messages(s"${keyPrefix.get}.intermediateRate", scottishRate.calculatedIntermediateRate, claimAmount, scottishRate.intermediateRate)</p>
+      <p class="govuk-body">@messages(s"${keyPrefix.get}.starterRate", scottishRate.calculatedStarterRate, claimAmount, scottishRate.starterRate)</p>
+      <p class="govuk-body">@messages(s"${keyPrefix.get}.basicRate", scottishRate.calculatedBasicRate, claimAmount, scottishRate.basicRate)</p>
+      <p class="govuk-body">@messages(s"${keyPrefix.get}.intermediateRate", scottishRate.calculatedIntermediateRate, claimAmount, scottishRate.intermediateRate)</p>
     }
   }
 }

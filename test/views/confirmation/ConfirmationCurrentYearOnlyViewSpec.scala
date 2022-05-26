@@ -22,7 +22,7 @@ import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import service.ClaimAmountService
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.confirmation.ConfirmationCurrentYearOnlyView
 
 class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {

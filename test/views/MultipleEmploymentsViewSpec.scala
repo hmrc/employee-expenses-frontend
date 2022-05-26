@@ -21,7 +21,7 @@ import models.{CheckMode, MultipleEmployments, NormalMode}
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.MultipleEmploymentsView
 
 class MultipleEmploymentsViewSpec extends OptionsViewBehaviours[MultipleEmployments] {
