@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +19,23 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    submitButton: playComponents.submit_button,
 )
 
 @(form: Form[Seq[TaxYearSelection]], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("taxYearSelection.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("taxYearSelection.title")}"
     ) {
 
     @formHelper(action = TaxYearSelectionController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_tax_year(
+        @playComponents.input_tax_year(
             field = form("value"),
             legend = messages("taxYearSelection.heading"),
             headingIsLegend = true,
@@ -44,6 +44,6 @@
             textBlock = Some(messages("taxYearSelection.bodyText"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

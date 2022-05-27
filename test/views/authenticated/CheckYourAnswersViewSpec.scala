@@ -22,7 +22,7 @@ import play.api.mvc.Call
 import play.twirl.api.HtmlFormat
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.authenticated.CheckYourAnswersView
 
 class CheckYourAnswersViewSpec extends ViewBehaviours {
