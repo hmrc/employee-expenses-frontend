@@ -58,3 +58,4 @@ trait OptionsViewBehaviours[A] extends ViewBehaviours {
     }
   }
 }
+
