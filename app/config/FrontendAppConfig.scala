@@ -62,7 +62,13 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
   lazy val contactHMRC: String = configuration.get[String]("contactHMRC.url")
   lazy val incomeTaxSummary: String = configuration.get[String]("incomeTaxSummary.url")
 
-  lazy val trackBaseUrl: String = configuration.get[String]("track-frontend.url")
+  lazy val ptaBaseUrl: String = servicesConfig.baseUrl("pertax-frontend")
+  lazy val ptaHomeUrl: String = s"$ptaBaseUrl${servicesConfig.getConfString("pertax-frontend.urls.home","/personal-account")}"
+  lazy val messagesUrl: String = s"$ptaBaseUrl${servicesConfig.getConfString("pertax-frontend.urls.messages","/messages")}"
+  lazy val yourProfileUrl: String = s"$ptaBaseUrl${servicesConfig.getConfString("pertax-frontend.urls.yourProfile","/your-profile")}"
+  lazy val trackBaseUrl: String = servicesConfig.baseUrl("tracking-frontend")
+  lazy val trackingHomeUrl = s"$trackBaseUrl${servicesConfig.getConfString("tracking-frontend.urls.home","/track")}"
+
   lazy val incomeSummary: String = configuration.get[String]("incomeSummary.url")
   lazy val personalDetails: String = configuration.get[String]("personalDetails.url")
 

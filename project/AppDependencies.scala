@@ -18,7 +18,7 @@ object AppDependencies {
     "com.typesafe.play"     %% "play-json-joda"                 % "2.9.0",
     "org.scalatra.scalate"  %% "play-scalate"                   % "0.6.0",
     "org.scalatra.scalate"  %% "scalate-core"                   % "1.9.6",
-    "uk.gov.hmrc"           %% "play-frontend-hmrc"             % "0.88.0-play-28"
+    "uk.gov.hmrc"           %% "play-frontend-hmrc"             % "3.20.0-play-28"
   )
 
 
