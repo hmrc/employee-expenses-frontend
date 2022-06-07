@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,29 +19,40 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    submitButton: playComponents.submit_button,
+    input_radio: playComponents.input_radio
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("constructionOccupations.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("constructionOccupations.title")}"
     ) {
 
     @formHelper(action = ConstructionOccupationsController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio_or(
+        @input_radio(
             field = form("value"),
             legend = messages("constructionOccupations.heading"),
             headingIsLegend = true,
-            inputs = ConstructionOccupations.options
+            inputs = Seq(
+                RadioItem(content = Text(Messages("constructionOccupations.joinerOrCarpenter")), value = Option("joinerOrCarpenter")),
+                RadioItem(content = Text(Messages("constructionOccupations.stoneMason")), value = Option("stoneMason")),
+                RadioItem(content = Text(Messages("constructionOccupations.asphaltOrCement")), value = Option("asphaltOrCement")),
+                RadioItem(content = Text(Messages("constructionOccupations.roofingFelt")), value = Option("roofingFelt")),
+                RadioItem(content = Text(Messages("constructionOccupations.labourerOrNavvy")), value = Option("labourerOrNavvy")),
+                RadioItem(content = Text(Messages("constructionOccupations.tilemaker")), value = Option("tilemaker")),
+                RadioItem(content = Text(Messages("constructionOccupations.buildingMaterials")), value = Option("buildingMaterials")),
+                RadioItem(divider = Some(Messages("site.or"))),
+                RadioItem(content = Text(Messages("constructionOccupations.none")), value = Option("none"))
+            )
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
