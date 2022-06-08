@@ -21,7 +21,7 @@ import forms.electrical.ElectricalFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.electrical.ElectricalView
 
 class ElectricalViewSpec extends YesNoViewBehaviours {
