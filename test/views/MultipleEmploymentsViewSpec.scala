@@ -52,8 +52,7 @@ class MultipleEmploymentsViewSpec extends OptionsViewBehaviours[MultipleEmployme
 
     "display RadioButtons inline" in {
       val doc = asDocument(applyView(form))
-      doc.select("fieldset > div").attr("class") mustBe "govuk-radios govuk-radios--inline"
-    }
+      doc.select("fieldset > div").attr("class").contains("govuk-radios--inline") }
 
   }
 

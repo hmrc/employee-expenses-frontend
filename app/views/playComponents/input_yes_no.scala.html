@@ -32,7 +32,7 @@
     Radios(
         fieldset = Some(Fieldset(
             legend = Some(Legend(
-            classes = labelClass.getOrElse("govuk-label--l"),
+            classes = labelClass.getOrElse("govuk-fieldset__legend--xl"),
             content = Text(label),
             isPageHeading = headingIsLegend
         ))
@@ -43,7 +43,7 @@
         RadioItem(content = Text(Messages("site.yes")), value = Option("true")),
         RadioItem(content = Text(Messages("site.no")), value = Option("false"))
     ),
-    classes = "govuk-radios--inline"
+    classes = "govuk-radios--inline govuk-!-margin-top-5"
     ).withFormField(field)
 )
 
