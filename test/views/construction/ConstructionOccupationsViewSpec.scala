@@ -20,7 +20,7 @@ import forms.construction.ConstructionOccupationsFormProvider
 import models.{ConstructionOccupations, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.construction.ConstructionOccupationsView
 
 class ConstructionOccupationsViewSpec extends OptionsViewBehaviours[ConstructionOccupations] {
@@ -36,6 +36,7 @@ class ConstructionOccupationsViewSpec extends OptionsViewBehaviours[Construction
   def applyView(form: Form[_]): HtmlFormat.Appendable =
     view.apply(form, NormalMode)(fakeRequest, messages)
 
+
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
@@ -47,13 +48,13 @@ class ConstructionOccupationsViewSpec extends OptionsViewBehaviours[Construction
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, ConstructionOccupations.options)
+    behave like optionsPage(form, applyView, ConstructionOccupations.options, true)
 
     "must have the correct text of 'or' between last 2 radioButtons" in {
 
       val doc = asDocument(applyView(form))
 
-      doc.getElementsByClass("form-block").text() mustBe messages("site.or")
+      doc.getElementsByClass("govuk-radios__divider").text() mustBe messages("site.or")
     }
   }
 
