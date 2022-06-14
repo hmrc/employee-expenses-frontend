@@ -20,7 +20,7 @@ import forms.engineering.AncillaryEngineeringWhichTradeFormProvider
 import models.{AncillaryEngineeringWhichTrade, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.engineering.AncillaryEngineeringWhichTradeView
 
 class AncillaryEngineeringWhichTradeViewSpec extends OptionsViewBehaviours[AncillaryEngineeringWhichTrade] {
@@ -47,7 +47,7 @@ class AncillaryEngineeringWhichTradeViewSpec extends OptionsViewBehaviours[Ancil
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, AncillaryEngineeringWhichTrade.options)
+    behave like optionsPage(form, applyView, AncillaryEngineeringWhichTrade.options, true)
   }
 
   application.stop()
