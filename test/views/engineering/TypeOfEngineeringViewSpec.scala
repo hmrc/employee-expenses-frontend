@@ -21,7 +21,7 @@ import models.{NormalMode, TypeOfEngineering}
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.engineering.TypeOfEngineeringView
 
 class TypeOfEngineeringViewSpec extends OptionsViewBehaviours[TypeOfEngineering] {
@@ -48,7 +48,7 @@ class TypeOfEngineeringViewSpec extends OptionsViewBehaviours[TypeOfEngineering]
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, TypeOfEngineering.options)
+    behave like optionsPage(form, applyView, TypeOfEngineering.options, true)
 
     behave like pageWithBodyText(applyView(form), "typeOfEngineering.heading")
   }
