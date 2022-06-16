@@ -19,27 +19,30 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+        layout: Layout,
+        formHelper: FormWithCSRF,
+        errorSummary: playComponents.error_summary,
+        submitButton: playComponents.submit_button,
+        input_yes_no: playComponents.input_yes_no,
+        heading: playComponents.heading,
+        list: playComponents.list
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("healthcareList1.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("healthcareList1.title")}"
 ) {
 
     @formHelper(action = HealthcareList1Controller.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.heading(
+        @heading(
             headingKey = "healthcareList1.heading"
         )
 
-        @components.list(
+        @list(
             pageKey = Some("healthcareList1"),
             listText = Some("healthcareList1.listText"),
             bulletList = Seq(
@@ -52,14 +55,14 @@
 
             )
         )
-        <div class="section">
-            @components.input_yes_no(
+        <div class="section govuk-!-margin-top-9">
+            @input_yes_no(
                 field = form("value"),
                 label = messages("healthcareList1.radioLabel"),
-                labelClass = Some("heading-medium u-margin-top--0-5em")
+                labelClass = Some("govuk-label--m")
             )
 
-            @components.submit_button()
+            @submitButton()
         </div>
     }
 }
