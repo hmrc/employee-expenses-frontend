@@ -21,7 +21,7 @@
 @()(implicit messages: Messages)
 
 @govukBackLink(BackLink(
-    href = "#",
+    href = "javascript:history.back()",
     content = Text(messages("site.back")),
     attributes = Map("id" -> "back-link")
 ))

@@ -20,7 +20,7 @@ import forms.healthcare.HealthcareList1FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.healthcare.HealthcareList1View
 
 class HealthcareList1ViewSpec extends YesNoViewBehaviours {
