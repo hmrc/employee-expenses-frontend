@@ -20,7 +20,7 @@ import forms.WoodFurnitureOccupationList2FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.manufacturing.WoodFurnitureOccupationList2View
 
 class WoodFurnitureOccupationList2ViewSpec extends YesNoViewBehaviours {

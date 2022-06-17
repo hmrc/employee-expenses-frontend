@@ -20,7 +20,7 @@ import forms.manufacturing.TypeOfManufacturingFormProvider
 import models.{NormalMode, TypeOfManufacturing}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.manufacturing.TypeOfManufacturingView
 
 class TypeOfManufacturingViewSpec extends OptionsViewBehaviours[TypeOfManufacturing] {
@@ -47,7 +47,7 @@ class TypeOfManufacturingViewSpec extends OptionsViewBehaviours[TypeOfManufactur
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, TypeOfManufacturing.options)
+    behave like optionsPage(form, applyView, TypeOfManufacturing.options, true)
   }
 
   application.stop()
