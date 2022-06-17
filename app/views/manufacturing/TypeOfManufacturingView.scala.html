@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,29 +19,39 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+        layout: Layout,
+        formHelper: FormWithCSRF,
+        errorSummary: playComponents.error_summary,
+        submitButton: playComponents.submit_button,
+        input_radio: playComponents.input_radio
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("typeOfManufacturing.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("typeOfManufacturing.title")}"
     ) {
 
     @formHelper(action = TypeOfManufacturingController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio_or(
+        @input_radio(
             field = form("value"),
             legend = messages("typeOfManufacturing.heading"),
-            inputs = TypeOfManufacturing.options,
+            inputs = Seq(
+                RadioItem(content = Text(Messages("typeOfManufacturing.aluminium")), value = Option("aluminium")),
+                RadioItem(content = Text(Messages("typeOfManufacturing.brassCopper")), value = Option("brassCopper")),
+                RadioItem(content = Text(Messages("typeOfManufacturing.glass")), value = Option("glass")),
+                RadioItem(content = Text(Messages("typeOfManufacturing.ironSteel")), value = Option("ironSteel")),
+                RadioItem(content = Text(Messages("typeOfManufacturing.preciousMetals")), value = Option("preciousMetals")),
+                RadioItem(content = Text(Messages("typeOfManufacturing.woodFurniture")), value = Option("woodFurniture")),
+                RadioItem(divider = Some(Messages("site.or"))),
+                RadioItem(content = Text(Messages("typeOfManufacturing.none")), value = Option("none"))
+            ),
             headingIsLegend = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
