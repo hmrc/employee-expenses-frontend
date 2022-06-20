@@ -14,8 +14,14 @@
  * limitations under the License.
  *@
 
-@(messageKey: String = "site.continue", href: String, newWindow: Boolean = false, id: String ="continue")(implicit messages: Messages)
+@(
+  messageKey: String = "site.continue",
+  href: String,
+  newWindow: Boolean = false,
+  id: String ="continue",
+  classes: String = "govuk-link"
+)(implicit messages: Messages)
 
 <p>
- <a id="@id" href="@href" role="button" class="govuk-link" @if(newWindow){target="_blank"}>@messages(messageKey)</a>
+ <a id="@id" href="@href" role="button" class=@classes @if(newWindow){target="_blank"}>@messages(messageKey)</a>
 <p>
