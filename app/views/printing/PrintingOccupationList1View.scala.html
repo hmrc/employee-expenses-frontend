@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,27 +19,30 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    heading: playComponents.heading,
+    list: playComponents.list,
+    input_yes_no: playComponents.input_yes_no,
+    submitButton: playComponents.submit_button
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("printingOccupationList1.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("printingOccupationList1.title")}"
     ) {
 
     @formHelper(action = PrintingOccupationList1Controller.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.heading(
+        @heading(
             headingKey = "printingOccupationList1.heading"
         )
 
-        @components.list(
+        @list(
             pageKey = Some("printingOccupationList1"),
             listText = Some("printingOccupationList1.listText"),
             bulletList = Seq(
@@ -50,14 +53,14 @@
                 "occupation5"
             )
         )
-        <div class="section">
-            @components.input_yes_no(
+        <div class="section govuk-!-margin-top-9">
+            @input_yes_no(
                 field = form("value"),
                 label = messages("printingOccupationList1.radioLabel"),
-                labelClass = Some("heading-medium u-margin-top--0-5em")
+                labelClass = Some("govuk-label--m")
             )
 
-            @components.submit_button()
+            @submitButton()
         </div>
     }
 }
