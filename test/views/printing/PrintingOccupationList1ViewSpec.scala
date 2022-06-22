@@ -21,7 +21,7 @@ import forms.printing.PrintingOccupationList1FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.printing.PrintingOccupationList1View
 
 class PrintingOccupationList1ViewSpec extends YesNoViewBehaviours {
