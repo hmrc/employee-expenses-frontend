@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ class TaxYearSelectionController @Inject()(
                   } yield
                     Redirect(navigator.nextPage(TaxYearSelectionPage, mode)(ua3))
             case _ =>
-              Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+              Future.successful(Redirect(SessionExpiredController.onPageLoad))
           }
         }
       )

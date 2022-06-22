@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class SecurityNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired when not a security page" in {
             navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
-              SessionExpiredController.onPageLoad()
+              SessionExpiredController.onPageLoad
           }
 
           "go to EmployerContribution when 'Yes' is selected" in {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     case FactoryEngineeringList1Page => factoryEngineeringList1(NormalMode)
     case FactoryEngineeringList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case FactoryEngineeringApprenticePage => factoryEngineeringApprentice(NormalMode)
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case _ => _ => routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -50,7 +50,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     case FactoryEngineeringList1Page => factoryEngineeringList1(CheckMode)
     case FactoryEngineeringList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case FactoryEngineeringApprenticePage => factoryEngineeringApprentice(CheckMode)
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case _ => _ => routes.SessionExpiredController.onPageLoad
   }
 
   private def typeOfEngineeringOptions(mode: Mode)(userAnswers: UserAnswers): Call = {
@@ -59,7 +59,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
       case Some(TradesRelatingToEngineering) => controllers.engineering.routes.AncillaryEngineeringWhichTradeController.onPageLoad(mode)
       case Some(FactoryOrWorkshopEngineering) => controllers.engineering.routes.FactoryEngineeringApprenticeController.onPageLoad(mode)
       case Some(NoneOfTheAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -67,7 +67,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     userAnswers.get(ConstructionalEngineeringApprenticePage) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.engineering.routes.ConstructionalEngineeringList1Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -75,7 +75,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     userAnswers.get(ConstructionalEngineeringList1Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.engineering.routes.ConstructionalEngineeringList2Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -83,14 +83,14 @@ class EngineeringNavigator @Inject()() extends Navigator {
     userAnswers.get(ConstructionalEngineeringList2Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.engineering.routes.ConstructionalEngineeringList3Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
   private def ancillaryEngineeringWhichTrade(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(AncillaryEngineeringWhichTradePage) match {
       case Some(_) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -98,7 +98,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     userAnswers.get(FactoryEngineeringList1Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.engineering.routes.FactoryEngineeringList2Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -106,7 +106,7 @@ class EngineeringNavigator @Inject()() extends Navigator {
     userAnswers.get(FactoryEngineeringApprenticePage) match {
       case Some(true)  => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.engineering.routes.FactoryEngineeringList1Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 }

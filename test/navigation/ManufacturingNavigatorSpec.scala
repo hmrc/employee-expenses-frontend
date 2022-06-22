@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 
         "go to SessionExpired when not a ManufacturingPage" in {
           navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
-            controllers.routes.SessionExpiredController.onPageLoad()
+            controllers.routes.SessionExpiredController.onPageLoad
         }
 
         "on TypeOfManufacturingController" must {
@@ -85,7 +85,7 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to Session Expired when no option available" in {
             navigator.nextPage(TypeOfManufacturingPage, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
         }
 
@@ -105,7 +105,7 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired from AluminiumApprentice when AluminiumApprenticePage when empty user answers" in {
             navigator.nextPage(AluminiumApprenticePage, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
 
           "go to EmployerContributionController from AluminiumOccupationList1 when 'Yes' is selected" in {
@@ -122,7 +122,7 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired from AluminiumOccupationList1 when empty user answers" in {
             navigator.nextPage(AluminiumOccupationList1Page, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
 
           "go to EmployerContributionController from AluminiumOccupatinoList2 when 'Yes' is selected" in {
@@ -139,7 +139,7 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired from AluminiumOccupationList2 when empty user answers" in {
             navigator.nextPage(AluminiumOccupationList2Page, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
 
           "go to EmployerContributionController from AluminiumOccupationList3 when 'Yes' is selected" in {
@@ -170,7 +170,7 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired from IronMiningController when empty user answers" in {
             navigator.nextPage(IronMiningPage, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
 
           "go to EmployerContributionController from IronMiningListController when 'Yes' is selected" in {
@@ -211,7 +211,7 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired from IronApprentice when empty user answers" in {
             navigator.nextPage(IronApprenticePage, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
         }
 
@@ -230,7 +230,7 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired from WoodFurnitureOccupationList1 when empty user answers" in {
             navigator.nextPage(WoodFurnitureOccupationList1Page, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
 
           "go to EmployerContributionController from WoodFurnitureOccupationList2 when 'Yes' is selected" in {
@@ -247,7 +247,7 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired from WoodFurnitureOccupationList2 when empty user answers" in {
             navigator.nextPage(WoodFurnitureOccupationList2Page, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
 
           "go to EmployerContributionController from WoodFurnitureOccupationList3 when 'Yes' is selected" in {

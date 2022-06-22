@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired when no TypeOfEngineeringPage in UserAnswers" in {
             navigator.nextPage(TypeOfEngineeringPage, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
         }
 
@@ -88,7 +88,7 @@ class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired when no ConstructionalEngineeringApprenticePage in UserAnswers" in {
             navigator.nextPage(ConstructionalEngineeringApprenticePage, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
         }
 
@@ -110,7 +110,7 @@ class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired when no ConstructionalEngineeringList1Page in UserAnswers" in {
             navigator.nextPage(ConstructionalEngineeringList1Page, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
         }
 
@@ -132,7 +132,7 @@ class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired when no ConstructionalEngineeringList2Page in UserAnswers" in {
             navigator.nextPage(ConstructionalEngineeringList2Page, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
         }
 
@@ -166,7 +166,7 @@ class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired when no AncillaryEngineeringWhichTradePage in UserAnswers" in {
             navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
         }
 
@@ -190,7 +190,7 @@ class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired when no FactoryEngineeringList1Page in UserAnswers" in {
             navigator.nextPage(FactoryEngineeringList1Page, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
         }
 
@@ -229,13 +229,13 @@ class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired when no FactoryEngineeringApprenticePage in UserAnswers" in {
             navigator.nextPage(FactoryEngineeringApprenticePage, mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
         }
 
         "go to SessionExpired when not one of the EngineeringPage" in {
           navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
-            controllers.routes.SessionExpiredController.onPageLoad()
+            controllers.routes.SessionExpiredController.onPageLoad
         }
       }
     }

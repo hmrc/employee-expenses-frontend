@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ class YourEmployerController @Inject()(
               Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(NormalMode)))
           }
         case _ =>
-          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+          Future.successful(Redirect(SessionExpiredController.onPageLoad))
       }
   }
 
@@ -101,7 +101,7 @@ class YourEmployerController @Inject()(
             }
           )
         case _ =>
-          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+          Future.successful(Redirect(SessionExpiredController.onPageLoad))
       }
   }
 }

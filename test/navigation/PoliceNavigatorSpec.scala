@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ class PoliceNavigatorSpec extends SpecBase with MockitoSugar {
 
         "go to SessionExpired when not a police page" in {
           navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
-            SessionExpiredController.onPageLoad()
+            SessionExpiredController.onPageLoad
         }
 
         "on SpecialConstableController" must {
@@ -54,7 +54,7 @@ class PoliceNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired when None" in {
             navigator.nextPage(SpecialConstablePage, mode)(emptyUserAnswers) mustBe
-              SessionExpiredController.onPageLoad()
+              SessionExpiredController.onPageLoad
           }
         }
 
@@ -74,7 +74,7 @@ class PoliceNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired when None" in {
             navigator.nextPage(CommunitySupportOfficerPage, mode)(emptyUserAnswers) mustBe
-              SessionExpiredController.onPageLoad()
+              SessionExpiredController.onPageLoad
           }
         }
 
@@ -95,7 +95,7 @@ class PoliceNavigatorSpec extends SpecBase with MockitoSugar {
 
           "go to SessionExpired when None" in {
             navigator.nextPage(MetropolitanPolicePage, mode)(emptyUserAnswers) mustBe
-              SessionExpiredController.onPageLoad()
+              SessionExpiredController.onPageLoad
           }
         }
 

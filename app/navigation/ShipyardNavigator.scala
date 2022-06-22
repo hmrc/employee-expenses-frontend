@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ class ShipyardNavigator @Inject()() extends Navigator {
     case ShipyardOccupationList1Page => shipyardOccupationList1(NormalMode)
     case ShipyardOccupationList2Page => shipyardOccupationList2(NormalMode)
     case LabourerPage                => _ => EmployerContributionController.onPageLoad(NormalMode)
-    case _ => _                      => routes.SessionExpiredController.onPageLoad()
+    case _ => _                      => routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -40,7 +40,7 @@ class ShipyardNavigator @Inject()() extends Navigator {
     case ShipyardOccupationList1Page => shipyardOccupationList1(CheckMode)
     case ShipyardOccupationList2Page => shipyardOccupationList2(CheckMode)
     case LabourerPage                => _ => EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _                      => routes.SessionExpiredController.onPageLoad()
+    case _ => _                      => routes.SessionExpiredController.onPageLoad
   }
 
 
@@ -48,7 +48,7 @@ class ShipyardNavigator @Inject()() extends Navigator {
     userAnswers.get(ShipyardApprenticeStorekeeperPage) match {
       case Some(true) => EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.shipyard.routes.ShipyardOccupationList1Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -56,7 +56,7 @@ class ShipyardNavigator @Inject()() extends Navigator {
     userAnswers.get(ShipyardOccupationList1Page) match {
       case Some(true) => EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.shipyard.routes.ShipyardOccupationList2Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -64,7 +64,7 @@ class ShipyardNavigator @Inject()() extends Navigator {
     userAnswers.get(ShipyardOccupationList2Page) match {
       case Some(true) => EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.shipyard.routes.LabourerController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 }

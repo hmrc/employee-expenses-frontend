@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ class PoliceNavigator @Inject()() extends Navigator {
     case CommunitySupportOfficerPage  => communitySupportOfficer(NormalMode)
     case MetropolitanPolicePage       => metropolitanPolice(NormalMode)
     case PoliceOfficerPage            => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case _                            => _ => controllers.routes.SessionExpiredController.onPageLoad()
+    case _                            => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -39,14 +39,14 @@ class PoliceNavigator @Inject()() extends Navigator {
     case CommunitySupportOfficerPage  => communitySupportOfficer(CheckMode)
     case MetropolitanPolicePage       => metropolitanPolice(CheckMode)
     case PoliceOfficerPage            => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
   def specialConstable(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(SpecialConstablePage) match {
       case Some(true)   => controllers.routes.CannotClaimExpenseController.onPageLoad()
       case Some(false)  => routes.CommunitySupportOfficerController.onPageLoad(mode)
-      case _            => controllers.routes.SessionExpiredController.onPageLoad()
+      case _            => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -54,7 +54,7 @@ class PoliceNavigator @Inject()() extends Navigator {
     userAnswers.get(CommunitySupportOfficerPage) match {
       case Some(true)   => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false)  => routes.MetropolitanPoliceController.onPageLoad(mode)
-      case _            => controllers.routes.SessionExpiredController.onPageLoad()
+      case _            => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -62,7 +62,7 @@ class PoliceNavigator @Inject()() extends Navigator {
     userAnswers.get(MetropolitanPolicePage) match {
       case Some(true)    => controllers.routes.CannotClaimExpenseController.onPageLoad()
       case Some(false)   => routes.PoliceOfficerController.onPageLoad(mode)
-      case _             => controllers.routes.SessionExpiredController.onPageLoad()
+      case _             => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 }

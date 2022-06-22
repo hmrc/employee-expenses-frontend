@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,11 @@ class SecurityNavigator @Inject()() extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case SecurityGuardNHSPage => _ => routes.EmployerContributionController.onPageLoad(NormalMode)
-    case _                    => _ => routes.SessionExpiredController.onPageLoad()
+    case _                    => _ => routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case SecurityGuardNHSPage => _ => routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => routes.SessionExpiredController.onPageLoad()
+    case _ => _ => routes.SessionExpiredController.onPageLoad
   }
 }

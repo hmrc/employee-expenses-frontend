@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ class TransportNavigator @Inject()() extends Navigator {
     case TransportCarpenterPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case TransportVehicleTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case CabinCrewPage              => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -46,7 +46,7 @@ class TransportNavigator @Inject()() extends Navigator {
     case TransportCarpenterPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case TransportVehicleTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case CabinCrewPage              => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
   private def typeOfTransportOptions(mode: Mode)(userAnswers: UserAnswers): Call = {
@@ -57,7 +57,7 @@ class TransportNavigator @Inject()() extends Navigator {
       case Some(SeamanCarpenter) => routes.TransportCarpenterController.onPageLoad(mode)
       case Some(Vehicles) => routes.TransportVehicleTradeController.onPageLoad(mode)
       case Some(NoneOfTheAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -65,7 +65,7 @@ class TransportNavigator @Inject()() extends Navigator {
     userAnswers.get(AirlineJobListPage) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.CabinCrewController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 }

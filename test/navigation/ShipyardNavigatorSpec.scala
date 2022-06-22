@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class ShipyardNavigatorSpec extends SpecBase with MockitoSugar {
 
         "go to SessionExpired when not a shipyard page" in {
           navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
-            SessionExpiredController.onPageLoad()
+            SessionExpiredController.onPageLoad
         }
 
         "go to EmployerContributionPage when Appprentice 'yes' is selected" in {
@@ -55,7 +55,7 @@ class ShipyardNavigatorSpec extends SpecBase with MockitoSugar {
 
         "go to SessionExpired when Appprentice None" in {
           navigator.nextPage(ShipyardApprenticeStorekeeperPage, mode)(emptyUserAnswers) mustBe
-            controllers.routes.SessionExpiredController.onPageLoad()
+            controllers.routes.SessionExpiredController.onPageLoad
         }
 
         "go to EmployerContributionPage when ShipyardOccupationList1 'Yes selected" in {
@@ -74,7 +74,7 @@ class ShipyardNavigatorSpec extends SpecBase with MockitoSugar {
 
         "go to SessionExpired when ShipyardOccupationList1 None" in {
           navigator.nextPage(ShipyardOccupationList1Page, mode)(emptyUserAnswers) mustBe
-            controllers.routes.SessionExpiredController.onPageLoad()
+            controllers.routes.SessionExpiredController.onPageLoad
         }
 
         "go to EmployerContributionPage when ShipyardOccupationList2 'Yes selected" in {
@@ -93,7 +93,7 @@ class ShipyardNavigatorSpec extends SpecBase with MockitoSugar {
 
         "go to SessionExpired when ShipyardOccupationList2 None" in {
           navigator.nextPage(ShipyardOccupationList2Page, mode)(emptyUserAnswers) mustBe
-            controllers.routes.SessionExpiredController.onPageLoad()
+            controllers.routes.SessionExpiredController.onPageLoad
         }
 
         "go to EmployerContributionPage when Labourer 'Yes selected" in {

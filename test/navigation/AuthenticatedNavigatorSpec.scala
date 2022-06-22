@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
             .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
-            CheckYourAnswersController.onPageLoad()
+            CheckYourAnswersController.onPageLoad
         }
 
         "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
@@ -75,7 +75,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
         "go to SessionExpired if no answer" in {
           navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(emptyUserAnswers) mustBe
-            SessionExpiredController.onPageLoad()
+            SessionExpiredController.onPageLoad
         }
       }
 
@@ -104,7 +104,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
         "go to SessionExpired if no answer" in {
           navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, NormalMode)(emptyUserAnswers) mustBe
-            SessionExpiredController.onPageLoad()
+            SessionExpiredController.onPageLoad
         }
       }
 
@@ -112,12 +112,12 @@ class AuthenticatedNavigatorSpec extends SpecBase {
         val ua = emptyUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
 
         navigator.nextPage(RemoveFRECodePage, NormalMode)(ua) mustBe
-          CheckYourAnswersController.onPageLoad()
+          CheckYourAnswersController.onPageLoad
       }
 
       "go to Check Your Answers from ChangeWhichTaxYearsPage" in {
         navigator.nextPage(ChangeWhichTaxYearsPage, NormalMode)(emptyUserAnswers) mustBe
-          CheckYourAnswersController.onPageLoad()
+          CheckYourAnswersController.onPageLoad
       }
 
       "go to YourAddressController from YourEmployer when answered true" in {
@@ -141,12 +141,12 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "go to SessionExpired from YourEmployer when YourEmployerPage is not in UserAnswers" in {
         navigator.nextPage(YourEmployerPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       "go to SessionExpired from TaxYearSelectionPage when FREResponse is not in UserAnswers" in {
         navigator.nextPage(TaxYearSelectionPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       "go to YourAddressController from CheckYourAnswers for when remove selected" in {
@@ -165,7 +165,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
         val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Remove).success.value
 
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
-          SubmissionController.onSubmit()
+          SubmissionController.onSubmit
       }
 
       "go to YourEmployerController from YourAddressController for when current year selected" in {
@@ -208,7 +208,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "go from 'HowYouWillGetYourExpenses' to 'SubmissionController.onSubmit'" in {
         navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(currentYearFullUserAnswers)
-          .mustBe(SubmissionController.onSubmit())
+          .mustBe(SubmissionController.onSubmit)
       }
 
       "go from 'SubmissionController' to 'Confirmation page' for current year" in {
@@ -234,7 +234,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "go to CheckYourAnswers from UpdateYourAddressPage" in {
         navigator.nextPage(UpdateYourAddressPage, CheckMode)(emptyUserAnswers) mustBe
-          CheckYourAnswersController.onPageLoad()
+          CheckYourAnswersController.onPageLoad
       }
 
       "go to HowYouWillGetYourExpenses from UpdateEmployerInformation when YourAddress is defined" in {
@@ -248,13 +248,13 @@ class AuthenticatedNavigatorSpec extends SpecBase {
       "go to CheckYourAnswers from ChangeWhichTaxYear when YourEmployer is not defined and CurrentYear is selected" in {
         val userAnswers = emptyUserAnswers.set(ChangeWhichTaxYearsPage, Seq(CurrentYear)).success.value
         navigator.nextPage(ChangeWhichTaxYearsPage, CheckMode)(userAnswers) mustBe
-          CheckYourAnswersController.onPageLoad()
+          CheckYourAnswersController.onPageLoad
       }
 
       "go to CheckYourAnswers from ChangeWhichTaxYear when YourEmployer is not defined and CurrentYear is not selected" in {
         val userAnswers = emptyUserAnswers.set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
         navigator.nextPage(ChangeWhichTaxYearsPage, CheckMode)(userAnswers) mustBe
-          CheckYourAnswersController.onPageLoad()
+          CheckYourAnswersController.onPageLoad
       }
 
       "go to CheckYourAnswers from ChangeWhichTaxYear when YourEmployer is defined and CurrentYear is selected" in {
@@ -262,7 +262,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
           .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
 
         navigator.nextPage(ChangeWhichTaxYearsPage, CheckMode)(userAnswers) mustBe
-          CheckYourAnswersController.onPageLoad()
+          CheckYourAnswersController.onPageLoad
       }
 
       "from TaxYearSelection" must {
@@ -271,7 +271,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
             .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
-            CheckYourAnswersController.onPageLoad()
+            CheckYourAnswersController.onPageLoad
         }
 
         "go to Check your answers when answered and freResponse returns FRENoYears and doesn't have  currentYear" in {
@@ -279,7 +279,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
             .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
-            CheckYourAnswersController.onPageLoad()
+            CheckYourAnswersController.onPageLoad
         }
 
         "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
@@ -300,7 +300,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
           val ua = emptyUserAnswers.set(FREResponse, TechnicalDifficulties).success.value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
-            TechnicalDifficultiesController.onPageLoad()
+            TechnicalDifficultiesController.onPageLoad
         }
       }
 
@@ -321,7 +321,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
         "go to SessionExpired if no answer" in {
           navigator.nextPage(AlreadyClaimingFRESameAmountPage, CheckMode)(emptyUserAnswers) mustBe
-            SessionExpiredController.onPageLoad()
+            SessionExpiredController.onPageLoad
         }
       }
 
@@ -349,12 +349,12 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
         "go to SessionExpired if no answer" in {
           navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, CheckMode)(emptyUserAnswers) mustBe
-            SessionExpiredController.onPageLoad()
+            SessionExpiredController.onPageLoad
         }
 
         "go to SessionExpired from TaxYearSelectionPage when FREResponse is not in UserAnswers" in {
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(emptyUserAnswers) mustBe
-            SessionExpiredController.onPageLoad()
+            SessionExpiredController.onPageLoad
         }
       }
 
@@ -362,7 +362,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
         val ua = emptyUserAnswers.set(CitizenDetailsAddress, address).success.value
 
         navigator.nextPage(YourAddressPage, CheckMode)(ua) mustBe
-          CheckYourAnswersController.onPageLoad()
+          CheckYourAnswersController.onPageLoad
       }
     }
   }
