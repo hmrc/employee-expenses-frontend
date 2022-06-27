@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ class GenericNavigatorSpec extends SpecBase {
 
         case object UnknownPage extends Page
         navigator.nextPage(UnknownPage, NormalMode)(UserAnswers(userAnswersId)) mustBe
-          IndexController.onPageLoad()
+          IndexController.onPageLoad
       }
 
       // Claim Amount
@@ -72,7 +72,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
         navigator.nextPage(MultipleEmploymentsPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //FirstIndustryOptionsPage
@@ -121,7 +121,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from FirstIndustryOptionsPage when no data is available" in {
         navigator.nextPage(FirstIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //SecondIndustryOptionsPage
@@ -163,7 +163,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from SecondIndustryOptionsPage when no data is available" in {
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //ThirdIndustryOptionsPage
@@ -212,7 +212,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from ThirdIndustryOptionsPage when no data is available" in {
         navigator.nextPage(ThirdIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //FourthIndustryOptionsPage
@@ -261,7 +261,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from FourthIndustryOptionsPage when no data is available" in {
         navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
 
       }
 
@@ -311,7 +311,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from FifthIndustryOptionsPage when no data is available" in {
         navigator.nextPage(FifthIndustryOptionsPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //EmployerContributionPage
@@ -332,7 +332,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from EmployerContributionPage when no data is available" in {
         navigator.nextPage(EmployerContributionPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //ExpensesEmployerPaidPage
@@ -355,7 +355,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from ExpensesEmployerPaidPage when no data is available" in {
         navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //SameEmployerContributionAllYearsPage
@@ -375,7 +375,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from SameEmployerContributionAllYearsPage when no data is available" in {
         navigator.nextPage(SameEmployerContributionAllYearsPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       "go to TaxYearSelectionController from ClaimAmountPage" in {
@@ -388,7 +388,7 @@ class GenericNavigatorSpec extends SpecBase {
       "go to CheckYourAnswers from a page that doesn't exist in the edit route map" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, CheckMode)(UserAnswers(userAnswersId)) mustBe CheckYourAnswersController.onPageLoad()
+        navigator.nextPage(UnknownPage, CheckMode)(UserAnswers(userAnswersId)) mustBe CheckYourAnswersController.onPageLoad
       }
 
       //EmployerContributionPage
@@ -409,7 +409,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from EmployerContributionPage when no data is available" in {
         navigator.nextPage(EmployerContributionPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //ExpensesEmployerPaidPage
@@ -432,7 +432,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from ExpensesEmployerPaidPage when no data is available" in {
         navigator.nextPage(ExpensesEmployerPaidPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //SameEmployerContributionAllYearsPage
@@ -452,11 +452,11 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from SameEmployerContributionAllYearsPage when no data is available" in {
         navigator.nextPage(SameEmployerContributionAllYearsPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       "go to TaxYearSelectionController from ClaimAmountPage" in {
-        navigator.nextPage(ClaimAmount, CheckMode)(emptyUserAnswers) mustBe CheckYourAnswersController.onPageLoad()
+        navigator.nextPage(ClaimAmount, CheckMode)(emptyUserAnswers) mustBe CheckYourAnswersController.onPageLoad
       }
 
 
@@ -478,7 +478,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
         navigator.nextPage(MultipleEmploymentsPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //FirstIndustryOptionsPage
@@ -527,7 +527,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from FirstIndustryOptionsPage when no data is available" in {
         navigator.nextPage(FirstIndustryOptionsPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //SecondIndustryOptionsPage
@@ -569,7 +569,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from SecondIndustryOptionsPage when no data is available" in {
         navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //ThirdIndustryOptionsPage
@@ -618,7 +618,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from ThirdIndustryOptionsPage when no data is available" in {
         navigator.nextPage(ThirdIndustryOptionsPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
 
       //FourthIndustryOptionsPage
@@ -667,7 +667,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from FourthIndustryOptionsPage when no data is available" in {
         navigator.nextPage(FourthIndustryOptionsPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
 
       }
 
@@ -717,7 +717,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to SessionExpiredController from FifthIndustryOptionsPage when no data is available" in {
         navigator.nextPage(FifthIndustryOptionsPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad()
+          SessionExpiredController.onPageLoad
       }
     }
   }

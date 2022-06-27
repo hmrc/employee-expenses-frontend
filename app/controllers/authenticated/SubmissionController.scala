@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ class SubmissionController @Inject()(override val messagesApi: MessagesApi,
             }
           )
         case _ =>
-          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+          Future.successful(Redirect(SessionExpiredController.onPageLoad))
       }
   }
 
@@ -88,7 +88,7 @@ class SubmissionController @Inject()(override val messagesApi: MessagesApi,
       Redirect(PhoneUsController.onPageLoad())
     } else {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, auditData)
-      Redirect(TechnicalDifficultiesController.onPageLoad())
+      Redirect(TechnicalDifficultiesController.onPageLoad)
     }
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,20 +29,20 @@ class PrintingNavigator @Inject()() extends Navigator {
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case PrintingOccupationList1Page => printingOccupationList1(NormalMode)
     case PrintingOccupationList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case PrintingOccupationList1Page => printingOccupationList1(CheckMode)
     case PrintingOccupationList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
   def printingOccupationList1 (mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(PrintingOccupationList1Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.PrintingOccupationList2Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 }

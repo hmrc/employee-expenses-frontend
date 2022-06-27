@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
       val controller = application.injector.instanceOf[IndexController]
 
-      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad.url).withSession(SessionKeys.sessionId -> "key")
 
       val result = controller.onPageLoad(request)
 
@@ -75,7 +75,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
       val controller = application.injector.instanceOf[IndexController]
 
-      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad.url)
 
       val result = controller.onPageLoad(request)
 
@@ -92,7 +92,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
       val controller = application.injector.instanceOf[IndexController]
 
-      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad.url).withSession(SessionKeys.sessionId -> "key")
 
       val result = controller.onPageLoad(request)
 
@@ -126,7 +126,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
         sessionRepository = mockSessionRepository
       )
 
-      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad.url)
 
       val result = controller.onPageLoad(request)
 

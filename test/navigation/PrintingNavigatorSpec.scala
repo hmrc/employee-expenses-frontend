@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ class PrintingNavigatorSpec extends SpecBase with MockitoSugar {
 
         "go to SessionExpired when not a printing page" in {
           navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
-            SessionExpiredController.onPageLoad()
+            SessionExpiredController.onPageLoad
         }
 
         "go to EmployerContributionController from PrintingOccupationList1Page when 'Yes' is selected" in {
@@ -51,7 +51,7 @@ class PrintingNavigatorSpec extends SpecBase with MockitoSugar {
 
         "go to SessionExpiredController from PrintingOccupationList1Page when None" in {
           navigator.nextPage(PrintingOccupationList1Page, mode)(emptyUserAnswers) mustBe
-            controllers.routes.SessionExpiredController.onPageLoad()
+            controllers.routes.SessionExpiredController.onPageLoad
         }
 
         "go to EmployerContributionController from PrintingOccupationList2Controller when 'Yes' is selected" in {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ class HeatingNavigatorSpec extends SpecBase with MockitoSugar{
 
           "go to SessionExpired when not HeatingOccupationListPage" in {
             navigator.nextPage(mock[Page], mode)(emptyUserAnswers) mustBe
-              controllers.routes.SessionExpiredController.onPageLoad()
+              controllers.routes.SessionExpiredController.onPageLoad
           }
         }
       }

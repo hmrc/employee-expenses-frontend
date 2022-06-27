@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ class AlreadyClaimingFREDifferentAmountsController @Inject()(
         case (Some(claimAmount), Some(freAmounts)) =>
           Ok(view(preparedForm, mode, claimAmount, freAmounts))
         case _ =>
-          Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+          Redirect(controllers.routes.SessionExpiredController.onPageLoad)
       }
   }
 
@@ -79,7 +79,7 @@ class AlreadyClaimingFREDifferentAmountsController @Inject()(
             }
           )
         case _ =>
-          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+          Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad))
       }
   }
 }

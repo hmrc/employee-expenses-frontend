@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     case WoodFurnitureOccupationList1Page => woodFurnitureOccupationList1(NormalMode)
     case WoodFurnitureOccupationList2Page => woodFurnitureOccupationList2(NormalMode)
     case WoodFurnitureOccupationList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -56,7 +56,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     case WoodFurnitureOccupationList1Page => woodFurnitureOccupationList1(CheckMode)
     case WoodFurnitureOccupationList2Page => woodFurnitureOccupationList2(CheckMode)
     case WoodFurnitureOccupationList3Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad()
+    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
   def typeOfManufacturing(mode: Mode)(userAnswers: UserAnswers): Call = {
@@ -68,7 +68,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
       case Some(PreciousMetals) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(WoodFurniture) => routes.WoodFurnitureOccupationList1Controller.onPageLoad(mode)
       case Some(NoneOfAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -76,7 +76,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     userAnswers.get(AluminiumApprenticePage) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.AluminiumOccupationList1Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -84,7 +84,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     userAnswers.get(AluminiumOccupationList1Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.AluminiumOccupationList2Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -92,7 +92,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     userAnswers.get(AluminiumOccupationList2Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.AluminiumOccupationList3Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -100,7 +100,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     userAnswers.get(IronApprenticePage) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.IronMiningController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -108,7 +108,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     userAnswers.get(IronMiningPage) match {
       case Some(true) => routes.IronMiningListController.onPageLoad(mode)
       case Some(false) => routes.IronSteelOccupationListController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -116,7 +116,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     userAnswers.get(WoodFurnitureOccupationList1Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.WoodFurnitureOccupationList2Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
@@ -124,7 +124,7 @@ class ManufacturingNavigator @Inject()() extends Navigator {
     userAnswers.get(WoodFurnitureOccupationList2Page) match {
       case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.WoodFurnitureOccupationList3Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 }

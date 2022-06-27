@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -207,7 +207,7 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustBe TechnicalDifficultiesController.onPageLoad().url
+      redirectLocation(result).value mustBe TechnicalDifficultiesController.onPageLoad.url
 
       application.stop()
     }
@@ -222,7 +222,7 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustBe SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustBe SessionExpiredController.onPageLoad.url
 
       application.stop()
     }

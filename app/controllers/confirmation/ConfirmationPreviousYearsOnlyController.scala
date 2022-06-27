@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,10 +65,10 @@ class ConfirmationPreviousYearsOnlyController @Inject()(
           }.recoverWith {
             case e =>
               logger.error(s"[ConfirmationPreviousYearsOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
-              Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad()))
+              Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad))
           }
         case _ =>
-          Future.successful(Redirect(SessionExpiredController.onPageLoad()))
+          Future.successful(Redirect(SessionExpiredController.onPageLoad))
       }
   }
 }

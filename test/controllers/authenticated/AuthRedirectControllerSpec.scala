@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,7 +111,7 @@ class AuthRedirectControllerSpec extends SpecBase with ScalaFutures with Integra
 
       status(result) mustEqual 303
 
-      redirectLocation(result).get mustBe SessionExpiredController.onPageLoad().url
+      redirectLocation(result).get mustBe SessionExpiredController.onPageLoad.url
 
       application.stop()
     }

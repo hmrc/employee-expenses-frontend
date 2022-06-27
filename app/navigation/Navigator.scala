@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ trait Navigator {
 
   def nextPage(page: Page, mode: Mode): UserAnswers => Call = mode match {
     case NormalMode =>
-      routeMap.lift(page).getOrElse(_ => IndexController.onPageLoad())
+      routeMap.lift(page).getOrElse(_ => IndexController.onPageLoad)
     case CheckMode =>
-      checkRouteMap.lift(page).getOrElse(_ => CheckYourAnswersController.onPageLoad())
+      checkRouteMap.lift(page).getOrElse(_ => CheckYourAnswersController.onPageLoad)
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,12 +35,12 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(NormalMode)
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(NormalMode)
     case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
-    case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad()
-    case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
+    case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad
+    case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad
     case CheckYourAnswersPage => _ => YourAddressController.onPageLoad(NormalMode)
     case YourAddressPage => yourAddress
     case YourEmployerPage => yourEmployer
-    case HowYouWillGetYourExpensesPage => _ => SubmissionController.onSubmit()
+    case HowYouWillGetYourExpensesPage => _ => SubmissionController.onSubmit
     case Submission => submission
   }
 
@@ -49,25 +49,25 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(CheckMode)
     case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(CheckMode)
     case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
-    case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad()
-    case _ => _ => CheckYourAnswersController.onPageLoad()
+    case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad
+    case _ => _ => CheckYourAnswersController.onPageLoad
   }
 
   private def yourAddress(userAnswers: UserAnswers): Call = {
     val routeIfRemoveDifferent = userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) flatMap {
-      case AlreadyClaimingFREDifferentAmounts.Remove => Some(SubmissionController.onSubmit())
+      case AlreadyClaimingFREDifferentAmounts.Remove => Some(SubmissionController.onSubmit)
       case _                                         => None
     }
 
     val routeIfRemoveSame = userAnswers.get(AlreadyClaimingFRESameAmountPage) flatMap {
-      case AlreadyClaimingFRESameAmount.Remove => Some(SubmissionController.onSubmit())
+      case AlreadyClaimingFRESameAmount.Remove => Some(SubmissionController.onSubmit)
       case _                                   => None
     }
 
     val routeIfCurrentYear = (userAnswers.get(TaxYearSelectionPage), userAnswers.get(ChangeWhichTaxYearsPage)) match {
       case (Some(selectedYears), None) if selectedYears.contains(CurrentYear) => Some(YourEmployerController.onPageLoad())
       case (Some(_), Some(changeYears)) if changeYears.contains(CurrentYear)  => Some(YourEmployerController.onPageLoad())
-      case (None, _) => Some(TechnicalDifficultiesController.onPageLoad())
+      case (None, _) => Some(TechnicalDifficultiesController.onPageLoad)
       case _         => None
     }
 
@@ -76,22 +76,22 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
   }
 
   private def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
-    case Some(FRENoYears) => CheckYourAnswersController.onPageLoad()
+    case Some(FRENoYears) => CheckYourAnswersController.onPageLoad
     case Some(FREAllYearsAllAmountsSameAsClaimAmount) =>
       AlreadyClaimingFRESameAmountController.onPageLoad(mode)
     case Some(FRESomeYears) =>
       AlreadyClaimingFREDifferentAmountsController.onPageLoad(mode)
     case Some(TechnicalDifficulties) =>
-      TechnicalDifficultiesController.onPageLoad()
+      TechnicalDifficultiesController.onPageLoad
     case _ =>
-      SessionExpiredController.onPageLoad()
+      SessionExpiredController.onPageLoad
   }
 
   private def alreadyClaimingFRESameAmount(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(AlreadyClaimingFRESameAmountPage) match {
       case Some(AlreadyClaimingFRESameAmount.NoChange) => NoCodeChangeController.onPageLoad()
       case Some(AlreadyClaimingFRESameAmount.Remove) => RemoveFRECodeController.onPageLoad(mode)
-      case _ => SessionExpiredController.onPageLoad()
+      case _ => SessionExpiredController.onPageLoad
     }
 
   private def alreadyClaimingFREDifferentAmount(mode: Mode)(userAnswers: UserAnswers): Call =
@@ -99,14 +99,14 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       case Some(NoChange) => NoCodeChangeController.onPageLoad()
       case Some(Change) => ChangeWhichTaxYearsController.onPageLoad(mode)
       case Some(Remove) => RemoveFRECodeController.onPageLoad(mode)
-      case _ => SessionExpiredController.onPageLoad()
+      case _ => SessionExpiredController.onPageLoad
     }
 
   private def yourEmployer(userAnswers: UserAnswers): Call = {
     userAnswers.get(YourEmployerPage) match {
       case Some(true)   => HowYouWillGetYourExpensesController.onPageLoad()
       case Some(false)  => UpdateEmployerInformationController.onPageLoad(NormalMode)
-      case            _ => SessionExpiredController.onPageLoad()
+      case            _ => SessionExpiredController.onPageLoad
     }
   }
 
@@ -133,7 +133,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
           ConfirmationCurrentAndPreviousYearsController.onPageLoad()
         }
       case _ =>
-        SessionExpiredController.onPageLoad()
+        SessionExpiredController.onPageLoad
     }
   }
 

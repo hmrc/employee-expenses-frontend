@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,13 +52,13 @@ class AuthenticatedIdentifierActionImpl @Inject()(
       case _: InsufficientConfidenceLevel =>
         hc.sessionId.map(_.value) match {
           case Some(id) => insufficientConfidence(request.getQueryString("key").getOrElse(id))
-          case _ => Redirect(SessionExpiredController.onPageLoad())
+          case _ => Redirect(SessionExpiredController.onPageLoad)
         }
       case _: AuthorisationException =>
-        Redirect(UnauthorisedController.onPageLoad())
+        Redirect(UnauthorisedController.onPageLoad)
       case e =>
         logger.error(s"[AuthenticatedIdentifierAction][authorised] failed $e", e)
-        Redirect(TechnicalDifficultiesController.onPageLoad())
+        Redirect(TechnicalDifficultiesController.onPageLoad)
     }
   }
 
@@ -67,7 +67,7 @@ class AuthenticatedIdentifierActionImpl @Inject()(
       case Some(id) =>
         Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + id}")))
       case _ =>
-        Redirect(SessionExpiredController.onPageLoad())
+        Redirect(SessionExpiredController.onPageLoad)
     }
   }
 
