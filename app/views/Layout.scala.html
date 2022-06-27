@@ -79,12 +79,11 @@ accountMenuEnabled: Boolean = true)(contentBlock: Html)(implicit request: Reques
 }
 
 
-
 @govukLayout(
     pageTitle = Some(s"$pageTitle - ${appConfig.serviceTitle}"),
     headBlock = Some(hmrcHead(headBlock = Some(head))),
     headerBlock = Some(hmrcStandardHeader(
-        serviceUrl = Some(controllers.routes.IndexController.onPageLoad().url),
+        serviceUrl = Some(controllers.routes.IndexController.onPageLoad.url),
         userResearchBanner = None
     )),
     beforeContentBlock = Some(accountMenu),
