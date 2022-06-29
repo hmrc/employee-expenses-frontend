@@ -15,69 +15,30 @@
  *@
 
 @import viewmodels.RadioCheckboxOption
+
+@this(govukCheckboxes : GovukCheckboxes)
+
 @(
         field: Field,
         legend: String,
         legendClass: Option[String] = None,
         hint: Option[String] = None,
-        inputs: Seq[RadioCheckboxOption],
+        inputs: Seq[CheckboxItem],
         textBlock: Option[String] = None,
         headingIsLegend: Boolean = false
-)(implicit
-        messages: Messages
-)
 
-@hintBlock = {
-    @hint.map { hint =>
-        <div id="@{field.id}-hint" class="govuk-hint">
-        <p class="form-hint">@hint</p>
-        </div>
-    }
-}
+)(implicit messages: Messages)
 
-@errorBlock = {
-    @field.errors.map { error =>
-        <span class="govuk-error-message" id="error-message-@field.id-input">
-            @messages(error.message, error.args: _*)
-        </span>
-    }
-}
+@govukCheckboxes(Checkboxes(
+    fieldset = Some(Fieldset(
+        legend = Some(Legend(
+        content = Text(legend),
+        classes = legendClass.getOrElse("govuk-fieldset__legend--xl"),
+        isPageHeading = headingIsLegend
+        ))
+    )),
+    hint = hint.map(hintString => Hint(content = Text(hintString))),
+    idPrefix = Some(field.id),
+    items = inputs
+).withFormField(field))
 
-<div class="govuk-form-group @if(field.hasErrors){form-group-error}">
-    <fieldset class="govuk-fieldset" id="@{field.id}" @if(hint.nonEmpty){aria-describedby="@{field.id}-hint"}>
-        @if(headingIsLegend){
-            <legend class="@legendClass.map(x => x) govuk-fieldset__legend govuk-fieldset__legend--l"><h1 class="govuk-fieldset__heading">@legend</h1></legend>
-        } else {
-            <legend class="bold-small @legendClass.map(x => x)">@legend</legend>
-        }
-        @if(textBlock.isDefined) {
-            <p class="govuk-body">@textBlock.get</p>
-        }
-        @hintBlock
-        @errorBlock
-        @for((RadioCheckboxOption(id, value, messageKey), index) <- inputs.zipWithIndex) {
-            @defining(
-                inputs.indices.flatMap { i =>
-                    field(s"[$i]").value
-                }
-            ) { answers =>
-                <div class="multiple-choice govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input"
-                        id="@field(s"[$index]").id"
-                        type="checkbox"
-                        name="@field(s"[$index]").name"
-                        value="@value"
-                        @if(answers.contains(value)) {checked="checked"}
-                    />
-                    <label class="govuk-label govuk-checkboxes__label" for="@field(s"[$index]").id" >
-
-                        @inputs(index).message.html
-                        @if(index == 0){
-                          <span id="current-year-hint" class="govuk-hint govuk-checkboxes__hint">@messages("taxYearSelection.currentYearHint")</span>
-                        }
-                    </label>
-                </div>
-            }
-        }
-    </fieldset>
-</div>
