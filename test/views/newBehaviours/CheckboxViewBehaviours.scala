@@ -40,9 +40,11 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
       "contain an input for the value" in {
         val doc = asDocument(createView(form))
         for {
-          (_, i) <- options.zipWithIndex
+          (option, i) <- options.zipWithIndex
         } yield {
-          assertRenderedById(doc, form(fieldKey)(s"[$i]").id)
+          val idVal = if(option != options.head){s"value-${i + 1}"} else "value"
+
+          assertRenderedById(doc, idVal)
         }
       }
 
@@ -59,9 +61,11 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
       "have no values checked when rendered with no form" in {
         val doc = asDocument(createView(form))
         for {
-          (_, i) <- options.zipWithIndex
+          (option, i) <- options.zipWithIndex
         } yield {
-          assert(!doc.getElementById(form(fieldKey)(s"[$i]").id).hasAttr("checked"))
+          val idVal = if(option != options.head){s"value-${i + 1}"} else "value"
+
+          assert(!doc.getElementById(idVal).hasAttr("checked"))
         }
       }
 
@@ -72,15 +76,15 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
               Map(s"$fieldKey[$i]" -> checkboxOption.value)
 
             val doc = asDocument(createView(form.bind(data)))
-            val field = form(fieldKey)(s"[$i]")
+            val field = if(checkboxOption != options.head){s"value-${i + 1}"} else "value"
 
-            assert(doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is not checked")
+            assert(doc.getElementById(field).hasAttr("checked"), s"${field} is not checked")
 
             options.zipWithIndex.foreach {
               case (option, j) =>
                 if (option != checkboxOption) {
-                  val field = form(fieldKey)(s"[$j]")
-                  assert(!doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is checked")
+                  val field = if(option != options.head){s"value-${j + 1}"} else "value"
+                  assert(!doc.getElementById(field).hasAttr("checked"), s"${field} is checked")
                 }
             }
           }
@@ -105,7 +109,7 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
       "show an error in the value field's label" in {
         val doc = asDocument(createView(form.withError(FormError(fieldKey, "error.invalid"))))
         val errorSpan = doc.getElementsByClass("govuk-error-message").first
-        errorSpan.text mustBe messages("error.invalid")
+        errorSpan.text mustBe "Error: " + messages("error.invalid")
       }
     }
   }

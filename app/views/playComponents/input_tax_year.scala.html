@@ -37,7 +37,7 @@
         isPageHeading = headingIsLegend
         ))
     )),
-    hint = hint.map(hintString => Hint(content = Text(hintString))),
+    hint = hint.map(hintString => Hint(content = HtmlContent(hintString))),
     idPrefix = Some(field.id),
     items = inputs
 ).withFormField(field))

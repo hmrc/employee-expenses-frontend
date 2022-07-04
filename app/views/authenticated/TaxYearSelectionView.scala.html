@@ -28,6 +28,7 @@
 
 @(form: Form[Seq[TaxYearSelection]], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+
 @layout(
     pageTitle = s"${errorPrefix(form)} ${messages("taxYearSelection.title")}"
     ) {
@@ -39,15 +40,17 @@
         @input_tax_year(
             field = form("value"),
             legend = messages("taxYearSelection.heading"),
-            hint = Some(messages("taxYearSelection.bodyText")),
+            hint = Some(messages("taxYearSelection.bodyText")
+                        + <p class = "govuk-body"> @Messages("taxYearSelection.listHint") </p> +
+                        messages("taxYearSelection.listHint")),
             inputs = TaxYearSelection.options.map { option =>
 
                 CheckboxItem(
                     content = HtmlContent(option.message.html),
                     value = option.value,
-                    hint = Some(Hint(
-                        content = Text(messages("placeholder - needs to just show up on first checkbox"))
-                    ))
+                    hint = if(option.value == "currentYear"){
+                                Some(Hint(content = Text(messages("taxYearSelection.currentYearHint"))
+                    ))} else None
                 )
             },
             textBlock = Some(messages("taxYearSelection.bodyText")),
