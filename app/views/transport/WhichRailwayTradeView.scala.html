@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,29 +19,35 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    submitButton: playComponents.submit_button,
+    input_radio: playComponents.input_radio
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("whichRailwayTrade.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("whichRailwayTrade.title")}"
     ) {
 
     @formHelper(action = WhichRailwayTradeController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio_or(
+        @input_radio(
             field = form("value"),
             legend = messages("whichRailwayTrade.heading"),
             headingIsLegend = true,
-            inputs = WhichRailwayTrade.options
+            inputs = Seq(
+                RadioItem(content = Text(Messages("whichRailwayTrade.vehiclePainters")), value = Option("vehiclePainters")),
+                RadioItem(content = Text(Messages("whichRailwayTrade.vehicleRepairersWagonLifters")), value = Option("vehicleRepairersWagonLifters")),
+                RadioItem(divider = Some(Messages("site.or"))),
+                RadioItem(content = Text(Messages("whichRailwayTrade.noneOfTheAbove")), value = Option("noneOfTheAbove"))
+            )
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

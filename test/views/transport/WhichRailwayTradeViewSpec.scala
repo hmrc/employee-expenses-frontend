@@ -20,7 +20,7 @@ import forms.transport.WhichRailwayTradeFormProvider
 import models.{NormalMode, WhichRailwayTrade}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.transport.WhichRailwayTradeView
 
 class WhichRailwayTradeViewSpec extends OptionsViewBehaviours[WhichRailwayTrade] {
@@ -47,7 +47,7 @@ class WhichRailwayTradeViewSpec extends OptionsViewBehaviours[WhichRailwayTrade]
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, WhichRailwayTrade.options)
+    behave like optionsPage(form, applyView, WhichRailwayTrade.options, true)
 
     behave like pageWithBodyText(applyView(form), "whichRailwayTrade.heading")
 

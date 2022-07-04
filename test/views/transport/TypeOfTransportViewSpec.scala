@@ -20,7 +20,7 @@ import forms.transport.TypeOfTransportFormProvider
 import models.{NormalMode, TypeOfTransport}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.transport.TypeOfTransportView
 
 class TypeOfTransportViewSpec extends OptionsViewBehaviours[TypeOfTransport] {
@@ -47,7 +47,7 @@ class TypeOfTransportViewSpec extends OptionsViewBehaviours[TypeOfTransport] {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, TypeOfTransport.options)
+    behave like optionsPage(form, applyView, TypeOfTransport.options, true)
   }
 
   application.stop()

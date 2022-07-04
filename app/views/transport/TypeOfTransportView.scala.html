@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,29 +19,38 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    submitButton: playComponents.submit_button,
+    input_radio: playComponents.input_radio
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("typeOfTransport.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("typeOfTransport.title")}"
     ) {
 
     @formHelper(action = TypeOfTransportController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio_or(
+        @input_radio(
             field = form("value"),
             legend = messages("typeOfTransport.heading"),
-            inputs = TypeOfTransport.options,
+            inputs =  Seq(
+                RadioItem(content = Text(Messages("typeOfTransport.airlines")), value = Option("airlines")),
+                RadioItem(content = Text(Messages("typeOfTransport.publicTransport")), value = Option("publicTransport")),
+                RadioItem(content = Text(Messages("typeOfTransport.railways")), value = Option("railways")),
+                RadioItem(content = Text(Messages("typeOfTransport.seamanCarpenter")), value = Option("seamanCarpenter")),
+                RadioItem(content = Text(Messages("typeOfTransport.vehicles")), value = Option("vehicles")),
+                RadioItem(divider = Some(Messages("site.or"))),
+                RadioItem(content = Text(Messages("typeOfTransport.noneOfTheAbove")), value = Option("noneOfTheAbove"))
+            ),
             headingIsLegend = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
