@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +15,20 @@
  *@
 
 @this(
-    main_template: MainTemplate
+    layout: Layout,
+    heading: playComponents.heading
 )
 
 @(govUkUrl: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("cannotClaimExpense.title")
+@layout(
+    pageTitle = messages("cannotClaimExpense.title")
     ) {
 
-    @components.back_link()
+    @heading("cannotClaimExpense.heading")
 
-    @components.heading("cannotClaimExpense.heading")
+    <p class="govuk-body">@messages("cannotClaimExpense.body")</p>
 
-    <p>@messages("cannotClaimExpense.body")</p>
-
-    <p><a id="link" href=@govUkUrl>@messages("cannotClaimExpense.hyperLink")</a></p>
+    <p class="govuk-body"><a class="govuk-link" id="link" href=@govUkUrl>@messages("cannotClaimExpense.hyperLink")</a></p>
 
 }
