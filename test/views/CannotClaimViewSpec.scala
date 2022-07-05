@@ -18,7 +18,7 @@ package views
 
 
 import play.twirl.api.Html
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.CannotClaimView
 
 class CannotClaimViewSpec extends ViewBehaviours  {
@@ -35,7 +35,7 @@ class CannotClaimViewSpec extends ViewBehaviours  {
 
     behave like pageWithBackLink(applyView)
 
-    val link1: Html = Html(s"""<a id="link" href="${frontendAppConfig.jobExpensesLink}">${messages("cannotClaim.link")}</a>""")
+    val link1: Html = Html(s"""<a id="link" class="govuk-link" href="${frontendAppConfig.jobExpensesLink}">${messages("cannotClaim.link")}</a>""")
 
     behave like pageWithBodyText(
                                 applyView,
