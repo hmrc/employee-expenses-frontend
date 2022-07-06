@@ -23,8 +23,10 @@
         legend: String,
         legendClass: Option[String] = None,
         hint: Option[String] = None,
+        hintClass: Option[String] = None,
         inputs: Seq[CheckboxItem],
         textBlock: Option[String] = None,
+        describedBy: Option[String] = None,
         headingIsLegend: Boolean = false
 
 )(implicit messages: Messages)
@@ -34,10 +36,11 @@
         legend = Some(Legend(
         content = Text(legend),
         classes = legendClass.getOrElse("govuk-fieldset__legend--xl"),
-        isPageHeading = headingIsLegend
+        isPageHeading = headingIsLegend,
         ))
     )),
-    hint = hint.map(hintString => Hint(content = Text(hintString))),
+
+    hint = hint.map(hintString => Hint(content = HtmlContent(hintString), classes = hintClass.get)),
     idPrefix = Some(field.id),
     items = inputs
 ).withFormField(field))
