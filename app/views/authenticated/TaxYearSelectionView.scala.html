@@ -39,8 +39,8 @@
 
         <h1 class="govuk-heading-xl">@messages("taxYearSelection.heading")</h1>
 
-        <p class="govuk-hint">@messages("taxYearSelection.bodyText")</p>
-        <p class="govuk-hint">@messages("taxYearSelection.listHint")</p>
+        <p class="govuk-body govuk-hint">@messages("taxYearSelection.bodyText")</p>
+        <p class="govuk-body govuk-hint">@messages("taxYearSelection.listHint")</p>
 
         @input_tax_year(
             field = form("value"),
@@ -56,7 +56,7 @@
                 )
             },
             textBlock = Some(messages("taxYearSelection.bodyText")),
-            headingIsLegend = true
+            headingIsLegend = false
         )
 
         @submitButton()
