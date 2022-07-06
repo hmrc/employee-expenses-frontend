@@ -20,7 +20,7 @@ import forms.TransportVehicleTradeFormProvider
 import models.{NormalMode, TransportVehicleTrade}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.transport.TransportVehicleTradeView
 
 class TransportVehicleTradeViewSpec extends OptionsViewBehaviours[TransportVehicleTrade] {
@@ -47,7 +47,7 @@ class TransportVehicleTradeViewSpec extends OptionsViewBehaviours[TransportVehic
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, TransportVehicleTrade.options)
+    behave like optionsPage(form, applyView, TransportVehicleTrade.options, true)
   }
 
   application.stop()
