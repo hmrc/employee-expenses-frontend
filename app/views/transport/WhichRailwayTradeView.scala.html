@@ -45,7 +45,8 @@
                 RadioItem(content = Text(Messages("whichRailwayTrade.vehicleRepairersWagonLifters")), value = Option("vehicleRepairersWagonLifters")),
                 RadioItem(divider = Some(Messages("site.or"))),
                 RadioItem(content = Text(Messages("whichRailwayTrade.noneOfTheAbove")), value = Option("noneOfTheAbove"))
-            )
+            ),
+            classes = "govuk-!-margin-top-3"
         )
 
         @submitButton()
