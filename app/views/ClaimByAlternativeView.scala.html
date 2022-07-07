@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,27 +18,26 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-        main_template: MainTemplate,
+        layout: Layout,
         frontendAppConfig: FrontendAppConfig,
-        formHelper: FormWithCSRF
+        formHelper: FormWithCSRF,
+        heading: playComponents.heading
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
-@claimOnlineLink = {<a href="@frontendAppConfig.p87ClaimOnlineUrl">@messages("claimByAlternative.onlineFormLink")</a>}
+@claimOnlineLink = {<a class="govuk-link" href="@frontendAppConfig.p87ClaimOnlineUrl">@messages("claimByAlternative.onlineFormLink")</a>}
 
-@claimByPostLink = {<a href="@frontendAppConfig.p87ClaimByPostUrl">@messages("claimByAlternative.claimByPostLink")</a>}
+@claimByPostLink = {<a class="govuk-link" href="@frontendAppConfig.p87ClaimByPostUrl">@messages("claimByAlternative.claimByPostLink")</a>}
 
-@main_template(
-  title = messages("claimByAlternative.title")
+@layout(
+  pageTitle = messages("claimByAlternative.title")
 ) {
 
   @formHelper(action = ClaimByAlternativeController.onSubmit(), 'autoComplete -> "off") {
 
-    @components.back_link()
+    @heading("claimByAlternative.heading")
 
-    @components.heading("claimByAlternative.heading")
-
-    <p>@Html(messages("claimByAlternative.paragraph", claimOnlineLink, claimByPostLink))</p>
+    <p class="govuk-body">@Html(messages("claimByAlternative.paragraph", claimOnlineLink, claimByPostLink))</p>
   }
 }
