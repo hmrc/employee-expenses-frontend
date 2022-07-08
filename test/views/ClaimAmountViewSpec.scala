@@ -20,7 +20,7 @@ import models.{Rates, ScottishRate, StandardRate}
 import pages.ClaimAmount
 import play.api.Application
 import service.ClaimAmountService
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.ClaimAmountView
 
 class ClaimAmountViewSpec extends ViewBehaviours {
