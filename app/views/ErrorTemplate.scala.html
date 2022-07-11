@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,19 @@
 @import config.FrontendAppConfig
 
 @this(
-    main_template: MainTemplate,
+    layout: Layout,
     appConfig: FrontendAppConfig
 )
 
 @(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
 @mainContent = {
- <h1 class="heading-xlarge">@heading</h1>
- <p>@message</p>
+ <h1 class="govuk-heading-xl">@heading</h1>
+ <p class="govuk-body">@message</p>
 }
 
-@main_template(
- title = pageTitle
+@layout(
+ pageTitle = pageTitle, backLinkEnabled = false
 ) {
  @mainContent
 }
