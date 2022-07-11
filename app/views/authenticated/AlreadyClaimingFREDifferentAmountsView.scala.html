@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,13 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+        layout: Layout,
+        formHelper: FormWithCSRF,
+        errorSummary: playComponents.error_summary,
+        inputRadio: playComponents.input_radio,
+        submitButton: playComponents.submit_button,
+        heading: playComponents.heading,
+        govukSummaryList : GovukSummaryList
 )
 
 @(
@@ -33,21 +38,19 @@
         messages: Messages
 )
 
-    @main_template(
-        title = s"${errorPrefix(form)} ${messages(s"alreadyClaimingFREDifferentAmounts.title")}"
+    @layout(
+        pageTitle = s"${errorPrefix(form)} ${messages(s"alreadyClaimingFREDifferentAmounts.title")}"
     ) {
         @formHelper(action = AlreadyClaimingFREDifferentAmountsController.onSubmit(mode), 'autoComplete -> "off") {
 
-            @components.back_link()
+            @errorSummary(form.errors)
 
-            @components.error_summary(form.errors)
+            @heading(headingKey = "alreadyClaimingFREDifferentAmounts.heading")
 
-            @components.heading(s"alreadyClaimingFREDifferentAmounts.heading")
-
-            <p>@messages("alreadyClaimingFREDifferentAmounts.bodyText1", claimAmount)</p>
+            <p class="govuk-body">@messages("alreadyClaimingFREDifferentAmounts.bodyText1", claimAmount)</p>
 
             @if(freAmounts.length == 1) {
-                <p>
+                <p class="govuk-body">
                     @messages(
                         "alreadyClaimingFREDifferentAmounts.bodyText1.singleYearOnly",
                         freAmounts.head.freAmount.get.grossAmount,
@@ -61,33 +64,44 @@
             }
 
             @if(freAmounts.length > 1) {
-                <ul role="list" class="govuk-check-your-answers section">
-                            @for(freAmounts <- freAmounts) {
-                                <li>
-                                <div class="cya-question" id="tax-year-@freAmounts.taxYear.year">
-                                @messages(
-                                    s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(freAmounts.taxYear.year)}",
-                                    freAmounts.taxYear.year.toString,
-                                    (freAmounts.taxYear.year + 1).toString
+                @govukSummaryList(SummaryList(
+                    rows = freAmounts.flatMap { freAmounts =>
+                        Seq(
+                            SummaryListRow(
+                                key = Key(
+                                    content = HtmlContent(messages(
+                                        s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(freAmounts.taxYear.year)}",
+                                        freAmounts.taxYear.year.toString,
+                                        (freAmounts.taxYear.year + 1).toString
+                                    )),
+                                    classes = s"tax-year-${freAmounts.taxYear.year}"
+                                ),
+                                value = Value(
+                                    content = HtmlContent(messages(
+                                        "alreadyClaimingFREDifferentAmounts.tableAmountHeading",
+                                        {if(freAmounts.freAmount.isDefined) "£" + freAmounts.freAmount.get.grossAmount else "£" + 0})
+                                    ),
+                                    classes = s"fre-amount-${freAmounts.taxYear.year}"
                                 )
-                                </div>
-                                <div class="cya-answer" id="fre-amount-@freAmounts.taxYear.year">
-                                    @messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading", {if(freAmounts.freAmount.isDefined) "£" + freAmounts.freAmount.get.grossAmount else "£" + 0})
-                                </div>
-                                </li>
-                            }
-                </ul>
+                            )
+                        )}
+                    ))
             }
 
             <div class="section">
-                @components.input_radio(
+                @inputRadio(
                     field = form("value"),
                     legend = messages(s"alreadyClaimingFREDifferentAmounts.label"),
-                    legendClass = Some("heading-medium u-margin-top--0-5em"),
-                    inputs = AlreadyClaimingFREDifferentAmounts.options
+                    legendClass = Some("govuk-label--m"),
+                    inputs = AlreadyClaimingFREDifferentAmounts.options map { radioOption =>
+                        RadioItem(
+                            value = Some(radioOption.value),
+                            content = HtmlContent(radioOption.message.html)
+                    )
+                },
+                classes = "govuk-radios"
                 )
-
-                @components.submit_button()
+                @submitButton()
             </div>
         }
     }

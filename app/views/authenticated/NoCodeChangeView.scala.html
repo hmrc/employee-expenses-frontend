@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,22 @@
 @import config.FrontendAppConfig
 
 @this(
-        main_template: MainTemplate,
-        frontendAppConfig: FrontendAppConfig
+        layout: Layout,
+        frontendAppConfig: FrontendAppConfig,
+        heading: playComponents.heading,
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
-@link = {<a href=@frontendAppConfig.incomeTaxSummary>@messages("noCodeChange.link")</a>}
+@link = {<a href=@frontendAppConfig.incomeTaxSummary class="govuk-link">@messages("noCodeChange.link")</a>}
 
-@main_template(
-    title = messages("noCodeChange.title")
+@layout(
+    pageTitle = messages("noCodeChange.title")
 ) {
 
-    @components.back_link()
+    @heading(headingKey = "noCodeChange.heading")
 
-    @components.heading("noCodeChange.heading")
+    <p class="govuk-body">@messages("noCodeChange.guidance1")</p>
 
-    <p>@messages("noCodeChange.guidance1")</p>
-
-    <p>@Html(messages("noCodeChange.guidance2", link))</p>
+    <p class="govuk-body">@Html(messages("noCodeChange.guidance2", link))</p>
 }

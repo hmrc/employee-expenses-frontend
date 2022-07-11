@@ -21,7 +21,7 @@ import models.{NormalMode, TaiTaxYear, TaxYearSelection}
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
 import viewmodels.RadioCheckboxOption
-import views.behaviours.CheckboxViewBehaviours
+import views.newBehaviours.CheckboxViewBehaviours
 import views.html.authenticated.ChangeWhichTaxYearsView
 
 class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelection] {
@@ -55,7 +55,9 @@ class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelectio
 
       taxYearsAndAmounts.map{
         options =>
-          doc.getElementById(s"fre-amount-${options._1.value}").text mustBe s"${messages("changeWhichTaxYears.columnHeading2", s"£${options._2}")}"
+         val idVal= if(options._1.value.indexOf(options) != options._1.value.indexOf(0)){s"value-${options._1.value}-item-hint"} else {"value-item-hint"}
+
+          doc.getElementById(idVal).text mustBe s"${messages("changeWhichTaxYears.columnHeading2", s"£${options._2}")}"
       }
     }
 
@@ -69,10 +71,13 @@ class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelectio
 
       "contain an input for the value" in {
         val doc = asDocument(applyView(form))
+
         for {
-          (_, i) <- taxYearsAndAmounts.zipWithIndex
+          (option, i) <- taxYearsAndAmounts.zipWithIndex
         } yield {
-          assertRenderedById(doc, form("value")(s"[$i]").id)
+         val idVal = if(option != taxYearsAndAmounts.head){s"value-${i + 1}"} else "value"
+
+         assertRenderedById(doc, idVal)
         }
       }
 
@@ -81,17 +86,19 @@ class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelectio
         for {
           (option, i) <- taxYearsAndAmounts.zipWithIndex
         } yield {
-          val id = form("value")(s"[$i]").id
-          doc.select(s"label[for=$id]").text mustBe s"${option._1.message.html.toString} ${messages("changeWhichTaxYears.columnHeading2", s"£${option._2}")}"
+          val idVal = if(option != taxYearsAndAmounts.head){s"value-${i + 1}"} else "value"
+          doc.select(s"label[for=$idVal]").text + " " + doc.select(s"#$idVal-item-hint").text mustBe s"${option._1.message.html.toString} ${messages("changeWhichTaxYears.columnHeading2", s"£${option._2}")}"
         }
       }
 
       "have no values checked when rendered with no form" in {
         val doc = asDocument(applyView(form))
         for {
-          (_, i) <- taxYearsAndAmounts.zipWithIndex
+          (option, i) <- taxYearsAndAmounts.zipWithIndex
         } yield {
-          assert(!doc.getElementById(form("value")(s"[$i]").id).hasAttr("checked"))
+          val idVal = if(option != taxYearsAndAmounts.head){s"value-${i + 1}"} else "value"
+
+          assert(!doc.getElementById(idVal).hasAttr("checked"))
         }
       }
 
@@ -100,17 +107,16 @@ class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelectio
           s"have correct value checked when value `${checkboxOption._1.value}` is given" in {
             val data: Map[String, String] =
               Map(s"value[$i]" -> checkboxOption._1.value)
-
             val doc = asDocument(applyView(form.bind(data)))
-            val field = form("value")(s"[$i]")
+            val field = if(checkboxOption != taxYearsAndAmounts.head){s"value-${i + 1}"} else "value"
 
-            assert(doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is not checked")
+            assert(doc.getElementById(field).hasAttr("checked"), s"${field} is not checked")
 
             taxYearsAndAmounts.zipWithIndex.foreach {
               case (option, j) =>
                 if (option != checkboxOption) {
-                  val field = form("value")(s"[$j]")
-                  assert(!doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is checked")
+                  val field = if(option != taxYearsAndAmounts.head){s"value-${j + 1}"} else "value"
+                  assert(!doc.getElementById(field).hasAttr("checked"), s"${field} is checked")
                 }
             }
           }
@@ -129,13 +135,13 @@ class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelectio
 
       "show an error summary" in {
         val doc = asDocument(applyView(form.withError(FormError("value", "error.invalid"))))
-        assertRenderedById(doc, "error-summary-heading")
+        assertRenderedById(doc, "error-summary-title")
       }
 
       "show an error in the value field's label" in {
         val doc = asDocument(applyView(form.withError(FormError("value", "error.invalid"))))
-        val errorSpan = doc.getElementsByClass("error-message").first
-        errorSpan.text mustBe messages("error.invalid")
+        val errorSpan = doc.getElementsByClass("govuk-error-message").first
+        errorSpan.text mustBe  "Error: " + messages("error.invalid")
       }
     }
   }

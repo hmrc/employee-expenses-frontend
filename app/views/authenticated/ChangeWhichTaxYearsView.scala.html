@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,31 +20,41 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    submitButton: playComponents.submit_button,
+    input_checkbox_table: playComponents.input_checkbox_table
 )
 
 @(form: Form[Seq[TaxYearSelection]], mode: Mode, yearsAndAmounts: Seq[(RadioCheckboxOption, Int)])(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("changeWhichTaxYears.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("changeWhichTaxYears.title")}"
     ) {
 
     @formHelper(action = ChangeWhichTaxYearsController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_checkbox_table(
+        @input_checkbox_table(
             field = form("value"),
             legend = messages("changeWhichTaxYears.heading"),
-            inputs = yearsAndAmounts,
+            inputs = yearsAndAmounts.map { case (radioOption, int) =>
+
+                CheckboxItem(
+                    content = HtmlContent(radioOption.message.html),
+                    value = radioOption.value,
+                    hint = Some(Hint(
+                        content = Text(messages(("changeWhichTaxYears.columnHeading2"), "£" + int))
+                    ))
+                )
+            },
             columnHeading1 = messages("changeWhichTaxYears.columnHeading1"),
             columnHeading2 = messages("changeWhichTaxYears.columnHeading2"),
             headingIsLegend = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
