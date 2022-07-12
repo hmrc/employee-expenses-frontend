@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,30 +19,39 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    submitButton: playComponents.submit_button,
+    input_radio: playComponents.input_radio
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("fifthIndustryOptions.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("fifthIndustryOptions.title")}"
     ) {
 
     @formHelper(action = FifthIndustryOptionsController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio_or(
+        @input_radio(
             field = form("value"),
             legend = messages("fifthIndustryOptions.heading"),
             headingIsLegend = true,
-            legendClass = Some("visually-hidden"),
-            inputs = FifthIndustryOptions.options
+            inputs = Seq(
+                RadioItem(content = Text(Messages("fifthIndustryOptions.armedForces")), value = Option("armedForces")),
+                RadioItem(content = Text(Messages("fifthIndustryOptions.docksWaterways")), value = Option("docksWaterways")),
+                RadioItem(content = Text(Messages("fifthIndustryOptions.forestry")), value = Option("forestry")),
+                RadioItem(content = Text(Messages("fifthIndustryOptions.shipyard")), value = Option("shipyard")),
+                RadioItem(content = Text(Messages("fifthIndustryOptions.textiles")), value = Option("textiles")),
+                RadioItem(divider = Some(Messages("site.or"))),
+                RadioItem(content = Text(Messages("fifthIndustryOptions.none")), value = Option("none"))
+            ),
+            classes = "govuk-!-margin-top-3"
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
