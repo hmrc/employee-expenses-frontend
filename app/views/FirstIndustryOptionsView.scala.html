@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,29 +19,38 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-        main_template: MainTemplate,
-        formHelper: FormWithCSRF
+        layout: Layout,
+        formHelper: FormWithCSRF,
+        errorSummary: playComponents.error_summary,
+        submitButton: playComponents.submit_button,
+        input_radio: playComponents.input_radio
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("firstIndustryOptions.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("firstIndustryOptions.title")}"
 ) {
 
-    @components.back_link()
-
-    @components.error_summary(form.errors)
+    @errorSummary(form.errors)
 
     @formHelper(action = FirstIndustryOptionsController.onSubmit(mode), 'autoComplete -> "off") {
-        @components.input_radio_or(
+        @input_radio(
             field = form("value"),
             legend = messages("firstIndustryOptions.heading"),
             headingIsLegend = true,
-            legendClass = Some("visually-hidden"),
-            inputs = FirstIndustryOptions.options
+            inputs = Seq(
+                RadioItem(content = Text(Messages("firstIndustryOptions.engineering")), value = Option("engineering")),
+                RadioItem(content = Text(Messages("firstIndustryOptions.foodAndCatering")), value = Option("foodAndCatering")),
+                RadioItem(content = Text(Messages("firstIndustryOptions.healthcare")), value = Option("healthcare")),
+                RadioItem(content = Text(Messages("firstIndustryOptions.retail")), value = Option("retail")),
+                RadioItem(content = Text(Messages("firstIndustryOptions.transportAndDistribution")), value = Option("transportAndDistribution")),
+                RadioItem(divider = Some(Messages("site.or"))),
+                RadioItem(content = Text(Messages("firstIndustryOptions.none")), value = Option("none"))
+            ),
+            classes = "govuk-!-margin-top-3"
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }
