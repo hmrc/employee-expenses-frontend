@@ -50,7 +50,8 @@
                 RadioItem(content = Text(Messages("constructionOccupations.buildingMaterials")), value = Option("buildingMaterials")),
                 RadioItem(divider = Some(Messages("site.or"))),
                 RadioItem(content = Text(Messages("constructionOccupations.none")), value = Option("none"))
-            )
+            ),
+            classes = "govuk-!-margin-top-3"
         )
 
         @submitButton()

@@ -21,7 +21,7 @@ import models.{EmployerContribution, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.html.EmployerContributionView
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 
 
 class EmployerContributionViewSpec extends OptionsViewBehaviours[EmployerContribution] {
@@ -65,7 +65,7 @@ class EmployerContributionViewSpec extends OptionsViewBehaviours[EmployerContrib
         "have a list" in {
 
           val doc = asDocument(view)
-          assertContainsText(doc, "list list-bullet")
+          assertContainsText(doc, "govuk-list govuk-list--bullet")
         }
 
         "have correct values" in {

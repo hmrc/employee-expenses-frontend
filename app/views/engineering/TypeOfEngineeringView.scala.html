@@ -46,7 +46,8 @@
                 RadioItem(content = Text(Messages("typeOfEngineering.tradesRelatingToEngineering")), value = Option("tradesRelatingToEngineering")),
                 RadioItem(divider = Some(Messages("site.or"))),
                 RadioItem(content = Text(Messages("typeOfEngineering.noneOfTheAbove")), value = Option("noneOfTheAbove"))
-            )
+            ),
+            classes = "govuk-!-margin-top-3"
         )
 
         @submitButton()
