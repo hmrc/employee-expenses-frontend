@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +16,32 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    heading: playComponents.heading,
+    submitButton: playComponents.submit_button,
+    inputTextCurrency: playComponents.input_text_currency
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("expensesEmployerPaid.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("expensesEmployerPaid.title")}"
     ) {
 
     @formHelper(action = ExpensesEmployerPaidController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.heading("expensesEmployerPaid.heading")
-
-        @components.input_text_currency(
+        @inputTextCurrency(
             field = form("value"),
             label = messages("expensesEmployerPaid.heading"),
             labelClass=Some("visually-hidden"),
             hint = Some(messages("expensesEmployerPaid.hint")),
-            inputType = Some("tel")
+            inputType = Some("numeric")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

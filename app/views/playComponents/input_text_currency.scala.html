@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@this(govukInput : GovukInput)
+
 @(
         field: Field,
         label: String,
@@ -23,26 +25,20 @@
         inputType: Option[String] = Some("text")
 )(implicit messages: Messages)
 
-<div class="form-group @if(field.hasErrors){form-group-error}">
-    <label class="form-label" for="@{field.id}">
-        <span class="bold @if(labelClass.nonEmpty){@labelClass}">@label</span>
-        @if(hint.nonEmpty){
-            <span id="@{field.id}-hint" class="form-hint">@hint</span>
-        }
-        @field.errors.map { error =>
-            <span class="error-message" id="error-message-@{field.id}-input">@messages(error.message, error.args: _*)</span>
-        }
-    </label>
-    <div class="hmrc-currency-input__wrapper form-control-wrapper">
-        <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
-        <input
-        class="form-control govuk-input @inputClass"
-        type="@{inputType}"
-        id="@{field.id}"
-        name="@{field.name}"
-        value="@{field.value}"
-            @if(field.hasErrors){aria-describedby="error-message-@{field.id}-input @{field.id}-hint"} else {aria-describedby="@{field.id}-hint"}
-        />
-    </div>
-</div>
+@govukInput(Input(
+    id = field.id,
+    name = field.id,
+    label = Label(
+        isPageHeading = true,
+        classes = "govuk-label--xl",
+        content = Text(label)
+    ),
+    hint = hint.map(hintString => Hint(content = Text(hintString))),
+    classes = "govuk-input--width-10",
+    spellcheck = Some(false),
+    prefix = Some(PrefixOrSuffix(
+        content = Text("£")
+    ))
+).withFormField(field))
+
 
