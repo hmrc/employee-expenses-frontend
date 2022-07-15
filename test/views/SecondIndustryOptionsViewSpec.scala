@@ -20,7 +20,7 @@ import forms.SecondIndustryOptionsFormProvider
 import models.{NormalMode, SecondIndustryOptions}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.SecondIndustryOptionsView
 
 class SecondIndustryOptionsViewSpec extends OptionsViewBehaviours[SecondIndustryOptions] {
@@ -47,7 +47,7 @@ class SecondIndustryOptionsViewSpec extends OptionsViewBehaviours[SecondIndustry
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, SecondIndustryOptions.options)
+    behave like optionsPage(form, applyView, SecondIndustryOptions.options, true)
 
     behave like pageWithBodyText(applyView(form), "secondIndustryOptions.heading")
 
@@ -55,7 +55,7 @@ class SecondIndustryOptionsViewSpec extends OptionsViewBehaviours[SecondIndustry
 
       val doc = asDocument(applyView(form))
 
-      doc.getElementsByClass("form-block").text() mustBe messages("site.or")
+      doc.getElementsByClass("govuk-radios__divider").text() mustBe messages("site.or")
     }
   }
 
