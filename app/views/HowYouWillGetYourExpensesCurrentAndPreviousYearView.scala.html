@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,36 +18,35 @@
 @import models.TaxYearSelection._
 
 @this(
-    main_template: MainTemplate
+    layout: Layout,
+    heading: playComponents.heading
 )
 
 @(href: String, currentYearMinus1Selected: Boolean, hasClaimIncreased: Boolean)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("howYouWillGetYourExpenses.title")
+@layout(
+    pageTitle = messages("howYouWillGetYourExpenses.title")
     ) {
 
-    @components.back_link()
+    @heading("howYouWillGetYourExpenses.heading")
 
-    @components.heading("howYouWillGetYourExpenses.heading")
-
-    <p class="lede">
+    <p class="govuk-body govuk-!-font-size-24">
         @messages(
             "howYouWillGetYourExpensesCurrentAndPreviousYear.paragraph1",taxYearStartString(0), taxYearEndString(0)
         )
     </p>
 
-    <h2>@messages("howYouWillGetYourExpensesCurrentAndPreviousYear.subHeading1")</h2>
+    <h2 class="govuk-heading-m">@messages("howYouWillGetYourExpensesCurrentAndPreviousYear.subHeading1")</h2>
 
     @if(hasClaimIncreased) {
-        <p>@messages("howYouWillGetYourExpenses.para1.increase")</p>
+        <p class="govuk-body">@messages("howYouWillGetYourExpenses.para1.increase")</p>
      } else {
-        <p>@messages("howYouWillGetYourExpenses.para1.decrease")</p>
+        <p class="govuk-body">@messages("howYouWillGetYourExpenses.para1.decrease")</p>
      }
 
-    <p>@messages("howYouWillGetYourExpenses.para2")</p>
+    <p class="govuk-body">@messages("howYouWillGetYourExpenses.para2")</p>
 
-    <ul class="list list-bullet" role="list">
+    <ul class="govuk-list govuk-list--bullet">
         @if(hasClaimIncreased) {
         <li>@messages("howYouWillGetYourExpenses.item1less")</li>
         } else {
@@ -59,13 +58,13 @@
 
     </ul>
 
-    <p>@messages("howYouWillGetYourExpensesCurrentAndPreviousYear.paragraph2")</p>
+    <p class="govuk-body">@messages("howYouWillGetYourExpensesCurrentAndPreviousYear.paragraph2")</p>
 
-    <h2>@messages("howYouWillGetYourExpensesCurrentAndPreviousYear.subHeading2")</h2>
+    <h2 class="govuk-heading-m">@messages("howYouWillGetYourExpensesCurrentAndPreviousYear.subHeading2")</h2>
 
-    <p>@messages("howYouWillGetYourExpensesPrevious.para1")</p>
+    <p class="govuk-body">@messages("howYouWillGetYourExpensesPrevious.para1")</p>
 
-    <ul class="list list-bullet" role="list">
+    <ul class="govuk-list govuk-list--bullet">
         <li>@messages("howYouWillGetYourExpensesPrevious.item1")</li>
         <li>@messages("howYouWillGetYourExpensesPrevious.item2")</li>
 
@@ -73,10 +72,10 @@
 
     @if(currentYearMinus1Selected){
 
-                <p>@messages("howYouWillGetYourExpensesPrevious.para2",taxYearStartString(1), taxYearEndString(1))</p>
+                <p class="govuk-body">@messages("howYouWillGetYourExpensesPrevious.para2",taxYearStartString(1), taxYearEndString(1))</p>
                                   }
 
-    @components.button_link(messages("howYouWillGetYourExpenses.button"), href)
+    @playComponents.button_link(messageKey = messages("howYouWillGetYourExpenses.button"), href = href, classes="govuk-button")
 
 
 }
