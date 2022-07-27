@@ -20,7 +20,7 @@ import forms.SameEmployerContributionAllYearsFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.SameEmployerContributionAllYearsView
 
 class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
@@ -54,7 +54,7 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "have the correct banner title" in {
 
           val doc = asDocument(applyView(form))
-          assertRenderedById(doc, "pageTitle")
+          assertRenderedByCssSelector(doc, "div.govuk-header__content")
         }
 
         "hide account menu when user not logged in" in {
@@ -82,7 +82,7 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "display language toggles" in {
 
           val doc = asDocument(applyView(form))
-          assertRenderedById(doc, "langSelector")
+          assertRenderedByCssSelector(doc, "nav.hmrc-language-select")
         }
       }
     }
@@ -92,15 +92,15 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "contain an input for the value" in {
 
           val doc = asDocument(applyView(form))
-          assertRenderedById(doc, "value-yes")
-          assertRenderedById(doc, "value-no")
+          assertRenderedById(doc, "value")
+          assertRenderedById(doc, "value-2")
         }
 
         "have no values checked when rendered with no form" in {
 
           val doc = asDocument(applyView(form))
-          assert(!doc.getElementById("value-yes").hasAttr("checked"))
-          assert(!doc.getElementById("value-no").hasAttr("checked"))
+          assert(!doc.getElementById("value").hasAttr("checked"))
+          assert(!doc.getElementById("value-2").hasAttr("checked"))
         }
 
         "not render an error summary" in {
@@ -125,14 +125,14 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "show an error summary" in {
 
           val doc = asDocument(applyView(form.withError(error)))
-          assertRenderedById(doc, "error-summary-heading")
+          assertRenderedById(doc, "error-summary-title")
         }
 
         "show an error in the value field's label" in {
 
           val doc = asDocument(applyView(form.withError(error)))
-          val errorSpan = doc.getElementsByClass("error-message").first
-          errorSpan.text mustBe messages(errorMessage)
+          val errorSpan = doc.getElementsByClass("govuk-error-message").first
+          errorSpan.text mustBe "Error: " + messages(errorMessage)
         }
 
         "show an error prefix in the browser title" in {
@@ -154,14 +154,14 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
     "have only the correct value checked" in {
 
       val doc = asDocument(createView(form.fill(answer)))
-      assert(doc.getElementById("value-yes").hasAttr("checked") == answer)
-      assert(doc.getElementById("value-no").hasAttr("checked") != answer)
+      assert(doc.getElementById("value").hasAttr("checked") == answer)
+      assert(doc.getElementById("value-2").hasAttr("checked") != answer)
     }
 
     "not render an error summary" in {
 
       val doc = asDocument(createView(form.fill(answer)))
-      assertNotRenderedById(doc, "error-summary_header")
+      assertNotRenderedById(doc, "error-summary-title")
     }
   }
 
