@@ -17,7 +17,7 @@
 package views
 
 import org.scalacheck.Prop.False
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.HowYouWillGetYourExpensesCurrentView
 
 class HowYouWillGetYourExpensesCurrentViewSpec extends ViewBehaviours {
