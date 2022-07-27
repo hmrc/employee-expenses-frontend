@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,22 @@
 @import config.FrontendAppConfig
 
 @this(
-        main_template: MainTemplate,
-        frontendAppConfig: FrontendAppConfig
+    layout: Layout,
+    frontendAppConfig: FrontendAppConfig,
+    heading: playComponents.heading
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @link = {
-    <a href=@frontendAppConfig.contactHMRC>@messages("phoneUs.paragraph.linkText")</a>
+    <a class="govuk-link" href=@frontendAppConfig.contactHMRC>@messages("phoneUs.paragraph.linkText")</a>
 }
 
-@main_template(
-    title = messages("phoneUs.title")
+@layout(
+    pageTitle = messages("phoneUs.title")
 ) {
 
-    @components.back_link()
+    @heading("phoneUs.heading")
 
-    @components.heading("phoneUs.heading")
-
-    <p>@Html(messages("phoneUs.paragraph", link))</p>
+    <p class="govuk-body">@Html(messages("phoneUs.paragraph", link))</p>
 }

@@ -17,7 +17,7 @@
 package views
 
 import play.twirl.api.Html
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.PhoneUsView
 
 class PhoneUsViewSpec extends ViewBehaviours {
@@ -38,7 +38,7 @@ class PhoneUsViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyViewWithAuth)
 
-    val link: Html = Html(s"""<a href="${frontendAppConfig.contactHMRC}">${messages("phoneUs.paragraph.linkText")}</a>""")
+    val link: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.contactHMRC}">${messages("phoneUs.paragraph.linkText")}</a>""")
 
     behave like pageWithBodyText(applyViewWithAuth, Html(messages("phoneUs.paragraph", link)).toString)
   }
