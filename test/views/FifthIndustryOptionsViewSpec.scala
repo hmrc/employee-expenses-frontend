@@ -47,7 +47,7 @@ class FifthIndustryOptionsViewSpec extends OptionsViewBehaviours[FifthIndustryOp
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, FifthIndustryOptions.options, true)
+    behave like optionsPage(form, applyView, FifthIndustryOptions.options)
 
     behave like pageWithBodyText(applyView(form), "fifthIndustryOptions.heading")
 

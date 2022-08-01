@@ -170,7 +170,7 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
       application.stop()
     }
 
-    for (occupation <- ConstructionOccupations.values) {
+    for (occupation <- ConstructionOccupations.values if occupation != ConstructionOccupations.Or) {
       val ua1 = emptyUserAnswers
       val ua2 = occupation match {
         case JoinerOrCarpenter =>

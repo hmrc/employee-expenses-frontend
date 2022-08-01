@@ -166,7 +166,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
       application.stop()
     }
 
-    for (trade <- AncillaryEngineeringWhichTrade.values) {
+    for (trade <- AncillaryEngineeringWhichTrade.values if trade != AncillaryEngineeringWhichTrade.Or) {
       val claimAmount = trade match {
         case AncillaryEngineeringWhichTrade.PatternMaker => ClaimAmounts.AncillaryEngineering.patternMaker
         case AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker => ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker

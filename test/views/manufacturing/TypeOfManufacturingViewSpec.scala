@@ -47,7 +47,7 @@ class TypeOfManufacturingViewSpec extends OptionsViewBehaviours[TypeOfManufactur
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, TypeOfManufacturing.options, true)
+    behave like optionsPage(form, applyView, TypeOfManufacturing.options)
   }
 
   application.stop()

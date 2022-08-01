@@ -167,7 +167,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
       application.stop()
     }
 
-    for(trade <- WhichRailwayTrade.values) {
+    for(trade <- WhichRailwayTrade.values if trade != WhichRailwayTrade.Or) {
       val claimAmount = trade match {
         case WhichRailwayTrade.VehiclePainters => ClaimAmounts.Transport.Railways.vehiclePainters
         case WhichRailwayTrade.VehicleRepairersWagonLifters => ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters

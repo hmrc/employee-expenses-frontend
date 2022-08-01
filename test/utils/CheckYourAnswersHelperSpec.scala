@@ -33,7 +33,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
       "display the correct label and answer" in {
         forAll(Gen.oneOf(FirstIndustryOptions.values)) {
           industry =>
-            if (industry != FirstIndustryOptions.NoneOfAbove) {
+            if (industry != FirstIndustryOptions.NoneOfAbove && industry != FirstIndustryOptions.Or) {
               val ua = emptyUserAnswers.set(FirstIndustryOptionsPage, industry).success.value
               helper(ua).industryType.get.label mustBe "industryType.checkYourAnswersLabel"
               helper(ua).industryType.get.answer mustBe s"firstIndustryOptions.${industry.toString}"
@@ -46,7 +46,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
       "display the correct label and answer" in {
         forAll(Gen.oneOf(SecondIndustryOptions.values)) {
           industry =>
-            if (industry != SecondIndustryOptions.NoneOfAbove) {
+            if (industry != SecondIndustryOptions.NoneOfAbove && industry != SecondIndustryOptions.Or) {
               val ua = emptyUserAnswers.set(SecondIndustryOptionsPage, industry).success.value
               helper(ua).secondaryIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
               helper(ua).secondaryIndustryList.get.answer mustBe s"secondIndustryOptions.${industry.toString}"
@@ -59,7 +59,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
       "display the correct label and answer" in {
         forAll(Gen.oneOf(ThirdIndustryOptions.values)) {
           industry =>
-            if (industry != ThirdIndustryOptions.NoneOfAbove) {
+            if (industry != ThirdIndustryOptions.NoneOfAbove && industry != ThirdIndustryOptions.Or) {
               val ua = emptyUserAnswers.set(ThirdIndustryOptionsPage, industry).success.value
               helper(ua).thirdIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
               helper(ua).thirdIndustryList.get.answer mustBe s"thirdIndustryOptions.${industry.toString}"
@@ -72,7 +72,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
       "display the correct label and answer" in {
         forAll(Gen.oneOf(FourthIndustryOptions.values)) {
           industry =>
-            if (industry != FourthIndustryOptions.NoneOfAbove) {
+            if (industry != FourthIndustryOptions.NoneOfAbove && industry != FourthIndustryOptions.Or) {
               val ua = emptyUserAnswers.set(FourthIndustryOptionsPage, industry).success.value
               helper(ua).fourthIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
               helper(ua).fourthIndustryList.get.answer mustBe s"fourthIndustryOptions.${industry.toString}"
@@ -85,7 +85,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
       "display the correct label and answer" in {
         forAll(Gen.oneOf(FifthIndustryOptions.values)) {
           industry =>
-            if (industry != FifthIndustryOptions.NoneOfAbove) {
+            if (industry != FifthIndustryOptions.NoneOfAbove && industry != FifthIndustryOptions.Or) {
               val ua = emptyUserAnswers.set(FifthIndustryOptionsPage, industry).success.value
               helper(ua).fifthIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
               helper(ua).fifthIndustryList.get.answer mustBe s"fifthIndustryOptions.${industry.toString}"

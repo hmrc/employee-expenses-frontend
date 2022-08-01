@@ -47,7 +47,7 @@ class SecondIndustryOptionsViewSpec extends OptionsViewBehaviours[SecondIndustry
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, SecondIndustryOptions.options, true)
+    behave like optionsPage(form, applyView, SecondIndustryOptions.options)
 
     behave like pageWithBodyText(applyView(form), "secondIndustryOptions.heading")
 

@@ -45,7 +45,7 @@ class AncillaryEngineeringWhichTradeController @Inject()(
                                                           sessionRepository: SessionRepository
                                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  val form = formProvider()
+  val form: Form[AncillaryEngineeringWhichTrade] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
@@ -70,7 +70,7 @@ class AncillaryEngineeringWhichTradeController @Inject()(
             case AncillaryEngineeringWhichTrade.PatternMaker => ClaimAmounts.AncillaryEngineering.patternMaker
             case AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker => ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
             case AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper => ClaimAmounts.AncillaryEngineering.apprentice
-            case AncillaryEngineeringWhichTrade.NoneOfTheAbove => ClaimAmounts.AncillaryEngineering.allOther
+            case _ => ClaimAmounts.AncillaryEngineering.allOther
           }
 
           for {

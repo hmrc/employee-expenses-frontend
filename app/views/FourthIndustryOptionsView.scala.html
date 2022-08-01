@@ -40,15 +40,16 @@
             field = form("value"),
             legend = messages("fourthIndustryOptions.heading"),
             headingIsLegend = true,
-            inputs = Seq(
-                RadioItem(content = Text(Messages("fourthIndustryOptions.agriculture")), value = Option("agriculture")),
-                RadioItem(content = Text(Messages("fourthIndustryOptions.clothingTextiles")), value = Option("clothingTextiles")),
-                RadioItem(content = Text(Messages("fourthIndustryOptions.fireService")), value = Option("fireService")),
-                RadioItem(content = Text(Messages("fourthIndustryOptions.heating")), value = Option("heating")),
-                RadioItem(content = Text(Messages("fourthIndustryOptions.printing")), value = Option("printing")),
-                RadioItem(divider = Some(Messages("site.or"))),
-                RadioItem(content = Text(Messages("fourthIndustryOptions.none")), value = Option("none"))
-            ),
+            inputs = FourthIndustryOptions.options map { radioOption =>
+                if (radioOption.value == "or") {
+                    RadioItem(divider = Some(Messages("site.or")))
+                } else {
+                    RadioItem(
+                        value = Some(radioOption.value),
+                        content = HtmlContent(radioOption.message.html)
+                    )
+                }
+            },
             classes = "govuk-!-margin-top-3"
         )
 

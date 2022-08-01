@@ -40,13 +40,16 @@
             field = form("value"),
             legend = messages("typeOfEngineering.heading"),
             headingIsLegend = true,
-            inputs = Seq(
-                RadioItem(content = Text(Messages("typeOfEngineering.constructionalEngineering")), value = Option("constructionalEngineering")),
-                RadioItem(content = Text(Messages("typeOfEngineering.factoryOrWorkshopEngineering")), value = Option("factoryOrWorkshopEngineering")),
-                RadioItem(content = Text(Messages("typeOfEngineering.tradesRelatingToEngineering")), value = Option("tradesRelatingToEngineering")),
-                RadioItem(divider = Some(Messages("site.or"))),
-                RadioItem(content = Text(Messages("typeOfEngineering.noneOfTheAbove")), value = Option("noneOfTheAbove"))
-            ),
+            inputs = TypeOfEngineering.options map { radioOption =>
+                if (radioOption.value == "or") {
+                    RadioItem(divider = Some(Messages("site.or")))
+                } else {
+                    RadioItem(
+                        value = Some(radioOption.value),
+                        content = HtmlContent(radioOption.message.html)
+                    )
+                }
+            },
             classes = "govuk-!-margin-top-3"
         )
 

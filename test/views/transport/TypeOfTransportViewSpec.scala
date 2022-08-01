@@ -47,7 +47,7 @@ class TypeOfTransportViewSpec extends OptionsViewBehaviours[TypeOfTransport] {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, TypeOfTransport.options, true)
+    behave like optionsPage(form, applyView, TypeOfTransport.options)
   }
 
   application.stop()
