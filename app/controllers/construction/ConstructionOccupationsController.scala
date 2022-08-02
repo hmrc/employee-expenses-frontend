@@ -19,9 +19,10 @@ package controllers.construction
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.construction.ConstructionOccupationsFormProvider
+
 import javax.inject.{Inject, Named}
 import models.ConstructionOccupations.{AsphaltOrCement, BuildingMaterials, JoinerOrCarpenter, LabourerOrNavvy, NoneOfAbove, RoofingFelt, StoneMason, Tilemaker}
-import models.{Enumerable, Mode}
+import models.{ConstructionOccupations, Enumerable, Mode}
 import navigation.Navigator
 import pages.ClaimAmount
 import pages.construction.ConstructionOccupationsPage
@@ -46,7 +47,7 @@ class ConstructionOccupationsController @Inject()(
                                                    view: ConstructionOccupationsView
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  val form = formProvider()
+  val form: Form[ConstructionOccupations] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
@@ -79,7 +80,7 @@ class ConstructionOccupationsController @Inject()(
                     case LabourerOrNavvy => ua.set(ClaimAmount, ClaimAmounts.Construction.labourerNavvy)
                     case Tilemaker => ua.set(ClaimAmount, ClaimAmounts.Construction.tileMaker)
                     case BuildingMaterials => ua.set(ClaimAmount, ClaimAmounts.Construction.buildingMaterials)
-                    case NoneOfAbove => ua.set(ClaimAmount, ClaimAmounts.Construction.allOther)
+                    case _ => ua.set(ClaimAmount, ClaimAmounts.Construction.allOther)
                   }
               })
             _ <- sessionRepository.set(request.identifier, updatedAnswers)

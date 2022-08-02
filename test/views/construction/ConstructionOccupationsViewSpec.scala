@@ -48,7 +48,7 @@ class ConstructionOccupationsViewSpec extends OptionsViewBehaviours[Construction
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, ConstructionOccupations.options, true)
+    behave like optionsPage(form, applyView, ConstructionOccupations.options)
 
     "must have the correct text of 'or' between last 2 radioButtons" in {
 

@@ -39,13 +39,16 @@
         @input_radio(
             field = form("value"),
             legend = messages("ancillaryEngineeringWhichTrade.heading"),
-            inputs = Seq(
-                RadioItem(content = Text(Messages("ancillaryEngineeringWhichTrade.apprenticeOrStorekeeper")), value = Option("apprenticeOrStorekeeper")),
-                RadioItem(content = Text(Messages("ancillaryEngineeringWhichTrade.labourerSupervisorOrUnskilledWorker")), value = Option("labourerSupervisorOrUnskilledWorker")),
-                RadioItem(content = Text(Messages("ancillaryEngineeringWhichTrade.patternMaker")), value = Option("patternMaker")),
-                RadioItem(divider = Some(Messages("site.or"))),
-                RadioItem(content = Text(Messages("ancillaryEngineeringWhichTrade.noneOfTheAbove")), value = Option("noneOfTheAbove"))
-            ),
+            inputs = AncillaryEngineeringWhichTrade.options map { radioOption =>
+                if (radioOption.value == "or") {
+                    RadioItem(divider = Some(Messages("site.or")))
+                } else {
+                    RadioItem(
+                        value = Some(radioOption.value),
+                        content = HtmlContent(radioOption.message.html)
+                    )
+                }
+            },
             classes = "govuk-!-margin-top-3",
             headingIsLegend = true
         )

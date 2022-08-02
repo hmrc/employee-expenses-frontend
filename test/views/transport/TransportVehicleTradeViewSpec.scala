@@ -47,7 +47,7 @@ class TransportVehicleTradeViewSpec extends OptionsViewBehaviours[TransportVehic
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, TransportVehicleTrade.options, true)
+    behave like optionsPage(form, applyView, TransportVehicleTrade.options)
   }
 
   application.stop()

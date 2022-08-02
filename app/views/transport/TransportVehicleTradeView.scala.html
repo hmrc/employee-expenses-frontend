@@ -39,15 +39,16 @@
         @input_radio(
             field = form("value"),
             legend = messages("transportVehicleTrade.heading"),
-            inputs = Seq(
-                RadioItem(content = Text(Messages("transportVehicleTrade.builder")), value = Option("builder")),
-                RadioItem(content = Text(Messages("transportVehicleTrade.buildersAssistantOrRepairersAssistant")), value = Option("buildersAssistantOrRepairersAssistant")),
-                RadioItem(content = Text(Messages("transportVehicleTrade.letterer")), value = Option("letterer")),
-                RadioItem(content = Text(Messages("transportVehicleTrade.railwayVehiclePainter")), value = Option("railwayVehiclePainter")),
-                RadioItem(content = Text(Messages("transportVehicleTrade.vehicleRepairerWagonLifter")), value = Option("vehicleRepairerWagonLifter")),
-                RadioItem(divider = Some(Messages("site.or"))),
-                RadioItem(content = Text(Messages("transportVehicleTrade.noneOfTheAbove")), value = Option("noneOfTheAbove"))
-            ),
+            inputs = TransportVehicleTrade.options map { radioOption =>
+                if (radioOption.value == "or") {
+                    RadioItem(divider = Some(Messages("site.or")))
+                } else {
+                    RadioItem(
+                        value = Some(radioOption.value),
+                        content = HtmlContent(radioOption.message.html)
+                    )
+                }
+            },
             classes = "govuk-!-margin-top-3",
             headingIsLegend = true
         )

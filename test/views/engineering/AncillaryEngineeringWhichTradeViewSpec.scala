@@ -47,7 +47,7 @@ class AncillaryEngineeringWhichTradeViewSpec extends OptionsViewBehaviours[Ancil
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like optionsPage(form, applyView, AncillaryEngineeringWhichTrade.options, true)
+    behave like optionsPage(form, applyView, AncillaryEngineeringWhichTrade.options)
   }
 
   application.stop()

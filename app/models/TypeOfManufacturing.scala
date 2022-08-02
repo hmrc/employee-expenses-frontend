@@ -28,10 +28,11 @@ object TypeOfManufacturing extends Enumerable.Implicits {
   case object IronSteel extends WithName("ironSteel") with TypeOfManufacturing
   case object PreciousMetals extends WithName("preciousMetals") with TypeOfManufacturing
   case object WoodFurniture extends WithName("woodFurniture") with TypeOfManufacturing
+  case object Or extends WithName("or") with TypeOfManufacturing
   case object NoneOfAbove extends WithName("none") with TypeOfManufacturing
 
   val values: Seq[TypeOfManufacturing] = Seq(
-    Aluminium, BrassCopper, Glass, IronSteel, PreciousMetals, WoodFurniture, NoneOfAbove
+    Aluminium, BrassCopper, Glass, IronSteel, PreciousMetals, WoodFurniture, Or, NoneOfAbove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {

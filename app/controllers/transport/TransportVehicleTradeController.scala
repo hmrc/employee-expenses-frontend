@@ -45,7 +45,7 @@ class TransportVehicleTradeController @Inject()(
                                                  sessionRepository: SessionRepository
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  val form = formProvider()
+  val form: Form[TransportVehicleTrade] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
@@ -72,7 +72,7 @@ class TransportVehicleTradeController @Inject()(
             case TransportVehicleTrade.RailwayVehiclePainter => ClaimAmounts.Transport.Railways.vehiclePainters
             case TransportVehicleTrade.Letterer => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
             case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
-            case TransportVehicleTrade.NoneOfTheAbove => ClaimAmounts.Transport.VehicleTrade.allOther
+            case _ => ClaimAmounts.Transport.VehicleTrade.allOther
           }
 
           for {

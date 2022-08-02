@@ -39,16 +39,16 @@
         @input_radio(
             field = form("value"),
             legend = messages("typeOfManufacturing.heading"),
-            inputs = Seq(
-                RadioItem(content = Text(Messages("typeOfManufacturing.aluminium")), value = Option("aluminium")),
-                RadioItem(content = Text(Messages("typeOfManufacturing.brassCopper")), value = Option("brassCopper")),
-                RadioItem(content = Text(Messages("typeOfManufacturing.glass")), value = Option("glass")),
-                RadioItem(content = Text(Messages("typeOfManufacturing.ironSteel")), value = Option("ironSteel")),
-                RadioItem(content = Text(Messages("typeOfManufacturing.preciousMetals")), value = Option("preciousMetals")),
-                RadioItem(content = Text(Messages("typeOfManufacturing.woodFurniture")), value = Option("woodFurniture")),
-                RadioItem(divider = Some(Messages("site.or"))),
-                RadioItem(content = Text(Messages("typeOfManufacturing.none")), value = Option("none"))
-            ),
+            inputs = TypeOfManufacturing.options map { radioOption =>
+                if (radioOption.value == "or") {
+                    RadioItem(divider = Some(Messages("site.or")))
+                } else {
+                    RadioItem(
+                        value = Some(radioOption.value),
+                        content = HtmlContent(radioOption.message.html)
+                    )
+                }
+            },
             classes = "govuk-!-margin-top-3",
             headingIsLegend = true
         )

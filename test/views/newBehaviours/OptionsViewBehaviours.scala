@@ -24,8 +24,7 @@ trait OptionsViewBehaviours[A] extends ViewBehaviours {
 
   def optionsPage(form: Form[A],
                   createView: Form[A] => HtmlFormat.Appendable,
-                  options: Seq[RadioCheckboxOption],
-                  radioOr: Boolean = false): Unit = {
+                  options: Seq[RadioCheckboxOption]): Unit = {
 
     "behave like an options page" must {
 
@@ -35,21 +34,20 @@ trait OptionsViewBehaviours[A] extends ViewBehaviours {
 
         for (option <- options) {
 
-          val idVal = if(radioOr && option == options.last){
-            s"value-${options.indexOf(option) + 2}"
-          } else if(option != options.head){
+          val idVal = if(option != options.head){
             s"value-${options.indexOf(option) + 1}"
           } else {s"value"}
 
-          assertContainsRadioButton(doc, idVal, "value", option.value, false)
+          if(option.value!= "or"){
+            assertContainsRadioButton(doc, idVal, "value", option.value, false)
+          }
         }
+
       }
     }
     for (option <- options) {
 
-      val idVal = if(radioOr && option == options.last){
-        s"value-${options.indexOf(option) + 2}"
-      } else if(option != options.head){
+      val idVal = if(option != options.head){
         s"value-${options.indexOf(option) + 1}"
       } else {s"value"}
 
@@ -59,18 +57,19 @@ trait OptionsViewBehaviours[A] extends ViewBehaviours {
 
           val doc = asDocument(createView(form.bind(Map("value" -> s"${option.value}"))))
 
-          assertContainsRadioButton(doc, idVal, "value", option.value, true)
+          if(option.value != "or"){
+            assertContainsRadioButton(doc, idVal, "value", option.value, true)
+          }
 
           for (unselectedOption <- options.filterNot(o => o == option)) {
 
-            val unselectId = if(radioOr && unselectedOption == options.last){
-              s"value-${options.indexOf(unselectedOption) + 2}"
-            } else if(unselectedOption != options.head) {
+            val unselectId = if(unselectedOption != options.head) {
               s"value-${options.indexOf(unselectedOption) + 1}"
             } else{s"value"}
 
-            assertContainsRadioButton(doc, unselectId, "value", unselectedOption.value, false)
-
+            if(unselectedOption.value != "or") {
+              assertContainsRadioButton(doc, unselectId, "value", unselectedOption.value, false)
+            }
           }
         }
       }
