@@ -41,16 +41,14 @@ accountMenuEnabled: Boolean = true)(contentBlock: Html)(implicit request: Reques
     @if(request.session.get("authToken")){
         @hmrcAccountMenu(AccountMenu(
             accountHome = AccountHome(
-                href = appConfig.ptaHomeUrl,
-                active = true
+                href = appConfig.ptaHomeUrl
             ),
             messages = AccountMessages(
                 href = appConfig.messagesUrl,
                 messageCount = None
             ),
             yourProfile = YourProfile(
-                href = appConfig.yourProfileUrl,
-                active = true
+                href = appConfig.yourProfileUrl
             ),
             checkProgress = CheckProgress(
                 href = appConfig.trackingHomeUrl
@@ -65,7 +63,10 @@ accountMenuEnabled: Boolean = true)(contentBlock: Html)(implicit request: Reques
 }
 
 @head = {
-<link rel="stylesheet" type="text/css" href ='@routes.Assets.versioned("stylesheets/vfr.css")'>
+@if(timeoutEnabled) {
+    @hmrcTimeoutDialogHelper(signOutUrl = appConfig.signOutUrl, keepAliveUrl = Some(appConfig.keepAliveUrl))
+}
+<link rel="stylesheet" type="text/css" href ='@routes.Assets.versioned("stylesheets/employeeexpensesfrontend-app.css")'>
 }
 
 

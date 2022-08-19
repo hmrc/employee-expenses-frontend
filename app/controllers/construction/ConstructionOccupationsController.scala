@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.construction.ConstructionOccupationsFormProvider
 
 import javax.inject.{Inject, Named}
-import models.ConstructionOccupations.{AsphaltOrCement, BuildingMaterials, JoinerOrCarpenter, LabourerOrNavvy, NoneOfAbove, RoofingFelt, StoneMason, Tilemaker}
+import models.ConstructionOccupations.{AsphaltOrCement, BuildingMaterials, JoinerOrCarpenter, LabourerOrNavvy, RoofingFelt, StoneMason, Tilemaker}
 import models.{ConstructionOccupations, Enumerable, Mode}
 import navigation.Navigator
 import pages.ClaimAmount

@@ -171,7 +171,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
         case AncillaryEngineeringWhichTrade.PatternMaker => ClaimAmounts.AncillaryEngineering.patternMaker
         case AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker => ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
         case AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper => ClaimAmounts.AncillaryEngineering.apprentice
-        case AncillaryEngineeringWhichTrade.NoneOfTheAbove => ClaimAmounts.AncillaryEngineering.allOther
+        case _ => ClaimAmounts.AncillaryEngineering.allOther
       }
 
       s"save $claimAmount to ClaimAmount when '$trade' is selected" in {

@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 <h2 class="govuk-heading-m">@messages(answerSection.headingKey)</h2>
 
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-    @components.answer_row(answerSection.relevanceRow)
+    @playComponents.answer_row(answerSection.relevanceRow)
 @for(row <- answerSection.rows){
     <div class="govuk-summary-list__row">
         <dd class="govuk-summary-list__value">@row.answer</dd>
