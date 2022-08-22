@@ -177,7 +177,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
         case TransportVehicleTrade.RailwayVehiclePainter => ClaimAmounts.Transport.Railways.vehiclePainters
         case TransportVehicleTrade.Letterer => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
         case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
-        case TransportVehicleTrade.NoneOfTheAbove => ClaimAmounts.Transport.VehicleTrade.allOther
+        case _ => ClaimAmounts.Transport.VehicleTrade.allOther
       }
 
       s"save $claimAmount 'buildersRepairersWagonLifters' when '$trade' is selected" in {

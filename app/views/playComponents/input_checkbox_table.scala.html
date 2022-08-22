@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,8 @@
         inputs: Seq[CheckboxItem],
         columnHeading1: String,
         columnHeading2: String,
-        headingIsLegend: Boolean = false
+        headingIsLegend: Boolean = false,
+        classes: String = ""
 
 )(implicit messages: Messages)
 
@@ -40,6 +41,7 @@
     )),
     hint = hint.map(hintString => Hint(content = Text(hintString))),
     idPrefix = Some(field.id),
-    items = inputs
+    items = inputs,
+    classes = classes
 ).withFormField(field))
 

@@ -21,7 +21,7 @@ import config.ClaimAmounts
 import controllers.actions.UnAuthed
 import controllers.routes._
 import forms.construction.ConstructionOccupationsFormProvider
-import models.ConstructionOccupations.{AsphaltOrCement, BuildingMaterials, JoinerOrCarpenter, LabourerOrNavvy, NoneOfAbove, RoofingFelt, StoneMason, Tilemaker}
+import models.ConstructionOccupations.{AsphaltOrCement, BuildingMaterials, JoinerOrCarpenter, LabourerOrNavvy, RoofingFelt, StoneMason, Tilemaker}
 import models.{ConstructionOccupations, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -32,6 +32,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.ClaimAmount
 import pages.construction.ConstructionOccupationsPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -43,12 +44,12 @@ import scala.concurrent.Future
 
 class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with ScalaCheckPropertyChecks {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val constructionOccupationsRoute = routes.ConstructionOccupationsController.onPageLoad(NormalMode).url
+  lazy val constructionOccupationsRoute: String = routes.ConstructionOccupationsController.onPageLoad(NormalMode).url
 
   val formProvider = new ConstructionOccupationsFormProvider()
-  val form = formProvider()
+  val form: Form[ConstructionOccupations] = formProvider()
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
@@ -194,7 +195,7 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
         case BuildingMaterials =>
           ua1.set(ClaimAmount, ClaimAmounts.Construction.buildingMaterials).success.value
           .set(ConstructionOccupationsPage, ConstructionOccupations.BuildingMaterials).success.value
-        case NoneOfAbove =>
+        case _ =>
           ua1.set(ClaimAmount, ClaimAmounts.Construction.allOther).success.value
           .set(ConstructionOccupationsPage, ConstructionOccupations.NoneOfAbove).success.value
       }

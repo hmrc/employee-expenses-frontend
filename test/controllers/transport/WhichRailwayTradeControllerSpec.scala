@@ -171,7 +171,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
       val claimAmount = trade match {
         case WhichRailwayTrade.VehiclePainters => ClaimAmounts.Transport.Railways.vehiclePainters
         case WhichRailwayTrade.VehicleRepairersWagonLifters => ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
-        case WhichRailwayTrade.NoneOfTheAbove => ClaimAmounts.Transport.Railways.allOther
+        case _ => ClaimAmounts.Transport.Railways.allOther
       }
 
       s"save '$claimAmount' to ClaimAmount when '$trade' is selected" in {
