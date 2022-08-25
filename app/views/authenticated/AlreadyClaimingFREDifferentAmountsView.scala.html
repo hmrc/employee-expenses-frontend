@@ -74,14 +74,14 @@
                                         freAmounts.taxYear.year.toString,
                                         (freAmounts.taxYear.year + 1).toString
                                     )),
-                                    classes = s"tax-year-${freAmounts.taxYear.year}"
+                                    classes = s"tax-year-${freAmounts.taxYear.year} govuk-!-width-two-thirds"
                                 ),
                                 value = Value(
                                     content = HtmlContent(messages(
                                         "alreadyClaimingFREDifferentAmounts.tableAmountHeading",
                                         {if(freAmounts.freAmount.isDefined) "£" + freAmounts.freAmount.get.grossAmount else "£" + 0})
                                     ),
-                                    classes = s"fre-amount-${freAmounts.taxYear.year}"
+                                    classes = s"fre-amount-${freAmounts.taxYear.year} govuk-!-width-one-third"
                                 )
                             )
                         )}
