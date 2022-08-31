@@ -17,7 +17,7 @@
 package views.authenticated
 
 import models.NormalMode
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.authenticated.UpdateEmployerInformationView
 
 class UpdateEmployerInformationViewSpec extends ViewBehaviours {

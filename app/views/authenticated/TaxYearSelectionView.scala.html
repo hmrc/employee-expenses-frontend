@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,33 +16,47 @@
 
 @import controllers.authenticated.routes._
 @import models.{Mode, TaxYearSelection}
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    submitButton: playComponents.submit_button,
+    input_tax_year: playComponents.input_tax_year
 )
 
 @(form: Form[Seq[TaxYearSelection]], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("taxYearSelection.title")}"
+
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("taxYearSelection.title")}"
     ) {
 
     @formHelper(action = TaxYearSelectionController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_tax_year(
+        @input_tax_year(
             field = form("value"),
             legend = messages("taxYearSelection.heading"),
-            headingIsLegend = true,
-            hint = Some(messages("taxYearSelection.listHint")),
-            inputs = TaxYearSelection.options,
-            textBlock = Some(messages("taxYearSelection.bodyText"))
+            legendClass = Some("govuk-!-margin-bottom-7 govuk-fieldset__legend--xl"),
+            hint = Some(messages("taxYearSelection.bodyText") + <br/> + messages("taxYearSelection.listHint")),
+            hintClass = Some("govuk-!-margin-bottom-4"),
+            describedBy = Some("select-all-hint"),
+            inputs = TaxYearSelection.options.map { option =>
+                CheckboxItem(
+                    content = HtmlContent(option.message.html),
+                    value = option.value,
+                    hint = if(option.value == "currentYear"){
+                                Some(Hint(content = Text(messages("taxYearSelection.currentYearHint"))
+                    ))} else None
+                )
+            },
+            textBlock = Some(messages("taxYearSelection.bodyText")),
+            headingIsLegend = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

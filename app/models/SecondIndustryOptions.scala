@@ -26,10 +26,11 @@ object SecondIndustryOptions extends Enumerable.Implicits {
   case object Education extends WithName("education") with SecondIndustryOptions
   case object ManufacturingWarehousing extends WithName("manufacturingWarehousing") with SecondIndustryOptions
   case object Police extends WithName("police") with SecondIndustryOptions
+  case object Or extends WithName("or") with SecondIndustryOptions
   case object NoneOfAbove extends WithName("none") with SecondIndustryOptions
 
   val values: Seq[SecondIndustryOptions] = Seq(
-    Construction, Education, ManufacturingWarehousing, Police, NoneOfAbove
+    Construction, Education, ManufacturingWarehousing, Police, Or, NoneOfAbove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {

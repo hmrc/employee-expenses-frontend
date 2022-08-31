@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 @import config.FrontendAppConfig
 
 @this(
-        main_template: MainTemplate,
+        layout: Layout,
         frontendAppConfig:FrontendAppConfig
 )
 
@@ -37,37 +37,37 @@
     if(freResponse == FREAllYearsAllAmountsSameAsClaimAmount || freResponse == FRESomeYears) "titleChanged" else "title"
 }
 
-@main_template(
-    title = messages(s"confirmation.$title")
+@layout(
+    pageTitle = messages(s"confirmation.$title"),
+    backLinkEnabled = false
 ) {
 
-    <div class="govuk-box-highlight">
-        <h1 class="heading-xlarge">@messages("confirmation.heading")</h1>
-
+    <div class="govuk-panel govuk-panel--confirmation">
+        <h1 class="govuk-panel__title">@messages("confirmation.heading")</h1>
         @{
-        (hasClaimIncreased, npsFreAmount > 0) match {
-        case (true, true) => {
-        <h2>{messages("confirmation.personalAllowanceIncrease", npsFreAmount, claimAmount)}</h2>
+            (hasClaimIncreased, npsFreAmount > 0) match {
+                case (true, true) => {
+                    <div class="govuk-panel__body">{messages("confirmation.personalAllowanceIncrease", npsFreAmount, claimAmount)}</div>
+                }
+                case (false, true) => {
+                    <div class="govuk-panel__body">{messages("confirmation.personalAllowanceDecrease", npsFreAmount, claimAmount)}</div>
+                }
+                case _ => {
+                    <div class="govuk-panel__body">{messages("confirmation.newPersonalAllowance", claimAmount)}</div>
+                }
+            }
         }
-        case (false, true) => {
-        <h2>{messages("confirmation.personalAllowanceDecrease", npsFreAmount, claimAmount)}</h2>
-        }
-        case _ => {
-        <h2>{messages("confirmation.newPersonalAllowance", claimAmount)}</h2>
-        }
+    </div>
 
-        }
-        }    </div>
+    <h2 class="govuk-heading-l">@messages("confirmation.whatHappensNext")</h2>
 
-    <h2>@messages("confirmation.whatHappensNext")</h2>
+    <h3 class="govuk-heading-m">@messages("confirmation.currentTaxYear")</h3>
 
-    <h3>@messages("confirmation.currentTaxYear")</h3>
+    <p class="govuk-body">@messages("confirmation.taxCodeChanged.currentYear.paragraph1")</p>
 
-    <p>@messages("confirmation.taxCodeChanged.currentYear.paragraph1")</p>
+    <p class="govuk-body">@messages("confirmation.taxCodeChanged.currentYear.paragraph2")</p>
 
-    <p>@messages("confirmation.taxCodeChanged.currentYear.paragraph2")</p>
+    @playComponents.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
 
-    @components.claim_amount_rates_list(claimAmountsAndRates, claimAmount)
-
-    @components.confirmation_footer(address, employerCorrect, frontendAppConfig.updateAddressInfoUrl, frontendAppConfig.updateEmployerInfoUrl)
+    @playComponents.confirmation_footer(address, employerCorrect, frontendAppConfig.updateAddressInfoUrl, frontendAppConfig.updateEmployerInfoUrl)
 }

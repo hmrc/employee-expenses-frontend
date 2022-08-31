@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,17 @@
  *@
 
 @this(
-    main_template: MainTemplate
+    layout: Layout,
+    heading: playComponents.heading
 )
 
 @(p87Url: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("claimByPostOrOnline.title")
+@layout(
+    pageTitle = messages("claimByPostOrOnline.title")
     ) {
 
-    @components.back_link()
+    @heading("claimByPostOrOnline.heading")
 
-    @components.heading("claimByPostOrOnline.heading")
-
-    @components.button_link("site.continue", p87Url)
+    @playComponents.button_link("site.continue", p87Url, classes = "govuk-button")
 }

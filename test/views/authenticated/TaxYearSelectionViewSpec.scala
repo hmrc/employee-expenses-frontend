@@ -21,7 +21,7 @@ import models.{NormalMode, TaxYearSelection}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import viewmodels.RadioCheckboxOption
-import views.behaviours.CheckboxViewBehaviours
+import views.newBehaviours.CheckboxViewBehaviours
 import views.html.authenticated.TaxYearSelectionView
 
 class TaxYearSelectionViewSpec extends CheckboxViewBehaviours[TaxYearSelection] {

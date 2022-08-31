@@ -21,7 +21,7 @@ import forms.shipyard.ShipyardOccupationList2FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.shipyard.ShipyardOccupationList2View
 
 class ShipyardOccupationList2ViewSpec extends YesNoViewBehaviours {

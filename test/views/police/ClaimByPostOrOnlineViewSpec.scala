@@ -17,7 +17,7 @@
 package views.police
 
 import play.api.Application
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.police.ClaimByPostOrOnlineView
 
 class ClaimByPostOrOnlineViewSpec extends ViewBehaviours {

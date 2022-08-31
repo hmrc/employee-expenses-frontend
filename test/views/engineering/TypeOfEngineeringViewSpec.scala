@@ -21,7 +21,7 @@ import models.{NormalMode, TypeOfEngineering}
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.engineering.TypeOfEngineeringView
 
 class TypeOfEngineeringViewSpec extends OptionsViewBehaviours[TypeOfEngineering] {

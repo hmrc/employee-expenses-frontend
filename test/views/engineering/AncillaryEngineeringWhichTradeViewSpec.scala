@@ -20,7 +20,7 @@ import forms.engineering.AncillaryEngineeringWhichTradeFormProvider
 import models.{AncillaryEngineeringWhichTrade, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.engineering.AncillaryEngineeringWhichTradeView
 
 class AncillaryEngineeringWhichTradeViewSpec extends OptionsViewBehaviours[AncillaryEngineeringWhichTrade] {

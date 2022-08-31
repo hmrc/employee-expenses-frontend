@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
  *@
 
 @this(
-        main_template: MainTemplate
+        layout: Layout,
+        heading: playComponents.heading
 )
 
 @(
@@ -26,32 +27,30 @@
         onwardRoute: String
 )(implicit request: Request[_], messages: Messages)
 
-    @main_template(
-        title = messages("claimAmount.title", amount)
+    @layout(
+        pageTitle = messages("claimAmount.title", amount)
     ) {
 
-        @components.back_link()
+        @heading(messages("claimAmount.heading"))
 
-        @components.heading(messages("claimAmount.heading"))
+        <p class="govuk-body govuk-!-font-size-24">@messages("claimAmount.increasePA", amount)</p>
 
-        <p class="lede">@messages("claimAmount.increasePA", amount)</p>
+        <h2 class="govuk-heading-s">@messages("claimAmount.englandHeading")</h2>
 
-        <h2 class="heading-small">@messages("claimAmount.englandHeading")</h2>
+        <p class="govuk-body">@messages("claimAmount.basicRate", standardRate.basicRate, amount, standardRate.calculatedBasicRate)</p>
+        <p class="govuk-body">@messages("claimAmount.higherRate", standardRate.higherRate, amount, standardRate.calculatedHigherRate)</p>
 
-        <p>@messages("claimAmount.basicRate", standardRate.basicRate, amount, standardRate.calculatedBasicRate)</p>
-        <p>@messages("claimAmount.higherRate", standardRate.higherRate, amount, standardRate.calculatedHigherRate)</p>
+        <h2 class="govuk-heading-s">@messages("claimAmount.scotlandHeading")</h2>
 
-        <h2 class="heading-small">@messages("claimAmount.scotlandHeading")</h2>
+        <p class="govuk-body">@messages("claimAmount.starterRate", scottishRate.starterRate, amount, scottishRate.calculatedStarterRate)</p>
+        <p class="govuk-body">@messages("claimAmount.basicRate", scottishRate.basicRate, amount, scottishRate.calculatedBasicRate)</p>
+        <p class="govuk-body">@messages("claimAmount.higherRate", scottishRate.higherRate, amount, scottishRate.calculatedHigherRate)</p>
 
-        <p>@messages("claimAmount.starterRate", scottishRate.starterRate, amount, scottishRate.calculatedStarterRate)</p>
-        <p>@messages("claimAmount.basicRate", scottishRate.basicRate, amount, scottishRate.calculatedBasicRate)</p>
-        <p>@messages("claimAmount.higherRate", scottishRate.higherRate, amount, scottishRate.calculatedHigherRate)</p>
+        <h2 class="govuk-heading-l">@messages("claimAmount.howThisIsCalculated")</h2>
 
-        <h2 class="heading-large">@messages("claimAmount.howThisIsCalculated")</h2>
+        <p class="govuk-body">@messages("claimAmount.amountDepends")</p>
 
-        <p>@messages("claimAmount.amountDepends")</p>
-
-        <ul class="list list-bullet">
+        <ul class="govuk-list govuk-list--bullet">
             <li>@messages("claimAmount.industry")</li>
             <li>@messages("claimAmount.whereYouLive")</li>
             <li>@messages("claimAmount.rateOfTax")</li>
@@ -61,5 +60,5 @@
             }
         </ul>
 
-        @components.button_link(messages("site.continue"), onwardRoute)
+        @playComponents.button_link(messages("site.continue"), onwardRoute, classes = "govuk-button")
     }

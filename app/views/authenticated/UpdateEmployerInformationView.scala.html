@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,21 @@
 @import controllers.authenticated.routes._
 
 @this(
-        main_template: MainTemplate
+        layout: Layout,
+        heading: playComponents.heading
 )
 
 @(nextPageURL: String)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("updateEmployerInformation.title")
+@layout(
+    pageTitle = messages("updateEmployerInformation.title")
 ) {
 
-    @components.back_link()
+    @heading(headingKey = "updateEmployerInformation.heading")
 
-    @components.heading("updateEmployerInformation.heading")
+    <p class="govuk-body">@messages("updateEmployerInformation.paragraph1")</p>
 
-    <p>@messages("updateEmployerInformation.paragraph1")</p>
+    <p class="govuk-body">@messages("updateEmployerInformation.paragraph2")</p>
 
-    <p>@messages("updateEmployerInformation.paragraph2")</p>
-
-    @components.button_link("site.continue", nextPageURL)
+    @playComponents.button_link(href=nextPageURL, classes="govuk-button")
 }

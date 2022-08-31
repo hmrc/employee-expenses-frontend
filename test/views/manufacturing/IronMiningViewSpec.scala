@@ -21,7 +21,7 @@ import forms.manufacturing.IronMiningFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.manufacturing.IronMiningView
 
 class IronMiningViewSpec extends YesNoViewBehaviours {

@@ -12,6 +12,7 @@ checkYourAnswers.editText=Newid eich ateb
 date.day=Diwrnod
 date.month=Mis
 date.year=Blwyddyn
+service.name = Hawlio ar gyfer gwisg unffurf ac offer
 error.browser.title.prefix=Gwall:
 error.boolean=Rhowch ateb
 error.invalid_date=Rhowch ddyddiad cywir

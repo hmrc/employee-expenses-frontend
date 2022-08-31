@@ -27,11 +27,12 @@ object TypeOfTransport extends Enumerable.Implicits {
   case object Railways extends WithName("railways") with TypeOfTransport
   case object SeamanCarpenter extends WithName("seamanCarpenter") with TypeOfTransport
   case object Vehicles extends WithName("vehicles") with TypeOfTransport
+  case object Or extends WithName("or") with TypeOfTransport
   case object NoneOfTheAbove extends WithName("noneOfTheAbove") with TypeOfTransport
 
 
   val values: Seq[TypeOfTransport] = Seq(
-    Airlines, PublicTransport, Railways, SeamanCarpenter, Vehicles, NoneOfTheAbove
+    Airlines, PublicTransport, Railways, SeamanCarpenter, Vehicles, Or, NoneOfTheAbove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {

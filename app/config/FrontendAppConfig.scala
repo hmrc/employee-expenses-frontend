@@ -21,14 +21,19 @@ import controllers.routes
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.Call
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import scala.util.Try
 
 @Singleton
-class FrontendAppConfig @Inject() (val configuration: Configuration) {
+class FrontendAppConfig @Inject() (val configuration: Configuration, val servicesConfig: ServicesConfig) {
+
+  private def loadConfig(key: String): String = Try(servicesConfig.getString(key)).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
   lazy val serviceTitle = "Claim for your work uniform and tools - GOV.UK"
 
-  private val contactHost = configuration.get[Service]("microservice.services.contact-frontend").baseUrl
-  private val contactFormServiceIdentifier = "employeeExpensesFrontend"
+  lazy val contactHost = configuration.get[Service]("microservice.services.contact-frontend").baseUrl
+  lazy val contactFormServiceIdentifier = loadConfig("contact-frontend-serviceId")
 
   val assetsPath: String = configuration.get[String]("assets.url") + configuration.get[String]("assets.version") + "/"
   val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports?service=$contactFormServiceIdentifier"
@@ -56,6 +61,13 @@ class FrontendAppConfig @Inject() (val configuration: Configuration) {
   lazy val jobExpensesLink: String = configuration.get[String]("jobExpenses.url")
   lazy val contactHMRC: String = configuration.get[String]("contactHMRC.url")
   lazy val incomeTaxSummary: String = configuration.get[String]("incomeTaxSummary.url")
+
+  lazy val ptaBaseUrl: String = servicesConfig.baseUrl("pertax-frontend")
+  lazy val ptaHomeUrl: String = s"$ptaBaseUrl${servicesConfig.getConfString("pertax-frontend.urls.home","/personal-account")}"
+  lazy val messagesUrl: String = s"$ptaBaseUrl${servicesConfig.getConfString("pertax-frontend.urls.messages","/messages")}"
+  lazy val yourProfileUrl: String = s"$ptaBaseUrl${servicesConfig.getConfString("pertax-frontend.urls.yourProfile","/your-profile")}"
+  lazy val trackBaseUrl: String = servicesConfig.baseUrl("tracking-frontend")
+  lazy val trackingHomeUrl = s"$trackBaseUrl${servicesConfig.getConfString("tracking-frontend.urls.home","/track")}"
 
   lazy val incomeSummary: String = configuration.get[String]("incomeSummary.url")
   lazy val personalDetails: String = configuration.get[String]("personalDetails.url")

@@ -17,10 +17,11 @@
 package views
 
 import forms.MultipleEmploymentsFormProvider
-import models.{MultipleEmployments, NormalMode}
+import models.{CheckMode, MultipleEmployments, NormalMode}
+import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.MultipleEmploymentsView
 
 class MultipleEmploymentsViewSpec extends OptionsViewBehaviours[MultipleEmployments] {
@@ -29,7 +30,7 @@ class MultipleEmploymentsViewSpec extends OptionsViewBehaviours[MultipleEmployme
 
   val form = new MultipleEmploymentsFormProvider()()
 
-  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   "MultipleEmployments view" must {
 
@@ -51,9 +52,7 @@ class MultipleEmploymentsViewSpec extends OptionsViewBehaviours[MultipleEmployme
 
     "display RadioButtons inline" in {
       val doc = asDocument(applyView(form))
-
-      doc.getElementById("value").attr("class") mustBe "inline"
-    }
+      doc.select("fieldset > div").attr("class").contains("govuk-radios--inline") }
 
   }
 

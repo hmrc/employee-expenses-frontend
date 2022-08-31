@@ -20,7 +20,7 @@ import forms.transport.CabinCrewFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.transport._
 
 class CabinCrewViewSpec extends YesNoViewBehaviours {

@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,32 +18,30 @@
 @import models.TaxYearSelection._
 
 @this(
-    main_template: MainTemplate
+    layout: Layout,
+    heading: playComponents.heading
 )
 
 @(href: String, currentYearMinus1Selected: Boolean)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = messages("howYouWillGetYourExpenses.title")
+@layout(
+    pageTitle = messages("howYouWillGetYourExpenses.title")
     ) {
 
-    @components.back_link()
+    @heading("howYouWillGetYourExpenses.heading")
 
-    @components.heading("howYouWillGetYourExpenses.heading")
+    <p class="govuk-body">@messages("howYouWillGetYourExpensesPrevious.para1")</p>
 
-    <p>@messages("howYouWillGetYourExpensesPrevious.para1")</p>
-
-    <ul class="list list-bullet" role="list">
+    <ul class="govuk-list govuk-list--bullet">
         <li>@messages("howYouWillGetYourExpensesPrevious.item1")</li>
         <li>@messages("howYouWillGetYourExpensesPrevious.item2")</li>
 
     </ul>
 
     @if(currentYearMinus1Selected){
-        <p>@messages("howYouWillGetYourExpensesPrevious.para2",taxYearStartString(1), taxYearEndString(1))</p>
+        <p class="govuk-body">@messages("howYouWillGetYourExpensesPrevious.para2",taxYearStartString(1), taxYearEndString(1))</p>
     }
 
-
-    @components.button_link(messages("howYouWillGetYourExpenses.button"), href)
+    @playComponents.button_link(messageKey= messages("howYouWillGetYourExpenses.button"), href= href, classes="govuk-button")
 
 }
