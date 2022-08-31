@@ -17,7 +17,8 @@ object AppDependencies {
     "uk.gov.hmrc"           %% "local-template-renderer"        % "2.17.0-play-28" excludeAll(ExclusionRule(organization="org.scalactic")),
     "com.typesafe.play"     %% "play-json-joda"                 % "2.9.2",
     "org.scalatra.scalate"  %% "play-scalate"                   % "0.6.0",
-    "org.scalatra.scalate"  %% "scalate-core"                   % "1.9.8"
+    "org.scalatra.scalate"  %% "scalate-core"                   % "1.9.8",
+    "uk.gov.hmrc"           %% "play-frontend-hmrc"             % "3.20.0-play-28"
   )
 
 

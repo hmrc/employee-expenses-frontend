@@ -21,7 +21,7 @@ import forms.ExpensesEmployerPaidFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.IntViewBehaviours
+import views.newBehaviours.IntViewBehaviours
 import views.html.ExpensesEmployerPaidView
 
 class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
@@ -54,7 +54,7 @@ class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
 
     "contain the '£' symbol" in {
       val doc = asDocument(applyView(form))
-      doc.getElementsByClass("hmrc-currency-input__unit").text mustBe "£"
+      doc.getElementsByClass("govuk-input__prefix").text mustBe "£"
     }
   }
 

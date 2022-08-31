@@ -20,7 +20,7 @@ import forms.construction.ConstructionOccupationsFormProvider
 import models.{ConstructionOccupations, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.construction.ConstructionOccupationsView
 
 class ConstructionOccupationsViewSpec extends OptionsViewBehaviours[ConstructionOccupations] {
@@ -35,6 +35,7 @@ class ConstructionOccupationsViewSpec extends OptionsViewBehaviours[Construction
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
     view.apply(form, NormalMode)(fakeRequest, messages)
+
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
@@ -53,7 +54,7 @@ class ConstructionOccupationsViewSpec extends OptionsViewBehaviours[Construction
 
       val doc = asDocument(applyView(form))
 
-      doc.getElementsByClass("form-block").text() mustBe messages("site.or")
+      doc.getElementsByClass("govuk-radios__divider").text() mustBe messages("site.or")
     }
   }
 

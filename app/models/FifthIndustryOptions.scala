@@ -27,6 +27,7 @@ object FifthIndustryOptions extends Enumerable.Implicits {
   case object Forestry extends WithName("forestry") with FifthIndustryOptions
   case object Shipyard extends WithName("shipyard") with FifthIndustryOptions
   case object Textiles extends WithName("textiles") with FifthIndustryOptions
+  case object Or extends WithName("or") with FifthIndustryOptions
   case object NoneOfAbove extends WithName("none") with FifthIndustryOptions
 
   val values: Seq[FifthIndustryOptions] = Seq(
@@ -35,6 +36,7 @@ object FifthIndustryOptions extends Enumerable.Implicits {
     Forestry,
     Shipyard,
     Textiles,
+    Or,
     NoneOfAbove
   )
 

@@ -17,7 +17,7 @@
 package views
 
 import play.api.Application
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.CannotClaimExpenseView
 
 class CannotClaimExpenseViewSpec extends ViewBehaviours {

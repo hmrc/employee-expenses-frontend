@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,21 @@
 @import config.FrontendAppConfig
 
 @this(
-        main_template: MainTemplate,
-        frontendAppConfig: FrontendAppConfig
+        layout: Layout,
+        frontendAppConfig: FrontendAppConfig,
+        heading: playComponents.heading
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
-@link = {<a id="link" href=@frontendAppConfig.jobExpensesLink>@messages("cannotClaim.link")</a>}
+@link = {<a id="link" class="govuk-link" href=@frontendAppConfig.jobExpensesLink>@messages("cannotClaim.link")</a>}
 
-@main_template(
-    title = messages("cannotClaim.title")
+@layout(
+    pageTitle = messages("cannotClaim.title")
     ) {
 
-    @components.back_link()
+    @heading("cannotClaim.heading")
 
-    @components.heading("cannotClaim.heading")
-
-    <p>@Html(messages("cannotClaim.para1", link))</p>
+    <p class="govuk-body">@Html(messages("cannotClaim.para1", link))</p>
 
 }

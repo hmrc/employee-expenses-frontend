@@ -94,7 +94,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       application.stop()
     }
 
-    for (trade <- TransportVehicleTrade.values) {
+    for (trade <- TransportVehicleTrade.values if trade != TransportVehicleTrade.Or) {
       s"redirect to the next page when valid data for '$trade' is submitted" in {
 
         val application =
@@ -170,14 +170,14 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       application.stop()
     }
 
-    for (trade <- TransportVehicleTrade.values) {
+    for (trade <- TransportVehicleTrade.values if trade != TransportVehicleTrade.Or) {
       val claimAmount = trade match {
         case TransportVehicleTrade.Builder => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
         case TransportVehicleTrade.VehicleRepairerWagonLifter => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
         case TransportVehicleTrade.RailwayVehiclePainter => ClaimAmounts.Transport.Railways.vehiclePainters
         case TransportVehicleTrade.Letterer => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
         case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
-        case TransportVehicleTrade.NoneOfTheAbove => ClaimAmounts.Transport.VehicleTrade.allOther
+        case _ => ClaimAmounts.Transport.VehicleTrade.allOther
       }
 
       s"save $claimAmount 'buildersRepairersWagonLifters' when '$trade' is selected" in {

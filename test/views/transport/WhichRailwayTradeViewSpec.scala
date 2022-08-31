@@ -20,7 +20,7 @@ import forms.transport.WhichRailwayTradeFormProvider
 import models.{NormalMode, WhichRailwayTrade}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.transport.WhichRailwayTradeView
 
 class WhichRailwayTradeViewSpec extends OptionsViewBehaviours[WhichRailwayTrade] {

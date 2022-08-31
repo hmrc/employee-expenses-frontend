@@ -21,7 +21,7 @@ import forms.docks.DocksOccupationList1FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.docks.DocksOccupationList1View
 
 class DocksOccupationList1ViewSpec extends YesNoViewBehaviours {

@@ -17,7 +17,7 @@
 package views
 
 import models.TaxYearSelection._
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.HowYouWillGetYourExpensesPreviousView
 
 

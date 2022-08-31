@@ -16,7 +16,7 @@
 
 package views
 
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.SessionExpiredView
 
 class SessionExpiredViewSpec extends ViewBehaviours {

@@ -21,7 +21,7 @@ import play.api.i18n.Messages
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
 import play.twirl.api.Html
-import views.behaviours.ViewBehaviours
+import views.newBehaviours.ViewBehaviours
 import views.html.confirmation.ConfirmationClaimStoppedView
 
 class ConfirmationClaimStoppedViewSpec extends ViewBehaviours {
@@ -58,13 +58,13 @@ class ConfirmationClaimStoppedViewSpec extends ViewBehaviours {
         "have the correct banner title" in {
 
           val doc = asDocument(viewWithAnswers)
-          assertRenderedById(doc, "pageTitle")
+          assertRenderedByCssSelector(doc, "div.govuk-header__content")
         }
 
         "hide account menu when user not logged in" in {
 
           val doc = asDocument(viewWithAnswers)
-          doc.getElementById("hideAccountMenu").text mustBe "true"
+          assertNotRenderedById(doc, "secondary-nav")
         }
 
         "display the correct browser title" in {
@@ -86,7 +86,7 @@ class ConfirmationClaimStoppedViewSpec extends ViewBehaviours {
         "display language toggles" in {
 
           val doc = asDocument(viewWithAnswers)
-          assertRenderedById(doc, "langSelector")
+          assertRenderedByCssSelector(doc, ".hmrc-language-select")
         }
       }
     }

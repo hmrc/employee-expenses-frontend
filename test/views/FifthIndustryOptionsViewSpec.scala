@@ -20,7 +20,7 @@ import forms.FifthIndustryOptionsFormProvider
 import models.{FifthIndustryOptions, NormalMode}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.FifthIndustryOptionsView
 
 class FifthIndustryOptionsViewSpec extends OptionsViewBehaviours[FifthIndustryOptions] {
@@ -55,7 +55,7 @@ class FifthIndustryOptionsViewSpec extends OptionsViewBehaviours[FifthIndustryOp
 
       val doc = asDocument(applyView(form))
 
-      doc.getElementsByClass("form-block").text() mustBe messages("site.or")
+      doc.getElementsByClass("govuk-radios__divider").text() mustBe messages("site.or")
     }
   }
   application.stop()

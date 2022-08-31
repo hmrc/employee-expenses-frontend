@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,33 +16,39 @@
 
 @import controllers.routes._
 @import models.Mode
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    submitButton: playComponents.submit_button,
+    inputRadio: playComponents.input_radio
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("multipleEmployments.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("multipleEmployments.title")}"
     ) {
 
     @formHelper(action = MultipleEmploymentsController.onSubmit(mode), 'autoComplete -> "off") {
+        @errorSummary(form.errors)
 
-        @components.back_link()
-
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
-            field = form("value"),
-            legend = messages("multipleEmployments.heading"),
-            legendClass = Some("visually-hidden"),
-            inputs = MultipleEmployments.options,
-            inline = true,
-            headingIsLegend = true
-        )
-
-        @components.submit_button()
+    @inputRadio(
+        field = form("value"),
+        legend = messages("multipleEmployments.heading"),
+        inputs = MultipleEmployments.options map { radioOption =>
+            RadioItem(
+                value = Some(radioOption.value),
+                content = HtmlContent(radioOption.message.html)
+            )
+        },
+        classes = "govuk-radios--inline govuk-!-margin-top-3",
+        headingIsLegend = true
+    )
+        @submitButton()
     }
 }
+
+

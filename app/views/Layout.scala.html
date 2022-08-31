@@ -1,0 +1,93 @@
+@*
+* Copyright 2022 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
+
+@import config.FrontendAppConfig
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcReportTechnicalIssue
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accountmenu.YourProfile
+
+@this(
+    govukLayout: GovukLayout,
+    hmrcAccountMenu: HmrcAccountMenu,
+    hmrcHead: HmrcHead,
+    hmrcStandardHeader: HmrcStandardHeader,
+    hmrcStandardFooter: HmrcStandardFooter,
+    hmrcScripts: HmrcScripts,
+    hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
+    hmrcReportTechnicalIssue: HmrcReportTechnicalIssue,
+    hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
+    backLink: playComponents.back_link,
+    appConfig: FrontendAppConfig
+)
+
+@(pageTitle: String,
+timeoutEnabled: Boolean = true,
+backLinkEnabled: Boolean = true,
+accountMenuEnabled: Boolean = true)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
+
+@accountMenu = {
+    @if(request.session.get("authToken")){
+        @hmrcAccountMenu(AccountMenu(
+            accountHome = AccountHome(
+                href = appConfig.ptaHomeUrl
+            ),
+            messages = AccountMessages(
+                href = appConfig.messagesUrl,
+                messageCount = None
+            ),
+            yourProfile = YourProfile(
+                href = appConfig.yourProfileUrl
+            ),
+            checkProgress = CheckProgress(
+                href = appConfig.trackingHomeUrl
+            ),
+            signOut = SignOut(appConfig.signOutUrl),
+            language = if (messages.lang.code == "cy") Cy else En
+        ))
+    }
+
+    @hmrcLanguageSelectHelper()
+    @if(backLinkEnabled) { @backLink() }
+}
+
+@head = {
+@if(timeoutEnabled) {
+    @hmrcTimeoutDialogHelper(signOutUrl = appConfig.signOutUrl, keepAliveUrl = Some(appConfig.keepAliveUrl))
+}
+<link rel="stylesheet" type="text/css" href ='@routes.Assets.versioned("stylesheets/employeeexpensesfrontend-app.css")'>
+}
+
+
+@mainContent = {
+    @contentBlock
+    @hmrcReportTechnicalIssue(ReportTechnicalIssue(
+        serviceId = appConfig.contactFormServiceIdentifier,
+        language = if(messages.lang.code == "cy") Cy else En,
+        baseUrl = Some(appConfig.contactHost)
+    ))
+}
+
+
+@govukLayout(
+    pageTitle = Some(s"$pageTitle - ${appConfig.serviceTitle}"),
+    headBlock = Some(hmrcHead(headBlock = Some(head))),
+    headerBlock = Some(hmrcStandardHeader(
+        serviceUrl = Some(controllers.routes.IndexController.onPageLoad.url),
+        userResearchBanner = None
+    )),
+    beforeContentBlock = Some(accountMenu),
+    scriptsBlock = Some(hmrcScripts()),
+    footerBlock = Some(hmrcStandardFooter())
+)(mainContent)

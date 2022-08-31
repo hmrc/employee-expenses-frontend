@@ -21,7 +21,7 @@ import forms.manufacturing.IronApprenticeFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.manufacturing.IronApprenticeView
 
 class IronApprenticeViewSpec extends YesNoViewBehaviours {

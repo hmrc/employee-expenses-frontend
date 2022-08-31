@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,31 +16,39 @@
 
 @import controllers.authenticated.routes._
 @import models.{Mode, TaxYearSelection}
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    submitButton: playComponents.submit_button,
+    inputRadio: playComponents.input_radio
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("removeFRECode.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("removeFRECode.title")}"
     ) {
 
     @formHelper(action = RemoveFRECodeController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @inputRadio(
             field = form("value"),
-            legend = messages("removeFRECode.heading"),
-            inputs = TaxYearSelection.options,
-            headingIsLegend = true
+            legend = messages(s"removeFRECode.heading"),
+            inputs = TaxYearSelection.options map { radioOption =>
+                RadioItem(
+                    value = Some(radioOption.value),
+                    content = HtmlContent(radioOption.message.html)
+            )
+        },
+        classes = "govuk-!-margin-top-3",
+        headingIsLegend = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

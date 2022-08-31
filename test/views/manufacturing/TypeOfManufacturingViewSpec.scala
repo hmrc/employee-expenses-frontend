@@ -20,7 +20,7 @@ import forms.manufacturing.TypeOfManufacturingFormProvider
 import models.{NormalMode, TypeOfManufacturing}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.manufacturing.TypeOfManufacturingView
 
 class TypeOfManufacturingViewSpec extends OptionsViewBehaviours[TypeOfManufacturing] {

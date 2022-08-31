@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,31 @@
 
 @import controllers.textiles.routes._
 @import models.Mode
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    heading: playComponents.heading,
+    list: playComponents.list,
+    input_yes_no: playComponents.input_yes_no,
+    submitButton: playComponents.submit_button
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("textilesOccupationList1.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("textilesOccupationList1.title")}"
     ) {
 
     @formHelper(action = TextilesOccupationList1Controller.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading("textilesOccupationList1.heading")
 
-        @components.heading("textilesOccupationList1.heading")
-
-        @components.list(
+        @list(
             pageKey = Some("textilesOccupationList1"),
             listText = Some("textilesOccupationList1.listText"),
             bulletList = Seq(
@@ -45,14 +49,14 @@
                 "occupation3"
             )
         )
-        <div class="section">
-            @components.input_yes_no(
+        <div class="section govuk-!-margin-top-9">
+            @input_yes_no(
                 field = form("value"),
                 label = messages("textilesOccupationList1.radioLabel"),
-                labelClass = Some("heading-medium u-margin-top--0-5em")
+                labelClass = Some("govuk-label--m")
             )
 
-            @components.submit_button()
+            @submitButton()
         </div>
     }
 }

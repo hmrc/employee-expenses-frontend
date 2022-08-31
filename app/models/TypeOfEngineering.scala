@@ -25,10 +25,11 @@ object TypeOfEngineering extends Enumerable.Implicits {
   case object ConstructionalEngineering extends WithName("constructionalEngineering") with TypeOfEngineering
   case object TradesRelatingToEngineering extends WithName("tradesRelatingToEngineering") with TypeOfEngineering
   case object FactoryOrWorkshopEngineering extends WithName("factoryOrWorkshopEngineering") with TypeOfEngineering
+  case object Or extends WithName("or") with TypeOfEngineering
   case object NoneOfTheAbove extends WithName("noneOfTheAbove") with TypeOfEngineering
 
   val values: Seq[TypeOfEngineering] = Seq(
-    ConstructionalEngineering, FactoryOrWorkshopEngineering, TradesRelatingToEngineering, NoneOfTheAbove
+    ConstructionalEngineering, FactoryOrWorkshopEngineering, TradesRelatingToEngineering, Or, NoneOfTheAbove
   )
 
   val options: Seq[RadioCheckboxOption] = values.map {

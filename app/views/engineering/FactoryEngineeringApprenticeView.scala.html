@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,32 @@
 
 @import controllers.engineering.routes._
 @import models.Mode
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    submitButton: playComponents.submit_button,
+    input_yes_no : playComponents.input_yes_no
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("factoryEngineeringApprentice.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("factoryEngineeringApprentice.title")}"
     ) {
 
     @formHelper(action = FactoryEngineeringApprenticeController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @input_yes_no(
             field = form("value"),
             label = messages("factoryEngineeringApprentice.heading"),
             headingIsLegend = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

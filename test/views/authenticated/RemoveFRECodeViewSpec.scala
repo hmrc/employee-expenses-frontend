@@ -20,7 +20,7 @@ import forms.authenticated.RemoveFRECodeFormProvider
 import models.{NormalMode, TaxYearSelection}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.authenticated.RemoveFRECodeView
 
 class RemoveFRECodeViewSpec extends OptionsViewBehaviours[TaxYearSelection] {

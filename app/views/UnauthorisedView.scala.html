@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,30 @@
 @import config.FrontendAppConfig
 
 @this(
-main_template: MainTemplate,
-frontendAppConfig: FrontendAppConfig
+    layout: Layout,
+    heading: playComponents.heading,
+    frontendAppConfig: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
-    @printAndPostLink = {<a href=@frontendAppConfig.p87ClaimByPostUrl >@messages("unauthorised.printAndPost")</a>}
-    @helplineLink = {<a href=@frontendAppConfig.contactHMRC >@messages("unauthorised.helpline")</a>}
-    @claimOnlineLink = {<a href=@frontendAppConfig.claimOnlineUrl >@messages("unauthorised.confirmIdentity")</a>}
+    @printAndPostLink = {<a class="govuk-link" href=@frontendAppConfig.p87ClaimByPostUrl >@messages("unauthorised.printAndPost")</a>}
+    @helplineLink = {<a class="govuk-link" href=@frontendAppConfig.contactHMRC >@messages("unauthorised.helpline")</a>}
+    @claimOnlineLink = {<a class="govuk-link" href=@frontendAppConfig.claimOnlineUrl >@messages("unauthorised.confirmIdentity")</a>}
 
-    @main_template(
-        title = messages("unauthorised.title")
+    @layout(
+        pageTitle = messages("unauthorised.title"), backLinkEnabled = false
     ) {
 
-        @components.heading("unauthorised.heading")
+        @heading("unauthorised.heading")
 
-        <p>@messages("unauthorised.cannotContinue")</p>
+        <p class="govuk-body">@messages("unauthorised.cannotContinue")</p>
 
-        <p>@messages("unauthorised.makeYourClaim") <a></a></p>
-        <ul class="list list-bullet">
+        <p class="govuk-body">@messages("unauthorised.makeYourClaim") <a></a></p>
+        <ul class="govuk-list govuk-list--bullet">
             <li>@Html(messages("unauthorised.byPost", printAndPostLink))</li>
             <li>@Html(messages("unauthorised.byPhone", helplineLink))</li>
         </ul>
 
-        <p>@Html(messages("unauthorised.claimOnline", claimOnlineLink))</p>
+        <p class="govuk-body">@Html(messages("unauthorised.claimOnline", claimOnlineLink))</p>
     }

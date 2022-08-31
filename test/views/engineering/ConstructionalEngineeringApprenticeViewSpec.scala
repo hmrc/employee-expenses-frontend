@@ -21,7 +21,7 @@ import forms.engineering.ConstructionalEngineeringApprenticeFormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import views.newBehaviours.YesNoViewBehaviours
 import views.html.engineering.ConstructionalEngineeringApprenticeView
 
 class ConstructionalEngineeringApprenticeViewSpec extends YesNoViewBehaviours {

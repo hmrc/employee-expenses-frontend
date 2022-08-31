@@ -21,7 +21,7 @@ import models.{AlreadyClaimingFRESameAmount, FlatRateExpense, FlatRateExpenseAmo
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.authenticated.AlreadyClaimingFRESameAmountView
 
 class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[AlreadyClaimingFRESameAmount] {
@@ -70,13 +70,13 @@ class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[Already
     "contains correct values for list" in {
       val doc = asDocument(applyView(form))
 
-      doc.getElementById(s"tax-year-${TaiTaxYear().year}").text mustBe messages(
+      doc.getElementsByClass(s"tax-year-${TaiTaxYear().year}").text mustBe messages(
         s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(TaiTaxYear().year)}",
         TaiTaxYear().year.toString,
         (TaiTaxYear().year + 1).toString
       )
 
-      doc.getElementById(s"fre-amount-${TaiTaxYear().year}").text mustBe messages("alreadyClaimingFRESameAmount.tableAmountHeading", "£100")
+      doc.getElementsByClass(s"fre-amount-${TaiTaxYear().year}").text mustBe messages("alreadyClaimingFRESameAmount.tableAmountHeading", "£100")
     }
 
   }

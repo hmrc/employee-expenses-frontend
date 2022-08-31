@@ -21,7 +21,7 @@ import models.{FirstIndustryOptions, NormalMode}
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.OptionsViewBehaviours
+import views.newBehaviours.OptionsViewBehaviours
 import views.html.FirstIndustryOptionsView
 
 class FirstIndustryOptionsViewSpec extends OptionsViewBehaviours[FirstIndustryOptions] {
@@ -53,7 +53,7 @@ class FirstIndustryOptionsViewSpec extends OptionsViewBehaviours[FirstIndustryOp
 
       val doc = asDocument(applyView(form))
 
-      doc.getElementsByClass("form-block").text() mustBe messages("site.or")
+      doc.getElementsByClass("govuk-radios__divider").text() mustBe messages("site.or")
     }
 
   }

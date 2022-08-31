@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,45 +16,54 @@
 
 @import controllers.routes._
 @import models.Mode
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
-    main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    layout: Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: playComponents.error_summary,
+    heading: playComponents.heading,
+    govukInsetText : GovukInsetText,
+    input_radio: playComponents.input_radio,
+    submitButton: playComponents.submit_button
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@main_template(
-    title = s"${errorPrefix(form)} ${messages("employerContribution.title")}"
+@layout(
+    pageTitle = s"${errorPrefix(form)} ${messages("employerContribution.title")}"
     ) {
 
     @formHelper(action = EmployerContributionController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @errorSummary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading("employerContribution.heading")
 
-        @components.heading("employerContribution.heading")
+        <p class="govuk-body">@messages("employerContribution.list.heading")</p>
 
-        <p>@messages("employerContribution.list.heading")</p>
-
-        <ul class="list list-bullet">
+        <ul class="govuk-list govuk-list--bullet">
             <li>@messages("employerContribution.list.item1")</li>
             <li>@messages("employerContribution.list.item2")</li>
             <li>@messages("employerContribution.list.item3")</li>
         </ul>
 
-        <p class="panel panel-border-wide">@messages("employerContribution.hint")</p>
+        @govukInsetText(InsetText(
+            content = Text(messages("employerContribution.hint"))
+        ))
 
-        @components.input_radio(
+        @input_radio(
             field = form("value"),
             legend = messages("employerContribution.heading"),
-            legendClass = Some("visually-hidden"),
-            inputs = EmployerContribution.options,
-            inline = false,
+            legendClass = Some("govuk-visually-hidden"),
+            inputs = EmployerContribution.options map { radioOption =>
+                RadioItem(
+                    value = Some(radioOption.value),
+                    content = HtmlContent(radioOption.message.html)
+                )
+            },
             headingIsLegend = false
         )
-
-        @components.submit_button()
+        @submitButton()
     }
 }

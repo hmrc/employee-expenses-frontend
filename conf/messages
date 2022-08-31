@@ -14,6 +14,8 @@ date.day = Day
 date.month = Month
 date.year = Year
 
+service.name = Claim for your work uniform and tools
+
 error.browser.title.prefix = Error:
 error.boolean = Please give an answer
 error.invalid_date = Give a correct date
