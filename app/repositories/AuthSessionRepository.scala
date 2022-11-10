@@ -16,63 +16,55 @@
 
 package repositories
 
-import java.time.LocalDateTime
+import com.mongodb.client.model.Indexes.ascending
 
+import java.time.LocalDateTime
 import javax.inject.Inject
 import models.{DatedCacheMap, UserAnswers}
+import org.mongodb.scala.model.Filters.equal
+import org.mongodb.scala.model.{IndexModel, IndexOptions, UpdateOptions, Updates}
 import play.api.Configuration
-import play.api.libs.json._
-import play.modules.reactivemongo.ReactiveMongoComponent
-import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.bson.{BSONDocument, BSONObjectID}
-import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
-import uk.gov.hmrc.mongo.ReactiveRepository
-import reactivemongo.api.WriteConcern
+import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
+import uk.gov.hmrc.mongo.MongoComponent
+
+import java.util.concurrent.TimeUnit
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AuthSessionRepository @Inject()(config: Configuration, mongo: ReactiveMongoComponent)
-  extends ReactiveRepository[DatedCacheMap, BSONObjectID]("auth-user-answers", mongo.mongoConnector.db, DatedCacheMap.formats) {
+class AuthSessionRepository @Inject()(config: Configuration, mongo: MongoComponent)
+  extends PlayMongoRepository[DatedCacheMap](
+    mongoComponent = mongo,
+    collectionName = "auth-user-answers",
+    domainFormat = DatedCacheMap.formats,
+    indexes = Seq(
+      IndexModel(
+        ascending("_id"),
+        IndexOptions()
+          .name("_id_")
+      ),
+      IndexModel(
+        ascending("lastUpdated"),
+        IndexOptions()
+          .name("user-answers-last-updated-index")
+          .expireAfter(config.get[Int]("mongodb.timeToLiveInSeconds"), TimeUnit.SECONDS)
+      )
+    )
+  ) {
 
-  private val cacheTtl = config.get[Int]("mongodb.timeToLiveInSeconds")
-
-  private val lastUpdatedIndex = Index(
-    key = Seq("lastUpdated" -> IndexType.Ascending),
-    name = Some("user-answers-last-updated-index"),
-    options = BSONDocument("expireAfterSeconds" -> cacheTtl)
-  )
-
-  val started: Future[Unit] =
-    collection.indexesManager.ensure(lastUpdatedIndex).map(_ => ())
-
-
-  def get(id: String): Future[Option[UserAnswers]] =
-    collection.find(Json.obj("_id" -> id), None).one[UserAnswers]
+  def get(id: String): Future[Option[DatedCacheMap]] = collection.find(equal("id", id)).headOption()
 
   def set(userAnswers: UserAnswers): Future[Boolean] = {
+    val selector = equal("_id", userAnswers.id)
+    val modifier = Updates.set("lastUpdated", LocalDateTime.now)
 
-    val selector = Json.obj(
-      "_id" -> userAnswers.id
-    )
-
-    val modifier = Json.obj(
-      "$set" -> (userAnswers copy (lastUpdated = LocalDateTime.now))
-    )
-
-    collection.update(ordered = false).one(selector, modifier, upsert = true).map {
-      lastError =>
-        lastError.ok
-    }
+    collection.updateOne(
+      filter = selector,
+      update = Updates.combine(modifier),
+      UpdateOptions()
+        .upsert(true)
+    ).toFuture().map(_.wasAcknowledged())
   }
 
-  def remove(id: String): Future[Option[UserAnswers]] =
-    collection.findAndRemove(
-      selector = Json.obj("_id" -> id),
-      sort = None,
-      fields = None,
-      writeConcern = WriteConcern.Default,
-      maxTime = None,
-      collation = None,
-      arrayFilters = Seq.empty
-    ).map(_.result[UserAnswers])
+  def remove(id: String): Future[Option[DatedCacheMap]] = collection.findOneAndDelete(equal("_id", id)).headOption()
+
 }
