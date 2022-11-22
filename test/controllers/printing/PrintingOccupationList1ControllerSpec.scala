@@ -46,9 +46,6 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
   private val formProvider = new PrintingOccupationList1FormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val printingOccupationList1Route: String = routes.PrintingOccupationList1Controller.onPageLoad(NormalMode).url
 
@@ -74,7 +71,7 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PrintingOccupationList1Page, true).success.value
+      val userAnswers = UserAnswers().set(PrintingOccupationList1Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +90,9 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
     }
 
     "redirect to the next page when answer is true" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -113,7 +112,9 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
     }
 
     "redirect to the next page when answer is false" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -188,7 +189,9 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
     }
 
     "save ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -211,7 +214,9 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
     }
 
     "save only page data when 'No' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

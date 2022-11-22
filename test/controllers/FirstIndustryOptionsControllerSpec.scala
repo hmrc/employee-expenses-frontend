@@ -75,7 +75,7 @@ class FirstIndustryOptionsControllerSpec
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(FirstIndustryOptionsPage, FirstIndustryOptions.values.head).success.value
+      val userAnswers = UserAnswers().set(FirstIndustryOptionsPage, FirstIndustryOptions.values.head).success.value
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).build()
       val request = FakeRequest(GET, firstIndustryOptionsRoute)
       val result = route(application, request).value

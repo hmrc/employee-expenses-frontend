@@ -55,7 +55,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
   "SameEmployerContributionAllYears Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val userAnswers = UserAnswers(userAnswersId).set(ExpensesEmployerPaidPage, contribution).success.value
+      val userAnswers = UserAnswers().set(ExpensesEmployerPaidPage, contribution).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -75,7 +75,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(SameEmployerContributionAllYearsPage, true).success.value
+      val userAnswers = UserAnswers().set(SameEmployerContributionAllYearsPage, true).success.value
       val userAnswers2 = userAnswers.set(ExpensesEmployerPaidPage, contribution).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers2)).build()
@@ -116,7 +116,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = UserAnswers(userAnswersId).set(ExpensesEmployerPaidPage, contribution).success.value
+      val userAnswers = UserAnswers().set(ExpensesEmployerPaidPage, contribution).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

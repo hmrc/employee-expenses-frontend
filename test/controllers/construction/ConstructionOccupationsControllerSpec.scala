@@ -50,8 +50,6 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
 
   val formProvider = new ConstructionOccupationsFormProvider()
   val form: Form[ConstructionOccupations] = formProvider()
-  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "ConstructionOccupations Controller" must {
 
@@ -75,7 +73,7 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ConstructionOccupationsPage, ConstructionOccupations.values.head).success.value
+      val userAnswers = UserAnswers().set(ConstructionOccupationsPage, ConstructionOccupations.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -94,7 +92,8 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
     }
 
     "redirect to the next page when valid data is submitted" in {
-
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
@@ -202,6 +201,7 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
 
       s"save correct amount to ClaimAmount when '$occupation' is selected" in {
         val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        val mockSessionRepository: SessionRepository = mock[SessionRepository]
         when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
 
         val application = applicationBuilder(userAnswers = Some(ua1))

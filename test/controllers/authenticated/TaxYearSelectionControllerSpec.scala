@@ -75,7 +75,7 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TaxYearSelectionPage, TaxYearSelection.values).success.value
+      val userAnswers = UserAnswers().set(TaxYearSelectionPage, TaxYearSelection.values).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

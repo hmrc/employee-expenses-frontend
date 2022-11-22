@@ -48,9 +48,6 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
   private val formProvider = new TypeOfManufacturingFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "TypeOfManufacturing Controller" must {
 
@@ -74,7 +71,7 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TypeOfManufacturingPage, TypeOfManufacturing.values.head).success.value
+      val userAnswers = UserAnswers().set(TypeOfManufacturingPage, TypeOfManufacturing.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +90,9 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -187,7 +186,9 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
       }
 
       s"save correct amount to ClaimAmount when '$trade' is selected" in {
+        val mockSessionRepository = mock[SessionRepository]
 
+        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()

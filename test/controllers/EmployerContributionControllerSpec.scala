@@ -45,9 +45,6 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
   private val formProvider = new EmployerContributionFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   "EmployerContribution Controller" must {
 
@@ -71,7 +68,7 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(EmployerContributionPage,  EmployerContribution.YesEmployerContribution).success.value
+      val userAnswers = UserAnswers().set(EmployerContributionPage,  EmployerContribution.YesEmployerContribution).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -90,7 +87,9 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -164,6 +163,9 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
     }
 
     "save 'YesEmployerContribution' when selected" in {
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -184,6 +186,9 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
     }
 
     "save 'false' when selected" in {
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

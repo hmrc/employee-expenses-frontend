@@ -45,9 +45,6 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
   private val formProvider = new ConstructionalEngineeringList1FormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val constructionalEngineeringList1Route: String = routes.ConstructionalEngineeringList1Controller.onPageLoad(NormalMode).url
 
@@ -73,7 +70,7 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ConstructionalEngineeringList1Page, true).success.value
+      val userAnswers = UserAnswers().set(ConstructionalEngineeringList1Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -92,7 +89,9 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
     }
 
     "redirect to the next page when answer is true" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -113,7 +112,9 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
     }
 
     "redirect to the next page when answer is false" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -189,7 +190,9 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
     }
 
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -211,7 +214,9 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
     }
 
     "save no ClaimAmount when 'No' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

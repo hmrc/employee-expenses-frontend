@@ -23,7 +23,7 @@ import models.UserAnswers
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SessionRepository @Inject()(authSessionRepository: UnAuthSessionRepository,
+class SessionRepository @Inject()(authSessionRepository: AuthSessionRepository,
                                   unAuthSessionRepository: UnAuthSessionRepository)(implicit ec: ExecutionContext) {
 
   def get(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
@@ -35,12 +35,12 @@ class SessionRepository @Inject()(authSessionRepository: UnAuthSessionRepository
 
   def set(identifierType: IdentifierType, userAnswers: UserAnswers): Future[Boolean] = {
     identifierType match {
-      case _: Authed => authSessionRepository.set(userAnswers)
-      case _: UnAuthed => unAuthSessionRepository.set(userAnswers)
+      case id: Authed => authSessionRepository.set(id.internalId, userAnswers)
+      case id: UnAuthed => unAuthSessionRepository.set(id.sessionId, userAnswers)
     }
   }
 
-  def remove(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
+  def remove(identifierType: IdentifierType): Future[Unit] = {
     identifierType match {
       case id: Authed => authSessionRepository.remove(id.internalId)
       case id: UnAuthed => unAuthSessionRepository.remove(id.sessionId)

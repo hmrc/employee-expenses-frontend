@@ -125,6 +125,6 @@ trait PageBehaviours extends AnyWordSpec with Matchers with ScalaCheckPropertyCh
 
   val userAnswersId = "id"
 
-  def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
+  def emptyUserAnswers = UserAnswers()
 
 }

@@ -49,10 +49,6 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
   "TypeOfTransport Controller" must {
 
     "return OK and the correct view for a GET" in {
@@ -75,7 +71,7 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TypeOfTransportPage, TypeOfTransport.values.head).success.value
+      val userAnswers = UserAnswers().set(TypeOfTransportPage, TypeOfTransport.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .build()
@@ -95,7 +91,9 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -178,7 +176,9 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
       }
 
       s"save '$transport' when selected" in {
+        val mockSessionRepository = mock[SessionRepository]
 
+        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()

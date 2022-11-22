@@ -5,7 +5,7 @@ object AppDependencies {
 
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
-    "uk.gov.hmrc"           %% "simple-reactivemongo"           % "8.1.0-play-28",
+    "uk.gov.hmrc.mongo"     %% "hmrc-mongo-play-28"             % "0.74.0",
     "uk.gov.hmrc"           %% "logback-json-logger"            % "5.2.0",
     "uk.gov.hmrc"           %% "govuk-template"                 % "5.77.0-play-28",
     "uk.gov.hmrc"           %% "play-ui"                        % "9.10.0-play-28",
@@ -26,6 +26,7 @@ object AppDependencies {
     "org.scalatestplus.play"  %% "scalatestplus-play"   % "5.1.0",
     "org.scalatestplus"       %% "scalatestplus-mockito"      % "1.0.0-M2",
     "org.scalatestplus"       %% "scalatestplus-scalacheck"   % "3.1.0.0-RC2",
+    "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-28"    % "0.74.0",
     "com.vladsch.flexmark"    %  "flexmark-all"               % "0.35.10",
     "org.pegdown"             %  "pegdown"              % "1.6.0",
     "org.jsoup"               %  "jsoup"                % "1.13.1",

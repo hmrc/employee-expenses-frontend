@@ -41,9 +41,6 @@ import scala.concurrent.Future
 class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -74,7 +71,7 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(FactoryEngineeringList1Page, true).success.value
+      val userAnswers = UserAnswers().set(FactoryEngineeringList1Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +90,9 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
     }
 
     "redirect to the next page when answer is true" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -114,7 +113,9 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
     }
 
     "redirect to the next page when answer is false" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -191,7 +192,9 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
   }
 
   "save  ClaimAmount when 'Yes' is selected" in {
+    val mockSessionRepository = mock[SessionRepository]
 
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
     val application = applicationBuilder(userAnswers = Some(userAnswers))
       .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
       .build()

@@ -32,7 +32,7 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
     beRemovable[FirstIndustryOptions](FirstIndustryOptionsPage)
 
     "remove answers stored in the industry group when updated" in {
-      val userAnswers = new UserAnswers(userAnswersId)
+      val userAnswers = new UserAnswers()
         .set(FirstIndustryOptionsPage, FirstIndustryOptions.NoneOfAbove).success.value
         .set(SecondIndustryOptionsPage, SecondIndustryOptions.Construction).success.value
         .set(ConstructionOccupationsPage, ConstructionOccupations.LabourerOrNavvy).success.value

@@ -46,10 +46,6 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
   private val formProvider = new SecurityGuardNHSFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
   lazy val securityGuardNHSRoute = routes.SecurityGuardNHSController.onPageLoad(NormalMode).url
 
   "SecurityGuardNHS Controller" must {
@@ -74,7 +70,7 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(SecurityGuardNHSPage, true).success.value
+      val userAnswers = UserAnswers().set(SecurityGuardNHSPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +89,9 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -167,7 +165,9 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
     }
 
     "save 'nhsSecurity' to ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -189,7 +189,9 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
     }
 
     "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

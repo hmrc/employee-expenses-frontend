@@ -45,9 +45,6 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
   private val formProvider = new IronSteelOccupationListFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val ironSteelOccupationListRoute = routes.IronSteelOccupationListController.onPageLoad(NormalMode).url
 
@@ -73,7 +70,7 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(IronSteelOccupationListPage, true).success.value
+      val userAnswers = UserAnswers().set(IronSteelOccupationListPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -92,7 +89,9 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -167,7 +166,9 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
     }
 
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -190,7 +191,9 @@ class IronSteelOccupationListControllerSpec extends SpecBase with ScalaFutures w
     }
 
     "save 'default' to ClaimAmount when 'No' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

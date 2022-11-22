@@ -44,9 +44,6 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
   val formProvider = new CateringStaffNHSFormProvider()
   val form = formProvider()
-  val mockSessionRepository: SessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val cateringStaffNHSRoute = routes.CateringStaffNHSController.onPageLoad(NormalMode).url
 
@@ -72,7 +69,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(CateringStaffNHSPage, true).success.value
+      val userAnswers = UserAnswers().set(CateringStaffNHSPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,7 +88,9 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -168,6 +167,8 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
   "save 'catering' to ClaimAmount when 'Yes' is selected" in {
 
+    val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
     when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
     val ua1 = emptyUserAnswers
@@ -192,6 +193,8 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
   }
 
   "save 'DefaultRate' to ClaimAmount when 'No' is selected" in {
+
+    val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
     when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 

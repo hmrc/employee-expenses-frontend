@@ -163,7 +163,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
     .set(AlreadyClaimingFRESameAmountPage, Remove).success.value
     .set(RemoveFRECodePage, CurrentYear).success.value
 
-  def emptyUserAnswers = UserAnswers(userAnswersId, Json.obj())
+  def emptyUserAnswers = UserAnswers()
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 

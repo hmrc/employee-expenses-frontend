@@ -33,7 +33,7 @@ class TaxYearSelectionPageSpec extends PageBehaviours {
 
     "remove authenticated userAnswers when TaxYearSelectionPage is updated" in {
 
-      val userAnswers = new UserAnswers(userAnswersId)
+      val userAnswers = new UserAnswers()
         .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
         .set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
         .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value

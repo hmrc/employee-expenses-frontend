@@ -58,7 +58,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
   "YourEmployer Controller" must {
 
     "return OK and the correct view for a GET and save employer data" in {
-      val userAnswers = UserAnswers(userAnswersId)
+      val userAnswers = UserAnswers()
         .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
@@ -117,7 +117,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     }
 
     "redirect to the next page when valid data is submitted" in {
-      val userAnswers = UserAnswers(userAnswersId)
+      val userAnswers = UserAnswers()
         .set(YourEmployerNames, employmentSeq).success.value
 
       val application =
@@ -141,7 +141,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
-      val userAnswers = UserAnswers(userAnswersId)
+      val userAnswers = UserAnswers()
         .set(YourEmployerNames, employmentSeq).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
@@ -198,7 +198,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     }
 
     "redirect to up Update your employer when no employer is located" in {
-      val userAnswers = UserAnswers(userAnswersId)
+      val userAnswers = UserAnswers()
         .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))

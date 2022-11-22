@@ -40,10 +40,6 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val mockSessionRepository: SessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
   lazy val removeFRECodeRoute: String = routes.RemoveFRECodeController.onPageLoad(NormalMode).url
 
   val formProvider = new RemoveFRECodeFormProvider()
@@ -71,7 +67,7 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(RemoveFRECodePage, TaxYearSelection.values.head).success.value
+      val userAnswers = UserAnswers().set(RemoveFRECodePage, TaxYearSelection.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -90,7 +86,9 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -166,7 +164,9 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
     for (option <- TaxYearSelection.values) {
       s"save '$option' when selected" in {
         val ua1 = emptyUserAnswers
+        val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
+        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
         val application = applicationBuilder(userAnswers = Some(ua1))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()

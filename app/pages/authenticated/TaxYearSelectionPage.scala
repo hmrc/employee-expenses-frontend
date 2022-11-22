@@ -37,7 +37,6 @@ object TaxYearSelectionPage extends QuestionPage[Seq[TaxYearSelection]] {
 
         Try(
           UserAnswers(
-            id = userAnswers.id,
             data = if (ty.contains(TaxYearSelection.CurrentYear)) data else data - YourEmployerPage
           )
         )

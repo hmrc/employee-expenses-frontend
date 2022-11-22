@@ -45,7 +45,7 @@ class AuthRedirectController @Inject()(
             (unAuthUA, authUA) match {
               case (Some(unAuthUA), None) =>
                 for {
-                  _ <- sessionRepository.set(request.identifier, UserAnswers(id.internalId, unAuthUA.data))
+                  _ <- sessionRepository.set(request.identifier, UserAnswers(unAuthUA.data))
                   _ <- sessionRepository.remove(UnAuthed(key))
                 } yield {
                   Redirect(TaxYearSelectionController.onPageLoad(NormalMode))

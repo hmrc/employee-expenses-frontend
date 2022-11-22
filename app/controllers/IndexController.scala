@@ -39,9 +39,9 @@ class IndexController @Inject()(
       val updateSession = if (request.userAnswers.isEmpty) {
         request.identifier match {
           case id: Authed =>
-            sessionRepository.set(request.identifier, UserAnswers(id.internalId)).map(_ => ())
+            sessionRepository.set(request.identifier, UserAnswers()).map(_ => ())
           case id: UnAuthed =>
-            sessionRepository.set(request.identifier, UserAnswers(id.sessionId)).map(_ => ())
+            sessionRepository.set(request.identifier, UserAnswers()).map(_ => ())
         }
       } else {
         Future.successful(())
