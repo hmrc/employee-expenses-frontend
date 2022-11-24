@@ -76,7 +76,7 @@ class DocksOccupationList1ControllerSpec extends SpecBase with ScalaFutures with
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(DocksOccupationList1Page, true).success.value
+      val userAnswers = UserAnswers().set(DocksOccupationList1Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

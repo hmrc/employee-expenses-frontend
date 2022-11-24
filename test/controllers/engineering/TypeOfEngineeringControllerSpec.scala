@@ -44,10 +44,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
 
   lazy val typeOfEngineeringRoute: String = controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode).url
 
-  private val mockSessionRepository = mock[SessionRepository]
   private val userAnswers = emptyUserAnswers
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   val formProvider = new TypeOfEngineeringFormProvider()
   val form = formProvider()
@@ -74,7 +71,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TypeOfEngineeringPage, TypeOfEngineering.values.head).success.value
+      val userAnswers = UserAnswers().set(TypeOfEngineeringPage, TypeOfEngineering.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +90,9 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -114,7 +113,9 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
     }
 
     "redirect to the next page when answer is NoneOfTheAbove" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -189,7 +190,9 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
   }
 
   "save 'defaultRate' to ClaimAmount when 'NoneOfTheAbove' is selected" in {
+    val mockSessionRepository = mock[SessionRepository]
 
+    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
     val application = applicationBuilder(userAnswers = Some(userAnswers))
       .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
       .build()

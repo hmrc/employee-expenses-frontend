@@ -44,9 +44,6 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
   private val formProvider = new SpecialConstableFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val specialConstableRoute: String = routes.SpecialConstableController.onPageLoad(NormalMode).url
 
@@ -72,7 +69,7 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(SpecialConstablePage, true).success.value
+      val userAnswers = UserAnswers().set(SpecialConstablePage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,7 +88,9 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -166,7 +165,9 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
     }
 
     "save 'true' when 'Yes' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -188,7 +189,9 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
     }
 
     "save 'false' when 'No' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

@@ -50,10 +50,6 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
   "TransportVehicleTrade Controller" must {
 
     "return OK and the correct view for a GET" in {
@@ -76,7 +72,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TransportVehicleTradePage, TransportVehicleTrade.values.head).success.value
+      val userAnswers = UserAnswers().set(TransportVehicleTradePage, TransportVehicleTrade.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -96,7 +92,9 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
     for (trade <- TransportVehicleTrade.values if trade != TransportVehicleTrade.Or) {
       s"redirect to the next page when valid data for '$trade' is submitted" in {
+        val mockSessionRepository = mock[SessionRepository]
 
+        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
         val application =
           applicationBuilder(userAnswers = Some(emptyUserAnswers))
             .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -117,7 +115,9 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -182,7 +182,9 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
       s"save $claimAmount 'buildersRepairersWagonLifters' when '$trade' is selected" in {
 
+        val mockSessionRepository = mock[SessionRepository]
 
+        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()

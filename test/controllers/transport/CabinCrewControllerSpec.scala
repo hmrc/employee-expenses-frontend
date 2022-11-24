@@ -77,7 +77,7 @@ class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSug
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(CabinCrewPage, true).success.value
+      val userAnswers = UserAnswers().set(CabinCrewPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

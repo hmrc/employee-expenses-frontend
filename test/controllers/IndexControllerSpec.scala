@@ -130,11 +130,6 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
       val result = controller.onPageLoad(request)
 
-      whenReady(result) {
-        _ =>
-          assert(argCaptor.getValue.id == userAnswersId)
-      }
-
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)

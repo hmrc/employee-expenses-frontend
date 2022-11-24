@@ -45,9 +45,6 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
 
   val formProvider = new AmbulanceStaffFormProvider()
   val form: Form[Boolean] = formProvider()
-  val mockSessionRepository: SessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val ambulanceStaffRoute: String = controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode).url
 
@@ -73,7 +70,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(AmbulanceStaffPage, true).success.value
+      val userAnswers = UserAnswers().set(AmbulanceStaffPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -92,7 +89,9 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
     }
 
     "redirect to the next page when true is submitted" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -113,7 +112,9 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
     }
 
     "redirect to the next page when false is submitted" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -189,6 +190,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
 
 
     "save 'ambulanceStaff' to ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
@@ -213,6 +215,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
     }
 
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 

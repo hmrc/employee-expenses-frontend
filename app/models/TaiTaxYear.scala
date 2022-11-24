@@ -16,7 +16,6 @@
 
 package models
 
-import com.github.nscala_time.time.Imports._
 import org.joda.time.LocalDate
 import play.api.libs.json.{Format, Json}
 
@@ -51,7 +50,7 @@ object TaiTaxYear {
 
   def apply(from: LocalDate = new LocalDate): TaiTaxYear = {
     val naiveYear = TaiTaxYear(from.year.get)
-    if (from < naiveYear.start) {
+    if (from.isBefore(naiveYear.start)) {
       naiveYear.prev
     }
     else {

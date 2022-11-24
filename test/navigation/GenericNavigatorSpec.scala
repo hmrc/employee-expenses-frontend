@@ -43,7 +43,7 @@ class GenericNavigatorSpec extends SpecBase {
       "go to Index from a page that doesn't exist in the route map" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode)(UserAnswers(userAnswersId)) mustBe
+        navigator.nextPage(UnknownPage, NormalMode)(UserAnswers()) mustBe
           IndexController.onPageLoad
       }
 
@@ -388,7 +388,7 @@ class GenericNavigatorSpec extends SpecBase {
       "go to CheckYourAnswers from a page that doesn't exist in the edit route map" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, CheckMode)(UserAnswers(userAnswersId)) mustBe CheckYourAnswersController.onPageLoad
+        navigator.nextPage(UnknownPage, CheckMode)(UserAnswers()) mustBe CheckYourAnswersController.onPageLoad
       }
 
       //EmployerContributionPage

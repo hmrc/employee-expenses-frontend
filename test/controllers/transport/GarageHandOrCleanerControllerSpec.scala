@@ -46,10 +46,6 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
   private val formProvider = new GarageHandOrCleanerFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
-
 
   lazy val garageHandOrCleanerRoute = routes.GarageHandOrCleanerController.onPageLoad(NormalMode).url
 
@@ -75,7 +71,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(GarageHandOrCleanerPage, true).success.value
+      val userAnswers = UserAnswers().set(GarageHandOrCleanerPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -94,7 +90,9 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     }
 
     "redirect to the next page when valid 'Yes' data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -114,7 +112,9 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     }
 
     "redirect to the next page when valid 'No' data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -134,7 +134,9 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -188,7 +190,9 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     }
 
     "save ClaimAmount 'garageHands' when true" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -210,7 +214,9 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     }
 
     "save ClaimAmount 'conductorsDrivers' when false" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

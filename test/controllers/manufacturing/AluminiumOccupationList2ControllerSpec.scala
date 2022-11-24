@@ -45,9 +45,6 @@ class AluminiumOccupationList2ControllerSpec extends SpecBase with ScalaFutures 
   private val formProvider = new AluminiumOccupationList2FormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val aluminiumOccupationList2Route = routes.AluminiumOccupationList2Controller.onPageLoad(NormalMode).url
 
@@ -73,7 +70,7 @@ class AluminiumOccupationList2ControllerSpec extends SpecBase with ScalaFutures 
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(AluminiumOccupationList2Page, true).success.value
+      val userAnswers = UserAnswers().set(AluminiumOccupationList2Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -92,7 +89,9 @@ class AluminiumOccupationList2ControllerSpec extends SpecBase with ScalaFutures 
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -167,7 +166,9 @@ class AluminiumOccupationList2ControllerSpec extends SpecBase with ScalaFutures 
     }
 
     "save 'list2' to ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -190,7 +191,9 @@ class AluminiumOccupationList2ControllerSpec extends SpecBase with ScalaFutures 
     }
 
     "save only page data when 'No' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

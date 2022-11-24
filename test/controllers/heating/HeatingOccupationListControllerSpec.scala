@@ -46,9 +46,6 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
   private val formProvider = new HeatingOccupationListFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val heatingOccupationListRoute = routes.HeatingOccupationListController.onPageLoad(NormalMode).url
 
@@ -74,7 +71,7 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(HeatingOccupationListPage, true).success.value
+      val userAnswers = UserAnswers().set(HeatingOccupationListPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +90,9 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -168,7 +167,9 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
     }
 
     "save 'list' to ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -190,7 +191,9 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
     }
 
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

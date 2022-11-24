@@ -47,10 +47,6 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
   private val formProvider = new AncillaryEngineeringWhichTradeFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
 
   "AncillaryEngineeringWhichTrade Controller" must {
 
@@ -74,7 +70,7 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(AncillaryEngineeringWhichTradePage, AncillaryEngineeringWhichTrade.values.head).success.value
+      val userAnswers = UserAnswers().set(AncillaryEngineeringWhichTradePage, AncillaryEngineeringWhichTrade.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +89,9 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -175,6 +173,9 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
       }
 
       s"save $claimAmount to ClaimAmount when '$trade' is selected" in {
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()

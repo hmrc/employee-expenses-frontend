@@ -46,9 +46,6 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
   private val formProvider = new CommunitySupportOfficerFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val communitySupportOfficerRoute = routes.CommunitySupportOfficerController.onPageLoad(NormalMode).url
 
@@ -74,7 +71,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(CommunitySupportOfficerPage, true).success.value
+      val userAnswers = UserAnswers().set(CommunitySupportOfficerPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +90,9 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -169,7 +168,9 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
 
 
     "save 'communitySupportOfficer' to ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -191,7 +192,9 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
     }
 
     "save no ClaimAmount when 'No' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

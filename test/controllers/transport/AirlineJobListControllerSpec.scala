@@ -46,16 +46,14 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
   private val formProvider = new AirlineJobListFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
   lazy val airlineJobListedRoute = routes.AirlineJobListController.onPageLoad(NormalMode).url
 
   "AirlineJobList Controller" must {
 
     "return OK and the correct view for a GET" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -76,7 +74,7 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(AirlineJobListPage, true).success.value
+      val userAnswers = UserAnswers().set(AirlineJobListPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -95,7 +93,9 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
     }
 
     "redirect to the next page when valid 'Yes' data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -115,7 +115,9 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
     }
 
     "redirect to the next page when valid 'No' data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -135,7 +137,9 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -158,7 +162,9 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application = applicationBuilder(userAnswers = None)
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -175,7 +181,9 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application = applicationBuilder(userAnswers = None)
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -193,7 +201,9 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
     }
 
     "save ClaimAmount 'PilotsFlightDeck' when true" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -215,7 +225,9 @@ class AirlineJobListControllerSpec extends SpecBase with ScalaFutures with Mocki
     }
 
     "save ClaimAmount 'null amount' when false" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

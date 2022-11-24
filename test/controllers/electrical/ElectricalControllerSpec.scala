@@ -45,9 +45,6 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
 
   val formProvider = new ElectricalFormProvider()
   val form = formProvider()
-  val mockSessionRepository: SessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val electricalRoute = ElectricalController.onPageLoad(NormalMode).url
 
@@ -73,7 +70,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ElectricalPage, true).success.value
+      val userAnswers = UserAnswers().set(ElectricalPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -92,7 +89,9 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -167,6 +166,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
     }
 
     "save 'onlyLaundry' to ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
@@ -192,6 +192,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
     }
 
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 

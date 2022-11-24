@@ -45,9 +45,6 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
   with ScalaFutures with IntegrationPatience with ScalaCheckPropertyChecks with Generators with OptionValues {
 
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -78,7 +75,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(SecondIndustryOptionsPage, SecondIndustryOptions.values.head).success.value
+      val userAnswers = UserAnswers().set(SecondIndustryOptionsPage, SecondIndustryOptions.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -97,7 +94,9 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -186,7 +185,9 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
       }
 
      s"save correct data when '$choice' is selected " in {
+       val mockSessionRepository = mock[SessionRepository]
 
+       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()

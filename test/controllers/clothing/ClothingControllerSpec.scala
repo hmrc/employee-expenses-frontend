@@ -46,9 +46,6 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
 
   val formProvider = new ClothingFormProvider()
   val form: Form[Boolean] = formProvider()
-  val mockSessionRepository: SessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val clothingRoute: String = routes.ClothingController.onPageLoad(NormalMode).url
 
@@ -74,7 +71,7 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ClothingPage, true).success.value
+      val userAnswers = UserAnswers().set(ClothingPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +90,9 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -169,6 +168,7 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
   }
 
   "save 'clothingList' to ClaimAmount when 'Yes' is selected" in {
+    val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
     when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
@@ -197,6 +197,8 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
   }
 
   "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
+
+    val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
     when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 

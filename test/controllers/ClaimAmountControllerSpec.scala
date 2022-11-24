@@ -114,7 +114,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       "claim amount found but no employer contribution" in {
         val claimAmount = 180
-        val userAnswers = UserAnswers(userAnswersId, Json.obj(ClaimAmount.toString -> claimAmount))
+        val userAnswers = UserAnswers(Json.obj(ClaimAmount.toString -> claimAmount))
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
         val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
         val result = route(application, request).value

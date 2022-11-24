@@ -49,10 +49,6 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
   "WhichRailwayTrade Controller" must {
 
     "return OK and the correct view for a GET" in {
@@ -75,7 +71,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(WhichRailwayTradePage, WhichRailwayTrade.values.head).success.value
+      val userAnswers = UserAnswers().set(WhichRailwayTradePage, WhichRailwayTrade.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -94,7 +90,9 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -175,7 +173,9 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
       }
 
       s"save '$claimAmount' to ClaimAmount when '$trade' is selected" in {
+        val mockSessionRepository = mock[SessionRepository]
 
+        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()

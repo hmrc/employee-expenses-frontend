@@ -45,10 +45,6 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
   private val formProvider = new WoodFurnitureOccupationList1FormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
   lazy val woodFurnitureOccupationList1Route = routes.WoodFurnitureOccupationList1Controller.onPageLoad(NormalMode).url
 
   "WoodFurnitureOccupationList1 Controller" must {
@@ -73,7 +69,7 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(WoodFurnitureOccupationList1Page, true).success.value
+      val userAnswers = UserAnswers().set(WoodFurnitureOccupationList1Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -92,7 +88,9 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -167,7 +165,9 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
     }
 
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -190,7 +190,9 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
     }
 
     "not save ClaimAmount when 'No' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

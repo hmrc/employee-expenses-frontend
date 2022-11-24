@@ -77,7 +77,7 @@ class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TextilesOccupationList1Page, true).success.value
+      val userAnswers = UserAnswers().set(TextilesOccupationList1Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

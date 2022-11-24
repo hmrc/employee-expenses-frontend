@@ -46,9 +46,6 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
   private val formProvider = new TransportCarpenterFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
 
   lazy val transportCarpenterRoute = routes.TransportCarpenterController.onPageLoad(NormalMode).url
 
@@ -74,7 +71,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TransportCarpenterPage, true).success.value
+      val userAnswers = UserAnswers().set(TransportCarpenterPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +90,9 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
     }
 
     "redirect to the next page when valid 'Yes' is submitted" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -114,7 +113,9 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
 
     "redirect to the next page when valid 'No' is submitted" in {
       transportCarpenterRoute
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -189,7 +190,9 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
     }
 
     "save ClaimAmount 'passengerLiners' when true" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -211,7 +214,9 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
     }
 
     "save ClaimAmount 'cargoTankersCoastersFerries' when false" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

@@ -44,9 +44,6 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
 
   val formProvider = new HealthcareList1FormProvider()
   val form = formProvider()
-  val mockSessionRepository: SessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val healthcareList1Route = controllers.healthcare.routes.HealthcareList1Controller.onPageLoad(NormalMode).url
 
@@ -72,7 +69,7 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(HealthcareList1Page, true).success.value
+      val userAnswers = UserAnswers().set(HealthcareList1Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,7 +88,9 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
     }
 
     "redirect to the next page when true is submitted" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -112,7 +111,9 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
     }
 
     "redirect to the next page when false is submitted" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -187,6 +188,7 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
     }
 
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
@@ -211,6 +213,7 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
     }
 
     "not save ClaimAmount when 'No' is selected" in {
+      val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 

@@ -45,9 +45,6 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
   private val formProvider = new ConstructionalEngineeringApprenticeFormProvider()
   private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  private val mockSessionRepository = mock[SessionRepository]
-
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
   lazy val constructionalEngineeringApprenticeRoute: String = routes.ConstructionalEngineeringApprenticeController.onPageLoad(NormalMode).url
 
@@ -73,7 +70,7 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ConstructionalEngineeringApprenticePage, true).success.value
+      val userAnswers = UserAnswers().set(ConstructionalEngineeringApprenticePage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -92,7 +89,9 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
     }
 
     "redirect to the next page when answer is true" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -113,7 +112,9 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
     }
 
     "redirect to the next page when answer is false" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -188,7 +189,9 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
     }
 
     "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -210,7 +213,9 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
     }
 
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
+      val mockSessionRepository = mock[SessionRepository]
 
+      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()

@@ -75,7 +75,7 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(LabourerPage, true).success.value
+      val userAnswers = UserAnswers().set(LabourerPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
