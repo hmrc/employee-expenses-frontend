@@ -18,11 +18,9 @@ package config
 
 import com.google.inject.AbstractModule
 import com.google.inject.name.Names
-import connectors.LocalTemplateRenderer
 import controllers.actions._
 import navigation._
 import scalate.ScalateEngineBoot
-import uk.gov.hmrc.renderer.TemplateRenderer
 
 class Module extends AbstractModule {
 
@@ -31,7 +29,6 @@ class Module extends AbstractModule {
     bind(classOf[DataRetrievalAction]).to(classOf[DataRetrievalActionImpl]).asEagerSingleton()
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl]).asEagerSingleton()
 
-    // For session based storage instead of cred based, change to SessionIdentifierAction
     bind(classOf[AuthenticatedIdentifierAction]).to(classOf[AuthenticatedIdentifierActionImpl]).asEagerSingleton()
     bind(classOf[UnauthenticatedIdentifierAction]).to(classOf[UnauthenticatedIdentifierActionImpl]).asEagerSingleton()
 
@@ -55,6 +52,5 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.docks)).to(classOf[DocksNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.textiles)).to(classOf[TextilesNavigator])
 
-    bind(classOf[TemplateRenderer]).to(classOf[LocalTemplateRenderer])
   }
 }

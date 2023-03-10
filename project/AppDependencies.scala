@@ -5,20 +5,17 @@ object AppDependencies {
 
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
-    "uk.gov.hmrc.mongo"     %% "hmrc-mongo-play-28"             % "0.74.0",
+    "uk.gov.hmrc.mongo"     %% "hmrc-mongo-play-28"             % "1.1.0",
     "uk.gov.hmrc"           %% "logback-json-logger"            % "5.2.0",
-    "uk.gov.hmrc"           %% "govuk-template"                 % "5.77.0-play-28",
-    "uk.gov.hmrc"           %% "play-ui"                        % "9.10.0-play-28",
-    "uk.gov.hmrc"           %% "http-caching-client"            % "9.6.0-play-28",
-    "uk.gov.hmrc"           %% "play-conditional-form-mapping"  % "1.11.0-play-28",
-    "uk.gov.hmrc"           %% "bootstrap-frontend-play-28"     % "5.24.0",
-    "uk.gov.hmrc"           %% "tax-year"                       % "1.3.0",
+    "uk.gov.hmrc"           %% "http-caching-client"            % "10.0.0-play-28",
+    "uk.gov.hmrc"           %% "play-conditional-form-mapping"  % "1.12.0-play-28",
+    "uk.gov.hmrc"           %% "bootstrap-frontend-play-28"     % "7.14.0",
+    "uk.gov.hmrc"           %% "tax-year"                       % "3.0.0",
     "uk.gov.hmrc"           %% "play-partials"                  % "8.3.0-play-28",
-    "uk.gov.hmrc"           %% "local-template-renderer"        % "2.17.0-play-28" excludeAll(ExclusionRule(organization="org.scalactic")),
-    "com.typesafe.play"     %% "play-json-joda"                 % "2.9.2",
+    "com.typesafe.play"     %% "play-json-joda"                 % "2.9.4",
     "org.scalatra.scalate"  %% "play-scalate"                   % "0.6.0",
     "org.scalatra.scalate"  %% "scalate-core"                   % "1.9.8",
-    "uk.gov.hmrc"           %% "play-frontend-hmrc"             % "3.20.0-play-28"
+    "uk.gov.hmrc"           %% "play-frontend-hmrc"             % "6.7.0-play-28"
   )
 
 

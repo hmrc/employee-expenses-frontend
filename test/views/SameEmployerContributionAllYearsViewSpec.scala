@@ -106,7 +106,7 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "not render an error summary" in {
 
           val doc = asDocument(applyView(form))
-          assertNotRenderedById(doc, "error-summary_header")
+          assertNotRenderedByCssSelector(doc, "#main-content > div > div > form > div.govuk-error-summary > div > h2")
         }
       }
 
@@ -125,7 +125,7 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "show an error summary" in {
 
           val doc = asDocument(applyView(form.withError(error)))
-          assertRenderedById(doc, "error-summary-title")
+          assertRenderedByCssSelector(doc, "#main-content > div > div > form > div.govuk-error-summary > div > h2")
         }
 
         "show an error in the value field's label" in {
@@ -161,7 +161,7 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
     "not render an error summary" in {
 
       val doc = asDocument(createView(form.fill(answer)))
-      assertNotRenderedById(doc, "error-summary-title")
+      assertNotRenderedByCssSelector(doc, "#main-content > div > div > form > div.govuk-error-summary > div > h2")
     }
   }
 

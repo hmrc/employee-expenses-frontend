@@ -16,8 +16,6 @@
 
 package pages
 
-import java.time.LocalDateTime
-
 import models.{FirstIndustryOptions, UserAnswers}
 import play.api.libs.json._
 
