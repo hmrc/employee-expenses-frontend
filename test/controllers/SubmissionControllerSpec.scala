@@ -21,7 +21,7 @@ import connectors.{CitizenDetailsConnector, TaiConnector}
 import controllers.authenticated.routes.SubmissionController
 import controllers.confirmation.routes._
 import controllers.routes.{PhoneUsController, SessionExpiredController, TechnicalDifficultiesController}
-import models.FlatRateExpenseOptions.{FREAllYearsAllAmountsSameAsClaimAmount, _}
+import models.FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4, _}
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}

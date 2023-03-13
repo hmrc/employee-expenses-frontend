@@ -93,8 +93,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
 
   lazy val flatRateExpenseId: Int = configuration.get[Int]("flatRateExpenseId")
 
-  val frontendTemplatePath: String = configuration.get[String]("microservice.services.frontend-template-provider.path")
-
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")

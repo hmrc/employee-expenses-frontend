@@ -17,7 +17,6 @@
 package navigation
 
 import base.SpecBase
-import models.AncillaryEngineeringWhichTrade._
 import models.TypeOfEngineering._
 import models._
 import org.scalatestplus.mockito.MockitoSugar

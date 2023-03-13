@@ -29,11 +29,15 @@ import uk.gov.hmrc.mongo.CurrentTimestampSupport
 import uk.gov.hmrc.mongo.cache.{CacheItem, MongoCacheRepository}
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
+import scala.concurrent.ExecutionContext
+
 class UnAuthSessionRepositorySpec extends SpecBase
   with Matchers
   with MockitoSugar
   with ScalaFutures
   with DefaultPlayMongoRepositorySupport[CacheItem] {
+
+  implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
 
   val unauthSessionRepo = new UnAuthSessionRepository(
     config = Configuration.from(Map("mongodb.timeToLiveInSeconds" -> 60)),

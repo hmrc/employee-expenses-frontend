@@ -20,5 +20,7 @@ import javax.inject.Inject
 import play.api.Configuration
 import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
 
+import scala.concurrent.ExecutionContext
+
 class UnAuthSessionRepository @Inject()(config: Configuration, mongo: MongoComponent, timestampSupport: TimestampSupport)
-  extends UserAnswersCache("unauth-user-answers", config, mongo, timestampSupport)
+                                       (implicit ec: ExecutionContext) extends UserAnswersCache("unauth-user-answers", config, mongo, timestampSupport)

@@ -16,7 +16,6 @@
 
 package base
 
-import com.github.tototoshi.play2.scalate.Scalate
 import config.{FrontendAppConfig, NavConstant}
 import controllers.actions._
 import models.AlreadyClaimingFRESameAmount.Remove
@@ -39,7 +38,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.FormPartialRetriever
-import utils.{MockEeFormPartialRetriever, MockScalate}
+import utils.MockEeFormPartialRetriever
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
@@ -184,7 +183,6 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
         bind[AuthenticatedIdentifierAction].to[FakeAuthedIdentifierAction],
         bind[UnauthenticatedIdentifierAction].to[FakeUnauthenticatedIdentifierAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
-        bind[Scalate].to[MockScalate],
         bind[FormPartialRetriever].to[MockEeFormPartialRetriever],
       )
 

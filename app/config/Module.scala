@@ -20,7 +20,6 @@ import com.google.inject.AbstractModule
 import com.google.inject.name.Names
 import controllers.actions._
 import navigation._
-import scalate.ScalateEngineBoot
 
 class Module extends AbstractModule {
 
@@ -31,8 +30,6 @@ class Module extends AbstractModule {
 
     bind(classOf[AuthenticatedIdentifierAction]).to(classOf[AuthenticatedIdentifierActionImpl]).asEagerSingleton()
     bind(classOf[UnauthenticatedIdentifierAction]).to(classOf[UnauthenticatedIdentifierActionImpl]).asEagerSingleton()
-
-    bind(classOf[ScalateEngineBoot]).asEagerSingleton()
 
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.generic)).to(classOf[GenericNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.engineering)).to(classOf[EngineeringNavigator])

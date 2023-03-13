@@ -17,20 +17,20 @@
 package controllers
 
 import controllers.actions.{Authed, AuthenticatedIdentifierAction}
+
 import javax.inject.Inject
 import models.requests.IdentifierRequest
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 class KeepAliveController @Inject()(
                                      identify: AuthenticatedIdentifierAction,
                                      sessionRepository: SessionRepository,
                                      val controllerComponents: MessagesControllerComponents
-                                   ) extends FrontendBaseController with I18nSupport {
+                                   )(implicit val ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def keepAlive: Action[AnyContent] = identify.async {
     implicit request: IdentifierRequest[AnyContent] =>
