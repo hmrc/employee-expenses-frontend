@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,12 @@ import play.api.Configuration
 import play.api.libs.json.Format
 import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
 import uk.gov.hmrc.mongo.cache.{CacheIdType, EntityCache, MongoCacheRepository}
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.{Duration, SECONDS}
 
 abstract class UserAnswersCache @Inject()(collectionName: String, config: Configuration, mongo: MongoComponent, timestampSupport: TimestampSupport)
-  extends EntityCache[String, UserAnswers]{
+                                         (implicit ec: ExecutionContext) extends EntityCache[String, UserAnswers]{
 
   lazy val format: Format[UserAnswers] = UserAnswers.format
   lazy val cacheRepo: MongoCacheRepository[String] = new MongoCacheRepository(

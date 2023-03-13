@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,8 @@
 
 package base
 
-import com.github.tototoshi.play2.scalate.Scalate
 import config.{FrontendAppConfig, NavConstant}
 import controllers.actions._
-import mocks.MockTemplateRenderer
 import models.AlreadyClaimingFRESameAmount.Remove
 import models.FirstIndustryOptions.{Healthcare, Retail}
 import models.FlatRateExpenseOptions.FRENoYears
@@ -40,8 +38,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.FormPartialRetriever
-import uk.gov.hmrc.renderer.TemplateRenderer
-import utils.{MockEeFormPartialRetriever, MockScalate}
+import utils.MockEeFormPartialRetriever
 
 trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
@@ -186,9 +183,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
         bind[AuthenticatedIdentifierAction].to[FakeAuthedIdentifierAction],
         bind[UnauthenticatedIdentifierAction].to[FakeUnauthenticatedIdentifierAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
-        bind[Scalate].to[MockScalate],
         bind[FormPartialRetriever].to[MockEeFormPartialRetriever],
-        bind(classOf[TemplateRenderer]).to(classOf[MockTemplateRenderer])
       )
 
     onwardRoute match {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,8 +87,7 @@ class ClaimAmountService @Inject()(
   def filterRecords(taxCodeRecord: Seq[TaxCodeRecord]): Option[TaxCodeRecord] = {
     taxCodeRecord.find(_.status == Live) match {
       case Some(liveTaxCodeRecord) => Some(liveTaxCodeRecord)
-      case None if taxCodeRecord.nonEmpty => taxCodeRecord.headOption
-      case None if taxCodeRecord.isEmpty => None
+      case None => taxCodeRecord.headOption
     }
   }
 

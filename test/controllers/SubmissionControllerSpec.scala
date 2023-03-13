@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import connectors.{CitizenDetailsConnector, TaiConnector}
 import controllers.authenticated.routes.SubmissionController
 import controllers.confirmation.routes._
 import controllers.routes.{PhoneUsController, SessionExpiredController, TechnicalDifficultiesController}
-import models.FlatRateExpenseOptions.{FREAllYearsAllAmountsSameAsClaimAmount, _}
+import models.FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4, _}
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}

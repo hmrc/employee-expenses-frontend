@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,15 @@ import uk.gov.hmrc.mongo.CurrentTimestampSupport
 import uk.gov.hmrc.mongo.cache.{CacheItem, MongoCacheRepository}
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
+import scala.concurrent.ExecutionContext
+
 class UnAuthSessionRepositorySpec extends SpecBase
   with Matchers
   with MockitoSugar
   with ScalaFutures
   with DefaultPlayMongoRepositorySupport[CacheItem] {
+
+  implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
 
   val unauthSessionRepo = new UnAuthSessionRepository(
     config = Configuration.from(Map("mongodb.timeToLiveInSeconds" -> 60)),

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,8 @@ package config
 
 import com.google.inject.AbstractModule
 import com.google.inject.name.Names
-import connectors.LocalTemplateRenderer
 import controllers.actions._
 import navigation._
-import scalate.ScalateEngineBoot
-import uk.gov.hmrc.renderer.TemplateRenderer
 
 class Module extends AbstractModule {
 
@@ -31,11 +28,8 @@ class Module extends AbstractModule {
     bind(classOf[DataRetrievalAction]).to(classOf[DataRetrievalActionImpl]).asEagerSingleton()
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl]).asEagerSingleton()
 
-    // For session based storage instead of cred based, change to SessionIdentifierAction
     bind(classOf[AuthenticatedIdentifierAction]).to(classOf[AuthenticatedIdentifierActionImpl]).asEagerSingleton()
     bind(classOf[UnauthenticatedIdentifierAction]).to(classOf[UnauthenticatedIdentifierActionImpl]).asEagerSingleton()
-
-    bind(classOf[ScalateEngineBoot]).asEagerSingleton()
 
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.generic)).to(classOf[GenericNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.engineering)).to(classOf[EngineeringNavigator])
@@ -55,6 +49,5 @@ class Module extends AbstractModule {
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.docks)).to(classOf[DocksNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.textiles)).to(classOf[TextilesNavigator])
 
-    bind(classOf[TemplateRenderer]).to(classOf[LocalTemplateRenderer])
   }
 }

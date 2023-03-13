@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,8 +92,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
   lazy val taxPercentageScotlandHigherRate: Int = configuration.get[Int]("scottish-tax-percentage.higherRate")
 
   lazy val flatRateExpenseId: Int = configuration.get[Int]("flatRateExpenseId")
-
-  val frontendTemplatePath: String = configuration.get[String]("microservice.services.frontend-template-provider.path")
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
