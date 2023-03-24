@@ -36,24 +36,36 @@ class AuthenticatedIdentifierActionImpl @Inject()(
                                                    val parser: BodyParsers.Default
                                                  )(implicit val executionContext: ExecutionContext) extends AuthenticatedIdentifierAction with AuthorisedFunctions with Logging {
 
+  object LT200 {
+    def unapply(confLevel: ConfidenceLevel): Option[ConfidenceLevel] =
+      if (confLevel.level < ConfidenceLevel.L200.level) Some(confLevel) else None
+  }
+
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    authorised(AuthProviders(AuthProvider.Verify) or (AffinityGroup.Individual and ConfidenceLevel.L200))
-      .retrieve(v2.Retrievals.nino and v2.Retrievals.internalId) {
-        case Some(nino) ~ Some(internalId) =>
-          block(IdentifierRequest(request, Authed(internalId), Some(nino)))
+    authorised()
+      .retrieve(v2.Retrievals.nino and v2.Retrievals.internalId and v2.Retrievals.affinityGroup and v2.Retrievals.confidenceLevel) {
+        case _ ~ _ ~ Some(AffinityGroup.Agent) ~ _ =>
+          Future(Redirect(UnauthorisedController.onPageLoad))
+        case _ ~ _ ~ Some(AffinityGroup.Individual | AffinityGroup.Organisation) ~ LT200(_) =>
+          Future.successful(upliftIfSessionNotExpired(hc.sessionId.map(_.value))(request))
+        case Some(nino) ~ Some(internalId) ~ _ ~ _ =>
+          block(
+            IdentifierRequest(
+              request,
+              Authed(internalId),
+              Some(nino)
+            )
+          )
         case _ =>
           throw new UnauthorizedException("Unauthorized exception: missing nino or internal id")
       } recover {
-      case _: UnauthorizedException | _: NoActiveSession =>
+      case _: NoActiveSession =>
         unauthorised(hc.sessionId.map(_.value))
       case _: InsufficientConfidenceLevel =>
-        hc.sessionId.map(_.value) match {
-          case Some(id) => insufficientConfidence(request.getQueryString("key").getOrElse(id))
-          case _ => Redirect(SessionExpiredController.onPageLoad)
-        }
+        upliftIfSessionNotExpired(hc.sessionId.map(_.value))(request)
       case _: AuthorisationException =>
         Redirect(UnauthorisedController.onPageLoad)
       case e =>
@@ -75,6 +87,13 @@ class AuthenticatedIdentifierActionImpl @Inject()(
     Redirect(s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200" +
       s"&completionURL=${config.authorisedCallback + queryString}" +
       s"&failureURL=${config.unauthorisedCallback}")
+  }
+
+  def upliftIfSessionNotExpired(sessionId: Option[String])(implicit request: Request[_]): Result = {
+    sessionId match {
+      case Some(id) => insufficientConfidence(request.getQueryString("key").getOrElse(id))
+      case _ => Redirect(SessionExpiredController.onPageLoad)
+    }
   }
 
 }

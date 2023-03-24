@@ -18,6 +18,7 @@ GET         /accept-and-claim                                    controllers.aut
 GET         /submit                                              controllers.authenticated.SubmissionController.onSubmit
 
 GET         /unauthorised                                        controllers.UnauthorisedController.onPageLoad
+GET         /identity-verification-failed                        controllers.UnauthorisedController.ivFailure
 
 GET         /technical-difficulties                              controllers.TechnicalDifficultiesController.onPageLoad
 

@@ -18,16 +18,16 @@ package views
 
 import play.api.Application
 import play.twirl.api.Html
+import views.html.IdentityVerificationFailedView
 import views.newBehaviours.ViewBehaviours
-import views.html.UnauthorisedView
 
-class UnauthorisedViewSpec extends ViewBehaviours {
+class IdentityVerificationFailedViewSpec extends ViewBehaviours {
 
   val application: Application = applicationBuilder().build()
 
   "Unauthorised view" must {
 
-    val view = application.injector.instanceOf[UnauthorisedView]
+    val view = application.injector.instanceOf[IdentityVerificationFailedView]
 
     val applyView = view.apply()(fakeRequest, messages)
 
