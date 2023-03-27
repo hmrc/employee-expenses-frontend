@@ -31,11 +31,13 @@
 @layout(
     pageTitle = messages("ivFailed.title"), backLinkEnabled = false
 ) {
+
     @heading("ivFailed.heading")
 
     <p class="govuk-body">@messages("ivFailed.cannotContinue")</p>
 
     <p class="govuk-body">@messages("ivFailed.makeYourClaim") <a></a></p>
+
     <ul class="govuk-list govuk-list--bullet">
         <li>@Html(messages("ivFailed.byPost", printAndPostLink))</li>
         <li>@Html(messages("ivFailed.byPhone", helplineLink))</li>
