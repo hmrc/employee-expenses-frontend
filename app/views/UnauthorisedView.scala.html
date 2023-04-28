@@ -22,24 +22,16 @@
     frontendAppConfig: FrontendAppConfig
 )
 
-@()(implicit request: Request[_], messages: Messages)
-
-@printAndPostLink = {<a class="govuk-link" href=@frontendAppConfig.p87ClaimByPostUrl >@messages("ivFailed.printAndPost")</a>}
-@helplineLink = {<a class="govuk-link" href=@frontendAppConfig.contactHMRC >@messages("ivFailed.helpline")</a>}
-@claimOnlineLink = {<a class="govuk-link" href=@frontendAppConfig.claimOnlineUrl >@messages("ivFailed.confirmIdentity")</a>}
+@(id: String)(implicit request: Request[_], messages: Messages)
 
 @layout(
-    pageTitle = messages("ivFailed.title"), backLinkEnabled = false
+    pageTitle = messages("unauthorised.title"), backLinkEnabled = false
 ) {
-    @heading("ivFailed.heading")
+    @heading("unauthorised.heading")
 
-    <p class="govuk-body">@messages("ivFailed.cannotContinue")</p>
-
-    <p class="govuk-body">@messages("ivFailed.makeYourClaim") <a></a></p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>@Html(messages("ivFailed.byPost", printAndPostLink))</li>
-        <li>@Html(messages("ivFailed.byPhone", helplineLink))</li>
-    </ul>
-
-    <p class="govuk-body">@Html(messages("ivFailed.claimOnline", claimOnlineLink))</p>
+    <p class="govuk-body">@messages("unauthorised.paragraph.one")</p>
+    <p class="govuk-body">
+        @messages("unauthorised.paragraph.two")
+        <a class="govuk-link" href="@{frontendAppConfig.loginUrl}?continue=@{frontendAppConfig.loginContinueUrl}@id">@messages("unauthorised.signIn.text")</a>
+    </p>
 }

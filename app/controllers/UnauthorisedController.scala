@@ -16,6 +16,7 @@
 
 package controllers
 
+import controllers.routes.SessionExpiredController
 import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
@@ -29,7 +30,10 @@ class UnauthorisedController @Inject()(
                                       ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    Ok(view())
+    hc.sessionId.map(_.value) match {
+      case Some(id) => Ok(view(id))
+      case _ => Redirect(SessionExpiredController.onPageLoad)
+    }
   }
 
   def ivFailure: Action[AnyContent] = Action { implicit  request =>
