@@ -25,24 +25,22 @@ class UnauthorisedViewSpec extends ViewBehaviours {
 
   val application: Application = applicationBuilder().build()
 
+  val sessionId = "id"
+
   "Unauthorised view" must {
 
     val view = application.injector.instanceOf[UnauthorisedView]
 
-    val applyView = view.apply()(fakeRequest, messages)
+    val applyView = view.apply(sessionId)(fakeRequest, messages)
 
-    behave like normalPage(applyView, "ivFailed")
+    behave like normalPage(applyView, "unauthorised")
 
-    val printAndPostLink: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.p87ClaimByPostUrl}">${messages("ivFailed.printAndPost")}</a>""")
-    val helplineLink: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.contactHMRC}">${messages("ivFailed.helpline")}</a>""")
-    val claimOnlineLink: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.claimOnlineUrl}">${messages("ivFailed.confirmIdentity")}</a>""")
+    val link: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.loginUrl}?continue=${frontendAppConfig.loginContinueUrl}$sessionId">${messages("unauthorised.signIn.text")}</a>""")
 
     behave like pageWithBodyText(applyView,
-      "ivFailed.cannotContinue",
-      "ivFailed.makeYourClaim",
-      Html(messages("ivFailed.byPost", printAndPostLink)).toString,
-      Html(messages("ivFailed.byPhone", helplineLink)).toString,
-      Html(messages("ivFailed.claimOnline", claimOnlineLink)).toString
+      "unauthorised.paragraph.one",
+      "unauthorised.paragraph.two",
+      "unauthorised.signIn.text"
     )
   }
 

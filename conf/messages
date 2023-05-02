@@ -56,6 +56,12 @@ site.textarea.char_limit = (Limit is {0} characters)
 site.startAgain = Restart your expenses claim
 site.or = or
 
+unauthorised.title = You cannot use this Government Gateway user ID to claim tax relief on your expenses
+unauthorised.heading = You cannot use this Government Gateway user ID to claim tax relief on your expenses
+unauthorised.paragraph.one = This is because you have signed in with your agent Government Gateway user ID.
+unauthorised.paragraph.two = To use this service you need to
+unauthorised.signIn.text = sign in with an individual Government Gateway user ID.
+
 ivFailed.title = We cannot confirm your identity
 ivFailed.heading = We cannot confirm your identity
 ivFailed.cannotContinue = We have been unable to confirm your identity, so you cannot continue claiming these expenses online.
