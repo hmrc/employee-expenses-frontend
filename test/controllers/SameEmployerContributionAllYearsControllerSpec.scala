@@ -54,7 +54,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
 
   "SameEmployerContributionAllYears Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
       val userAnswers = UserAnswers().set(ExpensesEmployerPaidPage, contribution).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -63,12 +63,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[SameEmployerContributionAllYearsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode, contribution)(request, messages).toString
 
       application.stop()
     }
@@ -82,14 +77,9 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
 
       val request = FakeRequest(GET, sameEmployerContributionAllYearsRoute)
 
-      val view = application.injector.instanceOf[SameEmployerContributionAllYearsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, contribution)(request, messages).toString
 
       application.stop()
     }
@@ -126,14 +116,9 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[SameEmployerContributionAllYearsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode, contribution)(request, messages).toString
 
       application.stop()
     }

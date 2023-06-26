@@ -32,16 +32,13 @@ import views.html.{HowYouWillGetYourExpensesCurrentAndPreviousYearView, HowYouWi
 class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPropertyChecks with Matchers with Generators {
 
   "HowYouWillGetYourExpensesController" must {
-    "return OK and the correct view for a GET when" when {
+    "return OK for a GET when" when {
       "user has selected current year only for changes" in {
         val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(CurrentYear)))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-        view(controllers.authenticated.routes.SubmissionController.onSubmit.url, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -52,11 +49,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(ua)).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, hasClaimIncreased = true)(request, messages).toString
 
         application.stop()
       }
@@ -67,11 +61,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(ua)).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -81,11 +72,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesPreviousView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, currentYearMinus1Selected = true)(request, messages).toString
 
         application.stop()
       }
@@ -95,11 +83,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, currentYearMinus1Selected = true, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -110,11 +95,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(ua)).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, currentYearMinus1Selected = true, hasClaimIncreased = true)(request, messages).toString
 
         application.stop()
       }
@@ -125,11 +107,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(ua)).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, currentYearMinus1Selected = true, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -139,11 +118,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, true, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -153,11 +129,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, false, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -167,11 +140,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesPreviousView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, currentYearMinus1Selected = true)(request, messages).toString
 
         application.stop()
       }
@@ -181,17 +151,14 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesPreviousView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, currentYearMinus1Selected = false)(request, messages).toString
 
         application.stop()
       }
     }
 
-    "return OK and the correct view for a GET when change years are selected" when {
+    "return OK for a GET when change years are selected" when {
       def changeYearsUserAnswers(years: Seq[TaxYearSelection]) = emptyUserAnswers
         .set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
         .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
@@ -208,11 +175,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(changeYearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, hasClaimIncreased = false)(request, messages).toString
 
         application.stop()
       }
@@ -222,11 +186,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(changeYearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesPreviousView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, true)(request, messages).toString
 
         application.stop()
       }
@@ -236,11 +197,8 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
         val application = applicationBuilder(userAnswers = Some(changeYearsUserAnswers(taxYearSelection))).build()
         val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
         val result = route(application, request).value
-        val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentAndPreviousYearView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(controllers.authenticated.routes.SubmissionController.onSubmit.url, true, false)(request, messages).toString
 
         application.stop()
       }

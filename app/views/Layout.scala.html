@@ -15,7 +15,6 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcReportTechnicalIssue
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accountmenu.YourProfile
 
 @this(
@@ -26,7 +25,7 @@
     hmrcStandardFooter: HmrcStandardFooter,
     hmrcScripts: HmrcScripts,
     hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
-    hmrcReportTechnicalIssue: HmrcReportTechnicalIssue,
+    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
     hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
     backLink: playComponents.back_link,
     appConfig: FrontendAppConfig
@@ -66,17 +65,12 @@ accountMenuEnabled: Boolean = true)(contentBlock: Html)(implicit request: Reques
 @if(timeoutEnabled) {
     @hmrcTimeoutDialogHelper(signOutUrl = appConfig.signOutUrl, keepAliveUrl = Some(appConfig.keepAliveUrl))
 }
-<link rel="stylesheet" type="text/css" href ='@routes.Assets.versioned("stylesheets/employeeexpensesfrontend-app.css")'>
 }
 
 
 @mainContent = {
     @contentBlock
-    @hmrcReportTechnicalIssue(ReportTechnicalIssue(
-        serviceId = appConfig.contactFormServiceIdentifier,
-        language = if(messages.lang.code == "cy") Cy else En,
-        baseUrl = Some(appConfig.contactHost)
-    ))
+    @hmrcReportTechnicalIssueHelper()
 }
 
 

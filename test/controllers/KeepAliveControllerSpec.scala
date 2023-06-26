@@ -40,7 +40,7 @@ class KeepAliveControllerSpec extends SpecBase with MockitoSugar with ScalaFutur
 
   "KeepAlive Controller" must {
 
-    "return OK and the correct view for a GET and update TTL" in {
+    "return OK for a GET and update TTL" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

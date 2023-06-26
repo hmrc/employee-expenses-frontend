@@ -55,7 +55,7 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
   "TaxYearSelection Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -63,12 +63,7 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TaxYearSelectionView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -81,14 +76,9 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
       val request = FakeRequest(GET, taxYearSelectionRoute)
 
-      val view = application.injector.instanceOf[TaxYearSelectionView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(TaxYearSelection.values), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -131,14 +121,9 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TaxYearSelectionView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

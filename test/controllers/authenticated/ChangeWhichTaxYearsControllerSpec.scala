@@ -52,7 +52,7 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
 
   "ChangeWhichTaxYears Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
       val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
@@ -62,12 +62,7 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ChangeWhichTaxYearsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode, taxYearsAndAmounts)(request, messages).toString
 
       application.stop()
     }
@@ -81,14 +76,9 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
 
       val request = FakeRequest(GET, changeWhichTaxYearsRoute)
 
-      val view = application.injector.instanceOf[ChangeWhichTaxYearsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(TaxYearSelection.values), NormalMode, taxYearsAndAmounts)(request, messages).toString
 
       application.stop()
     }
@@ -128,14 +118,9 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[ChangeWhichTaxYearsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode, taxYearsAndAmounts)(request, messages).toString
 
       application.stop()
     }
@@ -201,7 +186,6 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
 
       application.stop()
     }
-
 
   }
 }

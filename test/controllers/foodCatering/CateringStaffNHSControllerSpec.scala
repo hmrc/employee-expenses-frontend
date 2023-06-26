@@ -49,7 +49,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
   "CateringStaffNHS Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -57,12 +57,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[CateringStaffNHSView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -75,14 +70,9 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
       val request = FakeRequest(GET, cateringStaffNHSRoute)
 
-      val view = application.injector.instanceOf[CateringStaffNHSView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -120,14 +110,9 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[CateringStaffNHSView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

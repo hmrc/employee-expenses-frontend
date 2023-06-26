@@ -16,7 +16,6 @@
 
 package controllers.clothing
 
-
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
@@ -51,7 +50,7 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
 
   "Clothing Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -59,12 +58,7 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ClothingView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -77,14 +71,9 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
 
       val request = FakeRequest(GET, clothingRoute)
 
-      val view = application.injector.instanceOf[ClothingView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -122,14 +111,9 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[ClothingView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

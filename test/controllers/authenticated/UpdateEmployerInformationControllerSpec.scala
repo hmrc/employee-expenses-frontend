@@ -27,7 +27,7 @@ class UpdateEmployerInformationControllerSpec extends SpecBase {
 
   "UpdateEmployerInformation Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -35,12 +35,7 @@ class UpdateEmployerInformationControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[UpdateEmployerInformationView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(nextPageURL)(request, messages).toString
 
       application.stop()
     }

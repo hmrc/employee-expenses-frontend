@@ -33,13 +33,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
   lazy val serviceTitle = "Claim for your work uniform and tools - GOV.UK"
 
   lazy val contactHost = configuration.get[Service]("microservice.services.contact-frontend").baseUrl
-  lazy val contactFormServiceIdentifier = loadConfig("contact-frontend-serviceId")
-
-  val assetsPath: String = configuration.get[String]("assets.url") + configuration.get[String]("assets.version") + "/"
-  val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports?service=$contactFormServiceIdentifier"
-  val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  val betaFeedbackUrl = s"$contactHost/contact/beta-feedback"
-  val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated"
 
   lazy val taiHost: String = configuration.get[Service]("microservice.services.tai").baseUrl
   lazy val citizenDetailsUrl: String = configuration.get[Service]("microservice.services.citizen-details").baseUrl
@@ -100,4 +93,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
 
   def routeToSwitchLanguage: String => Call =
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
+
+  lazy val scaWrapperEnabled: Boolean = configuration.getOptional[Boolean]("feature-switch.sca-wrapper").getOrElse(false)
 }

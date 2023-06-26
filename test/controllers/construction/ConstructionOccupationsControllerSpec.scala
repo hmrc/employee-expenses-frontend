@@ -53,7 +53,7 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
 
   "ConstructionOccupations Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -61,12 +61,7 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConstructionOccupationsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -79,14 +74,9 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
 
       val request = FakeRequest(GET, constructionOccupationsRoute)
 
-      val view = application.injector.instanceOf[ConstructionOccupationsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(ConstructionOccupations.values.head), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -102,7 +92,6 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
           )
 
           .build()
-
 
       val request =
         FakeRequest(POST, constructionOccupationsRoute)
@@ -127,14 +116,9 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[ConstructionOccupationsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

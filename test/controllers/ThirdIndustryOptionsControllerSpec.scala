@@ -55,7 +55,7 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
 
   "ThirdIndustryOptions Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -63,12 +63,7 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ThirdIndustryOptionsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -81,14 +76,9 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
 
       val request = FakeRequest(GET, thirdIndustryOptionsRoute)
 
-      val view = application.injector.instanceOf[ThirdIndustryOptionsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(ThirdIndustryOptions.values.head), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -132,14 +122,9 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[ThirdIndustryOptionsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

@@ -19,7 +19,7 @@
 @import config.FrontendAppConfig
 
 @this(
-    layout: Layout,
+    layout: views.LayoutProvider,
     frontendAppConfig:FrontendAppConfig
 )
 @(
@@ -36,7 +36,7 @@
 
 @layout(
     pageTitle = messages(s"confirmation.$title"),
-    backLinkEnabled = false
+    showBackLink = false
 ) {
 
     <div class="govuk-panel govuk-panel--confirmation">

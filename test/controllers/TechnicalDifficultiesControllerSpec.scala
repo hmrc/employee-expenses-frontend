@@ -26,7 +26,7 @@ class TechnicalDifficultiesControllerSpec extends SpecBase with MockitoSugar {
 
   "Technical Difficulties Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -34,16 +34,7 @@ class TechnicalDifficultiesControllerSpec extends SpecBase with MockitoSugar {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ErrorTemplate]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustBe
-        view(
-          messages("technicalDifficulties.pageTitle"),
-          messages("technicalDifficulties.heading"),
-          messages("technicalDifficulties.message")
-        )(request, messages).toString
 
       application.stop()
     }

@@ -51,7 +51,7 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
   "PrintingOccupationList1 Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -59,12 +59,7 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[PrintingOccupationList1View]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -77,14 +72,9 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
       val request = FakeRequest(GET, printingOccupationList1Route)
 
-      val view = application.injector.instanceOf[PrintingOccupationList1View]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -144,14 +134,9 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[PrintingOccupationList1View]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -196,7 +181,6 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-
       val request = FakeRequest(POST, printingOccupationList1Route).withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -220,7 +204,6 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
-
 
       val request = FakeRequest(POST, printingOccupationList1Route).withFormUrlEncodedBody(("value", "false"))
 

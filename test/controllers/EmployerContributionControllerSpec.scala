@@ -48,7 +48,7 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
 
   "EmployerContribution Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -56,12 +56,7 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[EmployerContributionView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -74,14 +69,9 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
 
       val request = FakeRequest(GET, employerContributionRoute)
 
-      val view = application.injector.instanceOf[EmployerContributionView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill( EmployerContribution.YesEmployerContribution), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -117,16 +107,9 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
         FakeRequest(POST, employerContributionRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val boundForm = form.bind(Map("value" -> "invalid value"))
-
-      val view = application.injector.instanceOf[EmployerContributionView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

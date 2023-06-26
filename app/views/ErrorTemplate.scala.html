@@ -17,7 +17,7 @@
 @import config.FrontendAppConfig
 
 @this(
-    layout: Layout,
+    layout: views.LayoutProvider,
     appConfig: FrontendAppConfig
 )
 
@@ -29,7 +29,7 @@
 }
 
 @layout(
- pageTitle = pageTitle, backLinkEnabled = false
+ pageTitle = pageTitle, showBackLink = false
 ) {
  @mainContent
 }

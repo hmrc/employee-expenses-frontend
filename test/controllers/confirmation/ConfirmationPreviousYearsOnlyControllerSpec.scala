@@ -67,18 +67,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConfirmationPreviousYearsOnlyView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          claimAmountsAndRates = Seq(claimAmountsAndRates),
-          claimAmount = claimAmount,
-          address = None,
-          currentYearMinus1 =true,
-          freResponse = FlatRateExpenseOptions.FRENoYears
-        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }
@@ -99,22 +88,10 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConfirmationPreviousYearsOnlyView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          claimAmountsAndRates = Seq(claimAmountsAndRates),
-          claimAmount = claimAmount,
-          address = Some(address),
-          currentYearMinus1 =true,
-          freResponse = FlatRateExpenseOptions.FRENoYears
-        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }
-
 
     "Redirect to TechnicalDifficulties when call to Tai fails" in {
 

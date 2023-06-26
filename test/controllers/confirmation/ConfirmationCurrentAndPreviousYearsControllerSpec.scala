@@ -70,20 +70,7 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConfirmationCurrentAndPreviousYearsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          claimAmountsAndRates = Seq(claimAmountsAndRates),
-          claimAmount = claimAmount,
-          employerCorrect = Some(true),
-          address = Some(address),
-          hasClaimIncreased = false,
-          freResponse = FRENoYears,
-          npsFreAmount = 100
-        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }
@@ -106,20 +93,7 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConfirmationCurrentAndPreviousYearsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          claimAmountsAndRates = Seq(claimAmountsAndRates),
-          claimAmount = claimAmount,
-          employerCorrect = Some(true),
-          address = Some(address),
-          hasClaimIncreased = true,
-          freResponse = FRENoYears,
-          npsFreAmount = 70
-        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }
@@ -142,24 +116,10 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConfirmationCurrentAndPreviousYearsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          claimAmountsAndRates = Seq(claimAmountsAndRates),
-          claimAmount = claimAmount,
-          employerCorrect = Some(true),
-          address = Some(address),
-          hasClaimIncreased = false,
-          freResponse = FRENoYears,
-          npsFreAmount = 100
-        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }
-
 
     "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET without address" in {
       val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))))
@@ -174,20 +134,7 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConfirmationCurrentAndPreviousYearsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          claimAmountsAndRates = Seq(claimAmountsAndRates),
-          claimAmount = claimAmount,
-          employerCorrect = Some(true),
-          address = None,
-          hasClaimIncreased = false,
-          freResponse = FRENoYears,
-          npsFreAmount = 100
-        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }

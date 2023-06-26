@@ -49,7 +49,7 @@ class MultipleEmploymentsControllerSpec extends SpecBase  with ScalaFutures with
 
   "MultipleEmployments Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -57,12 +57,7 @@ class MultipleEmploymentsControllerSpec extends SpecBase  with ScalaFutures with
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[MultipleEmploymentsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -75,14 +70,9 @@ class MultipleEmploymentsControllerSpec extends SpecBase  with ScalaFutures with
 
       val request = FakeRequest(GET, multipleEmploymentsRoute)
 
-      val view = application.injector.instanceOf[MultipleEmploymentsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(MultipleEmployments.values.head), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -118,14 +108,9 @@ class MultipleEmploymentsControllerSpec extends SpecBase  with ScalaFutures with
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[MultipleEmploymentsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

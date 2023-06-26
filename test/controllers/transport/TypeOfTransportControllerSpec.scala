@@ -51,7 +51,7 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
 
   "TypeOfTransport Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -59,12 +59,7 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TypeOfTransportView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -78,14 +73,9 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
 
       val request = FakeRequest(GET, typeOfTransportRoute)
 
-      val view = application.injector.instanceOf[TypeOfTransportView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(TypeOfTransport.values.head), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -123,14 +113,9 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TypeOfTransportView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

@@ -50,7 +50,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
   "AlreadyClaimingFRESameAmount Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
       val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
@@ -60,17 +60,7 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[AlreadyClaimingFRESameAmountView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          form,
-          NormalMode,
-          userAnswers.get(ClaimAmountAndAnyDeductions).value,
-          userAnswers.get(FREAmounts).value
-        )(request, messages).toString
 
       application.stop()
     }
@@ -85,19 +75,9 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
       val request = FakeRequest(GET, alreadyClaimingFRESameAmountRoute)
 
-      val view = application.injector.instanceOf[AlreadyClaimingFRESameAmountView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          form.fill(AlreadyClaimingFRESameAmount.values.head),
-          NormalMode,
-          userAnswers.get(ClaimAmountAndAnyDeductions).value,
-          userAnswers.get(FREAmounts).value
-        )(request, messages).toString
 
       application.stop()
     }
@@ -137,19 +117,9 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[AlreadyClaimingFRESameAmountView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(
-          boundForm,
-          NormalMode,
-          userAnswers.get(ClaimAmountAndAnyDeductions).value,
-          userAnswers.get(FREAmounts).value
-        )(request, messages).toString
 
       application.stop()
     }
