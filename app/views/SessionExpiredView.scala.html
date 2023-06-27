@@ -17,7 +17,7 @@
 @import config.FrontendAppConfig
 
 @this(
-    layout: Layout,
+    layout: views.LayoutProvider,
     frontendAppConfig: FrontendAppConfig,
     heading: playComponents.heading
 )
@@ -25,7 +25,8 @@
 @()(implicit request: Request[_], messages: Messages)
 
     @layout(
-        pageTitle = messages("session_expired.title")
+        pageTitle = messages("session_expired.title"),
+        timeout = false
     ) {
 
         @heading("session_expired.heading")

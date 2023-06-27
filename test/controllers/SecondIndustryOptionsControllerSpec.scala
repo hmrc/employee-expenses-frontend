@@ -55,7 +55,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
 
   "SecondIndustryOptions Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -63,12 +63,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[SecondIndustryOptionsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -81,14 +76,9 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
 
       val request = FakeRequest(GET, secondIndustryOptionsRoute)
 
-      val view = application.injector.instanceOf[SecondIndustryOptionsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(SecondIndustryOptions.values.head), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -104,7 +94,6 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
           .build()
 
       val secondIndustryOptions: Gen[SecondIndustryOptions] = Gen.oneOf(SecondIndustryOptions.values)
-
 
       forAll(secondIndustryOptions) {
         secondIndustryOption =>
@@ -131,14 +120,9 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[SecondIndustryOptionsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

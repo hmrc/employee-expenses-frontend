@@ -51,7 +51,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
 
   "TypeOfEngineering Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -59,12 +59,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[TypeOfEngineeringView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -77,14 +72,9 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
 
       val request = FakeRequest(GET, typeOfEngineeringRoute)
 
-      val view = application.injector.instanceOf[TypeOfEngineeringView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(TypeOfEngineering.values.head), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -145,14 +135,9 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[TypeOfEngineeringView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

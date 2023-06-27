@@ -17,7 +17,7 @@
 @import config.FrontendAppConfig
 
 @this(
-    layout: Layout,
+    layout: views.LayoutProvider,
     heading: playComponents.heading,
     frontendAppConfig: FrontendAppConfig
 )
@@ -25,7 +25,7 @@
 @(id: String)(implicit request: Request[_], messages: Messages)
 
 @layout(
-    pageTitle = messages("unauthorised.title"), backLinkEnabled = false
+    pageTitle = messages("unauthorised.title"), showBackLink = false
 ) {
     @heading("unauthorised.heading")
 

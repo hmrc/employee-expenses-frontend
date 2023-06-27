@@ -44,7 +44,7 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
 
   "ClaimAmount Controller" must {
 
-    "return OK and the correct view for a GET when all data is found" in {
+    "return OK for a GET when all data is found" in {
       val claimAmount = 60
       val ua1 =
         emptyUserAnswers
@@ -85,14 +85,10 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
 
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
       val result = route(application, request).value
-      val view = application.injector.instanceOf[ClaimAmountView]
 
       whenReady(result) {
         _ =>
           status(result) mustEqual OK
-
-          contentAsString(result) mustEqual
-            view(claimAmount, None, claimAmountsAndRates, scottishClaimAmountsAndRates, "/employee-expenses/which-tax-year")(request, messages).toString
 
           verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }

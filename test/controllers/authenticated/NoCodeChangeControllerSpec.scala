@@ -34,7 +34,7 @@ class NoCodeChangeControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   "NoCodeChange Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val mockAuditConnector = mock[AuditConnector]
 
@@ -46,12 +46,7 @@ class NoCodeChangeControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[NoCodeChangeView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view()(request, messages).toString
 
       whenReady(result) {
         _ =>

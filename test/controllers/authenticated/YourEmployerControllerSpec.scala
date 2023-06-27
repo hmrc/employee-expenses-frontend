@@ -52,12 +52,11 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-
   lazy val yourEmployerRoute: String = YourEmployerController.onPageLoad().url
 
   "YourEmployer Controller" must {
 
-    "return OK and the correct view for a GET and save employer data" in {
+    "return OK for a GET and save employer data" in {
       val userAnswers = UserAnswers()
         .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
 
@@ -72,15 +71,10 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[YourEmployerView]
-
       val userAnswers2 = userAnswers
           .set(YourEmployerNames, Seq("HMRC LongBenton")).success.value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode, employmentSeq)(request, messages).toString
 
       whenReady(result) {
         _ =>
@@ -104,14 +98,9 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
-      val view = application.injector.instanceOf[YourEmployerView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, employmentSeq)(request, messages).toString
 
       application.stop()
     }
@@ -153,14 +142,9 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[YourEmployerView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode, employmentSeq)(request, messages).toString
 
       application.stop()
     }

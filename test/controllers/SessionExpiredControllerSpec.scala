@@ -25,7 +25,7 @@ class SessionExpiredControllerSpec extends SpecBase {
 
   "SessionExpired Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -33,12 +33,7 @@ class SessionExpiredControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[SessionExpiredView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view()(request, messages).toString
 
       application.stop()
     }

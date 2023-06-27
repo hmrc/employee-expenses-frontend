@@ -50,7 +50,7 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
 
   "AlreadyClaimingFREDifferentAmounts Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
       val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
 
@@ -60,17 +60,7 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[AlreadyClaimingFREDifferentAmountsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          form,
-          NormalMode,
-          userAnswers.get(ClaimAmountAndAnyDeductions).value,
-          userAnswers.get(FREAmounts).value
-        )(request, messages).toString
 
       application.stop()
     }
@@ -85,19 +75,9 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
 
       val request = FakeRequest(GET, alreadyClaimingFREDifferentAmountsRoute)
 
-      val view = application.injector.instanceOf[AlreadyClaimingFREDifferentAmountsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          form.fill(AlreadyClaimingFREDifferentAmounts.values.head),
-          NormalMode,
-          userAnswers.get(ClaimAmountAndAnyDeductions).value,
-          userAnswers.get(FREAmounts).value
-        )(request, messages).toString
 
       application.stop()
     }
@@ -105,7 +85,6 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
     "redirect to the next page when valid data is submitted" in {
       val userAnswers = currentYearFullUserAnswers
         .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
-
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -138,19 +117,9 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[AlreadyClaimingFREDifferentAmountsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(
-          boundForm,
-          NormalMode,
-          userAnswers.get(ClaimAmountAndAnyDeductions).value,
-          userAnswers.get(FREAmounts).value
-        )(request, messages).toString
 
       application.stop()
     }

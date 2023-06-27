@@ -361,7 +361,6 @@ class FakeFailingAuthConnector @Inject()(exceptionToReturn: Throwable) extends A
     Future.failed(exceptionToReturn)
 }
 
-
 class FakePassingAuthConnector @Inject()(stubbedRetrievalResult: Future[_]) extends AuthConnector {
   val serviceUrl: String = ""
 

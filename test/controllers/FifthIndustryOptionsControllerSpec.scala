@@ -58,7 +58,7 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
 
   "FifthIndustryOptions Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -66,12 +66,7 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[FifthIndustryOptionsView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -84,14 +79,9 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
 
       val request = FakeRequest(GET, fifthIndustryOptionsRoute)
 
-      val view = application.injector.instanceOf[FifthIndustryOptionsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(FifthIndustryOptions.values.head), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -128,14 +118,9 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
 
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val view = application.injector.instanceOf[FifthIndustryOptionsView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

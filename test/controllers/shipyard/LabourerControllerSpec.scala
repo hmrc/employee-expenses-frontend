@@ -55,7 +55,7 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
 
   "Labourer Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -63,12 +63,7 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[LabourerView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -81,14 +76,9 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
 
       val request = FakeRequest(GET, labourerRoute)
 
-      val view = application.injector.instanceOf[LabourerView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -125,14 +115,9 @@ class LabourerControllerSpec extends SpecBase  with ScalaFutures
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[LabourerView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

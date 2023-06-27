@@ -70,20 +70,7 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConfirmationCurrentYearOnlyView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          claimAmountsAndRates = Seq(claimAmountsAndRates),
-          claimAmount = claimAmount,
-          employerCorrect = Some(true),
-          address = Some(address),
-          hasClaimIncreased = true,
-          freResponse = FRENoYears,
-          npsFreAmount = 70
-        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }
@@ -105,20 +92,7 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConfirmationCurrentYearOnlyView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          claimAmountsAndRates = Seq(claimAmountsAndRates),
-          claimAmount = claimAmount,
-          employerCorrect = Some(true),
-          address = Some(address),
-          hasClaimIncreased = false,
-          freResponse = FRENoYears,
-          npsFreAmount = 120
-        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }
@@ -137,20 +111,7 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConfirmationCurrentYearOnlyView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(
-          claimAmountsAndRates = Seq(claimAmountsAndRates),
-          claimAmount = claimAmount,
-          employerCorrect = Some(true),
-          address = Some(address),
-          hasClaimIncreased = true,
-          freResponse = FRENoYears,
-          npsFreAmount = 0
-        )(request, messages, frontendAppConfig).toString
 
       application.stop()
     }

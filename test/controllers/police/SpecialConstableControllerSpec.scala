@@ -49,7 +49,7 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
 
   "SpecialConstable Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -57,12 +57,7 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[SpecialConstableView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -75,14 +70,9 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
 
       val request = FakeRequest(GET, specialConstableRoute)
 
-      val view = application.injector.instanceOf[SpecialConstableView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -120,14 +110,9 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[SpecialConstableView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }

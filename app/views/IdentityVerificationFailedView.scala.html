@@ -17,7 +17,7 @@
 @import config.FrontendAppConfig
 
 @this(
-    layout: Layout,
+    layout: views.LayoutProvider,
     heading: playComponents.heading,
     frontendAppConfig: FrontendAppConfig
 )
@@ -29,7 +29,7 @@
 @claimOnlineLink = {<a class="govuk-link" href=@frontendAppConfig.claimOnlineUrl >@messages("ivFailed.confirmIdentity")</a>}
 
 @layout(
-    pageTitle = messages("ivFailed.title"), backLinkEnabled = false
+    pageTitle = messages("ivFailed.title"), showBackLink = false
 ) {
 
     @heading("ivFailed.heading")

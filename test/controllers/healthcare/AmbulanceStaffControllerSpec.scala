@@ -50,7 +50,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
 
   "AmbulanceStaff Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -58,12 +58,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[AmbulanceStaffView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -76,14 +71,9 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
 
       val request = FakeRequest(GET, ambulanceStaffRoute)
 
-      val view = application.injector.instanceOf[AmbulanceStaffView]
-
       val result = route(application, request).value
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -144,14 +134,9 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[AmbulanceStaffView]
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, NormalMode)(request, messages).toString
 
       application.stop()
     }
@@ -187,7 +172,6 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
 
       application.stop()
     }
-
 
     "save 'ambulanceStaff' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]

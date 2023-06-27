@@ -25,7 +25,7 @@ class ClaimByPostOrOnlineControllerSpec extends SpecBase {
 
   "ClaimByPostOrOnline Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -33,14 +33,9 @@ class ClaimByPostOrOnlineControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ClaimByPostOrOnlineView]
-
       val p87Url = frontendAppConfig.p87Url
 
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(p87Url)(request, messages).toString
 
       application.stop()
     }

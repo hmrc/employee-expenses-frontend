@@ -62,7 +62,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
 
   "YourAddress Controller" must {
 
-    "redirect to next page and the correct view for a GET and save address to CitizensDetailsAddress" in {
+    "redirect to next page for a GET and save address to CitizensDetailsAddress" in {
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
         .thenReturn(Future.successful(HttpResponse(OK, validAddressJson.toString)))
       when(mockSessionRepository.set(any(), any()))

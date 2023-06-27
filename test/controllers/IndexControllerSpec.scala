@@ -42,12 +42,11 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
   private val mockAuthConnector: AuthConnector = mock[AuthConnector]
   private val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
 
-
   when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
 
   "Index Controller" must {
 
-    "redirect to the first page of the application and the correct view for a GET when user answers is not empty" in {
+    "redirect to the first page of the application for a GET when user answers is not empty" in {
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
 
@@ -86,7 +85,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       application.stop()
     }
 
-    "redirect to the first page of the application and the correct view for a GET when user answers is not empty when unauthed" in {
+    "redirect to the first page of the application for a GET when user answers is not empty when unauthed" in {
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
 

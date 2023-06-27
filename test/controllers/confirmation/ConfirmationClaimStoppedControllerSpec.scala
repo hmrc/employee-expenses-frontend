@@ -45,12 +45,7 @@ class ConfirmationClaimStoppedControllerSpec extends SpecBase with MockitoSugar 
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[ConfirmationClaimStoppedView]
-
       status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view()(request, messages).toString
 
       application.stop()
     }

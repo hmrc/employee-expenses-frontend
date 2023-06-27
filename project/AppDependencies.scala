@@ -10,9 +10,8 @@ object AppDependencies {
     "uk.gov.hmrc"           %% "play-conditional-form-mapping"  % "1.12.0-play-28",
     "uk.gov.hmrc"           %% "bootstrap-frontend-play-28"     % "7.14.0",
     "uk.gov.hmrc"           %% "tax-year"                       % "3.0.0",
-    "uk.gov.hmrc"           %% "play-partials"                  % "8.3.0-play-28",
     "com.typesafe.play"     %% "play-json-joda"                 % "2.9.4",
-    "uk.gov.hmrc"           %% "play-frontend-hmrc"             % "6.7.0-play-28"
+    "uk.gov.hmrc"           %% "sca-wrapper"                    % "1.0.37"
   )
 
 

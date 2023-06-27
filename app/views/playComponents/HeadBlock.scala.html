@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,30 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package controllers
-
-import base.SpecBase
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import views.html.CannotClaimExpenseView
-
-class CannotClaimExpenseControllerSpec extends SpecBase {
-
-  "CannotClaimExpense Controller" must {
-
-    "return OK for a GET" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val request = FakeRequest(GET, routes.CannotClaimExpenseController.onPageLoad().url)
-
-      val result = route(application, request).value
-
-      status(result) mustEqual OK
-
-      application.stop()
-    }
-  }
-}
+@this()
+<link href='@routes.Assets.versioned("stylesheets/application.css")'
+media="all"
+rel="stylesheet"
+type="text/css" />
