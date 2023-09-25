@@ -59,6 +59,14 @@ trait NewViewSpecBase extends SpecBase {
     assert(doc.getElementById(id) == null, "\n\nElement " + id + " was rendered on the page.\n")
   }
 
+  def assertRenderedByClass(doc: Document, className: String) = {
+    assert(doc.getElementsByClass(className).first() != null, "\n\nElement " + className + " was rendered on the page.\n")
+  }
+
+  def assertNotRenderedByClass(doc: Document, className: String) = {
+    assert(doc.getElementsByClass(className).first() == null, "\n\nElement " + className + " was rendered on the page.\n")
+  }
+
   def assertRenderedByCssSelector(doc: Document, cssSelector: String) = {
     assert(!doc.select(cssSelector).isEmpty, "Element " + cssSelector + " was not rendered on the page.")
   }
