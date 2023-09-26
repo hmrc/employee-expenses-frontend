@@ -14,10 +14,12 @@
  * limitations under the License.
  *@
 
+@import views.html.helper.CSPNonce
+
 @this()
 @()(implicit request: RequestHeader)
 
 @*
 *Add script elements you want to be included in the layout here
-*eg: <script src='@controllers.routes.Assets.versioned("javascripts/app.js")'></script>
+*eg: <script @CSPNonce.attr src='@controllers.routes.Assets.versioned("javascripts/app.js")'></script>
 *@

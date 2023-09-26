@@ -23,12 +23,8 @@ import play.api.i18n.Lang
 import play.api.mvc.Call
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-import scala.util.Try
-
 @Singleton
 class FrontendAppConfig @Inject() (val configuration: Configuration, val servicesConfig: ServicesConfig) {
-
-  private def loadConfig(key: String): String = Try(servicesConfig.getString(key)).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
   lazy val serviceTitle = "Claim for your work uniform and tools - GOV.UK"
 
