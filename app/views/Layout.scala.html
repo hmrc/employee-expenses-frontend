@@ -16,9 +16,9 @@
 
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accountmenu.YourProfile
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 
 @this(
-    govukLayout: GovukLayout,
     hmrcAccountMenu: HmrcAccountMenu,
     hmrcHead: HmrcHead,
     hmrcStandardHeader: HmrcStandardHeader,
@@ -28,7 +28,8 @@
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
     hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
     govukBackLink: GovukBackLink,
-    appConfig: FrontendAppConfig
+    appConfig: FrontendAppConfig,
+    hmrcStandardPage: HmrcStandardPage
 )
 
 @(pageTitle: String,
@@ -75,15 +76,17 @@ accountMenuEnabled: Boolean = true)(contentBlock: Html)(implicit request: Reques
     @hmrcReportTechnicalIssueHelper()
 }
 
-
-@govukLayout(
-    pageTitle = Some(s"$pageTitle - ${appConfig.serviceTitle}"),
-    headBlock = Some(hmrcHead(headBlock = Some(head))),
-    headerBlock = Some(hmrcStandardHeader(
-        serviceUrl = Some(controllers.routes.IndexController.onPageLoad.url),
-        userResearchBanner = None
-    )),
-    beforeContentBlock = Some(accountMenu),
-    scriptsBlock = Some(hmrcScripts()),
-    footerBlock = Some(hmrcStandardFooter())
+@hmrcStandardPage(
+    HmrcStandardPageParams(
+        serviceURLs = ServiceURLs(
+            serviceUrl = Some(controllers.routes.IndexController.onPageLoad.url)
+        ),
+        templateOverrides = TemplateOverrides(
+            additionalHeadBlock = Some(head),
+            beforeContentBlock = Some(accountMenu),
+            additionalScriptsBlock = Some(hmrcScripts())
+        ),
+        serviceName = Some(messages("service.name")),
+        pageTitle = Some(s"""$pageTitle - ${messages("service.name")} - GOV.UK""")
+    )
 )(mainContent)
