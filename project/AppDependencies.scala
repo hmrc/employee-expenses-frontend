@@ -3,17 +3,17 @@ import sbt.*
 object AppDependencies {
   import play.core.PlayVersion
 
-  private val bootstrapVersion = "7.22.0"
+  private val bootstrapVersion = "7.23.0"
 
 
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
-    "uk.gov.hmrc.mongo"     %% "hmrc-mongo-play-28"             % "1.3.0",
+    "uk.gov.hmrc.mongo"     %% "hmrc-mongo-play-28"             % "1.4.0",
     "uk.gov.hmrc"           %% "play-conditional-form-mapping"  % "1.13.0-play-28",
     "uk.gov.hmrc"           %% "bootstrap-frontend-play-28"     % bootstrapVersion,
     "uk.gov.hmrc"           %% "tax-year"                       % "3.3.0",
     "com.typesafe.play"     %% "play-json-joda"                 % "2.9.4",
-    "uk.gov.hmrc"           %% "sca-wrapper"                    % "1.0.45"
+    "uk.gov.hmrc"           %% "sca-wrapper"                    % "1.0.47"
   )
 
 
