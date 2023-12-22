@@ -19,7 +19,6 @@ package controllers.authenticated
 import base.SpecBase
 import config.NavConstant
 import controllers.actions.Authed
-import forms.authenticated.RemoveFRECodeFormProvider
 import models.{NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -32,18 +31,14 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.authenticated.RemoveFRECodeView
 
 import scala.concurrent.Future
 
 class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   lazy val removeFRECodeRoute: String = routes.RemoveFRECodeController.onPageLoad(NormalMode).url
-
-  val formProvider = new RemoveFRECodeFormProvider()
-  val form = formProvider()
 
   "RemoveFRECode Controller" must {
 
@@ -105,8 +100,6 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
       val request =
         FakeRequest(POST, removeFRECodeRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

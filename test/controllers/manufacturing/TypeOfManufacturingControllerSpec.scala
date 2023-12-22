@@ -19,7 +19,6 @@ package controllers.manufacturing
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.manufacturing.TypeOfManufacturingFormProvider
 import models.TypeOfManufacturing._
 import models.{NormalMode, TypeOfManufacturing, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -35,18 +34,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.manufacturing.TypeOfManufacturingView
 
 import scala.concurrent.Future
 
 class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val typeOfManufacturingRoute = controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(NormalMode).url
+  lazy val typeOfManufacturingRoute: String = controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(NormalMode).url
 
-  private val formProvider = new TypeOfManufacturingFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
   "TypeOfManufacturing Controller" must {
@@ -109,8 +105,6 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
       val request =
         FakeRequest(POST, typeOfManufacturingRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

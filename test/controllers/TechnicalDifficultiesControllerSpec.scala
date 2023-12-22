@@ -20,7 +20,6 @@ import base.SpecBase
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.ErrorTemplate
 
 class TechnicalDifficultiesControllerSpec extends SpecBase with MockitoSugar {
 

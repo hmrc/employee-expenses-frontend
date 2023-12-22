@@ -19,7 +19,6 @@ package controllers.engineering
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.engineering.FactoryEngineeringList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -35,7 +34,6 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.engineering.FactoryEngineeringList2View
 
 import scala.concurrent.Future
 
@@ -43,10 +41,7 @@ class FactoryEngineeringList2ControllerSpec extends SpecBase with MockitoSugar w
 
   private val userAnswers = emptyUserAnswers
 
-  def onwardRoute = Call("GET", "/foo")
-
-  val formProvider = new FactoryEngineeringList2FormProvider()
-  val form = formProvider()
+  def onwardRoute: Call = Call("GET", "/foo")
 
   lazy val factoryEngineeringList2Route: String = routes.FactoryEngineeringList2Controller.onPageLoad(NormalMode).url
 
@@ -133,8 +128,6 @@ class FactoryEngineeringList2ControllerSpec extends SpecBase with MockitoSugar w
       val request =
         FakeRequest(POST, factoryEngineeringList2Route)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

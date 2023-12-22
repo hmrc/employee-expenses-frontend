@@ -19,7 +19,6 @@ package controllers.engineering
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.engineering.TypeOfEngineeringFormProvider
 import models.{NormalMode, TypeOfEngineering, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -34,20 +33,16 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.engineering.TypeOfEngineeringView
 
 import scala.concurrent.Future
 
 class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   lazy val typeOfEngineeringRoute: String = controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode).url
 
   private val userAnswers = emptyUserAnswers
-
-  val formProvider = new TypeOfEngineeringFormProvider()
-  val form = formProvider()
 
   "TypeOfEngineering Controller" must {
 
@@ -132,8 +127,6 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
       val request =
         FakeRequest(POST, typeOfEngineeringRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

@@ -19,7 +19,6 @@ package controllers.foodCatering
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.foodCatering.CateringStaffNHSFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -34,18 +33,14 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.foodCatering.CateringStaffNHSView
 
 import scala.concurrent.Future
 
 class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new CateringStaffNHSFormProvider()
-  val form = formProvider()
-
-  lazy val cateringStaffNHSRoute = routes.CateringStaffNHSController.onPageLoad(NormalMode).url
+  lazy val cateringStaffNHSRoute: String = routes.CateringStaffNHSController.onPageLoad(NormalMode).url
 
   "CateringStaffNHS Controller" must {
 
@@ -107,8 +102,6 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
       val request =
         FakeRequest(POST, cateringStaffNHSRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

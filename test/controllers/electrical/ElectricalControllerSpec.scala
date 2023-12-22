@@ -20,7 +20,6 @@ import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import controllers.electrical.routes._
-import forms.electrical.ElectricalFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -40,12 +39,9 @@ import scala.concurrent.Future
 
 class ElectricalControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new ElectricalFormProvider()
-  val form = formProvider()
-
-  lazy val electricalRoute = ElectricalController.onPageLoad(NormalMode).url
+  lazy val electricalRoute: String = ElectricalController.onPageLoad(NormalMode).url
 
   "Electrical Controller" must {
 
@@ -107,8 +103,6 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
       val request =
         FakeRequest(POST, electricalRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

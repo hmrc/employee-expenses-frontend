@@ -22,7 +22,6 @@ import controllers.authenticated.routes._
 import controllers.routes._
 import models.FlatRateExpenseOptions
 import models.FlatRateExpenseOptions._
-import models.TaxYearSelection._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -33,9 +32,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.SubmissionService
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import utils.CheckYourAnswersHelper
-import viewmodels.AnswerSection
-import views.html.authenticated.CheckYourAnswersView
 
 class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with BeforeAndAfterEach {
 
@@ -43,24 +39,6 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
   private val mockAuditConnector = mock[AuditConnector]
   private val mockTaiConnector = mock[TaiConnector]
   private val mockCitizenDetailsConnector = mock[CitizenDetailsConnector]
-  private val cyaHelperMinimumUa = new CheckYourAnswersHelper(minimumUserAnswers)
-  private val cyaHelperFullUa = new CheckYourAnswersHelper(currentYearFullUserAnswers)
-
-  private val minimumSections = Seq(AnswerSection(None, Seq(
-    cyaHelperMinimumUa.industryType,
-    cyaHelperMinimumUa.employerContribution,
-    cyaHelperMinimumUa.expensesEmployerPaid,
-    cyaHelperMinimumUa.taxYearSelection,
-    cyaHelperMinimumUa.alreadyClaimingFRESameAmount,
-    cyaHelperMinimumUa.removeFRECode
-  ).flatten))
-
-  private val fullSections = Seq(AnswerSection(None, Seq(
-    cyaHelperFullUa.industryType,
-    cyaHelperFullUa.employerContribution,
-    cyaHelperFullUa.expensesEmployerPaid,
-    cyaHelperFullUa.taxYearSelection
-  ).flatten))
 
   override def beforeEach(): Unit = {
     reset(mockAuditConnector)

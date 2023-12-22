@@ -18,7 +18,6 @@ package controllers
 
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
-import forms.FirstIndustryOptionsFormProvider
 import generators.Generators
 import models.FirstIndustryOptions._
 import models.{FirstIndustryOptions, NormalMode, UserAnswers}
@@ -38,18 +37,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.FirstIndustryOptionsView
 
 import scala.concurrent.Future
 
 class FirstIndustryOptionsControllerSpec
   extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with ScalaCheckPropertyChecks with Generators with OptionValues {
 
-  def onwardRoute = Call("GET", "/FOO")
+  def onwardRoute: Call = Call("GET", "/FOO")
 
-  lazy val firstIndustryOptionsRoute = controllers.routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url
-  private val formProvider = new FirstIndustryOptionsFormProvider()
-  private val form = formProvider()
+  lazy val firstIndustryOptionsRoute: String = controllers.routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url
   private val mockSessionRepository = mock[SessionRepository]
   private val userAnswers = emptyUserAnswers
 
@@ -74,7 +70,6 @@ class FirstIndustryOptionsControllerSpec
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).build()
       val request = FakeRequest(GET, firstIndustryOptionsRoute)
       val result = route(application, request).value
-      val view: FirstIndustryOptionsView = application.injector.instanceOf[FirstIndustryOptionsView]
 
       status(result) mustEqual OK
 

@@ -19,7 +19,6 @@ package controllers.authenticated
 import base.SpecBase
 import config.NavConstant
 import controllers.routes._
-import forms.authenticated.TaxYearSelectionFormProvider
 import models.{FlatRateExpense, FlatRateExpenseAmounts, FlatRateExpenseOptions, NormalMode, TaiTaxYear, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -28,25 +27,21 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.ClaimAmountAndAnyDeductions
 import pages.authenticated.TaxYearSelectionPage
-import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import service.TaiService
-import views.html.authenticated.TaxYearSelectionView
 
 import scala.concurrent.Future
 
 class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   lazy val taxYearSelectionRoute: String = routes.TaxYearSelectionController.onPageLoad(NormalMode).url
 
-  private val formProvider = new TaxYearSelectionFormProvider()
-  private val form: Form[Seq[TaxYearSelection]] = formProvider()
   private val mockSessionRepository = mock[SessionRepository]
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
@@ -118,8 +113,6 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
       val request =
         FakeRequest(POST, taxYearSelectionRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

@@ -18,7 +18,6 @@ package controllers
 
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
-import forms.FourthIndustryOptionsFormProvider
 import models.{FourthIndustryOptions, NormalMode, UserAnswers}
 import models.FourthIndustryOptions._
 import navigation.{FakeNavigator, Navigator}
@@ -35,18 +34,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.FourthIndustryOptionsView
 
 import scala.concurrent.Future
 
 class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val fourthIndustryOptionsRoute = routes.FourthIndustryOptionsController.onPageLoad(NormalMode).url
+  lazy val fourthIndustryOptionsRoute: String = routes.FourthIndustryOptionsController.onPageLoad(NormalMode).url
 
-  private val formProvider = new FourthIndustryOptionsFormProvider()
-  private val form = formProvider()
   private val mockSessionRepository = mock[SessionRepository]
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
@@ -109,8 +105,6 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       val request =
         FakeRequest(POST, fourthIndustryOptionsRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

@@ -19,7 +19,6 @@ package controllers.transport
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.transport.WhichRailwayTradeFormProvider
 import models.{NormalMode, UserAnswers, WhichRailwayTrade}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -35,18 +34,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.transport.WhichRailwayTradeView
 
 import scala.concurrent.Future
 
 class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val whichRailwayTradeRoute = controllers.transport.routes.WhichRailwayTradeController.onPageLoad(NormalMode).url
+  lazy val whichRailwayTradeRoute: String = controllers.transport.routes.WhichRailwayTradeController.onPageLoad(NormalMode).url
 
-  private val formProvider = new WhichRailwayTradeFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
   "WhichRailwayTrade Controller" must {
@@ -109,8 +105,6 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
       val request =
         FakeRequest(POST, whichRailwayTradeRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

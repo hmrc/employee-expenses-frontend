@@ -19,7 +19,6 @@ package controllers.textiles
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.TextilesOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -34,17 +33,13 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.textiles.TextilesOccupationList1View
 
 import scala.concurrent.Future
 
 class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues
   with MockitoSugar with BeforeAndAfterEach {
 
-  def onwardRoute = Call("GET", "/foo")
-
-  val formProvider = new TextilesOccupationList1FormProvider()
-  val form = formProvider()
+  def onwardRoute: Call = Call("GET", "/foo")
 
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
@@ -114,8 +109,6 @@ class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
       val request =
         FakeRequest(POST, textilesOccupationList1Route)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

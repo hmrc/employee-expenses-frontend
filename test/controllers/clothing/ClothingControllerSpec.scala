@@ -19,7 +19,6 @@ package controllers.clothing
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.clothing.ClothingFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -29,22 +28,17 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.clothing.ClothingPage
-import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.clothing.ClothingView
 
 import scala.concurrent.Future
 
 class ClothingControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
-
-  val formProvider = new ClothingFormProvider()
-  val form: Form[Boolean] = formProvider()
+  def onwardRoute: Call = Call("GET", "/foo")
 
   lazy val clothingRoute: String = routes.ClothingController.onPageLoad(NormalMode).url
 
@@ -108,8 +102,6 @@ class ClothingControllerSpec extends SpecBase with ScalaFutures with Integration
       val request =
         FakeRequest(POST, clothingRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

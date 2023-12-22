@@ -18,7 +18,6 @@ package controllers.authenticated
 
 import base.SpecBase
 import config.NavConstant
-import forms.authenticated.AlreadyClaimingFREDifferentAmountsFormProvider
 import models.{AlreadyClaimingFREDifferentAmounts, FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -26,24 +25,21 @@ import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.authenticated.AlreadyClaimingFREDifferentAmountsPage
-import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
+import pages.FREAmounts
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.authenticated.AlreadyClaimingFREDifferentAmountsView
 
 import scala.concurrent.Future
 
 class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val alreadyClaimingFREDifferentAmountsRoute = routes.AlreadyClaimingFREDifferentAmountsController.onPageLoad(NormalMode).url
+  lazy val alreadyClaimingFREDifferentAmountsRoute: String = routes.AlreadyClaimingFREDifferentAmountsController.onPageLoad(NormalMode).url
 
-  private val formProvider = new AlreadyClaimingFREDifferentAmountsFormProvider()
-  private val form = formProvider()
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
@@ -114,8 +110,6 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
       val request =
         FakeRequest(POST, alreadyClaimingFREDifferentAmountsRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

@@ -19,7 +19,6 @@ package controllers
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.SecondIndustryOptionsFormProvider
 import generators.Generators
 import models.SecondIndustryOptions.Education
 import models.{NormalMode, SecondIndustryOptions, UserAnswers}
@@ -37,7 +36,6 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.SecondIndustryOptionsView
 
 import scala.concurrent.Future
 
@@ -46,12 +44,9 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
 
   private val userAnswers = emptyUserAnswers
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val secondIndustryOptionsRoute = routes.SecondIndustryOptionsController.onPageLoad(NormalMode).url
-
-  val formProvider = new SecondIndustryOptionsFormProvider()
-  val form = formProvider()
+  lazy val secondIndustryOptionsRoute: String = routes.SecondIndustryOptionsController.onPageLoad(NormalMode).url
 
   "SecondIndustryOptions Controller" must {
 
@@ -117,8 +112,6 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
       val request =
         FakeRequest(POST, secondIndustryOptionsRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

@@ -19,7 +19,6 @@ package controllers.printing
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.printing.PrintingOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -35,16 +34,13 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.printing.PrintingOccupationList1View
 
 import scala.concurrent.Future
 
 class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new PrintingOccupationList1FormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
   lazy val printingOccupationList1Route: String = routes.PrintingOccupationList1Controller.onPageLoad(NormalMode).url
@@ -131,8 +127,6 @@ class PrintingOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
       val request =
         FakeRequest(POST, printingOccupationList1Route)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

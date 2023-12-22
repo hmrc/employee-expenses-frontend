@@ -19,7 +19,6 @@ package controllers.manufacturing
 import base.SpecBase
 import config.NavConstant
 import controllers.actions.UnAuthed
-import forms.manufacturing.IronMiningFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -33,19 +32,16 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.manufacturing.IronMiningView
 
 import scala.concurrent.Future
 
 class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new IronMiningFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
-  lazy val ironMiningRoute = routes.IronMiningController.onPageLoad(NormalMode).url
+  lazy val ironMiningRoute: String = routes.IronMiningController.onPageLoad(NormalMode).url
 
   "IronMining Controller" must {
 
@@ -107,8 +103,6 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
       val request =
         FakeRequest(POST, ironMiningRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

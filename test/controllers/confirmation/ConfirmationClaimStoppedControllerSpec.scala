@@ -27,7 +27,6 @@ import pages.authenticated._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.confirmation._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

@@ -21,7 +21,6 @@ import config.NavConstant
 import controllers.actions.Authed
 import controllers.authenticated.routes._
 import controllers.routes._
-import forms.authenticated.YourEmployerFormProvider
 import models.{NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -36,16 +35,13 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import service.TaiService
-import views.html.authenticated.YourEmployerView
 
 import scala.concurrent.Future
 
 class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new YourEmployerFormProvider()
-  private val form = formProvider()
   private val mockTaiService = mock[TaiService]
   private val mockSessionRepository = mock[SessionRepository]
   private val employmentSeq: Seq[String] = Seq("HMRC LongBenton")
@@ -139,8 +135,6 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val request =
         FakeRequest(POST, yourEmployerRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

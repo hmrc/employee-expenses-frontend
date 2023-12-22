@@ -19,7 +19,6 @@ package controllers.transport
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.transport.TypeOfTransportFormProvider
 import models.TypeOfTransport.NoneOfTheAbove
 import models.{NormalMode, TypeOfTransport, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -35,18 +34,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.transport.TypeOfTransportView
 
 import scala.concurrent.Future
 
 class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val typeOfTransportRoute = routes.TypeOfTransportController.onPageLoad(NormalMode).url
+  lazy val typeOfTransportRoute: String = routes.TypeOfTransportController.onPageLoad(NormalMode).url
 
-  private val formProvider = new TypeOfTransportFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
   "TypeOfTransport Controller" must {
@@ -110,8 +106,6 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
       val request =
         FakeRequest(POST, typeOfTransportRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

@@ -18,7 +18,6 @@ package controllers
 
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
-import forms.FifthIndustryOptionsFormProvider
 import generators.Generators
 import models.FifthIndustryOptions.{Forestry, NoneOfAbove}
 import models.{FifthIndustryOptions, NormalMode, UserAnswers}
@@ -37,7 +36,6 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.FifthIndustryOptionsView
 
 import scala.concurrent.Future
 
@@ -50,11 +48,9 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
     when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
   }
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val fifthIndustryOptionsRoute = routes.FifthIndustryOptionsController.onPageLoad(NormalMode).url
-  private val formProvider = new FifthIndustryOptionsFormProvider()
-  private val form = formProvider()
+  lazy val fifthIndustryOptionsRoute: String = routes.FifthIndustryOptionsController.onPageLoad(NormalMode).url
 
   "FifthIndustryOptions Controller" must {
 
@@ -115,8 +111,6 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
       val request =
         FakeRequest(POST, fifthIndustryOptionsRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

@@ -19,7 +19,6 @@ package controllers.manufacturing
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.WoodFurnitureOccupationList3FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -34,19 +33,16 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.manufacturing.WoodFurnitureOccupationList3View
 
 import scala.concurrent.Future
 
 class WoodFurnitureOccupationList3ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new WoodFurnitureOccupationList3FormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
-  lazy val woodFurnitureOccupationList3Route = routes.WoodFurnitureOccupationList3Controller.onPageLoad(NormalMode).url
+  lazy val woodFurnitureOccupationList3Route: String = routes.WoodFurnitureOccupationList3Controller.onPageLoad(NormalMode).url
 
   "WoodFurnitureOccupationList3 Controller" must {
 
@@ -109,8 +105,6 @@ class WoodFurnitureOccupationList3ControllerSpec extends SpecBase with ScalaFutu
       val request =
         FakeRequest(POST, woodFurnitureOccupationList3Route)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

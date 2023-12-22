@@ -19,7 +19,6 @@ package controllers
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.ThirdIndustryOptionsFormProvider
 import generators.Generators
 import models.ThirdIndustryOptions._
 import models.{NormalMode, ThirdIndustryOptions, UserAnswers}
@@ -37,7 +36,6 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.ThirdIndustryOptionsView
 
 import scala.concurrent.Future
 
@@ -46,12 +44,9 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
 
   private val userAnswers = emptyUserAnswers
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val thirdIndustryOptionsRoute = routes.ThirdIndustryOptionsController.onPageLoad(NormalMode).url
-
-  val formProvider = new ThirdIndustryOptionsFormProvider()
-  val form = formProvider()
+  lazy val thirdIndustryOptionsRoute: String = routes.ThirdIndustryOptionsController.onPageLoad(NormalMode).url
 
   "ThirdIndustryOptions Controller" must {
 
@@ -119,8 +114,6 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
       val request =
         FakeRequest(POST, thirdIndustryOptionsRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 
