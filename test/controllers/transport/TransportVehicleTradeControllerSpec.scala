@@ -19,7 +19,6 @@ package controllers.transport
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.TransportVehicleTradeFormProvider
 import models.{NormalMode, TransportVehicleTrade, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -36,18 +35,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.transport.TransportVehicleTradeView
 
 import scala.concurrent.Future
 
 class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val transportVehicleTradeRoute = routes.TransportVehicleTradeController.onPageLoad(NormalMode).url
+  lazy val transportVehicleTradeRoute: String = routes.TransportVehicleTradeController.onPageLoad(NormalMode).url
 
-  private val formProvider = new TransportVehicleTradeFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
   "TransportVehicleTrade Controller" must {
@@ -114,8 +110,6 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
       val request = FakeRequest(POST, transportVehicleTradeRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

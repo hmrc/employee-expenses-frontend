@@ -19,7 +19,6 @@ package controllers.docks
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.docks.DocksOccupationList1FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -34,17 +33,13 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.docks.DocksOccupationList1View
 
 import scala.concurrent.Future
 
 class DocksOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues
   with MockitoSugar with BeforeAndAfterEach {
 
-  def onwardRoute = Call("GET", "/foo")
-
-  val formProvider = new DocksOccupationList1FormProvider()
-  val form = formProvider()
+  def onwardRoute: Call = Call("GET", "/foo")
 
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
   override def beforeEach(): Unit = {
@@ -52,7 +47,7 @@ class DocksOccupationList1ControllerSpec extends SpecBase with ScalaFutures with
     when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
   }
 
-  lazy val docksOccupationList1Route = routes.DocksOccupationList1Controller.onPageLoad(NormalMode).url
+  lazy val docksOccupationList1Route: String = routes.DocksOccupationList1Controller.onPageLoad(NormalMode).url
 
   "DocksOccupationList1 Controller" must {
 
@@ -113,8 +108,6 @@ class DocksOccupationList1ControllerSpec extends SpecBase with ScalaFutures with
       val request =
         FakeRequest(POST, docksOccupationList1Route)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

@@ -19,7 +19,6 @@ package controllers.transport
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.transport.CabinCrewFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -35,16 +34,12 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.transport.CabinCrewView
 
 import scala.concurrent.Future
 
 class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues with BeforeAndAfterEach {
 
-  def onwardRoute = Call("GET", "/foo")
-
-  private val formProvider = new CabinCrewFormProvider()
-  private val form = formProvider()
+  def onwardRoute: Call = Call("GET", "/foo")
 
   private val userAnswers = emptyUserAnswers
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
@@ -53,7 +48,7 @@ class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSug
     when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
   }
 
-  lazy val cabinCrewRoute = routes.CabinCrewController.onPageLoad(NormalMode).url
+  lazy val cabinCrewRoute: String = routes.CabinCrewController.onPageLoad(NormalMode).url
 
   "CabinCrew Controller" must {
 
@@ -114,8 +109,6 @@ class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSug
       val request =
         FakeRequest(POST, cabinCrewRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

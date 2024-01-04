@@ -33,7 +33,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import service.ClaimAmountService
-import views.html.confirmation._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -44,7 +43,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
   val mockClaimAmountService: ClaimAmountService = mock[ClaimAmountService]
   val claimAmountService = new ClaimAmountService(frontendAppConfig)
   val claimAmount: Int = currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get
-  val claimAmountsAndRates = StandardRate(
+  val claimAmountsAndRates: StandardRate = StandardRate(
 
     frontendAppConfig.taxPercentageBasicRate,
     frontendAppConfig.taxPercentageHigherRate,

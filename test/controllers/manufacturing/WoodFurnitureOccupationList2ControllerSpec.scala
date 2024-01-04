@@ -19,8 +19,6 @@ package controllers.manufacturing
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import controllers.routes.SessionExpiredController
-import forms.WoodFurnitureOccupationList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -35,19 +33,16 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.manufacturing.WoodFurnitureOccupationList2View
 
 import scala.concurrent.Future
 
 class WoodFurnitureOccupationList2ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new WoodFurnitureOccupationList2FormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
-  lazy val woodFurnitureOccupationList2Route = controllers.manufacturing.routes.WoodFurnitureOccupationList2Controller.onPageLoad(NormalMode).url
+  lazy val woodFurnitureOccupationList2Route: String = controllers.manufacturing.routes.WoodFurnitureOccupationList2Controller.onPageLoad(NormalMode).url
 
   "WoodFurnitureOccupationList2 Controller" must {
 
@@ -110,8 +105,6 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase with ScalaFutu
         FakeRequest(POST, woodFurnitureOccupationList2Route)
           .withFormUrlEncodedBody(("value", ""))
 
-      val boundForm = form.bind(Map("value" -> ""))
-
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
@@ -129,7 +122,7 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase with ScalaFutu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad.url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
 
       application.stop()
     }
@@ -146,7 +139,7 @@ class WoodFurnitureOccupationList2ControllerSpec extends SpecBase with ScalaFutu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad.url
+      redirectLocation(result).value mustEqual controllers.routes.SessionExpiredController.onPageLoad.url
 
       application.stop()
     }

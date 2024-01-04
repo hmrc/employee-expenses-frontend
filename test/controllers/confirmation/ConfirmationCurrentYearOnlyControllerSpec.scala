@@ -21,7 +21,6 @@ import connectors.TaiConnector
 import controllers.actions.Authed
 import controllers.confirmation.routes._
 import controllers.routes._
-import models.FlatRateExpenseOptions.FRENoYears
 import models.TaxCodeStatus.Live
 import models._
 import org.mockito.Matchers._
@@ -34,7 +33,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import service.ClaimAmountService
-import views.html.confirmation._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

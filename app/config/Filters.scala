@@ -16,7 +16,6 @@
 
 package config
 
-import config.FrontendAppConfig
 import play.api.http.{EnabledFilters, HttpFilters}
 import play.api.mvc.EssentialFilter
 import uk.gov.hmrc.sca.filters.WrapperDataFilter

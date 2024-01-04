@@ -19,7 +19,6 @@ package controllers.security
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.security.SecurityGuardNHSFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -35,18 +34,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.security.SecurityGuardNHSView
 
 import scala.concurrent.Future
 
 class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with OptionValues {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new SecurityGuardNHSFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  lazy val securityGuardNHSRoute = routes.SecurityGuardNHSController.onPageLoad(NormalMode).url
+  lazy val securityGuardNHSRoute: String = routes.SecurityGuardNHSController.onPageLoad(NormalMode).url
 
   "SecurityGuardNHS Controller" must {
 
@@ -107,8 +103,6 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
       val request =
         FakeRequest(POST, securityGuardNHSRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

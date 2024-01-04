@@ -28,7 +28,6 @@ import play.api.libs.json.JsObject
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import views.html.authenticated.NoCodeChangeView
 
 class NoCodeChangeControllerSpec extends SpecBase with MockitoSugar with ScalaFutures{
 

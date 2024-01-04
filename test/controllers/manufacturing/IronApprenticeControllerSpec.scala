@@ -19,7 +19,6 @@ package controllers.manufacturing
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.manufacturing.IronApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -34,18 +33,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.manufacturing.IronApprenticeView
 
 import scala.concurrent.Future
 
 class IronApprenticeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new IronApprenticeFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  lazy val ironApprenticeRoute = routes.IronApprenticeController.onPageLoad(NormalMode).url
+  lazy val ironApprenticeRoute: String = routes.IronApprenticeController.onPageLoad(NormalMode).url
 
   "IronApprentice Controller" must {
 
@@ -107,8 +103,6 @@ class IronApprenticeControllerSpec extends SpecBase with ScalaFutures with Mocki
       val request =
         FakeRequest(POST, ironApprenticeRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

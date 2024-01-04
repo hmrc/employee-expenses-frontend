@@ -19,7 +19,6 @@ package controllers
 import base.SpecBase
 import config.NavConstant
 import controllers.actions.UnAuthed
-import forms.SameEmployerContributionAllYearsFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -33,7 +32,6 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.SameEmployerContributionAllYearsView
 
 import scala.concurrent.Future
 
@@ -44,13 +42,11 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new SameEmployerContributionAllYearsFormProvider()
-  val form = formProvider()
   val contribution = 10
 
-  lazy val sameEmployerContributionAllYearsRoute = routes.SameEmployerContributionAllYearsController.onPageLoad(NormalMode).url
+  lazy val sameEmployerContributionAllYearsRoute: String = routes.SameEmployerContributionAllYearsController.onPageLoad(NormalMode).url
 
   "SameEmployerContributionAllYears Controller" must {
 
@@ -113,8 +109,6 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
       val request =
         FakeRequest(POST, sameEmployerContributionAllYearsRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

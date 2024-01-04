@@ -19,7 +19,6 @@ package controllers.transport
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.transport.TransportCarpenterFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -35,19 +34,16 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.transport.TransportCarpenterView
 
 import scala.concurrent.Future
 
 class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new TransportCarpenterFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
-  lazy val transportCarpenterRoute = routes.TransportCarpenterController.onPageLoad(NormalMode).url
+  lazy val transportCarpenterRoute: String = routes.TransportCarpenterController.onPageLoad(NormalMode).url
 
   "TransportCarpenter Controller" must {
 
@@ -131,8 +127,6 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
       val request =
         FakeRequest(POST, transportCarpenterRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

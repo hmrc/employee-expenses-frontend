@@ -19,7 +19,6 @@ package controllers.engineering
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.FactoryEngineeringApprenticeFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -34,16 +33,13 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.engineering.FactoryEngineeringApprenticeView
 
 import scala.concurrent.Future
 
 class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with OptionValues with IntegrationPatience {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new FactoryEngineeringApprenticeFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
   lazy val factoryEngineeringApprenticeRoute: String = routes.FactoryEngineeringApprenticeController.onPageLoad(NormalMode).url
@@ -131,8 +127,6 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
       val request =
         FakeRequest(POST, factoryEngineeringApprenticeRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

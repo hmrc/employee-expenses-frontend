@@ -19,7 +19,6 @@ package controllers.engineering
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.engineering.AncillaryEngineeringWhichTradeFormProvider
 import models.{AncillaryEngineeringWhichTrade, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -34,18 +33,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.engineering.AncillaryEngineeringWhichTradeView
 
 import scala.concurrent.Future
 
 class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val ancillaryEngineeringWhichTradeRoute = routes.AncillaryEngineeringWhichTradeController.onPageLoad(NormalMode).url
+  lazy val ancillaryEngineeringWhichTradeRoute: String = routes.AncillaryEngineeringWhichTradeController.onPageLoad(NormalMode).url
 
-  private val formProvider = new AncillaryEngineeringWhichTradeFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
   "AncillaryEngineeringWhichTrade Controller" must {
@@ -108,8 +104,6 @@ class AncillaryEngineeringWhichTradeControllerSpec extends SpecBase with ScalaFu
       val request =
         FakeRequest(POST, ancillaryEngineeringWhichTradeRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

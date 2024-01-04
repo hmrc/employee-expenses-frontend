@@ -19,7 +19,6 @@ package controllers
 import base.SpecBase
 import config.NavConstant
 import controllers.actions.UnAuthed
-import forms.ExpensesEmployerPaidFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -32,24 +31,21 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.ExpensesEmployerPaidView
 
 import scala.concurrent.Future
 
 class ExpensesEmployerPaidControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
-  private val formProvider = new ExpensesEmployerPaidFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val validAnswer = 0
 
-  lazy val expensesEmployerPaidRoute = routes.ExpensesEmployerPaidController.onPageLoad(NormalMode).url
+  lazy val expensesEmployerPaidRoute: String = routes.ExpensesEmployerPaidController.onPageLoad(NormalMode).url
 
   "expensesEmployerPaid Controller" must {
 

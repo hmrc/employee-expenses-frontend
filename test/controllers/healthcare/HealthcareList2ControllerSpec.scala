@@ -19,7 +19,6 @@ package controllers.healthcare
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.HealthcareList2FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -34,17 +33,12 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.healthcare.HealthcareList2View
 
 import scala.concurrent.Future
 
 class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
-
-  val formProvider = new HealthcareList2FormProvider()
-
-  val form = formProvider()
+  def onwardRoute: Call = Call("GET", "/foo")
 
   lazy val healthcareList2Route = routes.HealthcareList2Controller.onPageLoad(NormalMode).url
 
@@ -130,8 +124,6 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
       val request =
         FakeRequest(POST, healthcareList2Route)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

@@ -19,7 +19,6 @@ package controllers.heating
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.heating.HeatingOccupationListFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -35,19 +34,16 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.heating.HeatingOccupationListView
 
 import scala.concurrent.Future
 
 class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new HeatingOccupationListFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
-  lazy val heatingOccupationListRoute = routes.HeatingOccupationListController.onPageLoad(NormalMode).url
+  lazy val heatingOccupationListRoute: String = routes.HeatingOccupationListController.onPageLoad(NormalMode).url
 
   "HeatingOccupationList Controller" must {
 
@@ -109,8 +105,6 @@ class HeatingOccupationListControllerSpec extends SpecBase with ScalaFutures wit
       val request =
         FakeRequest(POST, heatingOccupationListRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

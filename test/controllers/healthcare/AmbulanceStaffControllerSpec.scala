@@ -19,7 +19,6 @@ package controllers.healthcare
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.healthcare.AmbulanceStaffFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -29,22 +28,17 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.ClaimAmount
 import pages.healthcare.AmbulanceStaffPage
-import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.healthcare.AmbulanceStaffView
 
 import scala.concurrent.Future
 
 class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
-
-  val formProvider = new AmbulanceStaffFormProvider()
-  val form: Form[Boolean] = formProvider()
+  def onwardRoute: Call = Call("GET", "/foo")
 
   lazy val ambulanceStaffRoute: String = controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode).url
 
@@ -131,8 +125,6 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
       val request =
         FakeRequest(POST, ambulanceStaffRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

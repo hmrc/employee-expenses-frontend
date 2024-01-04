@@ -19,7 +19,6 @@ package controllers.engineering
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.engineering.ConstructionalEngineeringList3FormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -34,18 +33,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.engineering.ConstructionalEngineeringList3View
 
 import scala.concurrent.Future
 
 class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new ConstructionalEngineeringList3FormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
-  lazy val constructionalEngineeringList3Route = routes.ConstructionalEngineeringList3Controller.onPageLoad(NormalMode).url
+  lazy val constructionalEngineeringList3Route: String = routes.ConstructionalEngineeringList3Controller.onPageLoad(NormalMode).url
 
   "ConstructionalEngineeringList3 Controller" must {
 
@@ -108,8 +104,6 @@ class ConstructionalEngineeringList3ControllerSpec extends SpecBase with ScalaFu
       val request =
         FakeRequest(POST, constructionalEngineeringList3Route)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 

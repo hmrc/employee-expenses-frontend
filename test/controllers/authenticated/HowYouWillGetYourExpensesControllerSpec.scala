@@ -27,7 +27,6 @@ import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage
 import pages.authenticated._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.{HowYouWillGetYourExpensesCurrentAndPreviousYearView, HowYouWillGetYourExpensesCurrentView, HowYouWillGetYourExpensesPreviousView}
 
 class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPropertyChecks with Matchers with Generators {
 

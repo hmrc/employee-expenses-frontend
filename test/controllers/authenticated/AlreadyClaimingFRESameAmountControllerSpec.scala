@@ -18,7 +18,6 @@ package controllers.authenticated
 
 import base.SpecBase
 import config.NavConstant
-import forms.authenticated.AlreadyClaimingFRESameAmountFormProvider
 import models.{AlreadyClaimingFRESameAmount, FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -32,18 +31,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.authenticated.AlreadyClaimingFRESameAmountView
 
 import scala.concurrent.Future
 
 class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   lazy val alreadyClaimingFRESameAmountRoute: String = routes.AlreadyClaimingFRESameAmountController.onPageLoad(NormalMode).url
 
-  private val formProvider = new AlreadyClaimingFRESameAmountFormProvider()
-  private val form = formProvider()
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
@@ -114,8 +110,6 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
       val request =
         FakeRequest(POST, alreadyClaimingFRESameAmountRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

@@ -18,7 +18,6 @@ package controllers.authenticated
 
 import base.SpecBase
 import config.NavConstant
-import forms.authenticated.ChangeWhichTaxYearsFormProvider
 import models.{FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, TaxYearSelection}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
@@ -32,20 +31,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import viewmodels.RadioCheckboxOption
-import views.html.authenticated.ChangeWhichTaxYearsView
 
 import scala.concurrent.Future
 
 class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val changeWhichTaxYearsRoute = routes.ChangeWhichTaxYearsController.onPageLoad(NormalMode).url
+  lazy val changeWhichTaxYearsRoute: String = routes.ChangeWhichTaxYearsController.onPageLoad(NormalMode).url
 
-  private val formProvider = new ChangeWhichTaxYearsFormProvider()
-  private val form = formProvider()
-  private val taxYearsAndAmounts: Seq[(RadioCheckboxOption, Int)] = Seq((TaxYearSelection.options.head, 100))
   private val mockSessionRepository = mock[SessionRepository]
 
   when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
@@ -115,8 +109,6 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
       val request =
         FakeRequest(POST, changeWhichTaxYearsRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

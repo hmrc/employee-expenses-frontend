@@ -20,7 +20,6 @@ import base.SpecBase
 import config.ClaimAmounts
 import controllers.actions.UnAuthed
 import controllers.routes._
-import forms.construction.ConstructionOccupationsFormProvider
 import models.ConstructionOccupations.{AsphaltOrCement, BuildingMaterials, JoinerOrCarpenter, LabourerOrNavvy, RoofingFelt, StoneMason, Tilemaker}
 import models.{ConstructionOccupations, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -32,13 +31,11 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.ClaimAmount
 import pages.construction.ConstructionOccupationsPage
-import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.construction.ConstructionOccupationsView
 
 import scala.concurrent.Future
 
@@ -47,9 +44,6 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
   def onwardRoute: Call = Call("GET", "/foo")
 
   lazy val constructionOccupationsRoute: String = routes.ConstructionOccupationsController.onPageLoad(NormalMode).url
-
-  val formProvider = new ConstructionOccupationsFormProvider()
-  val form: Form[ConstructionOccupations] = formProvider()
 
   "ConstructionOccupations Controller" must {
 
@@ -113,8 +107,6 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
       val request =
         FakeRequest(POST, constructionOccupationsRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
 
       val result = route(application, request).value
 

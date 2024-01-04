@@ -20,7 +20,6 @@ import base.SpecBase
 import models.NormalMode
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.authenticated.UpdateEmployerInformationView
 
 class UpdateEmployerInformationControllerSpec extends SpecBase {
   val nextPageURL = "/employee-expenses/how-you-will-get-your-expenses"

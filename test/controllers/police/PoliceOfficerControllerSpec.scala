@@ -19,7 +19,6 @@ package controllers.police
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
-import forms.police.PoliceOfficerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers._
@@ -35,16 +34,13 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.police.PoliceOfficerView
 
 import scala.concurrent.Future
 
 class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new PoliceOfficerFormProvider()
-  private val form = formProvider()
   private val userAnswers = emptyUserAnswers
 
   lazy val policeOfficerRoute: String = routes.PoliceOfficerController.onPageLoad(NormalMode).url
@@ -109,8 +105,6 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Mockit
       val request =
         FakeRequest(POST, policeOfficerRoute)
           .withFormUrlEncodedBody(("value", ""))
-
-      val boundForm = form.bind(Map("value" -> ""))
 
       val result = route(application, request).value
 
