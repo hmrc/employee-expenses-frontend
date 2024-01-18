@@ -16,9 +16,9 @@
 
 package models
 
-import org.joda.time.LocalDate
 import play.api.libs.json.{Format, Json}
 
+import java.time.LocalDate
 import scala.util.matching.Regex
 
 object TaxYearDates {
@@ -33,23 +33,23 @@ case class TaiTaxYear(year: Int) extends Ordered[TaiTaxYear] {
 
   require(year.toString.length == 4, "Invalid year")
 
-  def start: LocalDate = new LocalDate(year, startMonth, startDay)
-  def end: LocalDate = new LocalDate(year + 1, endMonth , endDay)
+  def start: LocalDate = LocalDate.of(year, startMonth, startDay)
+  def end: LocalDate = LocalDate.of(year + 1, endMonth , endDay)
   def next = TaiTaxYear(year + 1)
   def prev = TaiTaxYear(year - 1)
-  def startPrev: LocalDate = new LocalDate(prev.year, endMonth, startDay)
-  def endPrev: LocalDate = new LocalDate(prev.year + 1, startMonth, endDay)
+  def startPrev: LocalDate = LocalDate.of(prev.year, endMonth, startDay)
+  def endPrev: LocalDate = LocalDate.of(prev.year + 1, startMonth, endDay)
   def compare(that: TaiTaxYear): Int = this.year compare that.year
-  def twoDigitRange = s"${start.year.get % 100}-${end.year.get % 100}"
-  def fourDigitRange = s"${start.year.get}-${end.year.get}"
+  def twoDigitRange = s"${start.getYear % 100}-${end.getYear % 100}"
+  def fourDigitRange = s"${start.getYear}-${end.getYear}"
 }
 
 object TaiTaxYear {
 
   implicit val format: Format[TaiTaxYear] = Json.format[TaiTaxYear]
 
-  def apply(from: LocalDate = new LocalDate): TaiTaxYear = {
-    val naiveYear = TaiTaxYear(from.year.get)
+  def apply(from: LocalDate = LocalDate.now()): TaiTaxYear = {
+    val naiveYear = TaiTaxYear(from.getYear)
     if (from.isBefore(naiveYear.start)) {
       naiveYear.prev
     }

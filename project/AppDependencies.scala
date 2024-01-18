@@ -11,7 +11,6 @@ object AppDependencies {
     "uk.gov.hmrc.mongo"     %% "hmrc-mongo-play-28"             % mongoVersion,
     "uk.gov.hmrc"           %% "play-conditional-form-mapping"  % "1.13.0-play-28",
     "uk.gov.hmrc"           %% "tax-year"                       % "3.3.0",
-    "com.typesafe.play"     %% "play-json-joda"                 % "2.9.4",
     "uk.gov.hmrc"           %% "sca-wrapper-play-28"            % "1.1.0"
   )
 
