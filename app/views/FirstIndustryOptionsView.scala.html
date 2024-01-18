@@ -34,7 +34,7 @@
 
     @errorSummary(form.errors)
 
-    @formHelper(action = FirstIndustryOptionsController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = FirstIndustryOptionsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
         @input_radio(
             field = form("value"),
             legend = messages("firstIndustryOptions.heading"),

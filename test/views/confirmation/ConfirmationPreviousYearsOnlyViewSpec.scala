@@ -16,7 +16,7 @@
 
 package views.confirmation
 
-import models.{Address, FlatRateExpenseOptions, Rates, ScottishRate, StandardRate, TaxYearSelection}
+import models.{Address, FlatRateExpenseOptions, Rates, ScottishRate, StandardRate}
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
@@ -62,7 +62,7 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
                   address: Option[Address] = None,
                   freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
                  )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(claimAmountsAndRates, claimAmount, address, currentYearMinus1, freResponse)(fakeRequest, messages, frontendAppConfig)
+      view.apply(claimAmountsAndRates, claimAmount, address, currentYearMinus1, freResponse)(fakeRequest, messages)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 

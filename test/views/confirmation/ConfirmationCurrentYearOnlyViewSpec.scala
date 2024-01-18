@@ -72,7 +72,7 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
         hasClaimIncreased = hasClaimIncreased,
         freResponse = freResponse,
         npsFreAmount = npsFreAmount
-      )(fakeRequest, messages, frontendAppConfig)
+      )(fakeRequest, messages)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 

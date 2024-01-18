@@ -34,7 +34,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("clothing.title")}"
 ) {
 
-    @formHelper(action = ClothingController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = ClothingController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

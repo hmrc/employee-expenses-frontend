@@ -34,7 +34,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("healthcareList2.title")}"
     ) {
 
-    @formHelper(action = HealthcareList2Controller.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = HealthcareList2Controller.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.actions.{FakeDataRetrievalAction, UnauthenticatedIdentifierActionImpl}
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar

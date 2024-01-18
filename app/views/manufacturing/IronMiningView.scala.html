@@ -32,7 +32,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("ironMining.title")}"
     ) {
 
-    @formHelper(action = IronMiningController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = IronMiningController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

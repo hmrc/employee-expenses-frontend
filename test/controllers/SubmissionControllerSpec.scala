@@ -27,7 +27,7 @@ import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
 import models.{AlreadyClaimingFREDifferentAmounts, TaxYearSelection}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.{any, eq => eqTo}
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}

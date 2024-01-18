@@ -41,7 +41,7 @@
     @layout(
         pageTitle = s"${errorPrefix(form)} ${messages(s"alreadyClaimingFREDifferentAmounts.title")}"
     ) {
-        @formHelper(action = AlreadyClaimingFREDifferentAmountsController.onSubmit(mode), 'autoComplete -> "off") {
+        @formHelper(action = AlreadyClaimingFREDifferentAmountsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
             @errorSummary(form.errors)
 

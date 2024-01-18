@@ -22,7 +22,7 @@ import controllers.actions.Authed
 import controllers.authenticated.routes._
 import controllers.routes._
 import models.NormalMode
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}

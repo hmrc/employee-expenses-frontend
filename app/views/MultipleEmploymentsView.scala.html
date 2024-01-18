@@ -32,7 +32,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("multipleEmployments.title")}"
     ) {
 
-    @formHelper(action = MultipleEmploymentsController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = MultipleEmploymentsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
         @errorSummary(form.errors)
 
     @inputRadio(

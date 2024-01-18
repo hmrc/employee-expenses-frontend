@@ -32,7 +32,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("policeOfficer.title")}"
     ) {
 
-    @formHelper(action = PoliceOfficerController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = PoliceOfficerController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

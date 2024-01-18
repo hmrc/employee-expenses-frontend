@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.TaiConnector
 import models.{TaiTaxYear, TaxYearSelection}
 import models.TaxYearSelection._
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}

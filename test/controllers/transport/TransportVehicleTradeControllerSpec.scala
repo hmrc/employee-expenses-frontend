@@ -21,7 +21,7 @@ import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import models.{NormalMode, TransportVehicleTrade, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.mockito.Mockito._
 import org.scalatest.OptionValues

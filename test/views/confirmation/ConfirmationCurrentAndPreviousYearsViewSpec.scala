@@ -16,7 +16,7 @@
 
 package views.confirmation
 
-import models.{Address, FlatRateExpenseOptions, Rates, ScottishRate, StandardRate, TaxYearSelection}
+import models.{Address, FlatRateExpenseOptions, Rates, ScottishRate, StandardRate}
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
@@ -73,7 +73,7 @@ class ConfirmationCurrentAndPreviousYearsViewSpec extends ViewBehaviours {
         hasClaimIncreased,
         freResponse,
         npsFreAmount
-      )(fakeRequest, messages, frontendAppConfig)
+      )(fakeRequest, messages)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 

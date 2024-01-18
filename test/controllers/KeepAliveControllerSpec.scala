@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import controllers.actions.Authed
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}

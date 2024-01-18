@@ -23,7 +23,7 @@ import generators.Generators
 import models.ThirdIndustryOptions._
 import models.{NormalMode, ThirdIndustryOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalacheck.Gen
 import org.scalatest.OptionValues

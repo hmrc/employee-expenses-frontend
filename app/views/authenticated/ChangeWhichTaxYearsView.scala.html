@@ -33,7 +33,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("changeWhichTaxYears.title")}"
     ) {
 
-    @formHelper(action = ChangeWhichTaxYearsController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = ChangeWhichTaxYearsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
