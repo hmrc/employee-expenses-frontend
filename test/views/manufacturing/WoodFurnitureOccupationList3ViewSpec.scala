@@ -16,7 +16,6 @@
 
 package views.manufacturing
 
-import controllers.manufacturing.routes
 import forms.WoodFurnitureOccupationList3FormProvider
 import models.NormalMode
 import play.api.data.Form

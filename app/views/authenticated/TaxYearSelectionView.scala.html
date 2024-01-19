@@ -33,7 +33,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("taxYearSelection.title")}"
     ) {
 
-    @formHelper(action = TaxYearSelectionController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = TaxYearSelectionController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

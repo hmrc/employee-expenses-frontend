@@ -21,7 +21,7 @@ import config.NavConstant
 import controllers.routes._
 import models.{FlatRateExpense, FlatRateExpenseAmounts, FlatRateExpenseOptions, NormalMode, TaiTaxYear, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar

@@ -32,7 +32,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("removeFRECode.title")}"
     ) {
 
-    @formHelper(action = RemoveFRECodeController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = RemoveFRECodeController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

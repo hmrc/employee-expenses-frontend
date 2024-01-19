@@ -28,7 +28,7 @@
         address: Option[Address],
         currentYearMinus1: Boolean,
         freResponse: FlatRateExpenseOptions
-)(implicit request: Request[_], messages: Messages, appConfig: config.FrontendAppConfig)
+)(implicit request: Request[_], messages: Messages)
 
 @title = @{
     if(freResponse == FREAllYearsAllAmountsSameAsClaimAmount || freResponse == FRESomeYears) "titleChanged" else "title"

@@ -16,7 +16,7 @@
 
 package views
 
-import models.{Rates, ScottishRate, StandardRate}
+import models.{ScottishRate, StandardRate}
 import pages.ClaimAmount
 import play.api.Application
 import service.ClaimAmountService

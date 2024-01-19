@@ -20,8 +20,7 @@ import base.SpecBase
 import connectors.TaiConnector
 import models.{TaiTaxYear, TaxYearSelection}
 import models.TaxYearSelection._
-import org.joda.time.LocalDate
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -29,6 +28,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.http.HttpResponse
 import play.api.http.Status._
 
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -48,9 +48,9 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
   "SubmissionService" when {
     "getTaxYearsToUpdate" must {
-      val beforeApril = new LocalDate(LocalDate.now.getYear, 2, 4)
-      val afterApril = new LocalDate(LocalDate.now.getYear, 6, 4)
-      val april5th = new LocalDate(LocalDate.now.getYear, 4, 5)
+      val beforeApril = LocalDate.of(LocalDate.now.getYear, 2, 4)
+      val afterApril = LocalDate.of(LocalDate.now.getYear, 6, 4)
+      val april5th = LocalDate.of(LocalDate.now.getYear, 4, 5)
 
       "return correct taxYears when date is before April 6th and currentYear is passed in and no next year record" in {
 

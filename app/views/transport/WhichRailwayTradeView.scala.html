@@ -32,7 +32,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("whichRailwayTrade.title")}"
     ) {
 
-    @formHelper(action = WhichRailwayTradeController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = WhichRailwayTradeController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

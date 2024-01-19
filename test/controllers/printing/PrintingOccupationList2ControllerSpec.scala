@@ -21,7 +21,7 @@ import config.{ClaimAmounts, NavConstant}
 import controllers.actions.UnAuthed
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar

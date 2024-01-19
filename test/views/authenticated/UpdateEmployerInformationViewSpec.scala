@@ -16,7 +16,6 @@
 
 package views.authenticated
 
-import models.NormalMode
 import views.newBehaviours.ViewBehaviours
 import views.html.authenticated.UpdateEmployerInformationView
 

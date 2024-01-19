@@ -17,7 +17,6 @@
 package views
 
 import play.api.Application
-import play.twirl.api.Html
 import views.newBehaviours.ViewBehaviours
 import views.html.UnauthorisedView
 
@@ -34,8 +33,6 @@ class UnauthorisedViewSpec extends ViewBehaviours {
     val applyView = view.apply(sessionId)(fakeRequest, messages)
 
     behave like normalPage(applyView, "unauthorised")
-
-    val link: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.loginUrl}?continue=${frontendAppConfig.loginContinueUrl}$sessionId">${messages("unauthorised.signIn.text")}</a>""")
 
     behave like pageWithBodyText(applyView,
       "unauthorised.paragraph.one",

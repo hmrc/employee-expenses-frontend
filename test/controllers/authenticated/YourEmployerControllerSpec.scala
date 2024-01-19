@@ -23,7 +23,7 @@ import controllers.authenticated.routes._
 import controllers.routes._
 import models.{NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar

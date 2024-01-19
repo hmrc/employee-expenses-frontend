@@ -32,7 +32,7 @@
     pageTitle = s"${errorPrefix(form)} ${messages("fourthIndustryOptions.title")}"
     ) {
 
-    @formHelper(action = FourthIndustryOptionsController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = FourthIndustryOptionsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 

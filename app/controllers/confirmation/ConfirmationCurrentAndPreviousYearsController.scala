@@ -16,7 +16,6 @@
 
 package controllers.confirmation
 
-import config.FrontendAppConfig
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
 import controllers.routes.{SessionExpiredController, _}
 
@@ -45,7 +44,7 @@ class ConfirmationCurrentAndPreviousYearsController @Inject()(
                                                                taiService: TaiService,
                                                                sessionRepository: SessionRepository,
                                                                confirmationCurrentAndPreviousYearsView: ConfirmationCurrentAndPreviousYearsView
-                                                             )(implicit ec: ExecutionContext, appConfig: FrontendAppConfig) extends FrontendBaseController with I18nSupport with Logging {
+                                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>

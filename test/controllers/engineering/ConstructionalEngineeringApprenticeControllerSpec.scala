@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import pages.ClaimAmount
 import pages.engineering.ConstructionalEngineeringApprenticePage

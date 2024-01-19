@@ -23,7 +23,7 @@ import generators.Generators
 import models.SecondIndustryOptions.Education
 import models.{NormalMode, SecondIndustryOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalacheck.Gen
 import org.scalatest.OptionValues

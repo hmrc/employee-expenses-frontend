@@ -22,7 +22,7 @@ import models.{FourthIndustryOptions, NormalMode, UserAnswers}
 import models.FourthIndustryOptions._
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}

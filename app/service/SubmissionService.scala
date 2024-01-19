@@ -20,10 +20,10 @@ import com.google.inject.Inject
 import connectors.TaiConnector
 import models.TaxYearSelection._
 import models.{TaiTaxYear, TaxYearSelection}
-import org.joda.time.LocalDate
 import play.api.Logging
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 class SubmissionService @Inject()(
@@ -31,10 +31,10 @@ class SubmissionService @Inject()(
                                    taiConnector: TaiConnector
                                  ) extends Logging {
 
-  def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection], currentDate: LocalDate = LocalDate.now)
+  def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection], currentDate: LocalDate = LocalDate.now())
                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxYearSelection]] = {
 
-    if (taxYears.contains(CurrentYear) && (currentDate.getMonthOfYear < 4 || (currentDate.getMonthOfYear == 4 && currentDate.getDayOfMonth < 6))) {
+    if (taxYears.contains(CurrentYear) && (currentDate.getMonthValue < 4 || (currentDate.getMonthValue == 4 && currentDate.getDayOfMonth < 6))) {
 
       taiConnector.taiTaxAccountSummary(nino, TaiTaxYear(getTaxYear(CurrentYear) + 1)).map {
         _.status match {

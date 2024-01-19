@@ -34,7 +34,7 @@
   pageTitle = messages("claimByAlternative.title")
 ) {
 
-  @formHelper(action = ClaimByAlternativeController.onSubmit(), 'autoComplete -> "off") {
+  @formHelper(action = ClaimByAlternativeController.onSubmit(), Symbol("autoComplete") -> "off") {
 
     @heading("claimByAlternative.heading")
 

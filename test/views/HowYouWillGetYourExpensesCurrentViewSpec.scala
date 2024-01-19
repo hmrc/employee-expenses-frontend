@@ -16,7 +16,6 @@
 
 package views
 
-import org.scalacheck.Prop.False
 import views.newBehaviours.ViewBehaviours
 import views.html.HowYouWillGetYourExpensesCurrentView
 

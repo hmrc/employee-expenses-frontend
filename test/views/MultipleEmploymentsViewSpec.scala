@@ -17,7 +17,7 @@
 package views
 
 import forms.MultipleEmploymentsFormProvider
-import models.{CheckMode, MultipleEmployments, NormalMode}
+import models.{MultipleEmployments, NormalMode}
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

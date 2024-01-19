@@ -16,8 +16,9 @@
 
 package models
 
-import org.joda.time.LocalDate
 import org.scalatestplus.play.PlaySpec
+
+import java.time.LocalDate
 
 class TaiTaxYearSpec extends PlaySpec {
 
@@ -129,7 +130,7 @@ class TaiTaxYearSpec extends PlaySpec {
       ex.getMessage mustBe "requirement failed: Invalid year"
     }
 
-    "not thrown an exception when year is valid" in{
+    "not thrown an exception when year is valid" in {
       TaiTaxYear("17") mustBe TaiTaxYear(2017)
     }
   }

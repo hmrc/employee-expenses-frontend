@@ -20,7 +20,7 @@ import base.SpecBase
 import config.NavConstant
 import models.{MultipleEmployments, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar

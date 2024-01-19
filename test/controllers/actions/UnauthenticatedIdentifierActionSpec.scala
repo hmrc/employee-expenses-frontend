@@ -18,7 +18,7 @@ package controllers.actions
 
 import base.SpecBase
 import controllers.routes
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar

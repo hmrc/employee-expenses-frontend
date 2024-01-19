@@ -17,7 +17,7 @@
 package views.authenticated
 
 import forms.authenticated.ChangeWhichTaxYearsFormProvider
-import models.{NormalMode, TaiTaxYear, TaxYearSelection}
+import models.{NormalMode, TaxYearSelection}
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
 import viewmodels.RadioCheckboxOption
@@ -30,7 +30,9 @@ class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelectio
 
   val form = new ChangeWhichTaxYearsFormProvider()()
 
-  val taxYearsAndAmounts: Seq[(RadioCheckboxOption, Int)] = TaxYearSelection.options.map { year => (year, 123) }
+  val taxYearsAndAmounts: Seq[(RadioCheckboxOption, Int)] = TaxYearSelection.options.zipWithIndex.map {
+    case (year, index) => (year, (index + 1) * 100)
+  }
 
   def applyView(form: Form[Seq[TaxYearSelection]]): HtmlFormat.Appendable =
     application.injector.instanceOf[ChangeWhichTaxYearsView].apply(form, NormalMode, taxYearsAndAmounts)(fakeRequest, messages)
@@ -53,9 +55,13 @@ class ChangeWhichTaxYearsViewSpec extends CheckboxViewBehaviours[TaxYearSelectio
     "contains correct values for list" in {
       val doc = asDocument(applyView(form))
 
-      taxYearsAndAmounts.map{
+      taxYearsAndAmounts.map {
         options =>
-         val idVal= if(options._1.value.indexOf(options) != options._1.value.indexOf(0)){s"value-${options._1.value}-item-hint"} else {"value-item-hint"}
+          val idVal = if (taxYearsAndAmounts.indexOf(options) != 0) {
+            s"value-${taxYearsAndAmounts.indexOf(options) + 1}-item-hint"
+          } else {
+            "value-item-hint"
+          }
 
           doc.getElementById(idVal).text mustBe s"${messages("changeWhichTaxYears.columnHeading2", s"£${options._2}")}"
       }

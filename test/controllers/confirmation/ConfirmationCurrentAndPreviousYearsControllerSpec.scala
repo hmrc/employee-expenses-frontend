@@ -23,7 +23,7 @@ import controllers.confirmation.routes._
 import controllers.routes._
 import models.TaxCodeStatus.Live
 import models._
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
