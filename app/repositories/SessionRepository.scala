@@ -17,14 +17,16 @@
 package repositories
 
 import controllers.actions.{Authed, IdentifierType, UnAuthed}
-import javax.inject.{Inject, Singleton}
 import models.UserAnswers
+import models.mergedJourney.MergedJourney
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class SessionRepository @Inject()(authSessionRepository: AuthSessionRepository,
-                                  unAuthSessionRepository: UnAuthSessionRepository)(implicit ec: ExecutionContext) {
+                                  unAuthSessionRepository: UnAuthSessionRepository,
+                                  mergedJourneySessionRepository: MergedJourneySessionRepository)(implicit ec: ExecutionContext) {
 
   def get(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
     identifierType match {
@@ -35,6 +37,9 @@ class SessionRepository @Inject()(authSessionRepository: AuthSessionRepository,
 
   def set(identifierType: IdentifierType, userAnswers: UserAnswers): Future[Boolean] = {
     identifierType match {
+      case id: Authed if userAnswers.isMergedJourney =>
+        updateMergedJourneyTimeToLive(id)
+        authSessionRepository.set(id.internalId, userAnswers)
       case id: Authed => authSessionRepository.set(id.internalId, userAnswers)
       case id: UnAuthed => unAuthSessionRepository.set(id.sessionId, userAnswers)
     }
@@ -53,5 +58,17 @@ class SessionRepository @Inject()(authSessionRepository: AuthSessionRepository,
       case _ => Future.successful(false)
     }
   }
+
+  def getMergedJourney(internalId: String): Future[Option[MergedJourney]] =
+    mergedJourneySessionRepository.get(internalId)
+
+  def setMergedJourney(mergedJourney: MergedJourney): Future[Boolean] =
+    mergedJourneySessionRepository.set(mergedJourney)
+
+  def updateMergedJourneyTimeToLive(id: Authed): Future[Boolean] =
+    mergedJourneySessionRepository.get(id.internalId).flatMap {
+      case Some(data) => mergedJourneySessionRepository.set(data)
+      case _ => Future.successful(false)
+    }
 
 }

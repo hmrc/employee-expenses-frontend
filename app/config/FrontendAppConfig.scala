@@ -91,4 +91,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
 
   lazy val scaWrapperEnabled: Boolean = configuration.getOptional[Boolean]("feature-switch.sca-wrapper").getOrElse(false)
+  lazy val mergedJourneyEnabled: Boolean = configuration.getOptional[Boolean]("feature-switch.merged-journey").getOrElse(false)
+
 }

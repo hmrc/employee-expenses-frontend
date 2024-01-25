@@ -59,7 +59,7 @@ class GenericNavigator @Inject()() extends Navigator {
     case ExpensesEmployerPaidPage => expensesEmployerPaid(NormalMode)
     case SameEmployerContributionAllYearsPage => sameEmployerContributionAllYears(NormalMode)
     case ClaimAmount => _ => TaxYearSelectionController.onPageLoad(NormalMode)
-    case _ => _ => IndexController.onPageLoad
+    case _ => _ => IndexController.onPageLoad()
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {

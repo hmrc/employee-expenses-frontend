@@ -16,40 +16,42 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import controllers.actions._
-import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
+import pages.mergedJourney.MergedJourneyFlag
 import play.api.i18n.I18nSupport
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class IndexController @Inject()(
-                                 val controllerComponents: MessagesControllerComponents,
-                                 identify: UnauthenticatedIdentifierAction,
-                                 getData: DataRetrievalAction,
-                                 sessionRepository: SessionRepository
+class IndexController @Inject()(val controllerComponents: MessagesControllerComponents,
+                                identify: UnauthenticatedIdentifierAction,
+                                getData: DataRetrievalAction,
+                                sessionRepository: SessionRepository,
+                                appConfig: FrontendAppConfig
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData).async {
-    implicit request =>
-
-      val updateSession = if (request.userAnswers.isEmpty) {
-        request.identifier match {
-          case id: Authed =>
-            sessionRepository.set(request.identifier, UserAnswers()).map(_ => ())
-          case id: UnAuthed =>
-            sessionRepository.set(request.identifier, UserAnswers()).map(_ => ())
-        }
-      } else {
-        Future.successful(())
+  def onPageLoad(isMergedJourney: Boolean = false): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+    if (request.userAnswers.isEmpty || request.userAnswers.exists(_.isMergedJourney != isMergedJourney)) {
+      request.identifier match {
+        case id: Authed =>
+          sessionRepository
+            .set(request.identifier, UserAnswers(Json.obj(
+              MergedJourneyFlag.toString -> (isMergedJourney && appConfig.mergedJourneyEnabled)
+            )))
+            .map(_ => Redirect(routes.MultipleEmploymentsController.onPageLoad(NormalMode)))
+        case id: UnAuthed =>
+          sessionRepository
+            .set(request.identifier, UserAnswers())
+            .map(_ => Redirect(routes.MultipleEmploymentsController.onPageLoad(NormalMode)))
       }
-
-      updateSession.map {
-        _ =>
-          Redirect(routes.MultipleEmploymentsController.onPageLoad(NormalMode))
-      }
+    } else {
+      Future.successful(Redirect(routes.MultipleEmploymentsController.onPageLoad(NormalMode)))
+    }
   }
 }

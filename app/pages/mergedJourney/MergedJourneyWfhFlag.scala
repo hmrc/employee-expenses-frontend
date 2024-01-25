@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.mergedJourney
 
-import controllers.routes._
-import controllers.authenticated.routes._
-import models._
-import pages._
-import play.api.mvc.Call
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-trait Navigator {
+case object MergedJourneyWfhFlag extends QuestionPage[Boolean] {
 
-  protected def routeMap: PartialFunction[Page, UserAnswers => Call]
+  override def path: JsPath = JsPath \ toString
 
-  protected def checkRouteMap: PartialFunction[Page, UserAnswers => Call]
-
-  def nextPage(page: Page, mode: Mode): UserAnswers => Call = mode match {
-    case NormalMode =>
-      routeMap.lift(page).getOrElse(_ => IndexController.onPageLoad())
-    case CheckMode =>
-      checkRouteMap.lift(page).getOrElse(_ => CheckYourAnswersController.onPageLoad)
-  }
+  override def toString: String = "mergedJourneyWfhFlag"
 }

@@ -79,7 +79,7 @@ accountMenuEnabled: Boolean = true)(contentBlock: Html)(implicit request: Reques
 @hmrcStandardPage(
     HmrcStandardPageParams(
         serviceURLs = ServiceURLs(
-            serviceUrl = Some(controllers.routes.IndexController.onPageLoad.url)
+            serviceUrl = Some(controllers.routes.IndexController.onPageLoad().url)
         ),
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = Some(head),

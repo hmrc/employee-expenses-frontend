@@ -1,7 +1,7 @@
 # microservice specific routes
 ->         /hmrc-frontend                                        hmrcfrontend.Routes
 
-GET         /                                                    controllers.IndexController.onPageLoad
+GET         /                                                    controllers.IndexController.onPageLoad(isMergedJourney: Boolean ?= false)
 
 GET         /assets/*file                                        controllers.Assets.versioned(path="/public", file: Asset)
 
@@ -374,3 +374,7 @@ GET         /change-construction-occupations                     controllers.con
 POST        /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = CheckMode)
 
 GET         /how-you-will-get-your-expenses                       controllers.authenticated.HowYouWillGetYourExpensesController.onPageLoad()
+
+GET         /merged-journey-refresh-session                      controllers.mergedJourney.MergedJourneyController.mergedJourneyRefreshSession
+GET         /merged-journey-set-up                               controllers.mergedJourney.MergedJourneyController.setupMergedJourney(wfh: Boolean, psubs: Boolean, fre: Boolean)
+

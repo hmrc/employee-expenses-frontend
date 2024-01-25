@@ -30,10 +30,9 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuthenticatedIdentifierActionImpl @Inject()(
-                                                   override val authConnector: AuthConnector,
-                                                   config: FrontendAppConfig,
-                                                   val parser: BodyParsers.Default
+class AuthenticatedIdentifierActionImpl @Inject()(override val authConnector: AuthConnector,
+                                                  config: FrontendAppConfig,
+                                                  val parser: BodyParsers.Default
                                                  )(implicit val executionContext: ExecutionContext) extends AuthenticatedIdentifierAction with AuthorisedFunctions with Logging {
 
   object LT200 {
