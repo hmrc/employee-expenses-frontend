@@ -77,7 +77,7 @@ class NewLayoutProvider @Inject()(wrapperService: WrapperService,
       content = contentBlock,
       pageTitle = Some(s"$pageTitle - ${appConfig.serviceTitle}"),
       serviceURLs = ServiceURLs(
-        serviceUrl = Some(controllers.routes.IndexController.onPageLoad.url)
+        serviceUrl = Some(controllers.routes.IndexController.onPageLoad().url)
       ),
       timeOutUrl = Some(controllers.authenticated.routes.SignOutController.signOut.url),
       keepAliveUrl = controllers.routes.KeepAliveController.keepAlive.url,

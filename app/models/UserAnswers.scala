@@ -16,12 +16,15 @@
 
 package models
 
+import pages.mergedJourney.MergedJourneyFlag
 import pages._
 import play.api.libs.json._
 
 import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(data: JsObject = Json.obj()) {
+
+  def isMergedJourney: Boolean = get(MergedJourneyFlag).getOrElse(false)
 
   def get[A](page: QuestionPage[A])(implicit rds: Reads[A]): Option[A] =
     Reads.optionNoError(Reads.at(page.path)).reads(data).getOrElse(None)
