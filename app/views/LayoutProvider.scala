@@ -31,13 +31,14 @@ import javax.inject.Inject
 
 trait LayoutProvider {
   //noinspection ScalaStyle
-  def apply(
-             pageTitle: String,
-             showBackLink: Boolean = true,
-             timeout: Boolean = true,
-             showSignOut: Boolean = false,
-             scripts: Option[Html] = None,
-             stylesheets: Option[Html] = None
+  def apply(pageTitle: String,
+            showBackLink: Boolean = true,
+            timeout: Boolean = true,
+            showSignOut: Boolean = false,
+            scripts: Option[Html] = None,
+            stylesheets: Option[Html] = None,
+            serviceNameKeyOverride: Option[String] = None,
+            serviceUrlOverride: Option[String] = None
            )(contentBlock: Html)(
              implicit request: Request[_],
              messages: Messages
@@ -48,17 +49,19 @@ class OldLayoutProvider @Inject()(layout: views.html.Layout) extends LayoutProvi
 
   //noinspection ScalaStyle
   override def apply(pageTitle: String, showBackLink: Boolean, timeout: Boolean, showSignOut: Boolean,
-                     scripts: Option[Html], stylesheets: Option[Html])(contentBlock: Html)
+                     scripts: Option[Html], stylesheets: Option[Html],
+                     serviceNameKeyOverride: Option[String] = None,
+                     serviceUrlOverride: Option[String] = None)(contentBlock: Html)
                     (implicit request: Request[_], messages: Messages): HtmlFormat.Appendable = {
     layout(
       pageTitle = pageTitle,
       backLinkEnabled = showBackLink,
-      timeoutEnabled = timeout
+      timeoutEnabled = timeout,
+      serviceNameKeyOverride = serviceNameKeyOverride,
+      serviceUrlOverride = serviceUrlOverride
     )(contentBlock)
   }
 }
-
-
 
 
 class NewLayoutProvider @Inject()(wrapperService: WrapperService,
@@ -68,16 +71,19 @@ class NewLayoutProvider @Inject()(wrapperService: WrapperService,
 
   //noinspection ScalaStyle
   override def apply(pageTitle: String, showBackLink: Boolean, timeout: Boolean, showSignOut: Boolean,
-                     scripts: Option[Html], stylesheets: Option[Html])(contentBlock: Html)
+                     scripts: Option[Html], stylesheets: Option[Html],
+                     serviceNameKeyOverride: Option[String] = None,
+                     serviceUrlOverride: Option[String] = None)(contentBlock: Html)
                     (implicit request: Request[_], messages: Messages): HtmlFormat.Appendable = {
     val hideAccountMenu = request.session.get("authToken").isEmpty
 
     wrapperService.standardScaLayout(
       disableSessionExpired = !timeout,
       content = contentBlock,
-      pageTitle = Some(s"$pageTitle - ${appConfig.serviceTitle}"),
+      pageTitle = Some(s"$pageTitle - ${messages(serviceNameKeyOverride.getOrElse("service.name"))} - GOV.UK"),
+      serviceNameKey = Some(serviceNameKeyOverride.getOrElse("service.name")),
       serviceURLs = ServiceURLs(
-        serviceUrl = Some(controllers.routes.IndexController.onPageLoad().url)
+        serviceUrl = Some(serviceUrlOverride.getOrElse(controllers.routes.IndexController.onPageLoad().url))
       ),
       timeOutUrl = Some(controllers.authenticated.routes.SignOutController.signOut.url),
       keepAliveUrl = controllers.routes.KeepAliveController.keepAlive.url,

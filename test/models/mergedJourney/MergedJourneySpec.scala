@@ -19,23 +19,21 @@ package models.mergedJourney
 import base.SpecBase
 import play.api.libs.json.{JsObject, JsSuccess, Json}
 
-import java.time.Instant
-
 class MergedJourneySpec extends SpecBase {
 
   val testId = "testId"
   val testData: MergedJourney = MergedJourney(
     testId,
-    JourneySkipped,
-    JourneyPending,
-    JourneyComplete
+    ClaimSkipped,
+    ClaimPending,
+    ClaimCompleteCurrent
   )
 
   val testJson: JsObject = Json.obj(
     "internalId" -> testId,
-    "wfh" -> "JourneySkipped",
-    "psubs" -> "JourneyPending",
-    "fre" -> "JourneyComplete",
+    "wfh" -> "ClaimSkipped",
+    "psubs" -> "ClaimPending",
+    "fre" -> "ClaimCompleteCurrent",
     "lastUpdated" -> Json.obj(
       "$date" -> Json.obj("$numberLong" -> testData.lastUpdated.toEpochMilli.toString)
     )

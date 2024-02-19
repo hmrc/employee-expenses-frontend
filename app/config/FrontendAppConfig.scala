@@ -32,6 +32,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
 
   lazy val taiHost: String = configuration.get[Service]("microservice.services.tai").baseUrl
   lazy val citizenDetailsUrl: String = configuration.get[Service]("microservice.services.citizen-details").baseUrl
+  lazy val employeeWfhExpensesHost: String = servicesConfig.baseUrl("employee-wfh-expenses-frontend")
   lazy val employeeExpensesFrontendUrl: String = configuration.get[String]("employee-expenses.url")
 
   lazy val authUrl: String = configuration.get[Service]("microservice.services.auth").baseUrl
@@ -93,4 +94,8 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
   lazy val scaWrapperEnabled: Boolean = configuration.getOptional[Boolean]("feature-switch.sca-wrapper").getOrElse(false)
   lazy val mergedJourneyEnabled: Boolean = configuration.getOptional[Boolean]("feature-switch.merged-journey").getOrElse(false)
 
+  lazy val eligibilityCheckerUrl: String = configuration.get[String]("mergedJourney.eligibilityCheckerFallbackUrl")
+  lazy val startUrlWfh: String = configuration.get[String]("mergedJourney.workingFromHomeExpensesUrl")
+  lazy val startUrlPsubs: String = configuration.get[String]("mergedJourney.professionalSubscriptionsUrl")
+  lazy val startUrlFre: String = configuration.get[String]("mergedJourney.employeeExpensesUrl")
 }

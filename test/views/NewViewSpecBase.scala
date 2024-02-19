@@ -51,6 +51,10 @@ trait NewViewSpecBase extends SpecBase {
     for (key <- expectedMessageKeys) assertContainsText(doc, messages(key))
   }
 
+  def assertDoesNotContainMessages(doc: Document, unwantedMessageKeys: String*) = {
+    for (key <- unwantedMessageKeys) assertTextNotRendered(doc, messages(key))
+  }
+
   def assertRenderedById(doc: Document, id: String) = {
     assert(doc.getElementById(id) != null, "\n\nElement " + id + " was not rendered on the page.\n")
   }
