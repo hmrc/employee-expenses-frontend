@@ -10,7 +10,7 @@ object AppDependencies {
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30" % mongoVersion,
     "uk.gov.hmrc" %% "play-conditional-form-mapping-play-30" % "2.0.0",
     "uk.gov.hmrc" %% "tax-year" % "4.0.0",
-    "uk.gov.hmrc" %% "sca-wrapper-play-30" % "1.1.0"
+    "uk.gov.hmrc" %% "sca-wrapper-play-30" % "1.3.0"
   )
 
 
