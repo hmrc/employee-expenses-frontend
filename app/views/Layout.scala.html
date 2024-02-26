@@ -35,7 +35,9 @@
 @(pageTitle: String,
 timeoutEnabled: Boolean = true,
 backLinkEnabled: Boolean = true,
-accountMenuEnabled: Boolean = true)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
+accountMenuEnabled: Boolean = true,
+        serviceNameKeyOverride: Option[String] = None,
+        serviceUrlOverride: Option[String] = None)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
 @accountMenu = {
     @if(request.session.get("authToken")){
@@ -79,14 +81,14 @@ accountMenuEnabled: Boolean = true)(contentBlock: Html)(implicit request: Reques
 @hmrcStandardPage(
     HmrcStandardPageParams(
         serviceURLs = ServiceURLs(
-            serviceUrl = Some(controllers.routes.IndexController.onPageLoad().url)
+            serviceUrl = Some(serviceUrlOverride.getOrElse(controllers.routes.IndexController.onPageLoad().url))
         ),
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = Some(head),
             beforeContentBlock = Some(accountMenu),
             additionalScriptsBlock = Some(hmrcScripts())
         ),
-        serviceName = Some(messages("service.name")),
-        pageTitle = Some(s"""$pageTitle - ${messages("service.name")} - GOV.UK""")
+        serviceName = Some(messages(serviceNameKeyOverride.getOrElse("service.name"))),
+        pageTitle = Some(s"""$pageTitle - ${messages(serviceNameKeyOverride.getOrElse("service.name"))} - GOV.UK""")
     )
 )(mainContent)

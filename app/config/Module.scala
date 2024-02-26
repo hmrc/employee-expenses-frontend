@@ -33,6 +33,7 @@ class Module(environment: Environment, configuration: Configuration) extends Abs
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl]).asEagerSingleton()
 
     bind(classOf[AuthenticatedIdentifierAction]).to(classOf[AuthenticatedIdentifierActionImpl]).asEagerSingleton()
+    bind(classOf[MergedJourneyIdentifierAction]).to(classOf[MergedJourneyIdentifierActionImpl]).asEagerSingleton()
     bind(classOf[UnauthenticatedIdentifierAction]).to(classOf[UnauthenticatedIdentifierActionImpl]).asEagerSingleton()
 
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.generic)).to(classOf[GenericNavigator])

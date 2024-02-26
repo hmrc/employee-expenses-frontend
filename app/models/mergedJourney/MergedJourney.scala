@@ -22,10 +22,12 @@ import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import java.time.Instant
 
 case class MergedJourney(internalId: String,
-                         wfh: JourneyState,
-                         psubs: JourneyState,
-                         fre: JourneyState,
-                         lastUpdated: Instant = Instant.now())
+                         wfh: ClaimStatus,
+                         psubs: ClaimStatus,
+                         fre: ClaimStatus,
+                         lastUpdated: Instant = Instant.now()) {
+  lazy val claimList: Seq[ClaimStatus] = Seq(wfh, psubs, fre).filterNot(_.equals(ClaimSkipped))
+}
 
 object MergedJourney {
   implicit val instantFormat: Format[Instant] = MongoJavatimeFormats.instantFormat

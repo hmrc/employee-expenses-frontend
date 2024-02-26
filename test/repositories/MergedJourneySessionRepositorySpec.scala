@@ -17,7 +17,7 @@
 package repositories
 
 import base.SpecBase
-import models.mergedJourney.{JourneyPending, MergedJourney}
+import models.mergedJourney.{ClaimPending, MergedJourney}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.time.SpanSugar.convertIntToGrainOfTime
@@ -47,15 +47,15 @@ class MergedJourneySessionRepositorySpec extends SpecBase
   val testDifferentId = "testDifferentId"
   val testData: MergedJourney = MergedJourney(
     testId,
-    JourneyPending,
-    JourneyPending,
-    JourneyPending
+    ClaimPending,
+    ClaimPending,
+    ClaimPending
   )
   val testDifferentData: MergedJourney = MergedJourney(
     testDifferentId,
-    JourneyPending,
-    JourneyPending,
-    JourneyPending
+    ClaimPending,
+    ClaimPending,
+    ClaimPending
   )
 
   "MergedJourneySessionRepository" must {
