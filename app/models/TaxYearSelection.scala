@@ -107,4 +107,7 @@ object TaxYearSelection extends Enumerable.Implicits {
       case _ => throw new IllegalArgumentException("Invalid tax year selected")
     }
   }
+
+  def containsCurrent(taxYearSelection: Seq[TaxYearSelection]): Boolean = taxYearSelection.contains(CurrentYear)
+  def containsPrevious(taxYearSelection: Seq[TaxYearSelection]): Boolean = taxYearSelection.contains(CurrentYearMinus1) || taxYearSelection.contains(CurrentYearMinus2) || taxYearSelection.contains(CurrentYearMinus3) || taxYearSelection.contains(CurrentYearMinus4)
 }

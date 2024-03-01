@@ -18,13 +18,18 @@ package navigation
 
 import controllers.authenticated.routes._
 import controllers.confirmation.routes._
+import controllers.mergedJourney.routes.MergedJourneyController
 import controllers.routes._
+
 import javax.inject.{Inject, Singleton}
 import models.AlreadyClaimingFREDifferentAmounts._
 import models.FlatRateExpenseOptions._
-import models.TaxYearSelection.CurrentYear
+import models.TaxYearSelection.{CurrentYear, containsCurrent, containsPrevious}
 import models._
+import models.mergedJourney.{ClaimCompleteCurrent, ClaimCompleteCurrentPrevious, ClaimCompletePrevious, ClaimStatus, ClaimUnsuccessful}
 import pages.authenticated._
+import pages.confirmation.ConfirmationMergeJourneyPage
+import pages.mergedJourney.MergedJourneyFlag
 import pages.{FREResponse, Page}
 import play.api.mvc.Call
 
@@ -42,6 +47,7 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
     case YourEmployerPage => yourEmployer
     case HowYouWillGetYourExpensesPage => _ => SubmissionController.onSubmit
     case Submission => submission
+    case ConfirmationMergeJourneyPage => continueMergeJourney
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -119,21 +125,41 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       case (Some(_), Some(_), None) =>
         ConfirmationClaimStoppedController.onPageLoad()
       case (Some(taxYearsSelection), None, changeYears) =>
-
-        val taxYears = changeYears match {
-          case Some(changeYear) => changeYear
-          case _ => taxYearsSelection
-        }
-
-        if (taxYears.forall(_ == TaxYearSelection.CurrentYear)) {
-          ConfirmationCurrentYearOnlyController.onPageLoad()
-        } else if (!taxYears.contains(TaxYearSelection.CurrentYear)) {
-          ConfirmationPreviousYearsOnlyController.onPageLoad()
-        } else {
-          ConfirmationCurrentAndPreviousYearsController.onPageLoad()
+        if(userAnswers.get(MergedJourneyFlag).getOrElse(false))
+          ConfirmationMergeJourneyController.onPageLoad()
+        else {
+          val taxYears = changeYears match {
+            case Some(changeYear) => changeYear
+            case _ => taxYearsSelection
+          }
+          if (taxYears.forall(_ == TaxYearSelection.CurrentYear)) {
+            ConfirmationCurrentYearOnlyController.onPageLoad()
+          } else if (!taxYears.contains(TaxYearSelection.CurrentYear)) {
+            ConfirmationPreviousYearsOnlyController.onPageLoad()
+          } else {
+            ConfirmationCurrentAndPreviousYearsController.onPageLoad()
+          }
         }
       case _ =>
         SessionExpiredController.onPageLoad
+    }
+  }
+
+  private def continueMergeJourney(userAnswers: UserAnswers): Call = {
+    val changeYears = userAnswers.get(ChangeWhichTaxYearsPage)
+    val taxYears = if (changeYears.nonEmpty) changeYears else userAnswers.get(TaxYearSelectionPage)
+    taxYears match {
+      case Some(taxYears)  => MergedJourneyController.mergedJourneyContinue(journey="fre", status=getClaimStatus(taxYears))
+      case _ => SessionExpiredController.onPageLoad
+    }
+  }
+
+  private def getClaimStatus(selectedTaxYears: Seq[TaxYearSelection]): ClaimStatus = {
+    (containsCurrent(selectedTaxYears), containsPrevious(selectedTaxYears)) match {
+      case(true, true) => ClaimCompleteCurrentPrevious
+      case(true,false) => ClaimCompleteCurrent
+      case(false,true) => ClaimCompletePrevious
+      case(_, _) => ClaimUnsuccessful
     }
   }
 

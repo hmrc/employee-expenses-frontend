@@ -121,4 +121,26 @@ class TaxYearSelectionSpec extends SpecBase with MockitoSugar {
       }
     }
   }
+
+  "containsCurrent" must {
+    "return true if contains the current tax year" in {
+      val taxYearSelection = Seq(CurrentYear)
+      containsCurrent(taxYearSelection) mustBe true
+    }
+    "return false if does not contain the current tax year" in {
+      val taxYearSelection = Seq(CurrentYearMinus1)
+      containsCurrent(taxYearSelection) mustBe false
+    }
+  }
+
+  "containsPrevious" must {
+    "return true if contains a previous tax year" in {
+      val taxYearSelection = Seq(CurrentYearMinus1, CurrentYearMinus3)
+      containsPrevious(taxYearSelection) mustBe true
+    }
+    "return false if does not contain a previous tax year" in {
+      val taxYearSelection = Seq(CurrentYear)
+      containsPrevious(taxYearSelection) mustBe false
+    }
+  }
 }
