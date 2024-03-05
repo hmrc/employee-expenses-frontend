@@ -29,7 +29,7 @@ class CannotClaimExpenseViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[CannotClaimExpenseView]
 
-    val applyView = view.apply(govUkUrl)(fakeRequest, messages)
+    val applyView = view.apply()(fakeRequest, messages)
 
     behave like normalPage(applyView, "cannotClaimExpense")
 
@@ -37,7 +37,6 @@ class CannotClaimExpenseViewSpec extends ViewBehaviours {
 
     behave like pageWithBodyText(applyView, "cannotClaimExpense.body")
 
-    behave like pageWithHyperLink(applyView, govUkUrl)
   }
 
   application.stop()

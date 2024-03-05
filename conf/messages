@@ -522,10 +522,9 @@ metropolitanPolice.heading = Do you work for the Metropolitan Police?
 metropolitanPolice.checkYourAnswersLabel = Do you work for the Metropolitan Police?
 metropolitanPolice.error.required = Select yes if you work for the Metropolitan Police
 
-cannotClaimExpense.title = You cannot claim this expense
-cannotClaimExpense.heading = You cannot claim this expense
-cannotClaimExpense.body = This is due to your employer''s arrangements with HMRC.
-cannotClaimExpense.hyperLink = Return to GOV.UK
+cannotClaimExpense.title = You cannot claim tax relief for this expense
+cannotClaimExpense.heading = You cannot claim tax relief for this expense
+cannotClaimExpense.body = You cannot claim for this expense because you get tax relief through your payroll.
 
 communitySupportOfficer.title = Are you a community support officer?
 communitySupportOfficer.heading = Are you a community support officer?
