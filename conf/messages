@@ -56,6 +56,7 @@ site.service_name = Claim for your work uniform and tools
 site.textarea.char_limit = (Limit is {0} characters)
 site.startAgain = Restart your expenses claim
 site.or = or
+site.warning = Warning
 
 unauthorised.title = You cannot use this Government Gateway user ID to claim tax relief on your expenses
 unauthorised.heading = You cannot use this Government Gateway user ID to claim tax relief on your expenses
@@ -726,6 +727,11 @@ confirmationPreviousYears.basicRate = You will get £{0} of this £{1} if you ar
 confirmationPreviousYears.higherRate = You will get £{0} of this £{1} if you are a higher rate ({2}%) taxpayer.
 confirmationPreviousYears.intermediateRate = You will get £{0} of this £{1} if you are a intermediate rate ({2}%) taxpayer.
 
+confirmationMergeJourney.title = Claim complete for uniform, work clothing and tools
+confirmationMergeJourney.heading = Claim complete for uniform, work clothing and tools
+confirmationMergeJourney.whatHappensNext = What happens next
+confirmationMergeJourney.warningMessage = Your uniform, work clothing and tools claim will continue automatically each year. You will need to tell HMRC if anything changes.
+confirmationMergeJourney.para = Once you have completed all of your claims, you will be given more information.
 
 shipyardApprenticeStorekeeper.title = Are you an apprentice or storekeeper?
 shipyardApprenticeStorekeeper.heading = Are you an apprentice or storekeeper?

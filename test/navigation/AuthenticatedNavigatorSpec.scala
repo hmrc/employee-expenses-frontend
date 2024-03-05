@@ -20,11 +20,15 @@ import base.SpecBase
 import controllers.authenticated.routes._
 import controllers.confirmation.routes._
 import controllers.routes._
+import controllers.mergedJourney.routes._
 import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove}
 import models.FlatRateExpenseOptions._
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, _}
+import models.mergedJourney.{ClaimCompleteCurrent, ClaimCompleteCurrentPrevious, ClaimCompletePrevious}
 import models.{AlreadyClaimingFREDifferentAmounts, AlreadyClaimingFRESameAmount, CheckMode, NormalMode, TaxYearSelection}
 import pages.authenticated._
+import pages.confirmation.ConfirmationMergeJourneyPage
+import pages.mergedJourney.MergedJourneyFlag
 import pages.{CitizenDetailsAddress, FREResponse}
 
 class AuthenticatedNavigatorSpec extends SpecBase {
@@ -227,6 +231,33 @@ class AuthenticatedNavigatorSpec extends SpecBase {
         (TaxYearSelection.CurrentYear,
           TaxYearSelection.CurrentYearMinus1)))
           .mustBe(ConfirmationCurrentAndPreviousYearsController.onPageLoad())
+      }
+
+      "go from 'SubmissionController' to 'Confirmation Merge Journey page' if Merge Journey Flag is enabled" in {
+        val userAnswers = currentYearFullUserAnswers.set(MergedJourneyFlag, true).success.value
+        navigator.nextPage(Submission, NormalMode)(userAnswers)
+          .mustBe(ConfirmationMergeJourneyController.onPageLoad())
+      }
+
+      "go to MergedJourneyController mergedJourneyContinue with successful claim for current year from ConfirmationMergeJourneyPage" in {
+        navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(currentYearFullUserAnswers) mustBe
+          MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimCompleteCurrent)
+      }
+
+      "go to MergedJourneyController mergedJourneyContinue with successful claim for previous year from ConfirmationMergeJourneyPage" in {
+        navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(currentYearMinus1UserAnswers) mustBe
+          MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimCompletePrevious)
+      }
+
+      "go to MergedJourneyController mergedJourneyContinue with successful claim for current and previous year from ConfirmationMergeJourneyPage" in {
+        val answers = yearsUserAnswers(Seq(CurrentYear, CurrentYearMinus1))
+        navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(answers) mustBe
+          MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimCompleteCurrentPrevious)
+      }
+
+      "go to SessionExpiredController from ConfirmationMergeJourneyPage when no data is available" in {
+        navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(emptyUserAnswers) mustBe
+          SessionExpiredController.onPageLoad
       }
     }
 
