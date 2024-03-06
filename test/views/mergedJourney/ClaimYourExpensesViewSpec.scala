@@ -95,30 +95,14 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         "claimYourExpenses.heading",
         "claimYourExpenses.para.1",
         "claimYourExpenses.para.2",
-        "claimYourExpenses.para.4",
-        messages("claimYourExpenses.eventTitle.wfh", 1),
-        messages("claimYourExpenses.eventTitle.psubs", 2),
-        messages("claimYourExpenses.eventTitle.fre", 3),
-        "claimYourExpenses.tag.claimComplete",
-        "claimYourExpenses.status.claimComplete"
+        "claimYourExpenses.para.4"
       )
 
       assertDoesNotContainMessages(doc,
-        "claimYourExpenses.para.3",
-        "claimYourExpenses.tag.startYourClaim",
-        "claimYourExpenses.tag.cannotStartYet",
-        "claimYourExpenses.tag.claimStopped",
-        "claimYourExpenses.tag.claimNotChanged",
-        "claimYourExpenses.tag.claimUnsuccessful",
-        "claimYourExpenses.status.clickContinue",
-        "claimYourExpenses.status.pendingPsubs",
-        "claimYourExpenses.status.pendingFre",
-        "claimYourExpenses.status.claimStopped",
-        "claimYourExpenses.status.claimNotChanged",
-        "claimYourExpenses.status.claimUnsuccessful"
+        "claimYourExpenses.para.3"
       )
     }
-    "display correct static text when all journeys are pending" in {
+    "display correct static text when journeys are pending" in {
       val testJourney = MergedJourney(
         userAnswersId,
         ClaimPending,
@@ -131,101 +115,86 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         "claimYourExpenses.heading",
         "claimYourExpenses.para.1",
         "claimYourExpenses.para.2",
-        "claimYourExpenses.para.3",
-        messages("claimYourExpenses.eventTitle.wfh", 1),
-        messages("claimYourExpenses.eventTitle.psubs", 2),
-        messages("claimYourExpenses.eventTitle.fre", 3),
-        "claimYourExpenses.tag.startYourClaim",
-        "claimYourExpenses.tag.cannotStartYet",
-        "claimYourExpenses.status.clickContinue",
-        "claimYourExpenses.status.pendingPsubs",
-        "claimYourExpenses.status.pendingFre"
+        "claimYourExpenses.para.3"
       )
 
       assertDoesNotContainMessages(doc,
-        "claimYourExpenses.para.4",
-        "claimYourExpenses.tag.claimComplete",
-        "claimYourExpenses.tag.claimStopped",
-        "claimYourExpenses.tag.claimNotChanged",
-        "claimYourExpenses.tag.claimUnsuccessful",
-        "claimYourExpenses.status.claimComplete",
-        "claimYourExpenses.status.claimStopped",
-        "claimYourExpenses.status.claimNotChanged",
-        "claimYourExpenses.status.claimUnsuccessful"
+        "claimYourExpenses.para.4"
       )
     }
-    "display correct static text when all journeys are unsuccessful" in {
-      val testJourney = MergedJourney(
-        userAnswersId,
-        ClaimStopped,
-        ClaimUnsuccessful,
-        ClaimNotChanged
-      )
-      val doc = asDocument(view(testJourney)(fakeRequest, messages))
+    "display correct timeline" when {
+      "all claims are pending" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimPending,
+          ClaimPending,
+          ClaimPending
+        )
+        val doc = asDocument(view(testJourney)(fakeRequest, messages))
 
-      assertContainsMessages(doc,
-        "claimYourExpenses.heading",
-        "claimYourExpenses.para.1",
-        "claimYourExpenses.para.2",
-        "claimYourExpenses.para.4",
-        messages("claimYourExpenses.eventTitle.wfh", 1),
-        messages("claimYourExpenses.eventTitle.psubs", 2),
-        messages("claimYourExpenses.eventTitle.fre", 3),
-        "claimYourExpenses.tag.claimStopped",
-        "claimYourExpenses.tag.claimNotChanged",
-        "claimYourExpenses.tag.claimUnsuccessful",
-        "claimYourExpenses.status.claimStopped",
-        "claimYourExpenses.status.claimNotChanged",
-        "claimYourExpenses.status.claimUnsuccessful"
+        assertContainsMessages(doc,
+          messages("claimYourExpenses.eventTitle.wfh", 1),
+          messages("claimYourExpenses.eventTitle.psubs", 2),
+          messages("claimYourExpenses.eventTitle.fre", 3),
+          "claimYourExpenses.tag.startYourClaim",
+          "claimYourExpenses.tag.cannotStartYet",
+          "claimYourExpenses.status.clickContinue",
+          "claimYourExpenses.status.pending.psubs",
+          "claimYourExpenses.status.pending.fre"
+        )
+      }
+      "all claims are complete" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimCompleteCurrent,
+          ClaimCompletePrevious,
+          ClaimCompleteCurrentPrevious
+        )
+        val doc = asDocument(view(testJourney)(fakeRequest, messages))
 
-      )
+        assertContainsMessages(doc,
+          messages("claimYourExpenses.eventTitle.wfh", 1),
+          messages("claimYourExpenses.eventTitle.psubs", 2),
+          messages("claimYourExpenses.eventTitle.fre", 3),
+          "claimYourExpenses.tag.claimComplete",
+          "claimYourExpenses.status.claimComplete"
+        )
+      }
+      "claims are stopped or unsuccessful" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimSkipped,
+          ClaimStopped,
+          ClaimUnsuccessful
+        )
+        val doc = asDocument(view(testJourney)(fakeRequest, messages))
 
-      assertDoesNotContainMessages(doc,
-        "claimYourExpenses.para.3",
-        "claimYourExpenses.tag.claimComplete",
-        "claimYourExpenses.tag.startYourClaim",
-        "claimYourExpenses.tag.cannotStartYet",
-        "claimYourExpenses.status.claimComplete",
-        "claimYourExpenses.status.clickContinue",
-        "claimYourExpenses.status.pendingPsubs",
-        "claimYourExpenses.status.pendingFre"
-      )
-    }
-    "display correct static text when all journeys are complete but there are only 2" in {
-      val testJourney = MergedJourney(
-        userAnswersId,
-        ClaimSkipped,
-        ClaimCompleteCurrentPrevious,
-        ClaimCompletePrevious
-      )
-      val doc = asDocument(view(testJourney)(fakeRequest, messages))
+        assertContainsMessages(doc,
+          messages("claimYourExpenses.eventTitle.psubs", 1),
+          messages("claimYourExpenses.eventTitle.fre", 2),
+          "claimYourExpenses.tag.claimStopped",
+          "claimYourExpenses.tag.claimUnsuccessful",
+          "claimYourExpenses.status.claimStopped",
+          "claimYourExpenses.status.claimUnsuccessful"
+        )
+      }
+      "psubs and fre claims are not changed" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimSkipped,
+          ClaimNotChanged,
+          ClaimNotChanged
+        )
+        val doc = asDocument(view(testJourney)(fakeRequest, messages))
 
-      assertContainsMessages(doc,
-        "claimYourExpenses.heading",
-        "claimYourExpenses.para.1",
-        "claimYourExpenses.para.2",
-        "claimYourExpenses.para.4",
-        messages("claimYourExpenses.eventTitle.psubs", 1),
-        messages("claimYourExpenses.eventTitle.fre", 2),
-        "claimYourExpenses.tag.claimComplete",
-        "claimYourExpenses.status.claimComplete"
-      )
-
-      assertDoesNotContainMessages(doc,
-        "claimYourExpenses.para.3",
-        "claimYourExpenses.tag.startYourClaim",
-        "claimYourExpenses.tag.cannotStartYet",
-        "claimYourExpenses.tag.claimStopped",
-        "claimYourExpenses.tag.claimNotChanged",
-        "claimYourExpenses.tag.claimUnsuccessful",
-        "claimYourExpenses.status.clickContinue",
-        "claimYourExpenses.status.pendingPsubs",
-        "claimYourExpenses.status.pendingFre",
-        "claimYourExpenses.status.claimStopped",
-        "claimYourExpenses.status.claimNotChanged",
-        "claimYourExpenses.status.claimUnsuccessful",
-        messages("claimYourExpenses.eventTitle.wfh", 1),
-      )
+        assertContainsMessages(doc,
+          messages("claimYourExpenses.eventTitle.psubs", 1),
+          messages("claimYourExpenses.eventTitle.fre", 2),
+          "claimYourExpenses.tag.claimNotChanged",
+          "claimYourExpenses.status.claimNotChanged.psubs",
+          "claimYourExpenses.status.claimNotChanged.fre"
+        )
+      }
     }
   }
 }

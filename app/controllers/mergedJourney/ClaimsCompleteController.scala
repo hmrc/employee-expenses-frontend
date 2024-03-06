@@ -33,7 +33,6 @@ import views.html.mergedJourney.ClaimsCompleteView
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-// scalastyle:off cyclomatic.complexity
 @Singleton
 class ClaimsCompleteController @Inject()(identify: MergedJourneyIdentifierAction,
                                          sessionRepository: SessionRepository,
@@ -49,18 +48,14 @@ class ClaimsCompleteController @Inject()(identify: MergedJourneyIdentifierAction
       request.identifier match {
         case id: Authed =>
           sessionRepository.getMergedJourney(id.internalId).flatMap {
-            case Some(journeyConfig) if !journeyConfig.claimList.contains(ClaimPending) &&
-              journeyConfig.claimList.exists(Seq(ClaimCompleteCurrent, ClaimCompleteCurrentPrevious, ClaimCompletePrevious).contains) =>
-              //This handles the case where at least one of the journeys has been complete and none are pending
+            case Some(journeyConfig) if !journeyConfig.claimList.contains(ClaimPending) =>
+              //We only want to generate the page if there are no pending claims
               citizenDetailsConnector.getAddress(request.nino.get).map { response =>
                 Ok(claimsCompleteView(journeyConfig, Json.parse(response.body).validate[Address].asOpt))
               }.recoverWith { //Should never happen as this same address check is made in all 3 journeys and failure would prevent users reaching this
-                case e =>
+                case _ =>
                   Future.successful(Ok(claimsCompleteView(journeyConfig, None)))
               }
-            case Some(journeyConfig) if !journeyConfig.claimList.contains(ClaimPending) =>
-              //TODO: This case should handle merged journey that is finished but did not result in claims being made
-              ???
             case Some(_) =>
               logger.warn(s"[ClaimsCompleteController][claimsComplete] Some claims are still pending," +
                 s" returning to Claim Expenses page. Session: ${hc.sessionId.toString}")

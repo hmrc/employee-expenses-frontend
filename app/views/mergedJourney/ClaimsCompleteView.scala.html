@@ -23,6 +23,7 @@
         p: playComponents.p,
         list: playComponents.list,
         link: playComponents.link,
+        govukInsetText: GovukInsetText,
         govukPanel: GovukPanel
 )
 
@@ -34,6 +35,10 @@
 @claimingForPrevious = @{
     journeyConfig.claimList.exists(Seq(ClaimCompletePrevious, ClaimCompleteCurrentPrevious).contains)
 }
+@noClaimsMade = @{
+    !claimingForCurrent && !claimingForPrevious
+}
+
 @layout(
     pageTitle = s"${messages("claimsComplete.title")}",
     showBackLink = false,
@@ -42,33 +47,62 @@
 ) {
 
     @govukPanel(Panel(
-        title = Text(messages("claimsComplete.heading"))
+        title = Text(messages("claimsComplete.panel"))
     ))
 
-    @p() { @messages("claimsComplete.para.claims") }
+    @if(noClaimsMade) {
+        @p() { @messages("claimsComplete.para.claimsTried") }
+    } else {
+        @p() { @messages("claimsComplete.para.claims") }
+    }
 
     @list(
         bulletList = Seq(
-            if(journeyConfig.wfh.isInstanceOf[ClaimComplete]) Some(messages("claimsComplete.list.wfh")) else None,
-            if(journeyConfig.psubs.isInstanceOf[ClaimComplete]) Some(messages("claimsComplete.list.psubs")) else None,
-            if(journeyConfig.fre.isInstanceOf[ClaimComplete]) Some(messages("claimsComplete.list.fre")) else None
+            if(journeyConfig.wfh.isInstanceOf[ClaimComplete] || (noClaimsMade && !journeyConfig.wfh.equals(ClaimSkipped)))
+                Some(messages("claimsComplete.list.wfh"))
+            else None,
+            if(journeyConfig.psubs.isInstanceOf[ClaimComplete] || (noClaimsMade && !journeyConfig.psubs.equals(ClaimSkipped)))
+                Some(messages("claimsComplete.list.psubs"))
+            else None,
+            if(journeyConfig.fre.isInstanceOf[ClaimComplete] || (noClaimsMade && !journeyConfig.fre.equals(ClaimSkipped)))
+                Some(messages("claimsComplete.list.fre"))
+            else None
         ).flatten
     )
 
-    @if(claimingForCurrent) {
-        @h2("claimsComplete.heading.current", "govuk-heading-m")
-        @p() { @messages("claimsComplete.para.current") }
+    @if(noClaimsMade) {
+        @h2("claimsComplete.happensNext.heading", "govuk-heading-m")
+
+        @p() { @messages("claimsComplete.happensNext.para") }
     }
 
-    @if(claimingForPrevious) {
-        @h2("claimsComplete.heading.previous", "govuk-heading-m")
-        @p() { @messages("claimsComplete.para.previous") }
+    @if(claimingForCurrent || noClaimsMade) {
+        @h2("claimsComplete.current.heading", "govuk-heading-m")
+        @if(noClaimsMade) {
+            @list(
+                bulletList = Seq(
+                    messages("claimsComplete.current.bullet.1"),
+                    messages("claimsComplete.current.bullet.2")
+                )
+            )
+        } else {
+            @p() { @messages("claimsComplete.current.para") }
+        }
+    }
+
+    @if(claimingForPrevious || noClaimsMade) {
+        @h2("claimsComplete.previous.heading", "govuk-heading-m")
+        @if(noClaimsMade) {
+            @p() { @messages("claimsComplete.previous.para.noClaims") }
+        } else {
+            @p() { @messages("claimsComplete.previous.para.claims") }
+        }
     }
 
     @optAddress match {
         case Some(address) => {
-            @h2("claimsComplete.heading.address", "govuk-heading-m")
-            @p() { @messages("claimsComplete.para.address") }
+            @h2("claimsComplete.address.heading", "govuk-heading-m")
+            @p() { @messages("claimsComplete.address.para") }
 
             @p() {
                 @if(address.line1.exists(_.trim.nonEmpty)) { @address.line1<br> }
@@ -81,18 +115,40 @@
             }
 
             @p() {
-                @messages("claimsComplete.para.updateAddress.start")
+                @messages("claimsComplete.address.updateAddress.start")
                 @link(
                     link = appConfig.updateAddressInfoUrl,
-                    messageKey = "claimsComplete.para.updateAddress.link",
+                    messageKey = "claimsComplete.address.updateAddress.link",
                     isExternal = true
                 ).
-                @messages("claimsComplete.para.updateAddress.end")
+                @messages("claimsComplete.address.updateAddress.end")
             }
         }
         case _ => {
-            @h2("claimsComplete.heading.noAddress", "govuk-heading-m")
-            @p() { @messages("claimsComplete.para.noAddress") }
+            @h2("claimsComplete.address.heading", "govuk-heading-m")
+
+            @govukInsetText(InsetText(
+                content = Text(messages("claimsComplete.noAddress.inset"))
+            ))
+
+            @p() {
+                @messages("claimsComplete.noAddress.updateAddress.start")
+                @link(
+                    link = appConfig.updateAddressInfoUrl,
+                    messageKey = "claimsComplete.noAddress.updateAddress.link",
+                    isExternal = true
+                ).
+                @messages("claimsComplete.noAddress.updateAddress.end")
+            }
         }
+    }
+
+    @p() {
+        @link(
+            link = appConfig.feedbackSurveyUrl,
+            messageKey = "claimsComplete.feedback.link",
+            isExternal = true
+        )
+        @messages("claimsComplete.feedback.end")
     }
 }
