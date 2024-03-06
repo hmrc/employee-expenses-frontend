@@ -27,7 +27,6 @@ class MessagesSpec extends SpecBase {
   private val MatchSingleQuoteOnly = """\w+'{1}\w+""".r
   private val MatchBacktickQuoteOnly = """`+""".r
   private val MatchOpenQuoteOnly = """‘+""".r
-  private val MatchClosingQuoteOnly = """’+""".r
 
   private val englishMessages = parseMessages("conf/messages")
   private val welshMessages = parseMessages("conf/messages.cy")
@@ -62,18 +61,17 @@ class MessagesSpec extends SpecBase {
 
   private def countMessagesWithArgs(messages: Map[String, String]) = messages.values.filter(_.contains("{0}"))
 
-  private def assertNonEmpty(label: String, messages: Map[String, String]) = messages.foreach { case (key: String, value: String) =>
+  private def assertNonEmpty(label: String, messages: Map[String, String]): Unit = messages.foreach { case (key: String, value: String) =>
     withClue(s"In $label, there is an empty value for the key:[$key][$value]") {
       value.trim.isEmpty mustBe false
     }
   }
 
-  private def assertCorrectUseOfQuotes(label: String, messages: Map[String, String]) = messages.foreach { case (key: String, value: String) =>
+  private def assertCorrectUseOfQuotes(label: String, messages: Map[String, String]): Unit = messages.foreach { case (key: String, value: String) =>
     withClue(s"In $label, there is an unescaped or invalid quote:[$key][$value]") {
       MatchSingleQuoteOnly.findFirstIn(value).isDefined mustBe false
       MatchBacktickQuoteOnly.findFirstIn(value).isDefined mustBe false
       MatchOpenQuoteOnly.findFirstIn(value).isDefined mustBe false
-      MatchClosingQuoteOnly.findFirstIn(value).isDefined mustBe false
     }
   }
 

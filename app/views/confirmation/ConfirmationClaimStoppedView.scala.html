@@ -18,7 +18,7 @@
         layout: views.LayoutProvider
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(nextServiceUrl: Option[String] = None)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages("confirmation.titleStopped"),
@@ -30,4 +30,10 @@
     </div>
 
     <p class="govuk-body">@messages("confirmation.noLongerGetAmount")</p>
+    @nextServiceUrl match {
+      case Some(url) => {
+        @playComponents.button_link(messages("site.continue"), url, classes = "govuk-button")
+      }
+      case _ => {}
+    }
 }
