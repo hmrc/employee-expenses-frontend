@@ -606,7 +606,7 @@ updateYourAddress.guidance2 = After you have completed this claim, we will tell 
 
 noCodeChange.title = You do not need to do anything else
 noCodeChange.heading = You do not need to do anything else
-noCodeChange.guidance1 = This amount will stay in your tax code until you tell us that your employment circumstances have changed.
+noCodeChange.guidance1 = The amount of tax relief will stay the same in your tax code until you tell HMRC about any changes to your uniforms, work clothing and tools claim.
 noCodeChange.guidance2 = You can see this in your {0}.
 noCodeChange.link = PAYE Income Tax summary
 
@@ -851,14 +851,14 @@ claimYourExpenses.tag.startYourClaim = Start your claim
 claimYourExpenses.tag.cannotStartYet = Cannot start yet
 claimYourExpenses.tag.claimComplete = Claim complete
 claimYourExpenses.tag.claimStopped = Claim stopped
-claimYourExpenses.tag.claimNotChanged = TODO
+claimYourExpenses.tag.claimNotChanged = Claim not changed
 claimYourExpenses.tag.claimUnsuccessful = Claim unsuccessful
 claimYourExpenses.status.clickContinue = You can start this claim by continuing below.
 claimYourExpenses.status.pendingPsubs = You can return to claim Professional fees and subscriptions.
 claimYourExpenses.status.pendingFre = You can return to claim Uniform, work clothing and tools.
 claimYourExpenses.status.claimComplete = Your claim has been successfully sent.
 claimYourExpenses.status.claimStopped = You chose not to claim for this expense.
-claimYourExpenses.status.claimNotChanged = TODO
+claimYourExpenses.status.claimNotChanged = No changes were made to your uniforms, work clothing and tools claim.
 claimYourExpenses.status.claimUnsuccessful = You are not able to claim for this expense.
 
 claimsComplete.title = Your expense claims are complete

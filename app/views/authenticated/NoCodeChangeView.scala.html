@@ -15,6 +15,8 @@
  *@
 
 @import config.FrontendAppConfig
+@import controllers.mergedJourney.routes.MergedJourneyController
+@import models.mergedJourney.ClaimNotChanged
 
 @this(
         layout: views.LayoutProvider,
@@ -22,7 +24,7 @@
         heading: playComponents.heading,
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(isMergeJourney: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @link = {<a href=@frontendAppConfig.incomeTaxSummary class="govuk-link">@messages("noCodeChange.link")</a>}
 
@@ -34,5 +36,9 @@
 
     <p class="govuk-body">@messages("noCodeChange.guidance1")</p>
 
-    <p class="govuk-body">@Html(messages("noCodeChange.guidance2", link))</p>
+    @if(isMergeJourney) {
+        @playComponents.button_link(href=MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimNotChanged).url, classes="govuk-button")
+    } else {
+        <p class="govuk-body">@Html(messages("noCodeChange.guidance2", link))</p>
+    }
 }
