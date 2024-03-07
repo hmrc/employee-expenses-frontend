@@ -16,13 +16,17 @@
 
 package controllers
 
-import config.FrontendAppConfig
 import controllers.actions._
+import controllers.mergedJourney.routes.MergedJourneyController
+import models.mergedJourney.ClaimUnsuccessful
+
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CannotClaimExpenseView
+
+import scala.concurrent.{ExecutionContext}
 
 class CannotClaimExpenseController @Inject()(
                                               override val messagesApi: MessagesApi,
@@ -31,11 +35,13 @@ class CannotClaimExpenseController @Inject()(
                                               requireData: DataRequiredAction,
                                               val controllerComponents: MessagesControllerComponents,
                                               view: CannotClaimExpenseView,
-                                              frontendAppConfig: FrontendAppConfig
-                                     ) extends FrontendBaseController with I18nSupport {
+                                     )(implicit val ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
-      Ok(view(frontendAppConfig.govUkUrl))
+  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    if (request.userAnswers.isMergedJourney == true) {
+      Ok(view(Some(MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimUnsuccessful).url)))
+    } else {
+      Ok(view())
+    }
   }
 }

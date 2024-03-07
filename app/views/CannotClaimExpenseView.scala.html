@@ -19,7 +19,7 @@
     heading: playComponents.heading
 )
 
-@(govUkUrl: String)(implicit request: Request[_], messages: Messages)
+@(nextServiceUrl: Option[String] = None)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages("cannotClaimExpense.title")
@@ -28,7 +28,11 @@
     @heading("cannotClaimExpense.heading")
 
     <p class="govuk-body">@messages("cannotClaimExpense.body")</p>
+    @nextServiceUrl match {
+        case Some(url) => {
+            @playComponents.button_link(messages("site.continue"), url, classes = "govuk-button")
+        }
+        case _ => {}
 
-    <p class="govuk-body"><a class="govuk-link" id="link" href=@govUkUrl>@messages("cannotClaimExpense.hyperLink")</a></p>
-
+    }
 }
