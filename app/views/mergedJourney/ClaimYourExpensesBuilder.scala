@@ -85,15 +85,17 @@ class ClaimYourExpensesBuilder @Inject()(govukTag: GovukTag,
       case (ClaimPending, _) if isFirstPending =>
         p()(Html(messages("claimYourExpenses.status.clickContinue")))
       case (ClaimPending, `psubsJourney`) =>
-        p()(Html(messages("claimYourExpenses.status.pendingPsubs")))
+        p()(Html(messages("claimYourExpenses.status.pending.psubs")))
       case (ClaimPending, `freJourney`) =>
-        p()(Html(messages("claimYourExpenses.status.pendingFre")))
+        p()(Html(messages("claimYourExpenses.status.pending.fre")))
       case (_: ClaimComplete, _) =>
         p()(Html(messages("claimYourExpenses.status.claimComplete")))
       case (ClaimStopped, _) =>
         p()(Html(messages("claimYourExpenses.status.claimStopped")))
-      case (ClaimNotChanged, _) =>
-        p()(Html(messages("claimYourExpenses.status.claimNotChanged")))
+      case (ClaimNotChanged, `psubsJourney`) =>
+        p()(Html(messages("claimYourExpenses.status.claimNotChanged.psubs")))
+      case (ClaimNotChanged, `freJourney`) =>
+        p()(Html(messages("claimYourExpenses.status.claimNotChanged.fre")))
       case (ClaimUnsuccessful, _) =>
         p()(Html(messages("claimYourExpenses.status.claimUnsuccessful")))
       case _ =>

@@ -88,23 +88,6 @@ class ClaimsCompleteControllerSpec extends SpecBase with MockitoSugar with Scala
       application.stop()
     }
 
-//    "return OK with a view when the claims are complete unsuccessfully" in {
-//      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-//        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-//        .build()
-//
-//      val testJourney = MergedJourney(userAnswersId, ClaimStopped, ClaimUnsuccessful, ClaimNotChanged, Instant.now())
-//      when(mockSessionRepository.getMergedJourney(any())).thenReturn(Future.successful(Some(testJourney)))
-//
-//      val request = FakeRequest(GET, claimsCompleteUrl)
-//
-//      val result = route(application, request).value
-//
-//      status(result) mustBe OK
-//
-//      application.stop()
-//    }
-
     "redirect to claim your expenses if there are pending claims" in {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))

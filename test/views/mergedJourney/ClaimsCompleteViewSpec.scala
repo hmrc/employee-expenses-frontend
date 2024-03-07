@@ -38,7 +38,248 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
         "claimsComplete.title"
       )
     }
-    "have the right link when there is an address" when {
+    "have a confirmation panel" in {
+      val testJourney = MergedJourney(
+        userAnswersId,
+        ClaimCompleteCurrent,
+        ClaimCompletePrevious,
+        ClaimCompleteCurrentPrevious
+      )
+      val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+      assertRenderedByClass(doc, "govuk-panel govuk-panel--confirmation")
+    }
+    "display the correct list of claims" when {
+      "claims are complete" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimCompleteCurrent,
+          ClaimCompletePrevious,
+          ClaimCompleteCurrentPrevious
+        )
+        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+
+        assertContainsMessages(doc,
+          "claimsComplete.para.claims",
+          "claimsComplete.list.wfh",
+          "claimsComplete.list.psubs",
+          "claimsComplete.list.fre"
+        )
+        assertDoesNotContainMessages(doc,
+          "claimsComplete.para.claimsTried"
+        )
+      }
+      "claims are complete or skipped" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimCompleteCurrent,
+          ClaimSkipped,
+          ClaimCompleteCurrentPrevious
+        )
+        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+
+        assertContainsMessages(doc,
+          "claimsComplete.para.claims",
+          "claimsComplete.list.wfh",
+          "claimsComplete.list.fre"
+        )
+        assertDoesNotContainMessages(doc,
+          "claimsComplete.para.claimsTried",
+          "claimsComplete.list.psubs"
+        )
+      }
+      "claims are not made" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimStopped,
+          ClaimUnsuccessful,
+          ClaimNotChanged
+        )
+        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+
+        assertContainsMessages(doc,
+          "claimsComplete.para.claimsTried",
+          "claimsComplete.list.wfh",
+          "claimsComplete.list.psubs",
+          "claimsComplete.list.fre"
+        )
+        assertDoesNotContainMessages(doc,
+          "claimsComplete.para.claims"
+        )
+      }
+      "claims are not made or skipped" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimSkipped,
+          ClaimUnsuccessful,
+          ClaimNotChanged
+        )
+        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+
+        assertContainsMessages(doc,
+          "claimsComplete.para.claimsTried",
+          "claimsComplete.list.psubs",
+          "claimsComplete.list.fre"
+        )
+        assertDoesNotContainMessages(doc,
+          "claimsComplete.para.claims",
+          "claimsComplete.list.wfh"
+        )
+      }
+    }
+    "have the right guidance" when {
+      "claims are complete for current year only" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimCompleteCurrent,
+          ClaimCompleteCurrent,
+          ClaimCompleteCurrent
+        )
+        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+
+        assertContainsMessages(doc,
+          "claimsComplete.current.heading",
+          "claimsComplete.current.para"
+        )
+        assertDoesNotContainMessages(doc,
+          "claimsComplete.previous.heading",
+          "claimsComplete.previous.para.claims",
+          "claimsComplete.happensNext.heading",
+          "claimsComplete.happensNext.para",
+          "claimsComplete.current.bullet.1",
+          "claimsComplete.previous.para.noClaims"
+        )
+      }
+      "claims are complete for previous years only" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimCompletePrevious,
+          ClaimCompletePrevious,
+          ClaimCompletePrevious
+        )
+        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+
+        assertContainsMessages(doc,
+          "claimsComplete.previous.heading",
+          "claimsComplete.previous.para.claims"
+        )
+        assertDoesNotContainMessages(doc,
+          "claimsComplete.current.heading",
+          "claimsComplete.current.para",
+          "claimsComplete.happensNext.heading",
+          "claimsComplete.happensNext.para",
+          "claimsComplete.current.bullet.1",
+          "claimsComplete.current.bullet.2",
+          "claimsComplete.previous.para.noClaims"
+        )
+      }
+      "claims are complete for current and previous years" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimCompleteCurrent,
+          ClaimCompletePrevious,
+          ClaimCompleteCurrentPrevious
+        )
+        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+
+        assertContainsMessages(doc,
+          "claimsComplete.current.heading",
+          "claimsComplete.current.para",
+          "claimsComplete.previous.heading",
+          "claimsComplete.previous.para.claims"
+        )
+        assertDoesNotContainMessages(doc,
+          "claimsComplete.happensNext.heading",
+          "claimsComplete.happensNext.para",
+          "claimsComplete.current.bullet.1",
+          "claimsComplete.previous.para.noClaims"
+        )
+      }
+      "claims are not made" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimStopped,
+          ClaimUnsuccessful,
+          ClaimNotChanged
+        )
+        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+
+        assertContainsMessages(doc,
+          "claimsComplete.happensNext.heading",
+          "claimsComplete.happensNext.para",
+          "claimsComplete.current.heading",
+          "claimsComplete.current.bullet.1",
+          "claimsComplete.current.bullet.2",
+          "claimsComplete.previous.heading",
+          "claimsComplete.previous.para.noClaims"
+        )
+        assertDoesNotContainMessages(doc,
+          "claimsComplete.previous.para.claims"
+        )
+      }
+    }
+    "have the right address information" when {
+      "there is an address" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimCompleteCurrent,
+          ClaimCompleteCurrent,
+          ClaimCompleteCurrent
+        )
+        val applyView = view(testJourney, Some(address))(fakeRequest, messages, frontendAppConfig)
+        val doc = asDocument(applyView)
+
+        assertContainsMessages(doc,
+          "claimsComplete.address.heading",
+          "claimsComplete.address.para",
+          "claimsComplete.address.updateAddress.start",
+          "claimsComplete.address.updateAddress.link",
+          "claimsComplete.address.updateAddress.end"
+        )
+      }
+      "there is no address" in {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimCompleteCurrent,
+          ClaimCompleteCurrent,
+          ClaimCompleteCurrent
+        )
+        val applyView = view(testJourney, None)(fakeRequest, messages, frontendAppConfig)
+        val doc = asDocument(applyView)
+
+        assertContainsMessages(doc,
+          "claimsComplete.address.heading",
+          "claimsComplete.noAddress.updateAddress.start",
+          "claimsComplete.noAddress.updateAddress.link",
+          "claimsComplete.noAddress.updateAddress.end",
+          "claimsComplete.noAddress.inset"
+        )
+      }
+    }
+    "have the right address link" when {
+      "there is an address" when {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimCompleteCurrent,
+          ClaimCompleteCurrent,
+          ClaimCompleteCurrent
+        )
+        val applyView = view(testJourney, Some(address))(fakeRequest, messages, frontendAppConfig)
+
+        behave like pageWithLink(applyView, frontendAppConfig.updateAddressInfoUrl, "claimsComplete.address.updateAddress.link")
+      }
+      "there is no address" when {
+        val testJourney = MergedJourney(
+          userAnswersId,
+          ClaimCompleteCurrent,
+          ClaimCompleteCurrent,
+          ClaimCompleteCurrent
+        )
+        val applyView = view(testJourney, None)(fakeRequest, messages, frontendAppConfig)
+
+        behave like pageWithLink(applyView, frontendAppConfig.updateAddressInfoUrl, "claimsComplete.noAddress.updateAddress.link")
+      }
+    }
+    "have the right feedback link" when {
       val testJourney = MergedJourney(
         userAnswersId,
         ClaimCompleteCurrent,
@@ -46,133 +287,14 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
         ClaimCompleteCurrent
       )
       val applyView = view(testJourney, Some(address))(fakeRequest, messages, frontendAppConfig)
-
-      behave like pageWithLink(applyView, frontendAppConfig.updateAddressInfoUrl, "claimsComplete.para.updateAddress.link")
-    }
-    "display correct static text when current and previous year claims were made and there is an address" in {
-      val testJourney = MergedJourney(
-        userAnswersId,
-        ClaimCompleteCurrent,
-        ClaimCompleteCurrentPrevious,
-        ClaimCompletePrevious
-      )
-      val doc = asDocument(view(testJourney, Some(address))(fakeRequest, messages, frontendAppConfig))
+      val doc = asDocument(applyView)
 
       assertContainsMessages(doc,
-        "claimsComplete.heading",
-        "claimsComplete.para.claims",
-        "claimsComplete.list.wfh",
-        "claimsComplete.list.psubs",
-        "claimsComplete.list.fre",
-        "claimsComplete.heading.current",
-        "claimsComplete.para.current",
-        "claimsComplete.heading.previous",
-        "claimsComplete.para.previous",
-        "claimsComplete.heading.address",
-        "claimsComplete.para.address",
-        "claimsComplete.para.updateAddress.start",
-        "claimsComplete.para.updateAddress.link",
-        "claimsComplete.para.updateAddress.end"
+        "claimsComplete.feedback.link",
+        "claimsComplete.feedback.end"
       )
 
-      assertDoesNotContainMessages(doc,
-        "claimsComplete.heading.noAddress",
-        "claimsComplete.para.noAddress"
-      )
+      behave like pageWithLink(applyView, frontendAppConfig.feedbackSurveyUrl, "claimsComplete.feedback.link")
     }
-    "display correct static text when current year claims were made and there is an address" in {
-      val testJourney = MergedJourney(
-        userAnswersId,
-        ClaimCompleteCurrent,
-        ClaimCompleteCurrent,
-        ClaimCompleteCurrent
-      )
-      val doc = asDocument(view(testJourney, Some(address))(fakeRequest, messages, frontendAppConfig))
-
-      assertContainsMessages(doc,
-        "claimsComplete.heading",
-        "claimsComplete.para.claims",
-        "claimsComplete.list.wfh",
-        "claimsComplete.list.psubs",
-        "claimsComplete.list.fre",
-        "claimsComplete.heading.current",
-        "claimsComplete.para.current",
-        "claimsComplete.heading.address",
-        "claimsComplete.para.address",
-        "claimsComplete.para.updateAddress.start",
-        "claimsComplete.para.updateAddress.link",
-        "claimsComplete.para.updateAddress.end"
-      )
-
-      assertDoesNotContainMessages(doc,
-        "claimsComplete.heading.previous",
-        "claimsComplete.para.previous",
-        "claimsComplete.heading.noAddress",
-        "claimsComplete.para.noAddress"
-      )
-    }
-    "display correct static text when previous year claims were made and there is an address" in {
-      val testJourney = MergedJourney(
-        userAnswersId,
-        ClaimCompletePrevious,
-        ClaimCompletePrevious,
-        ClaimCompletePrevious
-      )
-      val doc = asDocument(view(testJourney, Some(address))(fakeRequest, messages, frontendAppConfig))
-
-      assertContainsMessages(doc,
-        "claimsComplete.heading",
-        "claimsComplete.para.claims",
-        "claimsComplete.list.wfh",
-        "claimsComplete.list.psubs",
-        "claimsComplete.list.fre",
-        "claimsComplete.heading.previous",
-        "claimsComplete.para.previous",
-        "claimsComplete.heading.address",
-        "claimsComplete.para.address",
-        "claimsComplete.para.updateAddress.start",
-        "claimsComplete.para.updateAddress.link",
-        "claimsComplete.para.updateAddress.end"
-      )
-
-      assertDoesNotContainMessages(doc,
-        "claimsComplete.heading.current",
-        "claimsComplete.para.current",
-        "claimsComplete.heading.noAddress",
-        "claimsComplete.para.noAddress"
-      )
-    }
-    "display correct static text when there is no address and not all claims were successful" in {
-      val testJourney = MergedJourney(
-        userAnswersId,
-        ClaimSkipped,
-        ClaimUnsuccessful,
-        ClaimCompleteCurrent
-      )
-      val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
-
-      assertContainsMessages(doc,
-        "claimsComplete.heading",
-        "claimsComplete.para.claims",
-        "claimsComplete.list.fre",
-        "claimsComplete.heading.current",
-        "claimsComplete.para.current",
-        "claimsComplete.heading.noAddress",
-        "claimsComplete.para.noAddress"
-      )
-
-      assertDoesNotContainMessages(doc,
-        "claimsComplete.list.wfh",
-        "claimsComplete.list.psubs",
-        "claimsComplete.heading.previous",
-        "claimsComplete.para.previous",
-        "claimsComplete.heading.address",
-        "claimsComplete.para.address",
-        "claimsComplete.para.updateAddress.start",
-        "claimsComplete.para.updateAddress.link",
-        "claimsComplete.para.updateAddress.end"
-      )
-    }
-
   }
 }
