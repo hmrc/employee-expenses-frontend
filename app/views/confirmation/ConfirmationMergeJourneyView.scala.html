@@ -17,7 +17,8 @@
 @this(
     layout: views.LayoutProvider,
     govukPanel : GovukPanel,
-    govukWarningText : GovukWarningText
+    govukWarningText : GovukWarningText,
+    p: playComponents.p
 )
 
 @(continueUrl: String)(implicit request: Request[_], messages: Messages)
@@ -30,14 +31,12 @@
         title = Text(messages("confirmationMergeJourney.heading")),
     ))
 
-    <h2 class="govuk-heading-m">@messages("confirmationMergeJourney.whatHappensNext")</h2>
-
     @govukWarningText(WarningText(
         iconFallbackText = Some(messages("site.warning")),
         content = Text(messages("confirmationMergeJourney.warningMessage"))
     ))
 
-    <p class="govuk-body">@messages("confirmationMergeJourney.para")</p>
+    @p(){@messages("confirmationMergeJourney.para")}
 
     @playComponents.button_link(href = continueUrl, classes = "govuk-button")
 }

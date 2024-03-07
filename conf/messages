@@ -728,7 +728,6 @@ confirmationPreviousYears.intermediateRate = You will get £{0} of this £{1} if
 
 confirmationMergeJourney.title = Claim complete for uniform, work clothing and tools
 confirmationMergeJourney.heading = Claim complete for uniform, work clothing and tools
-confirmationMergeJourney.whatHappensNext = What happens next
 confirmationMergeJourney.warningMessage = Your uniform, work clothing and tools claim will continue automatically each year. You will need to tell HMRC if anything changes.
 confirmationMergeJourney.para = Once you have completed all of your claims, you will be given more information.
 
