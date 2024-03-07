@@ -20,6 +20,8 @@ import play.api.Application
 import play.twirl.api.Html
 import views.newBehaviours.ViewBehaviours
 import views.html.authenticated.NoCodeChangeView
+import controllers.mergedJourney.routes.MergedJourneyController
+import models.mergedJourney.ClaimNotChanged
 
 class NoCodeChangeViewSpec extends ViewBehaviours {
 
@@ -42,6 +44,10 @@ class NoCodeChangeViewSpec extends ViewBehaviours {
     val link: Html = Html(s"""<a href="${frontendAppConfig.incomeTaxSummary}" class="govuk-link">${messages("noCodeChange.link")}</a>""")
 
     behave like pageWithBodyText(applyViewWithAuth, Html(messages("noCodeChange.guidance2", link)).toString)
+
+    val applyViewMergeJourneyWithAuth = view.apply(isMergeJourney = true)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+
+    behave like pageWithButtonLink(applyViewMergeJourneyWithAuth, MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimNotChanged).url, "continue")
 
   }
 

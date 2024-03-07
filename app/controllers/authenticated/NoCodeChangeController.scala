@@ -46,6 +46,6 @@ class NoCodeChangeController @Inject()(
         AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
       )
 
-      Ok(view())
+      Ok(view(request.userAnswers.isMergedJourney))
   }
 }
