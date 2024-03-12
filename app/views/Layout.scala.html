@@ -81,7 +81,7 @@ accountMenuEnabled: Boolean = true,
 @hmrcStandardPage(
     HmrcStandardPageParams(
         serviceURLs = ServiceURLs(
-            serviceUrl = Some(serviceUrlOverride.getOrElse(controllers.routes.IndexController.onPageLoad().url))
+            serviceUrl = Some(serviceUrlOverride.getOrElse(controllers.routes.IndexController.start.url))
         ),
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = Some(head),

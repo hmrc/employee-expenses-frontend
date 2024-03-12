@@ -17,20 +17,38 @@
 package controllers.actions
 
 import controllers.routes
+import controllers.confirmation.{routes => confRoutes}
+import models.NormalMode
+
 import javax.inject.Inject
 import models.requests.{DataRequest, OptionalDataRequest}
+import navigation.{AuthenticatedNavigator, Navigator}
+import pages.SubmittedClaim
+import pages.authenticated.Submission
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRequiredActionImpl @Inject()(implicit val executionContext: ExecutionContext) extends DataRequiredAction {
+class DataRequiredActionImpl @Inject()(navigator: AuthenticatedNavigator)
+                                      (implicit val executionContext: ExecutionContext)
+  extends DataRequiredAction {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
+
+    lazy val currentlyOnTheConfirmationPage = Seq(
+      confRoutes.ConfirmationCurrentYearOnlyController.onPageLoad().url,
+      confRoutes.ConfirmationCurrentAndPreviousYearsController.onPageLoad().url,
+      confRoutes.ConfirmationPreviousYearsOnlyController.onPageLoad().url,
+      confRoutes.ConfirmationClaimStoppedController.onPageLoad().url,
+      confRoutes.ConfirmationMergeJourneyController.onPageLoad().url
+    ).contains(request.uri)
 
     request.userAnswers match {
       case None =>
         Future.successful(Left(Redirect(routes.SessionExpiredController.onPageLoad)))
+      case Some(data) if data.get(SubmittedClaim).isDefined && !currentlyOnTheConfirmationPage =>
+        Future.successful(Left(Redirect(navigator.nextPage(Submission, NormalMode)(data))))
       case Some(data) =>
         Future.successful(Right(DataRequest(request.request, request.identifier, request.nino, data)))
     }

@@ -21,22 +21,20 @@ import models.mergedJourney.ClaimStopped
 import controllers.mergedJourney.routes.MergedJourneyController
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.confirmation.ConfirmationClaimStoppedView
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class ConfirmationClaimStoppedController @Inject()(
-                                                    override val messagesApi: MessagesApi,
-                                                    identify: AuthenticatedIdentifierAction,
-                                                    getData: DataRetrievalAction,
-                                                    requireData: DataRequiredAction,
-                                                    val controllerComponents: MessagesControllerComponents,
-                                                    confirmationClaimStoppedView: ConfirmationClaimStoppedView,
-                                                    sessionRepository: SessionRepository
-                                                  )(implicit val ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class ConfirmationClaimStoppedController @Inject()(override val messagesApi: MessagesApi,
+                                                   identify: AuthenticatedIdentifierAction,
+                                                   getData: DataRetrievalAction,
+                                                   requireData: DataRequiredAction,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   confirmationClaimStoppedView: ConfirmationClaimStoppedView,
+                                                  )(implicit val ec: ExecutionContext)
+  extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     if (request.userAnswers.isMergedJourney) {

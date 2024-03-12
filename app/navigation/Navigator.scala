@@ -30,7 +30,7 @@ trait Navigator {
 
   def nextPage(page: Page, mode: Mode): UserAnswers => Call = mode match {
     case NormalMode =>
-      routeMap.lift(page).getOrElse(_ => IndexController.onPageLoad())
+      routeMap.lift(page).getOrElse(_ => IndexController.start)
     case CheckMode =>
       checkRouteMap.lift(page).getOrElse(_ => CheckYourAnswersController.onPageLoad)
   }

@@ -34,17 +34,16 @@ import views.html.confirmation.ConfirmationCurrentYearOnlyView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmationCurrentYearOnlyController @Inject()(
-                                                       override val messagesApi: MessagesApi,
-                                                       identify: AuthenticatedIdentifierAction,
-                                                       getData: DataRetrievalAction,
-                                                       requireData: DataRequiredAction,
-                                                       val controllerComponents: MessagesControllerComponents,
-                                                       claimAmountService: ClaimAmountService,
-                                                       taiService: TaiService,
-                                                       sessionRepository: SessionRepository,
-                                                       confirmationCurrentYearOnlyView: ConfirmationCurrentYearOnlyView
-                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class ConfirmationCurrentYearOnlyController @Inject()(override val messagesApi: MessagesApi,
+                                                      identify: AuthenticatedIdentifierAction,
+                                                      getData: DataRetrievalAction,
+                                                      requireData: DataRequiredAction,
+                                                      val controllerComponents: MessagesControllerComponents,
+                                                      claimAmountService: ClaimAmountService,
+                                                      taiService: TaiService,
+                                                      confirmationCurrentYearOnlyView: ConfirmationCurrentYearOnlyView
+                                                     )(implicit ec: ExecutionContext)
+  extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
@@ -64,11 +63,9 @@ class ConfirmationCurrentYearOnlyController @Inject()(
           taiService.taxCodeRecords(request.nino.get, taxYear).map {
             result =>
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
-
               val freHasIncreased = npsFreAmount < claimAmountAndAnyDeductions
-
               val addressOption: Option[Address] = request.userAnswers.get(CitizenDetailsAddress)
-              sessionRepository.remove(request.identifier)
+
               Ok(confirmationCurrentYearOnlyView(
                 claimAmountsAndRates = claimAmountsAndRates,
                 claimAmount = claimAmountAndAnyDeductions,

@@ -18,21 +18,22 @@ package controllers.authenticated
 
 import config.NavConstant
 import controllers.actions._
-import controllers.routes.{PhoneUsController, SessionExpiredController, TechnicalDifficultiesController}
-import javax.inject.{Inject, Named}
+import controllers.{routes => baseRoutes}
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
-import pages.ClaimAmountAndAnyDeductions
 import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage, Submission, TaxYearSelectionPage}
+import pages.{ClaimAmountAndAnyDeductions, SubmittedClaim}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import repositories.SessionRepository
 import service.SubmissionService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
+import javax.inject.{Inject, Named}
 import scala.concurrent.{ExecutionContext, Future}
 
 class SubmissionController @Inject()(override val messagesApi: MessagesApi,
@@ -42,8 +43,9 @@ class SubmissionController @Inject()(override val messagesApi: MessagesApi,
                                      submissionService: SubmissionService,
                                      auditConnector: AuditConnector,
                                      val controllerComponents: MessagesControllerComponents,
-                                     @Named(NavConstant.authenticated) navigator: Navigator
-                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     @Named(NavConstant.authenticated) navigator: Navigator,
+                                     sessionRepository: SessionRepository
+                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
@@ -58,8 +60,7 @@ class SubmissionController @Inject()(override val messagesApi: MessagesApi,
       ) match {
         case (Some(taxYears), Some(_), Some(removeYear), None) =>
           submissionService.removeFRE(request.nino.get, taxYears, removeYear).map(
-            result =>
-              auditAndRedirect(result, dataToAudit, request.userAnswers)
+            result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier)
           )
         case (Some(taxYearsSelection), Some(claimAmountAndAnyDeductions), None, changeYears) =>
           val taxYears = changeYears match {
@@ -67,28 +68,29 @@ class SubmissionController @Inject()(override val messagesApi: MessagesApi,
             case _ => taxYearsSelection
           }
           submissionService.submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions).map(
-            result => {
-              auditAndRedirect(result, dataToAudit, request.userAnswers)
-            }
+            result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier)
           )
         case _ =>
-          Future.successful(Redirect(SessionExpiredController.onPageLoad))
+          Future.successful(Redirect(baseRoutes.SessionExpiredController.onPageLoad))
       }
   }
 
   private def auditAndRedirect(result: Seq[HttpResponse],
                                auditData: AuditData,
-                               userAnswers: UserAnswers
+                               userAnswers: UserAnswers,
+                               identifier: IdentifierType
                               )(implicit hc: HeaderCarrier): Result = {
 
     if (result.nonEmpty && result.forall(_.status == 204)) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
+      userAnswers.set(SubmittedClaim, true)
+        .map(answers => sessionRepository.set(identifier, answers))
       Redirect(navigator.nextPage(Submission, NormalMode)(userAnswers))
     } else if (result.nonEmpty && result.exists(_.status == 423)) {
-      Redirect(PhoneUsController.onPageLoad())
+      Redirect(baseRoutes.PhoneUsController.onPageLoad())
     } else {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, auditData)
-      Redirect(TechnicalDifficultiesController.onPageLoad)
+      Redirect(baseRoutes.TechnicalDifficultiesController.onPageLoad)
     }
   }
 

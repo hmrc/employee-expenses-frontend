@@ -2,6 +2,7 @@
 ->         /hmrc-frontend                                        hmrcfrontend.Routes
 
 GET         /                                                    controllers.IndexController.onPageLoad(isMergedJourney: Boolean ?= false)
+GET         /start                                               controllers.IndexController.start
 
 GET         /assets/*file                                        controllers.Assets.versioned(path="/public", file: Asset)
 
@@ -330,7 +331,7 @@ GET         /confirmation-claim-stopped                          controllers.con
 GET         /confirmation-current-year                           controllers.confirmation.ConfirmationCurrentYearOnlyController.onPageLoad()
 GET         /confirmation-current-and-previous-year              controllers.confirmation.ConfirmationCurrentAndPreviousYearsController.onPageLoad()
 GET         /confirmation-previous-year                          controllers.confirmation.ConfirmationPreviousYearsOnlyController.onPageLoad()
-GET         /confirmation-merge-journey                          controllers.confirmation.ConfirmationMergeJourneyController.onPageLoad()
+GET         /confirmation                                        controllers.confirmation.ConfirmationMergeJourneyController.onPageLoad()
 
 GET         /shipyard-occupation-list-1                          controllers.shipyard.ShipyardOccupationList1Controller.onPageLoad(mode: Mode = NormalMode)
 POST        /shipyard-occupation-list-1                          controllers.shipyard.ShipyardOccupationList1Controller.onSubmit(mode: Mode = NormalMode)

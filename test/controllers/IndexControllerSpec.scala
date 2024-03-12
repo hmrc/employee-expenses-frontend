@@ -42,76 +42,11 @@ import scala.concurrent.Future
 class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
-  private val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-  "Index Controller" must {
-
-    "redirect to the first page of the application for a GET when user answers is not empty" in {
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
-
-      val controller = application.injector.instanceOf[IndexController]
-
-      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
-
-      val result = controller.onPageLoad()(request)
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
-
-      application.stop()
-    }
-
-    "redirect to the first page of the application and create a user answers for a GET when user answers is empty when unauthed" in {
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
-      val application = applicationBuilder(None)
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .build()
-
-      when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
-        .thenReturn(Future.successful(new~(Some(fakeNino), Some(userAnswersId))))
-
-      val controller = application.injector.instanceOf[IndexController]
-
-      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
-
-      val result = controller.onPageLoad()(request)
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
-
-      application.stop()
-    }
-
-    "redirect to the first page of the application for a GET when user answers is not empty when unauthed" in {
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-
-      val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
-
-      val controller = application.injector.instanceOf[IndexController]
-
-      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
-
-      val result = controller.onPageLoad()(request)
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
-
-      application.stop()
-    }
-
-    "redirect to the first page of the application and create a user answers for a GET when user answers is empty when authed" in {
+  "onPageLoad" must {
+    "redirect to the first page of the application and reset user answers when user answers is not empty when authed" in {
       val argCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
       when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
-
-      val application = applicationBuilder(userAnswers = None)
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .build()
 
       val mockAuthConnector = mock[AuthConnector]
       when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
@@ -120,37 +55,27 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
         frontendAppConfig,
-        application.injector.instanceOf[BodyParsers.Default]
+        app.injector.instanceOf[BodyParsers.Default]
       )
 
       val controller = new IndexController(
-        controllerComponents = application.injector.instanceOf[MessagesControllerComponents],
+        controllerComponents = app.injector.instanceOf[MessagesControllerComponents],
         identify = passingAuthAction,
-        getData = new FakeDataRetrievalAction(None),
+        getData = new FakeDataRetrievalAction(Some(minimumUserAnswers)),
         sessionRepository = mockSessionRepository,
-        appConfig = application.injector.instanceOf[FrontendAppConfig]
+        appConfig = app.injector.instanceOf[FrontendAppConfig]
       )
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
-
       val result = controller.onPageLoad()(request)
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
-
       argCaptor.getValue.data mustBe Json.obj(MergedJourneyFlag.toString -> false)
-
-      application.stop()
     }
-
-    "redirect to the first page of the application and create a user answers for a GET when user answers is empty when authed and on merged journey" in {
+    "redirect to the first page of the application and create a user answers when user answers is empty when authed" in {
       val argCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
       when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
-
-      val application = applicationBuilder(userAnswers = None)
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .build()
 
       val mockAuthConnector = mock[AuthConnector]
       when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
@@ -159,29 +84,158 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
         frontendAppConfig,
-        application.injector.instanceOf[BodyParsers.Default]
+        app.injector.instanceOf[BodyParsers.Default]
       )
 
       val controller = new IndexController(
-        controllerComponents = application.injector.instanceOf[MessagesControllerComponents],
+        controllerComponents = app.injector.instanceOf[MessagesControllerComponents],
         identify = passingAuthAction,
         getData = new FakeDataRetrievalAction(None),
         sessionRepository = mockSessionRepository,
-        appConfig = application.injector.instanceOf[FrontendAppConfig]
+        appConfig = app.injector.instanceOf[FrontendAppConfig]
       )
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
+      val result = controller.onPageLoad()(request)
 
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+      argCaptor.getValue.data mustBe Json.obj(MergedJourneyFlag.toString -> false)
+    }
+    "redirect to the first page of the application and reset user answers when user answers is not empty when unauthed" in {
+      val argCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+
+      val controller = new IndexController(
+        controllerComponents = app.injector.instanceOf[MessagesControllerComponents],
+        identify = app.injector.instanceOf[UnauthenticatedIdentifierActionImpl],
+        getData = new FakeDataRetrievalAction(Some(minimumUserAnswers)),
+        sessionRepository = mockSessionRepository,
+        appConfig = app.injector.instanceOf[FrontendAppConfig]
+      )
+
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
+      val result = controller.onPageLoad()(request)
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+      argCaptor.getValue.data mustBe Json.obj()
+    }
+    "redirect to the first page of the application and create a user answers when user answers is empty when unauthed" in {
+      val argCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+
+      val controller = new IndexController(
+        controllerComponents = app.injector.instanceOf[MessagesControllerComponents],
+        identify = app.injector.instanceOf[UnauthenticatedIdentifierActionImpl],
+        getData = new FakeDataRetrievalAction(None),
+        sessionRepository = mockSessionRepository,
+        appConfig = app.injector.instanceOf[FrontendAppConfig]
+      )
+
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
+      val result = controller.onPageLoad()(request)
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+      argCaptor.getValue.data mustBe Json.obj()
+    }
+    "redirect to the first page of the application and create a user answers when user answers is empty when authed and on merged journey" in {
+      val argCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+
+      val mockAuthConnector = mock[AuthConnector]
+      when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
+        .thenReturn(Future.successful(new~(Some(fakeNino), Some(userAnswersId))))
+
+      val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
+        mockAuthConnector,
+        frontendAppConfig,
+        app.injector.instanceOf[BodyParsers.Default]
+      )
+
+      val controller = new IndexController(
+        controllerComponents = app.injector.instanceOf[MessagesControllerComponents],
+        identify = passingAuthAction,
+        getData = new FakeDataRetrievalAction(None),
+        sessionRepository = mockSessionRepository,
+        appConfig = app.injector.instanceOf[FrontendAppConfig]
+      )
+
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
       val result = controller.onPageLoad(isMergedJourney = true)(request)
 
       status(result) mustEqual SEE_OTHER
-
       redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
-
       argCaptor.getValue.data mustBe Json.obj(MergedJourneyFlag.toString -> true)
-
-      application.stop()
     }
+  }
 
+  "start" must {
+    "redirect to index with merged journey flag when authed and on merged journey" in {
+      val mockAuthConnector = mock[AuthConnector]
+      when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
+        .thenReturn(Future.successful(new~(Some(fakeNino), Some(userAnswersId))))
+
+      val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
+        mockAuthConnector,
+        frontendAppConfig,
+        app.injector.instanceOf[BodyParsers.Default]
+      )
+
+      val controller = new IndexController(
+        controllerComponents = app.injector.instanceOf[MessagesControllerComponents],
+        identify = passingAuthAction,
+        getData = new FakeDataRetrievalAction(Some(minimumUserAnswers.set(MergedJourneyFlag, true).get)),
+        sessionRepository = mockSessionRepository,
+        appConfig = app.injector.instanceOf[FrontendAppConfig]
+      )
+
+      val request = FakeRequest(method = "GET", path = routes.IndexController.start.url)
+      val result = controller.start(request)
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result) must contain(routes.IndexController.onPageLoad(true).url)
+    }
+    "redirect to index if user is authed without user answers" in {
+      val mockAuthConnector = mock[AuthConnector]
+      when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
+        .thenReturn(Future.successful(new~(Some(fakeNino), Some(userAnswersId))))
+
+      val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
+        mockAuthConnector,
+        frontendAppConfig,
+        app.injector.instanceOf[BodyParsers.Default]
+      )
+
+      val controller = new IndexController(
+        controllerComponents = app.injector.instanceOf[MessagesControllerComponents],
+        identify = passingAuthAction,
+        getData = new FakeDataRetrievalAction(None),
+        sessionRepository = mockSessionRepository,
+        appConfig = app.injector.instanceOf[FrontendAppConfig]
+      )
+
+      val request = FakeRequest(method = "GET", path = routes.IndexController.start.url)
+      val result = controller.start(request)
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result) must contain(routes.IndexController.onPageLoad().url)
+    }
+    "redirect to index if user is unauthed" in {
+      val controller = new IndexController(
+        controllerComponents = app.injector.instanceOf[MessagesControllerComponents],
+        identify = app.injector.instanceOf[UnauthenticatedIdentifierActionImpl],
+        getData = new FakeDataRetrievalAction(None),
+        sessionRepository = mockSessionRepository,
+        appConfig = app.injector.instanceOf[FrontendAppConfig]
+      )
+
+      val request = FakeRequest(method = "GET", path = routes.IndexController.start.url).withSession(SessionKeys.sessionId -> "key")
+      val result = controller.start(request)
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result) must contain(routes.IndexController.onPageLoad().url)
+    }
   }
 }

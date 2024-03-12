@@ -33,17 +33,16 @@ import views.html.confirmation.ConfirmationPreviousYearsOnlyView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmationPreviousYearsOnlyController @Inject()(
-                                                         override val messagesApi: MessagesApi,
-                                                         identify: AuthenticatedIdentifierAction,
-                                                         getData: DataRetrievalAction,
-                                                         requireData: DataRequiredAction,
-                                                         val controllerComponents: MessagesControllerComponents,
-                                                         claimAmountService: ClaimAmountService,
-                                                         taiService: TaiService,
-                                                         sessionRepository: SessionRepository,
-                                                         confirmationPreviousYearsOnlyView: ConfirmationPreviousYearsOnlyView
-                                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class ConfirmationPreviousYearsOnlyController @Inject()(override val messagesApi: MessagesApi,
+                                                        identify: AuthenticatedIdentifierAction,
+                                                        getData: DataRetrievalAction,
+                                                        requireData: DataRequiredAction,
+                                                        val controllerComponents: MessagesControllerComponents,
+                                                        claimAmountService: ClaimAmountService,
+                                                        taiService: TaiService,
+                                                        confirmationPreviousYearsOnlyView: ConfirmationPreviousYearsOnlyView
+                                                       )(implicit ec: ExecutionContext)
+  extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
@@ -59,7 +58,7 @@ class ConfirmationPreviousYearsOnlyController @Inject()(
               val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
               val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
               val addressOption: Option[Address] = request.userAnswers.get(CitizenDetailsAddress)
-              sessionRepository.remove(request.identifier)
+
               Ok(confirmationPreviousYearsOnlyView(claimAmountsAndRates, claimAmountAndAnyDeductions, addressOption, currentYearMinus1, freResponse))
           }.recoverWith {
             case e =>

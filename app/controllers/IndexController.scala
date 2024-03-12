@@ -37,21 +37,30 @@ class IndexController @Inject()(val controllerComponents: MessagesControllerComp
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(isMergedJourney: Boolean = false): Action[AnyContent] = (identify andThen getData).async { implicit request =>
-    if (request.userAnswers.isEmpty || request.userAnswers.exists(_.isMergedJourney != isMergedJourney)) {
-      request.identifier match {
-        case id: Authed =>
-          sessionRepository
-            .set(request.identifier, UserAnswers(Json.obj(
-              MergedJourneyFlag.toString -> (isMergedJourney && appConfig.mergedJourneyEnabled)
-            )))
-            .map(_ => Redirect(routes.MultipleEmploymentsController.onPageLoad(NormalMode)))
-        case id: UnAuthed =>
-          sessionRepository
-            .set(request.identifier, UserAnswers())
-            .map(_ => Redirect(routes.MultipleEmploymentsController.onPageLoad(NormalMode)))
-      }
-    } else {
-      Future.successful(Redirect(routes.MultipleEmploymentsController.onPageLoad(NormalMode)))
+    request.identifier match {
+      case id: Authed =>
+        sessionRepository
+          .set(request.identifier, UserAnswers(Json.obj(
+            MergedJourneyFlag.toString -> (isMergedJourney && appConfig.mergedJourneyEnabled)
+          )))
+          .map(_ => Redirect(firstPageInJourney))
+      case id: UnAuthed =>
+        sessionRepository
+          .set(request.identifier, UserAnswers())
+          .map(_ => Redirect(firstPageInJourney))
     }
   }
+
+  //This is a simple redirect that can be used when we want to send the user to the start
+  //without having to check if they're on a merged journey manually
+  def start: Action[AnyContent] = (identify andThen getData).async { implicit request =>
+    (request.identifier, request.userAnswers) match {
+      case (id: Authed, Some(answers)) if answers.isMergedJourney =>
+        Future.successful(Redirect(routes.IndexController.onPageLoad(true)))
+      case _ =>
+        Future.successful(Redirect(routes.IndexController.onPageLoad()))
+    }
+  }
+
+  private lazy val firstPageInJourney = routes.MultipleEmploymentsController.onPageLoad(NormalMode)
 }
