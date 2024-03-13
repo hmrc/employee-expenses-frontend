@@ -31,7 +31,7 @@ class SessionExpiredViewSpec extends ViewBehaviours {
 
     behave like normalPage(applyView, "session_expired", "guidance")
 
-    behave like pageWithButtonLink(applyView, frontendAppConfig.employeeExpensesFrontendUrl, "site.continue")
+    behave like pageWithButtonLink(applyView, controllers.routes.IndexController.start.url, "site.continue")
   }
 
   application.stop()

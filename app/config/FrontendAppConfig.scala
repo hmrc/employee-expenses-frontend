@@ -83,14 +83,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
 
   lazy val flatRateExpenseId: Int = configuration.get[Int]("flatRateExpenseId")
 
-  def languageMap: Map[String, Lang] = Map(
-    "english" -> Lang("en"),
-    "cymraeg" -> Lang("cy")
-  )
-
-  def routeToSwitchLanguage: String => Call =
-    (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
-
   lazy val scaWrapperEnabled: Boolean = configuration.getOptional[Boolean]("feature-switch.sca-wrapper").getOrElse(false)
   lazy val mergedJourneyEnabled: Boolean = configuration.getOptional[Boolean]("feature-switch.merged-journey").getOrElse(false)
 

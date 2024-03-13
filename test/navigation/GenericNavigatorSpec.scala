@@ -44,7 +44,7 @@ class GenericNavigatorSpec extends SpecBase {
 
         case object UnknownPage extends Page
         navigator.nextPage(UnknownPage, NormalMode)(UserAnswers()) mustBe
-          IndexController.onPageLoad()
+          IndexController.start
       }
 
       // Claim Amount
