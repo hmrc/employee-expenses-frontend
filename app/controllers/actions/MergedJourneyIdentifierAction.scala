@@ -33,7 +33,7 @@ class MergedJourneyIdentifierActionImpl @Inject()(override val authConnector: Au
   extends AuthenticatedIdentifierActionImpl(authConnector, config, parser) with MergedJourneyIdentifierAction {
 
   override def unauthorised(sessionId: Option[String], request: Request[_]): Result = {
-    Redirect(config.loginUrl, Map("continue" -> Seq(URLEncoder.encode(request.uri, "UTF-8"))))
+    Redirect(config.loginUrl, Map("continue" -> Seq(request.uri)))
   }
 
   override def insufficientConfidence(queryString: String, request: Request[_]): Result = {
