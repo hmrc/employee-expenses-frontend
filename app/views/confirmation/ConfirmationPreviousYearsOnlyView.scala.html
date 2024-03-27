@@ -47,7 +47,5 @@
 
     <p class="govuk-body">@messages("confirmation.confirmationLetter")</p>
 
-    @playComponents.claim_amount_rates_list(claimAmountsAndRates, claimAmount, Some("confirmationPreviousYears"))
-
     @playComponents.confirmation_footer(address, None, frontendAppConfig.updateAddressInfoUrl, frontendAppConfig.updateEmployerInfoUrl)
 }
