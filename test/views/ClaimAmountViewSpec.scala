@@ -54,10 +54,15 @@ class ClaimAmountViewSpec extends ViewBehaviours {
       basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
       intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
       higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
+      advancedRate = frontendAppConfig.taxPercentageScotlandAdvancedRate,
+      topRate = frontendAppConfig.taxPercentageScotlandTopRate,
       calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount - deduction.getOrElse(0)),
       calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount - deduction.getOrElse(0)),
       calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount - deduction.getOrElse(0)),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount - deduction.getOrElse(0))
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount - deduction.getOrElse(0)),
+      calculatedAdvancedRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandAdvancedRate, claimAmount - deduction.getOrElse(0)),
+      calculatedTopRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandTopRate, claimAmount - deduction.getOrElse(0))
+
     )
 
     val applyView = view.apply(

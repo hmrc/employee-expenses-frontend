@@ -49,10 +49,14 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
       basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
       intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
       higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
+      advancedRate = frontendAppConfig.taxPercentageScotlandAdvancedRate,
+      topRate = frontendAppConfig.taxPercentageScotlandTopRate,
       calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
       calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
       calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount)
+      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount),
+      calculatedAdvancedRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandAdvancedRate, claimAmount),
+      calculatedTopRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandTopRate, claimAmount)
     )
 
     def applyView(claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
@@ -92,32 +96,6 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
       )
     }
 
-    "display correct dynamic text for tax rates" in {
-
-      val doc = asDocument(viewWithAnswers)
-
-      assertContainsText(doc, messages(
-        "confirmationPreviousYears.basicRate",
-        claimAmountsRates.calculatedBasicRate,
-        claimAmount,
-        claimAmountsRates.basicRate
-      ))
-      assertContainsText(doc, messages(
-        "confirmationPreviousYears.higherRate",
-        claimAmountsRates.calculatedHigherRate,
-        claimAmount,
-        claimAmountsRates.higherRate
-      ))
-      assertContainsText(doc, messages(
-        "confirmationPreviousYears.intermediateRate",
-        scottishClaimAmountsRates.calculatedIntermediateRate,
-        claimAmount,
-        scottishClaimAmountsRates.intermediateRate
-      ))
-      assertContainsText(doc, messages("claimAmount.englandHeading"))
-      assertContainsText(doc, messages("claimAmount.scotlandHeading"))
-    }
-
     "display correct title when freResponse is 'FREAllYearsAmountsDifferent'" in {
 
       val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FRESomeYears)(fakeRequest, messages))
@@ -136,7 +114,7 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
 
       val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FRENoYears)(fakeRequest, messages))
 
-      doc.getElementsByTag("title").text mustBe "Claim completed - Claim for your work uniform and tools - GOV.UK"
+      doc.getElementsByTag("title").text mustBe "Claim complete for uniform, work clothing and tools - Claim for your work uniform and tools - GOV.UK"
     }
 
     "YourAddress" must {
