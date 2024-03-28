@@ -80,6 +80,8 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
   lazy val taxPercentageScotlandBasicRate: Int = configuration.get[Int]("scottish-tax-percentage.basicRate")
   lazy val taxPercentageScotlandIntermediateRate: Int = configuration.get[Int]("scottish-tax-percentage.intermediateRate")
   lazy val taxPercentageScotlandHigherRate: Int = configuration.get[Int]("scottish-tax-percentage.higherRate")
+  lazy val taxPercentageScotlandAdvancedRate: Int = configuration.get[Int]("scottish-tax-percentage.advancedRate")
+  lazy val taxPercentageScotlandTopRate: Int = configuration.get[Int]("scottish-tax-percentage.topRate")
 
   lazy val flatRateExpenseId: Int = configuration.get[Int]("flatRateExpenseId")
 
