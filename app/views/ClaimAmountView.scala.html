@@ -16,7 +16,9 @@
 
 @this(
         layout: views.LayoutProvider,
-        heading: playComponents.heading
+        heading: playComponents.heading,
+        govukInsetText : GovukInsetText,
+        list: playComponents.list
 )
 
 @(
@@ -27,24 +29,41 @@
         onwardRoute: String
 )(implicit request: Request[_], messages: Messages)
 
+    @bulletList(items: Seq[String]) = {
+        <ul class="govuk-list govuk-list--bullet govuk-list--spaced">
+            @for(item <- items) {
+                <li>@item</li>
+            }
+        </ul>
+    }
+
     @layout(
         pageTitle = messages("claimAmount.title", amount)
     ) {
 
         @heading(messages("claimAmount.heading"))
 
-        <p class="govuk-body govuk-!-font-size-24">@messages("claimAmount.increasePA", amount)</p>
+        @govukInsetText(InsetText(
+            content = Text(messages("claimAmount.increasePA", amount))
+        ))
 
-        <h2 class="govuk-heading-s">@messages("claimAmount.englandHeading")</h2>
+        <h2 class="govuk-heading-l">@messages("claimAmount.englandHeading")</h2>
 
-        <p class="govuk-body">@messages("claimAmount.basicRate", standardRate.basicRate, amount, standardRate.calculatedBasicRate)</p>
-        <p class="govuk-body">@messages("claimAmount.higherRate", standardRate.higherRate, amount, standardRate.calculatedHigherRate)</p>
+        @bulletList(Seq(
+            messages("claimAmount.basicRate", standardRate.basicRate, amount, standardRate.calculatedBasicRate),
+            messages("claimAmount.higherRate", standardRate.higherRate, amount, standardRate.calculatedHigherRate)
+        ))
 
-        <h2 class="govuk-heading-s">@messages("claimAmount.scotlandHeading")</h2>
+        <h2 class="govuk-heading-l">@messages("claimAmount.scotlandHeading")</h2>
 
-        <p class="govuk-body">@messages("claimAmount.starterRate", scottishRate.starterRate, amount, scottishRate.calculatedStarterRate)</p>
-        <p class="govuk-body">@messages("claimAmount.basicRate", scottishRate.basicRate, amount, scottishRate.calculatedBasicRate)</p>
-        <p class="govuk-body">@messages("claimAmount.higherRate", scottishRate.higherRate, amount, scottishRate.calculatedHigherRate)</p>
+        @bulletList(Seq(
+            messages("claimAmount.starterRate", scottishRate.starterRate, amount, scottishRate.calculatedStarterRate),
+            messages("claimAmount.basicRate", scottishRate.basicRate, amount, scottishRate.calculatedBasicRate),
+            messages("claimAmount.intermediateRate", scottishRate.intermediateRate, amount, scottishRate.calculatedIntermediateRate),
+            messages("claimAmount.higherRate", scottishRate.higherRate, amount, scottishRate.calculatedHigherRate),
+            messages("claimAmount.advancedRate", scottishRate.advancedRate, amount, scottishRate.calculatedAdvancedRate),
+            messages("claimAmount.topRate", scottishRate.topRate, amount, scottishRate.calculatedTopRate)
+        ))
 
         <h2 class="govuk-heading-l">@messages("claimAmount.howThisIsCalculated")</h2>
 

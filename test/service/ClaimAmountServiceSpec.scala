@@ -124,10 +124,14 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
             basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
             intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
             higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
+            advancedRate = frontendAppConfig.taxPercentageScotlandAdvancedRate,
+            topRate = frontendAppConfig.taxPercentageScotlandTopRate,
             calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
             calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
             calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
-            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount)
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount),
+            calculatedAdvancedRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandAdvancedRate, claimAmount),
+            calculatedTopRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandTopRate, claimAmount)
           )
         )
       }
@@ -142,10 +146,14 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
             basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
             intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
             higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
+            advancedRate = frontendAppConfig.taxPercentageScotlandAdvancedRate,
+            topRate = frontendAppConfig.taxPercentageScotlandTopRate,
             calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
             calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
             calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
-            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount)
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount),
+            calculatedAdvancedRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandAdvancedRate, claimAmount),
+            calculatedTopRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandTopRate, claimAmount)
           )
         )
       }
@@ -179,10 +187,14 @@ class ClaimAmountServiceSpec extends SpecBase with MockitoSugar with ScalaFuture
             basicRate = frontendAppConfig.taxPercentageScotlandBasicRate,
             intermediateRate = frontendAppConfig.taxPercentageScotlandIntermediateRate,
             higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
+            advancedRate = frontendAppConfig.taxPercentageScotlandAdvancedRate,
+            topRate = frontendAppConfig.taxPercentageScotlandTopRate,
             calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
             calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
             calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
-            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount)
+            calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount),
+            calculatedAdvancedRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandAdvancedRate, claimAmount),
+            calculatedTopRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandTopRate, claimAmount)
           )
         )
       }
