@@ -26,16 +26,19 @@
       @if(claimAmountsAndRates.length > 1) {
         <h3 class="govuk-heading-m">@messages(s"${keyPrefix.get}.englandHeading")</h3>
       }
-      <p class="govuk-body">@messages(s"${keyPrefix.get}.basicRate", standardRate.calculatedBasicRate, claimAmount, standardRate.basicRate)</p>
-      <p class="govuk-body">@messages(s"${keyPrefix.get}.higherRate", standardRate.calculatedHigherRate, claimAmount, standardRate.higherRate)</p>
+      <p class="govuk-body">@messages(s"${keyPrefix.get}.basicRate", standardRate.basicRate, claimAmount, standardRate.calculatedBasicRate)</p>
+      <p class="govuk-body">@messages(s"${keyPrefix.get}.higherRate",standardRate.higherRate, claimAmount, standardRate.calculatedHigherRate)</p>
     }
     case scottishRate: ScottishRate => {
       @if(claimAmountsAndRates.length > 1) {
         <h3 class="govuk-heading-m">@messages(s"${keyPrefix.get}.scotlandHeading")</h3>
       }
-      <p class="govuk-body">@messages(s"${keyPrefix.get}.starterRate", scottishRate.calculatedStarterRate, claimAmount, scottishRate.starterRate)</p>
-      <p class="govuk-body">@messages(s"${keyPrefix.get}.basicRate", scottishRate.calculatedBasicRate, claimAmount, scottishRate.basicRate)</p>
-      <p class="govuk-body">@messages(s"${keyPrefix.get}.intermediateRate", scottishRate.calculatedIntermediateRate, claimAmount, scottishRate.intermediateRate)</p>
+        <p class="govuk-body">@messages(s"${keyPrefix.get}.starterRate", scottishRate.starterRate, claimAmount, scottishRate.calculatedStarterRate)</p>
+        <p class="govuk-body">@messages(s"${keyPrefix.get}.basicRate", scottishRate.basicRate, claimAmount, scottishRate.calculatedBasicRate)</p>
+        <p class="govuk-body">@messages(s"${keyPrefix.get}.intermediateRate", scottishRate.intermediateRate, claimAmount, scottishRate.calculatedIntermediateRate)</p>
+        <p class="govuk-body">@messages(s"${keyPrefix.get}.higherRate", scottishRate.higherRate, claimAmount, scottishRate.calculatedHigherRate)</p>
+        <p class="govuk-body">@messages(s"${keyPrefix.get}.advancedRate", scottishRate.advancedRate, claimAmount, scottishRate.calculatedAdvancedRate)</p>
+        <p class="govuk-body">@messages(s"${keyPrefix.get}.topRate", scottishRate.topRate, claimAmount, scottishRate.calculatedTopRate)</p>
     }
   }
 }
