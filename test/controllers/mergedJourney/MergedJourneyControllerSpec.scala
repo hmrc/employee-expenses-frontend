@@ -298,7 +298,7 @@ class MergedJourneyControllerSpec extends SpecBase with MockitoSugar with ScalaF
       application.stop()
     }
 
-    "redirect to Technical Difficulties when updateTimeToLive fails" in {
+    "return 404 when updateTimeToLive can't find user answers" in {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -309,9 +309,7 @@ class MergedJourneyControllerSpec extends SpecBase with MockitoSugar with ScalaF
 
       val result = route(application, request).value
 
-      status(result) mustBe SEE_OTHER
-
-      redirectLocation(result).value mustBe controllers.routes.TechnicalDifficultiesController.onPageLoad.url
+      status(result) mustBe NOT_FOUND
 
       application.stop()
     }

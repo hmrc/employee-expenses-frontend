@@ -42,7 +42,7 @@ class MergedJourneySessionRepository @Inject()(config: Configuration,
         ascending("lastUpdated"),
         IndexOptions()
           .name("TTL")
-          .expireAfter(config.get[Int]("mongodb.timeToLiveInSeconds"), SECONDS)
+          .expireAfter(config.get[Int]("mongodb.mergedJourneyTimeToLiveInSeconds"), SECONDS)
       ),
       IndexModel(
         keys = ascending("internalId"),
@@ -50,7 +50,8 @@ class MergedJourneySessionRepository @Inject()(config: Configuration,
           .name("intId")
           .unique(true)
       )
-    )
+    ),
+    replaceIndexes = true
   ) {
 
   def get(id: String): Future[Option[MergedJourney]] =
