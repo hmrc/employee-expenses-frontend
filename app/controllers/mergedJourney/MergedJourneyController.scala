@@ -103,9 +103,9 @@ class MergedJourneyController @Inject()(identify: MergedJourneyIdentifierAction,
     request.identifier match {
       case id: Authed => sessionRepository.updateMergedJourneyTimeToLive(id).map {
         case true => Ok("OK")
-        case _ => Redirect(routes.TechnicalDifficultiesController.onPageLoad)
+        case _ => NotFound
       }
-      case _ => Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
+      case _ => Future.successful(InternalServerError)
     }
   }
 }

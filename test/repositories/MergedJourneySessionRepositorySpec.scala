@@ -39,7 +39,7 @@ class MergedJourneySessionRepositorySpec extends SpecBase
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = 30.seconds, interval = 100.millis)
 
   lazy val repository: MergedJourneySessionRepository = new MergedJourneySessionRepository(
-    config = Configuration.from(Map("mongodb.timeToLiveInSeconds" -> 60)),
+    config = Configuration.from(Map("mongodb.mergedJourneyTimeToLiveInSeconds" -> 60)),
     mongo = mongoComponent
   )
 
