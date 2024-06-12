@@ -9,6 +9,8 @@ specifically that of their 56 IABD code relating to uniform and tool expenses.
 
 Half of this service is unauthenticated, asking a number of eligibility questions to ensure a user is able to claim before passing them through to GG for sign in and completion.
 
+The service also hosts the routes, pages and a session repo that link PSUBS, WFH and FRE claim journeys into one merged journey.
+
 This service does not have it's own backend for updating NPS, instead it uses TAI for this integration.
 
 ### Dependencies
