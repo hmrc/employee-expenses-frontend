@@ -284,6 +284,7 @@ garageHandOrCleaner.title=A ydych yn weithiwr mewn modurdy neu''n lanhäwr?
 garageHandOrCleaner.heading=A ydych yn weithiwr mewn modurdy neu''n lanhäwr?
 garageHandOrCleaner.checkYourAnswersLabel=gweithiwrMewnModurdyNeuGlanhawr
 garageHandOrCleaner.error.required=Dewiswch ''Iawn'' os ydych yn weithiwr mewn modurdy neu''n lanhäwr
+factoryEngineeringList2.title=Swyddi peirianwyr ffatri neu weithdy (tudalen 2 o 2)
 factoryEngineeringList2.heading=Swyddi peirianwyr ffatri neu weithdy (tudalen 2 o 2)
 factoryEngineeringList2.checkYourAnswersLabel=Swyddi peirianwyr ffatri neu weithdy (tudalen 2 o 2)
 factoryEngineeringList2.error.required=Dewiswch ''Iawn'' os yw''ch swydd wedi''i rhestru
