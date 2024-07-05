@@ -22,7 +22,6 @@ import play.api.i18n.Messages
 import play.api.mvc.Request
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.ServiceURLs
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.sca.services.WrapperService
 import views.html.playComponents.{AdditionalScript, HeadBlock}
 
@@ -83,6 +82,7 @@ class NewLayoutProvider @Inject()(wrapperService: WrapperService,
       pageTitle = Some(s"$pageTitle - ${messages(serviceNameKeyOverride.getOrElse("service.name"))} - GOV.UK"),
       serviceNameKey = Some(serviceNameKeyOverride.getOrElse("service.name")),
       serviceURLs = ServiceURLs(
+        signOutUrl = Some(controllers.authenticated.routes.SignOutController.signOut.url),
         serviceUrl = Some(serviceUrlOverride.getOrElse(controllers.routes.IndexController.start.url))
       ),
       timeOutUrl = Some(controllers.authenticated.routes.SignOutController.signOut.url),
@@ -92,6 +92,6 @@ class NewLayoutProvider @Inject()(wrapperService: WrapperService,
       styleSheets = stylesheets.toSeq :+ headBlock(),
       fullWidth = false,
       hideMenuBar = hideAccountMenu,
-    )(messages, HeaderCarrierConverter.fromRequest(request), request)
+    )(messages, request)
   }
 }

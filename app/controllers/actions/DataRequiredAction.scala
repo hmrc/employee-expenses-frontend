@@ -16,18 +16,17 @@
 
 package controllers.actions
 
-import controllers.routes
 import controllers.confirmation.{routes => confRoutes}
+import controllers.routes
 import models.NormalMode
-
-import javax.inject.Inject
 import models.requests.{DataRequest, OptionalDataRequest}
-import navigation.{AuthenticatedNavigator, Navigator}
+import navigation.AuthenticatedNavigator
 import pages.SubmittedClaim
 import pages.authenticated.Submission
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DataRequiredActionImpl @Inject()(navigator: AuthenticatedNavigator)

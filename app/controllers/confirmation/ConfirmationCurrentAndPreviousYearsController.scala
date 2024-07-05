@@ -17,9 +17,7 @@
 package controllers.confirmation
 
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
-import controllers.routes.{SessionExpiredController, _}
-
-import javax.inject.Inject
+import controllers.routes._
 import models.TaxYearSelection.CurrentYear
 import models.{Address, FlatRateExpenseAmounts, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
@@ -27,11 +25,11 @@ import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREAmounts, FR
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import service.{ClaimAmountService, TaiService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.confirmation.ConfirmationCurrentAndPreviousYearsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmationCurrentAndPreviousYearsController @Inject()(override val messagesApi: MessagesApi,

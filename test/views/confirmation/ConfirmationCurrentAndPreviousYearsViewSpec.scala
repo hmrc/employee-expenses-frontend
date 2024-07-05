@@ -142,21 +142,21 @@ class ConfirmationCurrentAndPreviousYearsViewSpec extends ViewBehaviours {
 
       val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FRESomeYears)(fakeRequest, messages))
 
-      doc.getElementsByTag("title").text mustBe "Claim changed - Claim for your work uniform and tools - GOV.UK"
+      doc.title mustBe "Claim changed - Claim for your work uniform and tools - GOV.UK"
     }
 
     "display correct title when freResponse is 'FREAllYearsAllAmountsSameAsClaimAmount'" in {
 
       val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount)(fakeRequest, messages))
 
-      doc.getElementsByTag("title").text mustBe "Claim changed - Claim for your work uniform and tools - GOV.UK"
+      doc.title mustBe "Claim changed - Claim for your work uniform and tools - GOV.UK"
     }
 
     "display correct title when freResponse is 'FRENoYears'" in {
 
       val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FRENoYears)(fakeRequest, messages))
 
-      doc.getElementsByTag("title").text mustBe "Claim complete for uniform, work clothing and tools - Claim for your work uniform and tools - GOV.UK"
+      doc.title mustBe "Claim complete for uniform, work clothing and tools - Claim for your work uniform and tools - GOV.UK"
     }
 
     "YourAddress" must {
