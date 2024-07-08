@@ -21,16 +21,15 @@ import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, D
 import controllers.routes.SessionExpiredController
 import models.NormalMode
 import navigation.Navigator
-import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import pages.confirmation.ConfirmationMergeJourneyPage
+import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.confirmation.ConfirmationMergeJourneyView
 
 import javax.inject.{Inject, Named}
-import scala.concurrent.Future
 
 class ConfirmationMergeJourneyController @Inject()(
                                           override val messagesApi: MessagesApi,
