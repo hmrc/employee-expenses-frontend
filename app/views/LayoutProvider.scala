@@ -82,7 +82,7 @@ class NewLayoutProvider @Inject()(wrapperService: WrapperService,
       pageTitle = Some(s"$pageTitle - ${messages(serviceNameKeyOverride.getOrElse("service.name"))} - GOV.UK"),
       serviceNameKey = Some(serviceNameKeyOverride.getOrElse("service.name")),
       serviceURLs = ServiceURLs(
-        signOutUrl = Some(controllers.authenticated.routes.SignOutController.signOut.url),
+        signOutUrl = if(!hideAccountMenu) Some(controllers.authenticated.routes.SignOutController.signOut.url) else None,
         serviceUrl = Some(serviceUrlOverride.getOrElse(controllers.routes.IndexController.start.url))
       ),
       timeOutUrl = Some(controllers.authenticated.routes.SignOutController.signOut.url),
