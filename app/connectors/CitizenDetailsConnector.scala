@@ -18,26 +18,37 @@ package connectors
 
 import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import utils.HttpResponseHelper
 
 import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CitizenDetailsConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClient) extends CitizenDetailsConnector with HttpResponseHelper {
+class CitizenDetailsConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClientV2) extends CitizenDetailsConnector with HttpResponseHelper {
   override def getEtag(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
     val etagUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/etag"
 
-    httpClient.GET(etagUrl)
+    httpClient
+      .get(url"$etagUrl")
+      .execute[HttpResponse]
+      .flatMap {
+        response => Future.successful(response)
+      }
   }
 
   override def getAddress(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
     val designatoryDetailsUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/designatory-details"
 
-    httpClient.GET(designatoryDetailsUrl)
+    httpClient
+      .get(url"$designatoryDetailsUrl")
+      .execute[HttpResponse]
+      .flatMap {
+        response => Future.successful(response)
+      }
   }
 }
 
