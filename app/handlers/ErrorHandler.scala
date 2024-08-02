@@ -16,44 +16,42 @@
 
 package handlers
 
-import javax.inject.{Inject, Singleton}
 import play.api.Logging
+import play.api.http.Status.FORBIDDEN
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results.Forbidden
-import play.api.http.Status.FORBIDDEN
-import play.api.mvc.{Request, RequestHeader, Result}
+import play.api.mvc.{RequestHeader, Result}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.ErrorTemplate
 
-import scala.concurrent.Future
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ErrorHandler @Inject()(
                               val messagesApi: MessagesApi,
                               view: ErrorTemplate
-                            ) extends FrontendErrorHandler with I18nSupport with Logging {
+                            )(implicit val ec: ExecutionContext) extends FrontendErrorHandler with I18nSupport with Logging {
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
-    view(pageTitle, heading, message)
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader): Future[Html] =
+    Future.successful(view(pageTitle, heading, message))
 
   override def onClientError(request: RequestHeader, statusCode: Int, message: String): Future[Result] = {
 
     if (statusCode == FORBIDDEN) {
 
-      implicit val rhToRequest: Request[String] = Request(request, "")
+      implicit val implicitRequest: RequestHeader = request
 
       logger.info(s"Forbidden request with message: $message")
 
-      Future.successful(
-        Forbidden(standardErrorTemplate(
-          "technicalDifficulties.pageTitle",
-          "technicalDifficulties.heading",
-          "technicalDifficulties.message"))
-      )
-    } else {
+      standardErrorTemplate(
+        "technicalDifficulties.pageTitle",
+        "technicalDifficulties.heading",
+        "technicalDifficulties.message").map(Forbidden(_))
+    }
+    else {
       super.onClientError(request, statusCode, message)
     }
   }
-
 }

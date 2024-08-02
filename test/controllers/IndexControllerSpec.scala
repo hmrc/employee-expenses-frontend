@@ -26,7 +26,6 @@ import org.mockito.Mockito._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.mergedJourney.MergedJourneyFlag
-import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.{BodyParsers, MessagesControllerComponents}
 import play.api.test.FakeRequest

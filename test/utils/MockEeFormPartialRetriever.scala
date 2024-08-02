@@ -20,16 +20,16 @@ import com.google.inject.Inject
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.RequestHeader
 import play.twirl.api.Html
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.play.partials.{FormPartialRetrieverImpl, HeaderCarrierForPartialsConverter}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
-class MockEeFormPartialRetriever @Inject()(httpGet: HttpClient, headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter)
+class MockEeFormPartialRetriever @Inject()(httpGet: HttpClientV2, headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter)
   extends FormPartialRetrieverImpl(httpGet, headerCarrierForPartialsConverter) with MockitoSugar {
 
-  override def getPartialContent(url: String, templateParameters: Map[String, String], errorMessage: Html)
-                                (implicit ec: ExecutionContext,  request: RequestHeader): Html = {
-    Html("")
+  override def getPartialContentAsync(url: String, templateParameters: Map[String, String], errorMessage: Html)
+                                (implicit ec: ExecutionContext,  request: RequestHeader): Future[Html] = {
+    Future.successful(Html(""))
   }
 }

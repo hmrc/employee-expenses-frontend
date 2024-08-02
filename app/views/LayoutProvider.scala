@@ -19,7 +19,7 @@ package views
 import config.FrontendAppConfig
 import play.api.Logging
 import play.api.i18n.Messages
-import play.api.mvc.Request
+import play.api.mvc.RequestHeader
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.ServiceURLs
 import uk.gov.hmrc.sca.services.WrapperService
@@ -39,7 +39,7 @@ trait LayoutProvider {
             serviceNameKeyOverride: Option[String] = None,
             serviceUrlOverride: Option[String] = None
            )(contentBlock: Html)(
-             implicit request: Request[_],
+             implicit request: RequestHeader,
              messages: Messages
            ): HtmlFormat.Appendable
 }
@@ -51,7 +51,7 @@ class OldLayoutProvider @Inject()(layout: views.html.Layout) extends LayoutProvi
                      scripts: Option[Html], stylesheets: Option[Html],
                      serviceNameKeyOverride: Option[String] = None,
                      serviceUrlOverride: Option[String] = None)(contentBlock: Html)
-                    (implicit request: Request[_], messages: Messages): HtmlFormat.Appendable = {
+                    (implicit request: RequestHeader, messages: Messages): HtmlFormat.Appendable = {
     layout(
       pageTitle = pageTitle,
       backLinkEnabled = showBackLink,
@@ -73,7 +73,7 @@ class NewLayoutProvider @Inject()(wrapperService: WrapperService,
                      scripts: Option[Html], stylesheets: Option[Html],
                      serviceNameKeyOverride: Option[String] = None,
                      serviceUrlOverride: Option[String] = None)(contentBlock: Html)
-                    (implicit request: Request[_], messages: Messages): HtmlFormat.Appendable = {
+                    (implicit request: RequestHeader, messages: Messages): HtmlFormat.Appendable = {
     val hideAccountMenu = request.session.get("authToken").isEmpty
 
     wrapperService.standardScaLayout(
@@ -92,6 +92,6 @@ class NewLayoutProvider @Inject()(wrapperService: WrapperService,
       styleSheets = stylesheets.toSeq :+ headBlock(),
       fullWidth = false,
       hideMenuBar = hideAccountMenu,
-    )(messages, request)
+    )(messages, request.withBody())
   }
 }
