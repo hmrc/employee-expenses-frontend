@@ -109,8 +109,8 @@ employerContribution.noEmployerContribution = No, my employer has not paid back 
 
 claimByAlternative.title = If you are claiming for more than one job you must claim by post
 claimByAlternative.heading = If you are claiming for more than one job you must claim by post
-claimByAlternative.paragraph = {0}
-claimByAlternative.claimByPostLink = Claim by post
+claimByAlternative.claimByPostLink = {0}
+claimByAlternative.claimByPostLinkText = Claim by post
 
 multipleEmployments.title = How many jobs are you claiming for?
 multipleEmployments.heading = How many jobs are you claiming for?
