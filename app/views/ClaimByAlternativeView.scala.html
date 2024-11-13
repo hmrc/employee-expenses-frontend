@@ -26,9 +26,7 @@
 
 @()(implicit request: Request[_], messages: Messages)
 
-@claimOnlineLink = {<a class="govuk-link" href="@frontendAppConfig.p87ClaimOnlineUrl">@messages("claimByAlternative.onlineFormLink")</a>}
-
-@claimByPostLink = {<a class="govuk-link" href="@frontendAppConfig.p87ClaimByPostUrl">@messages("claimByAlternative.claimByPostLink")</a>}
+@claimByPostLink = {<a class="govuk-link" href="@frontendAppConfig.p87ClaimByPostUrl">@messages("claimByAlternative.claimByPostLinkText")</a>}
 
 @layout(
   pageTitle = messages("claimByAlternative.title")
@@ -38,6 +36,6 @@
 
     @heading("claimByAlternative.heading")
 
-    <p class="govuk-body">@Html(messages("claimByAlternative.paragraph", claimOnlineLink, claimByPostLink))</p>
+    <p class="govuk-body">@Html(messages("claimByAlternative.claimByPostLink",claimByPostLink))</p>
   }
 }
