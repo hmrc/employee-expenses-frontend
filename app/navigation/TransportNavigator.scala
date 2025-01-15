@@ -51,7 +51,7 @@ class TransportNavigator @Inject()() extends Navigator {
 
   private def typeOfTransportOptions(mode: Mode)(userAnswers: UserAnswers): Call = {
     userAnswers.get(TypeOfTransportPage) match {
-      case Some(Airlines) => routes.AirlineJobListController.onPageLoad(mode)
+      case Some(Airlines) => routes.UsePrintAndPostController.onPageLoad()
       case Some(PublicTransport) => routes.GarageHandOrCleanerController.onPageLoad(mode)
       case Some(Railways) => routes.WhichRailwayTradeController.onPageLoad(mode)
       case Some(SeamanCarpenter) => routes.TransportCarpenterController.onPageLoad(mode)

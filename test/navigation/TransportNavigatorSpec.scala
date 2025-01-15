@@ -45,7 +45,7 @@ class TransportNavigatorSpec extends SpecBase with MockitoSugar {
           "go to AirlineJobList when 'Airlines' is selected" in {
             val answers = emptyUserAnswers.set(TypeOfTransportPage, Airlines).success.value
             navigator.nextPage(TypeOfTransportPage, mode)(answers) mustBe
-              routes.AirlineJobListController.onPageLoad(mode)
+              routes.UsePrintAndPostController.onPageLoad()
           }
 
           "go to GarageHandOrCleanerController when 'Public Transport' is selected" in {

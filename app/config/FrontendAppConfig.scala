@@ -89,4 +89,5 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
   lazy val startUrlWfh: String = configuration.get[String]("mergedJourney.workingFromHomeExpensesUrl")
   lazy val startUrlPsubs: String = configuration.get[String]("mergedJourney.professionalSubscriptionsUrl")
   lazy val startUrlFre: String = configuration.get[String]("mergedJourney.employeeExpensesUrl")
+  lazy val employeeExpensesClaimByIformUrl: String = configuration.get[String]("urls.employeeExpensesClaimByIformUrl")
 }
