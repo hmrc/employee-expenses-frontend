@@ -375,6 +375,8 @@ POST        /change-construction-occupations                     controllers.con
 
 GET         /how-you-will-get-your-expenses                       controllers.authenticated.HowYouWillGetYourExpensesController.onPageLoad()
 
+GET        /use-print-and-post-form                      controllers.transport.UsePrintAndPostController.onPageLoad()
+
 ######################################
 ### Merged Journey URLs
 ######################################

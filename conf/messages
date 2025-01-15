@@ -892,3 +892,15 @@ claimsComplete.noAddress.updateAddress.link = update your address in your Person
 claimsComplete.noAddress.updateAddress.end = Otherwise HMRC will not be able to send you any letters.
 claimsComplete.feedback.link = What did you think of this service? (opens in new tab)
 claimsComplete.feedback.end = (takes 30 seconds to complete)
+
+
+usePrintAndPostDetailed.heading_freOnly_iform = You can make a claim for these job expenses
+usePrintAndPostDetailed.para1_freOnly_iform = Before sending your claim, check the guidance below for each type of expense. To claim these expenses, sign in to complete an online form.
+usePrintAndPostDetailed.title_freOnly_iform = You can make a claim for these job expenses
+usePrintAndPostDetailed.youCanClaim = You can claim tax relief for:
+usePrintAndPostDetailed.evidenceToSupport = Evidence to support your claim for tax relief
+claimingFor.uniformsClothingTools_freOnly = Uniform, work clothing and tools (Flat rate expenses)
+usePrintAndPostDetailed.uniformsClothingTools.1_freOnly_iform = If you are claiming a fixed amount of tax relief, you do not need to send receipts or records.
+usePrintAndPostDetailed.link.label_freOnly_iform = Start your claim
+usePrintAndPostDetailed.para2_freOnly_iform = If you cannot claim online, you can make a
+usePrintAndPostDetailed.para2_freOnly.link.label_iform = claim by post (opens in a new window or tab)
