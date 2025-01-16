@@ -16,7 +16,6 @@
 
 @import config.FrontendAppConfig
 
-
 @this(
     layout: Layout,
     heading: playComponents.heading,
@@ -28,37 +27,31 @@
 )
 @()(implicit request: Request[_], messages: Messages)
 
-
-
-
 @layout(
     pageTitle = messages("usePrintAndPostDetailed.title")
 ) {
 
-@heading(messages("usePrintAndPostDetailed.heading"))
+    @heading(messages("usePrintAndPostDetailed.heading"))
+    
+    @govukInsetText(InsetText(
+        content =  HtmlContent(
+        s"""
+        ${messages("usePrintAndPostDetailed.para1_freOnly_iform")} <br><br>
+        ${messages("usePrintAndPostDetailed.para2_freOnly_iform")} <a href="${appConfig.p87ClaimByPostUrl}" target="_blank">${messages("usePrintAndPostDetailed.para2_freOnly.link.label_iform")}</a>
+        """
+        )
+    ))
 
-@govukInsetText(InsetText(
-content =  HtmlContent(
-s"""
-${messages("usePrintAndPostDetailed.para1_freOnly_iform")} <br><br>
-${messages("usePrintAndPostDetailed.para2_freOnly_iform")} <a href="${appConfig.p87ClaimByPostUrl}" target="_blank">${messages("usePrintAndPostDetailed.para2_freOnly.link.label_iform")}</a>
-"""
-)
-))
-
-
-@h2("usePrintAndPostDetailed.youCanClaim", "govuk-heading-m")
-<p class="govuk-body">@messages("claimingFor.uniformsClothingTools_freOnly")</p>
-
-@h2("usePrintAndPostDetailed.evidenceToSupport", "govuk-heading-m")
-<p class="govuk-heading-s">@messages("claimingFor.uniformsClothingTools_freOnly")</p>
-@p(){@messages(s"usePrintAndPostDetailed.uniformsClothingTools.1_freOnly_iform")}
-
-<div class="govuk-body govuk-!-margin-top-8">
-    @playComponents.button_link(messageKey = messages("usePrintAndPostDetailed.link.label_freOnly_iform"), href = appConfig.employeeExpensesClaimByIformUrl, classes="govuk-button")
-</div>
-
-
+    @h2("usePrintAndPostDetailed.youCanClaim", "govuk-heading-m")
+    <p class="govuk-body">@messages("claimingFor.uniformsClothingTools_freOnly")</p>
+    
+    @h2("usePrintAndPostDetailed.evidenceToSupport", "govuk-heading-m")
+    <p class="govuk-heading-s">@messages("claimingFor.uniformsClothingTools_freOnly")</p>
+    @p(){@messages(s"usePrintAndPostDetailed.uniformsClothingTools.1_freOnly_iform")}
+    
+    <div class="govuk-body govuk-!-margin-top-8">
+        @playComponents.button_link(messageKey = messages("usePrintAndPostDetailed.link.label_freOnly_iform"), href = appConfig.employeeExpensesClaimByIformUrl, classes="govuk-button")
+    </div>
 
 }
 

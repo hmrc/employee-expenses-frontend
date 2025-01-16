@@ -62,5 +62,5 @@ class UsePrintAndPostControllerSpec extends SpecBase with ScalaFutures with Mock
 
       application.stop()
     }
-
-  }}
+  }
+}

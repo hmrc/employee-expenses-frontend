@@ -44,7 +44,4 @@ class UsePrintAndPostController @Inject()(
     implicit request =>
       Ok(freOnlyPrintAndPostView())
   }
-
-
-
 }
