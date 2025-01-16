@@ -19,18 +19,13 @@ package controllers.transport
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
 import forms.transport.AirlineJobListFormProvider
+import models.Mode
 
 import javax.inject.{Inject, Named}
-import models.Mode
 import navigation.Navigator
-import pages.ClaimAmount
-import pages.transport.AirlineJobListPage
-import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import repositories.SessionRepository
-//import views.html.IndexView
 import views.html.transport.UseIformFreOnlyView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,16 +36,15 @@ class UsePrintAndPostController @Inject()(
                                            identify: UnauthenticatedIdentifierAction,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction,
-                                           formProvider: AirlineJobListFormProvider,
                                            val controllerComponents: MessagesControllerComponents,
-                                            //view:IndexView,
-                                           view:UseIformFreOnlyView,
-                                           sessionRepository: SessionRepository
+                                           freOnlyPrintAndPostView:UseIformFreOnlyView,
                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-      Ok(view())
+      Ok(freOnlyPrintAndPostView())
   }
+
+
 
 }

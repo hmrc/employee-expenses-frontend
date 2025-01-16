@@ -797,9 +797,9 @@ claimsComplete.noAddress.updateAddress.end = Fel arall, ni fydd CThEF yn gallu a
 claimsComplete.feedback.link = Beth oedd eich barn am y gwasanaeth hwn? (yn agor tab newydd)
 claimsComplete.feedback.end = (mae’n cymryd 30 eiliad i lenwi)
 
-usePrintAndPostDetailed.heading_freOnly_iform = Gallwch wneud hawliad am y treuliau swydd hyn
+usePrintAndPostDetailed.heading = Gallwch wneud hawliad am y treuliau swydd hyn
 usePrintAndPostDetailed.para1_freOnly_iform = Cyn anfon eich hawliad, gwiriwch yr arweiniad isod ynghylch pob math o draul wahanol. I hawlio’r treuliau hyn, mewngofnodwch i lenwi ffurflen ar-lein.
-usePrintAndPostDetailed.title_freOnly_iform = Gallwch wneud hawliad am y treuliau swydd hyn
+usePrintAndPostDetailed.title = Gallwch wneud hawliad am y treuliau swydd hyn
 usePrintAndPostDetailed.youCanClaim = Gallwch hawlio rhyddhad treth ar gyfer:
 usePrintAndPostDetailed.evidenceToSupport = Tystiolaeth i gefnogi’ch hawliad am ryddhad treth
 claimingFor.uniformsClothingTools_freOnly = Gwisgoedd unffurf, dillad gwaith ac offer (Treuliau cyfradd unffurf)

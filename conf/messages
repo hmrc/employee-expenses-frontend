@@ -894,9 +894,9 @@ claimsComplete.feedback.link = What did you think of this service? (opens in new
 claimsComplete.feedback.end = (takes 30 seconds to complete)
 
 
-usePrintAndPostDetailed.heading_freOnly_iform = You can make a claim for these job expenses
+usePrintAndPostDetailed.heading= You can make a claim for these job expenses
 usePrintAndPostDetailed.para1_freOnly_iform = Before sending your claim, check the guidance below for each type of expense. To claim these expenses, sign in to complete an online form.
-usePrintAndPostDetailed.title_freOnly_iform = You can make a claim for these job expenses
+usePrintAndPostDetailed.title = You can make a claim for these job expenses
 usePrintAndPostDetailed.youCanClaim = You can claim tax relief for:
 usePrintAndPostDetailed.evidenceToSupport = Evidence to support your claim for tax relief
 claimingFor.uniformsClothingTools_freOnly = Uniform, work clothing and tools (Flat rate expenses)
