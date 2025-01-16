@@ -47,12 +47,8 @@ class UsePrintAndPostControllerSpec extends SpecBase with ScalaFutures with Mock
   "UsePrintAndPostController Controller" must {
 
     "return OK for a GET" in {
-      val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, UsePrintAndPostControllerRoute)
 
