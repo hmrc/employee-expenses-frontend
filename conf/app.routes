@@ -135,10 +135,7 @@ POST        /factory-engineering-apprentice                      controllers.eng
 GET         /change-factory-engineering-apprentice               controllers.engineering.FactoryEngineeringApprenticeController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-factory-engineering-apprentice               controllers.engineering.FactoryEngineeringApprenticeController.onSubmit(mode: Mode = CheckMode)
 
-GET         /airline-job-listed                                  controllers.transport.AirlineJobListController.onPageLoad(mode: Mode = NormalMode)
-POST        /airline-job-listed                                  controllers.transport.AirlineJobListController.onSubmit(mode: Mode = NormalMode)
-GET         /change-airline-job-listed                           controllers.transport.AirlineJobListController.onPageLoad(mode: Mode = CheckMode)
-POST        /change-airline-job-listed                           controllers.transport.AirlineJobListController.onSubmit(mode: Mode = CheckMode)
+
 
 GET         /garage-hand-cleaner                                 controllers.transport.GarageHandOrCleanerController.onPageLoad(mode: Mode = NormalMode)
 POST        /garage-hand-cleaner                                 controllers.transport.GarageHandOrCleanerController.onSubmit(mode: Mode = NormalMode)
@@ -374,6 +371,9 @@ GET         /change-construction-occupations                     controllers.con
 POST        /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = CheckMode)
 
 GET         /how-you-will-get-your-expenses                       controllers.authenticated.HowYouWillGetYourExpensesController.onPageLoad()
+
+GET        /use-print-and-post-form                      controllers.transport.UsePrintAndPostController.onPageLoad()
+
 
 ######################################
 ### Merged Journey URLs
