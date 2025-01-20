@@ -17,46 +17,59 @@
 package controllers.transport
 
 import base.SpecBase
-import config.{ClaimAmounts, NavConstant}
-import controllers.actions.UnAuthed
-import models.{NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
-import org.scalatest.OptionValues
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatestplus.mockito.MockitoSugar
-import pages.ClaimAmount
-import pages.transport.AirlineJobListPage
-import play.api.Application
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import repositories.SessionRepository
+import play.twirl.api.HtmlFormat
+import views.html.transport.UseIformFreOnlyView
+import play.api.i18n.Messages
+import play.api.mvc.Request
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{reset, verify, when}
+import org.scalatestplus.mockito.MockitoSugar.mock
+import scala.concurrent.ExecutionContext.Implicits.global
 
-import scala.concurrent.Future
-
-class UsePrintAndPostControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
-
-  def onwardRoute: Call = Call("GET", "/foo")
 
 
-  lazy val UsePrintAndPostControllerRoute: String = routes.UsePrintAndPostController.onPageLoad().url
+class UsePrintAndPostControllerSpec extends SpecBase with BeforeAndAfterEach with BeforeAndAfterAll {
 
-  "UsePrintAndPostController Controller" must {
+  private val useIformFreOnlyView = mock[UseIformFreOnlyView]
 
-    "return OK for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  private  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[UseIformFreOnlyView].toInstance(useIformFreOnlyView)
+        )
+        .build()
 
-      val request = FakeRequest(GET, UsePrintAndPostControllerRoute)
+      override def beforeEach(): Unit = {
+        super.beforeEach()
 
-      val result = route(application, request).value
+        reset(
+          useIformFreOnlyView
+        )
+        when(useIformFreOnlyView.apply()(any[Request[_]], any[Messages])).thenReturn(HtmlFormat.empty)
+      }
 
-      status(result) mustEqual OK
+  override def afterAll(): Unit = {
+        application.stop()
+        super.afterAll()
+      }
+  "UsePrintAndPostController" must {
 
-      application.stop()
+      def usePrintAndPostRoute = routes.UsePrintAndPostController.onPageLoad().url
+
+      def testRequest = FakeRequest(GET, usePrintAndPostRoute)
+
+      "return OK and the correct view for a GET" in  {
+
+        for {
+          result <- route(application, testRequest).value
+          _ = result.header.status mustBe OK
+          _ = verify(useIformFreOnlyView).apply()(any[Request[_]], any[Messages])
+        } yield ()
+      }
+
     }
   }
-}
