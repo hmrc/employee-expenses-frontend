@@ -29,4 +29,5 @@ class TypeOfManufacturingPageSpec extends PageBehaviours {
 
     beRemovable[TypeOfManufacturing](TypeOfManufacturingPage)
   }
+
 }

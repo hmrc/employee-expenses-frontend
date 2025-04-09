@@ -32,33 +32,24 @@ class TypeOfEngineeringSpec extends AnyWordSpec with Matchers with ScalaCheckPro
 
       val gen = Gen.oneOf(TypeOfEngineering.values.toSeq)
 
-      forAll(gen) {
-        typeOfEngineering =>
-
-          JsString(typeOfEngineering.toString).validate[TypeOfEngineering].asOpt.value mustEqual typeOfEngineering
+      forAll(gen) { typeOfEngineering =>
+        JsString(typeOfEngineering.toString).validate[TypeOfEngineering].asOpt.value mustEqual typeOfEngineering
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!TypeOfEngineering.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!TypeOfEngineering.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[TypeOfEngineering] mustEqual JsError("error.invalid")
-      }
+      forAll(gen)(invalidValue => JsString(invalidValue).validate[TypeOfEngineering] mustEqual JsError("error.invalid"))
     }
 
     "serialise" in {
 
       val gen = Gen.oneOf(TypeOfEngineering.values.toSeq)
 
-      forAll(gen) {
-        typeOfEngineering =>
-
-          Json.toJson(typeOfEngineering) mustEqual JsString(typeOfEngineering.toString)
-      }
+      forAll(gen)(typeOfEngineering => Json.toJson(typeOfEngineering) mustEqual JsString(typeOfEngineering.toString))
     }
   }
+
 }

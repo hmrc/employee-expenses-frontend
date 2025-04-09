@@ -26,20 +26,25 @@ class TypeOfEngineeringFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "typeOfEngineering.error.required"
 
-    behave like optionsField[TypeOfEngineering](
-      form,
-      fieldName,
-      validValues  = TypeOfEngineering.values,
-      invalidError = FormError(fieldName, "error.invalid")
+    behave.like(
+      optionsField[TypeOfEngineering](
+        form,
+        fieldName,
+        validValues = TypeOfEngineering.values,
+        invalidError = FormError(fieldName, "error.invalid")
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

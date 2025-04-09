@@ -19,7 +19,15 @@ package controllers.authenticated
 import base.SpecBase
 import config.NavConstant
 import controllers.routes._
-import models.{FlatRateExpense, FlatRateExpenseAmounts, FlatRateExpenseOptions, NormalMode, TaiTaxYear, TaxYearSelection, UserAnswers}
+import models.{
+  FlatRateExpense,
+  FlatRateExpenseAmounts,
+  FlatRateExpenseOptions,
+  NormalMode,
+  TaiTaxYear,
+  TaxYearSelection,
+  UserAnswers
+}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -44,7 +52,7 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
   private val mockSessionRepository = mock[SessionRepository]
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
   private val mockTaiService: TaiService = mock[TaiService]
 
@@ -84,14 +92,17 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
 
       val application =
         applicationBuilder(Some(answers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
 
-      when(mockTaiService.freResponse(any(), any(), any())(any(), any())) thenReturn Future.successful(FlatRateExpenseOptions.FRENoYears)
-      when(mockTaiService.getFREAmount(any(), any())(any(), any())) thenReturn
-        Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019))))
+      when(mockTaiService.freResponse(any(), any(), any())(any(), any()))
+        .thenReturn(Future.successful(FlatRateExpenseOptions.FRENoYears))
+      when(mockTaiService.getFREAmount(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019)))))
 
       val request =
         FakeRequest(POST, taxYearSelectionRoute)
@@ -124,13 +135,16 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
     "redirect to session expired when no claim amount set" in {
       val application =
         applicationBuilder(Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
-      when(mockTaiService.freResponse(any(), any(), any())(any(), any())) thenReturn Future.successful(FlatRateExpenseOptions.FRENoYears)
-      when(mockTaiService.getFREAmount(any(), any())(any(), any())) thenReturn
-        Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019))))
+      when(mockTaiService.freResponse(any(), any(), any())(any(), any()))
+        .thenReturn(Future.successful(FlatRateExpenseOptions.FRENoYears))
+      when(mockTaiService.getFREAmount(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019)))))
 
       val request =
         FakeRequest(POST, taxYearSelectionRoute)
@@ -176,4 +190,5 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
       application.stop()
     }
   }
+
 }

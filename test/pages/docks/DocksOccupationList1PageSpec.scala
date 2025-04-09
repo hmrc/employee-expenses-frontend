@@ -28,4 +28,5 @@ class DocksOccupationList1PageSpec extends PageBehaviours {
 
     beRemovable[Boolean](DocksOccupationList1Page)
   }
+
 }

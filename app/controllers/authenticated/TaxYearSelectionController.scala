@@ -36,55 +36,54 @@ import views.html.authenticated.TaxYearSelectionView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TaxYearSelectionController @Inject()(
-                                            override val messagesApi: MessagesApi,
-                                            sessionRepository: SessionRepository,
-                                            @Named(NavConstant.authenticated) navigator: Navigator,
-                                            identify: AuthenticatedIdentifierAction,
-                                            getData: DataRetrievalAction,
-                                            requireData: DataRequiredAction,
-                                            formProvider: TaxYearSelectionFormProvider,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            view: TaxYearSelectionView,
-                                            taiService: TaiService
-                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class TaxYearSelectionController @Inject() (
+    override val messagesApi: MessagesApi,
+    sessionRepository: SessionRepository,
+    @Named(NavConstant.authenticated) navigator: Navigator,
+    identify: AuthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: TaxYearSelectionFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: TaxYearSelectionView,
+    taiService: TaiService
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm: Form[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm: Form[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[Seq[TaxYearSelection]]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.nino) match {
+              case (Some(claimAmount), Some(nino)) =>
+                for {
+                  ua          <- Future.fromTry(request.userAnswers.set(TaxYearSelectionPage, value))
+                  freResponse <- taiService.freResponse(value, nino, claimAmount)
+                  ua2         <- Future.fromTry(ua.set(FREResponse, freResponse))
+                  freAmounts  <- taiService.getFREAmount(value, nino)
+                  ua3         <- Future.fromTry(ua2.set(FREAmounts, freAmounts))
+                  _           <- sessionRepository.set(request.identifier, ua3)
+                } yield Redirect(navigator.nextPage(TaxYearSelectionPage, mode)(ua3))
+              case _ =>
+                Future.successful(Redirect(SessionExpiredController.onPageLoad))
+            }
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[Seq[TaxYearSelection]]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.nino) match {
-            case (Some(claimAmount), Some(nino)) =>
-                  for {
-                    ua  <- Future.fromTry(request.userAnswers.set(TaxYearSelectionPage, value))
-                    freResponse <- taiService.freResponse(value, nino, claimAmount)
-                    ua2 <- Future.fromTry(ua.set(FREResponse, freResponse))
-                    freAmounts <- taiService.getFREAmount(value, nino)
-                    ua3 <- Future.fromTry(ua2.set(FREAmounts, freAmounts))
-                    _   <- sessionRepository.set(request.identifier, ua3)
-                  } yield
-                    Redirect(navigator.nextPage(TaxYearSelectionPage, mode)(ua3))
-            case _ =>
-              Future.successful(Redirect(SessionExpiredController.onPageLoad))
-          }
-        }
-      )
-  }
 }

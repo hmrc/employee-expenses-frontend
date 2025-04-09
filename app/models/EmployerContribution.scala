@@ -23,17 +23,17 @@ sealed trait EmployerContribution
 object EmployerContribution extends Enumerable.Implicits {
 
   case object YesEmployerContribution extends WithName("yesEmployerContribution") with EmployerContribution
-  case object NoEmployerContribution extends WithName("noEmployerContribution") with EmployerContribution
+  case object NoEmployerContribution  extends WithName("noEmployerContribution") with EmployerContribution
 
   val values: Seq[EmployerContribution] = Seq(
-    YesEmployerContribution, NoEmployerContribution
+    YesEmployerContribution,
+    NoEmployerContribution
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map {
-    value =>
-      RadioCheckboxOption("employerContribution", value.toString)
-  }
+  val options: Seq[RadioCheckboxOption] =
+    values.map(value => RadioCheckboxOption("employerContribution", value.toString))
 
   implicit val enumerable: Enumerable[EmployerContribution] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

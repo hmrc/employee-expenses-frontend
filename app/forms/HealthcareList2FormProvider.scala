@@ -27,4 +27,5 @@ class HealthcareList2FormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("healthcareList2.error.required")
     )
+
 }

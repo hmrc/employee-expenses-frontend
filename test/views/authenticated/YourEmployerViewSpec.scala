@@ -28,7 +28,7 @@ class YourEmployerViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "yourEmployer"
 
-  val form = new YourEmployerFormProvider()()
+  val form         = new YourEmployerFormProvider()()
   val employerName = Seq("HMRC Longbenton")
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -43,23 +43,24 @@ class YourEmployerViewSpec extends YesNoViewBehaviours {
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, employerName)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like yesNoPage(
-      form,
-      applyView,
-      messageKeyPrefix,
-      routes.YourEmployerController.onSubmit().url,
-      Some(messages(s"$messageKeyPrefix.label", employerName))
+    behave.like(
+      yesNoPage(
+        form,
+        applyView,
+        messageKeyPrefix,
+        routes.YourEmployerController.onSubmit().url,
+        Some(messages(s"$messageKeyPrefix.label", employerName))
+      )
     )
 
-    behave like pageWithBodyText(applyView(form), employerName.head.toString)
+    behave.like(pageWithBodyText(applyView(form), employerName.head.toString))
   }
 
   application.stop()
 }
-

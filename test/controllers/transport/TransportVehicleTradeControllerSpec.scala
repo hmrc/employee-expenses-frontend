@@ -38,7 +38,12 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+class TransportVehicleTradeControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with OptionValues {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -76,11 +81,11 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
       application.stop()
     }
 
-    for (trade <- TransportVehicleTrade.values if trade != TransportVehicleTrade.Or) {
+    for (trade <- TransportVehicleTrade.values if trade != TransportVehicleTrade.Or)
       s"redirect to the next page when valid data for '$trade' is submitted" in {
         val mockSessionRepository = mock[SessionRepository]
 
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
         val application =
           applicationBuilder(userAnswers = Some(emptyUserAnswers))
             .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -88,7 +93,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
             .build()
 
         val request = FakeRequest(POST, transportVehicleTradeRoute)
-            .withFormUrlEncodedBody(("value", trade.toString))
+          .withFormUrlEncodedBody(("value", trade.toString))
 
         val result = route(application, request).value
 
@@ -98,18 +103,17 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
         application.stop()
       }
-    }
 
     "return a Bad Request and errors when invalid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
       val request = FakeRequest(POST, transportVehicleTradeRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
+        .withFormUrlEncodedBody(("value", "invalid value"))
 
       val result = route(application, request).value
 
@@ -152,10 +156,12 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
     for (trade <- TransportVehicleTrade.values if trade != TransportVehicleTrade.Or) {
       val claimAmount = trade match {
         case TransportVehicleTrade.Builder => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
-        case TransportVehicleTrade.VehicleRepairerWagonLifter => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
+        case TransportVehicleTrade.VehicleRepairerWagonLifter =>
+          ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
         case TransportVehicleTrade.RailwayVehiclePainter => ClaimAmounts.Transport.Railways.vehiclePainters
         case TransportVehicleTrade.Letterer => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
-        case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
+        case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant =>
+          ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
         case _ => ClaimAmounts.Transport.VehicleTrade.allOther
       }
 
@@ -163,7 +169,7 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
 
         val mockSessionRepository = mock[SessionRepository]
 
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
@@ -172,18 +178,20 @@ class TransportVehicleTradeControllerSpec extends SpecBase with ScalaFutures wit
           .withFormUrlEncodedBody(("value", trade.toString))
 
         val userAnswers2 = userAnswers
-          .set(TransportVehicleTradePage, trade).success.value
-          .set(ClaimAmount, claimAmount).success.value
+          .set(TransportVehicleTradePage, trade)
+          .success
+          .value
+          .set(ClaimAmount, claimAmount)
+          .success
+          .value
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
-            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-        }
+        whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
         application.stop()
       }
     }
   }
+
 }

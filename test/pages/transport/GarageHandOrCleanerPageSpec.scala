@@ -28,4 +28,5 @@ class GarageHandOrCleanerPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](GarageHandOrCleanerPage)
   }
+
 }

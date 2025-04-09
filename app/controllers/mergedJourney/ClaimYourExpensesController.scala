@@ -31,13 +31,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 // scalastyle:off cyclomatic.complexity
 @Singleton
-class ClaimYourExpensesController @Inject()(identify: MergedJourneyIdentifierAction,
-                                            sessionRepository: SessionRepository,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            claimYourExpensesView: ClaimYourExpensesView,
-                                            appConfig: FrontendAppConfig
-                                           )(implicit val ec: ExecutionContext)
-  extends FrontendBaseController with I18nSupport with Logging {
+class ClaimYourExpensesController @Inject() (
+    identify: MergedJourneyIdentifierAction,
+    sessionRepository: SessionRepository,
+    val controllerComponents: MessagesControllerComponents,
+    claimYourExpensesView: ClaimYourExpensesView,
+    appConfig: FrontendAppConfig
+)(implicit val ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   def show: Action[AnyContent] = identify.async { implicit request =>
     if (appConfig.mergedJourneyEnabled) {
@@ -47,11 +50,13 @@ class ClaimYourExpensesController @Inject()(identify: MergedJourneyIdentifierAct
             case Some(journeyConfig) =>
               Ok(claimYourExpensesView(journeyConfig))
             case _ =>
-              logger.warn(s"[ClaimYourExpensesController][claimYourExpenses] Missing journey config," +
-                s" returning to Eligibility Checker. Session: ${hc.sessionId.toString}")
+              logger.warn(
+                s"[ClaimYourExpensesController][claimYourExpenses] Missing journey config," +
+                  s" returning to Eligibility Checker. Session: ${hc.sessionId.toString}"
+              )
               Redirect(appConfig.eligibilityCheckerUrl)
           }
-        case _ => //Should never happen
+        case _ => // Should never happen
           Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
       }
     } else {

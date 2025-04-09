@@ -29,4 +29,5 @@ class TypeOfTransportSpec extends PageBehaviours {
 
     beRemovable[TypeOfTransport](TypeOfTransportPage)
   }
+
 }

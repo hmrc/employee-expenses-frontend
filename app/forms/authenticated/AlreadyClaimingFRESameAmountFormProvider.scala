@@ -27,4 +27,5 @@ class AlreadyClaimingFRESameAmountFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[AlreadyClaimingFRESameAmount]("alreadyClaimingFRESameAmount.error.required")
     )
+
 }

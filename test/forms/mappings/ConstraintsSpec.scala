@@ -22,7 +22,6 @@ import play.api.data.validation.{Invalid, Valid}
 
 class ConstraintsSpec extends AnyWordSpec with Matchers with Constraints {
 
-
   "firstError" must {
 
     "return Valid when all constraints pass" in {

@@ -20,6 +20,16 @@ import controllers.actions.IdentifierType
 import models.UserAnswers
 import play.api.mvc.{Request, WrappedRequest}
 
-case class OptionalDataRequest[A](request: Request[A], identifier: IdentifierType, nino: Option[String] = None, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
+case class OptionalDataRequest[A](
+    request: Request[A],
+    identifier: IdentifierType,
+    nino: Option[String] = None,
+    userAnswers: Option[UserAnswers]
+) extends WrappedRequest[A](request)
 
-case class DataRequest[A](request: Request[A], identifier: IdentifierType, nino: Option[String] = None, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+case class DataRequest[A](
+    request: Request[A],
+    identifier: IdentifierType,
+    nino: Option[String] = None,
+    userAnswers: UserAnswers
+) extends WrappedRequest[A](request)

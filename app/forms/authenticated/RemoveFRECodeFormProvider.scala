@@ -27,4 +27,5 @@ class RemoveFRECodeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[TaxYearSelection]("removeFRECode.error.required")
     )
+
 }

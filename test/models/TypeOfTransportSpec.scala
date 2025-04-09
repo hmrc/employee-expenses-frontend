@@ -32,33 +32,24 @@ class TypeOfTransportSpec extends AnyWordSpec with Matchers with ScalaCheckPrope
 
       val gen = Gen.oneOf(TypeOfTransport.values.toSeq)
 
-      forAll(gen) {
-        typeOfTransport =>
-
-          JsString(typeOfTransport.toString).validate[TypeOfTransport].asOpt.value mustEqual typeOfTransport
+      forAll(gen) { typeOfTransport =>
+        JsString(typeOfTransport.toString).validate[TypeOfTransport].asOpt.value mustEqual typeOfTransport
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!TypeOfTransport.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!TypeOfTransport.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[TypeOfTransport] mustEqual JsError("error.invalid")
-      }
+      forAll(gen)(invalidValue => JsString(invalidValue).validate[TypeOfTransport] mustEqual JsError("error.invalid"))
     }
 
     "serialise" in {
 
       val gen = Gen.oneOf(TypeOfTransport.values.toSeq)
 
-      forAll(gen) {
-        typeOfTransport =>
-
-          Json.toJson(typeOfTransport) mustEqual JsString(typeOfTransport.toString)
-      }
+      forAll(gen)(typeOfTransport => Json.toJson(typeOfTransport) mustEqual JsString(typeOfTransport.toString))
     }
   }
+
 }

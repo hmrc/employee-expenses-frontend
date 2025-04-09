@@ -23,7 +23,7 @@ import play.api.data.FormError
 class EmployerContributionFormProviderSpec extends OptionFieldBehaviours {
 
   val requiredKey = "employerContribution.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new EmployerContributionFormProvider()()
 
@@ -31,17 +31,22 @@ class EmployerContributionFormProviderSpec extends OptionFieldBehaviours {
 
     val fieldName = "value"
 
-    behave like optionsField[EmployerContribution](
-      form,
-      fieldName,
-      validValues = EmployerContribution.values,
-      invalidError = FormError(fieldName, "error.invalid")
+    behave.like(
+      optionsField[EmployerContribution](
+        form,
+        fieldName,
+        validValues = EmployerContribution.values,
+        invalidError = FormError(fieldName, "error.invalid")
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

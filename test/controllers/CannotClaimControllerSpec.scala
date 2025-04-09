@@ -37,4 +37,5 @@ class CannotClaimControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

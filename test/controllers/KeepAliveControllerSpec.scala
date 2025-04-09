@@ -29,13 +29,17 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class KeepAliveControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with BeforeAndAfterEach {
+class KeepAliveControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience
+    with BeforeAndAfterEach {
 
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = {
+  override def beforeEach(): Unit =
     reset(mockSessionRepository)
-  }
 
   s"GET ${routes.KeepAliveController.keepAlive.url}" must {
     "return OK and the correct view for a GET" in {
@@ -46,7 +50,7 @@ class KeepAliveControllerSpec extends SpecBase with MockitoSugar with ScalaFutur
       when(mockSessionRepository.updateTimeToLive(any())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(GET, routes.KeepAliveController.keepAlive.url)
-      val result = route(application, request).value
+      val result  = route(application, request).value
 
       status(result) mustEqual OK
 
@@ -60,7 +64,7 @@ class KeepAliveControllerSpec extends SpecBase with MockitoSugar with ScalaFutur
       when(mockSessionRepository.updateTimeToLive(any())).thenReturn(Future.successful(false))
 
       val request = FakeRequest(GET, routes.KeepAliveController.keepAlive.url)
-      val result = route(application, request).value
+      val result  = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad.url

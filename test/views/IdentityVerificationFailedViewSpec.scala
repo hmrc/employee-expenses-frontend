@@ -31,18 +31,27 @@ class IdentityVerificationFailedViewSpec extends ViewBehaviours {
 
     val applyView = view.apply()(fakeRequest, messages)
 
-    behave like normalPage(applyView, "ivFailed")
+    behave.like(normalPage(applyView, "ivFailed"))
 
-    val printAndPostLink: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.p87ClaimByPostUrl}">${messages("ivFailed.printAndPost")}</a>""")
-    val helplineLink: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.contactHMRC}">${messages("ivFailed.helpline")}</a>""")
-    val claimOnlineLink: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.claimOnlineUrl}">${messages("ivFailed.confirmIdentity")}</a>""")
+    val printAndPostLink: Html =
+      Html(s"""<a class="govuk-link" href="${frontendAppConfig.p87ClaimByPostUrl}">${messages(
+          "ivFailed.printAndPost"
+        )}</a>""")
+    val helplineLink: Html =
+      Html(s"""<a class="govuk-link" href="${frontendAppConfig.contactHMRC}">${messages("ivFailed.helpline")}</a>""")
+    val claimOnlineLink: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.claimOnlineUrl}">${messages(
+        "ivFailed.confirmIdentity"
+      )}</a>""")
 
-    behave like pageWithBodyText(applyView,
-      "ivFailed.cannotContinue",
-      "ivFailed.makeYourClaim",
-      Html(messages("ivFailed.byPost", printAndPostLink)).toString,
-      Html(messages("ivFailed.byPhone", helplineLink)).toString,
-      Html(messages("ivFailed.claimOnline", claimOnlineLink)).toString
+    behave.like(
+      pageWithBodyText(
+        applyView,
+        "ivFailed.cannotContinue",
+        "ivFailed.makeYourClaim",
+        Html(messages("ivFailed.byPost", printAndPostLink)).toString,
+        Html(messages("ivFailed.byPhone", helplineLink)).toString,
+        Html(messages("ivFailed.claimOnline", claimOnlineLink)).toString
+      )
     )
   }
 

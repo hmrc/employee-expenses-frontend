@@ -32,51 +32,50 @@ import views.html.SameEmployerContributionAllYearsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SameEmployerContributionAllYearsController @Inject()(
-                                                            override val messagesApi: MessagesApi,
-                                                            @Named(NavConstant.generic) navigator: Navigator,
-                                                            identify: UnauthenticatedIdentifierAction,
-                                                            getData: DataRetrievalAction,
-                                                            requireData: DataRequiredAction,
-                                                            formProvider: SameEmployerContributionAllYearsFormProvider,
-                                                            val controllerComponents: MessagesControllerComponents,
-                                                            view: SameEmployerContributionAllYearsView,
-                                                            sessionRepository: SessionRepository
-                                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class SameEmployerContributionAllYearsController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.generic) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: SameEmployerContributionAllYearsFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: SameEmployerContributionAllYearsView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(SameEmployerContributionAllYearsPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(SameEmployerContributionAllYearsPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      request.userAnswers.get(ExpensesEmployerPaidPage) match {
-        case Some(contribution) => Ok(view(preparedForm, mode, contribution))
-        case _ => Redirect(routes.SessionExpiredController.onPageLoad)
-      }
+    request.userAnswers.get(ExpensesEmployerPaidPage) match {
+      case Some(contribution) => Ok(view(preparedForm, mode, contribution))
+      case _                  => Redirect(routes.SessionExpiredController.onPageLoad)
+    }
 
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
-    implicit request =>
-      request.userAnswers.get(ExpensesEmployerPaidPage) match {
-        case Some(contribution) =>
-          form.bindFromRequest().fold(
-            (formWithErrors: Form[_]) =>
-              Future.successful(BadRequest(view(formWithErrors, mode, contribution))),
-
-            value => {
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+    request.userAnswers.get(ExpensesEmployerPaidPage) match {
+      case Some(contribution) =>
+        form
+          .bindFromRequest()
+          .fold(
+            (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode, contribution))),
+            value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(SameEmployerContributionAllYearsPage, value))
-                _ <- sessionRepository.set(request.identifier, updatedAnswers)
+                _              <- sessionRepository.set(request.identifier, updatedAnswers)
               } yield Redirect(navigator.nextPage(SameEmployerContributionAllYearsPage, mode)(updatedAnswers))
-            }
           )
-        case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
-      }
+      case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
+    }
   }
+
 }

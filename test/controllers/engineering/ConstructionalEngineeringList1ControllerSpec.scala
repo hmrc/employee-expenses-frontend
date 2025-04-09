@@ -36,13 +36,19 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+class ConstructionalEngineeringList1ControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with OptionValues {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
   private val userAnswers = emptyUserAnswers
 
-  lazy val constructionalEngineeringList1Route: String = routes.ConstructionalEngineeringList1Controller.onPageLoad(NormalMode).url
+  lazy val constructionalEngineeringList1Route: String =
+    routes.ConstructionalEngineeringList1Controller.onPageLoad(NormalMode).url
 
   "ConstructionalEngineeringList1 Controller" must {
 
@@ -77,7 +83,7 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
     "redirect to the next page when answer is true" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -100,7 +106,7 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
     "redirect to the next page when answer is false" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -170,7 +176,7 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -180,13 +186,14 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.ConstructionalEngineering.list1).success.value
-        .set(ConstructionalEngineeringList1Page, true).success.value
+        .set(ClaimAmount, ClaimAmounts.ConstructionalEngineering.list1)
+        .success
+        .value
+        .set(ConstructionalEngineeringList1Page, true)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -194,7 +201,7 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
     "save no ClaimAmount when 'No' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -204,14 +211,14 @@ class ConstructionalEngineeringList1ControllerSpec extends SpecBase with ScalaFu
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ConstructionalEngineeringList1Page, false).success.value
+        .set(ConstructionalEngineeringList1Page, false)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

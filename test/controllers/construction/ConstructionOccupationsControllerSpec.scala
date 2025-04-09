@@ -20,7 +20,15 @@ import base.SpecBase
 import config.ClaimAmounts
 import controllers.actions.UnAuthed
 import controllers.routes._
-import models.ConstructionOccupations.{AsphaltOrCement, BuildingMaterials, JoinerOrCarpenter, LabourerOrNavvy, RoofingFelt, StoneMason, Tilemaker}
+import models.ConstructionOccupations.{
+  AsphaltOrCement,
+  BuildingMaterials,
+  JoinerOrCarpenter,
+  LabourerOrNavvy,
+  RoofingFelt,
+  StoneMason,
+  Tilemaker
+}
 import models.{ConstructionOccupations, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -39,7 +47,12 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with ScalaCheckPropertyChecks {
+class ConstructionOccupationsControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience
+    with ScalaCheckPropertyChecks {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -62,7 +75,8 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers().set(ConstructionOccupationsPage, ConstructionOccupations.values.head).success.value
+      val userAnswers =
+        UserAnswers().set(ConstructionOccupationsPage, ConstructionOccupations.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -77,14 +91,13 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
 
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].qualifiedWith("Construction").toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
-
           .build()
 
       val request =
@@ -150,35 +163,75 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
       val ua1 = emptyUserAnswers
       val ua2 = occupation match {
         case JoinerOrCarpenter =>
-          ua1.set(ClaimAmount, ClaimAmounts.Construction.joinersCarpenters).success.value
-          .set(ConstructionOccupationsPage, ConstructionOccupations.JoinerOrCarpenter).success.value
+          ua1
+            .set(ClaimAmount, ClaimAmounts.Construction.joinersCarpenters)
+            .success
+            .value
+            .set(ConstructionOccupationsPage, ConstructionOccupations.JoinerOrCarpenter)
+            .success
+            .value
         case StoneMason =>
-          ua1.set(ClaimAmount, ClaimAmounts.Construction.stoneMasons).success.value
-          .set(ConstructionOccupationsPage, ConstructionOccupations.StoneMason).success.value
+          ua1
+            .set(ClaimAmount, ClaimAmounts.Construction.stoneMasons)
+            .success
+            .value
+            .set(ConstructionOccupationsPage, ConstructionOccupations.StoneMason)
+            .success
+            .value
         case AsphaltOrCement =>
-          ua1.set(ClaimAmount, ClaimAmounts.Construction.asphaltCement).success.value
-          .set(ConstructionOccupationsPage, ConstructionOccupations.AsphaltOrCement).success.value
+          ua1
+            .set(ClaimAmount, ClaimAmounts.Construction.asphaltCement)
+            .success
+            .value
+            .set(ConstructionOccupationsPage, ConstructionOccupations.AsphaltOrCement)
+            .success
+            .value
         case RoofingFelt =>
-          ua1.set(ClaimAmount, ClaimAmounts.Construction.roofingFelt).success.value
-          .set(ConstructionOccupationsPage, ConstructionOccupations.RoofingFelt).success.value
+          ua1
+            .set(ClaimAmount, ClaimAmounts.Construction.roofingFelt)
+            .success
+            .value
+            .set(ConstructionOccupationsPage, ConstructionOccupations.RoofingFelt)
+            .success
+            .value
         case LabourerOrNavvy =>
-          ua1.set(ClaimAmount, ClaimAmounts.Construction.labourerNavvy).success.value
-          .set(ConstructionOccupationsPage, ConstructionOccupations.LabourerOrNavvy).success.value
+          ua1
+            .set(ClaimAmount, ClaimAmounts.Construction.labourerNavvy)
+            .success
+            .value
+            .set(ConstructionOccupationsPage, ConstructionOccupations.LabourerOrNavvy)
+            .success
+            .value
         case Tilemaker =>
-          ua1.set(ClaimAmount, ClaimAmounts.Construction.tileMaker).success.value
-          .set(ConstructionOccupationsPage, ConstructionOccupations.Tilemaker).success.value
+          ua1
+            .set(ClaimAmount, ClaimAmounts.Construction.tileMaker)
+            .success
+            .value
+            .set(ConstructionOccupationsPage, ConstructionOccupations.Tilemaker)
+            .success
+            .value
         case BuildingMaterials =>
-          ua1.set(ClaimAmount, ClaimAmounts.Construction.buildingMaterials).success.value
-          .set(ConstructionOccupationsPage, ConstructionOccupations.BuildingMaterials).success.value
+          ua1
+            .set(ClaimAmount, ClaimAmounts.Construction.buildingMaterials)
+            .success
+            .value
+            .set(ConstructionOccupationsPage, ConstructionOccupations.BuildingMaterials)
+            .success
+            .value
         case _ =>
-          ua1.set(ClaimAmount, ClaimAmounts.Construction.allOther).success.value
-          .set(ConstructionOccupationsPage, ConstructionOccupations.NoneOfAbove).success.value
+          ua1
+            .set(ClaimAmount, ClaimAmounts.Construction.allOther)
+            .success
+            .value
+            .set(ConstructionOccupationsPage, ConstructionOccupations.NoneOfAbove)
+            .success
+            .value
       }
 
       s"save correct amount to ClaimAmount when '$occupation' is selected" in {
-        val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        val argCaptor                                = ArgumentCaptor.forClass(classOf[UserAnswers])
         val mockSessionRepository: SessionRepository = mock[SessionRepository]
-        when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any(), argCaptor.capture())).thenReturn(Future.successful(true))
 
         val application = applicationBuilder(userAnswers = Some(ua1))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -189,14 +242,14 @@ class ConstructionOccupationsControllerSpec extends SpecBase with MockitoSugar w
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
-            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
-            argCaptor.getValue.data mustBe ua2.data
+        whenReady(result) { _ =>
+          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+          argCaptor.getValue.data mustBe ua2.data
         }
 
         application.stop()
       }
     }
   }
+
 }

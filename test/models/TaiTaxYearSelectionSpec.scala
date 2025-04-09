@@ -24,7 +24,12 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.OptionValues
 import play.api.libs.json.{JsError, JsString, Json}
 
-class TaiTaxYearSelectionSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with OptionValues with ModelGenerators {
+class TaiTaxYearSelectionSpec
+    extends AnyWordSpec
+    with Matchers
+    with ScalaCheckPropertyChecks
+    with OptionValues
+    with ModelGenerators {
 
   "TaxYearSelection" must {
 
@@ -32,33 +37,24 @@ class TaiTaxYearSelectionSpec extends AnyWordSpec with Matchers with ScalaCheckP
 
       val gen = arbitrary[TaxYearSelection]
 
-      forAll(gen) {
-        taxYearSelection =>
-
-          JsString(taxYearSelection.toString).validate[TaxYearSelection].asOpt.value mustEqual taxYearSelection
+      forAll(gen) { taxYearSelection =>
+        JsString(taxYearSelection.toString).validate[TaxYearSelection].asOpt.value mustEqual taxYearSelection
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!TaxYearSelection.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!TaxYearSelection.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[TaxYearSelection] mustEqual JsError("error.invalid")
-      }
+      forAll(gen)(invalidValue => JsString(invalidValue).validate[TaxYearSelection] mustEqual JsError("error.invalid"))
     }
 
     "serialise" in {
 
       val gen = arbitrary[TaxYearSelection]
 
-      forAll(gen) {
-        taxYearSelection =>
-
-          Json.toJson(taxYearSelection) mustEqual JsString(taxYearSelection.toString)
-      }
+      forAll(gen)(taxYearSelection => Json.toJson(taxYearSelection) mustEqual JsString(taxYearSelection.toString))
     }
   }
+
 }

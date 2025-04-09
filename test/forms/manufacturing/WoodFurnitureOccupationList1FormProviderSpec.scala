@@ -23,7 +23,7 @@ import play.api.data.FormError
 class WoodFurnitureOccupationList1FormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "woodFurnitureOccupationList1.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new WoodFurnitureOccupationList1FormProvider()()
 
@@ -31,16 +31,21 @@ class WoodFurnitureOccupationList1FormProviderSpec extends BooleanFieldBehaviour
 
     val fieldName = "value"
 
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+    behave.like(
+      booleanField(
+        form,
+        fieldName,
+        invalidError = FormError(fieldName, invalidKey)
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

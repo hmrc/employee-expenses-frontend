@@ -45,11 +45,11 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
   "onPageLoad" must {
     "redirect to the first page of the application and reset user answers when user answers is not empty when authed" in {
       val argCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), argCaptor.capture())).thenReturn(Future.successful(true))
 
       val mockAuthConnector = mock[AuthConnector]
       when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
-        .thenReturn(Future.successful(new~(Some(fakeNino), Some(userAnswersId))))
+        .thenReturn(Future.successful(new ~(Some(fakeNino), Some(userAnswersId))))
 
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
@@ -66,7 +66,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       )
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
-      val result = controller.onPageLoad()(request)
+      val result  = controller.onPageLoad()(request)
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
@@ -74,11 +74,11 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
     }
     "redirect to the first page of the application and create a user answers when user answers is empty when authed" in {
       val argCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), argCaptor.capture())).thenReturn(Future.successful(true))
 
       val mockAuthConnector = mock[AuthConnector]
       when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
-        .thenReturn(Future.successful(new~(Some(fakeNino), Some(userAnswersId))))
+        .thenReturn(Future.successful(new ~(Some(fakeNino), Some(userAnswersId))))
 
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
@@ -95,7 +95,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       )
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
-      val result = controller.onPageLoad()(request)
+      val result  = controller.onPageLoad()(request)
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
@@ -103,7 +103,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
     }
     "redirect to the first page of the application and reset user answers when user answers is not empty when unauthed" in {
       val argCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), argCaptor.capture())).thenReturn(Future.successful(true))
 
       val controller = new IndexController(
         controllerComponents = app.injector.instanceOf[MessagesControllerComponents],
@@ -113,7 +113,8 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
         appConfig = app.injector.instanceOf[FrontendAppConfig]
       )
 
-      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
+        .withSession(SessionKeys.sessionId -> "key")
       val result = controller.onPageLoad()(request)
 
       status(result) mustEqual SEE_OTHER
@@ -122,7 +123,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
     }
     "redirect to the first page of the application and create a user answers when user answers is empty when unauthed" in {
       val argCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), argCaptor.capture())).thenReturn(Future.successful(true))
 
       val controller = new IndexController(
         controllerComponents = app.injector.instanceOf[MessagesControllerComponents],
@@ -132,7 +133,8 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
         appConfig = app.injector.instanceOf[FrontendAppConfig]
       )
 
-      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url).withSession(SessionKeys.sessionId -> "key")
+      val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
+        .withSession(SessionKeys.sessionId -> "key")
       val result = controller.onPageLoad()(request)
 
       status(result) mustEqual SEE_OTHER
@@ -141,11 +143,11 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
     }
     "redirect to the first page of the application and create a user answers when user answers is empty when authed and on merged journey" in {
       val argCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), argCaptor.capture())).thenReturn(Future.successful(true))
 
       val mockAuthConnector = mock[AuthConnector]
       when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
-        .thenReturn(Future.successful(new~(Some(fakeNino), Some(userAnswersId))))
+        .thenReturn(Future.successful(new ~(Some(fakeNino), Some(userAnswersId))))
 
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
@@ -162,7 +164,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       )
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.onPageLoad().url)
-      val result = controller.onPageLoad(isMergedJourney = true)(request)
+      val result  = controller.onPageLoad(isMergedJourney = true)(request)
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
@@ -174,7 +176,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
     "redirect to index with merged journey flag when authed and on merged journey" in {
       val mockAuthConnector = mock[AuthConnector]
       when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
-        .thenReturn(Future.successful(new~(Some(fakeNino), Some(userAnswersId))))
+        .thenReturn(Future.successful(new ~(Some(fakeNino), Some(userAnswersId))))
 
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
@@ -191,7 +193,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       )
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.start.url)
-      val result = controller.start(request)
+      val result  = controller.start(request)
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) must contain(routes.IndexController.onPageLoad(true).url)
@@ -199,7 +201,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
     "redirect to index if user is authed without user answers" in {
       val mockAuthConnector = mock[AuthConnector]
       when(mockAuthConnector.authorise[Option[String] ~ Option[String]](any(), any())(any(), any()))
-        .thenReturn(Future.successful(new~(Some(fakeNino), Some(userAnswersId))))
+        .thenReturn(Future.successful(new ~(Some(fakeNino), Some(userAnswersId))))
 
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
@@ -216,7 +218,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       )
 
       val request = FakeRequest(method = "GET", path = routes.IndexController.start.url)
-      val result = controller.start(request)
+      val result  = controller.start(request)
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) must contain(routes.IndexController.onPageLoad().url)
@@ -230,11 +232,13 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
         appConfig = app.injector.instanceOf[FrontendAppConfig]
       )
 
-      val request = FakeRequest(method = "GET", path = routes.IndexController.start.url).withSession(SessionKeys.sessionId -> "key")
+      val request =
+        FakeRequest(method = "GET", path = routes.IndexController.start.url).withSession(SessionKeys.sessionId -> "key")
       val result = controller.start(request)
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) must contain(routes.IndexController.onPageLoad().url)
     }
   }
+
 }

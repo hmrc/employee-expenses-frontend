@@ -33,53 +33,56 @@ import views.html.authenticated.AlreadyClaimingFREDifferentAmountsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AlreadyClaimingFREDifferentAmountsController @Inject()(
-                                                              override val messagesApi: MessagesApi,
-                                                              sessionRepository: SessionRepository,
-                                                              @Named(NavConstant.authenticated) navigator: Navigator,
-                                                              identify: AuthenticatedIdentifierAction,
-                                                              getData: DataRetrievalAction,
-                                                              requireData: DataRequiredAction,
-                                                              formProvider: AlreadyClaimingFREDifferentAmountsFormProvider,
-                                                              val controllerComponents: MessagesControllerComponents,
-                                                              view: AlreadyClaimingFREDifferentAmountsView
-                                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class AlreadyClaimingFREDifferentAmountsController @Inject() (
+    override val messagesApi: MessagesApi,
+    sessionRepository: SessionRepository,
+    @Named(NavConstant.authenticated) navigator: Navigator,
+    identify: AuthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: AlreadyClaimingFREDifferentAmountsFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: AlreadyClaimingFREDifferentAmountsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.userAnswers.get(FREAmounts)) match {
-        case (Some(claimAmount), Some(freAmounts)) =>
-          Ok(view(preparedForm, mode, claimAmount, freAmounts))
-        case _ =>
-          Redirect(controllers.routes.SessionExpiredController.onPageLoad)
-      }
+    (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.userAnswers.get(FREAmounts)) match {
+      case (Some(claimAmount), Some(freAmounts)) =>
+        Ok(view(preparedForm, mode, claimAmount, freAmounts))
+      case _ =>
+        Redirect(controllers.routes.SessionExpiredController.onPageLoad)
+    }
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
       (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.userAnswers.get(FREAmounts)) match {
         case (Some(claimAmount), Some(freAmounts)) =>
-          form.bindFromRequest().fold(
-            (formWithErrors: Form[_]) =>
-              Future.successful(BadRequest(view(formWithErrors, mode, claimAmount, freAmounts))),
-
-            value => {
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(AlreadyClaimingFREDifferentAmountsPage, value))
-                _ <- sessionRepository.set(request.identifier, updatedAnswers)
-              } yield Redirect(navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, mode)(updatedAnswers))
-            }
-          )
+          form
+            .bindFromRequest()
+            .fold(
+              (formWithErrors: Form[_]) =>
+                Future.successful(BadRequest(view(formWithErrors, mode, claimAmount, freAmounts))),
+              value =>
+                for {
+                  updatedAnswers <- Future
+                    .fromTry(request.userAnswers.set(AlreadyClaimingFREDifferentAmountsPage, value))
+                  _ <- sessionRepository.set(request.identifier, updatedAnswers)
+                } yield Redirect(navigator.nextPage(AlreadyClaimingFREDifferentAmountsPage, mode)(updatedAnswers))
+            )
         case _ =>
           Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad))
       }
-  }
+    }
+
 }

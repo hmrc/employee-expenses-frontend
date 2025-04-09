@@ -33,17 +33,39 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
 
     "remove answers stored in the industry group when updated" in {
       val userAnswers = new UserAnswers()
-        .set(FirstIndustryOptionsPage, FirstIndustryOptions.NoneOfAbove).success.value
-        .set(SecondIndustryOptionsPage, SecondIndustryOptions.Construction).success.value
-        .set(ConstructionOccupationsPage, ConstructionOccupations.LabourerOrNavvy).success.value
-        .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
-        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
-        .set(ExpensesEmployerPaidPage, 20).success.value
-        .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change).success.value
-        .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
-        .set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear)).success.value
-        .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
-        .set(YourEmployerPage, true).success.value
+        .set(FirstIndustryOptionsPage, FirstIndustryOptions.NoneOfAbove)
+        .success
+        .value
+        .set(SecondIndustryOptionsPage, SecondIndustryOptions.Construction)
+        .success
+        .value
+        .set(ConstructionOccupationsPage, ConstructionOccupations.LabourerOrNavvy)
+        .success
+        .value
+        .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution)
+        .success
+        .value
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear))
+        .success
+        .value
+        .set(ExpensesEmployerPaidPage, 20)
+        .success
+        .value
+        .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change)
+        .success
+        .value
+        .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove)
+        .success
+        .value
+        .set(ChangeWhichTaxYearsPage, Seq(TaxYearSelection.CurrentYear))
+        .success
+        .value
+        .set(RemoveFRECodePage, TaxYearSelection.CurrentYear)
+        .success
+        .value
+        .set(YourEmployerPage, true)
+        .success
+        .value
 
       val updatedUserAnswers = userAnswers.set(FirstIndustryOptionsPage, FirstIndustryOptions.Retail).get
 
@@ -60,4 +82,5 @@ class FirstIndustryOptionsPageSpec extends PageBehaviours {
       updatedUserAnswers.data.keys.contains(YourEmployerPage) mustBe true
     }
   }
+
 }

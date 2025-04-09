@@ -36,13 +36,19 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with OptionValues with IntegrationPatience {
+class ConstructionalEngineeringApprenticeControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with OptionValues
+    with IntegrationPatience {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
   private val userAnswers = emptyUserAnswers
 
-  lazy val constructionalEngineeringApprenticeRoute: String = routes.ConstructionalEngineeringApprenticeController.onPageLoad(NormalMode).url
+  lazy val constructionalEngineeringApprenticeRoute: String =
+    routes.ConstructionalEngineeringApprenticeController.onPageLoad(NormalMode).url
 
   "ConstructionalEngineeringApprentice Controller" must {
 
@@ -77,7 +83,7 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
     "redirect to the next page when answer is true" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -100,7 +106,7 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
     "redirect to the next page when answer is false" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -170,23 +176,25 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
     "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = FakeRequest(POST, constructionalEngineeringApprenticeRoute).withFormUrlEncodedBody(("value", "true"))
+      val request =
+        FakeRequest(POST, constructionalEngineeringApprenticeRoute).withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.ConstructionalEngineering.apprentice).success.value
-        .set(ConstructionalEngineeringApprenticePage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.ConstructionalEngineering.apprentice)
+        .success
+        .value
+        .set(ConstructionalEngineeringApprenticePage, true)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -194,25 +202,28 @@ class ConstructionalEngineeringApprenticeControllerSpec extends SpecBase with Sc
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = FakeRequest(POST, constructionalEngineeringApprenticeRoute).withFormUrlEncodedBody(("value", "false"))
+      val request =
+        FakeRequest(POST, constructionalEngineeringApprenticeRoute).withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.ConstructionalEngineering.allOther).success.value
-        .set(ConstructionalEngineeringApprenticePage, false).success.value
+        .set(ClaimAmount, ClaimAmounts.ConstructionalEngineering.allOther)
+        .success
+        .value
+        .set(ConstructionalEngineeringApprenticePage, false)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

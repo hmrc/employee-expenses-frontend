@@ -36,12 +36,18 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
+class WoodFurnitureOccupationList1ControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
   private val userAnswers = emptyUserAnswers
-  lazy val woodFurnitureOccupationList1Route: String = routes.WoodFurnitureOccupationList1Controller.onPageLoad(NormalMode).url
+
+  lazy val woodFurnitureOccupationList1Route: String =
+    routes.WoodFurnitureOccupationList1Controller.onPageLoad(NormalMode).url
 
   "WoodFurnitureOccupationList1 Controller" must {
 
@@ -76,11 +82,13 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute))
+          )
           .build()
 
       val request =
@@ -146,7 +154,7 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -157,13 +165,14 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-          .set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.list1).success.value
-          .set(WoodFurnitureOccupationList1Page, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Manufacturing.WoodFurniture.list1)
+        .success
+        .value
+        .set(WoodFurnitureOccupationList1Page, true)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -171,7 +180,7 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
     "not save ClaimAmount when 'No' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -182,14 +191,14 @@ class WoodFurnitureOccupationList1ControllerSpec extends SpecBase with ScalaFutu
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(WoodFurnitureOccupationList1Page, false).success.value
+        .set(WoodFurnitureOccupationList1Page, false)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

@@ -36,11 +36,17 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with OptionValues with IntegrationPatience with MockitoSugar {
+class HealthcareList1ControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with OptionValues
+    with IntegrationPatience
+    with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val healthcareList1Route: String = controllers.healthcare.routes.HealthcareList1Controller.onPageLoad(NormalMode).url
+  lazy val healthcareList1Route: String =
+    controllers.healthcare.routes.HealthcareList1Controller.onPageLoad(NormalMode).url
 
   "HealthcareList1 Controller" must {
 
@@ -75,7 +81,7 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
     "redirect to the next page when true is submitted" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -98,7 +104,7 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
     "redirect to the next page when false is submitted" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -168,7 +174,7 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
     "save 'list1' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
       val ua1 = emptyUserAnswers
 
@@ -179,12 +185,15 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
       val request = FakeRequest(POST, healthcareList1Route).withFormUrlEncodedBody(("value", "true"))
 
       val ua2 = ua1
-        .set(ClaimAmount, ClaimAmounts.Healthcare.list1).success.value
-        .set(HealthcareList1Page, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Healthcare.list1)
+        .success
+        .value
+        .set(HealthcareList1Page, true)
+        .success
+        .value
 
-      whenReady(route(application, request).value) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      whenReady(route(application, request).value) { _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
       application.stop()
@@ -193,7 +202,7 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
     "not save ClaimAmount when 'No' is selected" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
       val ua1 = emptyUserAnswers
 
@@ -204,14 +213,16 @@ class HealthcareList1ControllerSpec extends SpecBase with ScalaFutures with Opti
       val request = FakeRequest(POST, healthcareList1Route).withFormUrlEncodedBody(("value", "false"))
 
       val ua2 = ua1
-        .set(HealthcareList1Page, false).success.value
+        .set(HealthcareList1Page, false)
+        .success
+        .value
 
-      whenReady(route(application, request).value) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      whenReady(route(application, request).value) { _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
       application.stop()
     }
   }
+
 }

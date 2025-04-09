@@ -24,40 +24,38 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SessionRepository @Inject()(authSessionRepository: AuthSessionRepository,
-                                  unAuthSessionRepository: UnAuthSessionRepository,
-                                  mergedJourneySessionRepository: MergedJourneySessionRepository)(implicit ec: ExecutionContext) {
+class SessionRepository @Inject() (
+    authSessionRepository: AuthSessionRepository,
+    unAuthSessionRepository: UnAuthSessionRepository,
+    mergedJourneySessionRepository: MergedJourneySessionRepository
+)(implicit ec: ExecutionContext) {
 
-  def get(identifierType: IdentifierType): Future[Option[UserAnswers]] = {
+  def get(identifierType: IdentifierType): Future[Option[UserAnswers]] =
     identifierType match {
-      case id: Authed => authSessionRepository.get(id.internalId)
+      case id: Authed   => authSessionRepository.get(id.internalId)
       case id: UnAuthed => unAuthSessionRepository.get(id.sessionId)
     }
-  }
 
-  def set(identifierType: IdentifierType, userAnswers: UserAnswers): Future[Boolean] = {
+  def set(identifierType: IdentifierType, userAnswers: UserAnswers): Future[Boolean] =
     identifierType match {
       case id: Authed if userAnswers.isMergedJourney =>
         updateMergedJourneyTimeToLive(id)
         authSessionRepository.set(id.internalId, userAnswers)
-      case id: Authed => authSessionRepository.set(id.internalId, userAnswers)
+      case id: Authed   => authSessionRepository.set(id.internalId, userAnswers)
       case id: UnAuthed => unAuthSessionRepository.set(id.sessionId, userAnswers)
     }
-  }
 
-  def remove(identifierType: IdentifierType): Future[Unit] = {
+  def remove(identifierType: IdentifierType): Future[Unit] =
     identifierType match {
-      case id: Authed => authSessionRepository.remove(id.internalId)
+      case id: Authed   => authSessionRepository.remove(id.internalId)
       case id: UnAuthed => unAuthSessionRepository.remove(id.sessionId)
     }
-  }
 
-  def updateTimeToLive(id: Authed): Future[Boolean] = {
+  def updateTimeToLive(id: Authed): Future[Boolean] =
     get(id).flatMap {
       case Some(ua) => set(id, ua)
-      case _ => Future.successful(false)
+      case _        => Future.successful(false)
     }
-  }
 
   def getMergedJourney(internalId: String): Future[Option[MergedJourney]] =
     mergedJourneySessionRepository.get(internalId)
@@ -68,7 +66,7 @@ class SessionRepository @Inject()(authSessionRepository: AuthSessionRepository,
   def updateMergedJourneyTimeToLive(id: Authed): Future[Boolean] =
     mergedJourneySessionRepository.get(id.internalId).flatMap {
       case Some(data) => mergedJourneySessionRepository.set(data)
-      case _ => Future.successful(false)
+      case _          => Future.successful(false)
     }
 
 }

@@ -28,15 +28,16 @@ case object AlreadyClaimingFREDifferentAmountsPage extends QuestionPage[AlreadyC
 
   override def toString: String = "alreadyClaimingFREDifferentAmounts"
 
-  override def cleanup(value: Option[AlreadyClaimingFREDifferentAmounts], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[AlreadyClaimingFREDifferentAmounts], userAnswers: UserAnswers): Try[UserAnswers] =
 
     value match {
       case Some(AlreadyClaimingFREDifferentAmounts.Remove) =>
-        userAnswers.remove(YourEmployerPage)
+        userAnswers
+          .remove(YourEmployerPage)
           .flatMap(_.remove(YourAddressPage))
 
       case _ =>
         super.cleanup(value, userAnswers)
     }
-  }
+
 }

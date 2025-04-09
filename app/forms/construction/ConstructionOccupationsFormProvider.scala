@@ -27,4 +27,5 @@ class ConstructionOccupationsFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[ConstructionOccupations]("constructionOccupations.error.required")
     )
+
 }

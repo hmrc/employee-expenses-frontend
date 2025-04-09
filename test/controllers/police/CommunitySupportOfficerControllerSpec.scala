@@ -37,7 +37,12 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+class CommunitySupportOfficerControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with OptionValues {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -78,7 +83,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -148,7 +153,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
     "save 'communitySupportOfficer' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -158,13 +163,14 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Police.communitySupportOfficer).success.value
-        .set(CommunitySupportOfficerPage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Police.communitySupportOfficer)
+        .success
+        .value
+        .set(CommunitySupportOfficerPage, true)
+        .success
+        .value
 
-      whenReady(result){
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -172,7 +178,7 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
     "save no ClaimAmount when 'No' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -183,14 +189,14 @@ class CommunitySupportOfficerControllerSpec extends SpecBase with ScalaFutures w
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(CommunitySupportOfficerPage, false).success.value
+        .set(CommunitySupportOfficerPage, false)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

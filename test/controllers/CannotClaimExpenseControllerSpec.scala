@@ -37,4 +37,5 @@ class CannotClaimExpenseControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

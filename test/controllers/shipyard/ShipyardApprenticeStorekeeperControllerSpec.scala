@@ -37,19 +37,26 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class ShipyardApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFutures
-  with IntegrationPatience with OptionValues with MockitoSugar with BeforeAndAfterEach {
+class ShipyardApprenticeStorekeeperControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with IntegrationPatience
+    with OptionValues
+    with MockitoSugar
+    with BeforeAndAfterEach {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val userAnswers = emptyUserAnswers
+  private val userAnswers                              = emptyUserAnswers
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
   override def beforeEach(): Unit = {
     reset(mockSessionRepository)
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+    when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
   }
 
-  lazy val shipyardApprenticeStorekeeperRoute = routes.ShipyardApprenticeStorekeeperController.onPageLoad(NormalMode).url
+  lazy val shipyardApprenticeStorekeeperRoute =
+    routes.ShipyardApprenticeStorekeeperController.onPageLoad(NormalMode).url
 
   "ApprenticeStorekeeper Controller" must {
 
@@ -88,7 +95,8 @@ class ShipyardApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFut
           .overrides(
             bind[Navigator].qualifiedWith(NavConstant.shipyard).toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, shipyardApprenticeStorekeeperRoute)
@@ -162,13 +170,14 @@ class ShipyardApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFut
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Shipyard.apprentice).success.value
-        .set(ShipyardApprenticeStorekeeperPage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Shipyard.apprentice)
+        .success
+        .value
+        .set(ShipyardApprenticeStorekeeperPage, true)
+        .success
+        .value
 
-      whenReady(result){
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -183,16 +192,16 @@ class ShipyardApprenticeStorekeeperControllerSpec extends SpecBase with ScalaFut
         .withFormUrlEncodedBody(("value", "false"))
 
       val userAnswers2 = userAnswers
-        .set(ShipyardApprenticeStorekeeperPage, false).success.value
+        .set(ShipyardApprenticeStorekeeperPage, false)
+        .success
+        .value
 
       val result = route(application, request).value
 
-      whenReady(result){
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

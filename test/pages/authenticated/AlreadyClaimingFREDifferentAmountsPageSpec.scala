@@ -34,13 +34,20 @@ class AlreadyClaimingFREDifferentAmountsPageSpec extends PageBehaviours {
   "remove YourEmployer and YourAddress when answer is Remove" in {
 
     val userAnswers = emptyUserAnswers
-      .set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
-      .set(YourAddressPage, true).success.value
-      .set(YourEmployerPage, true).success.value
+      .set(AlreadyClaimingFREDifferentAmountsPage, Change)
+      .success
+      .value
+      .set(YourAddressPage, true)
+      .success
+      .value
+      .set(YourEmployerPage, true)
+      .success
+      .value
 
     val updatedUserAnswers = userAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Remove).get
 
     updatedUserAnswers.get(YourAddressPage) mustBe None
     updatedUserAnswers.get(YourEmployerPage) mustBe None
   }
+
 }

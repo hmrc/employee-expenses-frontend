@@ -30,7 +30,13 @@ import utils.WireMockHelper
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper with GuiceOneAppPerSuite with ScalaFutures with IntegrationPatience {
+class CitizenDetailsConnectorSpec
+    extends SpecBase
+    with MockitoSugar
+    with WireMockHelper
+    with GuiceOneAppPerSuite
+    with ScalaFutures
+    with IntegrationPatience {
 
   override implicit lazy val app: Application =
     new GuiceApplicationBuilder()
@@ -54,11 +60,10 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getEtag(fakeNino)
 
-      whenReady(result) {
-        res =>
-          res mustBe a[HttpResponse]
-          res.status mustBe 200
-          res.body mustBe validEtagJson.toString
+      whenReady(result) { res =>
+        res mustBe a[HttpResponse]
+        res.status mustBe 200
+        res.body mustBe validEtagJson.toString
       }
     }
 
@@ -73,10 +78,9 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getEtag(fakeNino)
 
-      whenReady(result) {
-        result =>
-          result mustBe a[HttpResponse]
-          result.status mustBe 500
+      whenReady(result) { result =>
+        result mustBe a[HttpResponse]
+        result.status mustBe 500
       }
     }
 
@@ -91,10 +95,9 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getEtag(fakeNino)
 
-      whenReady(result) {
-        result =>
-          result mustBe a[HttpResponse]
-          result.status mustBe 404
+      whenReady(result) { result =>
+        result mustBe a[HttpResponse]
+        result.status mustBe 404
       }
     }
 
@@ -109,10 +112,9 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getEtag(fakeNino)
 
-      whenReady(result) {
-        result =>
-          result mustBe a[HttpResponse]
-          result.status mustBe 423
+      whenReady(result) { result =>
+        result mustBe a[HttpResponse]
+        result.status mustBe 423
       }
     }
 
@@ -131,11 +133,10 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getAddress(fakeNino)
 
-      whenReady(result) {
-        res =>
-          res mustBe a[HttpResponse]
-          res.status mustBe 200
-          res.body mustBe validAddressJson.toString
+      whenReady(result) { res =>
+        res mustBe a[HttpResponse]
+        res.status mustBe 200
+        res.body mustBe validAddressJson.toString
       }
 
     }
@@ -151,10 +152,9 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getAddress(fakeNino)
 
-      whenReady(result) {
-        result =>
-          result mustBe a[HttpResponse]
-          result.status mustBe 500
+      whenReady(result) { result =>
+        result mustBe a[HttpResponse]
+        result.status mustBe 500
       }
     }
 
@@ -169,10 +169,9 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getAddress(fakeNino)
 
-      whenReady(result) {
-        result =>
-          result mustBe a[HttpResponse]
-          result.status mustBe 404
+      whenReady(result) { result =>
+        result mustBe a[HttpResponse]
+        result.status mustBe 404
       }
     }
 
@@ -187,10 +186,9 @@ class CitizenDetailsConnectorSpec extends SpecBase with MockitoSugar with WireMo
 
       val result: Future[HttpResponse] = citizenDetailsConnector.getAddress(fakeNino)
 
-      whenReady(result) {
-        result =>
-          result mustBe a[HttpResponse]
-          result.status mustBe 423
+      whenReady(result) { result =>
+        result mustBe a[HttpResponse]
+        result.status mustBe 423
       }
     }
   }

@@ -33,50 +33,53 @@ import views.html.FirstIndustryOptionsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FirstIndustryOptionsController @Inject()(
-                                                override val messagesApi: MessagesApi,
-                                                identify: UnauthenticatedIdentifierAction,
-                                                getData: DataRetrievalAction,
-                                                requireData: DataRequiredAction,
-                                                formProvider: FirstIndustryOptionsFormProvider,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: FirstIndustryOptionsView,
-                                                @Named(NavConstant.generic) navigator: Navigator,
-                                                sessionRepository: SessionRepository
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class FirstIndustryOptionsController @Inject() (
+    override val messagesApi: MessagesApi,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: FirstIndustryOptionsFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: FirstIndustryOptionsView,
+    @Named(NavConstant.generic) navigator: Navigator,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits {
 
   val form: Form[FirstIndustryOptions] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(FirstIndustryOptionsPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(FirstIndustryOptionsPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <-
+                if (value == FirstIndustryOptions.Retail) {
+                  Future.fromTry(
+                    request.userAnswers
+                      .set(FirstIndustryOptionsPage, value)
+                      .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
+                  )
+                } else {
+                  Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value))
+                }
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(FirstIndustryOptionsPage, mode)(updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <- if (value == FirstIndustryOptions.Retail) {
-              Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(FirstIndustryOptionsPage, value))
-            }
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(FirstIndustryOptionsPage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

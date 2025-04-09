@@ -27,7 +27,9 @@ class ExpensesEmployerPaidFormProvider @Inject() extends Mappings {
       "value" -> intCurrency(
         "expensesEmployerPaid.error.required",
         "expensesEmployerPaid.error.wholeNumber",
-        "expensesEmployerPaid.error.nonNumeric")
-          .verifying(inRange(0, 999999, "expensesEmployerPaid.error.outOfRange"))
+        "expensesEmployerPaid.error.nonNumeric"
+      )
+        .verifying(inRange(0, 999999, "expensesEmployerPaid.error.outOfRange"))
     )
+
 }

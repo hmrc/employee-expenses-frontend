@@ -35,22 +35,30 @@ class NoCodeChangeViewSpec extends ViewBehaviours {
 
     val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView, "noCodeChange")
+    behave.like(normalPage(applyView, "noCodeChange"))
 
-    behave like pageWithAccountMenu(applyViewWithAuth)
+    behave.like(pageWithAccountMenu(applyViewWithAuth))
 
-    behave like pageWithBackLink(applyViewWithAuth)
+    behave.like(pageWithBackLink(applyViewWithAuth))
 
-    val link: Html = Html(s"""<a href="${frontendAppConfig.incomeTaxSummary}" class="govuk-link">${messages("noCodeChange.link")}</a>""")
+    val link: Html = Html(
+      s"""<a href="${frontendAppConfig.incomeTaxSummary}" class="govuk-link">${messages("noCodeChange.link")}</a>"""
+    )
 
-    behave like pageWithBodyText(applyViewWithAuth, Html(messages("noCodeChange.guidance2", link)).toString)
+    behave.like(pageWithBodyText(applyViewWithAuth, Html(messages("noCodeChange.guidance2", link)).toString))
 
-    val applyViewMergeJourneyWithAuth = view.apply(isMergeJourney = true)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewMergeJourneyWithAuth =
+      view.apply(isMergeJourney = true)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like pageWithButtonLink(applyViewMergeJourneyWithAuth, MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimNotChanged).url, "continue")
+    behave.like(
+      pageWithButtonLink(
+        applyViewMergeJourneyWithAuth,
+        MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimNotChanged).url,
+        "continue"
+      )
+    )
 
   }
 
   application.stop()
 }
-

@@ -27,4 +27,5 @@ class TypeOfTransportFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[TypeOfTransport]("typeOfTransport.error.required")
     )
+
 }

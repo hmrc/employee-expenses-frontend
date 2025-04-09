@@ -28,14 +28,18 @@ import pages.authenticated._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPropertyChecks with Matchers with Generators {
+class HowYouWillGetYourExpensesControllerSpec
+    extends SpecBase
+    with ScalaCheckPropertyChecks
+    with Matchers
+    with Generators {
 
   "HowYouWillGetYourExpensesController" must {
     "return OK for a GET when" when {
       "user has selected current year only for changes" in {
         val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(CurrentYear)))).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result      = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -44,10 +48,12 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
       "user has selected current year only for changes with an increase" in {
         val ua = yearsUserAnswers(Seq(CurrentYear))
-          .set(ClaimAmountAndAnyDeductions, 120).success.value
+          .set(ClaimAmountAndAnyDeductions, 120)
+          .success
+          .value
         val application = applicationBuilder(userAnswers = Some(ua)).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result      = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -56,21 +62,23 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
       "user has selected current year only for changes with a decrease" in {
         val ua = yearsUserAnswers(Seq(CurrentYear))
-          .set(ClaimAmountAndAnyDeductions, 40).success.value
+          .set(ClaimAmountAndAnyDeductions, 40)
+          .success
+          .value
         val application = applicationBuilder(userAnswers = Some(ua)).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result      = route(application, request).value
 
         status(result) mustEqual OK
 
         application.stop()
       }
 
-       "user has selected CY-1 only for changes" in {
+      "user has selected CY-1 only for changes" in {
         val taxYearSelection = Seq(CurrentYearMinus1)
-        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val application      = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
+        val request          = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result           = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -79,9 +87,9 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
       "user has selected CY and CY-1 for changes" in {
         val taxYearSelection = Seq(CurrentYear, CurrentYearMinus1)
-        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val application      = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
+        val request          = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result           = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -90,10 +98,12 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
       "user has selected CY and CY-1 for changes with an increase" in {
         val ua = yearsUserAnswers(Seq(CurrentYear, CurrentYearMinus1))
-          .set(ClaimAmountAndAnyDeductions, 120).success.value
+          .set(ClaimAmountAndAnyDeductions, 120)
+          .success
+          .value
         val application = applicationBuilder(userAnswers = Some(ua)).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result      = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -102,10 +112,12 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
       "user has selected CY and CY-1 for changes with a decrease" in {
         val ua = yearsUserAnswers(Seq(CurrentYear, CurrentYearMinus1))
-          .set(ClaimAmountAndAnyDeductions, 40).success.value
+          .set(ClaimAmountAndAnyDeductions, 40)
+          .success
+          .value
         val application = applicationBuilder(userAnswers = Some(ua)).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result      = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -114,9 +126,9 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
       "user has selected CY, CY-1 and previous year for changes" in {
         val taxYearSelection = Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus1)
-        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val application      = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
+        val request          = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result           = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -125,9 +137,9 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
       "user has selected CY and CY-2 for changes" in {
         val taxYearSelection = Seq(CurrentYear, CurrentYearMinus2)
-        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val application      = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
+        val request          = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result           = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -136,9 +148,9 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
       "user has selected CY-1 and CY-2 for changes" in {
         val taxYearSelection = Seq(CurrentYearMinus1, CurrentYearMinus2)
-        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val application      = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
+        val request          = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result           = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -147,9 +159,9 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
       "user has selected CY-2 and CY-3 for changes" in {
         val taxYearSelection = Seq(CurrentYearMinus2, CurrentYearMinus3)
-        val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val application      = applicationBuilder(userAnswers = Some(yearsUserAnswers(taxYearSelection))).build()
+        val request          = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result           = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -159,21 +171,42 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
     "return OK for a GET when change years are selected" when {
       def changeYearsUserAnswers(years: Seq[TaxYearSelection]) = emptyUserAnswers
-        .set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
-        .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
-        .set(ChangeWhichTaxYearsPage, years).success.value
-        .set(YourAddressPage, true).success.value
-        .set(YourEmployerPage, true).success.value
-        .set(ClaimAmount, 100).success.value
-        .set(ClaimAmountAndAnyDeductions, 80).success.value
-        .set(FREResponse, FRENoYears).success.value
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(EmployerContributionPage, EmployerContribution.NoEmployerContribution)
+        .success
+        .value
+        .set(
+          TaxYearSelectionPage,
+          Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)
+        )
+        .success
+        .value
+        .set(ChangeWhichTaxYearsPage, years)
+        .success
+        .value
+        .set(YourAddressPage, true)
+        .success
+        .value
+        .set(YourEmployerPage, true)
+        .success
+        .value
+        .set(ClaimAmount, 100)
+        .success
+        .value
+        .set(ClaimAmountAndAnyDeductions, 80)
+        .success
+        .value
+        .set(FREResponse, FRENoYears)
+        .success
+        .value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       "user has selected current year only for changes" in {
         val taxYearSelection = Seq(CurrentYear)
-        val application = applicationBuilder(userAnswers = Some(changeYearsUserAnswers(taxYearSelection))).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val application      = applicationBuilder(userAnswers = Some(changeYearsUserAnswers(taxYearSelection))).build()
+        val request          = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result           = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -182,9 +215,9 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
       "user has selected CY-1 only for changes" in {
         val taxYearSelection = Seq(CurrentYearMinus1)
-        val application = applicationBuilder(userAnswers = Some(changeYearsUserAnswers(taxYearSelection))).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val application      = applicationBuilder(userAnswers = Some(changeYearsUserAnswers(taxYearSelection))).build()
+        val request          = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result           = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -193,9 +226,9 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
 
       "user has selected CY and CY-1 for changes" in {
         val taxYearSelection = Seq(CurrentYear, CurrentYearMinus1)
-        val application = applicationBuilder(userAnswers = Some(changeYearsUserAnswers(taxYearSelection))).build()
-        val request = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
-        val result = route(application, request).value
+        val application      = applicationBuilder(userAnswers = Some(changeYearsUserAnswers(taxYearSelection))).build()
+        val request          = FakeRequest(GET, routes.HowYouWillGetYourExpensesController.onPageLoad().url)
+        val result           = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -203,4 +236,5 @@ class HowYouWillGetYourExpensesControllerSpec extends SpecBase with ScalaCheckPr
       }
     }
   }
+
 }

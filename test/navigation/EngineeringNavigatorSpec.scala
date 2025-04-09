@@ -24,7 +24,7 @@ import pages.Page
 import pages.engineering._
 
 class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
-  private val modes = Seq(NormalMode, CheckMode)
+  private val modes     = Seq(NormalMode, CheckMode)
   private val navigator = new EngineeringNavigator
 
   "EngineeringNavigator" when {
@@ -67,7 +67,7 @@ class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
           }
         }
 
-        //Constructional Engineering
+        // Constructional Engineering
 
         "from ConstructionalEngineeringApprentice" must {
 
@@ -152,16 +152,15 @@ class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
           }
         }
 
-        //Ancillary Engineering
+        // Ancillary Engineering
 
         "from AncillaryEngineeringWhichTrade" must {
-          for (trade <- AncillaryEngineeringWhichTrade.values) {
+          for (trade <- AncillaryEngineeringWhichTrade.values)
             s"goto EmployerContribution when '$trade' selected" in {
               val answers = emptyUserAnswers.set(AncillaryEngineeringWhichTradePage, trade).success.value
               navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(answers) mustBe
                 controllers.routes.EmployerContributionController.onPageLoad(mode)
             }
-          }
 
           "go to SessionExpired when no AncillaryEngineeringWhichTradePage in UserAnswers" in {
             navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(emptyUserAnswers) mustBe
@@ -169,7 +168,7 @@ class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
           }
         }
 
-        //Factory Engineering
+        // Factory Engineering
 
         "from FactoryEngineeringList1" must {
 
@@ -239,4 +238,5 @@ class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
       }
     }
   }
+
 }

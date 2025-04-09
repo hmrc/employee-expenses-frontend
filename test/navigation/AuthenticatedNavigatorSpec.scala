@@ -25,7 +25,13 @@ import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove}
 import models.FlatRateExpenseOptions._
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, _}
 import models.mergedJourney.{ClaimCompleteCurrent, ClaimCompleteCurrentPrevious, ClaimCompletePrevious}
-import models.{AlreadyClaimingFREDifferentAmounts, AlreadyClaimingFRESameAmount, CheckMode, NormalMode, TaxYearSelection}
+import models.{
+  AlreadyClaimingFREDifferentAmounts,
+  AlreadyClaimingFRESameAmount,
+  CheckMode,
+  NormalMode,
+  TaxYearSelection
+}
 import pages.authenticated._
 import pages.confirmation.ConfirmationMergeJourneyPage
 import pages.mergedJourney.MergedJourneyFlag
@@ -39,8 +45,13 @@ class AuthenticatedNavigatorSpec extends SpecBase {
     "in Normal mode" must {
       "from TaxYearSelection" must {
         "go to CheckYourAnswers when answered and freResponse returns FRENoYears and currentTax has been selected" in {
-          val ua = emptyUserAnswers.set(FREResponse, FRENoYears).success.value
-            .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
+          val ua = emptyUserAnswers
+            .set(FREResponse, FRENoYears)
+            .success
+            .value
+            .set(TaxYearSelectionPage, Seq(CurrentYear))
+            .success
+            .value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
             CheckYourAnswersController.onPageLoad
@@ -64,14 +75,16 @@ class AuthenticatedNavigatorSpec extends SpecBase {
       "from AlreadyClaimingFRESameAmount" must {
 
         "go to NoCodeChange when answer is NoChange" in {
-          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.NoChange).success.value
+          val ua =
+            emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.NoChange).success.value
 
           navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(ua) mustBe
             NoCodeChangeController.onPageLoad()
         }
 
         "go to RemoveFRECode when answer is false" in {
-          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
+          val ua =
+            emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
 
           navigator.nextPage(AlreadyClaimingFRESameAmountPage, NormalMode)(ua) mustBe
             RemoveFRECodeController.onPageLoad(NormalMode)
@@ -159,14 +172,18 @@ class AuthenticatedNavigatorSpec extends SpecBase {
       }
 
       "go to YourAddressController from CheckYourAnswers for when current year selected" in {
-        val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
+        val ua =
+          emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
 
         navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
           YourAddressController.onPageLoad(NormalMode)
       }
 
       "go to SubmissionController from YourAddressPage for when current year selected" in {
-        val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Remove).success.value
+        val ua = emptyUserAnswers
+          .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Remove)
+          .success
+          .value
 
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
           SubmissionController.onSubmit
@@ -174,8 +191,12 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "go to YourEmployerController from YourAddressController for when current year selected" in {
         val ua = emptyUserAnswers
-          .set(CitizenDetailsAddress, address).success.value
-          .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
+          .set(CitizenDetailsAddress, address)
+          .success
+          .value
+          .set(TaxYearSelectionPage, Seq(CurrentYear))
+          .success
+          .value
 
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
           YourEmployerController.onPageLoad()
@@ -183,9 +204,15 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "go to YourEmployerController from YourAddressController for when current year selected in Change year" in {
         val ua = emptyUserAnswers
-          .set(CitizenDetailsAddress, address).success.value
-          .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
-          .set(ChangeWhichTaxYearsPage, Seq(CurrentYear)).success.value
+          .set(CitizenDetailsAddress, address)
+          .success
+          .value
+          .set(TaxYearSelectionPage, Seq(CurrentYear))
+          .success
+          .value
+          .set(ChangeWhichTaxYearsPage, Seq(CurrentYear))
+          .success
+          .value
 
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
           YourEmployerController.onPageLoad()
@@ -193,9 +220,15 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "go to HowYouWillGetYourExpensesController from YourAddressController for when current year selected in tax year selection but not in Change year" in {
         val ua = emptyUserAnswers
-          .set(CitizenDetailsAddress, address).success.value
-          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus2)).success.value
-          .set(ChangeWhichTaxYearsPage, Seq(CurrentYearMinus2)).success.value
+          .set(CitizenDetailsAddress, address)
+          .success
+          .value
+          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus2))
+          .success
+          .value
+          .set(ChangeWhichTaxYearsPage, Seq(CurrentYearMinus2))
+          .success
+          .value
 
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
           HowYouWillGetYourExpensesController.onPageLoad()
@@ -203,56 +236,60 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "go to HowYouWillGetYourExpensesController from YourAddressController when current year is not selected" in {
         val ua = emptyUserAnswers
-          .set(CitizenDetailsAddress, address).success.value
-          .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
+          .set(CitizenDetailsAddress, address)
+          .success
+          .value
+          .set(TaxYearSelectionPage, Seq(CurrentYearMinus1))
+          .success
+          .value
 
         navigator.nextPage(YourAddressPage, NormalMode)(ua) mustBe
           HowYouWillGetYourExpensesController.onPageLoad()
       }
 
-      "go from 'HowYouWillGetYourExpenses' to 'SubmissionController.onSubmit'" in {
-        navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(currentYearFullUserAnswers)
+      "go from 'HowYouWillGetYourExpenses' to 'SubmissionController.onSubmit'" in
+        navigator
+          .nextPage(HowYouWillGetYourExpensesPage, NormalMode)(currentYearFullUserAnswers)
           .mustBe(SubmissionController.onSubmit)
-      }
 
-      "go from 'SubmissionController' to 'Confirmation page' for current year" in {
-        navigator.nextPage(Submission, NormalMode)(currentYearFullUserAnswers)
+      "go from 'SubmissionController' to 'Confirmation page' for current year" in
+        navigator
+          .nextPage(Submission, NormalMode)(currentYearFullUserAnswers)
           .mustBe(ConfirmationCurrentYearOnlyController.onPageLoad())
-      }
 
-      "go from 'SubmissionController' to 'Confirmation page' for previous year" in {
-        navigator.nextPage(Submission,
-          NormalMode)(yearsUserAnswers(Seq(TaxYearSelection.CurrentYearMinus1)))
+      "go from 'SubmissionController' to 'Confirmation page' for previous year" in
+        navigator
+          .nextPage(Submission, NormalMode)(yearsUserAnswers(Seq(TaxYearSelection.CurrentYearMinus1)))
           .mustBe(ConfirmationPreviousYearsOnlyController.onPageLoad())
-      }
 
-      "go from 'SubmissionController' to 'Confirmation page' for current and previous year" in {
-        navigator.nextPage(Submission, NormalMode)(yearsUserAnswers(Seq
-        (TaxYearSelection.CurrentYear,
-          TaxYearSelection.CurrentYearMinus1)))
+      "go from 'SubmissionController' to 'Confirmation page' for current and previous year" in
+        navigator
+          .nextPage(Submission, NormalMode)(
+            yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))
+          )
           .mustBe(ConfirmationCurrentAndPreviousYearsController.onPageLoad())
-      }
 
       "go from 'SubmissionController' to 'Confirmation Merge Journey page' if Merge Journey Flag is enabled" in {
         val userAnswers = currentYearFullUserAnswers.set(MergedJourneyFlag, true).success.value
-        navigator.nextPage(Submission, NormalMode)(userAnswers)
+        navigator
+          .nextPage(Submission, NormalMode)(userAnswers)
           .mustBe(ConfirmationMergeJourneyController.onPageLoad())
       }
 
       "go to MergedJourneyController mergedJourneyContinue with successful claim for current year from ConfirmationMergeJourneyPage" in {
         navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(currentYearFullUserAnswers) mustBe
-          MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimCompleteCurrent)
+          MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimCompleteCurrent)
       }
 
       "go to MergedJourneyController mergedJourneyContinue with successful claim for previous year from ConfirmationMergeJourneyPage" in {
         navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(currentYearMinus1UserAnswers) mustBe
-          MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimCompletePrevious)
+          MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimCompletePrevious)
       }
 
       "go to MergedJourneyController mergedJourneyContinue with successful claim for current and previous year from ConfirmationMergeJourneyPage" in {
         val answers = yearsUserAnswers(Seq(CurrentYear, CurrentYearMinus1))
         navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(answers) mustBe
-          MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimCompleteCurrentPrevious)
+          MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimCompleteCurrentPrevious)
       }
 
       "go to SessionExpiredController from ConfirmationMergeJourneyPage when no data is available" in {
@@ -289,8 +326,13 @@ class AuthenticatedNavigatorSpec extends SpecBase {
       }
 
       "go to CheckYourAnswers from ChangeWhichTaxYear when YourEmployer is defined and CurrentYear is selected" in {
-        val userAnswers = emptyUserAnswers.set(YourEmployerPage, true).success.value
-          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
+        val userAnswers = emptyUserAnswers
+          .set(YourEmployerPage, true)
+          .success
+          .value
+          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1))
+          .success
+          .value
 
         navigator.nextPage(ChangeWhichTaxYearsPage, CheckMode)(userAnswers) mustBe
           CheckYourAnswersController.onPageLoad
@@ -298,16 +340,26 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "from TaxYearSelection" must {
         "go to Check your answers when answered and freResponse returns FRENoYears and has currentYear" in {
-          val ua = emptyUserAnswers.set(FREResponse, FRENoYears).success.value
-            .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
+          val ua = emptyUserAnswers
+            .set(FREResponse, FRENoYears)
+            .success
+            .value
+            .set(TaxYearSelectionPage, Seq(CurrentYear))
+            .success
+            .value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
             CheckYourAnswersController.onPageLoad
         }
 
         "go to Check your answers when answered and freResponse returns FRENoYears and doesn't have  currentYear" in {
-          val ua = emptyUserAnswers.set(FREResponse, FRENoYears).success.value
-            .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
+          val ua = emptyUserAnswers
+            .set(FREResponse, FRENoYears)
+            .success
+            .value
+            .set(TaxYearSelectionPage, Seq(CurrentYearMinus1))
+            .success
+            .value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
             CheckYourAnswersController.onPageLoad
@@ -337,14 +389,16 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "from AlreadyClaimingFRESameAmount" must {
         "go to NoCodeChange when answer is NoChange" in {
-          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.NoChange).success.value
+          val ua =
+            emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.NoChange).success.value
 
           navigator.nextPage(AlreadyClaimingFRESameAmountPage, CheckMode)(ua) mustBe
             NoCodeChangeController.onPageLoad()
         }
 
         "go to RemoveFRECode when answer is false" in {
-          val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
+          val ua =
+            emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
 
           navigator.nextPage(AlreadyClaimingFRESameAmountPage, CheckMode)(ua) mustBe
             RemoveFRECodeController.onPageLoad(CheckMode)
@@ -397,4 +451,5 @@ class AuthenticatedNavigatorSpec extends SpecBase {
       }
     }
   }
+
 }

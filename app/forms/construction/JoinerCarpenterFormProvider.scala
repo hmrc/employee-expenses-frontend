@@ -26,4 +26,5 @@ class JoinerCarpenterFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("joinerCarpenter.error.required")
     )
+
 }

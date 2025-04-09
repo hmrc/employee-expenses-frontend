@@ -33,52 +33,55 @@ import views.html.manufacturing.IronApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class IronApprenticeController @Inject()(
-                                          override val messagesApi: MessagesApi,
-                                          @Named(NavConstant.manufacturing) navigator: Navigator,
-                                          identify: UnauthenticatedIdentifierAction,
-                                          getData: DataRetrievalAction,
-                                          requireData: DataRequiredAction,
-                                          formProvider: IronApprenticeFormProvider,
-                                          val controllerComponents: MessagesControllerComponents,
-                                          view: IronApprenticeView,
-                                          sessionRepository: SessionRepository
-                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class IronApprenticeController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.manufacturing) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: IronApprenticeFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: IronApprenticeView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(IronApprenticePage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(IronApprenticePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+        value =>
           for {
-            updatedAnswers <- if (value) {
-              Future.fromTry(request.userAnswers.set(IronApprenticePage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.apprentice))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(IronApprenticePage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.allOther))
-              )
-            }
+            updatedAnswers <-
+              if (value) {
+                Future.fromTry(
+                  request.userAnswers
+                    .set(IronApprenticePage, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.apprentice))
+                )
+              } else {
+                Future.fromTry(
+                  request.userAnswers
+                    .set(IronApprenticePage, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.allOther))
+                )
+              }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(IronApprenticePage, mode)(updatedAnswers))
-        }
       )
   }
+
 }

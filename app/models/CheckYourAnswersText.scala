@@ -17,8 +17,8 @@
 package models
 
 case class CheckYourAnswersText(
-                                 heading: String,
-                                 disclaimerHeading: String,
-                                 disclaimer: String,
-                                 button: String
-                               )
+    heading: String,
+    disclaimerHeading: String,
+    disclaimer: String,
+    button: String
+)

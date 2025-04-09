@@ -28,4 +28,5 @@ class YourEmployerPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](YourEmployerPage)
   }
+
 }

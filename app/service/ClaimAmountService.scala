@@ -24,18 +24,17 @@ import pages.ExpensesEmployerPaidPage
 
 import scala.math.BigDecimal.RoundingMode
 
-class ClaimAmountService @Inject()(
-                                    appConfig: FrontendAppConfig
-                                  ) {
+class ClaimAmountService @Inject() (
+    appConfig: FrontendAppConfig
+) {
 
-  def calculateClaimAmount(userAnswers: UserAnswers, claimAmount: Int): Int = {
+  def calculateClaimAmount(userAnswers: UserAnswers, claimAmount: Int): Int =
     userAnswers.get(ExpensesEmployerPaidPage) match {
       case Some(expensesPaid) =>
         claimAmount - expensesPaid
       case None =>
         claimAmount
     }
-  }
 
   def calculateTax(percentage: Int, amount: Int): String = {
 
@@ -48,16 +47,15 @@ class ClaimAmountService @Inject()(
     }
   }
 
-  def standardRate(claimAmount: Int): StandardRate = {
+  def standardRate(claimAmount: Int): StandardRate =
     StandardRate(
       basicRate = appConfig.taxPercentageBasicRate,
       higherRate = appConfig.taxPercentageHigherRate,
       calculatedBasicRate = calculateTax(appConfig.taxPercentageBasicRate, claimAmount),
       calculatedHigherRate = calculateTax(appConfig.taxPercentageHigherRate, claimAmount)
     )
-  }
 
-  def scottishRate(claimAmount: Int): ScottishRate = {
+  def scottishRate(claimAmount: Int): ScottishRate =
     ScottishRate(
       starterRate = appConfig.taxPercentageScotlandStarterRate,
       basicRate = appConfig.taxPercentageScotlandBasicRate,
@@ -72,7 +70,6 @@ class ClaimAmountService @Inject()(
       calculatedAdvancedRate = calculateTax(appConfig.taxPercentageScotlandAdvancedRate, claimAmount),
       calculatedTopRate = calculateTax(appConfig.taxPercentageScotlandTopRate, claimAmount)
     )
-  }
 
   def getRates(taxCodeRecords: Seq[TaxCodeRecord], claimAmount: Int): Seq[Rates] = {
 
@@ -88,11 +85,10 @@ class ClaimAmountService @Inject()(
     }
   }
 
-  def filterRecords(taxCodeRecord: Seq[TaxCodeRecord]): Option[TaxCodeRecord] = {
+  def filterRecords(taxCodeRecord: Seq[TaxCodeRecord]): Option[TaxCodeRecord] =
     taxCodeRecord.find(_.status == Live) match {
       case Some(liveTaxCodeRecord) => Some(liveTaxCodeRecord)
-      case None => taxCodeRecord.headOption
+      case None                    => taxCodeRecord.headOption
     }
-  }
 
 }

@@ -27,18 +27,19 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.authenticated.UpdateEmployerInformationView
 
-class UpdateEmployerInformationController @Inject()(
-                                                     override val messagesApi: MessagesApi,
-                                                     @Named(NavConstant.authenticated) navigator: Navigator,
-                                                     identify: AuthenticatedIdentifierAction,
-                                                     getData: DataRetrievalAction,
-                                                     requireData: DataRequiredAction,
-                                                     val controllerComponents: MessagesControllerComponents,
-                                                     view: UpdateEmployerInformationView
-                                     ) extends FrontendBaseController with I18nSupport {
+class UpdateEmployerInformationController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.authenticated) navigator: Navigator,
+    identify: AuthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    val controllerComponents: MessagesControllerComponents,
+    view: UpdateEmployerInformationView
+) extends FrontendBaseController
+    with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
-      Ok(view(navigator.nextPage(UpdateYourEmployerInformationPage, mode)(request.userAnswers).url))
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    Ok(view(navigator.nextPage(UpdateYourEmployerInformationPage, mode)(request.userAnswers).url))
   }
+
 }

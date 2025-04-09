@@ -27,4 +27,5 @@ class AlreadyClaimingFREDifferentAmountsFormProvider @Inject() extends Mappings 
     Form(
       "value" -> enumerable[AlreadyClaimingFREDifferentAmounts]("alreadyClaimingFREDifferentAmounts.error.required")
     )
+
 }

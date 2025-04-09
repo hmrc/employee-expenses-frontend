@@ -32,21 +32,20 @@ class TransportVehicleTradeSpec extends AnyWordSpec with Matchers with ScalaChec
 
       val gen = Gen.oneOf(TransportVehicleTrade.values.toSeq)
 
-      forAll(gen) {
-        transportVehicleTrade =>
-
-          JsString(transportVehicleTrade.toString).validate[TransportVehicleTrade].asOpt.value mustEqual transportVehicleTrade
+      forAll(gen) { transportVehicleTrade =>
+        JsString(transportVehicleTrade.toString)
+          .validate[TransportVehicleTrade]
+          .asOpt
+          .value mustEqual transportVehicleTrade
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!TransportVehicleTrade.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!TransportVehicleTrade.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[TransportVehicleTrade] mustEqual JsError("error.invalid")
+      forAll(gen) { invalidValue =>
+        JsString(invalidValue).validate[TransportVehicleTrade] mustEqual JsError("error.invalid")
       }
     }
 
@@ -54,11 +53,10 @@ class TransportVehicleTradeSpec extends AnyWordSpec with Matchers with ScalaChec
 
       val gen = Gen.oneOf(TransportVehicleTrade.values.toSeq)
 
-      forAll(gen) {
-        transportVehicleTrade =>
-
-          Json.toJson(transportVehicleTrade) mustEqual JsString(transportVehicleTrade.toString)
+      forAll(gen) { transportVehicleTrade =>
+        Json.toJson(transportVehicleTrade) mustEqual JsString(transportVehicleTrade.toString)
       }
     }
   }
+
 }

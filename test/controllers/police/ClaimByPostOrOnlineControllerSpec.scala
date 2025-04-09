@@ -37,4 +37,5 @@ class ClaimByPostOrOnlineControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

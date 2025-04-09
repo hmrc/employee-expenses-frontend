@@ -26,4 +26,5 @@ class DocksOccupationList1FormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("docksOccupationList1.error.required")
     )
+
 }

@@ -22,9 +22,7 @@ import views.NewViewSpecBase
 
 trait ViewBehaviours extends NewViewSpecBase {
 
-  def normalPage(view: HtmlFormat.Appendable,
-    messageKeyPrefix: String,
-    expectedGuidanceKeys: String*): Unit = {
+  def normalPage(view: HtmlFormat.Appendable, messageKeyPrefix: String, expectedGuidanceKeys: String*): Unit =
 
     "behave like a normal page" when {
 
@@ -71,9 +69,8 @@ trait ViewBehaviours extends NewViewSpecBase {
         }
       }
     }
-  }
 
-  def pageWithAccountMenu(view: HtmlFormat.Appendable): Unit = {
+  def pageWithAccountMenu(view: HtmlFormat.Appendable): Unit =
 
     "behave like a normal page with account menu" when {
 
@@ -92,9 +89,8 @@ trait ViewBehaviours extends NewViewSpecBase {
         }
       }
     }
-  }
 
-  def pageWithBackLink(view: HtmlFormat.Appendable): Unit = {
+  def pageWithBackLink(view: HtmlFormat.Appendable): Unit =
 
     "behave like a page with a back link" must {
 
@@ -104,44 +100,32 @@ trait ViewBehaviours extends NewViewSpecBase {
         assertRenderedByClass(doc, "govuk-back-link")
       }
     }
-  }
 
-  def pageWithList(view: HtmlFormat.Appendable,
-                   pageKey: String,
-                   bulletList: Seq[String]): Unit = {
+  def pageWithList(view: HtmlFormat.Appendable, pageKey: String, bulletList: Seq[String]): Unit =
 
     "behave like a page with a list" must {
 
       "have a list" in {
 
         val doc = asDocument(view)
-        bulletList.foreach {
-          x => assertRenderedById(doc, s"bullet-$x")
-        }
+        bulletList.foreach(x => assertRenderedById(doc, s"bullet-$x"))
       }
 
       "have correct values" in {
 
         val doc = asDocument(view)
-        bulletList.foreach {
-          x => assertContainsMessages(doc, s"$pageKey.$x")
-        }
+        bulletList.foreach(x => assertContainsMessages(doc, s"$pageKey.$x"))
       }
     }
-  }
 
-  def pageWithSecondaryHeader(view: HtmlFormat.Appendable,
-                              heading: String): Unit = {
+  def pageWithSecondaryHeader(view: HtmlFormat.Appendable, heading: String): Unit =
 
     "behave like a page with a secondary header" in {
 
       Jsoup.parse(view.toString()).getElementsByClass("heading-secondary").text() must include(heading)
     }
-  }
 
-  def pageWithButtonLink(view: HtmlFormat.Appendable,
-                         url: String,
-                         id: String): Unit = {
+  def pageWithButtonLink(view: HtmlFormat.Appendable, url: String, id: String): Unit =
 
     "behave like a page with a button link" must {
 
@@ -153,30 +137,24 @@ trait ViewBehaviours extends NewViewSpecBase {
 
       "have a url" in {
 
-        val doc = asDocument(view)
+        val doc    = asDocument(view)
         val result = doc.getElementById(messages(id).toLowerCase)
         result.attr("href") mustBe url
       }
     }
-  }
 
-  def pageWithBodyText(view: HtmlFormat.Appendable,
-                       messageKey: String*): Unit = {
+  def pageWithBodyText(view: HtmlFormat.Appendable, messageKey: String*): Unit =
 
     "behave like a page with body text" must {
 
       "display content" in {
         val doc = asDocument(view)
-        for (key <- messageKey) {
+        for (key <- messageKey)
           assertContainsMessages(doc, key)
-        }
       }
     }
-  }
 
-  def pageWithHyperLink(view: HtmlFormat.Appendable,
-                        url: String,
-                        id: String = "link"): Unit = {
+  def pageWithHyperLink(view: HtmlFormat.Appendable, url: String, id: String = "link"): Unit =
 
     "behave like a page with a url link" must {
       "display link" in {
@@ -184,20 +162,16 @@ trait ViewBehaviours extends NewViewSpecBase {
         doc.getElementById(id).attr("href") mustBe url
       }
     }
-  }
 
-  def pageWithLink(view: HtmlFormat.Appendable,
-                   url: String,
-                   text: String): Unit = {
+  def pageWithLink(view: HtmlFormat.Appendable, url: String, text: String): Unit =
 
     "behave like a page with a url link" must {
       "display link" in {
         val doc = asDocument(view)
-        doc.getElementsContainingText(messages(text).toLowerCase)
+        doc
+          .getElementsContainingText(messages(text).toLowerCase)
           .attr("href") mustBe url
       }
     }
-  }
 
 }
-

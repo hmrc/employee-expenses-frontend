@@ -22,11 +22,11 @@ import pages.foodCatering.CateringStaffNHSPage
 import controllers.routes._
 
 class FoodCateringNavigatorSpec extends SpecBase {
-  private val modes = Seq(NormalMode, CheckMode)
+  private val modes     = Seq(NormalMode, CheckMode)
   private val navigator = new FoodCateringNavigator
 
   "FoodCateringNavigator" when {
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
         "go to EmployerContributionController from CateringStaffNHSController when answered 'yes' " in {
           val userAnswers = emptyUserAnswers.set(CateringStaffNHSPage, true).success.value
@@ -47,6 +47,6 @@ class FoodCateringNavigatorSpec extends SpecBase {
             SessionExpiredController.onPageLoad
         }
       }
-    }
   }
+
 }

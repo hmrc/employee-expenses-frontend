@@ -38,4 +38,5 @@ class RemoveFRECodePageSpec extends PageBehaviours {
       result.get(ChangeWhichTaxYearsPage) mustNot be(defined)
     }
   }
+
 }

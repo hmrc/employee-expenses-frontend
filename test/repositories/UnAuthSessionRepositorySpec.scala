@@ -31,11 +31,12 @@ import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
 import scala.concurrent.ExecutionContext
 
-class UnAuthSessionRepositorySpec extends SpecBase
-  with Matchers
-  with MockitoSugar
-  with ScalaFutures
-  with DefaultPlayMongoRepositorySupport[CacheItem] {
+class UnAuthSessionRepositorySpec
+    extends SpecBase
+    with Matchers
+    with MockitoSugar
+    with ScalaFutures
+    with DefaultPlayMongoRepositorySupport[CacheItem] {
 
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
 
@@ -46,51 +47,45 @@ class UnAuthSessionRepositorySpec extends SpecBase
   )
 
   override lazy val repository: MongoCacheRepository[String] = unauthSessionRepo.cacheRepo
+
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(
       bind[UnAuthSessionRepository].toInstance(unauthSessionRepo)
     )
     .build()
 
-  val unauthId = UnAuthed("un-auth-id")
-  val otherAuthId = UnAuthed("other-un-auth-id")
-  val userAnswers = currentYearMinus1UserAnswers
+  val unauthId         = UnAuthed("un-auth-id")
+  val otherAuthId      = UnAuthed("other-un-auth-id")
+  val userAnswers      = currentYearMinus1UserAnswers
   val otherUserAnswers = currentYearFullUserAnswers
 
   "UnAuthSessionRepository" must {
 
     "retrieve None when user answers don't exist" in {
       val futureResult = unauthSessionRepo.get(unauthId.sessionId)
-      whenReady(futureResult) { result =>
-        result mustBe None
-      }
+      whenReady(futureResult)(result => result mustBe None)
     }
 
     "retrieve None when user answers don't exist for the specified user id" in {
       await(unauthSessionRepo.set(otherAuthId.sessionId, otherUserAnswers))
       val futureResult = unauthSessionRepo.get(unauthId.sessionId)
-      whenReady(futureResult) { result =>
-        result mustBe None
-      }
+      whenReady(futureResult)(result => result mustBe None)
     }
 
     "retrieve user answers if they're present" in {
       await(unauthSessionRepo.set(unauthId.sessionId, userAnswers))
       val futureResult = unauthSessionRepo.get(unauthId.sessionId)
-      whenReady(futureResult) { result =>
-        result mustBe Some(userAnswers)
-      }
+      whenReady(futureResult)(result => result mustBe Some(userAnswers))
     }
 
-    "retrieve correct user answers among other entries"in {
+    "retrieve correct user answers among other entries" in {
       await(unauthSessionRepo.set(otherAuthId.sessionId, otherUserAnswers))
       await(unauthSessionRepo.set(unauthId.sessionId, userAnswers))
       val futureResult = unauthSessionRepo.get(unauthId.sessionId)
-      whenReady(futureResult) { result =>
-        result mustBe Some(userAnswers)
-      }
+      whenReady(futureResult)(result => result mustBe Some(userAnswers))
 
     }
 
   }
+
 }

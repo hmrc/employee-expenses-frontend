@@ -29,4 +29,5 @@ class ConstructionOccupationsPageSpec extends PageBehaviours {
 
     beRemovable[ConstructionOccupations](ConstructionOccupationsPage)
   }
+
 }

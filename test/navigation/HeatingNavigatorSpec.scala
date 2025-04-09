@@ -22,12 +22,12 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
 import pages.heating.HeatingOccupationListPage
 
-class HeatingNavigatorSpec extends SpecBase with MockitoSugar{
-  private val modes = Seq(NormalMode, CheckMode)
+class HeatingNavigatorSpec extends SpecBase with MockitoSugar {
+  private val modes     = Seq(NormalMode, CheckMode)
   private val navigator = new HeatingNavigator
 
   "HeatingNavigator" when {
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
         "from Heating" must {
           "go to EmployerContribution when 'Yes' is selected" in {
@@ -50,6 +50,6 @@ class HeatingNavigatorSpec extends SpecBase with MockitoSugar{
           }
         }
       }
-    }
   }
+
 }

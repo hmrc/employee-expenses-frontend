@@ -37,14 +37,18 @@ import service.ClaimAmountService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
+class ConfirmationPreviousYearsOnlyControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience {
 
-  val mockTaiConnector: TaiConnector = mock[TaiConnector]
+  val mockTaiConnector: TaiConnector             = mock[TaiConnector]
   val mockClaimAmountService: ClaimAmountService = mock[ClaimAmountService]
-  val claimAmountService = new ClaimAmountService(frontendAppConfig)
-  val claimAmount: Int = currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get
-  val claimAmountsAndRates: StandardRate = StandardRate(
+  val claimAmountService                         = new ClaimAmountService(frontendAppConfig)
+  val claimAmount: Int                           = currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get
 
+  val claimAmountsAndRates: StandardRate = StandardRate(
     frontendAppConfig.taxPercentageBasicRate,
     frontendAppConfig.taxPercentageHigherRate,
     claimAmountService.calculateTax(frontendAppConfig.taxPercentageBasicRate, claimAmount),
@@ -54,13 +58,15 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
   "ConfirmationPreviousYearsOnlyController" must {
     "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with no address" in {
 
-      val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(TaxYearSelection.CurrentYearMinus1))))
-        .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
-        .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
-        .build()
+      val application =
+        applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(TaxYearSelection.CurrentYearMinus1))))
+          .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
+          .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
+          .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
-      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationPreviousYearsOnlyController.onPageLoad().url)
 
@@ -73,15 +79,18 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
 
     "return OK and the correct ConfirmationPreviousYearsOnlyView for a GET with address" in {
       val answers = yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))
-        .set(CitizenDetailsAddress, address).success.value
+        .set(CitizenDetailsAddress, address)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(answers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
-      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationPreviousYearsOnlyController.onPageLoad().url)
 
@@ -134,19 +143,20 @@ class ConfirmationPreviousYearsOnlyControllerSpec extends SpecBase with MockitoS
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
 
       val request = FakeRequest(GET, ConfirmationPreviousYearsOnlyController.onPageLoad().url)
 
       val result = route(application, request).value
 
-      whenReady(result) {
-        _ =>
-          val sessionRepository = application.injector.instanceOf[SessionRepository]
-          sessionRepository.get(Authed(userAnswersId)).map(_ mustBe None)
+      whenReady(result) { _ =>
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
+        sessionRepository.get(Authed(userAnswersId)).map(_ mustBe None)
       }
 
       application.stop()
     }
   }
+
 }

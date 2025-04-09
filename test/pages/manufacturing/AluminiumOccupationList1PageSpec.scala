@@ -28,4 +28,5 @@ class AluminiumOccupationList1PageSpec extends PageBehaviours {
 
     beRemovable[Boolean](AluminiumOccupationList1Page)
   }
+
 }

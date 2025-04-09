@@ -20,9 +20,9 @@ sealed trait TaxCodeStatus
 
 object TaxCodeStatus extends Enumerable.Implicits {
 
-  case object Live extends WithName("Live") with TaxCodeStatus
+  case object Live              extends WithName("Live") with TaxCodeStatus
   case object PotentiallyCeased extends WithName("PotentiallyCeased") with TaxCodeStatus
-  case object Ceased extends WithName("Ceased") with TaxCodeStatus
+  case object Ceased            extends WithName("Ceased") with TaxCodeStatus
 
   val values: Seq[TaxCodeStatus] = Seq(Live, PotentiallyCeased, Ceased)
 

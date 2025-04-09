@@ -32,54 +32,61 @@ import views.html.confirmation.ConfirmationCurrentYearOnlyView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmationCurrentYearOnlyController @Inject()(override val messagesApi: MessagesApi,
-                                                      identify: AuthenticatedIdentifierAction,
-                                                      getData: DataRetrievalAction,
-                                                      requireData: DataRequiredAction,
-                                                      val controllerComponents: MessagesControllerComponents,
-                                                      claimAmountService: ClaimAmountService,
-                                                      taiService: TaiService,
-                                                      confirmationCurrentYearOnlyView: ConfirmationCurrentYearOnlyView
-                                                     )(implicit ec: ExecutionContext)
-  extends FrontendBaseController with I18nSupport with Logging {
+class ConfirmationCurrentYearOnlyController @Inject() (
+    override val messagesApi: MessagesApi,
+    identify: AuthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    val controllerComponents: MessagesControllerComponents,
+    claimAmountService: ClaimAmountService,
+    taiService: TaiService,
+    confirmationCurrentYearOnlyView: ConfirmationCurrentYearOnlyView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
-      val npsFreAmount = request.userAnswers.get(FREAmounts)
-        .flatMap(_.find(_.taxYear.year == TaxYearSelection.getTaxYear(CurrentYear))) match {
-        case Some(FlatRateExpenseAmounts(Some(npsAmount), _)) => npsAmount.grossAmount
-        case _ => 0
-      }
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { implicit request =>
+    val npsFreAmount = request.userAnswers
+      .get(FREAmounts)
+      .flatMap(_.find(_.taxYear.year == TaxYearSelection.getTaxYear(CurrentYear))) match {
+      case Some(FlatRateExpenseAmounts(Some(npsAmount), _)) => npsAmount.grossAmount
+      case _                                                => 0
+    }
 
-      (
-        request.userAnswers.get(FREResponse),
-        request.userAnswers.get(YourEmployerPage),
-        request.userAnswers.get(ClaimAmountAndAnyDeductions)
-      ) match {
-        case (Some(freResponse), Some(employer), Some(claimAmountAndAnyDeductions)) =>
-          val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(CurrentYear))
-          taiService.taxCodeRecords(request.nino.get, taxYear).map {
-            result =>
-              val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
-              val freHasIncreased = npsFreAmount < claimAmountAndAnyDeductions
-              val addressOption: Option[Address] = request.userAnswers.get(CitizenDetailsAddress)
+    (
+      request.userAnswers.get(FREResponse),
+      request.userAnswers.get(YourEmployerPage),
+      request.userAnswers.get(ClaimAmountAndAnyDeductions)
+    ) match {
+      case (Some(freResponse), Some(employer), Some(claimAmountAndAnyDeductions)) =>
+        val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(CurrentYear))
+        taiService
+          .taxCodeRecords(request.nino.get, taxYear)
+          .map { result =>
+            val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
+            val freHasIncreased                  = npsFreAmount < claimAmountAndAnyDeductions
+            val addressOption: Option[Address]   = request.userAnswers.get(CitizenDetailsAddress)
 
-              Ok(confirmationCurrentYearOnlyView(
+            Ok(
+              confirmationCurrentYearOnlyView(
                 claimAmountsAndRates = claimAmountsAndRates,
                 claimAmount = claimAmountAndAnyDeductions,
                 employerCorrect = Some(employer),
                 address = addressOption,
                 hasClaimIncreased = freHasIncreased,
                 freResponse = freResponse,
-                npsFreAmount = npsFreAmount)
+                npsFreAmount = npsFreAmount
               )
-          }.recoverWith {
-            case e =>
-              logger.error(s"[ConfirmationCurrentYearOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
-              Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad))
+            )
           }
-        case _ =>
-          Future.successful(Redirect(SessionExpiredController.onPageLoad))
-      }
+          .recoverWith { case e =>
+            logger.error(s"[ConfirmationCurrentYearOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
+            Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad))
+          }
+      case _ =>
+        Future.successful(Redirect(SessionExpiredController.onPageLoad))
+    }
   }
+
 }

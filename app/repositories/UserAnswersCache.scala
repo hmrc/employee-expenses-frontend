@@ -26,26 +26,32 @@ import uk.gov.hmrc.mongo.cache.{CacheIdType, EntityCache, MongoCacheRepository}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.{Duration, SECONDS}
 
-abstract class UserAnswersCache @Inject()(collectionName: String, config: Configuration, mongo: MongoComponent, timestampSupport: TimestampSupport)
-                                         (implicit ec: ExecutionContext) extends EntityCache[String, UserAnswers]{
+abstract class UserAnswersCache @Inject() (
+    collectionName: String,
+    config: Configuration,
+    mongo: MongoComponent,
+    timestampSupport: TimestampSupport
+)(implicit ec: ExecutionContext)
+    extends EntityCache[String, UserAnswers] {
 
   lazy val format: Format[UserAnswers] = UserAnswers.format
+
   lazy val cacheRepo: MongoCacheRepository[String] = new MongoCacheRepository(
-    mongoComponent   = mongo,
-    collectionName   = collectionName,
-    ttl              = Duration(config.get[Int]("mongodb.timeToLiveInSeconds"), SECONDS),
+    mongoComponent = mongo,
+    collectionName = collectionName,
+    ttl = Duration(config.get[Int]("mongodb.timeToLiveInSeconds"), SECONDS),
     timestampSupport = timestampSupport,
-    cacheIdType      = CacheIdType.SimpleCacheId,
-    replaceIndexes   = false
+    cacheIdType = CacheIdType.SimpleCacheId,
+    replaceIndexes = false
   )
 
   def get(id: String): Future[Option[UserAnswers]] =
     getFromCache(id)
 
-  def set(id: String, userAnswers: UserAnswers): Future[Boolean] = {
+  def set(id: String, userAnswers: UserAnswers): Future[Boolean] =
     putCache(id)(userAnswers).map(_ => true)
-  }
 
   def remove(id: String): Future[Unit] =
     deleteFromCache(id)
+
 }

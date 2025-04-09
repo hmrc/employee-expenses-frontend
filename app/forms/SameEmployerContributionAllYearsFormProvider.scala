@@ -27,4 +27,5 @@ class SameEmployerContributionAllYearsFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("sameEmployerContributionAllYears.error.required")
     )
+
 }

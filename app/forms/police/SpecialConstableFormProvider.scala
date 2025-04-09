@@ -26,4 +26,5 @@ class SpecialConstableFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("specialConstable.error.required")
     )
+
 }

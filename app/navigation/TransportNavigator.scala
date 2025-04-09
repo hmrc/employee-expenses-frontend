@@ -25,47 +25,46 @@ import pages.transport._
 import play.api.mvc.Call
 
 @Singleton
-class TransportNavigator @Inject()() extends Navigator {
+class TransportNavigator @Inject() () extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TypeOfTransportPage => userAnswers => typeOfTransportOptions(NormalMode)(userAnswers)
-    case AirlineJobListPage => airlineJobList(NormalMode)
-    case GarageHandOrCleanerPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case WhichRailwayTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case TransportCarpenterPage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case TypeOfTransportPage       => userAnswers => typeOfTransportOptions(NormalMode)(userAnswers)
+    case AirlineJobListPage        => airlineJobList(NormalMode)
+    case GarageHandOrCleanerPage   => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case WhichRailwayTradePage     => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case TransportCarpenterPage    => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case TransportVehicleTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case CabinCrewPage              => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad
+    case CabinCrewPage             => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
+    case _                         => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TypeOfTransportPage => userAnswers => typeOfTransportOptions(CheckMode)(userAnswers)
-    case AirlineJobListPage => airlineJobList(CheckMode)
-    case GarageHandOrCleanerPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case WhichRailwayTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case TransportCarpenterPage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case TypeOfTransportPage       => userAnswers => typeOfTransportOptions(CheckMode)(userAnswers)
+    case AirlineJobListPage        => airlineJobList(CheckMode)
+    case GarageHandOrCleanerPage   => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case WhichRailwayTradePage     => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case TransportCarpenterPage    => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case TransportVehicleTradePage => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case CabinCrewPage              => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad
+    case CabinCrewPage             => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
+    case _                         => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
-  private def typeOfTransportOptions(mode: Mode)(userAnswers: UserAnswers): Call = {
+  private def typeOfTransportOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(TypeOfTransportPage) match {
-      case Some(Airlines) => routes.UsePrintAndPostController.onPageLoad()
+      case Some(Airlines)        => routes.UsePrintAndPostController.onPageLoad()
       case Some(PublicTransport) => routes.GarageHandOrCleanerController.onPageLoad(mode)
-      case Some(Railways) => routes.WhichRailwayTradeController.onPageLoad(mode)
+      case Some(Railways)        => routes.WhichRailwayTradeController.onPageLoad(mode)
       case Some(SeamanCarpenter) => routes.TransportCarpenterController.onPageLoad(mode)
-      case Some(Vehicles) => routes.TransportVehicleTradeController.onPageLoad(mode)
-      case Some(NoneOfTheAbove) => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad
+      case Some(Vehicles)        => routes.TransportVehicleTradeController.onPageLoad(mode)
+      case Some(NoneOfTheAbove)  => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case _                     => controllers.routes.SessionExpiredController.onPageLoad
     }
-  }
 
-  private def airlineJobList(mode: Mode)(userAnswers: UserAnswers): Call = {
+  private def airlineJobList(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(AirlineJobListPage) match {
-      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(true)  => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.CabinCrewController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad
+      case _           => controllers.routes.SessionExpiredController.onPageLoad
     }
-  }
+
 }

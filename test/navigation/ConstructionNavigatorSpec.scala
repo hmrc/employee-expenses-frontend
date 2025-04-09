@@ -22,21 +22,21 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.construction._
 
 class ConstructionNavigatorSpec extends SpecBase with MockitoSugar {
-  private val modes = Seq(NormalMode, CheckMode)
+  private val modes     = Seq(NormalMode, CheckMode)
   private val navigator = new ConstructionNavigator
 
   "Construction Navigator" when {
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
 
         "go to EmployerContribution from ConstructionOccupations" in {
-          val answers = emptyUserAnswers.set(ConstructionOccupationsPage, ConstructionOccupations.BuildingMaterials).success.value
+          val answers =
+            emptyUserAnswers.set(ConstructionOccupationsPage, ConstructionOccupations.BuildingMaterials).success.value
 
           navigator.nextPage(ConstructionOccupationsPage, mode)(answers) mustBe
             controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
       }
-    }
   }
 
 }

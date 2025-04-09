@@ -26,20 +26,25 @@ class WhichRailwayTradeFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "whichRailwayTrade.error.required"
 
-    behave like optionsField[WhichRailwayTrade](
-      form,
-      fieldName,
-      validValues  = WhichRailwayTrade.values,
-      invalidError = FormError(fieldName, "error.invalid")
+    behave.like(
+      optionsField[WhichRailwayTrade](
+        form,
+        fieldName,
+        validValues = WhichRailwayTrade.values,
+        invalidError = FormError(fieldName, "error.invalid")
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

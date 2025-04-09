@@ -134,4 +134,5 @@ class TaiTaxYearSpec extends PlaySpec {
       TaiTaxYear("17") mustBe TaiTaxYear(2017)
     }
   }
+
 }

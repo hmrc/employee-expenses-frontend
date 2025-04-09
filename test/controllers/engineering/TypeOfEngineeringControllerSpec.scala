@@ -36,11 +36,17 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+class TypeOfEngineeringControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with OptionValues {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val typeOfEngineeringRoute: String = controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode).url
+  lazy val typeOfEngineeringRoute: String =
+    controllers.engineering.routes.TypeOfEngineeringController.onPageLoad(NormalMode).url
 
   private val userAnswers = emptyUserAnswers
 
@@ -77,7 +83,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -100,7 +106,7 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
     "redirect to the next page when answer is NoneOfTheAbove" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -170,23 +176,26 @@ class TypeOfEngineeringControllerSpec extends SpecBase with ScalaFutures with Mo
   "save 'defaultRate' to ClaimAmount when 'NoneOfTheAbove' is selected" in {
     val mockSessionRepository = mock[SessionRepository]
 
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+    when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
     val application = applicationBuilder(userAnswers = Some(userAnswers))
       .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
       .build()
 
-    val request = FakeRequest(POST, typeOfEngineeringRoute).withFormUrlEncodedBody(("value", TypeOfEngineering.NoneOfTheAbove.toString))
+    val request = FakeRequest(POST, typeOfEngineeringRoute).withFormUrlEncodedBody(
+      ("value", TypeOfEngineering.NoneOfTheAbove.toString)
+    )
 
     val result = route(application, request).value
 
     val userAnswers2 = userAnswers
-      .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-      .set(TypeOfEngineeringPage, TypeOfEngineering.NoneOfTheAbove).success.value
+      .set(ClaimAmount, ClaimAmounts.defaultRate)
+      .success
+      .value
+      .set(TypeOfEngineeringPage, TypeOfEngineering.NoneOfTheAbove)
+      .success
+      .value
 
-    whenReady(result) {
-      _ =>
-        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-    }
+    whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
     application.stop()
   }

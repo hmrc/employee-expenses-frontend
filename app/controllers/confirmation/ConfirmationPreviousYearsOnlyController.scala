@@ -31,40 +31,52 @@ import views.html.confirmation.ConfirmationPreviousYearsOnlyView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmationPreviousYearsOnlyController @Inject()(override val messagesApi: MessagesApi,
-                                                        identify: AuthenticatedIdentifierAction,
-                                                        getData: DataRetrievalAction,
-                                                        requireData: DataRequiredAction,
-                                                        val controllerComponents: MessagesControllerComponents,
-                                                        claimAmountService: ClaimAmountService,
-                                                        taiService: TaiService,
-                                                        confirmationPreviousYearsOnlyView: ConfirmationPreviousYearsOnlyView
-                                                       )(implicit ec: ExecutionContext)
-  extends FrontendBaseController with I18nSupport with Logging {
+class ConfirmationPreviousYearsOnlyController @Inject() (
+    override val messagesApi: MessagesApi,
+    identify: AuthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    val controllerComponents: MessagesControllerComponents,
+    claimAmountService: ClaimAmountService,
+    taiService: TaiService,
+    confirmationPreviousYearsOnlyView: ConfirmationPreviousYearsOnlyView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
-      (
-        request.userAnswers.get(FREResponse),
-        request.userAnswers.get(ClaimAmountAndAnyDeductions),
-        request.userAnswers.get(TaxYearSelectionPage)
-      ) match {
-        case (Some(freResponse), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
-          val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYears.head))
-          taiService.taxCodeRecords(request.nino.get, taxYear).map {
-            result =>
-              val currentYearMinus1: Boolean = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
-              val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
-              val addressOption: Option[Address] = request.userAnswers.get(CitizenDetailsAddress)
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { implicit request =>
+    (
+      request.userAnswers.get(FREResponse),
+      request.userAnswers.get(ClaimAmountAndAnyDeductions),
+      request.userAnswers.get(TaxYearSelectionPage)
+    ) match {
+      case (Some(freResponse), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
+        val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYears.head))
+        taiService
+          .taxCodeRecords(request.nino.get, taxYear)
+          .map { result =>
+            val currentYearMinus1: Boolean       = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
+            val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
+            val addressOption: Option[Address]   = request.userAnswers.get(CitizenDetailsAddress)
 
-              Ok(confirmationPreviousYearsOnlyView(claimAmountsAndRates, claimAmountAndAnyDeductions, addressOption, currentYearMinus1, freResponse))
-          }.recoverWith {
-            case e =>
-              logger.error(s"[ConfirmationPreviousYearsOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
-              Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad))
+            Ok(
+              confirmationPreviousYearsOnlyView(
+                claimAmountsAndRates,
+                claimAmountAndAnyDeductions,
+                addressOption,
+                currentYearMinus1,
+                freResponse
+              )
+            )
           }
-        case _ =>
-          Future.successful(Redirect(SessionExpiredController.onPageLoad))
-      }
+          .recoverWith { case e =>
+            logger.error(s"[ConfirmationPreviousYearsOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
+            Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad))
+          }
+      case _ =>
+        Future.successful(Redirect(SessionExpiredController.onPageLoad))
+    }
   }
+
 }

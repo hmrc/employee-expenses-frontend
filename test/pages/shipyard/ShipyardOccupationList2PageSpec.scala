@@ -28,4 +28,5 @@ class ShipyardOccupationList2PageSpec extends PageBehaviours {
 
     beRemovable[Boolean](ShipyardOccupationList2Page)
   }
+
 }

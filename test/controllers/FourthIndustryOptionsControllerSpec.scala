@@ -37,7 +37,12 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+class FourthIndustryOptionsControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with OptionValues {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -45,7 +50,7 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
   private val mockSessionRepository = mock[SessionRepository]
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
   "FourthIndustryOptions Controller" must {
 
@@ -144,16 +149,26 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
       application.stop()
     }
 
-    for(trade <- FourthIndustryOptions.values){
+    for (trade <- FourthIndustryOptions.values) {
 
       val userAnswers = emptyUserAnswers
       val userAnswers2 = trade match {
-        case Agriculture => userAnswers
-          .set(FourthIndustryOptionsPage, trade).success.value
-          .set(ClaimAmount, ClaimAmounts.agriculture).success.value
-        case FireService => userAnswers
-          .set(FourthIndustryOptionsPage, trade).success.value
-          .set(ClaimAmount, ClaimAmounts.fireService).success.value
+        case Agriculture =>
+          userAnswers
+            .set(FourthIndustryOptionsPage, trade)
+            .success
+            .value
+            .set(ClaimAmount, ClaimAmounts.agriculture)
+            .success
+            .value
+        case FireService =>
+          userAnswers
+            .set(FourthIndustryOptionsPage, trade)
+            .success
+            .value
+            .set(ClaimAmount, ClaimAmounts.fireService)
+            .success
+            .value
         case _ => userAnswers.set(FourthIndustryOptionsPage, trade).success.value
       }
 
@@ -165,19 +180,17 @@ class FourthIndustryOptionsControllerSpec extends SpecBase with ScalaFutures wit
 
         val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
 
-        when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any(), argCaptor.capture())).thenReturn(Future.successful(true))
 
         val request = FakeRequest(POST, fourthIndustryOptionsRoute).withFormUrlEncodedBody(("value", trade.toString))
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
-            assert(argCaptor.getValue.data == userAnswers2.data)
-        }
+        whenReady(result)(_ => assert(argCaptor.getValue.data == userAnswers2.data))
 
         application.stop()
       }
     }
   }
+
 }

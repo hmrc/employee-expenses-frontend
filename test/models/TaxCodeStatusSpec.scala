@@ -24,8 +24,12 @@ import org.scalatest.OptionValues
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, JsString, Json}
 
-class TaxCodeStatusSpec extends SpecBase with Matchers with ScalaCheckPropertyChecks with OptionValues with ModelGenerators {
-
+class TaxCodeStatusSpec
+    extends SpecBase
+    with Matchers
+    with ScalaCheckPropertyChecks
+    with OptionValues
+    with ModelGenerators {
 
   "TaxCodeStatus" must {
 
@@ -33,33 +37,23 @@ class TaxCodeStatusSpec extends SpecBase with Matchers with ScalaCheckPropertyCh
 
       val gen = arbitrary[TaxCodeStatus]
 
-      forAll(gen) {
-        taxCodeStatus =>
-
-          JsString(taxCodeStatus.toString).validate[TaxCodeStatus].asOpt.value mustEqual taxCodeStatus
+      forAll(gen) { taxCodeStatus =>
+        JsString(taxCodeStatus.toString).validate[TaxCodeStatus].asOpt.value mustEqual taxCodeStatus
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!TaxCodeStatus.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!TaxCodeStatus.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[TaxCodeStatus] mustEqual JsError("error.invalid")
-      }
+      forAll(gen)(invalidValue => JsString(invalidValue).validate[TaxCodeStatus] mustEqual JsError("error.invalid"))
     }
 
     "serialise" in {
 
       val gen = arbitrary[TaxCodeStatus]
 
-      forAll(gen) {
-        taxCodeStatus =>
-
-          Json.toJson(taxCodeStatus) mustEqual JsString(taxCodeStatus.toString)
-      }
+      forAll(gen)(taxCodeStatus => Json.toJson(taxCodeStatus) mustEqual JsString(taxCodeStatus.toString))
     }
   }
 

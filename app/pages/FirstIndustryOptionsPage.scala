@@ -27,13 +27,12 @@ case object FirstIndustryOptionsPage extends QuestionPage[FirstIndustryOptions] 
 
   override def toString: String = "firstIndustryOptions"
 
-  override def cleanup(value: Option[FirstIndustryOptions], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[FirstIndustryOptions], userAnswers: UserAnswers): Try[UserAnswers] =
 
     Try(
       UserAnswers(
-        data = userAnswers.data - industryPath,
+        data = userAnswers.data - industryPath
       )
     )
-  }
 
 }

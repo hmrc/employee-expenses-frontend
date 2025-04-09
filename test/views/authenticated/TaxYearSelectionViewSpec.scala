@@ -34,7 +34,9 @@ class TaxYearSelectionViewSpec extends CheckboxViewBehaviours[TaxYearSelection] 
     application.injector.instanceOf[TaxYearSelectionView].apply(form, NormalMode)(fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[Seq[TaxYearSelection]]): HtmlFormat.Appendable =
-    application.injector.instanceOf[TaxYearSelectionView].apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    application.injector
+      .instanceOf[TaxYearSelectionView]
+      .apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   val messageKeyPrefix = "taxYearSelection"
 
@@ -42,17 +44,15 @@ class TaxYearSelectionViewSpec extends CheckboxViewBehaviours[TaxYearSelection] 
 
   "TaxYearSelectionView" must {
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like checkboxPage(form, applyView, messageKeyPrefix, options)
+    behave.like(checkboxPage(form, applyView, messageKeyPrefix, options))
 
-    behave like pageWithBodyText(applyView(form),
-      "taxYearSelection.bodyText",
-      "taxYearSelection.listHint")
+    behave.like(pageWithBodyText(applyView(form), "taxYearSelection.bodyText", "taxYearSelection.listHint"))
   }
 
   application.stop()

@@ -30,46 +30,45 @@ import org.mockito.Mockito.{reset, verify, when}
 import org.scalatestplus.mockito.MockitoSugar.mock
 import scala.concurrent.ExecutionContext.Implicits.global
 
-
-
 class UsePrintAndPostControllerSpec extends SpecBase with BeforeAndAfterEach with BeforeAndAfterAll {
 
   private val useIformFreOnlyView = mock[UseIformFreOnlyView]
 
+  private val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+    .overrides(
+      bind[UseIformFreOnlyView].toInstance(useIformFreOnlyView)
+    )
+    .build()
 
-  private  val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[UseIformFreOnlyView].toInstance(useIformFreOnlyView)
-        )
-        .build()
+  override def beforeEach(): Unit = {
+    super.beforeEach()
 
-      override def beforeEach(): Unit = {
-        super.beforeEach()
-
-        reset(
-          useIformFreOnlyView
-        )
-        when(useIformFreOnlyView.apply()(any[Request[_]], any[Messages])).thenReturn(HtmlFormat.empty)
-      }
+    reset(
+      useIformFreOnlyView
+    )
+    when(useIformFreOnlyView.apply()(any[Request[_]], any[Messages])).thenReturn(HtmlFormat.empty)
+  }
 
   override def afterAll(): Unit = {
-        application.stop()
-        super.afterAll()
-      }
+    application.stop()
+    super.afterAll()
+  }
+
   "UsePrintAndPostController" must {
 
-      def usePrintAndPostRoute = routes.UsePrintAndPostController.onPageLoad().url
+    def usePrintAndPostRoute = routes.UsePrintAndPostController.onPageLoad().url
 
-      def testRequest = FakeRequest(GET, usePrintAndPostRoute)
+    def testRequest = FakeRequest(GET, usePrintAndPostRoute)
 
-      "return OK and the correct view for a GET" in  {
+    "return OK and the correct view for a GET" in {
 
-        for {
-          result <- route(application, testRequest).value
-          _ = result.header.status mustBe OK
-          _ = verify(useIformFreOnlyView).apply()(any[Request[_]], any[Messages])
-        } yield ()
-      }
-
+      for {
+        result <- route(application, testRequest).value
+        _ = result.header.status mustBe OK
+        _ = verify(useIformFreOnlyView).apply()(any[Request[_]], any[Messages])
+      } yield ()
     }
+
   }
+
+}

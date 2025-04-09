@@ -37,7 +37,12 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+class TransportCarpenterControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with OptionValues {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -78,7 +83,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
     "redirect to the next page when valid 'Yes' is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -86,7 +91,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
           .build()
 
       val request = FakeRequest(POST, transportCarpenterRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -101,7 +106,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
       transportCarpenterRoute
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -109,7 +114,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
           .build()
 
       val request = FakeRequest(POST, transportCarpenterRoute)
-          .withFormUrlEncodedBody(("value", "false"))
+        .withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
 
@@ -170,7 +175,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
     "save ClaimAmount 'passengerLiners' when true" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -180,13 +185,14 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Transport.Seamen.passengerLiners).success.value
-        .set(TransportCarpenterPage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Transport.Seamen.passengerLiners)
+        .success
+        .value
+        .set(TransportCarpenterPage, true)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -194,7 +200,7 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
     "save ClaimAmount 'cargoTankersCoastersFerries' when false" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -204,15 +210,17 @@ class TransportCarpenterControllerSpec extends SpecBase with ScalaFutures with M
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries).success.value
-        .set(TransportCarpenterPage, false).success.value
+        .set(ClaimAmount, ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries)
+        .success
+        .value
+        .set(TransportCarpenterPage, false)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

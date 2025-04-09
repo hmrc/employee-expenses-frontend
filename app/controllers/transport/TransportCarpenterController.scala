@@ -33,52 +33,55 @@ import views.html.transport.TransportCarpenterView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TransportCarpenterController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              @Named(NavConstant.transport) navigator: Navigator,
-                                              identify: UnauthenticatedIdentifierAction,
-                                              getData: DataRetrievalAction,
-                                              requireData: DataRequiredAction,
-                                              formProvider: TransportCarpenterFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: TransportCarpenterView,
-                                              sessionRepository: SessionRepository
-                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class TransportCarpenterController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.transport) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: TransportCarpenterFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: TransportCarpenterView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(TransportCarpenterPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(TransportCarpenterPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+        value =>
           for {
-            updatedAnswers <- if (value) {
-              Future.fromTry(request.userAnswers.set(TransportCarpenterPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Seamen.passengerLiners))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(TransportCarpenterPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries))
-              )
-            }
+            updatedAnswers <-
+              if (value) {
+                Future.fromTry(
+                  request.userAnswers
+                    .set(TransportCarpenterPage, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Seamen.passengerLiners))
+                )
+              } else {
+                Future.fromTry(
+                  request.userAnswers
+                    .set(TransportCarpenterPage, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Seamen.cargoTankersCoastersFerries))
+                )
+              }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(TransportCarpenterPage, mode)(updatedAnswers))
-        }
       )
   }
+
 }

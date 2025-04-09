@@ -27,4 +27,5 @@ class CabinCrewFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("cabinCrew.error.required")
     )
+
 }

@@ -24,7 +24,7 @@ import play.twirl.api.Html
 import views.html.confirmation.ConfirmationMergeJourneyView
 import views.newBehaviours.ViewBehaviours
 
-class ConfirmationMergeJourneyViewSpec extends ViewBehaviours{
+class ConfirmationMergeJourneyViewSpec extends ViewBehaviours {
 
   val application: Application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers)).build()
 
@@ -39,16 +39,12 @@ class ConfirmationMergeJourneyViewSpec extends ViewBehaviours{
 
     val applyViewWithAuth = applyView()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like pageWithAccountMenu(applyViewWithAuth)
+    behave.like(pageWithAccountMenu(applyViewWithAuth))
 
     val doc = asDocument(viewWithAnswers)
 
-    "display correct static text" in {
-
-      assertContainsMessages(doc,
-        "confirmationMergeJourney.para",
-      )
-    }
+    "display correct static text" in
+      assertContainsMessages(doc, "confirmationMergeJourney.para")
 
     "behave like a normal page" when {
 

@@ -26,22 +26,25 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CannotClaimExpenseView
 
-import scala.concurrent.{ExecutionContext}
+import scala.concurrent.ExecutionContext
 
-class CannotClaimExpenseController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              identify: UnauthenticatedIdentifierAction,
-                                              getData: DataRetrievalAction,
-                                              requireData: DataRequiredAction,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: CannotClaimExpenseView,
-                                     )(implicit val ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class CannotClaimExpenseController @Inject() (
+    override val messagesApi: MessagesApi,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    val controllerComponents: MessagesControllerComponents,
+    view: CannotClaimExpenseView
+)(implicit val ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
     if (request.userAnswers.isMergedJourney == true) {
-      Ok(view(Some(MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimUnsuccessful).url)))
+      Ok(view(Some(MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimUnsuccessful).url)))
     } else {
       Ok(view())
     }
   }
+
 }

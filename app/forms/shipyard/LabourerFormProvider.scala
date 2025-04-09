@@ -26,4 +26,5 @@ class LabourerFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("labourer.error.required")
     )
+
 }

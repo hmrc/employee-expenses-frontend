@@ -28,4 +28,5 @@ class IronMiningPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](IronMiningPage)
   }
+
 }

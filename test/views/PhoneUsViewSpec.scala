@@ -32,15 +32,17 @@ class PhoneUsViewSpec extends ViewBehaviours {
 
     val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView, "phoneUs")
+    behave.like(normalPage(applyView, "phoneUs"))
 
-    behave like pageWithAccountMenu(applyViewWithAuth)
+    behave.like(pageWithAccountMenu(applyViewWithAuth))
 
-    behave like pageWithBackLink(applyViewWithAuth)
+    behave.like(pageWithBackLink(applyViewWithAuth))
 
-    val link: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.contactHMRC}">${messages("phoneUs.paragraph.linkText")}</a>""")
+    val link: Html = Html(
+      s"""<a class="govuk-link" href="${frontendAppConfig.contactHMRC}">${messages("phoneUs.paragraph.linkText")}</a>"""
+    )
 
-    behave like pageWithBodyText(applyViewWithAuth, Html(messages("phoneUs.paragraph", link)).toString)
+    behave.like(pageWithBodyText(applyViewWithAuth, Html(messages("phoneUs.paragraph", link)).toString))
   }
 
   application.stop()

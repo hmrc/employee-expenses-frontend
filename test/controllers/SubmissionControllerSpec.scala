@@ -22,7 +22,14 @@ import controllers.authenticated.routes.SubmissionController
 import controllers.confirmation.routes._
 import controllers.routes.{PhoneUsController, SessionExpiredController, TechnicalDifficultiesController}
 import models.FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount
-import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4, _}
+import models.TaxYearSelection.{
+  CurrentYear,
+  CurrentYearMinus1,
+  CurrentYearMinus2,
+  CurrentYearMinus3,
+  CurrentYearMinus4,
+  _
+}
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
 import models.{AlreadyClaimingFREDifferentAmounts, TaxYearSelection}
@@ -33,7 +40,12 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.authenticated.{AlreadyClaimingFREDifferentAmountsPage, ChangeWhichTaxYearsPage, RemoveFRECodePage, TaxYearSelectionPage}
+import pages.authenticated.{
+  AlreadyClaimingFREDifferentAmountsPage,
+  ChangeWhichTaxYearsPage,
+  RemoveFRECodePage,
+  TaxYearSelectionPage
+}
 import pages.{ClaimAmountAndAnyDeductions, FREResponse}
 import play.api.inject.bind
 import play.api.libs.json.JsObject
@@ -46,12 +58,17 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
 import scala.concurrent.Future
 
-class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks with MockitoSugar with BeforeAndAfterEach
-  with ScalaFutures with IntegrationPatience {
+class SubmissionControllerSpec
+    extends SpecBase
+    with ScalaCheckPropertyChecks
+    with MockitoSugar
+    with BeforeAndAfterEach
+    with ScalaFutures
+    with IntegrationPatience {
 
-  private val mockSubmissionService = mock[SubmissionService]
-  private val mockAuditConnector = mock[AuditConnector]
-  private val mockTaiConnector = mock[TaiConnector]
+  private val mockSubmissionService       = mock[SubmissionService]
+  private val mockAuditConnector          = mock[AuditConnector]
+  private val mockTaiConnector            = mock[TaiConnector]
   private val mockCitizenDetailsConnector = mock[CitizenDetailsConnector]
 
   override def beforeEach(): Unit = {
@@ -72,36 +89,40 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .thenReturn(Future.successful(Seq(HttpResponse(NO_CONTENT, ""))))
 
         val userAnswers = minimumUserAnswers
-          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
-          .set(RemoveFRECodePage, CurrentYear).success.value
+          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1))
+          .success
+          .value
+          .set(RemoveFRECodePage, CurrentYear)
+          .success
+          .value
 
         val application = applicationBuilder(Some(userAnswers), Some(onwardRoute))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
             bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
+          )
+          .build()
 
         val request = FakeRequest(GET, SubmissionController.onSubmit.url)
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
+        whenReady(result) { _ =>
+          val captor = ArgumentCaptor.forClass(classOf[AuditData])
 
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+          verify(mockAuditConnector, times(1))
+            .sendExplicitAudit(eqTo(UpdateFlatRateExpenseSuccess.toString), captor.capture())(any(), any(), any())
 
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo(UpdateFlatRateExpenseSuccess.toString), captor.capture())(any(), any(), any())
+          val auditData = captor.getValue
 
-            val auditData = captor.getValue
+          auditData.nino mustEqual fakeNino
+          auditData.userAnswers mustEqual userAnswers.data
+          auditData.userAnswers mustBe a[JsObject]
 
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual userAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
+          status(result) mustEqual SEE_OTHER
 
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual onwardRoute.url
+          redirectLocation(result).value mustEqual onwardRoute.url
         }
 
         application.stop()
@@ -113,36 +134,40 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .thenReturn(Future.successful(Seq(HttpResponse(INTERNAL_SERVER_ERROR, ""))))
 
         val userAnswers = minimumUserAnswers
-          .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
-          .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
+          .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount)
+          .success
+          .value
+          .set(RemoveFRECodePage, TaxYearSelection.CurrentYear)
+          .success
+          .value
 
         val application = applicationBuilder(Some(userAnswers))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
             bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
+          )
+          .build()
 
         val request = FakeRequest(GET, SubmissionController.onSubmit.url)
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
+        whenReady(result) { _ =>
+          val captor = ArgumentCaptor.forClass(classOf[AuditData])
 
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+          verify(mockAuditConnector, times(1))
+            .sendExplicitAudit(eqTo(UpdateFlatRateExpenseFailure.toString), captor.capture())(any(), any(), any())
 
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo(UpdateFlatRateExpenseFailure.toString), captor.capture())(any(), any(), any())
+          val auditData = captor.getValue
 
-            val auditData = captor.getValue
+          auditData.nino mustEqual fakeNino
+          auditData.userAnswers mustEqual userAnswers.data
+          auditData.userAnswers mustBe a[JsObject]
 
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual userAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
+          status(result) mustEqual SEE_OTHER
 
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad.url
+          redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad.url
         }
 
         application.stop()
@@ -154,30 +179,34 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .thenReturn(Future.successful(Seq(HttpResponse(LOCKED, ""))))
 
         val userAnswers = minimumUserAnswers
-          .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount).success.value
-          .set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
+          .set(FREResponse, FREAllYearsAllAmountsSameAsClaimAmount)
+          .success
+          .value
+          .set(RemoveFRECodePage, TaxYearSelection.CurrentYear)
+          .success
+          .value
 
         val application = applicationBuilder(Some(userAnswers))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
             bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
+          )
+          .build()
 
         val request = FakeRequest(GET, SubmissionController.onSubmit.url)
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
+        whenReady(result) { _ =>
+          val captor = ArgumentCaptor.forClass(classOf[AuditData])
 
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+          verify(mockAuditConnector, times(0))
+            .sendExplicitAudit(eqTo(UpdateFlatRateExpenseFailure.toString), captor.capture())(any(), any(), any())
 
-            verify(mockAuditConnector, times(0)).sendExplicitAudit(eqTo(UpdateFlatRateExpenseFailure.toString), captor.capture())(any(), any(), any())
+          status(result) mustEqual SEE_OTHER
 
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual PhoneUsController.onPageLoad().url
+          redirectLocation(result).value mustEqual PhoneUsController.onPageLoad().url
         }
 
         application.stop()
@@ -195,28 +224,28 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
             bind[AuditData].toInstance(AuditData(fakeNino, currentYearFullUserAnswers.data))
-          ).build()
+          )
+          .build()
 
         val request = FakeRequest(GET, SubmissionController.onSubmit.url)
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
+        whenReady(result) { _ =>
+          val captor = ArgumentCaptor.forClass(classOf[AuditData])
 
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+          verify(mockAuditConnector, times(1))
+            .sendExplicitAudit(eqTo(UpdateFlatRateExpenseSuccess.toString), captor.capture())(any(), any(), any())
 
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo(UpdateFlatRateExpenseSuccess.toString), captor.capture())(any(), any(), any())
+          val auditData = captor.getValue
 
-            val auditData = captor.getValue
+          auditData.nino mustEqual fakeNino
+          auditData.userAnswers mustEqual currentYearFullUserAnswers.data
+          auditData.userAnswers mustBe a[JsObject]
 
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual currentYearFullUserAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
+          status(result) mustEqual SEE_OTHER
 
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual ConfirmationCurrentYearOnlyController.onPageLoad().url
+          redirectLocation(result).value mustEqual ConfirmationCurrentYearOnlyController.onPageLoad().url
         }
 
         application.stop()
@@ -228,36 +257,40 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .thenReturn(Future.successful(Seq(HttpResponse(NO_CONTENT, ""))))
 
         val userAnswers = minimumUserAnswers
-          .set(ClaimAmountAndAnyDeductions, 100).success.value
-          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
+          .set(ClaimAmountAndAnyDeductions, 100)
+          .success
+          .value
+          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1))
+          .success
+          .value
 
         val application = applicationBuilder(Some(userAnswers))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
             bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
+          )
+          .build()
 
         val request = FakeRequest(GET, SubmissionController.onSubmit.url)
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
+        whenReady(result) { _ =>
+          val captor = ArgumentCaptor.forClass(classOf[AuditData])
 
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+          verify(mockAuditConnector, times(1))
+            .sendExplicitAudit(eqTo(UpdateFlatRateExpenseSuccess.toString), captor.capture())(any(), any(), any())
 
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo(UpdateFlatRateExpenseSuccess.toString), captor.capture())(any(), any(), any())
+          val auditData = captor.getValue
 
-            val auditData = captor.getValue
+          auditData.nino mustEqual fakeNino
+          auditData.userAnswers mustEqual userAnswers.data
+          auditData.userAnswers mustBe a[JsObject]
 
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual userAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
+          status(result) mustEqual SEE_OTHER
 
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual ConfirmationCurrentAndPreviousYearsController.onPageLoad().url
+          redirectLocation(result).value mustEqual ConfirmationCurrentAndPreviousYearsController.onPageLoad().url
         }
 
         application.stop()
@@ -269,30 +302,34 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .thenReturn(Future.successful(Seq(HttpResponse(LOCKED, ""))))
 
         val userAnswers = minimumUserAnswers
-          .set(ClaimAmountAndAnyDeductions, 100).success.value
-          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
+          .set(ClaimAmountAndAnyDeductions, 100)
+          .success
+          .value
+          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1))
+          .success
+          .value
 
         val application = applicationBuilder(Some(userAnswers))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
             bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
+          )
+          .build()
 
         val request = FakeRequest(GET, SubmissionController.onSubmit.url)
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
+        whenReady(result) { _ =>
+          val captor = ArgumentCaptor.forClass(classOf[AuditData])
 
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+          verify(mockAuditConnector, times(0))
+            .sendExplicitAudit(eqTo(UpdateFlatRateExpenseSuccess.toString), captor.capture())(any(), any(), any())
 
-            verify(mockAuditConnector, times(0)).sendExplicitAudit(eqTo(UpdateFlatRateExpenseSuccess.toString), captor.capture())(any(), any(), any())
+          status(result) mustEqual SEE_OTHER
 
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual PhoneUsController.onPageLoad().url
+          redirectLocation(result).value mustEqual PhoneUsController.onPageLoad().url
         }
 
         application.stop()
@@ -304,36 +341,40 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .thenReturn(Future.successful(Seq(HttpResponse(NO_CONTENT, ""))))
 
         val userAnswers = minimumUserAnswers
-          .set(ClaimAmountAndAnyDeductions, 100).success.value
-          .set(TaxYearSelectionPage, Seq(CurrentYearMinus2, CurrentYearMinus3)).success.value
+          .set(ClaimAmountAndAnyDeductions, 100)
+          .success
+          .value
+          .set(TaxYearSelectionPage, Seq(CurrentYearMinus2, CurrentYearMinus3))
+          .success
+          .value
 
         val application = applicationBuilder(Some(userAnswers))
           .overrides(
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
             bind[AuditData].toInstance(AuditData(fakeNino, userAnswers.data))
-          ).build()
+          )
+          .build()
 
         val request = FakeRequest(GET, SubmissionController.onSubmit.url)
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
+        whenReady(result) { _ =>
+          val captor = ArgumentCaptor.forClass(classOf[AuditData])
 
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+          verify(mockAuditConnector, times(1))
+            .sendExplicitAudit(eqTo(UpdateFlatRateExpenseSuccess.toString), captor.capture())(any(), any(), any())
 
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo(UpdateFlatRateExpenseSuccess.toString), captor.capture())(any(), any(), any())
+          val auditData = captor.getValue
 
-            val auditData = captor.getValue
+          auditData.nino mustEqual fakeNino
+          auditData.userAnswers mustEqual userAnswers.data
+          auditData.userAnswers mustBe a[JsObject]
 
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual userAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
+          status(result) mustEqual SEE_OTHER
 
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual ConfirmationPreviousYearsOnlyController.onPageLoad().url
+          redirectLocation(result).value mustEqual ConfirmationPreviousYearsOnlyController.onPageLoad().url
         }
 
         application.stop()
@@ -349,28 +390,28 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
             bind[SubmissionService].toInstance(mockSubmissionService),
             bind[AuditConnector].toInstance(mockAuditConnector),
             bind[AuditData].toInstance(AuditData(fakeNino, currentYearFullUserAnswers.data))
-          ).build()
+          )
+          .build()
 
         val request = FakeRequest(GET, SubmissionController.onSubmit.url)
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
+        whenReady(result) { _ =>
+          val captor = ArgumentCaptor.forClass(classOf[AuditData])
 
-            val captor = ArgumentCaptor.forClass(classOf[AuditData])
+          verify(mockAuditConnector, times(1))
+            .sendExplicitAudit(eqTo(UpdateFlatRateExpenseFailure.toString), captor.capture())(any(), any(), any())
 
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo(UpdateFlatRateExpenseFailure.toString), captor.capture())(any(), any(), any())
+          val auditData = captor.getValue
 
-            val auditData = captor.getValue
+          auditData.nino mustEqual fakeNino
+          auditData.userAnswers mustEqual currentYearFullUserAnswers.data
+          auditData.userAnswers mustBe a[JsObject]
 
-            auditData.nino mustEqual fakeNino
-            auditData.userAnswers mustEqual currentYearFullUserAnswers.data
-            auditData.userAnswers mustBe a[JsObject]
+          status(result) mustEqual SEE_OTHER
 
-            status(result) mustEqual SEE_OTHER
-
-            redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad.url
+          redirectLocation(result).value mustEqual TechnicalDifficultiesController.onPageLoad.url
         }
 
         application.stop()
@@ -384,31 +425,38 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
         when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(),any())(any(),any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         val userAnswers = currentYearFullUserAnswers
-          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
-          .set(ClaimAmountAndAnyDeductions, 100).success.value
+          .set(
+            TaxYearSelectionPage,
+            Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)
+          )
+          .success
+          .value
+          .set(ClaimAmountAndAnyDeductions, 100)
+          .success
+          .value
 
         val application = applicationBuilder(Some(userAnswers))
           .overrides(
             bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector),
             bind[TaiConnector].toInstance(mockTaiConnector),
             bind[AuditConnector].toInstance(mockAuditConnector)
-          ).build()
+          )
+          .build()
 
         val request = FakeRequest(GET, SubmissionController.onSubmit.url)
-        val result = route(application, request).value
+        val result  = route(application, request).value
 
-        whenReady(result) {
-          _ =>
-            verify(mockTaiConnector, times(5)).taiFREUpdate(any(), any(), any(), any())(any(), any())
+        whenReady(result) { _ =>
+          verify(mockTaiConnector, times(5)).taiFREUpdate(any(), any(), any(), any())(any(), any())
 
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(
-              eqTo(UpdateFlatRateExpenseSuccess.toString),
-              eqTo(AuditData(fakeNino, userAnswers.data))
-            )(any(), any(), any())
+          verify(mockAuditConnector, times(1)).sendExplicitAudit(
+            eqTo(UpdateFlatRateExpenseSuccess.toString),
+            eqTo(AuditData(fakeNino, userAnswers.data))
+          )(any(), any(), any())
         }
 
         application.stop()
@@ -421,33 +469,44 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
         when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(),any())(any(),any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         val userAnswers = minimumUserAnswers
-          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
-          .set(ClaimAmountAndAnyDeductions, 100).success.value
-          .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change).success.value
-          .set(ChangeWhichTaxYearsPage, Seq(CurrentYear, CurrentYearMinus1)).success.value
+          .set(
+            TaxYearSelectionPage,
+            Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)
+          )
+          .success
+          .value
+          .set(ClaimAmountAndAnyDeductions, 100)
+          .success
+          .value
+          .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.Change)
+          .success
+          .value
+          .set(ChangeWhichTaxYearsPage, Seq(CurrentYear, CurrentYearMinus1))
+          .success
+          .value
 
         val application = applicationBuilder(Some(userAnswers))
           .overrides(
             bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector),
             bind[TaiConnector].toInstance(mockTaiConnector),
             bind[AuditConnector].toInstance(mockAuditConnector)
-          ).build()
+          )
+          .build()
 
         val request = FakeRequest(GET, SubmissionController.onSubmit.url)
-        val result = route(application, request).value
+        val result  = route(application, request).value
 
-        whenReady(result) {
-          _ =>
-            verify(mockTaiConnector, times(2)).taiFREUpdate(any(), any(), any(), any())(any(), any())
+        whenReady(result) { _ =>
+          verify(mockTaiConnector, times(2)).taiFREUpdate(any(), any(), any(), any())(any(), any())
 
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(
-              eqTo(UpdateFlatRateExpenseSuccess.toString),
-              eqTo(AuditData(fakeNino, userAnswers.data))
-            )(any(), any(), any())
+          verify(mockAuditConnector, times(1)).sendExplicitAudit(
+            eqTo(UpdateFlatRateExpenseSuccess.toString),
+            eqTo(AuditData(fakeNino, userAnswers.data))
+          )(any(), any(), any())
         }
 
         application.stop()
@@ -460,32 +519,39 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
         when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(),any())(any(),any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         val userAnswers = minimumUserAnswers
-          .set(TaxYearSelectionPage, Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)).success.value
-          .set(RemoveFRECodePage, CurrentYearMinus2).success.value
+          .set(
+            TaxYearSelectionPage,
+            Seq(CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4)
+          )
+          .success
+          .value
+          .set(RemoveFRECodePage, CurrentYearMinus2)
+          .success
+          .value
 
         val application = applicationBuilder(Some(userAnswers))
           .overrides(
             bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector),
             bind[TaiConnector].toInstance(mockTaiConnector),
             bind[AuditConnector].toInstance(mockAuditConnector)
-          ).build()
+          )
+          .build()
 
         val request = FakeRequest(GET, SubmissionController.onSubmit.url)
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
-            verify(mockTaiConnector, times(3)).taiFREUpdate(any(), any(), any(), any())(any(), any())
+        whenReady(result) { _ =>
+          verify(mockTaiConnector, times(3)).taiFREUpdate(any(), any(), any(), any())(any(), any())
 
-            verify(mockAuditConnector, times(1)).sendExplicitAudit(
-              eqTo(UpdateFlatRateExpenseSuccess.toString),
-              eqTo(AuditData(fakeNino, userAnswers.data))
-            )(any(), any(), any())
+          verify(mockAuditConnector, times(1)).sendExplicitAudit(
+            eqTo(UpdateFlatRateExpenseSuccess.toString),
+            eqTo(AuditData(fakeNino, userAnswers.data))
+          )(any(), any(), any())
         }
 
         application.stop()
@@ -507,4 +573,5 @@ class SubmissionControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
       application.stop()
     }
   }
+
 }

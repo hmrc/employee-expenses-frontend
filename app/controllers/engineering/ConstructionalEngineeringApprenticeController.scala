@@ -33,47 +33,51 @@ import views.html.engineering.ConstructionalEngineeringApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConstructionalEngineeringApprenticeController @Inject()(
-                                                               override val messagesApi: MessagesApi,
-                                                               @Named(NavConstant.engineering) navigator: Navigator,
-                                                               identify: UnauthenticatedIdentifierAction,
-                                                               getData: DataRetrievalAction,
-                                                               requireData: DataRequiredAction,
-                                                               formProvider: ConstructionalEngineeringApprenticeFormProvider,
-                                                               val controllerComponents: MessagesControllerComponents,
-                                                               view: ConstructionalEngineeringApprenticeView,
-                                                               sessionRepository: SessionRepository
-                                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class ConstructionalEngineeringApprenticeController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.engineering) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: ConstructionalEngineeringApprenticeFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: ConstructionalEngineeringApprenticeView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(ConstructionalEngineeringApprenticePage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(ConstructionalEngineeringApprenticePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value => {
+            val claimAmount =
+              if (value) ClaimAmounts.ConstructionalEngineering.apprentice
+              else ClaimAmounts.ConstructionalEngineering.allOther
+            for {
+              updatedAnswers <- Future.fromTry(
+                request.userAnswers
+                  .set(ConstructionalEngineeringApprenticePage, value)
+                  .flatMap(_.set(ClaimAmount, claimAmount))
+              )
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(ConstructionalEngineeringApprenticePage, mode)(updatedAnswers))
+          }
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          val claimAmount = if (value) ClaimAmounts.ConstructionalEngineering.apprentice else ClaimAmounts.ConstructionalEngineering.allOther
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionalEngineeringApprenticePage, value)
-              .flatMap(_.set(ClaimAmount, claimAmount))
-            )
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(ConstructionalEngineeringApprenticePage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

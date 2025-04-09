@@ -24,15 +24,16 @@ import pages.textiles.TextilesOccupationList1Page
 import play.api.mvc.Call
 
 @Singleton
-class TextilesNavigator @Inject()() extends Navigator {
+class TextilesNavigator @Inject() () extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case TextilesOccupationList1Page => _ => routes.EmployerContributionController.onPageLoad(NormalMode)
-    case _            => _ => routes.SessionExpiredController.onPageLoad
+    case _                           => _ => routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case TextilesOccupationList1Page => _ => routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => routes.SessionExpiredController.onPageLoad
+    case _                           => _ => routes.SessionExpiredController.onPageLoad
   }
+
 }

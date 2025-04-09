@@ -51,36 +51,43 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
       higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
       advancedRate = frontendAppConfig.taxPercentageScotlandAdvancedRate,
       topRate = frontendAppConfig.taxPercentageScotlandTopRate,
-      calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
-      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
-      calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount),
-      calculatedAdvancedRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandAdvancedRate, claimAmount),
+      calculatedStarterRate =
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
+      calculatedBasicRate =
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
+      calculatedIntermediateRate =
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
+      calculatedHigherRate =
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount),
+      calculatedAdvancedRate =
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandAdvancedRate, claimAmount),
       calculatedTopRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandTopRate, claimAmount)
     )
 
-    def applyView(claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
-                  claimAmount: Int = claimAmount,
-                  updateAddress: Boolean = false,
-                  currentYearMinus1: Boolean = true,
-                  address: Option[Address] = None,
-                  freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
-                 )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
+    def applyView(
+        claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
+        claimAmount: Int = claimAmount,
+        updateAddress: Boolean = false,
+        currentYearMinus1: Boolean = true,
+        address: Option[Address] = None,
+        freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
+    )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
       view.apply(claimAmountsAndRates, claimAmount, address, currentYearMinus1, freResponse)(fakeRequest, messages)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 
     val applyViewWithAuth = applyView()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(viewWithAnswers, "confirmation")
+    behave.like(normalPage(viewWithAnswers, "confirmation"))
 
-    behave like pageWithAccountMenu(applyViewWithAuth)
+    behave.like(pageWithAccountMenu(applyViewWithAuth))
 
     "display correct static text" in {
 
       val doc = asDocument(viewWithAnswers)
 
-      assertContainsMessages(doc,
+      assertContainsMessages(
+        doc,
         "confirmation.heading",
         "confirmation.whatHappensNext",
         "confirmation.confirmationLetter"
@@ -91,9 +98,7 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
 
       val doc = asDocument(applyView(currentYearMinus1 = false)(fakeRequest, messages))
 
-      assertTextNotRendered(doc,
-        messages("confirmation.currentYearMinusOneDelay")
-      )
+      assertTextNotRendered(doc, messages("confirmation.currentYearMinusOneDelay"))
     }
 
     "display correct title when freResponse is 'FREAllYearsAmountsDifferent'" in {
@@ -105,7 +110,9 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
 
     "display correct title when freResponse is 'FREAllYearsAllAmountsSameAsClaimAmount'" in {
 
-      val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount)(fakeRequest, messages))
+      val doc = asDocument(
+        applyView(freResponse = FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount)(fakeRequest, messages)
+      )
 
       doc.title mustBe "Claim changed - Claim for your work uniform and tools - GOV.UK"
     }

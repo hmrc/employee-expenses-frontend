@@ -28,11 +28,11 @@ case object ChangeWhichTaxYearsPage extends QuestionPage[Seq[TaxYearSelection]] 
 
   override def toString: String = "changeWhichTaxYears"
 
-  override def cleanup(value: Option[Seq[TaxYearSelection]], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Seq[TaxYearSelection]], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(_) =>
         userAnswers.remove(RemoveFRECodePage)
       case _ => super.cleanup(value, userAnswers)
     }
-  }
+
 }

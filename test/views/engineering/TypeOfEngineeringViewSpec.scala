@@ -38,19 +38,19 @@ class TypeOfEngineeringViewSpec extends OptionsViewBehaviours[TypeOfEngineering]
     view.apply(form, NormalMode)(fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "TypeOfEngineeringView" must {
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like optionsPage(form, applyView, TypeOfEngineering.options)
+    behave.like(optionsPage(form, applyView, TypeOfEngineering.options))
 
-    behave like pageWithBodyText(applyView(form), "typeOfEngineering.heading")
+    behave.like(pageWithBodyText(applyView(form), "typeOfEngineering.heading"))
   }
 
   application.stop()

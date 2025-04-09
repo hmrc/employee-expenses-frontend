@@ -38,19 +38,21 @@ class EmployerContributionPageSpec extends PageBehaviours with Generators {
 
     "remove ExpensesPaid and SameEmployerContributionAllYears when EmployerContribution is False" in {
 
-      val updatedUserAnswers = userAnswers.flatMap(_.set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution)).get
+      val updatedUserAnswers =
+        userAnswers.flatMap(_.set(EmployerContributionPage, EmployerContribution.NoEmployerContribution)).get
 
       updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe None
       updatedUserAnswers.get(SameEmployerContributionAllYearsPage) mustBe None
     }
 
-
     "keep ExpensesPaid amount when EmployerContribution is True" in {
-      val updatedUserAnswers = userAnswers.get.set(EmployerContributionPage,  EmployerContribution.YesEmployerContribution).get
+      val updatedUserAnswers =
+        userAnswers.get.set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).get
 
       updatedUserAnswers.get(ExpensesEmployerPaidPage) mustBe Some(100)
       updatedUserAnswers.get(SameEmployerContributionAllYearsPage) mustBe Some(true)
 
     }
   }
+
 }

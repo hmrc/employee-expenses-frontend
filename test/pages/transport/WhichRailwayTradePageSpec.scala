@@ -29,4 +29,5 @@ class WhichRailwayTradeSpec extends PageBehaviours {
 
     beRemovable[WhichRailwayTrade](WhichRailwayTradePage)
   }
+
 }

@@ -26,15 +26,18 @@ case class Message(key: String, args: Any*) {
 
   def string(implicit messages: Messages): String =
     messages(key, args: _*)
+
 }
 
 case class RadioCheckboxOption(id: String, value: String, message: Message)
 
 object RadioCheckboxOption {
+
   def apply(keyPrefix: String, option: String, messageArgs: Any*): RadioCheckboxOption =
     RadioCheckboxOption(
       id = s"$keyPrefix.$option",
       value = option,
       message = Message(s"$keyPrefix.$option", messageArgs: _*)
     )
+
 }

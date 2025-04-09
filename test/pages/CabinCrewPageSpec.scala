@@ -29,4 +29,5 @@ class CabinCrewPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](CabinCrewPage)
   }
+
 }

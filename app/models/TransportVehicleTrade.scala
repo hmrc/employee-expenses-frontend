@@ -22,25 +22,32 @@ sealed trait TransportVehicleTrade
 
 object TransportVehicleTrade extends Enumerable.Implicits {
 
-  case object Builder extends WithName("builder") with TransportVehicleTrade
+  case object Builder                    extends WithName("builder") with TransportVehicleTrade
   case object VehicleRepairerWagonLifter extends WithName("vehicleRepairerWagonLifter") with TransportVehicleTrade
-  case object RailwayVehiclePainter extends WithName("railwayVehiclePainter") with TransportVehicleTrade
-  case object Letterer extends WithName("letterer") with TransportVehicleTrade
-  case object BuildersAssistantOrRepairersAssistant extends WithName("buildersAssistantOrRepairersAssistant") with TransportVehicleTrade
-  case object Or extends WithName("or") with TransportVehicleTrade
+  case object RailwayVehiclePainter      extends WithName("railwayVehiclePainter") with TransportVehicleTrade
+  case object Letterer                   extends WithName("letterer") with TransportVehicleTrade
+
+  case object BuildersAssistantOrRepairersAssistant
+      extends WithName("buildersAssistantOrRepairersAssistant")
+      with TransportVehicleTrade
+
+  case object Or             extends WithName("or") with TransportVehicleTrade
   case object NoneOfTheAbove extends WithName("noneOfTheAbove") with TransportVehicleTrade
 
-
-
   val values: Seq[TransportVehicleTrade] = Seq(
-    Builder, BuildersAssistantOrRepairersAssistant, Letterer, RailwayVehiclePainter, VehicleRepairerWagonLifter, Or, NoneOfTheAbove
+    Builder,
+    BuildersAssistantOrRepairersAssistant,
+    Letterer,
+    RailwayVehiclePainter,
+    VehicleRepairerWagonLifter,
+    Or,
+    NoneOfTheAbove
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map {
-    value =>
-      RadioCheckboxOption("transportVehicleTrade", value.toString)
-  }
+  val options: Seq[RadioCheckboxOption] =
+    values.map(value => RadioCheckboxOption("transportVehicleTrade", value.toString))
 
   implicit val enumerable: Enumerable[TransportVehicleTrade] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

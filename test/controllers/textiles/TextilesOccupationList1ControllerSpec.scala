@@ -36,8 +36,13 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues
-  with MockitoSugar with BeforeAndAfterEach {
+class TextilesOccupationList1ControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with IntegrationPatience
+    with OptionValues
+    with MockitoSugar
+    with BeforeAndAfterEach {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -45,7 +50,7 @@ class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
   override def beforeEach(): Unit = {
     reset(mockSessionRepository)
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+    when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
   }
 
   lazy val textilesOccupationList1Route = routes.TextilesOccupationList1Controller.onPageLoad(NormalMode).url
@@ -87,7 +92,8 @@ class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
           .overrides(
             bind[Navigator].qualifiedWith(NavConstant.textiles).toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, textilesOccupationList1Route)
@@ -162,15 +168,16 @@ class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
       val ua2 =
         ua1
-          .set(ClaimAmount, ClaimAmounts.Textiles.list1).success.value
-          .set(TextilesOccupationList1Page, true).success.value
+          .set(ClaimAmount, ClaimAmounts.Textiles.list1)
+          .success
+          .value
+          .set(TextilesOccupationList1Page, true)
+          .success
+          .value
 
       val result = route(application, request).value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2))
 
       application.stop()
     }
@@ -188,17 +195,19 @@ class TextilesOccupationList1ControllerSpec extends SpecBase with ScalaFutures w
 
       val ua2 =
         ua1
-          .set(ClaimAmount, ClaimAmounts.Textiles.allOther).success.value
-          .set(TextilesOccupationList1Page, false).success.value
+          .set(ClaimAmount, ClaimAmounts.Textiles.allOther)
+          .success
+          .value
+          .set(TextilesOccupationList1Page, false)
+          .success
+          .value
 
       val result = route(application, request).value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2))
 
       application.stop()
     }
   }
+
 }

@@ -37,7 +37,12 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class ElectricalControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
+class ElectricalControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with IntegrationPatience
+    with OptionValues
+    with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -76,7 +81,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -146,7 +151,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
     "save 'onlyLaundry' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
       val ua1 = emptyUserAnswers
 
@@ -158,12 +163,15 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
         .withFormUrlEncodedBody(("value", "true"))
 
       val ua2 = ua1
-        .set(ClaimAmount, ClaimAmounts.Electrical.onlyLaundry).success.value
-        .set(ElectricalPage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Electrical.onlyLaundry)
+        .success
+        .value
+        .set(ElectricalPage, true)
+        .success
+        .value
 
-      whenReady(route(application, request).value) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      whenReady(route(application, request).value) { _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
       application.stop()
@@ -172,7 +180,7 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
       val ua1 = emptyUserAnswers
 
@@ -184,15 +192,19 @@ class ElectricalControllerSpec extends SpecBase with ScalaFutures with Integrati
         .withFormUrlEncodedBody(("value", "false"))
 
       val ua2 = ua1
-        .set(ClaimAmount, ClaimAmounts.Electrical.allOther).success.value
-        .set(ElectricalPage, false).success.value
+        .set(ClaimAmount, ClaimAmounts.Electrical.allOther)
+        .success
+        .value
+        .set(ElectricalPage, false)
+        .success
+        .value
 
-      whenReady(route(application, request).value) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      whenReady(route(application, request).value) { _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
       application.stop()
     }
   }
+
 }

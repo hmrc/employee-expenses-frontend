@@ -23,6 +23,7 @@ import play.api.data.Form
 class FirstIndustryOptionsFormProvider extends Mappings {
 
   def apply(): Form[FirstIndustryOptions] = Form(
-    "value" -> enumerable[FirstIndustryOptions](requiredKey = "firstIndustryOptions.error.required" )
+    "value" -> enumerable[FirstIndustryOptions](requiredKey = "firstIndustryOptions.error.required")
   )
+
 }

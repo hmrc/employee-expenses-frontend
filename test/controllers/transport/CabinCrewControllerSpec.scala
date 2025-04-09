@@ -37,15 +37,22 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues with BeforeAndAfterEach {
+class CabinCrewControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with OptionValues
+    with BeforeAndAfterEach {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val userAnswers = emptyUserAnswers
+  private val userAnswers                              = emptyUserAnswers
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
   override def beforeEach(): Unit = {
     reset(mockSessionRepository)
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+    when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
   }
 
   lazy val cabinCrewRoute: String = routes.CabinCrewController.onPageLoad(NormalMode).url
@@ -87,7 +94,8 @@ class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSug
           .overrides(
             bind[Navigator].qualifiedWith(NavConstant.transport).toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, cabinCrewRoute)
@@ -160,13 +168,14 @@ class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSug
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew).success.value
-        .set(CabinCrewPage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew)
+        .success
+        .value
+        .set(CabinCrewPage, true)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -182,16 +191,18 @@ class CabinCrewControllerSpec extends SpecBase with ScalaFutures with MockitoSug
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-        .set(CabinCrewPage, false).success.value
+        .set(ClaimAmount, ClaimAmounts.defaultRate)
+        .success
+        .value
+        .set(CabinCrewPage, false)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
 
   }
+
 }

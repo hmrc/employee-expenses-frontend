@@ -22,6 +22,7 @@ import play.api.libs.json.{JsObject, JsSuccess, Json}
 class MergedJourneySpec extends SpecBase {
 
   val testId = "testId"
+
   val testData: MergedJourney = MergedJourney(
     testId,
     ClaimSkipped,
@@ -31,9 +32,9 @@ class MergedJourneySpec extends SpecBase {
 
   val testJson: JsObject = Json.obj(
     "internalId" -> testId,
-    "wfh" -> "ClaimSkipped",
-    "psubs" -> "ClaimPending",
-    "fre" -> "ClaimCompleteCurrent",
+    "wfh"        -> "ClaimSkipped",
+    "psubs"      -> "ClaimPending",
+    "fre"        -> "ClaimCompleteCurrent",
     "lastUpdated" -> Json.obj(
       "$date" -> Json.obj("$numberLong" -> testData.lastUpdated.toEpochMilli.toString)
     )
@@ -46,7 +47,8 @@ class MergedJourneySpec extends SpecBase {
 
     "deserialise correctly" in {
       Json.fromJson[MergedJourney](testJson).map(_.copy(lastUpdated = testData.lastUpdated)) mustBe JsSuccess(testData)
-      //there is a minor loss of accuracy when deserialising hence the lastUpdated change
+      // there is a minor loss of accuracy when deserialising hence the lastUpdated change
     }
   }
+
 }

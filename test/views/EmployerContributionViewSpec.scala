@@ -23,7 +23,6 @@ import play.twirl.api.HtmlFormat
 import views.html.EmployerContributionView
 import views.newBehaviours.OptionsViewBehaviours
 
-
 class EmployerContributionViewSpec extends OptionsViewBehaviours[EmployerContribution] {
 
   val messageKeyPrefix = "employerContribution"
@@ -42,39 +41,35 @@ class EmployerContributionViewSpec extends OptionsViewBehaviours[EmployerContrib
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-      behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-      behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-      behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-      behave like optionsPage(form, applyView, EmployerContribution.options)
+    behave.like(optionsPage(form, applyView, EmployerContribution.options))
 
-      behave like pageWithList(applyView(form), messageKeyPrefix, Seq("list.item1", "list.item2", "list.item3"))
+    behave.like(pageWithList(applyView(form), messageKeyPrefix, Seq("list.item1", "list.item2", "list.item3")))
 
   }
 
   application.stop()
 
-    override def pageWithList(view: HtmlFormat.Appendable,
-                            pageKey: String,
-                            bulletList: Seq[String]): Unit = {
+  override def pageWithList(view: HtmlFormat.Appendable, pageKey: String, bulletList: Seq[String]): Unit =
 
-      "behave like a page with a list" must {
+    "behave like a page with a list" must {
 
-        "have a list" in {
+      "have a list" in {
 
-          val doc = asDocument(view)
-          assertContainsText(doc, "govuk-list govuk-list--bullet")
-        }
+        val doc = asDocument(view)
+        assertContainsText(doc, "govuk-list govuk-list--bullet")
+      }
 
-        "have correct values" in {
+      "have correct values" in {
 
-          val doc = asDocument(view)
-          bulletList.foreach {
-            x => assertContainsMessages(doc, s"$pageKey.$x")
-          }
+        val doc = asDocument(view)
+        bulletList.foreach(x => assertContainsMessages(doc, s"$pageKey.$x"))
       }
     }
-  }
+
 }

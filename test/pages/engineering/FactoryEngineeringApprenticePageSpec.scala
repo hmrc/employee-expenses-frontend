@@ -28,4 +28,5 @@ class FactoryEngineeringApprenticePageSpec extends PageBehaviours {
 
     beRemovable[Boolean](FactoryEngineeringApprenticePage)
   }
+
 }

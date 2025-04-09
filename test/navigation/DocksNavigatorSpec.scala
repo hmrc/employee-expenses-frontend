@@ -24,10 +24,10 @@ import pages.docks.DocksOccupationList1Page
 
 class DocksNavigatorSpec extends SpecBase with MockitoSugar {
   private val modes = Seq(NormalMode, CheckMode)
-  val navigator = new DocksNavigator
+  val navigator     = new DocksNavigator
 
   "DocksNavigator" when {
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
         "go to EmployerContribution from Docks when 'Yes' is selected" in {
           val answers = emptyUserAnswers.set(DocksOccupationList1Page, true).success.value
@@ -48,6 +48,6 @@ class DocksNavigatorSpec extends SpecBase with MockitoSugar {
             controllers.routes.SessionExpiredController.onPageLoad
         }
       }
-    }
   }
+
 }

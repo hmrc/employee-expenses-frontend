@@ -17,7 +17,14 @@
 package views.authenticated
 
 import forms.authenticated.AlreadyClaimingFRESameAmountFormProvider
-import models.{AlreadyClaimingFRESameAmount, FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, TaxYearSelection}
+import models.{
+  AlreadyClaimingFRESameAmount,
+  FlatRateExpense,
+  FlatRateExpenseAmounts,
+  NormalMode,
+  TaiTaxYear,
+  TaxYearSelection
+}
 import play.api.Application
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -33,7 +40,12 @@ class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[Already
   val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
   private val fakeClaimAmount = 100
-  private val fakeFreAmounts = Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()), FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear().prev))
+
+  private val fakeFreAmounts = Seq(
+    FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()),
+    FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear().prev)
+  )
+
   private val fakeFreAmount = Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))
 
   "AlreadyClaimingFRESameAmount view" must {
@@ -47,15 +59,18 @@ class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[Already
       view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmount)(fakeRequest, messages)
 
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+      view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(
+        fakeRequest.withSession(("authToken", "SomeAuthToken")),
+        messages
+      )
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like optionsPage(form, applyView, AlreadyClaimingFRESameAmount.options)
+    behave.like(optionsPage(form, applyView, AlreadyClaimingFRESameAmount.options))
 
     "contain list for multiple years" in {
       val doc = asDocument(applyView(form))
@@ -76,7 +91,10 @@ class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[Already
         (TaiTaxYear().year + 1).toString
       )
 
-      doc.getElementsByClass(s"fre-amount-${TaiTaxYear().year}").text mustBe messages("alreadyClaimingFRESameAmount.tableAmountHeading", "£100")
+      doc.getElementsByClass(s"fre-amount-${TaiTaxYear().year}").text mustBe messages(
+        "alreadyClaimingFRESameAmount.tableAmountHeading",
+        "£100"
+      )
     }
 
   }

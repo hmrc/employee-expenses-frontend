@@ -28,34 +28,31 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuthRedirectController @Inject()(
-                                        identify: AuthenticatedIdentifierAction,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        sessionRepository: SessionRepository
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController {
+class AuthRedirectController @Inject() (
+    identify: AuthenticatedIdentifierAction,
+    val controllerComponents: MessagesControllerComponents,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController {
 
-  def onPageLoad(key: String): Action[AnyContent] = identify.async {
-    implicit request =>
-      val id: Authed = request.identifier.asInstanceOf[Authed]
+  def onPageLoad(key: String): Action[AnyContent] = identify.async { implicit request =>
+    val id: Authed = request.identifier.asInstanceOf[Authed]
 
-      sessionRepository.get(UnAuthed(key)).flatMap {
-        unAuthUA =>
-        sessionRepository.get(id).flatMap {
-          authUA =>
-            (unAuthUA, authUA) match {
-              case (Some(unAuthUA), None) =>
-                for {
-                  _ <- sessionRepository.set(request.identifier, UserAnswers(unAuthUA.data))
-                  _ <- sessionRepository.remove(UnAuthed(key))
-                } yield {
-                  Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
-                }
-              case (_, Some(authUA)) =>
-                Future.successful(Redirect(TaxYearSelectionController.onPageLoad(NormalMode)))
-              case _ =>
-                Future.successful(Redirect(SessionExpiredController.onPageLoad))
-            }
+    sessionRepository.get(UnAuthed(key)).flatMap { unAuthUA =>
+      sessionRepository.get(id).flatMap { authUA =>
+        (unAuthUA, authUA) match {
+          case (Some(unAuthUA), None) =>
+            for {
+              _ <- sessionRepository.set(request.identifier, UserAnswers(unAuthUA.data))
+              _ <- sessionRepository.remove(UnAuthed(key))
+            } yield Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
+          case (_, Some(authUA)) =>
+            Future.successful(Redirect(TaxYearSelectionController.onPageLoad(NormalMode)))
+          case _ =>
+            Future.successful(Redirect(SessionExpiredController.onPageLoad))
         }
       }
+    }
   }
+
 }

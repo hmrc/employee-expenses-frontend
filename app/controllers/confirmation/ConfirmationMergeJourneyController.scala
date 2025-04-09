@@ -31,27 +31,32 @@ import views.html.confirmation.ConfirmationMergeJourneyView
 
 import javax.inject.{Inject, Named}
 
-class ConfirmationMergeJourneyController @Inject()(
-                                          override val messagesApi: MessagesApi,
-                                          @Named(NavConstant.authenticated) navigator: Navigator,
-                                          identify: AuthenticatedIdentifierAction,
-                                          getData: DataRetrievalAction,
-                                          requireData: DataRequiredAction,
-                                          val controllerComponents: MessagesControllerComponents,
-                                          confirmationMergeJourneyView: ConfirmationMergeJourneyView,
-                                        ) extends FrontendBaseController with I18nSupport {
+class ConfirmationMergeJourneyController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.authenticated) navigator: Navigator,
+    identify: AuthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    val controllerComponents: MessagesControllerComponents,
+    confirmationMergeJourneyView: ConfirmationMergeJourneyView
+) extends FrontendBaseController
+    with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
-      (
-        request.userAnswers.get(FREResponse),
-        request.userAnswers.get(YourEmployerPage),
-        request.userAnswers.get(ClaimAmountAndAnyDeductions),
-        request.userAnswers.get(TaxYearSelectionPage)
-      ) match {
-        case (Some(_), Some(_), Some(_), Some(_)) =>
-          Ok(confirmationMergeJourneyView(continueUrl = navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(request.userAnswers).url))
-        case _ => Redirect(SessionExpiredController.onPageLoad)
-      }
+  def onPageLoad(): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    (
+      request.userAnswers.get(FREResponse),
+      request.userAnswers.get(YourEmployerPage),
+      request.userAnswers.get(ClaimAmountAndAnyDeductions),
+      request.userAnswers.get(TaxYearSelectionPage)
+    ) match {
+      case (Some(_), Some(_), Some(_), Some(_)) =>
+        Ok(
+          confirmationMergeJourneyView(continueUrl =
+            navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(request.userAnswers).url
+          )
+        )
+      case _ => Redirect(SessionExpiredController.onPageLoad)
+    }
   }
+
 }

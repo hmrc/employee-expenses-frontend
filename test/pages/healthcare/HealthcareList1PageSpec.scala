@@ -28,4 +28,5 @@ class HealthcareList1PageSpec extends PageBehaviours {
 
     beRemovable[Boolean](HealthcareList1Page)
   }
+
 }

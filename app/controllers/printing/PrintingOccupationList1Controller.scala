@@ -33,50 +33,52 @@ import views.html.printing.PrintingOccupationList1View
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PrintingOccupationList1Controller @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   @Named(NavConstant.printing) navigator: Navigator,
-                                                   identify: UnauthenticatedIdentifierAction,
-                                                   getData: DataRetrievalAction,
-                                                   requireData: DataRequiredAction,
-                                                   formProvider: PrintingOccupationList1FormProvider,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   view: PrintingOccupationList1View,
-                                                   sessionRepository: SessionRepository
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class PrintingOccupationList1Controller @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.printing) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: PrintingOccupationList1FormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: PrintingOccupationList1View,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(PrintingOccupationList1Page) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(PrintingOccupationList1Page) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <-
+                if (value) {
+                  Future.fromTry(
+                    request.userAnswers
+                      .set(PrintingOccupationList1Page, value)
+                      .flatMap(_.set(ClaimAmount, ClaimAmounts.Printing.list1))
+                  )
+                } else {
+                  Future.fromTry(request.userAnswers.set(PrintingOccupationList1Page, value))
+                }
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(PrintingOccupationList1Page, mode)(updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <- if (value) {
-              Future.fromTry(request.userAnswers.set(PrintingOccupationList1Page, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Printing.list1))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(PrintingOccupationList1Page, value))
-            }
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(PrintingOccupationList1Page, mode)(updatedAnswers))
-        }
-      )
-  }
 }

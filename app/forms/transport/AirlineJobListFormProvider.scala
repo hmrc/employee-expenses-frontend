@@ -26,4 +26,5 @@ class AirlineJobListFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("airlineJobList.error.required")
     )
+
 }

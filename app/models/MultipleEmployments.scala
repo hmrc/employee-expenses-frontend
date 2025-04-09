@@ -22,18 +22,18 @@ sealed trait MultipleEmployments
 
 object MultipleEmployments extends Enumerable.Implicits {
 
-  case object OneJob extends WithName("oneJob") with MultipleEmployments
+  case object OneJob         extends WithName("oneJob") with MultipleEmployments
   case object MoreThanOneJob extends WithName("moreThanOneJob") with MultipleEmployments
 
   val values: Seq[MultipleEmployments] = Seq(
-    OneJob, MoreThanOneJob
+    OneJob,
+    MoreThanOneJob
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map {
-    value =>
-      RadioCheckboxOption("multipleEmployments", value.toString)
-  }
+  val options: Seq[RadioCheckboxOption] =
+    values.map(value => RadioCheckboxOption("multipleEmployments", value.toString))
 
   implicit val enumerable: Enumerable[MultipleEmployments] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

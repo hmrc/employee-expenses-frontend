@@ -26,4 +26,5 @@ class MetropolitanPoliceFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("metropolitanPolice.error.required")
     )
+
 }

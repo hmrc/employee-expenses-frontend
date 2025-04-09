@@ -36,21 +36,21 @@ class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
 
     val view = application.injector.instanceOf[ExpensesEmployerPaidView]
 
-
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest, messages)
 
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like pageWithBackLink(applyView(form))
-
-    behave like intPage(form, applyView, messageKeyPrefix, routes.ExpensesEmployerPaidController.onSubmit(NormalMode).url)
+    behave.like(
+      intPage(form, applyView, messageKeyPrefix, routes.ExpensesEmployerPaidController.onSubmit(NormalMode).url)
+    )
 
     "contain the '£' symbol" in {
       val doc = asDocument(applyView(form))

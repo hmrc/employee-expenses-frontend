@@ -42,13 +42,13 @@ class IronMiningViewSpec extends YesNoViewBehaviours {
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, routes.IronMiningController.onSubmit(NormalMode).url)
+    behave.like(yesNoPage(form, applyView, messageKeyPrefix, routes.IronMiningController.onSubmit(NormalMode).url))
   }
 
   application.stop()

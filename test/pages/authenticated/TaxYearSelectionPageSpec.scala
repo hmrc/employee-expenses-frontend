@@ -34,12 +34,24 @@ class TaxYearSelectionPageSpec extends PageBehaviours {
     "remove authenticated userAnswers when TaxYearSelectionPage is updated" in {
 
       val userAnswers = new UserAnswers()
-        .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
-        .set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
-        .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
-        .set(ChangeWhichTaxYearsPage, Seq(CurrentYear)).success.value
-        .set(RemoveFRECodePage, CurrentYear).success.value
-        .set(YourEmployerPage, true).success.value
+        .set(TaxYearSelectionPage, Seq(CurrentYear))
+        .success
+        .value
+        .set(AlreadyClaimingFREDifferentAmountsPage, Change)
+        .success
+        .value
+        .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove)
+        .success
+        .value
+        .set(ChangeWhichTaxYearsPage, Seq(CurrentYear))
+        .success
+        .value
+        .set(RemoveFRECodePage, CurrentYear)
+        .success
+        .value
+        .set(YourEmployerPage, true)
+        .success
+        .value
 
       val updatedUserAnswers = userAnswers.set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).get
 
@@ -51,4 +63,5 @@ class TaxYearSelectionPageSpec extends PageBehaviours {
     }
 
   }
+
 }

@@ -29,15 +29,20 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ErrorHandler @Inject()(
-                              val messagesApi: MessagesApi,
-                              view: ErrorTemplate
-                            )(implicit val ec: ExecutionContext) extends FrontendErrorHandler with I18nSupport with Logging {
+class ErrorHandler @Inject() (
+    val messagesApi: MessagesApi,
+    view: ErrorTemplate
+)(implicit val ec: ExecutionContext)
+    extends FrontendErrorHandler
+    with I18nSupport
+    with Logging {
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader): Future[Html] =
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(
+      implicit request: RequestHeader
+  ): Future[Html] =
     Future.successful(view(pageTitle, heading, message))
 
-  override def onClientError(request: RequestHeader, statusCode: Int, message: String): Future[Result] = {
+  override def onClientError(request: RequestHeader, statusCode: Int, message: String): Future[Result] =
 
     if (statusCode == FORBIDDEN) {
 
@@ -48,10 +53,10 @@ class ErrorHandler @Inject()(
       standardErrorTemplate(
         "technicalDifficulties.pageTitle",
         "technicalDifficulties.heading",
-        "technicalDifficulties.message").map(Forbidden(_))
-    }
-    else {
+        "technicalDifficulties.message"
+      ).map(Forbidden(_))
+    } else {
       super.onClientError(request, statusCode, message)
     }
-  }
+
 }

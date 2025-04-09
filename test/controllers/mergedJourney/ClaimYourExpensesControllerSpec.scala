@@ -31,13 +31,17 @@ import repositories.SessionRepository
 import java.time.Instant
 import scala.concurrent.Future
 
-class ClaimYourExpensesControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with BeforeAndAfterEach {
+class ClaimYourExpensesControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience
+    with BeforeAndAfterEach {
 
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  override def beforeEach(): Unit = {
+  override def beforeEach(): Unit =
     reset(mockSessionRepository)
-  }
 
   val claimYourExpensesUrl: String = "/employee-expenses/claim-your-expenses"
 
@@ -47,7 +51,13 @@ class ClaimYourExpensesControllerSpec extends SpecBase with MockitoSugar with Sc
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val testJourney = MergedJourney(userAnswersId, ClaimCompleteCurrentPrevious, ClaimCompleteCurrent, ClaimCompletePrevious, Instant.now())
+      val testJourney = MergedJourney(
+        userAnswersId,
+        ClaimCompleteCurrentPrevious,
+        ClaimCompleteCurrent,
+        ClaimCompletePrevious,
+        Instant.now()
+      )
       when(mockSessionRepository.getMergedJourney(any())).thenReturn(Future.successful(Some(testJourney)))
 
       val request = FakeRequest(GET, claimYourExpensesUrl)
@@ -93,4 +103,5 @@ class ClaimYourExpensesControllerSpec extends SpecBase with MockitoSugar with Sc
       application.stop()
     }
   }
+
 }

@@ -26,4 +26,5 @@ class TransportCarpenterFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("transportCarpenter.error.required")
     )
+
 }

@@ -22,9 +22,11 @@ import viewmodels.RadioCheckboxOption
 
 trait OptionsViewBehaviours[A] extends ViewBehaviours {
 
-  def optionsPage(form: Form[A],
-                  createView: Form[A] => HtmlFormat.Appendable,
-                  options: Seq[RadioCheckboxOption]): Unit = {
+  def optionsPage(
+      form: Form[A],
+      createView: Form[A] => HtmlFormat.Appendable,
+      options: Seq[RadioCheckboxOption]
+  ): Unit = {
 
     "behave like an options page" must {
 
@@ -34,11 +36,11 @@ trait OptionsViewBehaviours[A] extends ViewBehaviours {
 
         for (option <- options) {
 
-          val idVal = if(option != options.head){
+          val idVal = if (option != options.head) {
             s"value-${options.indexOf(option) + 1}"
-          } else {s"value"}
+          } else { s"value" }
 
-          if(option.value!= "or"){
+          if (option.value != "or") {
             assertContainsRadioButton(doc, idVal, "value", option.value, false)
           }
         }
@@ -47,9 +49,9 @@ trait OptionsViewBehaviours[A] extends ViewBehaviours {
     }
     for (option <- options) {
 
-      val idVal = if(option != options.head){
+      val idVal = if (option != options.head) {
         s"value-${options.indexOf(option) + 1}"
-      } else {s"value"}
+      } else { s"value" }
 
       s"rendered with a value of '${option.value}' " must {
 
@@ -57,17 +59,17 @@ trait OptionsViewBehaviours[A] extends ViewBehaviours {
 
           val doc = asDocument(createView(form.bind(Map("value" -> s"${option.value}"))))
 
-          if(option.value != "or"){
+          if (option.value != "or") {
             assertContainsRadioButton(doc, idVal, "value", option.value, true)
           }
 
           for (unselectedOption <- options.filterNot(o => o == option)) {
 
-            val unselectId = if(unselectedOption != options.head) {
+            val unselectId = if (unselectedOption != options.head) {
               s"value-${options.indexOf(unselectedOption) + 1}"
-            } else{s"value"}
+            } else { s"value" }
 
-            if(unselectedOption.value != "or") {
+            if (unselectedOption.value != "or") {
               assertContainsRadioButton(doc, unselectId, "value", unselectedOption.value, false)
             }
           }
@@ -75,4 +77,5 @@ trait OptionsViewBehaviours[A] extends ViewBehaviours {
       }
     }
   }
+
 }

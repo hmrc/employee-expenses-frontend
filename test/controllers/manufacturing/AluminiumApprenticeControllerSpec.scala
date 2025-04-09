@@ -77,11 +77,13 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute))
+          )
           .build()
 
       val request =
@@ -147,7 +149,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
     "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -158,13 +160,14 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-          .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.apprentice).success.value
-          .set(AluminiumApprenticePage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.apprentice)
+        .success
+        .value
+        .set(AluminiumApprenticePage, true)
+        .success
+        .value
 
-      whenReady(result){
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -172,7 +175,7 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -183,15 +186,17 @@ class AluminiumApprenticeControllerSpec extends SpecBase with ScalaFutures with 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.allOther).success.value
-        .set(AluminiumApprenticePage, false).success.value
+        .set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.allOther)
+        .success
+        .value
+        .set(AluminiumApprenticePage, false)
+        .success
+        .value
 
-      whenReady(result){
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

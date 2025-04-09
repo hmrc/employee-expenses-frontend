@@ -33,11 +33,16 @@ import play.api.test.Helpers._
 import service.SubmissionService
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
-class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with BeforeAndAfterEach {
+class CheckYourAnswersControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience
+    with BeforeAndAfterEach {
 
-  private val mockSubmissionService = mock[SubmissionService]
-  private val mockAuditConnector = mock[AuditConnector]
-  private val mockTaiConnector = mock[TaiConnector]
+  private val mockSubmissionService       = mock[SubmissionService]
+  private val mockAuditConnector          = mock[AuditConnector]
+  private val mockTaiConnector            = mock[TaiConnector]
   private val mockCitizenDetailsConnector = mock[CitizenDetailsConnector]
 
   override def beforeEach(): Unit = {
@@ -52,8 +57,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
       "return OK for a GET for a stopped claim" in {
         val userAnswers = minimumUserAnswers.set(FREResponse, FRENoYears).success.value
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-        val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
+        val result      = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -62,10 +67,12 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
       "return OK for a GET for a changed claim" in {
         val userAnswers = currentYearFullUserAnswers
-            .set(FREResponse, FlatRateExpenseOptions.FRESomeYears).success.value
+          .set(FREResponse, FlatRateExpenseOptions.FRESomeYears)
+          .success
+          .value
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-        val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
+        val result      = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -74,8 +81,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
       "return OK for a GET for a new claim" in {
         val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers)).build()
-        val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
+        val result      = route(application, request).value
 
         status(result) mustEqual OK
 
@@ -84,8 +91,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
       "redirect to session expired when no freResponse is found" in {
         val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
-        val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
+        val result      = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
 
@@ -94,8 +101,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
 
       "redirect to Session Expired for a GET if no existing data is found" in {
         val application = applicationBuilder(userAnswers = None).build()
-        val request = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
+        val result      = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad.url
@@ -107,9 +114,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
     "acceptAndClaim" must {
       "redirect to next page" in {
         val onwardRoute: Call = Call("GET", "/foo")
-        val application = applicationBuilder(Some(emptyUserAnswers), onwardRoute = Some(onwardRoute)).build()
-        val request = FakeRequest(GET, CheckYourAnswersController.acceptAndClaim.url)
-        val result = route(application, request).value
+        val application       = applicationBuilder(Some(emptyUserAnswers), onwardRoute = Some(onwardRoute)).build()
+        val request           = FakeRequest(GET, CheckYourAnswersController.acceptAndClaim.url)
+        val result            = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
@@ -118,4 +125,5 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Sca
       }
     }
   }
+
 }

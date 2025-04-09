@@ -28,4 +28,5 @@ class ClothingPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](ClothingPage)
   }
+
 }

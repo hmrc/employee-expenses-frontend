@@ -28,4 +28,5 @@ class FifthIndustryOptionsFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[FifthIndustryOptions]("fifthIndustryOptions.error.required")
     )
+
 }

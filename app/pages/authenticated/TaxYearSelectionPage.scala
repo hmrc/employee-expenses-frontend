@@ -28,7 +28,7 @@ object TaxYearSelectionPage extends QuestionPage[Seq[TaxYearSelection]] {
 
   override def toString: String = "taxYearSelection"
 
-  override def cleanup(value: Option[Seq[TaxYearSelection]], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Seq[TaxYearSelection]], userAnswers: UserAnswers): Try[UserAnswers] =
 
     value match {
       case Some(ty) =>
@@ -43,5 +43,5 @@ object TaxYearSelectionPage extends QuestionPage[Seq[TaxYearSelection]] {
       case _ =>
         super.cleanup(value, userAnswers)
     }
-  }
+
 }

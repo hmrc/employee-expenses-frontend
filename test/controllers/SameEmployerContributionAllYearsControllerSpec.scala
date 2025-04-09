@@ -35,18 +35,23 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class SameEmployerContributionAllYearsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience{
+class SameEmployerContributionAllYearsControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience {
 
-  private val userAnswers = emptyUserAnswers
+  private val userAnswers           = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
   def onwardRoute: Call = Call("GET", "/foo")
 
   val contribution = 10
 
-  lazy val sameEmployerContributionAllYearsRoute: String = routes.SameEmployerContributionAllYearsController.onPageLoad(NormalMode).url
+  lazy val sameEmployerContributionAllYearsRoute: String =
+    routes.SameEmployerContributionAllYearsController.onPageLoad(NormalMode).url
 
   "SameEmployerContributionAllYears Controller" must {
 
@@ -66,7 +71,7 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers().set(SameEmployerContributionAllYearsPage, true).success.value
+      val userAnswers  = UserAnswers().set(SameEmployerContributionAllYearsPage, true).success.value
       val userAnswers2 = userAnswers.set(ExpensesEmployerPaidPage, contribution).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers2)).build()
@@ -184,7 +189,9 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
     "save 'true' when 'Yes' is selected" in {
 
       val ua = userAnswers
-        .set(ExpensesEmployerPaidPage, 0).success.value
+        .set(ExpensesEmployerPaidPage, 0)
+        .success
+        .value
 
       val application: Application = applicationBuilder(userAnswers = Some(ua))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -195,12 +202,11 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
       val result = route(application, request).value
 
       val userAnswers2 = ua
-        .set(SameEmployerContributionAllYearsPage, true).success.value
+        .set(SameEmployerContributionAllYearsPage, true)
+        .success
+        .value
 
-      whenReady(result){
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -208,7 +214,9 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
     "save 'false' when 'No' is selected" in {
 
       val ua = userAnswers
-        .set(ExpensesEmployerPaidPage, 0).success.value
+        .set(ExpensesEmployerPaidPage, 0)
+        .success
+        .value
 
       val application: Application = applicationBuilder(userAnswers = Some(ua))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -219,15 +227,14 @@ class SameEmployerContributionAllYearsControllerSpec extends SpecBase with Mocki
       val result = route(application, request).value
 
       val userAnswers2 = ua
+        .set(SameEmployerContributionAllYearsPage, false)
+        .success
+        .value
 
-        .set(SameEmployerContributionAllYearsPage, false).success.value
-
-      whenReady(result){
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

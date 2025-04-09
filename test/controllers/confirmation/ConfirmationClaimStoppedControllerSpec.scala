@@ -30,13 +30,18 @@ import repositories.SessionRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ConfirmationClaimStoppedControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
+class ConfirmationClaimStoppedControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience {
 
   "ConfirmationClaimStoppedController" must {
 
     "return OK and ConfirmationClaimStoppedView for a GET with specific answers" in {
 
-      val userAnswers = currentYearFullUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYearMinus1).success.value
+      val userAnswers =
+        currentYearFullUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYearMinus1).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -58,13 +63,13 @@ class ConfirmationClaimStoppedControllerSpec extends SpecBase with MockitoSugar 
 
       val result = route(application, request).value
 
-      whenReady(result) {
-        _ =>
-          val sessionRepository = application.injector.instanceOf[SessionRepository]
-          sessionRepository.get(Authed(userAnswersId)).map(_ mustBe None)
+      whenReady(result) { _ =>
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
+        sessionRepository.get(Authed(userAnswersId)).map(_ mustBe None)
       }
 
       application.stop()
     }
   }
+
 }

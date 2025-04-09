@@ -32,33 +32,24 @@ class WhichRailwayTradeSpec extends AnyWordSpec with Matchers with ScalaCheckPro
 
       val gen = Gen.oneOf(WhichRailwayTrade.values.toSeq)
 
-      forAll(gen) {
-        whichRailwayTrade =>
-
-          JsString(whichRailwayTrade.toString).validate[WhichRailwayTrade].asOpt.value mustEqual whichRailwayTrade
+      forAll(gen) { whichRailwayTrade =>
+        JsString(whichRailwayTrade.toString).validate[WhichRailwayTrade].asOpt.value mustEqual whichRailwayTrade
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!WhichRailwayTrade.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!WhichRailwayTrade.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[WhichRailwayTrade] mustEqual JsError("error.invalid")
-      }
+      forAll(gen)(invalidValue => JsString(invalidValue).validate[WhichRailwayTrade] mustEqual JsError("error.invalid"))
     }
 
     "serialise" in {
 
       val gen = Gen.oneOf(WhichRailwayTrade.values.toSeq)
 
-      forAll(gen) {
-        whichRailwayTrade =>
-
-          Json.toJson(whichRailwayTrade) mustEqual JsString(whichRailwayTrade.toString)
-      }
+      forAll(gen)(whichRailwayTrade => Json.toJson(whichRailwayTrade) mustEqual JsString(whichRailwayTrade.toString))
     }
   }
+
 }

@@ -32,44 +32,44 @@ import views.html.MultipleEmploymentsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class MultipleEmploymentsController @Inject()(
-                                               override val messagesApi: MessagesApi,
-                                               @Named(NavConstant.generic) navigator: Navigator,
-                                               identify: UnauthenticatedIdentifierAction,
-                                               getData: DataRetrievalAction,
-                                               requireData: DataRequiredAction,
-                                               formProvider: MultipleEmploymentsFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: MultipleEmploymentsView,
-                                               sessionRepository: SessionRepository
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class MultipleEmploymentsController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.generic) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: MultipleEmploymentsFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: MultipleEmploymentsView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
       val preparedForm = request.userAnswers.get(MultipleEmploymentsPage) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Future.successful(Ok(view(preparedForm, mode)))
-  }
+    }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(MultipleEmploymentsPage, value))
+              _              <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(MultipleEmploymentsPage, mode)(updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(MultipleEmploymentsPage, value))
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(MultipleEmploymentsPage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

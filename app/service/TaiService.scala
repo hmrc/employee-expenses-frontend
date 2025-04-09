@@ -26,74 +26,85 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TaiService @Inject()(taiConnector: TaiConnector,
-                           citizenDetailsConnector: CitizenDetailsConnector
-                          ) extends Logging {
+class TaiService @Inject() (taiConnector: TaiConnector, citizenDetailsConnector: CitizenDetailsConnector)
+    extends Logging {
 
-  def employments(nino: String, taxYearSelection: TaxYearSelection)
-                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Employment]] = {
+  def employments(
+      nino: String,
+      taxYearSelection: TaxYearSelection
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Employment]] = {
 
     val taxYear: TaiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
 
     taiConnector.taiEmployments(nino, taxYear)
   }
 
-  def taxCodeRecords(nino: String, year: TaiTaxYear)
-                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
+  def taxCodeRecords(nino: String, year: TaiTaxYear)(
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext
+  ): Future[Seq[TaxCodeRecord]] =
 
     taiConnector.taiTaxCodeRecords(nino, year)
-  }
 
-  def updateFRE(nino: String, year: TaiTaxYear, grossAmount: Int)
-               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  def updateFRE(nino: String, year: TaiTaxYear, grossAmount: Int)(
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext
+  ): Future[HttpResponse] =
 
-    citizenDetailsConnector.getEtag(nino).flatMap {
-      response =>
-        response.status match {
-          case 200 =>
-            Json.parse(response.body).validate[ETag] match {
-              case JsSuccess(body, _) =>
-                taiConnector.taiFREUpdate(nino, year, body.etag.toInt, grossAmount)
-              case JsError(e) =>
-                logger.error(s"[TaiService.updateFRE][CitizenDetailsConnector.getEtag][Json.parse] failed $e")
-                Future.successful(response)
-            }
-          case _ =>
-            Future.successful(response)
-        }
+    citizenDetailsConnector.getEtag(nino).flatMap { response =>
+      response.status match {
+        case 200 =>
+          Json.parse(response.body).validate[ETag] match {
+            case JsSuccess(body, _) =>
+              taiConnector.taiFREUpdate(nino, year, body.etag.toInt, grossAmount)
+            case JsError(e) =>
+              logger.error(s"[TaiService.updateFRE][CitizenDetailsConnector.getEtag][Json.parse] failed $e")
+              Future.successful(response)
+          }
+        case _ =>
+          Future.successful(response)
+      }
     }
-  }
 
-  def getFREAmount(taxYearSelection: Seq[TaxYearSelection], nino: String)
-                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[FlatRateExpenseAmounts]] = {
+  def getFREAmount(
+      taxYearSelection: Seq[TaxYearSelection],
+      nino: String
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[FlatRateExpenseAmounts]] = {
 
     val taxYears: Seq[TaiTaxYear] = taxYearSelection.map(x => TaiTaxYear(TaxYearSelection.getTaxYear(x)))
 
-    Future.sequence(taxYears map {
-      taxYear =>
-        taiConnector.getFlatRateExpense(nino, taxYear).map {
-          freAmount =>
-            FlatRateExpenseAmounts(freAmount.headOption, taxYear)
-        }
+    Future.sequence(taxYears.map { taxYear =>
+      taiConnector.getFlatRateExpense(nino, taxYear).map { freAmount =>
+        FlatRateExpenseAmounts(freAmount.headOption, taxYear)
+      }
     })
   }
 
-  def freResponse(taxYears: Seq[TaxYearSelection], nino: String, claimAmount: Int)
-                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[FlatRateExpenseOptions] = {
+  def freResponse(taxYears: Seq[TaxYearSelection], nino: String, claimAmount: Int)(
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext
+  ): Future[FlatRateExpenseOptions] =
 
     getFREAmount(taxYears, nino).map {
       case freSeq if freSeq.forall(_.freAmount.isEmpty) =>
         FRENoYears
-      case freSeq if freSeq.exists(_.freAmount.isEmpty) && freSeq.filterNot(_.freAmount.isEmpty).forall(_.freAmount.get.grossAmount == 0) =>
+      case freSeq
+          if freSeq.exists(_.freAmount.isEmpty) && freSeq
+            .filterNot(_.freAmount.isEmpty)
+            .forall(_.freAmount.get.grossAmount == 0) =>
         FRENoYears
       case freSeq if freSeq.forall(_.freAmount.isDefined) && freSeq.forall(_.freAmount.get.grossAmount == 0) =>
         FRENoYears
-      case freSeq if freSeq.forall(_.freAmount.isDefined) && freSeq.forall(_.freAmount.get.grossAmount == claimAmount) =>
+      case freSeq
+          if freSeq.forall(_.freAmount.isDefined) && freSeq.forall(_.freAmount.get.grossAmount == claimAmount) =>
         FREAllYearsAllAmountsSameAsClaimAmount
-      case freSeq if freSeq.exists(_.freAmount.isDefined) && freSeq.filterNot(_.freAmount.isEmpty).exists(_.freAmount.get.grossAmount > 0) =>
+      case freSeq
+          if freSeq.exists(_.freAmount.isDefined) && freSeq
+            .filterNot(_.freAmount.isEmpty)
+            .exists(_.freAmount.get.grossAmount > 0) =>
         FRESomeYears
       case _ =>
         TechnicalDifficulties
     }
-  }
+
 }

@@ -34,21 +34,28 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
+class AlreadyClaimingFREDifferentAmountsControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val alreadyClaimingFREDifferentAmountsRoute: String = routes.AlreadyClaimingFREDifferentAmountsController.onPageLoad(NormalMode).url
+  lazy val alreadyClaimingFREDifferentAmountsRoute: String =
+    routes.AlreadyClaimingFREDifferentAmountsController.onPageLoad(NormalMode).url
 
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
   "AlreadyClaimingFREDifferentAmounts Controller" must {
 
     "return OK for a GET" in {
       val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -64,8 +71,12 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = currentYearFullUserAnswers
-        .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.values.head).success.value
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(AlreadyClaimingFREDifferentAmountsPage, AlreadyClaimingFREDifferentAmounts.values.head)
+        .success
+        .value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -80,12 +91,16 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
 
     "redirect to the next page when valid data is submitted" in {
       val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .build()
 
       val request =
@@ -103,7 +118,9 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
 
     "return a Bad Request and errors when invalid data is submitted" in {
       val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -180,4 +197,5 @@ class AlreadyClaimingFREDifferentAmountsControllerSpec extends SpecBase with Sca
       application.stop()
     }
   }
+
 }

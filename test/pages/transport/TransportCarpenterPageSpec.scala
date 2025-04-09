@@ -28,4 +28,5 @@ class TransportCarpenterPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](TransportCarpenterPage)
   }
+
 }

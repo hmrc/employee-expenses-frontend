@@ -36,54 +36,58 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import javax.inject.{Inject, Named}
 import scala.concurrent.{ExecutionContext, Future}
 
-class SubmissionController @Inject()(override val messagesApi: MessagesApi,
-                                     identify: AuthenticatedIdentifierAction,
-                                     getData: DataRetrievalAction,
-                                     requireData: DataRequiredAction,
-                                     submissionService: SubmissionService,
-                                     auditConnector: AuditConnector,
-                                     val controllerComponents: MessagesControllerComponents,
-                                     @Named(NavConstant.authenticated) navigator: Navigator,
-                                     sessionRepository: SessionRepository
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class SubmissionController @Inject() (
+    override val messagesApi: MessagesApi,
+    identify: AuthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    submissionService: SubmissionService,
+    auditConnector: AuditConnector,
+    val controllerComponents: MessagesControllerComponents,
+    @Named(NavConstant.authenticated) navigator: Navigator,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
-  def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
-      val dataToAudit: AuditData =
-        AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
+  def onSubmit: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { implicit request =>
+    val dataToAudit: AuditData =
+      AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
 
-      (
-        request.userAnswers.get(TaxYearSelectionPage),
-        request.userAnswers.get(ClaimAmountAndAnyDeductions),
-        request.userAnswers.get(RemoveFRECodePage),
-        request.userAnswers.get(ChangeWhichTaxYearsPage)
-      ) match {
-        case (Some(taxYears), Some(_), Some(removeYear), None) =>
-          submissionService.removeFRE(request.nino.get, taxYears, removeYear).map(
-            result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier)
-          )
-        case (Some(taxYearsSelection), Some(claimAmountAndAnyDeductions), None, changeYears) =>
-          val taxYears = changeYears match {
-            case Some(changeYears) => changeYears
-            case _ => taxYearsSelection
-          }
-          submissionService.submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions).map(
-            result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier)
-          )
-        case _ =>
-          Future.successful(Redirect(baseRoutes.SessionExpiredController.onPageLoad))
-      }
+    (
+      request.userAnswers.get(TaxYearSelectionPage),
+      request.userAnswers.get(ClaimAmountAndAnyDeductions),
+      request.userAnswers.get(RemoveFRECodePage),
+      request.userAnswers.get(ChangeWhichTaxYearsPage)
+    ) match {
+      case (Some(taxYears), Some(_), Some(removeYear), None) =>
+        submissionService
+          .removeFRE(request.nino.get, taxYears, removeYear)
+          .map(result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier))
+      case (Some(taxYearsSelection), Some(claimAmountAndAnyDeductions), None, changeYears) =>
+        val taxYears = changeYears match {
+          case Some(changeYears) => changeYears
+          case _                 => taxYearsSelection
+        }
+        submissionService
+          .submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions)
+          .map(result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier))
+      case _ =>
+        Future.successful(Redirect(baseRoutes.SessionExpiredController.onPageLoad))
+    }
   }
 
-  private def auditAndRedirect(result: Seq[HttpResponse],
-                               auditData: AuditData,
-                               userAnswers: UserAnswers,
-                               identifier: IdentifierType
-                              )(implicit hc: HeaderCarrier): Result = {
+  private def auditAndRedirect(
+      result: Seq[HttpResponse],
+      auditData: AuditData,
+      userAnswers: UserAnswers,
+      identifier: IdentifierType
+  )(implicit hc: HeaderCarrier): Result =
 
     if (result.nonEmpty && result.forall(_.status == 204)) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)
-      userAnswers.set(SubmittedClaim, true)
+      userAnswers
+        .set(SubmittedClaim, true)
         .map(answers => sessionRepository.set(identifier, answers))
       Redirect(navigator.nextPage(Submission, NormalMode)(userAnswers))
     } else if (result.nonEmpty && result.exists(_.status == 423)) {
@@ -92,6 +96,5 @@ class SubmissionController @Inject()(override val messagesApi: MessagesApi,
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseFailure.toString, auditData)
       Redirect(baseRoutes.TechnicalDifficultiesController.onPageLoad)
     }
-  }
 
 }

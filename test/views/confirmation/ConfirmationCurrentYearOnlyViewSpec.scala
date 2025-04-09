@@ -51,23 +51,28 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
       higherRate = frontendAppConfig.taxPercentageScotlandHigherRate,
       advancedRate = frontendAppConfig.taxPercentageScotlandAdvancedRate,
       topRate = frontendAppConfig.taxPercentageScotlandTopRate,
-      calculatedStarterRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
-      calculatedBasicRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
-      calculatedIntermediateRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
-      calculatedHigherRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount),
-      calculatedAdvancedRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandAdvancedRate, claimAmount),
+      calculatedStarterRate =
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandStarterRate, claimAmount),
+      calculatedBasicRate =
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandBasicRate, claimAmount),
+      calculatedIntermediateRate =
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandIntermediateRate, claimAmount),
+      calculatedHigherRate =
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandHigherRate, claimAmount),
+      calculatedAdvancedRate =
+        claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandAdvancedRate, claimAmount),
       calculatedTopRate = claimAmountService.calculateTax(frontendAppConfig.taxPercentageScotlandTopRate, claimAmount)
     )
 
     def applyView(
-                   claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
-                   claimAmount: Int = claimAmount,
-                   updateEmployer: Boolean = false,
-                   updateAddress: Boolean = false,
-                   hasClaimIncreased: Boolean = true,
-                   freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears,
-                   npsFreAmount: Int = 0
-                 )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
+        claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
+        claimAmount: Int = claimAmount,
+        updateEmployer: Boolean = false,
+        updateAddress: Boolean = false,
+        hasClaimIncreased: Boolean = true,
+        freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears,
+        npsFreAmount: Int = 0
+    )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
       view.apply(
         claimAmountsAndRates = claimAmountsAndRates,
         claimAmount = claimAmount,
@@ -82,14 +87,15 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
     val applyViewWithAuth = applyView()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(viewWithAnswers, "confirmation")
+    behave.like(normalPage(viewWithAnswers, "confirmation"))
 
-    behave like pageWithAccountMenu(applyViewWithAuth)
+    behave.like(pageWithAccountMenu(applyViewWithAuth))
 
     "display correct static text for an increase in FRE" in {
       val doc = asDocument(applyView(npsFreAmount = 1)(fakeRequest, messages))
 
-      assertContainsMessages(doc,
+      assertContainsMessages(
+        doc,
         "confirmation.heading",
         messages("confirmation.personalAllowanceIncrease", 1, claimAmount),
         "confirmation.whatHappensNext",
@@ -103,12 +109,15 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
     "display correct static text for an decrease in FRE" in {
 
-      val doc = asDocument(applyView(
-        hasClaimIncreased = false,
-        npsFreAmount = 200
-      )(fakeRequest, messages))
+      val doc = asDocument(
+        applyView(
+          hasClaimIncreased = false,
+          npsFreAmount = 200
+        )(fakeRequest, messages)
+      )
 
-      assertContainsMessages(doc,
+      assertContainsMessages(
+        doc,
         "confirmation.heading",
         messages("confirmation.personalAllowanceDecrease", 200, claimAmount),
         "confirmation.whatHappensNext",
@@ -124,7 +133,8 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
       val doc = asDocument(applyView()(fakeRequest, messages))
 
-      assertContainsMessages(doc,
+      assertContainsMessages(
+        doc,
         "confirmation.heading",
         messages("confirmation.newPersonalAllowance", claimAmount),
         "confirmation.whatHappensNext",
@@ -140,24 +150,33 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
       val doc = asDocument(viewWithAnswers)
 
-      assertContainsText(doc, messages(
-        "confirmation.basicRate",
-        claimAmountsRates.calculatedBasicRate,
-        claimAmount,
-        claimAmountsRates.basicRate
-      ))
-      assertContainsText(doc, messages(
-        "confirmation.higherRate",
-        claimAmountsRates.calculatedHigherRate,
-        claimAmount,
-        claimAmountsRates.higherRate
-      ))
-      assertContainsText(doc, messages(
-        "confirmation.intermediateRate",
-        scottishClaimAmountsRates.calculatedIntermediateRate,
-        claimAmount,
-        scottishClaimAmountsRates.intermediateRate
-      ))
+      assertContainsText(
+        doc,
+        messages(
+          "confirmation.basicRate",
+          claimAmountsRates.calculatedBasicRate,
+          claimAmount,
+          claimAmountsRates.basicRate
+        )
+      )
+      assertContainsText(
+        doc,
+        messages(
+          "confirmation.higherRate",
+          claimAmountsRates.calculatedHigherRate,
+          claimAmount,
+          claimAmountsRates.higherRate
+        )
+      )
+      assertContainsText(
+        doc,
+        messages(
+          "confirmation.intermediateRate",
+          scottishClaimAmountsRates.calculatedIntermediateRate,
+          claimAmount,
+          scottishClaimAmountsRates.intermediateRate
+        )
+      )
       assertContainsText(doc, messages("claimAmount.englandHeading"))
       assertContainsText(doc, messages("claimAmount.scotlandHeading"))
     }
@@ -171,7 +190,9 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
     "display correct title when freResponse is 'FREAllYearsAllAmountsSameAsClaimAmount'" in {
 
-      val doc = asDocument(applyView(freResponse = FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount)(fakeRequest, messages))
+      val doc = asDocument(
+        applyView(freResponse = FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount)(fakeRequest, messages)
+      )
 
       doc.title mustBe "Claim changed - Claim for your work uniform and tools - GOV.UK"
     }

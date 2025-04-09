@@ -34,51 +34,53 @@ import views.html.manufacturing.TypeOfManufacturingView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TypeOfManufacturingController @Inject()(
-                                               override val messagesApi: MessagesApi,
-                                               @Named(NavConstant.manufacturing) navigator: Navigator,
-                                               identify: UnauthenticatedIdentifierAction,
-                                               getData: DataRetrievalAction,
-                                               requireData: DataRequiredAction,
-                                               formProvider: TypeOfManufacturingFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: TypeOfManufacturingView,
-                                               sessionRepository: SessionRepository
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class TypeOfManufacturingController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.manufacturing) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: TypeOfManufacturingFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: TypeOfManufacturingView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(TypeOfManufacturingPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(TypeOfManufacturingPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfManufacturingPage, value))
+              newUserAnswers <- value match {
+                case BrassCopper =>
+                  Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.brassCopper))
+                case Glass => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.glass))
+                case PreciousMetals =>
+                  Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.quarryingPreciousMetals))
+                case NoneOfAbove => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate))
+                case _           => Future.successful(updatedAnswers)
+              }
+              _ <- sessionRepository.set(request.identifier, newUserAnswers)
+            } yield Redirect(navigator.nextPage(TypeOfManufacturingPage, mode)(newUserAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfManufacturingPage, value))
-            newUserAnswers <- value match {
-              case BrassCopper => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.brassCopper))
-              case Glass => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.glass))
-              case PreciousMetals => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.Manufacturing.quarryingPreciousMetals))
-              case NoneOfAbove => Future.fromTry(updatedAnswers.set(ClaimAmount, ClaimAmounts.defaultRate))
-              case _ => Future.successful(updatedAnswers)
-            }
-            _ <- sessionRepository.set(request.identifier, newUserAnswers)
-          } yield Redirect(navigator.nextPage(TypeOfManufacturingPage, mode)(newUserAnswers))
-        }
-      )
-  }
 }

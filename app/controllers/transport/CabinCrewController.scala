@@ -33,52 +33,56 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CabinCrewController @Inject()(
-                                     override val messagesApi: MessagesApi,
-                                     sessionRepository: SessionRepository,
-                                     @Named(NavConstant.transport) navigator: Navigator,
-                                     identify: UnauthenticatedIdentifierAction,
-                                     getData: DataRetrievalAction,
-                                     requireData: DataRequiredAction,
-                                     formProvider: CabinCrewFormProvider,
-                                     val controllerComponents: MessagesControllerComponents,
-                                     view: CabinCrewView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class CabinCrewController @Inject() (
+    override val messagesApi: MessagesApi,
+    sessionRepository: SessionRepository,
+    @Named(NavConstant.transport) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: CabinCrewFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: CabinCrewView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(CabinCrewPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(CabinCrewPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <-
+                if (value) {
+                  Future.fromTry(
+                    request.userAnswers
+                      .set(CabinCrewPage, value)
+                      .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew))
+                  )
+                } else {
+                  Future.fromTry(
+                    request.userAnswers
+                      .set(CabinCrewPage, value)
+                      .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
+                  )
+                }
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(CabinCrewPage, mode)(updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <- if (value) {
-              Future.fromTry(request.userAnswers.set(CabinCrewPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Transport.Airlines.cabinCrew))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(CabinCrewPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
-              )
-            }
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(CabinCrewPage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

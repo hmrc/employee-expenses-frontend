@@ -22,13 +22,13 @@ sealed trait FirstIndustryOptions
 
 object FirstIndustryOptions extends Enumerable.Implicits {
 
-  case object Healthcare extends WithName("healthcare") with FirstIndustryOptions
-  case object FoodAndCatering extends WithName("foodAndCatering") with FirstIndustryOptions
-  case object Retail extends WithName("retail") with FirstIndustryOptions
-  case object Engineering extends WithName("engineering") with FirstIndustryOptions
+  case object Healthcare               extends WithName("healthcare") with FirstIndustryOptions
+  case object FoodAndCatering          extends WithName("foodAndCatering") with FirstIndustryOptions
+  case object Retail                   extends WithName("retail") with FirstIndustryOptions
+  case object Engineering              extends WithName("engineering") with FirstIndustryOptions
   case object TransportAndDistribution extends WithName("transportAndDistribution") with FirstIndustryOptions
-  case object Or extends WithName("or") with FirstIndustryOptions
-  case object NoneOfAbove extends WithName("none") with FirstIndustryOptions
+  case object Or                       extends WithName("or") with FirstIndustryOptions
+  case object NoneOfAbove              extends WithName("none") with FirstIndustryOptions
 
   val values: Seq[FirstIndustryOptions] = Seq(
     Engineering,
@@ -40,11 +40,10 @@ object FirstIndustryOptions extends Enumerable.Implicits {
     NoneOfAbove
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map{
-    value =>
-      RadioCheckboxOption("firstIndustryOptions", value.toString)
-  }
+  val options: Seq[RadioCheckboxOption] =
+    values.map(value => RadioCheckboxOption("firstIndustryOptions", value.toString))
 
-  implicit val enumerable:Enumerable[FirstIndustryOptions] =
+  implicit val enumerable: Enumerable[FirstIndustryOptions] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

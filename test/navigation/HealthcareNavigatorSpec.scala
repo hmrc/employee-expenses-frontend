@@ -22,12 +22,12 @@ import models.{CheckMode, NormalMode}
 import pages.healthcare._
 
 class HealthcareNavigatorSpec extends SpecBase {
-  private val modes = Seq(NormalMode, CheckMode)
+  private val modes     = Seq(NormalMode, CheckMode)
   private val navigator = new HealthcareNavigator
 
   "HealthcareNavigator" when {
 
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
 
         "Healthcare list 1 page" must {
@@ -96,6 +96,6 @@ class HealthcareNavigatorSpec extends SpecBase {
           }
         }
       }
-    }
   }
+
 }

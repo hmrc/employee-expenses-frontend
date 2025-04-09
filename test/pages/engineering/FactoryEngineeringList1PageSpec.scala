@@ -28,4 +28,5 @@ class FactoryEngineeringList1PageSpec extends PageBehaviours {
 
     beRemovable[Boolean](FactoryEngineeringList1Page)
   }
+
 }

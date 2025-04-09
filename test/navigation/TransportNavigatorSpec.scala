@@ -28,8 +28,7 @@ import pages.transport._
 class TransportNavigatorSpec extends SpecBase with MockitoSugar {
 
   private val navigator = new TransportNavigator
-  private val modes = Seq(NormalMode, CheckMode)
-
+  private val modes     = Seq(NormalMode, CheckMode)
 
   "TransportNavigator" when {
 
@@ -98,7 +97,7 @@ class TransportNavigatorSpec extends SpecBase with MockitoSugar {
           }
 
         }
-        "on CabinCrewController" must{
+        "on CabinCrewController" must {
           "go to EmployerContributionController when 'Yes' selected on CabinCrewPage" in {
             val answers = emptyUserAnswers.set(CabinCrewPage, true).success.value
             navigator.nextPage(CabinCrewPage, mode)(answers) mustBe
@@ -126,13 +125,12 @@ class TransportNavigatorSpec extends SpecBase with MockitoSugar {
         }
 
         "on WhichRailwayTrade" must {
-          for (trade <- WhichRailwayTrade.values) {
+          for (trade <- WhichRailwayTrade.values)
             s"goto EmployerContributionController when '$trade' selected" in {
               val answers = emptyUserAnswers.set(WhichRailwayTradePage, trade).success.value
               navigator.nextPage(WhichRailwayTradePage, mode)(answers) mustBe
                 controllers.routes.EmployerContributionController.onPageLoad(mode)
             }
-          }
         }
 
         "on TransportCarpenterController" must {
@@ -150,15 +148,15 @@ class TransportNavigatorSpec extends SpecBase with MockitoSugar {
         }
 
         "on TransportVehicleTrade" must {
-          for (trade <- TransportVehicleTrade.values) {
+          for (trade <- TransportVehicleTrade.values)
             s"goto EmployerContributionController when '$trade' selected" in {
               val answers = emptyUserAnswers.set(TransportVehicleTradePage, trade).success.value
               navigator.nextPage(TransportVehicleTradePage, mode)(answers) mustBe
                 controllers.routes.EmployerContributionController.onPageLoad(mode)
             }
-          }
         }
       }
     }
   }
+
 }

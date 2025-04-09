@@ -28,10 +28,12 @@ case object EmployerContributionPage extends QuestionPage[EmployerContribution] 
   override def toString: String = "employerContribution"
 
   override def cleanup(value: Option[EmployerContribution], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match  {
+    value match {
       case Some(EmployerContribution.YesEmployerContribution) => Success(userAnswers)
       case _ =>
-        userAnswers.remove(ExpensesEmployerPaidPage)
-        .flatMap(_.remove(SameEmployerContributionAllYearsPage))
-  }
+        userAnswers
+          .remove(ExpensesEmployerPaidPage)
+          .flatMap(_.remove(SameEmployerContributionAllYearsPage))
+    }
+
 }

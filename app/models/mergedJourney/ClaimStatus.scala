@@ -23,45 +23,49 @@ sealed trait ClaimStatus {
   val key: String = toString
 }
 
-abstract class ClaimComplete extends ClaimStatus
-case object ClaimCompleteCurrent extends ClaimComplete
-case object ClaimCompletePrevious extends ClaimComplete
+abstract class ClaimComplete             extends ClaimStatus
+case object ClaimCompleteCurrent         extends ClaimComplete
+case object ClaimCompletePrevious        extends ClaimComplete
 case object ClaimCompleteCurrentPrevious extends ClaimComplete
 
-case object ClaimSkipped extends ClaimStatus
-case object ClaimPending extends ClaimStatus
-case object ClaimStopped extends ClaimStatus
-case object ClaimNotChanged extends ClaimStatus
+case object ClaimSkipped      extends ClaimStatus
+case object ClaimPending      extends ClaimStatus
+case object ClaimStopped      extends ClaimStatus
+case object ClaimNotChanged   extends ClaimStatus
 case object ClaimUnsuccessful extends ClaimStatus
 
 object ClaimStatus {
+
   private val mapping: String => ClaimStatus = {
-    case ClaimCompleteCurrent.key => ClaimCompleteCurrent
-    case ClaimCompletePrevious.key => ClaimCompletePrevious
+    case ClaimCompleteCurrent.key         => ClaimCompleteCurrent
+    case ClaimCompletePrevious.key        => ClaimCompletePrevious
     case ClaimCompleteCurrentPrevious.key => ClaimCompleteCurrentPrevious
-    case ClaimSkipped.key => ClaimSkipped
-    case ClaimPending.key => ClaimPending
-    case ClaimStopped.key => ClaimStopped
-    case ClaimNotChanged.key => ClaimNotChanged
-    case ClaimUnsuccessful.key => ClaimUnsuccessful
+    case ClaimSkipped.key                 => ClaimSkipped
+    case ClaimPending.key                 => ClaimPending
+    case ClaimStopped.key                 => ClaimStopped
+    case ClaimNotChanged.key              => ClaimNotChanged
+    case ClaimUnsuccessful.key            => ClaimUnsuccessful
   }
 
-  val reads: Reads[ClaimStatus] = Reads { json => json.validate[String].map(mapping) }
-  val writes: Writes[ClaimStatus] = Writes { state => JsString(state.toString) }
+  val reads: Reads[ClaimStatus]            = Reads(json => json.validate[String].map(mapping))
+  val writes: Writes[ClaimStatus]          = Writes(state => JsString(state.toString))
   implicit val format: Format[ClaimStatus] = Format(reads, writes)
 
-  implicit def urlBinder(implicit stringBinder: QueryStringBindable[String]): QueryStringBindable[ClaimStatus] = new QueryStringBindable[ClaimStatus] {
-    override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, ClaimStatus]] =
-      stringBinder.bind("status", params) map {
-        case Right(status) => try {
-          Right(mapping(status))
-        } catch {
-          case _: Throwable => Left(s"Unknown value '$status' for ClaimStatus")
+  implicit def urlBinder(implicit stringBinder: QueryStringBindable[String]): QueryStringBindable[ClaimStatus] =
+    new QueryStringBindable[ClaimStatus] {
+      override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, ClaimStatus]] =
+        stringBinder.bind("status", params).map {
+          case Right(status) =>
+            try
+              Right(mapping(status))
+            catch {
+              case _: Throwable => Left(s"Unknown value '$status' for ClaimStatus")
+            }
+          case _ => Left(s"Unable to bind a ClaimStatus")
         }
-        case _ => Left(s"Unable to bind a ClaimStatus")
-      }
 
-    override def unbind(key: String, value: ClaimStatus): String =
-      stringBinder.unbind("status", value.key)
-  }
+      override def unbind(key: String, value: ClaimStatus): String =
+        stringBinder.unbind("status", value.key)
+    }
+
 }

@@ -43,32 +43,37 @@ class IronSteelOccupationListViewSpec extends YesNoViewBehaviours {
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like yesNoPage(
-      form = form,
-      createView = applyView,
-      messageKeyPrefix = messageKeyPrefix,
-      expectedFormAction = routes.IronSteelOccupationListController.onSubmit(NormalMode).url,
-      legendLabel = Some(messageKeyPrefix + ".radioLabel")
-
-    )
-
-    behave like pageWithList(applyView(form), messageKeyPrefix,
-      Seq(
-        "occupation1",
-        "occupation2",
-        "occupation3",
-        "occupation4",
-        "occupation5"
+    behave.like(
+      yesNoPage(
+        form = form,
+        createView = applyView,
+        messageKeyPrefix = messageKeyPrefix,
+        expectedFormAction = routes.IronSteelOccupationListController.onSubmit(NormalMode).url,
+        legendLabel = Some(messageKeyPrefix + ".radioLabel")
       )
     )
 
-    behave like pageWithBodyText(applyView(form), "ironSteelOccupationList.listText")
+    behave.like(
+      pageWithList(
+        applyView(form),
+        messageKeyPrefix,
+        Seq(
+          "occupation1",
+          "occupation2",
+          "occupation3",
+          "occupation4",
+          "occupation5"
+        )
+      )
+    )
+
+    behave.like(pageWithBodyText(applyView(form), "ironSteelOccupationList.listText"))
   }
 
   application.stop()

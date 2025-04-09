@@ -33,55 +33,60 @@ import views.html.transport.TransportVehicleTradeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TransportVehicleTradeController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 @Named(NavConstant.transport) navigator: Navigator,
-                                                 identify: UnauthenticatedIdentifierAction,
-                                                 getData: DataRetrievalAction,
-                                                 requireData: DataRequiredAction,
-                                                 formProvider: TransportVehicleTradeFormProvider,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 view: TransportVehicleTradeView,
-                                                 sessionRepository: SessionRepository
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class TransportVehicleTradeController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.transport) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: TransportVehicleTradeFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: TransportVehicleTradeView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits {
 
   val form: Form[TransportVehicleTrade] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(TransportVehicleTradePage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(TransportVehicleTradePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value => {
+            val claimAmount = value match {
+              case TransportVehicleTrade.Builder => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
+              case TransportVehicleTrade.VehicleRepairerWagonLifter =>
+                ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
+              case TransportVehicleTrade.RailwayVehiclePainter => ClaimAmounts.Transport.Railways.vehiclePainters
+              case TransportVehicleTrade.Letterer => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
+              case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant =>
+                ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
+              case _ => ClaimAmounts.Transport.VehicleTrade.allOther
+            }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          val claimAmount = value match {
-            case TransportVehicleTrade.Builder => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
-            case TransportVehicleTrade.VehicleRepairerWagonLifter => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters
-            case TransportVehicleTrade.RailwayVehiclePainter => ClaimAmounts.Transport.Railways.vehiclePainters
-            case TransportVehicleTrade.Letterer => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
-            case TransportVehicleTrade.BuildersAssistantOrRepairersAssistant => ClaimAmounts.Transport.VehicleTrade.paintersLetterersAssistants
-            case _ => ClaimAmounts.Transport.VehicleTrade.allOther
+            for {
+              updatedAnswers <- Future.fromTry(
+                request.userAnswers
+                  .set(TransportVehicleTradePage, value)
+                  .flatMap(_.set(ClaimAmount, claimAmount))
+              )
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(TransportVehicleTradePage, mode)(updatedAnswers))
           }
+        )
+    }
 
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TransportVehicleTradePage, value)
-              .flatMap(_.set(ClaimAmount, claimAmount))
-            )
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(TransportVehicleTradePage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

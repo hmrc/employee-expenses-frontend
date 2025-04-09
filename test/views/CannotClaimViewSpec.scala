@@ -16,12 +16,11 @@
 
 package views
 
-
 import play.twirl.api.Html
 import views.newBehaviours.ViewBehaviours
 import views.html.CannotClaimView
 
-class CannotClaimViewSpec extends ViewBehaviours  {
+class CannotClaimViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -31,16 +30,21 @@ class CannotClaimViewSpec extends ViewBehaviours  {
 
     val applyView = view.apply()(fakeRequest, messages)
 
-    behave like normalPage(applyView, "cannotClaim")
+    behave.like(normalPage(applyView, "cannotClaim"))
 
-    behave like pageWithBackLink(applyView)
+    behave.like(pageWithBackLink(applyView))
 
-    val link1: Html = Html(s"""<a id="link" class="govuk-link" href="${frontendAppConfig.jobExpensesLink}">${messages("cannotClaim.link")}</a>""")
+    val link1: Html = Html(s"""<a id="link" class="govuk-link" href="${frontendAppConfig.jobExpensesLink}">${messages(
+        "cannotClaim.link"
+      )}</a>""")
 
-    behave like pageWithBodyText(
-                                applyView,
-                                Html(messages("cannotClaim.para1", link1)).toString
-                                )
+    behave.like(
+      pageWithBodyText(
+        applyView,
+        Html(messages("cannotClaim.para1", link1)).toString
+      )
+    )
   }
+
   application.stop()
 }

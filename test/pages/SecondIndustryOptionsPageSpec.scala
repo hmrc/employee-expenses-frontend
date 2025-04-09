@@ -29,4 +29,5 @@ class SecondIndustryOptionsSpec extends PageBehaviours {
 
     beRemovable[SecondIndustryOptions](SecondIndustryOptionsPage)
   }
+
 }

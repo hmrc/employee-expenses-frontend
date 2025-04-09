@@ -20,7 +20,11 @@ sealed trait FlatRateExpenseOptions
 
 object FlatRateExpenseOptions extends Enumerable.Implicits {
   case object FRENoYears extends WithName("freNoYears") with FlatRateExpenseOptions
-  case object FREAllYearsAllAmountsSameAsClaimAmount extends WithName("freAllYearsAllAmountsSameAsClaimAmount") with FlatRateExpenseOptions
+
+  case object FREAllYearsAllAmountsSameAsClaimAmount
+      extends WithName("freAllYearsAllAmountsSameAsClaimAmount")
+      with FlatRateExpenseOptions
+
   case object FRESomeYears extends WithName("freAllYearsAllAmountsDifferentToClaimAmount") with FlatRateExpenseOptions
   case object TechnicalDifficulties extends WithName("technicalDifficulties") with FlatRateExpenseOptions
 
@@ -33,4 +37,5 @@ object FlatRateExpenseOptions extends Enumerable.Implicits {
 
   implicit val enumerable: Enumerable[FlatRateExpenseOptions] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

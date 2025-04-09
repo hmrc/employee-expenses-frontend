@@ -26,7 +26,10 @@ import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CitizenDetailsConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClientV2) extends CitizenDetailsConnector with HttpResponseHelper {
+class CitizenDetailsConnectorImpl @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClientV2)
+    extends CitizenDetailsConnector
+    with HttpResponseHelper {
+
   override def getEtag(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
     val etagUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/etag"
@@ -34,9 +37,7 @@ class CitizenDetailsConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpCl
     httpClient
       .get(url"$etagUrl")
       .execute[HttpResponse]
-      .flatMap {
-        response => Future.successful(response)
-      }
+      .flatMap(response => Future.successful(response))
   }
 
   override def getAddress(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
@@ -46,10 +47,9 @@ class CitizenDetailsConnectorImpl @Inject()(appConfig: FrontendAppConfig, httpCl
     httpClient
       .get(url"$designatoryDetailsUrl")
       .execute[HttpResponse]
-      .flatMap {
-        response => Future.successful(response)
-      }
+      .flatMap(response => Future.successful(response))
   }
+
 }
 
 @ImplementedBy(classOf[CitizenDetailsConnectorImpl])

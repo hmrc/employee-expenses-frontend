@@ -35,9 +35,14 @@ import uk.gov.hmrc.http.InternalServerException
 import java.time.Instant
 import scala.concurrent.Future
 
-class MergedJourneyControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with BeforeAndAfterEach {
+class MergedJourneyControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience
+    with BeforeAndAfterEach {
 
-  private val mockSessionRepository = mock[SessionRepository]
+  private val mockSessionRepository            = mock[SessionRepository]
   private val mockEmployeeWfhExpensesConnector = mock[EmployeeWfhExpensesConnector]
 
   override def beforeEach(): Unit = {
@@ -58,7 +63,8 @@ class MergedJourneyControllerSpec extends SpecBase with MockitoSugar with ScalaF
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[SessionRepository].toInstance(mockSessionRepository),
-          bind[EmployeeWfhExpensesConnector].toInstance(mockEmployeeWfhExpensesConnector))
+          bind[EmployeeWfhExpensesConnector].toInstance(mockEmployeeWfhExpensesConnector)
+        )
         .build()
 
       val argumentCaptor: ArgumentCaptor[MergedJourney] = ArgumentCaptor.forClass(classOf[MergedJourney])
@@ -81,7 +87,8 @@ class MergedJourneyControllerSpec extends SpecBase with MockitoSugar with ScalaF
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[SessionRepository].toInstance(mockSessionRepository),
-          bind[EmployeeWfhExpensesConnector].toInstance(mockEmployeeWfhExpensesConnector))
+          bind[EmployeeWfhExpensesConnector].toInstance(mockEmployeeWfhExpensesConnector)
+        )
         .build()
 
       when(mockEmployeeWfhExpensesConnector.checkIfAllYearsClaimed(any())).thenReturn(Future.successful(true))
@@ -290,9 +297,8 @@ class MergedJourneyControllerSpec extends SpecBase with MockitoSugar with ScalaF
 
       status(result) mustBe OK
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).updateMergedJourneyTimeToLive(Authed(userAnswersId))
+      whenReady(result) { _ =>
+        verify(mockSessionRepository, times(1)).updateMergedJourneyTimeToLive(Authed(userAnswersId))
       }
 
       application.stop()

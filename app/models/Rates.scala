@@ -19,23 +19,23 @@ package models
 sealed trait Rates
 
 case class StandardRate(
-                         basicRate: Int,
-                         higherRate: Int,
-                         calculatedBasicRate: String,
-                         calculatedHigherRate: String
-                       ) extends Rates
+    basicRate: Int,
+    higherRate: Int,
+    calculatedBasicRate: String,
+    calculatedHigherRate: String
+) extends Rates
 
 case class ScottishRate(
-                          starterRate: Int,
-                          basicRate: Int,
-                          intermediateRate: Int,
-                          higherRate: Int,
-                          advancedRate: Int,
-                          topRate: Int,
-                          calculatedStarterRate: String,
-                          calculatedBasicRate: String,
-                          calculatedIntermediateRate: String,
-                          calculatedHigherRate: String,
-                          calculatedAdvancedRate: String,
-                          calculatedTopRate: String
-                        ) extends Rates
+    starterRate: Int,
+    basicRate: Int,
+    intermediateRate: Int,
+    higherRate: Int,
+    advancedRate: Int,
+    topRate: Int,
+    calculatedStarterRate: String,
+    calculatedBasicRate: String,
+    calculatedIntermediateRate: String,
+    calculatedHigherRate: String,
+    calculatedAdvancedRate: String,
+    calculatedTopRate: String
+) extends Rates

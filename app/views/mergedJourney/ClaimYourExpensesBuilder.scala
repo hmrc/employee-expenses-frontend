@@ -30,9 +30,7 @@ import views.mergedJourney.ClaimYourExpensesBuilder._
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ClaimYourExpensesBuilder @Inject()(govukTag: GovukTag,
-                                         p: playComponents.p,
-                                         appConfig: FrontendAppConfig) {
+class ClaimYourExpensesBuilder @Inject() (govukTag: GovukTag, p: playComponents.p, appConfig: FrontendAppConfig) {
 
   def continueUrl(journeyConfig: MergedJourney): String =
     journeyConfig match {
@@ -47,40 +45,76 @@ class ClaimYourExpensesBuilder @Inject()(govukTag: GovukTag,
     }
 
   def events(journeyConfig: MergedJourney)(implicit messages: Messages): Seq[Event] = {
-    val journeys = Seq((journeyConfig.wfh, wfhJourney), (journeyConfig.psubs, psubsJourney), (journeyConfig.fre, freJourney))
-      .filterNot(_._1 == ClaimSkipped)
+    val journeys =
+      Seq((journeyConfig.wfh, wfhJourney), (journeyConfig.psubs, psubsJourney), (journeyConfig.fre, freJourney))
+        .filterNot(_._1 == ClaimSkipped)
 
     journeys.zipWithIndex.map { case ((status, journey), index) =>
       Event(
         title = messages(s"claimYourExpenses.eventTitle.$journey", index + 1),
         time = "",
-        content = HtmlFormat.fill(List(
-          eventTag(status, isFirstPending = index == journeys.indexWhere(_._1 == ClaimPending)),
-          eventDescription(status, journey, isFirstPending = index == journeys.indexWhere(_._1 == ClaimPending))
-        )).body,
+        content = HtmlFormat
+          .fill(
+            List(
+              eventTag(status, isFirstPending = index == journeys.indexWhere(_._1 == ClaimPending)),
+              eventDescription(status, journey, isFirstPending = index == journeys.indexWhere(_._1 == ClaimPending))
+            )
+          )
+          .body
       )
     }
   }
 
-  private def eventTag(status: ClaimStatus, isFirstPending: Boolean)(implicit messages: Messages): HtmlFormat.Appendable =
+  private def eventTag(status: ClaimStatus, isFirstPending: Boolean)(
+      implicit messages: Messages
+  ): HtmlFormat.Appendable =
     status match {
       case ClaimPending if isFirstPending =>
-        govukTag(Tag(Text(messages("claimYourExpenses.tag.startYourClaim")), classes = "govuk-tag--turquoise govuk-!-margin-bottom-4"))
+        govukTag(
+          Tag(
+            Text(messages("claimYourExpenses.tag.startYourClaim")),
+            classes = "govuk-tag--turquoise govuk-!-margin-bottom-4"
+          )
+        )
       case ClaimPending =>
-        govukTag(Tag(Text(messages("claimYourExpenses.tag.cannotStartYet")), classes = "govuk-tag--grey govuk-!-margin-bottom-4"))
+        govukTag(
+          Tag(
+            Text(messages("claimYourExpenses.tag.cannotStartYet")),
+            classes = "govuk-tag--grey govuk-!-margin-bottom-4"
+          )
+        )
       case _: ClaimComplete =>
-        govukTag(Tag(Text(messages("claimYourExpenses.tag.claimComplete")), classes = "govuk-tag--blue govuk-!-margin-bottom-4"))
+        govukTag(
+          Tag(
+            Text(messages("claimYourExpenses.tag.claimComplete")),
+            classes = "govuk-tag--blue govuk-!-margin-bottom-4"
+          )
+        )
       case ClaimStopped =>
-        govukTag(Tag(Text(messages("claimYourExpenses.tag.claimStopped")), classes = "govuk-tag--red govuk-!-margin-bottom-4"))
+        govukTag(
+          Tag(Text(messages("claimYourExpenses.tag.claimStopped")), classes = "govuk-tag--red govuk-!-margin-bottom-4")
+        )
       case ClaimNotChanged =>
-        govukTag(Tag(Text(messages("claimYourExpenses.tag.claimNotChanged")), classes = "govuk-tag--red govuk-!-margin-bottom-4"))
+        govukTag(
+          Tag(
+            Text(messages("claimYourExpenses.tag.claimNotChanged")),
+            classes = "govuk-tag--red govuk-!-margin-bottom-4"
+          )
+        )
       case ClaimUnsuccessful =>
-        govukTag(Tag(Text(messages("claimYourExpenses.tag.claimUnsuccessful")), classes = "govuk-tag--red govuk-!-margin-bottom-4"))
+        govukTag(
+          Tag(
+            Text(messages("claimYourExpenses.tag.claimUnsuccessful")),
+            classes = "govuk-tag--red govuk-!-margin-bottom-4"
+          )
+        )
       case _ =>
         throw new InternalServerException("[ClaimEventBuilder][eventTag] Attempted to build an impossible case")
     }
 
-  private def eventDescription(status: ClaimStatus, journey: String, isFirstPending: Boolean)(implicit messages: Messages): Html =
+  private def eventDescription(status: ClaimStatus, journey: String, isFirstPending: Boolean)(
+      implicit messages: Messages
+  ): Html =
     (status, journey) match {
       case (ClaimPending, _) if isFirstPending =>
         p()(Html(messages("claimYourExpenses.status.clickContinue")))
@@ -101,10 +135,11 @@ class ClaimYourExpensesBuilder @Inject()(govukTag: GovukTag,
       case _ =>
         throw new InternalServerException("[ClaimEventBuilder][eventDescription] Attempted to build an impossible case")
     }
+
 }
 
 object ClaimYourExpensesBuilder {
-  val wfhJourney = "wfh"
+  val wfhJourney   = "wfh"
   val psubsJourney = "psubs"
-  val freJourney = "fre"
+  val freJourney   = "fre"
 }

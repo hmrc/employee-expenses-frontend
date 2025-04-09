@@ -23,12 +23,11 @@ class IabdEditDataRequestSpec extends SpecBase {
 
   "IabdEditDataRequest" must {
     "parse json correctly" in {
-      val iabdEditDataRequestJson = Json.parse(
-        """
-          |{
-          |  "version": 1,
-          |  "grossAmount": 100
-          |}
+      val iabdEditDataRequestJson = Json.parse("""
+                                                 |{
+                                                 |  "version": 1,
+                                                 |  "grossAmount": 100
+                                                 |}
         """.stripMargin)
 
       val iabdEditDataRequest = iabdEditDataRequestJson.as[IabdEditDataRequest]
@@ -38,11 +37,10 @@ class IabdEditDataRequestSpec extends SpecBase {
     }
 
     "fail to bind when given invalid json" in {
-      val iabdEditDataRequestJson = Json.parse(
-        """
-          |{
-          |  "version": 1
-          |}
+      val iabdEditDataRequestJson = Json.parse("""
+                                                 |{
+                                                 |  "version": 1
+                                                 |}
         """.stripMargin)
 
       val parseError = intercept[JsResultException] {

@@ -26,4 +26,5 @@ class StoneMasonFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("stoneMason.error.required")
     )
+
 }

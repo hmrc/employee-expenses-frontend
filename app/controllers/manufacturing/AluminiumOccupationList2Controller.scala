@@ -33,50 +33,51 @@ import views.html.manufacturing.AluminiumOccupationList2View
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AluminiumOccupationList2Controller @Inject()(
-                                                    override val messagesApi: MessagesApi,
-                                                    @Named(NavConstant.manufacturing) navigator: Navigator,
-                                                    identify: UnauthenticatedIdentifierAction,
-                                                    getData: DataRetrievalAction,
-                                                    requireData: DataRequiredAction,
-                                                    formProvider: AluminiumOccupationList2FormProvider,
-                                                    val controllerComponents: MessagesControllerComponents,
-                                                    view: AluminiumOccupationList2View,
-                                                    sessionRepository: SessionRepository
-                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AluminiumOccupationList2Controller @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.manufacturing) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: AluminiumOccupationList2FormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: AluminiumOccupationList2View,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(AluminiumOccupationList2Page) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(AluminiumOccupationList2Page) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+        value =>
           for {
-            updatedAnswers <- if (value) {
-              Future.fromTry(request.userAnswers.set(AluminiumOccupationList2Page, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.list2))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(AluminiumOccupationList2Page, value))
-            }
+            updatedAnswers <-
+              if (value) {
+                Future.fromTry(
+                  request.userAnswers
+                    .set(AluminiumOccupationList2Page, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.list2))
+                )
+              } else {
+                Future.fromTry(request.userAnswers.set(AluminiumOccupationList2Page, value))
+              }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(AluminiumOccupationList2Page, mode)(updatedAnswers))
-        }
       )
   }
+
 }

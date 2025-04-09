@@ -30,86 +30,76 @@ class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
 
   "Industry type" when {
     "first industry list" must {
-      "display the correct label and answer" in {
-        forAll(Gen.oneOf(FirstIndustryOptions.values)) {
-          industry =>
-            if (industry != FirstIndustryOptions.NoneOfAbove && industry != FirstIndustryOptions.Or) {
-              val ua = emptyUserAnswers.set(FirstIndustryOptionsPage, industry).success.value
-              helper(ua).industryType.get.label mustBe "industryType.checkYourAnswersLabel"
-              helper(ua).industryType.get.answer mustBe s"firstIndustryOptions.${industry.toString}"
-            }
+      "display the correct label and answer" in
+        forAll(Gen.oneOf(FirstIndustryOptions.values)) { industry =>
+          if (industry != FirstIndustryOptions.NoneOfAbove && industry != FirstIndustryOptions.Or) {
+            val ua = emptyUserAnswers.set(FirstIndustryOptionsPage, industry).success.value
+            helper(ua).industryType.get.label mustBe "industryType.checkYourAnswersLabel"
+            helper(ua).industryType.get.answer mustBe s"firstIndustryOptions.${industry.toString}"
+          }
         }
-      }
     }
 
     "second industry list" must {
-      "display the correct label and answer" in {
-        forAll(Gen.oneOf(SecondIndustryOptions.values)) {
-          industry =>
-            if (industry != SecondIndustryOptions.NoneOfAbove && industry != SecondIndustryOptions.Or) {
-              val ua = emptyUserAnswers.set(SecondIndustryOptionsPage, industry).success.value
-              helper(ua).secondaryIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
-              helper(ua).secondaryIndustryList.get.answer mustBe s"secondIndustryOptions.${industry.toString}"
-            }
+      "display the correct label and answer" in
+        forAll(Gen.oneOf(SecondIndustryOptions.values)) { industry =>
+          if (industry != SecondIndustryOptions.NoneOfAbove && industry != SecondIndustryOptions.Or) {
+            val ua = emptyUserAnswers.set(SecondIndustryOptionsPage, industry).success.value
+            helper(ua).secondaryIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
+            helper(ua).secondaryIndustryList.get.answer mustBe s"secondIndustryOptions.${industry.toString}"
+          }
         }
-      }
     }
 
     "third industry list" must {
-      "display the correct label and answer" in {
-        forAll(Gen.oneOf(ThirdIndustryOptions.values)) {
-          industry =>
-            if (industry != ThirdIndustryOptions.NoneOfAbove && industry != ThirdIndustryOptions.Or) {
-              val ua = emptyUserAnswers.set(ThirdIndustryOptionsPage, industry).success.value
-              helper(ua).thirdIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
-              helper(ua).thirdIndustryList.get.answer mustBe s"thirdIndustryOptions.${industry.toString}"
-            }
+      "display the correct label and answer" in
+        forAll(Gen.oneOf(ThirdIndustryOptions.values)) { industry =>
+          if (industry != ThirdIndustryOptions.NoneOfAbove && industry != ThirdIndustryOptions.Or) {
+            val ua = emptyUserAnswers.set(ThirdIndustryOptionsPage, industry).success.value
+            helper(ua).thirdIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
+            helper(ua).thirdIndustryList.get.answer mustBe s"thirdIndustryOptions.${industry.toString}"
+          }
         }
-      }
     }
 
     "fourth industry list" must {
-      "display the correct label and answer" in {
-        forAll(Gen.oneOf(FourthIndustryOptions.values)) {
-          industry =>
-            if (industry != FourthIndustryOptions.NoneOfAbove && industry != FourthIndustryOptions.Or) {
-              val ua = emptyUserAnswers.set(FourthIndustryOptionsPage, industry).success.value
-              helper(ua).fourthIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
-              helper(ua).fourthIndustryList.get.answer mustBe s"fourthIndustryOptions.${industry.toString}"
-            }
+      "display the correct label and answer" in
+        forAll(Gen.oneOf(FourthIndustryOptions.values)) { industry =>
+          if (industry != FourthIndustryOptions.NoneOfAbove && industry != FourthIndustryOptions.Or) {
+            val ua = emptyUserAnswers.set(FourthIndustryOptionsPage, industry).success.value
+            helper(ua).fourthIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
+            helper(ua).fourthIndustryList.get.answer mustBe s"fourthIndustryOptions.${industry.toString}"
+          }
         }
-      }
     }
 
     "fifth industry list" must {
-      "display the correct label and answer" in {
-        forAll(Gen.oneOf(FifthIndustryOptions.values)) {
-          industry =>
-            if (industry != FifthIndustryOptions.NoneOfAbove && industry != FifthIndustryOptions.Or) {
-              val ua = emptyUserAnswers.set(FifthIndustryOptionsPage, industry).success.value
-              helper(ua).fifthIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
-              helper(ua).fifthIndustryList.get.answer mustBe s"fifthIndustryOptions.${industry.toString}"
-            }
+      "display the correct label and answer" in
+        forAll(Gen.oneOf(FifthIndustryOptions.values)) { industry =>
+          if (industry != FifthIndustryOptions.NoneOfAbove && industry != FifthIndustryOptions.Or) {
+            val ua = emptyUserAnswers.set(FifthIndustryOptionsPage, industry).success.value
+            helper(ua).fifthIndustryList.get.label mustBe "industryType.checkYourAnswersLabel"
+            helper(ua).fifthIndustryList.get.answer mustBe s"fifthIndustryOptions.${industry.toString}"
+          }
         }
-      }
     }
   }
 
   "expensesEmployerPaid" must {
-    "display the correct label and answer" in {
-      forAll(Gen.posNum[Int]) {
-        amount =>
-          val ua = emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
-          val ua2 = ua.set(ExpensesEmployerPaidPage, amount).success.value
-          helper(ua2).expensesEmployerPaid.get.label mustBe "expensesEmployerPaid.checkYourAnswersLabel"
-          helper(ua2).expensesEmployerPaid.get.answer mustBe s"£$amount"
+    "display the correct label and answer" in
+      forAll(Gen.posNum[Int]) { amount =>
+        val ua =
+          emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
+        val ua2 = ua.set(ExpensesEmployerPaidPage, amount).success.value
+        helper(ua2).expensesEmployerPaid.get.label mustBe "expensesEmployerPaid.checkYourAnswersLabel"
+        helper(ua2).expensesEmployerPaid.get.answer mustBe s"£$amount"
       }
-    }
   }
-  
+
   "alreadyClaimingFRESameAmount" must {
     "display the correct label and answer for no change" in {
-      val ua = emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.NoChange).success.value
+      val ua =
+        emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.NoChange).success.value
       helper(ua).alreadyClaimingFRESameAmount.get.label mustBe "alreadyClaimingFRESameAmount.checkYourAnswersLabel"
       helper(ua).alreadyClaimingFRESameAmount.get.answer mustBe s"alreadyClaimingFRESameAmount.noChange"
     }
@@ -125,7 +115,9 @@ class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
     "Answered as 'change'" must {
       "display the correct label and answer" in {
         val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Change).success.value
-        helper(ua).alreadyClaimingFREDifferentAmounts.get.label mustBe "alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel"
+        helper(
+          ua
+        ).alreadyClaimingFREDifferentAmounts.get.label mustBe "alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel"
         helper(ua).alreadyClaimingFREDifferentAmounts.get.answer mustBe s"alreadyClaimingFREDifferentAmounts.change"
       }
     }
@@ -133,7 +125,9 @@ class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
     "Answered as 'noChange'" must {
       "display the correct label and answer" in {
         val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, NoChange).success.value
-        helper(ua).alreadyClaimingFREDifferentAmounts.get.label mustBe "alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel"
+        helper(
+          ua
+        ).alreadyClaimingFREDifferentAmounts.get.label mustBe "alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel"
         helper(ua).alreadyClaimingFREDifferentAmounts.get.answer mustBe s"alreadyClaimingFREDifferentAmounts.noChange"
       }
     }
@@ -141,7 +135,9 @@ class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
     "Answered as 'remove'" must {
       "display the correct label and answer" in {
         val ua = emptyUserAnswers.set(AlreadyClaimingFREDifferentAmountsPage, Remove).success.value
-        helper(ua).alreadyClaimingFREDifferentAmounts.get.label mustBe "alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel"
+        helper(
+          ua
+        ).alreadyClaimingFREDifferentAmounts.get.label mustBe "alreadyClaimingFREDifferentAmounts.checkYourAnswersLabel"
         helper(ua).alreadyClaimingFREDifferentAmounts.get.answer mustBe s"alreadyClaimingFREDifferentAmounts.remove"
       }
     }
@@ -149,73 +145,79 @@ class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
 
   "changeWhichTaxYears" must {
     "display the correct label and answer" in {
-      val taxYears = Gen.nonEmptyContainerOf[Seq, TaxYearSelection](Gen.oneOf(
-        TaxYearSelection.CurrentYear,
-        TaxYearSelection.CurrentYearMinus1,
-        TaxYearSelection.CurrentYearMinus2,
-        TaxYearSelection.CurrentYearMinus3,
-        TaxYearSelection.CurrentYearMinus4
-      ))
+      val taxYears = Gen.nonEmptyContainerOf[Seq, TaxYearSelection](
+        Gen.oneOf(
+          TaxYearSelection.CurrentYear,
+          TaxYearSelection.CurrentYearMinus1,
+          TaxYearSelection.CurrentYearMinus2,
+          TaxYearSelection.CurrentYearMinus3,
+          TaxYearSelection.CurrentYearMinus4
+        )
+      )
 
-      forAll(taxYears) {
-        taxYearSeq =>
-          val ua = emptyUserAnswers.set(ChangeWhichTaxYearsPage, taxYearSeq).success.value
-          helper(ua).changeWhichTaxYears.get.label mustBe "changeWhichTaxYears.checkYourAnswersLabel"
-          helper(ua).changeWhichTaxYears.get.answer mustBe taxYearSeq.map {
-            taxYear =>
-              messages(s"taxYearSelection.$taxYear",
-                TaxYearSelection.getTaxYear(taxYear).toString,
-                (TaxYearSelection.getTaxYear(taxYear) + 1).toString
-              )
-          }.mkString("<br>")
+      forAll(taxYears) { taxYearSeq =>
+        val ua = emptyUserAnswers.set(ChangeWhichTaxYearsPage, taxYearSeq).success.value
+        helper(ua).changeWhichTaxYears.get.label mustBe "changeWhichTaxYears.checkYourAnswersLabel"
+        helper(ua).changeWhichTaxYears.get.answer mustBe taxYearSeq
+          .map { taxYear =>
+            messages(
+              s"taxYearSelection.$taxYear",
+              TaxYearSelection.getTaxYear(taxYear).toString,
+              (TaxYearSelection.getTaxYear(taxYear) + 1).toString
+            )
+          }
+          .mkString("<br>")
       }
     }
   }
 
   "removeFRECode" must {
-    "display the correct label and answer" in {
-      forAll(Gen.oneOf(TaxYearSelection.values)) {
-        taxYear =>
-          val ua = emptyUserAnswers.set(RemoveFRECodePage, taxYear).success.value
-          helper(ua).removeFRECode.get.label mustBe "removeFRECode.checkYourAnswersLabel"
-          helper(ua).removeFRECode.get.answer mustBe messages(s"taxYearSelection.$taxYear",
-            TaxYearSelection.getTaxYear(taxYear).toString,
-            (TaxYearSelection.getTaxYear(taxYear) + 1).toString
-          )
+    "display the correct label and answer" in
+      forAll(Gen.oneOf(TaxYearSelection.values)) { taxYear =>
+        val ua = emptyUserAnswers.set(RemoveFRECodePage, taxYear).success.value
+        helper(ua).removeFRECode.get.label mustBe "removeFRECode.checkYourAnswersLabel"
+        helper(ua).removeFRECode.get.answer mustBe messages(
+          s"taxYearSelection.$taxYear",
+          TaxYearSelection.getTaxYear(taxYear).toString,
+          (TaxYearSelection.getTaxYear(taxYear) + 1).toString
+        )
       }
-    }
   }
 
   "taxYearSelection" must {
     "display the correct label and answer" in {
-      val taxYears = Gen.nonEmptyContainerOf[Seq, TaxYearSelection](Gen.oneOf(
-        TaxYearSelection.CurrentYear,
-        TaxYearSelection.CurrentYearMinus1,
-        TaxYearSelection.CurrentYearMinus2,
-        TaxYearSelection.CurrentYearMinus3,
-        TaxYearSelection.CurrentYearMinus4
-      ))
+      val taxYears = Gen.nonEmptyContainerOf[Seq, TaxYearSelection](
+        Gen.oneOf(
+          TaxYearSelection.CurrentYear,
+          TaxYearSelection.CurrentYearMinus1,
+          TaxYearSelection.CurrentYearMinus2,
+          TaxYearSelection.CurrentYearMinus3,
+          TaxYearSelection.CurrentYearMinus4
+        )
+      )
 
-      forAll(taxYears) {
-        taxYearSeq =>
-          val ua = emptyUserAnswers.set(TaxYearSelectionPage, taxYearSeq).success.value
-          helper(ua).taxYearSelection.get.label mustBe "taxYearSelection.checkYourAnswersLabel"
-          helper(ua).taxYearSelection.get.answer mustBe taxYearSeq.map {
-            taxYear =>
-              messages(s"taxYearSelection.$taxYear",
-                TaxYearSelection.getTaxYear(taxYear).toString,
-                (TaxYearSelection.getTaxYear(taxYear) + 1).toString
-              )
-          }.mkString("<br>")
+      forAll(taxYears) { taxYearSeq =>
+        val ua = emptyUserAnswers.set(TaxYearSelectionPage, taxYearSeq).success.value
+        helper(ua).taxYearSelection.get.label mustBe "taxYearSelection.checkYourAnswersLabel"
+        helper(ua).taxYearSelection.get.answer mustBe taxYearSeq
+          .map { taxYear =>
+            messages(
+              s"taxYearSelection.$taxYear",
+              TaxYearSelection.getTaxYear(taxYear).toString,
+              (TaxYearSelection.getTaxYear(taxYear) + 1).toString
+            )
+          }
+          .mkString("<br>")
       }
     }
   }
 
   "employerContribution" when {
     "display the correct label and answer when 'True'" in {
-          val ua = emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
-          helper(ua).employerContribution.get.label mustBe "employerContribution.checkYourAnswersLabel"
-          helper(ua).employerContribution.get.answer mustBe "employerContribution.yesEmployerContribution"
+      val ua =
+        emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
+      helper(ua).employerContribution.get.label mustBe "employerContribution.checkYourAnswersLabel"
+      helper(ua).employerContribution.get.answer mustBe "employerContribution.yesEmployerContribution"
     }
 
     "display the correct label and answer when 'False'" in {
@@ -225,4 +227,5 @@ class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks 
 
     }
   }
+
 }

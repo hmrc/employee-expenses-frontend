@@ -23,5 +23,5 @@ sealed trait AuditEventType
 object AuditEventType {
   object UpdateFlatRateExpenseSuccess extends WithName("updateFlatRateExpenseSuccess") with AuditEventType
   object UpdateFlatRateExpenseFailure extends WithName("updateFlatRateExpenseFailure") with AuditEventType
-  object NoCodeChange extends WithName("noCodeChange") with AuditEventType
+  object NoCodeChange                 extends WithName("noCodeChange") with AuditEventType
 }

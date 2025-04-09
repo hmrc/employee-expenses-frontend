@@ -26,4 +26,5 @@ class BuildingMaterialsFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("buildingMaterials.error.required")
     )
+
 }

@@ -28,4 +28,5 @@ class ConstructionalEngineeringList1PageSpec extends PageBehaviours {
 
     beRemovable[Boolean](ConstructionalEngineeringList1Page)
   }
+
 }

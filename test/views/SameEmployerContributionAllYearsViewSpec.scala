@@ -43,9 +43,9 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, contribution)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
     "behave like a normal page" when {
 
@@ -110,15 +110,11 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         }
       }
 
-      "rendered with a value of true" must {
+      "rendered with a value of true" must
+        behave.like(answeredYesNoPage(applyView, true))
 
-        behave like answeredYesNoPage(applyView, true)
-      }
-
-      "rendered with a value of false" must {
-
-        behave like answeredYesNoPage(applyView, false)
-      }
+      "rendered with a value of false" must
+        behave.like(answeredYesNoPage(applyView, false))
 
       "rendered with an error" must {
 
@@ -130,7 +126,7 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
 
         "show an error in the value field's label" in {
 
-          val doc = asDocument(applyView(form.withError(error)))
+          val doc       = asDocument(applyView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("govuk-error-message").first
           errorSpan.text mustBe "Error: " + messages(errorMessage)
         }
@@ -141,13 +137,15 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
           assertEqualsValue(
             doc,
             "title",
-            s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title", contribution)} - ${frontendAppConfig.serviceTitle}"""
+            s"""${messages("error.browser.title.prefix")} ${messages(
+                s"$messageKeyPrefix.title",
+                contribution
+              )} - ${frontendAppConfig.serviceTitle}"""
           )
         }
       }
     }
   }
-
 
   override def answeredYesNoPage(createView: Form[Boolean] => HtmlFormat.Appendable, answer: Boolean): Unit = {
 

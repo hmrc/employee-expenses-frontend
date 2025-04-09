@@ -31,10 +31,14 @@ import uk.gov.hmrc.http.SessionKeys
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar {
+class UnauthenticatedIdentifierActionSpec
+    extends SpecBase
+    with ScalaFutures
+    with IntegrationPatience
+    with MockitoSugar {
 
   class Harness(authAction: UnauthenticatedIdentifierAction) {
-    def onPageLoad(): Action[AnyContent] = authAction { _ => Results.Ok }
+    def onPageLoad(): Action[AnyContent] = authAction(_ => Results.Ok)
   }
 
   "Un Auth Action" must {
@@ -51,8 +55,8 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
       val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
       val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, frontendAppConfig, bodyParsers)
-      val controller = new Harness(unAuthAction)
-      val result = controller.onPageLoad()(fakeRequest)
+      val controller   = new Harness(unAuthAction)
+      val result       = controller.onPageLoad()(fakeRequest)
 
       status(result) mustBe OK
 
@@ -131,4 +135,5 @@ class UnauthenticatedIdentifierActionSpec extends SpecBase with ScalaFutures wit
       application.stop()
     }
   }
+
 }

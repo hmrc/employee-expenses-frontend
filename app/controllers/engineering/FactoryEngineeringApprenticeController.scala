@@ -33,49 +33,52 @@ import views.html.engineering.FactoryEngineeringApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FactoryEngineeringApprenticeController @Inject()(
-                                                        override val messagesApi: MessagesApi,
-                                                        @Named(NavConstant.engineering) navigator: Navigator,
-                                                        identify: UnauthenticatedIdentifierAction,
-                                                        getData: DataRetrievalAction,
-                                                        requireData: DataRequiredAction,
-                                                        formProvider: FactoryEngineeringApprenticeFormProvider,
-                                                        val controllerComponents: MessagesControllerComponents,
-                                                        view: FactoryEngineeringApprenticeView,
-                                                        sessionRepository: SessionRepository
-                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class FactoryEngineeringApprenticeController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.engineering) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: FactoryEngineeringApprenticeFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: FactoryEngineeringApprenticeView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(FactoryEngineeringApprenticePage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(FactoryEngineeringApprenticePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <-
+                if (value) {
+                  Future.fromTry(
+                    request.userAnswers
+                      .set(FactoryEngineeringApprenticePage, value)
+                      .flatMap(_.set(ClaimAmount, ClaimAmounts.FactoryEngineering.apprentice))
+                  )
+                } else {
+                  Future.fromTry(request.userAnswers.set(FactoryEngineeringApprenticePage, value))
+                }
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(FactoryEngineeringApprenticePage, mode)(updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <- if (value){
-              Future.fromTry(request.userAnswers.set(FactoryEngineeringApprenticePage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.FactoryEngineering.apprentice)))
-            } else {
-              Future.fromTry(request.userAnswers.set(FactoryEngineeringApprenticePage, value))
-            }
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(FactoryEngineeringApprenticePage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

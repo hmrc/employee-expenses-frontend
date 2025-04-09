@@ -22,19 +22,20 @@ sealed trait AlreadyClaimingFREDifferentAmounts
 
 object AlreadyClaimingFREDifferentAmounts extends Enumerable.Implicits {
 
-  case object Change extends WithName("change") with AlreadyClaimingFREDifferentAmounts
+  case object Change   extends WithName("change") with AlreadyClaimingFREDifferentAmounts
   case object NoChange extends WithName("noChange") with AlreadyClaimingFREDifferentAmounts
-  case object Remove extends WithName("remove") with AlreadyClaimingFREDifferentAmounts
+  case object Remove   extends WithName("remove") with AlreadyClaimingFREDifferentAmounts
 
   val values: Seq[AlreadyClaimingFREDifferentAmounts] = Seq(
-    NoChange, Change, Remove
+    NoChange,
+    Change,
+    Remove
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map {
-    value =>
-      RadioCheckboxOption("alreadyClaimingFREDifferentAmounts", value.toString)
-  }
+  val options: Seq[RadioCheckboxOption] =
+    values.map(value => RadioCheckboxOption("alreadyClaimingFREDifferentAmounts", value.toString))
 
   implicit val enumerable: Enumerable[AlreadyClaimingFREDifferentAmounts] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

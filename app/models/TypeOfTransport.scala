@@ -22,24 +22,27 @@ sealed trait TypeOfTransport
 
 object TypeOfTransport extends Enumerable.Implicits {
 
-  case object Airlines extends WithName("airlines") with TypeOfTransport
+  case object Airlines        extends WithName("airlines") with TypeOfTransport
   case object PublicTransport extends WithName("publicTransport") with TypeOfTransport
-  case object Railways extends WithName("railways") with TypeOfTransport
+  case object Railways        extends WithName("railways") with TypeOfTransport
   case object SeamanCarpenter extends WithName("seamanCarpenter") with TypeOfTransport
-  case object Vehicles extends WithName("vehicles") with TypeOfTransport
-  case object Or extends WithName("or") with TypeOfTransport
-  case object NoneOfTheAbove extends WithName("noneOfTheAbove") with TypeOfTransport
-
+  case object Vehicles        extends WithName("vehicles") with TypeOfTransport
+  case object Or              extends WithName("or") with TypeOfTransport
+  case object NoneOfTheAbove  extends WithName("noneOfTheAbove") with TypeOfTransport
 
   val values: Seq[TypeOfTransport] = Seq(
-    Airlines, PublicTransport, Railways, SeamanCarpenter, Vehicles, Or, NoneOfTheAbove
+    Airlines,
+    PublicTransport,
+    Railways,
+    SeamanCarpenter,
+    Vehicles,
+    Or,
+    NoneOfTheAbove
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map {
-    value =>
-      RadioCheckboxOption("typeOfTransport", value.toString)
-  }
+  val options: Seq[RadioCheckboxOption] = values.map(value => RadioCheckboxOption("typeOfTransport", value.toString))
 
   implicit val enumerable: Enumerable[TypeOfTransport] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+
 }

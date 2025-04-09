@@ -41,23 +41,31 @@ import repositories.SessionRepository
 import scala.concurrent.Future
 
 class FirstIndustryOptionsControllerSpec
-  extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with ScalaCheckPropertyChecks with Generators with OptionValues {
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience
+    with ScalaCheckPropertyChecks
+    with Generators
+    with OptionValues {
 
   def onwardRoute: Call = Call("GET", "/FOO")
 
-  lazy val firstIndustryOptionsRoute: String = controllers.routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url
-  private val mockSessionRepository = mock[SessionRepository]
-  private val userAnswers = emptyUserAnswers
+  lazy val firstIndustryOptionsRoute: String =
+    controllers.routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  private val mockSessionRepository = mock[SessionRepository]
+  private val userAnswers           = emptyUserAnswers
+
+  when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
   "FirstIndustryOptionsController" must {
 
     "return Ok" in {
 
       val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-      val request = FakeRequest(GET, firstIndustryOptionsRoute)
-      val result = route(application, request).value
+      val request                  = FakeRequest(GET, firstIndustryOptionsRoute)
+      val result                   = route(application, request).value
 
       status(result) mustEqual OK
 
@@ -68,8 +76,8 @@ class FirstIndustryOptionsControllerSpec
 
       val userAnswers = UserAnswers().set(FirstIndustryOptionsPage, FirstIndustryOptions.values.head).success.value
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-      val request = FakeRequest(GET, firstIndustryOptionsRoute)
-      val result = route(application, request).value
+      val request                  = FakeRequest(GET, firstIndustryOptionsRoute)
+      val result                   = route(application, request).value
 
       status(result) mustEqual OK
 
@@ -85,16 +93,14 @@ class FirstIndustryOptionsControllerSpec
 
       val firstIndustryOptions: Gen[FirstIndustryOptions] = Gen.oneOf(FirstIndustryOptions.values)
 
-      forAll(firstIndustryOptions) {
-        firstIndustryOption =>
+      forAll(firstIndustryOptions) { firstIndustryOption =>
+        val request = FakeRequest(POST, firstIndustryOptionsRoute)
+          .withFormUrlEncodedBody(("value", firstIndustryOption.toString))
+        val result = route(application, request).value
 
-          val request = FakeRequest(POST, firstIndustryOptionsRoute)
-            .withFormUrlEncodedBody(("value", firstIndustryOption.toString))
-          val result = route(application, request).value
+        status(result) mustEqual SEE_OTHER
 
-          status(result) mustEqual SEE_OTHER
-
-          redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual onwardRoute.url
       }
 
       application.stop()
@@ -145,11 +151,19 @@ class FirstIndustryOptionsControllerSpec
 
   for (trade <- FirstIndustryOptions.values) {
     val userAnswers2 = trade match {
-      case Retail => userAnswers
-        .set(FirstIndustryOptionsPage, trade).success.value
-        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-      case _ => userAnswers
-        .set(FirstIndustryOptionsPage, trade).success.value
+      case Retail =>
+        userAnswers
+          .set(FirstIndustryOptionsPage, trade)
+          .success
+          .value
+          .set(ClaimAmount, ClaimAmounts.defaultRate)
+          .success
+          .value
+      case _ =>
+        userAnswers
+          .set(FirstIndustryOptionsPage, trade)
+          .success
+          .value
     }
 
     s"save correct amount to ClaimAmount when '$trade' is selected" in {
@@ -160,18 +174,16 @@ class FirstIndustryOptionsControllerSpec
 
       val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
 
-      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), argCaptor.capture())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, firstIndustryOptionsRoute).withFormUrlEncodedBody(("value", trade.toString))
 
       val result = route(application, request).value
 
-      whenReady(result) {
-        _ =>
-          assert(argCaptor.getValue.data == userAnswers2.data)
-      }
+      whenReady(result)(_ => assert(argCaptor.getValue.data == userAnswers2.data))
 
       application.stop()
     }
   }
+
 }

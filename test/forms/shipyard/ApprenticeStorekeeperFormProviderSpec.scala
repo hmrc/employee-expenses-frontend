@@ -22,7 +22,7 @@ import play.api.data.FormError
 class ApprenticeStorekeeperFormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "shipyardApprenticeStorekeeper.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new ShipyardApprenticeStorekeeperFormProvider()()
 
@@ -30,16 +30,21 @@ class ApprenticeStorekeeperFormProviderSpec extends BooleanFieldBehaviours {
 
     val fieldName = "value"
 
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+    behave.like(
+      booleanField(
+        form,
+        fieldName,
+        invalidError = FormError(fieldName, invalidKey)
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

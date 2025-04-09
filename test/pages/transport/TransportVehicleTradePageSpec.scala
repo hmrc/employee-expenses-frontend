@@ -29,4 +29,5 @@ class TransportVehicleTradeSpec extends PageBehaviours {
 
     beRemovable[TransportVehicleTrade](TransportVehicleTradePage)
   }
+
 }

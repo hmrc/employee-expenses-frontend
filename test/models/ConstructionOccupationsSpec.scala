@@ -32,21 +32,20 @@ class ConstructionOccupationsSpec extends AnyWordSpec with Matchers with ScalaCh
 
       val gen = Gen.oneOf(ConstructionOccupations.values.toSeq)
 
-      forAll(gen) {
-        constructionOccupations =>
-
-          JsString(constructionOccupations.toString).validate[ConstructionOccupations].asOpt.value mustEqual constructionOccupations
+      forAll(gen) { constructionOccupations =>
+        JsString(constructionOccupations.toString)
+          .validate[ConstructionOccupations]
+          .asOpt
+          .value mustEqual constructionOccupations
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!ConstructionOccupations.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!ConstructionOccupations.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[ConstructionOccupations] mustEqual JsError("error.invalid")
+      forAll(gen) { invalidValue =>
+        JsString(invalidValue).validate[ConstructionOccupations] mustEqual JsError("error.invalid")
       }
     }
 
@@ -54,11 +53,10 @@ class ConstructionOccupationsSpec extends AnyWordSpec with Matchers with ScalaCh
 
       val gen = Gen.oneOf(ConstructionOccupations.values.toSeq)
 
-      forAll(gen) {
-        constructionOccupations =>
-
-          Json.toJson(constructionOccupations) mustEqual JsString(constructionOccupations.toString)
+      forAll(gen) { constructionOccupations =>
+        Json.toJson(constructionOccupations) mustEqual JsString(constructionOccupations.toString)
       }
     }
   }
+
 }

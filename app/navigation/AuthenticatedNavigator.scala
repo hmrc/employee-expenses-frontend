@@ -26,7 +26,13 @@ import models.AlreadyClaimingFREDifferentAmounts._
 import models.FlatRateExpenseOptions._
 import models.TaxYearSelection.{CurrentYear, containsCurrent, containsPrevious}
 import models._
-import models.mergedJourney.{ClaimCompleteCurrent, ClaimCompleteCurrentPrevious, ClaimCompletePrevious, ClaimStatus, ClaimUnsuccessful}
+import models.mergedJourney.{
+  ClaimCompleteCurrent,
+  ClaimCompleteCurrentPrevious,
+  ClaimCompletePrevious,
+  ClaimStatus,
+  ClaimUnsuccessful
+}
 import pages.authenticated._
 import pages.confirmation.ConfirmationMergeJourneyPage
 import pages.mergedJourney.MergedJourneyFlag
@@ -34,50 +40,55 @@ import pages.{FREResponse, Page}
 import play.api.mvc.Call
 
 @Singleton
-class AuthenticatedNavigator @Inject()() extends Navigator {
+class AuthenticatedNavigator @Inject() () extends Navigator {
+
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => taxYearSelection(NormalMode)
-    case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(NormalMode)
+    case TaxYearSelectionPage                   => taxYearSelection(NormalMode)
+    case AlreadyClaimingFRESameAmountPage       => alreadyClaimingFRESameAmount(NormalMode)
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(NormalMode)
-    case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
-    case RemoveFRECodePage => _ => CheckYourAnswersController.onPageLoad
-    case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad
-    case CheckYourAnswersPage => _ => YourAddressController.onPageLoad(NormalMode)
-    case YourAddressPage => yourAddress
-    case YourEmployerPage => yourEmployer
-    case HowYouWillGetYourExpensesPage => _ => SubmissionController.onSubmit
-    case Submission => submission
-    case ConfirmationMergeJourneyPage => continueMergeJourney
+    case UpdateYourEmployerInformationPage      => _ => HowYouWillGetYourExpensesController.onPageLoad()
+    case RemoveFRECodePage                      => _ => CheckYourAnswersController.onPageLoad
+    case ChangeWhichTaxYearsPage                => _ => CheckYourAnswersController.onPageLoad
+    case CheckYourAnswersPage                   => _ => YourAddressController.onPageLoad(NormalMode)
+    case YourAddressPage                        => yourAddress
+    case YourEmployerPage                       => yourEmployer
+    case HowYouWillGetYourExpensesPage          => _ => SubmissionController.onSubmit
+    case Submission                             => submission
+    case ConfirmationMergeJourneyPage           => continueMergeJourney
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case TaxYearSelectionPage => taxYearSelection(CheckMode)
+    case TaxYearSelectionPage                   => taxYearSelection(CheckMode)
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(CheckMode)
-    case AlreadyClaimingFRESameAmountPage => alreadyClaimingFRESameAmount(CheckMode)
-    case UpdateYourEmployerInformationPage => _ => HowYouWillGetYourExpensesController.onPageLoad()
-    case ChangeWhichTaxYearsPage => _ => CheckYourAnswersController.onPageLoad
-    case _ => _ => CheckYourAnswersController.onPageLoad
+    case AlreadyClaimingFRESameAmountPage       => alreadyClaimingFRESameAmount(CheckMode)
+    case UpdateYourEmployerInformationPage      => _ => HowYouWillGetYourExpensesController.onPageLoad()
+    case ChangeWhichTaxYearsPage                => _ => CheckYourAnswersController.onPageLoad
+    case _                                      => _ => CheckYourAnswersController.onPageLoad
   }
 
   private def yourAddress(userAnswers: UserAnswers): Call = {
-    val routeIfRemoveDifferent = userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) flatMap {
+    val routeIfRemoveDifferent = userAnswers.get(AlreadyClaimingFREDifferentAmountsPage).flatMap {
       case AlreadyClaimingFREDifferentAmounts.Remove => Some(SubmissionController.onSubmit)
       case _                                         => None
     }
 
-    val routeIfRemoveSame = userAnswers.get(AlreadyClaimingFRESameAmountPage) flatMap {
+    val routeIfRemoveSame = userAnswers.get(AlreadyClaimingFRESameAmountPage).flatMap {
       case AlreadyClaimingFRESameAmount.Remove => Some(SubmissionController.onSubmit)
       case _                                   => None
     }
 
     val routeIfCurrentYear = (userAnswers.get(TaxYearSelectionPage), userAnswers.get(ChangeWhichTaxYearsPage)) match {
-      case (Some(selectedYears), None) if selectedYears.contains(CurrentYear) => Some(YourEmployerController.onPageLoad())
-      case (Some(_), Some(changeYears)) if changeYears.contains(CurrentYear)  => Some(YourEmployerController.onPageLoad())
+      case (Some(selectedYears), None) if selectedYears.contains(CurrentYear) =>
+        Some(YourEmployerController.onPageLoad())
+      case (Some(_), Some(changeYears)) if changeYears.contains(CurrentYear) =>
+        Some(YourEmployerController.onPageLoad())
       case (None, _) => Some(TechnicalDifficultiesController.onPageLoad)
       case _         => None
     }
 
-    (routeIfRemoveDifferent orElse routeIfRemoveSame orElse routeIfCurrentYear)
+    routeIfRemoveDifferent
+      .orElse(routeIfRemoveSame)
+      .orElse(routeIfCurrentYear)
       .getOrElse(HowYouWillGetYourExpensesController.onPageLoad())
   }
 
@@ -96,27 +107,26 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
   private def alreadyClaimingFRESameAmount(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(AlreadyClaimingFRESameAmountPage) match {
       case Some(AlreadyClaimingFRESameAmount.NoChange) => NoCodeChangeController.onPageLoad()
-      case Some(AlreadyClaimingFRESameAmount.Remove) => RemoveFRECodeController.onPageLoad(mode)
-      case _ => SessionExpiredController.onPageLoad
+      case Some(AlreadyClaimingFRESameAmount.Remove)   => RemoveFRECodeController.onPageLoad(mode)
+      case _                                           => SessionExpiredController.onPageLoad
     }
 
   private def alreadyClaimingFREDifferentAmount(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) match {
       case Some(NoChange) => NoCodeChangeController.onPageLoad()
-      case Some(Change) => ChangeWhichTaxYearsController.onPageLoad(mode)
-      case Some(Remove) => RemoveFRECodeController.onPageLoad(mode)
-      case _ => SessionExpiredController.onPageLoad
+      case Some(Change)   => ChangeWhichTaxYearsController.onPageLoad(mode)
+      case Some(Remove)   => RemoveFRECodeController.onPageLoad(mode)
+      case _              => SessionExpiredController.onPageLoad
     }
 
-  private def yourEmployer(userAnswers: UserAnswers): Call = {
+  private def yourEmployer(userAnswers: UserAnswers): Call =
     userAnswers.get(YourEmployerPage) match {
-      case Some(true)   => HowYouWillGetYourExpensesController.onPageLoad()
-      case Some(false)  => UpdateEmployerInformationController.onPageLoad(NormalMode)
-      case            _ => SessionExpiredController.onPageLoad
+      case Some(true)  => HowYouWillGetYourExpensesController.onPageLoad()
+      case Some(false) => UpdateEmployerInformationController.onPageLoad(NormalMode)
+      case _           => SessionExpiredController.onPageLoad
     }
-  }
 
-  private def submission(userAnswers: UserAnswers): Call = {
+  private def submission(userAnswers: UserAnswers): Call =
     (
       userAnswers.get(TaxYearSelectionPage),
       userAnswers.get(RemoveFRECodePage),
@@ -125,12 +135,12 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       case (Some(_), Some(_), None) =>
         ConfirmationClaimStoppedController.onPageLoad()
       case (Some(taxYearsSelection), None, changeYears) =>
-        if(userAnswers.get(MergedJourneyFlag).getOrElse(false))
+        if (userAnswers.get(MergedJourneyFlag).getOrElse(false))
           ConfirmationMergeJourneyController.onPageLoad()
         else {
           val taxYears = changeYears match {
             case Some(changeYear) => changeYear
-            case _ => taxYearsSelection
+            case _                => taxYearsSelection
           }
           if (taxYears.forall(_ == TaxYearSelection.CurrentYear)) {
             ConfirmationCurrentYearOnlyController.onPageLoad()
@@ -143,24 +153,23 @@ class AuthenticatedNavigator @Inject()() extends Navigator {
       case _ =>
         SessionExpiredController.onPageLoad
     }
-  }
 
   private def continueMergeJourney(userAnswers: UserAnswers): Call = {
     val changeYears = userAnswers.get(ChangeWhichTaxYearsPage)
-    val taxYears = if (changeYears.nonEmpty) changeYears else userAnswers.get(TaxYearSelectionPage)
+    val taxYears    = if (changeYears.nonEmpty) changeYears else userAnswers.get(TaxYearSelectionPage)
     taxYears match {
-      case Some(taxYears)  => MergedJourneyController.mergedJourneyContinue(journey="fre", status=getClaimStatus(taxYears))
+      case Some(taxYears) =>
+        MergedJourneyController.mergedJourneyContinue(journey = "fre", status = getClaimStatus(taxYears))
       case _ => SessionExpiredController.onPageLoad
     }
   }
 
-  private def getClaimStatus(selectedTaxYears: Seq[TaxYearSelection]): ClaimStatus = {
+  private def getClaimStatus(selectedTaxYears: Seq[TaxYearSelection]): ClaimStatus =
     (containsCurrent(selectedTaxYears), containsPrevious(selectedTaxYears)) match {
-      case(true, true) => ClaimCompleteCurrentPrevious
-      case(true,false) => ClaimCompleteCurrent
-      case(false,true) => ClaimCompletePrevious
-      case(_, _) => ClaimUnsuccessful
+      case (true, true)  => ClaimCompleteCurrentPrevious
+      case (true, false) => ClaimCompleteCurrent
+      case (false, true) => ClaimCompletePrevious
+      case (_, _)        => ClaimUnsuccessful
     }
-  }
 
 }

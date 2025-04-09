@@ -35,31 +35,34 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class YourAddressController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       citizenDetailsConnector: CitizenDetailsConnector,
-                                       sessionRepository: SessionRepository,
-                                       @Named(NavConstant.authenticated) navigator: Navigator,
-                                       identify: AuthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class YourAddressController @Inject() (
+    override val messagesApi: MessagesApi,
+    citizenDetailsConnector: CitizenDetailsConnector,
+    sessionRepository: SessionRepository,
+    @Named(NavConstant.authenticated) navigator: Navigator,
+    identify: AuthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    val controllerComponents: MessagesControllerComponents
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      citizenDetailsConnector.getAddress(request.nino.get).flatMap {
-        response =>
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      citizenDetailsConnector
+        .getAddress(request.nino.get)
+        .flatMap { response =>
           response.status match {
             case OK =>
               Json.parse(response.body).validate[Address] match {
                 case JsSuccess(address, _) if validAddress(address) =>
-                    for {
-                      updatedAnswers <- Future.fromTry(request.userAnswers.set(CitizenDetailsAddress, address))
-                      _ <- sessionRepository.set(request.identifier, updatedAnswers)
-                    } yield Redirect(navigator.nextPage(YourAddressPage, mode)(updatedAnswers))
-               case _ =>
+                  for {
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(CitizenDetailsAddress, address))
+                    _              <- sessionRepository.set(request.identifier, updatedAnswers)
+                  } yield Redirect(navigator.nextPage(YourAddressPage, mode)(updatedAnswers))
+                case _ =>
                   Future.successful(Redirect(navigator.nextPage(YourAddressPage, mode)(request.userAnswers)))
               }
             case LOCKED =>
@@ -67,12 +70,12 @@ class YourAddressController @Inject()(
             case _ =>
               Future.successful(Redirect(navigator.nextPage(YourAddressPage, mode)(request.userAnswers)))
           }
-      }.recoverWith {
-        case e =>
+        }
+        .recoverWith { case e =>
           logger.error(s"[YourAddressController][citizenDetailsConnector.getAddress] failed $e", e)
           Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad))
-      }
-  }
+        }
+    }
 
   private def validAddress(address: Address): Boolean =
     address.line1.exists(_.trim.nonEmpty) && address.postcode.exists(_.trim.nonEmpty)

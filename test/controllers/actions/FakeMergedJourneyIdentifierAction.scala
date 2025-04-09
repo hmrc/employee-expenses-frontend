@@ -23,7 +23,9 @@ import play.api.mvc._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeMergedJourneyIdentifierAction @Inject()(bodyParsers: PlayBodyParsers) extends SpecBase with MergedJourneyIdentifierAction {
+class FakeMergedJourneyIdentifierAction @Inject() (bodyParsers: PlayBodyParsers)
+    extends SpecBase
+    with MergedJourneyIdentifierAction {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
     block(IdentifierRequest(request, Authed(userAnswersId), Some(fakeNino)))
@@ -33,4 +35,5 @@ class FakeMergedJourneyIdentifierAction @Inject()(bodyParsers: PlayBodyParsers) 
 
   override protected def executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
+
 }

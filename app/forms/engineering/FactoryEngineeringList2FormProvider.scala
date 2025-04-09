@@ -26,4 +26,5 @@ class FactoryEngineeringList2FormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("factoryEngineeringList2.error.required")
     )
+
 }

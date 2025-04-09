@@ -28,4 +28,5 @@ class IronApprenticePageSpec extends PageBehaviours {
 
     beRemovable[Boolean](IronApprenticePage)
   }
+
 }

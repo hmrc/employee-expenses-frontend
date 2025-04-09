@@ -17,14 +17,16 @@
 package utils
 
 import play.api.libs.json.{JsNull, JsResult, Json, Reads}
-import uk.gov.hmrc.http.{ HttpReads, HttpResponse }
+import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 trait HttpResponseHelper {
 
   // scalastyle:off object.name
   object & {
+
     def unapply(response: HttpResponse): Option[(HttpResponse, HttpResponse)] =
       Some((response, response))
+
   }
 
   object status {
@@ -32,10 +34,12 @@ trait HttpResponseHelper {
   }
 
   class JsonParsed[A] {
+
     def unapply(response: HttpResponse)(implicit rds: Reads[A]): Option[JsResult[A]] = {
-      val json = Option(response.json) getOrElse JsNull
+      val json = Option(response.json).getOrElse(JsNull)
       Some(Json.fromJson[A](json))
     }
+
   }
 
   object JsonParsed {
@@ -47,4 +51,5 @@ trait HttpResponseHelper {
       override def read(method: String, url: String, response: HttpResponse): HttpResponse =
         response
     }
+
 }

@@ -28,4 +28,5 @@ class WoodFurnitureOccupationList2PageSpec extends PageBehaviours {
 
     beRemovable[Boolean](WoodFurnitureOccupationList2Page)
   }
+
 }

@@ -26,4 +26,5 @@ class SecurityGuardNHSFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("securityGuardNHS.error.required")
     )
+
 }

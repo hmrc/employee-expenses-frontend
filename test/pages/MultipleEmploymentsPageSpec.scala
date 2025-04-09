@@ -29,4 +29,5 @@ class MultipleEmploymentsPageSpec extends PageBehaviours {
 
     beRemovable[MultipleEmployments](MultipleEmploymentsPage)
   }
+
 }

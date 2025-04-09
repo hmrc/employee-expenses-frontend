@@ -26,10 +26,10 @@ import pages.printing._
 
 class PrintingNavigatorSpec extends SpecBase with MockitoSugar {
   private val navigator = new PrintingNavigator
-  private val modes = Seq(NormalMode, CheckMode)
+  private val modes     = Seq(NormalMode, CheckMode)
 
   "PrintingNavigator" when {
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
 
         "go to SessionExpired when not a printing page" in {
@@ -66,6 +66,6 @@ class PrintingNavigatorSpec extends SpecBase with MockitoSugar {
             controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
       }
-    }
   }
+
 }

@@ -33,52 +33,56 @@ import views.html.transport.WhichRailwayTradeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class WhichRailwayTradeController @Inject()(
-                                             override val messagesApi: MessagesApi,
-                                             @Named(NavConstant.transport) navigator: Navigator,
-                                             identify: UnauthenticatedIdentifierAction,
-                                             getData: DataRetrievalAction,
-                                             requireData: DataRequiredAction,
-                                             formProvider: WhichRailwayTradeFormProvider,
-                                             val controllerComponents: MessagesControllerComponents,
-                                             view: WhichRailwayTradeView,
-                                             sessionRepository: SessionRepository
-                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class WhichRailwayTradeController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.transport) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: WhichRailwayTradeFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: WhichRailwayTradeView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits {
 
   val form: Form[WhichRailwayTrade] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(WhichRailwayTradePage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(WhichRailwayTradePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value => {
+            val claimAmount = value match {
+              case WhichRailwayTrade.VehiclePainters => ClaimAmounts.Transport.Railways.vehiclePainters
+              case WhichRailwayTrade.VehicleRepairersWagonLifters =>
+                ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
+              case _ => ClaimAmounts.Transport.Railways.allOther
+            }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          val claimAmount = value match {
-            case WhichRailwayTrade.VehiclePainters => ClaimAmounts.Transport.Railways.vehiclePainters
-            case WhichRailwayTrade.VehicleRepairersWagonLifters => ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
-            case _ => ClaimAmounts.Transport.Railways.allOther
+            for {
+              updatedAnswers <- Future.fromTry(
+                request.userAnswers
+                  .set(WhichRailwayTradePage, value)
+                  .flatMap(_.set(ClaimAmount, claimAmount))
+              )
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(WhichRailwayTradePage, mode)(updatedAnswers))
           }
+        )
+    }
 
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(WhichRailwayTradePage, value)
-              .flatMap(_.set(ClaimAmount, claimAmount))
-            )
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(WhichRailwayTradePage, mode)(updatedAnswers))
-        }
-      )
-  }
 }
