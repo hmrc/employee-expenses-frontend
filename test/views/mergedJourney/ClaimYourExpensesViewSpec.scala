@@ -34,9 +34,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
       )
       val doc = asDocument(view(testJourney)(fakeRequest, messages))
 
-      assertPageTitleEqualsMessage(doc,
-        "claimYourExpenses.title"
-      )
+      assertPageTitleEqualsMessage(doc, "claimYourExpenses.title")
     }
     "have the right link when next journey is wfh" when {
       val testJourney = MergedJourney(
@@ -47,7 +45,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
       )
       val applyView = view(testJourney)(fakeRequest, messages)
 
-      behave like pageWithButtonLink(applyView, frontendAppConfig.startUrlWfh, "site.continue")
+      behave.like(pageWithButtonLink(applyView, frontendAppConfig.startUrlWfh, "site.continue"))
     }
     "have the right link when next journey is psubs" when {
       val testJourney = MergedJourney(
@@ -58,7 +56,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
       )
       val applyView = view(testJourney)(fakeRequest, messages)
 
-      behave like pageWithButtonLink(applyView, frontendAppConfig.startUrlPsubs, "site.continue")
+      behave.like(pageWithButtonLink(applyView, frontendAppConfig.startUrlPsubs, "site.continue"))
     }
     "have the right link when next journey is fre" when {
       val testJourney = MergedJourney(
@@ -69,7 +67,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
       )
       val applyView = view(testJourney)(fakeRequest, messages)
 
-      behave like pageWithButtonLink(applyView, frontendAppConfig.startUrlFre, "site.continue")
+      behave.like(pageWithButtonLink(applyView, frontendAppConfig.startUrlFre, "site.continue"))
     }
     "have the right link when all claims are complete" when {
       val testJourney = MergedJourney(
@@ -80,7 +78,13 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
       )
       val applyView = view(testJourney)(fakeRequest, messages)
 
-      behave like pageWithButtonLink(applyView, controllers.mergedJourney.routes.ClaimsCompleteController.show.url, "site.continue")
+      behave.like(
+        pageWithButtonLink(
+          applyView,
+          controllers.mergedJourney.routes.ClaimsCompleteController.show.url,
+          "site.continue"
+        )
+      )
     }
     "display correct static text when all journeys are complete" in {
       val testJourney = MergedJourney(
@@ -91,16 +95,15 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
       )
       val doc = asDocument(view(testJourney)(fakeRequest, messages))
 
-      assertContainsMessages(doc,
+      assertContainsMessages(
+        doc,
         "claimYourExpenses.heading",
         "claimYourExpenses.para.1",
         "claimYourExpenses.para.2",
         "claimYourExpenses.para.4"
       )
 
-      assertDoesNotContainMessages(doc,
-        "claimYourExpenses.para.3"
-      )
+      assertDoesNotContainMessages(doc, "claimYourExpenses.para.3")
     }
     "display correct static text when journeys are pending" in {
       val testJourney = MergedJourney(
@@ -111,16 +114,15 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
       )
       val doc = asDocument(view(testJourney)(fakeRequest, messages))
 
-      assertContainsMessages(doc,
+      assertContainsMessages(
+        doc,
         "claimYourExpenses.heading",
         "claimYourExpenses.para.1",
         "claimYourExpenses.para.2",
         "claimYourExpenses.para.3"
       )
 
-      assertDoesNotContainMessages(doc,
-        "claimYourExpenses.para.4"
-      )
+      assertDoesNotContainMessages(doc, "claimYourExpenses.para.4")
     }
     "display correct timeline" when {
       "all claims are pending" in {
@@ -132,7 +134,8 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         )
         val doc = asDocument(view(testJourney)(fakeRequest, messages))
 
-        assertContainsMessages(doc,
+        assertContainsMessages(
+          doc,
           messages("claimYourExpenses.eventTitle.wfh", 1),
           messages("claimYourExpenses.eventTitle.psubs", 2),
           messages("claimYourExpenses.eventTitle.fre", 3),
@@ -152,7 +155,8 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         )
         val doc = asDocument(view(testJourney)(fakeRequest, messages))
 
-        assertContainsMessages(doc,
+        assertContainsMessages(
+          doc,
           messages("claimYourExpenses.eventTitle.wfh", 1),
           messages("claimYourExpenses.eventTitle.psubs", 2),
           messages("claimYourExpenses.eventTitle.fre", 3),
@@ -169,7 +173,8 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         )
         val doc = asDocument(view(testJourney)(fakeRequest, messages))
 
-        assertContainsMessages(doc,
+        assertContainsMessages(
+          doc,
           messages("claimYourExpenses.eventTitle.psubs", 1),
           messages("claimYourExpenses.eventTitle.fre", 2),
           "claimYourExpenses.tag.claimStopped",
@@ -187,7 +192,8 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         )
         val doc = asDocument(view(testJourney)(fakeRequest, messages))
 
-        assertContainsMessages(doc,
+        assertContainsMessages(
+          doc,
           messages("claimYourExpenses.eventTitle.psubs", 1),
           messages("claimYourExpenses.eventTitle.fre", 2),
           "claimYourExpenses.tag.claimNotChanged",
@@ -197,4 +203,5 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
       }
     }
   }
+
 }

@@ -28,4 +28,5 @@ class ApprenticeStorekeeperPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](ShipyardApprenticeStorekeeperPage)
   }
+
 }

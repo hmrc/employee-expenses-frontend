@@ -90,16 +90,17 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   lazy val etag: Int = 123
 
-  lazy val validEtagJson: JsValue = Json.parse(
-    s"""
-       |{
-       |   "etag":"$etag"
-       |}
+  lazy val validEtagJson: JsValue = Json.parse(s"""
+                                                  |{
+                                                  |   "etag":"$etag"
+                                                  |}
     """.stripMargin)
 
-  lazy val taiEmployment: Seq[Employment] = Seq(Employment(
-    name = "HMRC LongBenton"
-  ))
+  lazy val taiEmployment: Seq[Employment] = Seq(
+    Employment(
+      name = "HMRC LongBenton"
+    )
+  )
 
   lazy val emptyAddress = Address(
     None,
@@ -112,53 +113,135 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
   )
 
   lazy val checkYourAnswersTextNoFre: CheckYourAnswersText =
-    CheckYourAnswersText(heading = "title", disclaimerHeading = "claimExpenses", disclaimer = "confirmInformationNoFre", button = "acceptClaimExpenses")
+    CheckYourAnswersText(
+      heading = "title",
+      disclaimerHeading = "claimExpenses",
+      disclaimer = "confirmInformationNoFre",
+      button = "acceptClaimExpenses"
+    )
+
   lazy val checkYourAnswersTextStopFre: CheckYourAnswersText =
-    CheckYourAnswersText(heading = "heading", disclaimerHeading = "stopClaim", disclaimer = "confirmInformationChangeFre", button = "acceptStopClaim")
+    CheckYourAnswersText(
+      heading = "heading",
+      disclaimerHeading = "stopClaim",
+      disclaimer = "confirmInformationChangeFre",
+      button = "acceptStopClaim"
+    )
+
   lazy val checkYourAnswersTextChangeFre: CheckYourAnswersText =
-    CheckYourAnswersText(heading = "title", disclaimerHeading = "changeClaim", disclaimer = "confirmInformationChangeFre", button = "acceptChangeClaim")
+    CheckYourAnswersText(
+      heading = "title",
+      disclaimerHeading = "changeClaim",
+      disclaimer = "confirmInformationChangeFre",
+      button = "acceptChangeClaim"
+    )
 
   def currentYearFullUserAnswers: UserAnswers = emptyUserAnswers
-    .set(FirstIndustryOptionsPage, Healthcare).success.value
-    .set(HealthcareList1Page , true).success.value
-    .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
-    .set(ExpensesEmployerPaidPage, 123).success.value
-    .set(SameEmployerContributionAllYearsPage, true).success.value
-    .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
-    .set(YourAddressPage, true).success.value
-    .set(YourEmployerPage, true).success.value
-    .set(CitizenDetailsAddress, address).success.value
-    .set(ClaimAmount, 200).success.value
-    .set(ClaimAmountAndAnyDeductions, 80).success.value
-    .set(FREResponse, FRENoYears).success.value
+    .set(FirstIndustryOptionsPage, Healthcare)
+    .success
+    .value
+    .set(HealthcareList1Page, true)
+    .success
+    .value
+    .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution)
+    .success
+    .value
+    .set(ExpensesEmployerPaidPage, 123)
+    .success
+    .value
+    .set(SameEmployerContributionAllYearsPage, true)
+    .success
+    .value
+    .set(TaxYearSelectionPage, Seq(CurrentYear))
+    .success
+    .value
+    .set(YourAddressPage, true)
+    .success
+    .value
+    .set(YourEmployerPage, true)
+    .success
+    .value
+    .set(CitizenDetailsAddress, address)
+    .success
+    .value
+    .set(ClaimAmount, 200)
+    .success
+    .value
+    .set(ClaimAmountAndAnyDeductions, 80)
+    .success
+    .value
+    .set(FREResponse, FRENoYears)
+    .success
+    .value
 
   val currentYearMinus1UserAnswers = emptyUserAnswers
-    .set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
-    .set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
-    .set(YourAddressPage, true).success.value
-    .set(YourEmployerPage, true).success.value
-    .set(ClaimAmount, 100).success.value
-    .set(ClaimAmountAndAnyDeductions, 80).success.value
-    .set(FREResponse, FRENoYears).success.value
+    .set(EmployerContributionPage, EmployerContribution.NoEmployerContribution)
+    .success
+    .value
+    .set(TaxYearSelectionPage, Seq(CurrentYearMinus1))
+    .success
+    .value
+    .set(YourAddressPage, true)
+    .success
+    .value
+    .set(YourEmployerPage, true)
+    .success
+    .value
+    .set(ClaimAmount, 100)
+    .success
+    .value
+    .set(ClaimAmountAndAnyDeductions, 80)
+    .success
+    .value
+    .set(FREResponse, FRENoYears)
+    .success
+    .value
 
   def yearsUserAnswers(years: Seq[TaxYearSelection]) = emptyUserAnswers
-    .set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
-    .set(TaxYearSelectionPage, years).success.value
-    .set(YourAddressPage, true).success.value
-    .set(YourEmployerPage, true).success.value
-    .set(ClaimAmount, 100).success.value
-    .set(ClaimAmountAndAnyDeductions, 80).success.value
-    .set(FREResponse, FRENoYears).success.value
-    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
-
+    .set(EmployerContributionPage, EmployerContribution.NoEmployerContribution)
+    .success
+    .value
+    .set(TaxYearSelectionPage, years)
+    .success
+    .value
+    .set(YourAddressPage, true)
+    .success
+    .value
+    .set(YourEmployerPage, true)
+    .success
+    .value
+    .set(ClaimAmount, 100)
+    .success
+    .value
+    .set(ClaimAmountAndAnyDeductions, 80)
+    .success
+    .value
+    .set(FREResponse, FRENoYears)
+    .success
+    .value
+    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+    .success
+    .value
 
   def minimumUserAnswers: UserAnswers = emptyUserAnswers
-    .set(FirstIndustryOptionsPage, Retail).success.value
-    .set(EmployerContributionPage, EmployerContribution.NoEmployerContribution).success.value
-    .set(ClaimAmountAndAnyDeductions, 60).success.value
-    .set(TaxYearSelectionPage, Seq(CurrentYear)).success.value
-    .set(AlreadyClaimingFRESameAmountPage, Remove).success.value
-    .set(RemoveFRECodePage, CurrentYear).success.value
+    .set(FirstIndustryOptionsPage, Retail)
+    .success
+    .value
+    .set(EmployerContributionPage, EmployerContribution.NoEmployerContribution)
+    .success
+    .value
+    .set(ClaimAmountAndAnyDeductions, 60)
+    .success
+    .value
+    .set(TaxYearSelectionPage, Seq(CurrentYear))
+    .success
+    .value
+    .set(AlreadyClaimingFRESameAmountPage, Remove)
+    .success
+    .value
+    .set(RemoveFRECodePage, CurrentYear)
+    .success
+    .value
 
   def emptyUserAnswers = UserAnswers()
 
@@ -174,8 +257,10 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   implicit def messages: Messages = messagesApi.preferred(fakeRequest)
 
-  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None,
-                                   onwardRoute: Option[Call] = None): GuiceApplicationBuilder = {
+  protected def applicationBuilder(
+      userAnswers: Option[UserAnswers] = None,
+      onwardRoute: Option[Call] = None
+  ): GuiceApplicationBuilder = {
 
     val default = new GuiceApplicationBuilder()
       .overrides(
@@ -184,13 +269,16 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
         bind[MergedJourneyIdentifierAction].to[FakeMergedJourneyIdentifierAction],
         bind[UnauthenticatedIdentifierAction].to[FakeUnauthenticatedIdentifierAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers)),
-        bind[FormPartialRetriever].to[MockEeFormPartialRetriever],
+        bind[FormPartialRetriever].to[MockEeFormPartialRetriever]
       )
 
     onwardRoute match {
       case Some(onward) =>
-        default.overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onward)))
+        default.overrides(
+          bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onward))
+        )
       case None => default
     }
   }
+
 }

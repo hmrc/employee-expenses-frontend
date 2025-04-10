@@ -27,4 +27,5 @@ class EmployerContributionFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[EmployerContribution]("employerContribution.error.required")
     )
+
 }

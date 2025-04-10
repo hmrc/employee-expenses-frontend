@@ -22,7 +22,7 @@ import play.api.data.FormError
 class IronSteelOccupationListFormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "ironSteelOccupationList.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new IronSteelOccupationListFormProvider()()
 
@@ -30,16 +30,21 @@ class IronSteelOccupationListFormProviderSpec extends BooleanFieldBehaviours {
 
     val fieldName = "value"
 
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+    behave.like(
+      booleanField(
+        form,
+        fieldName,
+        invalidError = FormError(fieldName, invalidKey)
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

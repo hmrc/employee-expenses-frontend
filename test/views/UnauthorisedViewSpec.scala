@@ -32,12 +32,15 @@ class UnauthorisedViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(sessionId)(fakeRequest, messages)
 
-    behave like normalPage(applyView, "unauthorised")
+    behave.like(normalPage(applyView, "unauthorised"))
 
-    behave like pageWithBodyText(applyView,
-      "unauthorised.paragraph.one",
-      "unauthorised.paragraph.two",
-      "unauthorised.signIn.text"
+    behave.like(
+      pageWithBodyText(
+        applyView,
+        "unauthorised.paragraph.one",
+        "unauthorised.paragraph.two",
+        "unauthorised.signIn.text"
+      )
     )
   }
 

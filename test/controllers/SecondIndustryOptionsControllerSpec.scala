@@ -39,8 +39,14 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
-  with ScalaFutures with IntegrationPatience with ScalaCheckPropertyChecks with Generators with OptionValues {
+class SecondIndustryOptionsControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience
+    with ScalaCheckPropertyChecks
+    with Generators
+    with OptionValues {
 
   private val userAnswers = emptyUserAnswers
 
@@ -81,7 +87,7 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -90,16 +96,14 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
 
       val secondIndustryOptions: Gen[SecondIndustryOptions] = Gen.oneOf(SecondIndustryOptions.values)
 
-      forAll(secondIndustryOptions) {
-        secondIndustryOption =>
+      forAll(secondIndustryOptions) { secondIndustryOption =>
+        val request = FakeRequest(POST, secondIndustryOptionsRoute)
+          .withFormUrlEncodedBody(("value", secondIndustryOption.toString))
+        val result = route(application, request).value
 
-          val request = FakeRequest(POST, secondIndustryOptionsRoute)
-            .withFormUrlEncodedBody(("value", secondIndustryOption.toString))
-          val result = route(application, request).value
+        status(result) mustEqual SEE_OTHER
 
-          status(result) mustEqual SEE_OTHER
-
-          redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual onwardRoute.url
       }
 
       application.stop()
@@ -154,17 +158,25 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
     for (choice <- SecondIndustryOptions.values) {
 
       val userAnswers2 = choice match {
-        case Education => userAnswers
-          .set(SecondIndustryOptionsPage, choice).success.value
-          .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-        case _ => userAnswers
-          .set(SecondIndustryOptionsPage, choice).success.value
+        case Education =>
+          userAnswers
+            .set(SecondIndustryOptionsPage, choice)
+            .success
+            .value
+            .set(ClaimAmount, ClaimAmounts.defaultRate)
+            .success
+            .value
+        case _ =>
+          userAnswers
+            .set(SecondIndustryOptionsPage, choice)
+            .success
+            .value
       }
 
-     s"save correct data when '$choice' is selected " in {
-       val mockSessionRepository = mock[SessionRepository]
+      s"save correct data when '$choice' is selected " in {
+        val mockSessionRepository = mock[SessionRepository]
 
-       when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
@@ -173,13 +185,11 @@ class SecondIndustryOptionsControllerSpec extends SpecBase with MockitoSugar
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
-            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-        }
+        whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
         application.stop()
       }
     }
   }
+
 }

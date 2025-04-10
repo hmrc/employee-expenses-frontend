@@ -76,11 +76,13 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute))
+          )
           .build()
 
       val request =
@@ -146,7 +148,7 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
     "save 'true' when 'Yes' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -157,12 +159,11 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(IronMiningPage, true).success.value
+        .set(IronMiningPage, true)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -170,7 +171,7 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
     "save 'false' when 'No' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -181,14 +182,14 @@ class IronMiningControllerSpec extends SpecBase with ScalaFutures with MockitoSu
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(IronMiningPage, false).success.value
+        .set(IronMiningPage, false)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

@@ -36,7 +36,12 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
+class CateringStaffNHSControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with IntegrationPatience
+    with OptionValues
+    with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -75,7 +80,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -147,7 +152,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
     val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+    when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
     val ua1 = emptyUserAnswers
 
@@ -159,12 +164,15 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
       .withFormUrlEncodedBody(("value", "true"))
 
     val ua2 = ua1
-      .set(ClaimAmount, ClaimAmounts.Healthcare.catering).success.value
-      .set(CateringStaffNHSPage, true).success.value
+      .set(ClaimAmount, ClaimAmounts.Healthcare.catering)
+      .success
+      .value
+      .set(CateringStaffNHSPage, true)
+      .success
+      .value
 
-    whenReady(route(application, request).value) {
-      _ =>
-        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+    whenReady(route(application, request).value) { _ =>
+      verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
     }
 
     application.stop()
@@ -174,7 +182,7 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
 
     val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+    when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
     val ua1 = emptyUserAnswers
 
@@ -186,14 +194,18 @@ class CateringStaffNHSControllerSpec extends SpecBase with ScalaFutures with Int
       .withFormUrlEncodedBody(("value", "false"))
 
     val ua2 = ua1
-      .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-      .set(CateringStaffNHSPage, false).success.value
+      .set(ClaimAmount, ClaimAmounts.defaultRate)
+      .success
+      .value
+      .set(CateringStaffNHSPage, false)
+      .success
+      .value
 
-    whenReady(route(application, request).value) {
-      _ =>
-        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+    whenReady(route(application, request).value) { _ =>
+      verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
     }
 
     application.stop()
   }
+
 }

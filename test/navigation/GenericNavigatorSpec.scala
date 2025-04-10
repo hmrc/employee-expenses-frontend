@@ -54,7 +54,7 @@ class GenericNavigatorSpec extends SpecBase {
           TaxYearSelectionController.onPageLoad(NormalMode)
       }
 
-      //MultipleEmploymentsPage
+      // MultipleEmploymentsPage
 
       "go to ClaimByAlternativeController from MultipleEmploymentsPage when 'Yes' is selected" in {
         val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.MoreThanOneJob).success.value
@@ -75,7 +75,7 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //FirstIndustryOptionsPage
+      // FirstIndustryOptionsPage
 
       "go to TypeOfEngineeringController from FirstIndustryOptionsPage when Engineering is selected" in {
         val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, Engineering).success.value
@@ -124,7 +124,7 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //SecondIndustryOptionsPage
+      // SecondIndustryOptionsPage
 
       "go to ConstructionOccupationsController from SecondIndustryOptionsPage when 'Construction' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
@@ -147,14 +147,14 @@ class GenericNavigatorSpec extends SpecBase {
           controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(NormalMode)
       }
 
-      "go to SpecialConstableController from SecondIndustryOptionsPage when 'Police' is selected" in{
+      "go to SpecialConstableController from SecondIndustryOptionsPage when 'Police' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Police).success.value
 
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
           controllers.police.routes.SpecialConstableController.onPageLoad(NormalMode)
       }
 
-      "go to ThirdIndustryOptionsController from SecondIndustryOptionsPage when 'None of the above' is selected" in{
+      "go to ThirdIndustryOptionsController from SecondIndustryOptionsPage when 'None of the above' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, SecondIndustryOptions.NoneOfAbove).success.value
 
         navigator.nextPage(SecondIndustryOptionsPage, NormalMode)(answers) mustBe
@@ -166,7 +166,7 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //ThirdIndustryOptionsPage
+      // ThirdIndustryOptionsPage
 
       "go EmployerContributionController from ThirdIndustryOptionsPage when Banks and Building Societies is selected" in {
         val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, BanksBuildingSocieties).success.value
@@ -215,7 +215,7 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //FourthIndustryOptionsPage
+      // FourthIndustryOptionsPage
 
       "go EmployerContributionController from FourthIndustryOptionsPage when 'agriculture' is selected" in {
         val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Agriculture).success.value
@@ -224,7 +224,7 @@ class GenericNavigatorSpec extends SpecBase {
           EmployerContributionController.onPageLoad(NormalMode)
       }
 
-      "go to ClothingController from FourthIndustryOptionsPage when 'ClothingTextiles' is selected" in{
+      "go to ClothingController from FourthIndustryOptionsPage when 'ClothingTextiles' is selected" in {
         val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, ClothingTextiles).success.value
 
         navigator.nextPage(FourthIndustryOptionsPage, NormalMode)(answers) mustBe
@@ -265,7 +265,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       }
 
-      //FifthIndustryOptionsPage
+      // FifthIndustryOptionsPage
 
       "go to CannotClaimExpenseController from FifthIndustryOptionsPage when 'Armed forces' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Armedforces).success.value
@@ -314,17 +314,19 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //EmployerContributionPage
+      // EmployerContributionPage
 
       "go to ClaimAmount from EmployerContributionPage when 'None' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
+        val answers =
+          emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.NoEmployerContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
           ClaimAmountController.onPageLoad(NormalMode)
       }
 
       "go to ExpensesEmployerPaidController from EmployerContributionPage when 'Some' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage,  EmployerContribution.YesEmployerContribution).success.value
+        val answers =
+          emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, NormalMode)(answers) mustBe
           ExpensesEmployerPaidController.onPageLoad(NormalMode)
@@ -335,10 +337,10 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //ExpensesEmployerPaidPage
+      // ExpensesEmployerPaidPage
 
       "go to CannotClaimController from ExpensesEmployerPaidPage if ClaimAmount is <= ExpensesEmployerPaid" in {
-        val answers = emptyUserAnswers.set(ExpensesEmployerPaidPage, 100).success.value
+        val answers        = emptyUserAnswers.set(ExpensesEmployerPaidPage, 100).success.value
         val updatedAnswers = answers.set(ClaimAmount, 100).success.value
 
         navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(updatedAnswers) mustBe
@@ -346,7 +348,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SameEmployerContributionAllYearsController from ExpensesEmployerPaidPage if ClaimAmount is > ExpensesEmployerPaid" in {
-        val answers = emptyUserAnswers.set(ExpensesEmployerPaidPage, 50).success.value
+        val answers        = emptyUserAnswers.set(ExpensesEmployerPaidPage, 50).success.value
         val updatedAnswers = answers.set(ClaimAmount, 100).success.value
 
         navigator.nextPage(ExpensesEmployerPaidPage, NormalMode)(updatedAnswers) mustBe
@@ -358,7 +360,7 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //SameEmployerContributionAllYearsPage
+      // SameEmployerContributionAllYearsPage
       "go to ClaimAmountController from SameEmployerContributionAllYearsPage if true" in {
         val answers = emptyUserAnswers.set(SameEmployerContributionAllYearsPage, true).success.value
 
@@ -379,7 +381,9 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to TaxYearSelectionController from ClaimAmountPage" in {
-        navigator.nextPage(ClaimAmount, NormalMode)(emptyUserAnswers) mustBe TaxYearSelectionController.onPageLoad(NormalMode)
+        navigator.nextPage(ClaimAmount, NormalMode)(emptyUserAnswers) mustBe TaxYearSelectionController.onPageLoad(
+          NormalMode
+        )
       }
     }
 
@@ -391,17 +395,19 @@ class GenericNavigatorSpec extends SpecBase {
         navigator.nextPage(UnknownPage, CheckMode)(UserAnswers()) mustBe CheckYourAnswersController.onPageLoad
       }
 
-      //EmployerContributionPage
+      // EmployerContributionPage
 
       "go to ClaimAmount from EmployerContributionPage when 'None' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage,  EmployerContribution.NoEmployerContribution).success.value
+        val answers =
+          emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.NoEmployerContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, CheckMode)(answers) mustBe
           ClaimAmountController.onPageLoad(CheckMode)
       }
 
       "go to ExpensesEmployerPaidController from EmployerContributionPage when 'Some' is selected" in {
-        val answers = emptyUserAnswers.set(EmployerContributionPage,  EmployerContribution.YesEmployerContribution).success.value
+        val answers =
+          emptyUserAnswers.set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
 
         navigator.nextPage(EmployerContributionPage, CheckMode)(answers) mustBe
           ExpensesEmployerPaidController.onPageLoad(CheckMode)
@@ -412,10 +418,10 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //ExpensesEmployerPaidPage
+      // ExpensesEmployerPaidPage
 
       "go to CannotClaimController from ExpensesEmployerPaidPage if ClaimAmount is <= ExpensesEmployerPaid" in {
-        val answers = emptyUserAnswers.set(ExpensesEmployerPaidPage, 100).success.value
+        val answers        = emptyUserAnswers.set(ExpensesEmployerPaidPage, 100).success.value
         val updatedAnswers = answers.set(ClaimAmount, 100).success.value
 
         navigator.nextPage(ExpensesEmployerPaidPage, CheckMode)(updatedAnswers) mustBe
@@ -423,7 +429,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to SameEmployerContributionAllYearsController from ExpensesEmployerPaidPage if ClaimAmount is > ExpensesEmployerPaid" in {
-        val answers = emptyUserAnswers.set(ExpensesEmployerPaidPage, 50).success.value
+        val answers        = emptyUserAnswers.set(ExpensesEmployerPaidPage, 50).success.value
         val updatedAnswers = answers.set(ClaimAmount, 100).success.value
 
         navigator.nextPage(ExpensesEmployerPaidPage, CheckMode)(updatedAnswers) mustBe
@@ -435,7 +441,7 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //SameEmployerContributionAllYearsPage
+      // SameEmployerContributionAllYearsPage
       "go to ClaimAmountController from SameEmployerContributionAllYearsPage if true" in {
         val answers = emptyUserAnswers.set(SameEmployerContributionAllYearsPage, true).success.value
 
@@ -459,8 +465,7 @@ class GenericNavigatorSpec extends SpecBase {
         navigator.nextPage(ClaimAmount, CheckMode)(emptyUserAnswers) mustBe CheckYourAnswersController.onPageLoad
       }
 
-
-      //MultipleEmploymentsPage
+      // MultipleEmploymentsPage
 
       "go to ClaimByAlternativeController from MultipleEmploymentsPage when 'Yes' is selected" in {
         val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.MoreThanOneJob).success.value
@@ -481,7 +486,7 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //FirstIndustryOptionsPage
+      // FirstIndustryOptionsPage
 
       "go to TypeOfEngineeringController from FirstIndustryOptionsPage when Engineering is selected" in {
         val answers = emptyUserAnswers.set(FirstIndustryOptionsPage, Engineering).success.value
@@ -530,7 +535,7 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //SecondIndustryOptionsPage
+      // SecondIndustryOptionsPage
 
       "go to ConstructionOccupationsController from SecondIndustryOptionsPage when 'Construction' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Construction).success.value
@@ -553,14 +558,14 @@ class GenericNavigatorSpec extends SpecBase {
           controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(CheckMode)
       }
 
-      "go to SpecialConstableController from SecondIndustryOptionsPage when 'Police' is selected" in{
+      "go to SpecialConstableController from SecondIndustryOptionsPage when 'Police' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, Police).success.value
 
         navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
           controllers.police.routes.SpecialConstableController.onPageLoad(CheckMode)
       }
 
-      "go to ThirdIndustryOptionsController from SecondIndustryOptionsPage when 'None of the above' is selected" in{
+      "go to ThirdIndustryOptionsController from SecondIndustryOptionsPage when 'None of the above' is selected" in {
         val answers = emptyUserAnswers.set(SecondIndustryOptionsPage, SecondIndustryOptions.NoneOfAbove).success.value
 
         navigator.nextPage(SecondIndustryOptionsPage, CheckMode)(answers) mustBe
@@ -572,7 +577,7 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //ThirdIndustryOptionsPage
+      // ThirdIndustryOptionsPage
 
       "go EmployerContributionController from ThirdIndustryOptionsPage when Banks and Building Societies is selected" in {
         val answers = emptyUserAnswers.set(ThirdIndustryOptionsPage, BanksBuildingSocieties).success.value
@@ -621,7 +626,7 @@ class GenericNavigatorSpec extends SpecBase {
           SessionExpiredController.onPageLoad
       }
 
-      //FourthIndustryOptionsPage
+      // FourthIndustryOptionsPage
 
       "go EmployerContributionController from FourthIndustryOptionsPage when 'agriculture' is selected" in {
         val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, Agriculture).success.value
@@ -630,7 +635,7 @@ class GenericNavigatorSpec extends SpecBase {
           EmployerContributionController.onPageLoad(CheckMode)
       }
 
-      "go to ClothingController from FourthIndustryOptionsPage when 'ClothingTextiles' is selected" in{
+      "go to ClothingController from FourthIndustryOptionsPage when 'ClothingTextiles' is selected" in {
         val answers = emptyUserAnswers.set(FourthIndustryOptionsPage, ClothingTextiles).success.value
 
         navigator.nextPage(FourthIndustryOptionsPage, CheckMode)(answers) mustBe
@@ -671,7 +676,7 @@ class GenericNavigatorSpec extends SpecBase {
 
       }
 
-      //FifthIndustryOptionsPage
+      // FifthIndustryOptionsPage
 
       "go to CannotClaimExpenseController from FifthIndustryOptionsPage when 'Armed forces' is selected" in {
         val answers = emptyUserAnswers.set(FifthIndustryOptionsPage, Armedforces).success.value

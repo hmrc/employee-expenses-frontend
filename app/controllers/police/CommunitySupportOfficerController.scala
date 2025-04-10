@@ -33,50 +33,52 @@ import views.html.police.CommunitySupportOfficerView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CommunitySupportOfficerController @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   @Named(NavConstant.police) navigator: Navigator,
-                                                   identify: UnauthenticatedIdentifierAction,
-                                                   getData: DataRetrievalAction,
-                                                   requireData: DataRequiredAction,
-                                                   formProvider: CommunitySupportOfficerFormProvider,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   view: CommunitySupportOfficerView,
-                                                   sessionRepository: SessionRepository
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class CommunitySupportOfficerController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.police) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: CommunitySupportOfficerFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: CommunitySupportOfficerView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(CommunitySupportOfficerPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(CommunitySupportOfficerPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <-
+                if (value) {
+                  Future.fromTry(
+                    request.userAnswers
+                      .set(CommunitySupportOfficerPage, value)
+                      .flatMap(_.set(ClaimAmount, ClaimAmounts.Police.communitySupportOfficer))
+                  )
+                } else {
+                  Future.fromTry(request.userAnswers.set(CommunitySupportOfficerPage, value))
+                }
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(CommunitySupportOfficerPage, mode)(updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <- if (value) {
-              Future.fromTry(request.userAnswers.set(CommunitySupportOfficerPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Police.communitySupportOfficer))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(CommunitySupportOfficerPage, value))
-            }
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(CommunitySupportOfficerPage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

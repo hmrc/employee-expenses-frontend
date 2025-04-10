@@ -37,11 +37,16 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with OptionValues {
+class SecurityGuardNHSControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience
+    with OptionValues {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val userAnswers = emptyUserAnswers
+  private val userAnswers                = emptyUserAnswers
   lazy val securityGuardNHSRoute: String = routes.SecurityGuardNHSController.onPageLoad(NormalMode).url
 
   "SecurityGuardNHS Controller" must {
@@ -77,7 +82,7 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -85,7 +90,7 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
           .build()
 
       val request = FakeRequest(POST, securityGuardNHSRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -146,7 +151,7 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
     "save 'nhsSecurity' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -156,13 +161,14 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Security.nhsSecurity).success.value
-        .set(SecurityGuardNHSPage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Security.nhsSecurity)
+        .success
+        .value
+        .set(SecurityGuardNHSPage, true)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -170,7 +176,7 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
     "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -180,14 +186,16 @@ class SecurityGuardNHSControllerSpec extends SpecBase with MockitoSugar with Sca
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-        .set(SecurityGuardNHSPage, false).success.value
+        .set(ClaimAmount, ClaimAmounts.defaultRate)
+        .success
+        .value
+        .set(SecurityGuardNHSPage, false)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
       application.stop()
     }
   }
+
 }

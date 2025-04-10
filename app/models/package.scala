@@ -22,6 +22,7 @@ package object models {
 
     def setObject(path: JsPath, value: JsValue): JsResult[JsObject] =
       jsObject.set(path, value).flatMap(_.validate[JsObject])
+
   }
 
   implicit class RichJsValue(jsValue: JsValue) {
@@ -42,26 +43,26 @@ package object models {
           setKeyNode(n, jsValue, value)
 
         case (first :: second :: rest, oldValue) =>
-          Reads.optionNoError(Reads.at[JsValue](JsPath(first :: Nil)))
-            .reads(oldValue).flatMap {
-            opt =>
-
-              opt.map(JsSuccess(_)).getOrElse {
-                second match {
-                  case _: KeyPathNode =>
-                    JsSuccess(Json.obj())
-                  case _: IdxPathNode =>
-                    JsSuccess(Json.arr())
-                  case _: RecursiveSearch =>
-                    JsError("recursive search is not supported")
+          Reads
+            .optionNoError(Reads.at[JsValue](JsPath(first :: Nil)))
+            .reads(oldValue)
+            .flatMap { opt =>
+              opt
+                .map(JsSuccess(_))
+                .getOrElse {
+                  second match {
+                    case _: KeyPathNode =>
+                      JsSuccess(Json.obj())
+                    case _: IdxPathNode =>
+                      JsSuccess(Json.arr())
+                    case _: RecursiveSearch =>
+                      JsError("recursive search is not supported")
+                  }
                 }
-              }.flatMap {
-                _.set(JsPath(second :: rest), value).flatMap {
-                  newValue =>
-                    oldValue.set(JsPath(first :: Nil), newValue)
+                .flatMap {
+                  _.set(JsPath(second :: rest), value).flatMap(newValue => oldValue.set(JsPath(first :: Nil), newValue))
                 }
-              }
-          }
+            }
       }
 
     private def setIndexNode(node: IdxPathNode, oldValue: JsValue, newValue: JsValue): JsResult[JsValue] = {
@@ -93,5 +94,7 @@ package object models {
           JsError(s"cannot set a key on $oldValue")
       }
     }
+
   }
+
 }

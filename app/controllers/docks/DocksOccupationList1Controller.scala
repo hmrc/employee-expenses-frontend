@@ -34,52 +34,55 @@ import views.html.docks.DocksOccupationList1View
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DocksOccupationList1Controller @Inject()(
-                                                override val messagesApi: MessagesApi,
-                                                sessionRepository: SessionRepository,
-                                                @Named(docks) navigator: Navigator,
-                                                identify: UnauthenticatedIdentifierAction,
-                                                getData: DataRetrievalAction,
-                                                requireData: DataRequiredAction,
-                                                formProvider: DocksOccupationList1FormProvider,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: DocksOccupationList1View
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class DocksOccupationList1Controller @Inject() (
+    override val messagesApi: MessagesApi,
+    sessionRepository: SessionRepository,
+    @Named(docks) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: DocksOccupationList1FormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: DocksOccupationList1View
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(DocksOccupationList1Page) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(DocksOccupationList1Page) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+        value =>
           for {
             updatedAnswers <- value match {
               case true =>
-                Future.fromTry(request.userAnswers.set(DocksOccupationList1Page, value)
-                  .flatMap(_.set(ClaimAmount, ClaimAmounts.docksAndWaterways))
+                Future.fromTry(
+                  request.userAnswers
+                    .set(DocksOccupationList1Page, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.docksAndWaterways))
                 )
-              case false => Future.fromTry(request.userAnswers.set(DocksOccupationList1Page, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
-              )
+              case false =>
+                Future.fromTry(
+                  request.userAnswers
+                    .set(DocksOccupationList1Page, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
+                )
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(DocksOccupationList1Page, mode)(updatedAnswers))
-        }
       )
   }
+
 }

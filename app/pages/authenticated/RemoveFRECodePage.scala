@@ -28,11 +28,11 @@ case object RemoveFRECodePage extends QuestionPage[TaxYearSelection] {
 
   override def toString: String = "removeFRECode"
 
-  override def cleanup(value: Option[TaxYearSelection], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[TaxYearSelection], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(_) =>
         userAnswers.remove(ChangeWhichTaxYearsPage)
       case _ => super.cleanup(value, userAnswers)
     }
-  }
+
 }

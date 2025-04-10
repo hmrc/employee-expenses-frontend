@@ -39,13 +39,21 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures
-  with IntegrationPatience with ScalaCheckPropertyChecks with Generators with OptionValues with BeforeAndAfterEach {
+class FifthIndustryOptionsControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience
+    with ScalaCheckPropertyChecks
+    with Generators
+    with OptionValues
+    with BeforeAndAfterEach {
 
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
   override def beforeEach(): Unit = {
     reset(mockSessionRepository)
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+    when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
   }
 
   def onwardRoute: Call = Call("GET", "/foo")
@@ -89,7 +97,8 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
           .overrides(
             bind[Navigator].qualifiedWith(NavConstant.generic).toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, fifthIndustryOptionsRoute)
@@ -155,12 +164,22 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
 
     val userAnswers = emptyUserAnswers
     val userAnswers2 = trade match {
-      case Forestry => userAnswers
-        .set(FifthIndustryOptionsPage, trade).success.value
-        .set(ClaimAmount, ClaimAmounts.forestry).success.value
-      case NoneOfAbove => userAnswers
-        .set(FifthIndustryOptionsPage, trade).success.value
-        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
+      case Forestry =>
+        userAnswers
+          .set(FifthIndustryOptionsPage, trade)
+          .success
+          .value
+          .set(ClaimAmount, ClaimAmounts.forestry)
+          .success
+          .value
+      case NoneOfAbove =>
+        userAnswers
+          .set(FifthIndustryOptionsPage, trade)
+          .success
+          .value
+          .set(ClaimAmount, ClaimAmounts.defaultRate)
+          .success
+          .value
       case _ => userAnswers.set(FifthIndustryOptionsPage, trade).success.value
     }
 
@@ -172,18 +191,16 @@ class FifthIndustryOptionsControllerSpec extends SpecBase with MockitoSugar with
 
       val argCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
 
-      when(mockSessionRepository.set(any(), argCaptor.capture())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), argCaptor.capture())).thenReturn(Future.successful(true))
 
       val request = FakeRequest(POST, fifthIndustryOptionsRoute).withFormUrlEncodedBody(("value", trade.toString))
 
       val result = route(application, request).value
 
-      whenReady(result) {
-        _ =>
-          assert(argCaptor.getValue.data == userAnswers2.data)
-      }
+      whenReady(result)(_ => assert(argCaptor.getValue.data == userAnswers2.data))
 
       application.stop()
     }
   }
+
 }

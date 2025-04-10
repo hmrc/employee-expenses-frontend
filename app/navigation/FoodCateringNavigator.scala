@@ -24,19 +24,20 @@ import pages.foodCatering.CateringStaffNHSPage
 import play.api.mvc.Call
 
 @Singleton
-class FoodCateringNavigator @Inject()() extends Navigator {
+class FoodCateringNavigator @Inject() () extends Navigator {
 
-  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case CateringStaffNHSPage => cateringStaffNHSNav(NormalMode)
+  protected val routeMap: PartialFunction[Page, UserAnswers => Call] = { case CateringStaffNHSPage =>
+    cateringStaffNHSNav(NormalMode)
   }
 
-  protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case CateringStaffNHSPage => cateringStaffNHSNav(CheckMode)
+  protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = { case CateringStaffNHSPage =>
+    cateringStaffNHSNav(CheckMode)
   }
 
   def cateringStaffNHSNav(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(CateringStaffNHSPage) match {
       case Some(_) => EmployerContributionController.onPageLoad(mode)
-      case _ => SessionExpiredController.onPageLoad
+      case _       => SessionExpiredController.onPageLoad
     }
+
 }

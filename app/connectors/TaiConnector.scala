@@ -29,11 +29,9 @@ import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 import scala.reflect.ClassTag
 
-trait Defaulting extends Logging{
+trait Defaulting extends Logging {
 
-
-  def withDefaultToEmptySeq[T: ClassTag](response: HttpResponse)
-                                        (implicit reads: Reads[Seq[T]]): Seq[T] = {
+  def withDefaultToEmptySeq[T: ClassTag](response: HttpResponse)(implicit reads: Reads[Seq[T]]): Seq[T] =
 
     response.status match {
       case 200 =>
@@ -48,14 +46,18 @@ trait Defaulting extends Logging{
       case _ =>
         Seq.empty
     }
-  }
+
 }
 
 @Singleton
-class TaiConnector @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClientV2) extends HttpResponseHelper with Defaulting {
+class TaiConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClientV2)
+    extends HttpResponseHelper
+    with Defaulting {
 
-  def taiEmployments(nino: String, taxYear: TaiTaxYear)
-                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Employment]] = {
+  def taiEmployments(
+      nino: String,
+      taxYear: TaiTaxYear
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Employment]] = {
 
     val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/employments/years/${taxYear.year}"
 
@@ -65,10 +67,13 @@ class TaiConnector @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClien
       .map(withDefaultToEmptySeq[Employment])
   }
 
-  def getFlatRateExpense(nino: String, taxYear: TaiTaxYear)
-                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[FlatRateExpense]] = {
+  def getFlatRateExpense(
+      nino: String,
+      taxYear: TaiTaxYear
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[FlatRateExpense]] = {
 
-    val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/expenses/employee-expenses/${appConfig.flatRateExpenseId}"
+    val taiUrl: String =
+      s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/expenses/employee-expenses/${appConfig.flatRateExpenseId}"
 
     httpClient
       .get(url"$taiUrl")
@@ -76,10 +81,13 @@ class TaiConnector @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClien
       .map(withDefaultToEmptySeq[FlatRateExpense])
   }
 
-  def taiFREUpdate(nino: String, taxYear: TaiTaxYear, version: Int, grossAmount: Int)
-                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  def taiFREUpdate(nino: String, taxYear: TaiTaxYear, version: Int, grossAmount: Int)(
+      implicit hc: HeaderCarrier,
+      ec: ExecutionContext
+  ): Future[HttpResponse] = {
 
-    val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/expenses/employee-expenses/${appConfig.flatRateExpenseId}"
+    val taiUrl: String =
+      s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/expenses/employee-expenses/${appConfig.flatRateExpenseId}"
 
     val body: IabdEditDataRequest = IabdEditDataRequest(version, grossAmount)
 
@@ -89,8 +97,10 @@ class TaiConnector @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClien
       .execute[HttpResponse]
   }
 
-  def taiTaxCodeRecords(nino: String, taxYear: TaiTaxYear)
-                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
+  def taiTaxCodeRecords(
+      nino: String,
+      taxYear: TaiTaxYear
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
 
     val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/income/tax-code-incomes"
 
@@ -100,8 +110,10 @@ class TaiConnector @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClien
       .map(withDefaultToEmptySeq[TaxCodeRecord])
   }
 
-  def taiTaxAccountSummary(nino: String, taxYear: TaiTaxYear)
-                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  def taiTaxAccountSummary(
+      nino: String,
+      taxYear: TaiTaxYear
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
     val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/summary"
 
@@ -109,4 +121,5 @@ class TaiConnector @Inject()(appConfig: FrontendAppConfig, httpClient: HttpClien
       .get(url"$taiUrl")
       .execute[HttpResponse]
   }
+
 }

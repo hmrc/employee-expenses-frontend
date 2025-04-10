@@ -26,4 +26,5 @@ class ClothingFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("clothing.error.required")
     )
+
 }

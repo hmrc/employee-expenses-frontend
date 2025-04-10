@@ -27,4 +27,5 @@ class WhichRailwayTradeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[WhichRailwayTrade]("whichRailwayTrade.error.required")
     )
+
 }

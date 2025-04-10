@@ -31,48 +31,58 @@ import views.html.ClaimAmountView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ClaimAmountController @Inject()(
-                                       appConfig: FrontendAppConfig,
-                                       override val messagesApi: MessagesApi,
-                                       @Named(NavConstant.generic) navigator: Navigator,
-                                       identify: UnauthenticatedIdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: ClaimAmountView,
-                                       claimAmountService: ClaimAmountService,
-                                       config: FrontendAppConfig,
-                                       sessionRepository: SessionRepository
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class ClaimAmountController @Inject() (
+    appConfig: FrontendAppConfig,
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.generic) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    val controllerComponents: MessagesControllerComponents,
+    view: ClaimAmountView,
+    claimAmountService: ClaimAmountService,
+    config: FrontendAppConfig,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   import claimAmountService._
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-
-    implicit request =>
-      (request.userAnswers.get(EmployerContributionPage), request.userAnswers.get(ClaimAmount), request.userAnswers.get(ExpensesEmployerPaidPage)) match {
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      (
+        request.userAnswers.get(EmployerContributionPage),
+        request.userAnswers.get(ClaimAmount),
+        request.userAnswers.get(ExpensesEmployerPaidPage)
+      ) match {
         case (Some(_), Some(claimAmount), employerContribution) =>
           val claimAmountAndAnyDeductions: Int = calculateClaimAmount(request.userAnswers, claimAmount)
 
           for {
-            saveClaimAmountAndAnyDeductions <- Future.fromTry(request.userAnswers.set(ClaimAmountAndAnyDeductions, claimAmountAndAnyDeductions))
+            saveClaimAmountAndAnyDeductions <- Future.fromTry(
+              request.userAnswers.set(ClaimAmountAndAnyDeductions, claimAmountAndAnyDeductions)
+            )
             _ <- sessionRepository.set(request.identifier, saveClaimAmountAndAnyDeductions)
           } yield {
 
             val standardRate: StandardRate = claimAmountService.standardRate(claimAmountAndAnyDeductions)
             val scottishRate: ScottishRate = claimAmountService.scottishRate(claimAmountAndAnyDeductions)
 
-            Ok(view(
-              claimAmountAndAnyDeductions,
-              employerContribution,
-              standardRate,
-              scottishRate,
-              navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
-            ))
+            Ok(
+              view(
+                claimAmountAndAnyDeductions,
+                employerContribution,
+                standardRate,
+                scottishRate,
+                navigator.nextPage(ClaimAmount, mode)(request.userAnswers).url
+              )
+            )
           }
 
         case _ =>
           Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
       }
-  }
+    }
+
 }

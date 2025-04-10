@@ -23,7 +23,9 @@ import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeAuthedIdentifierAction @Inject()(bodyParsers: PlayBodyParsers) extends SpecBase with AuthenticatedIdentifierAction {
+class FakeAuthedIdentifierAction @Inject() (bodyParsers: PlayBodyParsers)
+    extends SpecBase
+    with AuthenticatedIdentifierAction {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
     block(IdentifierRequest(request, Authed(userAnswersId), Some(fakeNino)))
@@ -33,4 +35,5 @@ class FakeAuthedIdentifierAction @Inject()(bodyParsers: PlayBodyParsers) extends
 
   override protected def executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
+
 }

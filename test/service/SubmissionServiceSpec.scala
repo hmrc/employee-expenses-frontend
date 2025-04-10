@@ -32,25 +32,29 @@ import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with BeforeAndAfterEach with IntegrationPatience {
+class SubmissionServiceSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with BeforeAndAfterEach
+    with IntegrationPatience {
 
-  private val mockTaiService = mock[TaiService]
-  private val mockTaiConnector = mock[TaiConnector]
+  private val mockTaiService    = mock[TaiService]
+  private val mockTaiConnector  = mock[TaiConnector]
   private val submissionService = new SubmissionService(mockTaiService, mockTaiConnector)
 
-  private val currentTaxYear = Seq(CurrentYear)
-  private val taxYearsWithCurrentYear = Seq(CurrentYear, CurrentYearMinus1)
+  private val currentTaxYear             = Seq(CurrentYear)
+  private val taxYearsWithCurrentYear    = Seq(CurrentYear, CurrentYearMinus1)
   private val taxYearsWithoutCurrentYear = Seq(CurrentYearMinus1, CurrentYearMinus2)
-  private val claimAmount = 100
+  private val claimAmount                = 100
 
   override def beforeEach() = reset(mockTaiConnector)
-
 
   "SubmissionService" when {
     "getTaxYearsToUpdate" must {
       val beforeApril = LocalDate.of(LocalDate.now.getYear, 2, 4)
-      val afterApril = LocalDate.of(LocalDate.now.getYear, 6, 4)
-      val april5th = LocalDate.of(LocalDate.now.getYear, 4, 5)
+      val afterApril  = LocalDate.of(LocalDate.now.getYear, 6, 4)
+      val april5th    = LocalDate.of(LocalDate.now.getYear, 4, 5)
 
       "return correct taxYears when date is before April 6th and currentYear is passed in and no next year record" in {
 
@@ -59,10 +63,9 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
         val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear, beforeApril)
 
-        whenReady(result) {
-          result =>
-            result.length mustBe 1
-            result.contains(CurrentYear) mustBe true
+        whenReady(result) { result =>
+          result.length mustBe 1
+          result.contains(CurrentYear) mustBe true
         }
 
         verify(mockTaiConnector, times(1)).taiTaxAccountSummary(fakeNino, TaiTaxYear(getTaxYear(CurrentYear) + 1))
@@ -75,12 +78,11 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
         val result = submissionService.getTaxYearsToUpdate(fakeNino, taxYearsWithCurrentYear, beforeApril)
 
-        whenReady(result) {
-          result =>
-            result.length mustBe 3
-            result.contains(CurrentYear) mustBe true
-            result.contains(NextYear) mustBe true
-            result.contains(CurrentYearMinus1) mustBe true
+        whenReady(result) { result =>
+          result.length mustBe 3
+          result.contains(CurrentYear) mustBe true
+          result.contains(NextYear) mustBe true
+          result.contains(CurrentYearMinus1) mustBe true
         }
 
         verify(mockTaiConnector, times(1)).taiTaxAccountSummary(fakeNino, TaiTaxYear(getTaxYear(CurrentYear) + 1))
@@ -92,11 +94,10 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
         val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear, april5th)
 
-        whenReady(result) {
-          result =>
-            result.length mustBe 2
-            result.contains(CurrentYear) mustBe true
-            result.contains(NextYear) mustBe true
+        whenReady(result) { result =>
+          result.length mustBe 2
+          result.contains(CurrentYear) mustBe true
+          result.contains(NextYear) mustBe true
         }
 
         verify(mockTaiConnector, times(1)).taiTaxAccountSummary(fakeNino, TaiTaxYear(getTaxYear(CurrentYear) + 1))
@@ -106,10 +107,9 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
         val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear, afterApril)
 
-        whenReady(result) {
-          result =>
-            result.length mustBe 1
-            result.contains(CurrentYear) mustBe true
+        whenReady(result) { result =>
+          result.length mustBe 1
+          result.contains(CurrentYear) mustBe true
         }
 
         verify(mockTaiConnector, times(0)).taiTaxAccountSummary(fakeNino, TaiTaxYear(getTaxYear(CurrentYear) + 1))
@@ -121,11 +121,10 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
         val result = submissionService.getTaxYearsToUpdate(fakeNino, taxYearsWithoutCurrentYear, beforeApril)
 
-        whenReady(result) {
-          result =>
-            result.length mustBe 2
-            result.contains(CurrentYearMinus1) mustBe true
-            result.contains(CurrentYearMinus2) mustBe true
+        whenReady(result) { result =>
+          result.length mustBe 2
+          result.contains(CurrentYearMinus1) mustBe true
+          result.contains(CurrentYearMinus2) mustBe true
         }
       }
     }
@@ -140,10 +139,9 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
         val result: Future[Seq[HttpResponse]] = submissionService.submitFRE(fakeNino, currentTaxYear, claimAmount)
 
-        whenReady(result) {
-          res =>
-            res mustBe a[Seq[_]]
-            res.head.status mustBe 204
+        whenReady(result) { res =>
+          res mustBe a[Seq[_]]
+          res.head.status mustBe 204
         }
       }
 
@@ -156,10 +154,9 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
         val result = submissionService.submitFRE(fakeNino, currentTaxYear, claimAmount)
 
-        whenReady(result) {
-          res =>
-            res mustBe a[Seq[_]]
-            res.head.status mustBe 500
+        whenReady(result) { res =>
+          res mustBe a[Seq[_]]
+          res.head.status mustBe 500
         }
       }
     }
@@ -174,10 +171,9 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
         val result = submissionService.removeFRE(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
 
-        whenReady(result) {
-          res =>
-            res mustBe a[Seq[_]]
-            res.head.status mustBe 204
+        whenReady(result) { res =>
+          res mustBe a[Seq[_]]
+          res.head.status mustBe 204
         }
       }
 
@@ -190,12 +186,12 @@ class SubmissionServiceSpec extends SpecBase with MockitoSugar with ScalaFutures
 
         val result = submissionService.removeFRE(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
 
-        whenReady(result) {
-          res =>
-            res mustBe a[Seq[_]]
-            res.head.status mustBe 500
+        whenReady(result) { res =>
+          res mustBe a[Seq[_]]
+          res.head.status mustBe 500
         }
       }
     }
   }
+
 }

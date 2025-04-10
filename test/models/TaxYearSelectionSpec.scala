@@ -72,10 +72,18 @@ class TaxYearSelectionSpec extends SpecBase with MockitoSugar {
       val taxYearOptions: Seq[RadioCheckboxOption] = TaxYearSelection.options
 
       taxYearOptions.head.message.string mustBe s"6 April ${TaxYear.current.startYear} to 5 April ${TaxYear.current.finishYear} (the current tax year)"
-      taxYearOptions(1).message.string mustBe s"6 April ${TaxYear.current.back(1).startYear} to 5 April ${TaxYear.current.back(1).finishYear}"
-      taxYearOptions(2).message.string mustBe s"6 April ${TaxYear.current.back(2).startYear} to 5 April ${TaxYear.current.back(2).finishYear}"
-      taxYearOptions(3).message.string mustBe s"6 April ${TaxYear.current.back(3).startYear} to 5 April ${TaxYear.current.back(3).finishYear}"
-      taxYearOptions(4).message.string mustBe s"6 April ${TaxYear.current.back(4).startYear} to 5 April ${TaxYear.current.back(4).finishYear}"
+      taxYearOptions(
+        1
+      ).message.string mustBe s"6 April ${TaxYear.current.back(1).startYear} to 5 April ${TaxYear.current.back(1).finishYear}"
+      taxYearOptions(
+        2
+      ).message.string mustBe s"6 April ${TaxYear.current.back(2).startYear} to 5 April ${TaxYear.current.back(2).finishYear}"
+      taxYearOptions(
+        3
+      ).message.string mustBe s"6 April ${TaxYear.current.back(3).startYear} to 5 April ${TaxYear.current.back(3).finishYear}"
+      taxYearOptions(
+        4
+      ).message.string mustBe s"6 April ${TaxYear.current.back(4).startYear} to 5 April ${TaxYear.current.back(4).finishYear}"
     }
 
     "return the correct values" in {
@@ -107,18 +115,16 @@ class TaxYearSelectionSpec extends SpecBase with MockitoSugar {
   "taxYearStartString" must {
     "return the year the tax year started as a String" in {
       val currentTaxYear = TaxYear.current.startYear
-      for (yearsBack <- 0 to 4) {
+      for (yearsBack <- 0 to 4)
         taxYearStartString(yearsBack) mustBe (currentTaxYear - yearsBack).toString
-      }
     }
   }
 
   "taxYearEndString" must {
     "return the year the tax year ended as a String" in {
       val currentTaxYear = TaxYear.current.finishYear
-      for (yearsBack <- 0 to 4) {
+      for (yearsBack <- 0 to 4)
         taxYearEndString(yearsBack) mustBe (currentTaxYear - yearsBack).toString
-      }
     }
   }
 
@@ -143,4 +149,5 @@ class TaxYearSelectionSpec extends SpecBase with MockitoSugar {
       containsPrevious(taxYearSelection) mustBe false
     }
   }
+
 }

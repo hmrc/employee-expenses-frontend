@@ -23,7 +23,7 @@ import play.api.data.FormError
 class ConstructionOccupationList2FormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "constructionOccupationList2.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new ConstructionOccupationList2FormProvider()()
 
@@ -31,16 +31,21 @@ class ConstructionOccupationList2FormProviderSpec extends BooleanFieldBehaviours
 
     val fieldName = "value"
 
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+    behave.like(
+      booleanField(
+        form,
+        fieldName,
+        invalidError = FormError(fieldName, invalidKey)
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

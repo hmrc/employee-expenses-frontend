@@ -36,7 +36,6 @@ import models.TaxYearSelection._
 import views.newBehaviours.ViewBehaviours
 import views.html.HowYouWillGetYourExpensesCurrentAndPreviousYearView
 
-
 class HowYouWillGetYourExpensesCurrentAndPreviousYearViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -50,22 +49,24 @@ class HowYouWillGetYourExpensesCurrentAndPreviousYearViewSpec extends ViewBehavi
       view.apply("onwardRoute", currentYearMinus1, true)(request, messages)
     }
 
+    behave.like(normalPage(applyView(true, false), "howYouWillGetYourExpenses"))
 
-    behave like normalPage(applyView(true, false), "howYouWillGetYourExpenses")
+    behave.like(pageWithAccountMenu(applyView(true)))
 
-    behave like pageWithAccountMenu(applyView(true))
-
-    behave like pageWithBackLink(applyView(true))
+    behave.like(pageWithBackLink(applyView(true)))
 
     "does show paragraph when CY-1 is selected" must {
       val wantedMessage = messages(
         "howYouWillGetYourExpensesPrevious.para2",
-        taxYearStartString(1), taxYearEndString(1)
+        taxYearStartString(1),
+        taxYearEndString(1)
       )
 
-      behave like pageWithBodyText(
-        applyView(true),
-        wantedMessage
+      behave.like(
+        pageWithBodyText(
+          applyView(true),
+          wantedMessage
+        )
       )
     }
 
@@ -74,7 +75,8 @@ class HowYouWillGetYourExpensesCurrentAndPreviousYearViewSpec extends ViewBehavi
 
       val unwantedMessage = messages(
         "howYouWillGetYourExpensesPrevious.para2",
-        taxYearStartString(1), taxYearEndString(1)
+        taxYearStartString(1),
+        taxYearEndString(1)
       )
 
       assertTextNotRendered(doc, unwantedMessage)

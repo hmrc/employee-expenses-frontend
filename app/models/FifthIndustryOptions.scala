@@ -22,13 +22,13 @@ sealed trait FifthIndustryOptions
 
 object FifthIndustryOptions extends Enumerable.Implicits {
 
-  case object Armedforces extends WithName("armedForces") with FifthIndustryOptions
+  case object Armedforces    extends WithName("armedForces") with FifthIndustryOptions
   case object Dockswaterways extends WithName("docksWaterways") with FifthIndustryOptions
-  case object Forestry extends WithName("forestry") with FifthIndustryOptions
-  case object Shipyard extends WithName("shipyard") with FifthIndustryOptions
-  case object Textiles extends WithName("textiles") with FifthIndustryOptions
-  case object Or extends WithName("or") with FifthIndustryOptions
-  case object NoneOfAbove extends WithName("none") with FifthIndustryOptions
+  case object Forestry       extends WithName("forestry") with FifthIndustryOptions
+  case object Shipyard       extends WithName("shipyard") with FifthIndustryOptions
+  case object Textiles       extends WithName("textiles") with FifthIndustryOptions
+  case object Or             extends WithName("or") with FifthIndustryOptions
+  case object NoneOfAbove    extends WithName("none") with FifthIndustryOptions
 
   val values: Seq[FifthIndustryOptions] = Seq(
     Armedforces,
@@ -40,11 +40,10 @@ object FifthIndustryOptions extends Enumerable.Implicits {
     NoneOfAbove
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map {
-    value =>
-      RadioCheckboxOption("fifthIndustryOptions", value.toString)
-  }
+  val options: Seq[RadioCheckboxOption] =
+    values.map(value => RadioCheckboxOption("fifthIndustryOptions", value.toString))
 
   implicit val enumerable: Enumerable[FifthIndustryOptions] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

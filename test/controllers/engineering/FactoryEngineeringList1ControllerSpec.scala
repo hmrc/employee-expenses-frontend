@@ -36,7 +36,12 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+class FactoryEngineeringList1ControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with OptionValues {
 
   private val userAnswers = emptyUserAnswers
 
@@ -77,7 +82,7 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
     "redirect to the next page when answer is true" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -100,7 +105,7 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
     "redirect to the next page when answer is false" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -171,7 +176,7 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
   "save  ClaimAmount when 'Yes' is selected" in {
     val mockSessionRepository = mock[SessionRepository]
 
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+    when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
     val application = applicationBuilder(userAnswers = Some(userAnswers))
       .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
       .build()
@@ -180,15 +185,17 @@ class FactoryEngineeringList1ControllerSpec extends SpecBase with ScalaFutures w
 
     val result = route(application, request).value
 
-    val userAnswers2= userAnswers
-    .set(ClaimAmount, ClaimAmounts.FactoryEngineering.list1).success.value
-    .set(FactoryEngineeringList1Page, true).success.value
+    val userAnswers2 = userAnswers
+      .set(ClaimAmount, ClaimAmounts.FactoryEngineering.list1)
+      .success
+      .value
+      .set(FactoryEngineeringList1Page, true)
+      .success
+      .value
 
-    whenReady(result){
-      _ =>
-        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-    }
+    whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
     application.stop()
   }
+
 }

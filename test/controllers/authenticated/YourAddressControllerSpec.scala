@@ -38,7 +38,12 @@ import uk.gov.hmrc.http.HttpResponse
 
 import scala.concurrent.Future
 
-class YourAddressControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with MockitoSugar with BeforeAndAfterEach {
+class YourAddressControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with IntegrationPatience
+    with MockitoSugar
+    with BeforeAndAfterEach {
 
   private def onwardRoute = Call("method", "route")
 
@@ -52,7 +57,7 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
      """.stripMargin
   )
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
   private val mockCitizenDetailsConnector: CitizenDetailsConnector = mock[CitizenDetailsConnector]
 
@@ -71,21 +76,18 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       val userAnswers = minimumUserAnswers
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), onwardRoute = Some(onwardRoute))
-          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .build()
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+        .build()
       val request = FakeRequest(GET, yourAddressRoute)
-      val result = route(application, request).value
+      val result  = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe onwardRoute.url
 
       val newUserAnswers = userAnswers.set(CitizenDetailsAddress, address).success.value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(Authed(userAnswersId), newUserAnswers)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(Authed(userAnswersId), newUserAnswers))
 
       application.stop()
     }
@@ -96,8 +98,8 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
         .build()
 
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(OK, emptyAddressJson.toString))
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(OK, emptyAddressJson.toString)))
 
       val request =
         FakeRequest(GET, yourAddressRoute).withFormUrlEncodedBody(("value", "true"))
@@ -112,12 +114,12 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
     }
 
     "redirect to HowWillYouGetYourExpenses if 404 returned from getAddress" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(NOT_FOUND, ""))
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(NOT_FOUND, "")))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
-          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-          .build()
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
       val request =
         FakeRequest(GET, yourAddressRoute).withFormUrlEncodedBody(("value", "true"))
       val result = route(application, request).value
@@ -129,12 +131,12 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
     }
 
     "redirect to Phone Us if 423 returned from getAddress" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(LOCKED, ""))
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(LOCKED, "")))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
-          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-          .build()
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
       val request =
         FakeRequest(GET, yourAddressRoute)
           .withFormUrlEncodedBody(("value", "true"))
@@ -147,12 +149,12 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
     }
 
     "redirect to NextPage if 500 returned from getAddress" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, ""))
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, "")))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
-          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-          .build()
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
       val request =
         FakeRequest(GET, yourAddressRoute)
           .withFormUrlEncodedBody(("value", "true"))
@@ -165,12 +167,12 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
     }
 
     "redirect to NextPage if any other status returned from getAddress" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(123, ""))
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(123, "")))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
-          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-          .build()
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
       val request =
         FakeRequest(GET, yourAddressRoute)
           .withFormUrlEncodedBody(("value", "true"))
@@ -183,7 +185,8 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
     }
 
     "redirect to Technical Difficulties when call to CitizensDetails fails" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn Future.failed(new Exception("error"))
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+        .thenReturn(Future.failed(new Exception("error")))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
@@ -200,12 +203,12 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
     }
 
     "redirect to CheckYourAnswers when could not parse Json to Address model" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(OK, incorrectJson.toString))
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(OK, incorrectJson.toString)))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
-          .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
-          .build()
+        .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
+        .build()
       val request =
         FakeRequest(GET, yourAddressRoute)
           .withFormUrlEncodedBody(("value", "true"))
@@ -217,4 +220,5 @@ class YourAddressControllerSpec extends SpecBase with ScalaFutures with Integrat
       application.stop()
     }
   }
+
 }

@@ -59,7 +59,8 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers().set(EmployerContributionPage,  EmployerContribution.YesEmployerContribution).success.value
+      val userAnswers =
+        UserAnswers().set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -75,7 +76,7 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -144,22 +145,23 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
     "save 'YesEmployerContribution' when selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = FakeRequest(POST, employerContributionRoute).withFormUrlEncodedBody(("value", EmployerContribution.YesEmployerContribution.toString))
+      val request = FakeRequest(POST, employerContributionRoute).withFormUrlEncodedBody(
+        ("value", EmployerContribution.YesEmployerContribution.toString)
+      )
 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
+        .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -167,24 +169,26 @@ class EmployerContributionControllerSpec extends SpecBase with ScalaFutures with
     "save 'false' when selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val request = FakeRequest(POST, employerContributionRoute).withFormUrlEncodedBody(("value", EmployerContribution.NoEmployerContribution.toString))
+      val request = FakeRequest(POST, employerContributionRoute).withFormUrlEncodedBody(
+        ("value", EmployerContribution.NoEmployerContribution.toString)
+      )
 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(EmployerContributionPage, EmployerContribution.NoEmployerContribution).success.value
+        .set(EmployerContributionPage, EmployerContribution.NoEmployerContribution)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

@@ -24,7 +24,11 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.OptionValues
 import play.api.libs.json.{JsError, JsString, Json}
 
-class AncillaryEngineeringWhichTradeSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class AncillaryEngineeringWhichTradeSpec
+    extends AnyWordSpec
+    with Matchers
+    with ScalaCheckPropertyChecks
+    with OptionValues {
 
   "AncillaryEngineeringWhichTrade" must {
 
@@ -32,21 +36,20 @@ class AncillaryEngineeringWhichTradeSpec extends AnyWordSpec with Matchers with 
 
       val gen = Gen.oneOf(AncillaryEngineeringWhichTrade.values.toSeq)
 
-      forAll(gen) {
-        ancillaryEngineeringWhichTrade =>
-
-          JsString(ancillaryEngineeringWhichTrade.toString).validate[AncillaryEngineeringWhichTrade].asOpt.value mustEqual ancillaryEngineeringWhichTrade
+      forAll(gen) { ancillaryEngineeringWhichTrade =>
+        JsString(ancillaryEngineeringWhichTrade.toString)
+          .validate[AncillaryEngineeringWhichTrade]
+          .asOpt
+          .value mustEqual ancillaryEngineeringWhichTrade
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!AncillaryEngineeringWhichTrade.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!AncillaryEngineeringWhichTrade.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[AncillaryEngineeringWhichTrade] mustEqual JsError("error.invalid")
+      forAll(gen) { invalidValue =>
+        JsString(invalidValue).validate[AncillaryEngineeringWhichTrade] mustEqual JsError("error.invalid")
       }
     }
 
@@ -54,11 +57,10 @@ class AncillaryEngineeringWhichTradeSpec extends AnyWordSpec with Matchers with 
 
       val gen = Gen.oneOf(AncillaryEngineeringWhichTrade.values.toSeq)
 
-      forAll(gen) {
-        ancillaryEngineeringWhichTrade =>
-
-          Json.toJson(ancillaryEngineeringWhichTrade) mustEqual JsString(ancillaryEngineeringWhichTrade.toString)
+      forAll(gen) { ancillaryEngineeringWhichTrade =>
+        Json.toJson(ancillaryEngineeringWhichTrade) mustEqual JsString(ancillaryEngineeringWhichTrade.toString)
       }
     }
   }
+
 }

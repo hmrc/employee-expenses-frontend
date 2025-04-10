@@ -37,19 +37,19 @@ class WhichRailwayTradeViewSpec extends OptionsViewBehaviours[WhichRailwayTrade]
     view.apply(form, NormalMode)(fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "WhichRailwayTradeView" must {
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like optionsPage(form, applyView, WhichRailwayTrade.options)
+    behave.like(optionsPage(form, applyView, WhichRailwayTrade.options))
 
-    behave like pageWithBodyText(applyView(form), "whichRailwayTrade.heading")
+    behave.like(pageWithBodyText(applyView(form), "whichRailwayTrade.heading"))
 
   }
 

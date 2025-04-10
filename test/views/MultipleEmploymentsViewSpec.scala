@@ -42,17 +42,18 @@ class MultipleEmploymentsViewSpec extends OptionsViewBehaviours[MultipleEmployme
     def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like optionsPage(form, applyView, MultipleEmployments.options)
+    behave.like(optionsPage(form, applyView, MultipleEmployments.options))
 
     "display RadioButtons inline" in {
       val doc = asDocument(applyView(form))
-      doc.select("fieldset > div").attr("class").contains("govuk-radios--inline") }
+      doc.select("fieldset > div").attr("class").contains("govuk-radios--inline")
+    }
 
   }
 

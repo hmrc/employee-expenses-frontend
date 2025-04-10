@@ -26,17 +26,21 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class KeepAliveController @Inject()(identify: AuthenticatedIdentifierAction,
-                                    sessionRepository: SessionRepository,
-                                    val controllerComponents: MessagesControllerComponents
-                                   )(implicit val ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class KeepAliveController @Inject() (
+    identify: AuthenticatedIdentifierAction,
+    sessionRepository: SessionRepository,
+    val controllerComponents: MessagesControllerComponents
+)(implicit val ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   def keepAlive: Action[AnyContent] = identify.async { implicit request =>
     val id = request.identifier.asInstanceOf[Authed]
 
     sessionRepository.updateTimeToLive(id).map {
       case true => Ok("OK")
-      case _ => Redirect(routes.SessionExpiredController.onPageLoad)
+      case _    => Redirect(routes.SessionExpiredController.onPageLoad)
     }
   }
+
 }

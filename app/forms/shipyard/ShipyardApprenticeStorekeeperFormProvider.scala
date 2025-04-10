@@ -42,4 +42,5 @@ class ShipyardApprenticeStorekeeperFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("shipyardApprenticeStorekeeper.error.required")
     )
+
 }

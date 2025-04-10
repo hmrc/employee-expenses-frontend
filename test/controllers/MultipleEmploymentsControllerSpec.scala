@@ -33,13 +33,13 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class MultipleEmploymentsControllerSpec extends SpecBase  with ScalaFutures with MockitoSugar with IntegrationPatience{
+class MultipleEmploymentsControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
   private val mockSessionRepository = mock[SessionRepository]
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
   lazy val multipleEmploymentsRoute: String = routes.MultipleEmploymentsController.onPageLoad(NormalMode).url
 
@@ -141,4 +141,5 @@ class MultipleEmploymentsControllerSpec extends SpecBase  with ScalaFutures with
       application.stop()
     }
   }
+
 }

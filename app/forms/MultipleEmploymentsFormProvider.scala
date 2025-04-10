@@ -27,4 +27,5 @@ class MultipleEmploymentsFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[MultipleEmployments]("multipleEmployments.error.required")
     )
+
 }

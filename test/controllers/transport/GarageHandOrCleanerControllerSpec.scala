@@ -37,7 +37,12 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+class GarageHandOrCleanerControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with OptionValues {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -78,7 +83,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     "redirect to the next page when valid 'Yes' data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -86,7 +91,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
           .build()
 
       val request = FakeRequest(POST, garageHandOrCleanerRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -100,7 +105,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     "redirect to the next page when valid 'No' data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -108,7 +113,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
           .build()
 
       val request = FakeRequest(POST, garageHandOrCleanerRoute)
-          .withFormUrlEncodedBody(("value", "false"))
+        .withFormUrlEncodedBody(("value", "false"))
 
       val result = route(application, request).value
 
@@ -122,13 +127,13 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     "return a Bad Request and errors when invalid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
       val request = FakeRequest(POST, garageHandOrCleanerRoute)
-          .withFormUrlEncodedBody(("value", ""))
+        .withFormUrlEncodedBody(("value", ""))
 
       val result = route(application, request).value
 
@@ -157,7 +162,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
       val application = applicationBuilder(userAnswers = None).build()
 
       val request = FakeRequest(POST, garageHandOrCleanerRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -171,7 +176,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     "save ClaimAmount 'garageHands' when true" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -181,13 +186,14 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.garageHands).success.value
-        .set(GarageHandOrCleanerPage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.garageHands)
+        .success
+        .value
+        .set(GarageHandOrCleanerPage, true)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -195,7 +201,7 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
     "save ClaimAmount 'conductorsDrivers' when false" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -205,14 +211,16 @@ class GarageHandOrCleanerControllerSpec extends SpecBase with ScalaFutures with 
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.conductorsDrivers).success.value
-        .set(GarageHandOrCleanerPage, false).success.value
+        .set(ClaimAmount, ClaimAmounts.Transport.PublicTransport.conductorsDrivers)
+        .success
+        .value
+        .set(GarageHandOrCleanerPage, false)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
       application.stop()
     }
   }
+
 }

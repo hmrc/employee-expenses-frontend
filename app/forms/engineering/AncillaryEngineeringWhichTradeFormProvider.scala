@@ -27,4 +27,5 @@ class AncillaryEngineeringWhichTradeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[AncillaryEngineeringWhichTrade]("ancillaryEngineeringWhichTrade.error.required")
     )
+
 }

@@ -30,8 +30,7 @@ import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
 
-  class Harness(sessionRepository: SessionRepository)
-    extends DataRetrievalActionImpl(sessionRepository) {
+  class Harness(sessionRepository: SessionRepository) extends DataRetrievalActionImpl(sessionRepository) {
     def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = transform(request)
   }
 
@@ -42,27 +41,23 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
       "set userAnswers in unauthed to 'None' in the request" in {
 
         val sessionRepository = mock[SessionRepository]
-        when(sessionRepository.get(UnAuthed(userAnswersId))) thenReturn Future(None)
+        when(sessionRepository.get(UnAuthed(userAnswersId))).thenReturn(Future(None))
         val action = new Harness(sessionRepository)
 
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, UnAuthed(userAnswersId), Some(fakeNino)))
 
-        whenReady(futureResult) { result =>
-          result.userAnswers.isEmpty mustBe true
-        }
+        whenReady(futureResult)(result => result.userAnswers.isEmpty mustBe true)
       }
 
       "set userAnswers in authed to 'None' in the request" in {
 
         val sessionRepository = mock[SessionRepository]
-        when(sessionRepository.get(Authed(userAnswersId))) thenReturn Future(None)
+        when(sessionRepository.get(Authed(userAnswersId))).thenReturn(Future(None))
         val action = new Harness(sessionRepository)
 
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, Authed(userAnswersId), Some(fakeNino)))
 
-        whenReady(futureResult) { result =>
-          result.userAnswers.isEmpty mustBe true
-        }
+        whenReady(futureResult)(result => result.userAnswers.isEmpty mustBe true)
       }
     }
 
@@ -71,28 +66,25 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar with ScalaFutur
       "build a userAnswers in unathed object and add it to the request" in {
 
         val sessionRepository = mock[SessionRepository]
-        when(sessionRepository.get(UnAuthed(userAnswersId))) thenReturn Future(Some(new UserAnswers(Json.obj())))
+        when(sessionRepository.get(UnAuthed(userAnswersId))).thenReturn(Future(Some(new UserAnswers(Json.obj()))))
         val action = new Harness(sessionRepository)
 
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, UnAuthed(userAnswersId), Some(fakeNino)))
 
-        whenReady(futureResult) { result =>
-          result.userAnswers.isDefined mustBe true
-        }
+        whenReady(futureResult)(result => result.userAnswers.isDefined mustBe true)
       }
 
       "build a userAnswers in authed object and add it to the request" in {
 
         val sessionRepository = mock[SessionRepository]
-        when(sessionRepository.get(Authed(userAnswersId))) thenReturn Future(Some(new UserAnswers()))
+        when(sessionRepository.get(Authed(userAnswersId))).thenReturn(Future(Some(new UserAnswers())))
         val action = new Harness(sessionRepository)
 
         val futureResult = action.callTransform(IdentifierRequest(fakeRequest, Authed(userAnswersId), Some(fakeNino)))
 
-        whenReady(futureResult) { result =>
-          result.userAnswers.isDefined mustBe true
-        }
+        whenReady(futureResult)(result => result.userAnswers.isDefined mustBe true)
       }
     }
   }
+
 }

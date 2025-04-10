@@ -24,10 +24,10 @@ import pages.textiles.TextilesOccupationList1Page
 
 class TextilesNavigatorSpec extends SpecBase with MockitoSugar {
   private val modes = Seq(NormalMode, CheckMode)
-  val navigator = new TextilesNavigator
+  val navigator     = new TextilesNavigator
 
   "TextilesNavigator" when {
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
 
         "go to SessionExpired when not a textiles page" in {
@@ -49,6 +49,6 @@ class TextilesNavigatorSpec extends SpecBase with MockitoSugar {
             controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
       }
-    }
   }
+
 }

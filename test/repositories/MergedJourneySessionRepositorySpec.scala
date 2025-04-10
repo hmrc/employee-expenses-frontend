@@ -28,11 +28,12 @@ import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
 import scala.concurrent.ExecutionContext
 
-class MergedJourneySessionRepositorySpec extends SpecBase
-  with Matchers
-  with MockitoSugar
-  with ScalaFutures
-  with DefaultPlayMongoRepositorySupport[MergedJourney] {
+class MergedJourneySessionRepositorySpec
+    extends SpecBase
+    with Matchers
+    with MockitoSugar
+    with ScalaFutures
+    with DefaultPlayMongoRepositorySupport[MergedJourney] {
 
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
@@ -43,14 +44,16 @@ class MergedJourneySessionRepositorySpec extends SpecBase
     mongo = mongoComponent
   )
 
-  val testId = "testId"
+  val testId          = "testId"
   val testDifferentId = "testDifferentId"
+
   val testData: MergedJourney = MergedJourney(
     testId,
     ClaimPending,
     ClaimPending,
     ClaimPending
   )
+
   val testDifferentData: MergedJourney = MergedJourney(
     testDifferentId,
     ClaimPending,
@@ -61,17 +64,13 @@ class MergedJourneySessionRepositorySpec extends SpecBase
   "MergedJourneySessionRepository" must {
     "retrieve None when data doesn't exist" in {
       val futureResult = repository.get(testId)
-      whenReady(futureResult) { result =>
-        result mustBe None
-      }
+      whenReady(futureResult)(result => result mustBe None)
     }
 
     "retrieve None when data doesn't exist for the specified id" in {
       await(repository.set(testData))
       val futureResult = repository.get(testDifferentId)
-      whenReady(futureResult) { result =>
-        result mustBe None
-      }
+      whenReady(futureResult)(result => result mustBe None)
     }
 
     "retrieve data with a new timestamp if it's present" in {
@@ -93,4 +92,5 @@ class MergedJourneySessionRepositorySpec extends SpecBase
       }
     }
   }
+
 }

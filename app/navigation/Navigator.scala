@@ -34,4 +34,5 @@ trait Navigator {
     case CheckMode =>
       checkRouteMap.lift(page).getOrElse(_ => CheckYourAnswersController.onPageLoad)
   }
+
 }

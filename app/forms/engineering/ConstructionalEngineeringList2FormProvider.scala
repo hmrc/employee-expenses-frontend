@@ -26,4 +26,5 @@ class ConstructionalEngineeringList2FormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("constructionalEngineeringList2.error.required")
     )
+
 }

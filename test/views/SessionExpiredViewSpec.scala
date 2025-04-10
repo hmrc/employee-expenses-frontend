@@ -29,9 +29,9 @@ class SessionExpiredViewSpec extends ViewBehaviours {
 
     val applyView = view.apply()(fakeRequest, messages)
 
-    behave like normalPage(applyView, "session_expired", "guidance")
+    behave.like(normalPage(applyView, "session_expired", "guidance"))
 
-    behave like pageWithButtonLink(applyView, controllers.routes.IndexController.start.url, "site.continue")
+    behave.like(pageWithButtonLink(applyView, controllers.routes.IndexController.start.url, "site.continue"))
   }
 
   application.stop()

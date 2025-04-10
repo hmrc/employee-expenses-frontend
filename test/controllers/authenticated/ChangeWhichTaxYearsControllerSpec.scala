@@ -42,13 +42,15 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
 
   private val mockSessionRepository = mock[SessionRepository]
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
   "ChangeWhichTaxYears Controller" must {
 
     "return OK for a GET" in {
       val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -63,8 +65,12 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
 
     "populate the view correctly on a GET when the question has previously been answered" in {
       val userAnswers = currentYearFullUserAnswers
-        .set(ChangeWhichTaxYearsPage, TaxYearSelection.values).success.value
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(ChangeWhichTaxYearsPage, TaxYearSelection.values)
+        .success
+        .value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -79,11 +85,15 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
 
     "redirect to the next page when valid data is submitted" in {
       val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
 
@@ -102,7 +112,9 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
 
     "return a Bad Request and errors when invalid data is submitted" in {
       val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -180,4 +192,5 @@ class ChangeWhichTaxYearsControllerSpec extends SpecBase with ScalaFutures with 
     }
 
   }
+
 }

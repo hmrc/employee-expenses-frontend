@@ -24,7 +24,11 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.OptionValues
 import play.api.libs.json.{JsError, JsString, Json}
 
-class AlreadyClaimingFREDifferentAmountsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class AlreadyClaimingFREDifferentAmountsSpec
+    extends AnyWordSpec
+    with Matchers
+    with ScalaCheckPropertyChecks
+    with OptionValues {
 
   "AlreadyClaimingFREDifferentAmounts" must {
 
@@ -32,21 +36,20 @@ class AlreadyClaimingFREDifferentAmountsSpec extends AnyWordSpec with Matchers w
 
       val gen = Gen.oneOf(AlreadyClaimingFREDifferentAmounts.values.toSeq)
 
-      forAll(gen) {
-        alreadyClaimingFREDifferentAmounts =>
-
-          JsString(alreadyClaimingFREDifferentAmounts.toString).validate[AlreadyClaimingFREDifferentAmounts].asOpt.value mustEqual alreadyClaimingFREDifferentAmounts
+      forAll(gen) { alreadyClaimingFREDifferentAmounts =>
+        JsString(alreadyClaimingFREDifferentAmounts.toString)
+          .validate[AlreadyClaimingFREDifferentAmounts]
+          .asOpt
+          .value mustEqual alreadyClaimingFREDifferentAmounts
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!AlreadyClaimingFREDifferentAmounts.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!AlreadyClaimingFREDifferentAmounts.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[AlreadyClaimingFREDifferentAmounts] mustEqual JsError("error.invalid")
+      forAll(gen) { invalidValue =>
+        JsString(invalidValue).validate[AlreadyClaimingFREDifferentAmounts] mustEqual JsError("error.invalid")
       }
     }
 
@@ -54,11 +57,10 @@ class AlreadyClaimingFREDifferentAmountsSpec extends AnyWordSpec with Matchers w
 
       val gen = Gen.oneOf(AlreadyClaimingFREDifferentAmounts.values.toSeq)
 
-      forAll(gen) {
-        alreadyClaimingFREDifferentAmounts =>
-
-          Json.toJson(alreadyClaimingFREDifferentAmounts) mustEqual JsString(alreadyClaimingFREDifferentAmounts.toString)
+      forAll(gen) { alreadyClaimingFREDifferentAmounts =>
+        Json.toJson(alreadyClaimingFREDifferentAmounts) mustEqual JsString(alreadyClaimingFREDifferentAmounts.toString)
       }
     }
   }
+
 }

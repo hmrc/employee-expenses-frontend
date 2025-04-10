@@ -28,4 +28,5 @@ class ElectricalPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](ElectricalPage)
   }
+
 }

@@ -26,4 +26,5 @@ class CommunitySupportOfficerFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("communitySupportOfficer.error.required")
     )
+
 }

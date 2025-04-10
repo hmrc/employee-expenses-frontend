@@ -40,7 +40,7 @@ class IronApprenticeControllerSpec extends SpecBase with ScalaFutures with Mocki
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val userAnswers = emptyUserAnswers
+  private val userAnswers              = emptyUserAnswers
   lazy val ironApprenticeRoute: String = routes.IronApprenticeController.onPageLoad(NormalMode).url
 
   "IronApprentice Controller" must {
@@ -76,11 +76,13 @@ class IronApprenticeControllerSpec extends SpecBase with ScalaFutures with Mocki
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute))
+          )
           .build()
 
       val request =
@@ -146,7 +148,7 @@ class IronApprenticeControllerSpec extends SpecBase with ScalaFutures with Mocki
     "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -157,13 +159,14 @@ class IronApprenticeControllerSpec extends SpecBase with ScalaFutures with Mocki
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.apprentice).success.value
-        .set(IronApprenticePage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.apprentice)
+        .success
+        .value
+        .set(IronApprenticePage, true)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -171,7 +174,7 @@ class IronApprenticeControllerSpec extends SpecBase with ScalaFutures with Mocki
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -182,15 +185,17 @@ class IronApprenticeControllerSpec extends SpecBase with ScalaFutures with Mocki
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.allOther).success.value
-        .set(IronApprenticePage, false).success.value
+        .set(ClaimAmount, ClaimAmounts.Manufacturing.IronSteel.allOther)
+        .success
+        .value
+        .set(IronApprenticePage, false)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

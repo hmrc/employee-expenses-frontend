@@ -60,4 +60,5 @@ class Module(environment: Environment, configuration: Configuration) extends Abs
       bind(classOf[LayoutProvider]).to(classOf[OldLayoutProvider]).asEagerSingleton()
     }
   }
+
 }

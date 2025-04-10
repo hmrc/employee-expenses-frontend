@@ -24,10 +24,10 @@ import pages.clothing.ClothingPage
 
 class ClothingNavigatorSpec extends SpecBase with MockitoSugar {
   private val modes = Seq(NormalMode, CheckMode)
-  val navigator = new ClothingNavigator
+  val navigator     = new ClothingNavigator
 
   "ClothingNavigator" when {
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
         "go to EmployerContribution from Clothing when 'Yes' is selected" in {
           val answers = emptyUserAnswers.set(ClothingPage, true).success.value
@@ -48,6 +48,6 @@ class ClothingNavigatorSpec extends SpecBase with MockitoSugar {
             controllers.routes.SessionExpiredController.onPageLoad
         }
       }
-    }
   }
+
 }

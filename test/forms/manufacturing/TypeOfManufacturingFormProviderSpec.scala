@@ -26,20 +26,25 @@ class TypeOfManufacturingFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "typeOfManufacturing.error.required"
 
-    behave like optionsField[TypeOfManufacturing](
-      form,
-      fieldName,
-      validValues  = TypeOfManufacturing.values,
-      invalidError = FormError(fieldName, "error.invalid")
+    behave.like(
+      optionsField[TypeOfManufacturing](
+        form,
+        fieldName,
+        validValues = TypeOfManufacturing.values,
+        invalidError = FormError(fieldName, "error.invalid")
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

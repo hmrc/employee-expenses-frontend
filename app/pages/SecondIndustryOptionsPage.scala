@@ -21,7 +21,7 @@ import play.api.libs.json.JsPath
 
 case object SecondIndustryOptionsPage extends QuestionPage[SecondIndustryOptions] {
 
-  override def path: JsPath = JsPath \ industryPath \toString
+  override def path: JsPath = JsPath \ industryPath \ toString
 
   override def toString: String = "secondIndustryOptions"
 }

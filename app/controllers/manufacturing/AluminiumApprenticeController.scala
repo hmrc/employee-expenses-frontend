@@ -33,52 +33,55 @@ import views.html.manufacturing.AluminiumApprenticeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AluminiumApprenticeController @Inject()(
-                                               override val messagesApi: MessagesApi,
-                                               @Named(NavConstant.manufacturing) navigator: Navigator,
-                                               identify: UnauthenticatedIdentifierAction,
-                                               getData: DataRetrievalAction,
-                                               requireData: DataRequiredAction,
-                                               formProvider: AluminiumApprenticeFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: AluminiumApprenticeView,
-                                               sessionRepository: SessionRepository
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AluminiumApprenticeController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.manufacturing) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: AluminiumApprenticeFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: AluminiumApprenticeView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(AluminiumApprenticePage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(AluminiumApprenticePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+        value =>
           for {
-            updatedAnswers <- if (value) {
-              Future.fromTry(request.userAnswers.set(AluminiumApprenticePage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.apprentice))
-              )
-            } else {
-              Future.fromTry(request.userAnswers.set(AluminiumApprenticePage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.allOther))
-              )
-            }
+            updatedAnswers <-
+              if (value) {
+                Future.fromTry(
+                  request.userAnswers
+                    .set(AluminiumApprenticePage, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.apprentice))
+                )
+              } else {
+                Future.fromTry(
+                  request.userAnswers
+                    .set(AluminiumApprenticePage, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.Manufacturing.Aluminium.allOther))
+                )
+              }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(AluminiumApprenticePage, mode)(updatedAnswers))
-        }
       )
   }
+
 }

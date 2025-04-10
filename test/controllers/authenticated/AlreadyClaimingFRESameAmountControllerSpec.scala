@@ -34,21 +34,28 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
+class AlreadyClaimingFRESameAmountControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val alreadyClaimingFRESameAmountRoute: String = routes.AlreadyClaimingFRESameAmountController.onPageLoad(NormalMode).url
+  lazy val alreadyClaimingFRESameAmountRoute: String =
+    routes.AlreadyClaimingFRESameAmountController.onPageLoad(NormalMode).url
 
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
   "AlreadyClaimingFRESameAmount Controller" must {
 
     "return OK for a GET" in {
       val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -64,8 +71,12 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = currentYearFullUserAnswers
-        .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.values.head).success.value
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.values.head)
+        .success
+        .value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -80,12 +91,16 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
     "redirect to the next page when valid data is submitted" in {
       val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .build()
 
       val request =
@@ -103,7 +118,9 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
     "return a Bad Request and errors when invalid data is submitted" in {
       val userAnswers = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -120,7 +137,10 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
     "redirect to Session Expired on GET if ClaimAmount is missing" in {
 
-      val userAnswers = emptyUserAnswers.set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+      val userAnswers = emptyUserAnswers
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -154,11 +174,16 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
     "redirect to Session Expired on POST if ClaimAmount is missing" in {
 
-      val userAnswers = emptyUserAnswers.set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+      val userAnswers = emptyUserAnswers
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .build()
 
       val request =
@@ -180,7 +205,9 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .build()
 
       val request =
@@ -227,4 +254,5 @@ class AlreadyClaimingFRESameAmountControllerSpec extends SpecBase with ScalaFutu
       application.stop()
     }
   }
+
 }

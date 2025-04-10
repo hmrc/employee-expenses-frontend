@@ -25,11 +25,16 @@ import uk.gov.hmrc.play.partials.{FormPartialRetrieverImpl, HeaderCarrierForPart
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class MockEeFormPartialRetriever @Inject()(httpGet: HttpClientV2, headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter)
-  extends FormPartialRetrieverImpl(httpGet, headerCarrierForPartialsConverter) with MockitoSugar {
+class MockEeFormPartialRetriever @Inject() (
+    httpGet: HttpClientV2,
+    headerCarrierForPartialsConverter: HeaderCarrierForPartialsConverter
+) extends FormPartialRetrieverImpl(httpGet, headerCarrierForPartialsConverter)
+    with MockitoSugar {
 
-  override def getPartialContentAsync(url: String, templateParameters: Map[String, String], errorMessage: Html)
-                                (implicit ec: ExecutionContext,  request: RequestHeader): Future[Html] = {
+  override def getPartialContentAsync(url: String, templateParameters: Map[String, String], errorMessage: Html)(
+      implicit ec: ExecutionContext,
+      request: RequestHeader
+  ): Future[Html] =
     Future.successful(Html(""))
-  }
+
 }

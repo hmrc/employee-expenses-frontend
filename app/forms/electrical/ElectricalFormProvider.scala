@@ -26,4 +26,5 @@ class ElectricalFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("electrical.error.required")
     )
+
 }

@@ -32,11 +32,11 @@ class ClaimByPostOrOnlineViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(p87Url)(fakeRequest, messages)
 
-    behave like normalPage(applyView, "claimByPostOrOnline")
+    behave.like(normalPage(applyView, "claimByPostOrOnline"))
 
-    behave like pageWithBackLink(applyView)
+    behave.like(pageWithBackLink(applyView))
 
-    behave like pageWithButtonLink(applyView, p87Url, "site.continue")
+    behave.like(pageWithButtonLink(applyView, p87Url, "site.continue"))
   }
 
   application.stop()

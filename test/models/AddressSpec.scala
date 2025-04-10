@@ -21,6 +21,7 @@ import org.scalatest.OptionValues
 import play.api.libs.json.Json
 
 class AddressSpec extends SpecBase with OptionValues {
+
   "Address" must {
     "serialize correctly" in {
       Json.toJson[Address](address) mustBe validAddressJson
@@ -45,7 +46,6 @@ class AddressSpec extends SpecBase with OptionValues {
       Address.asLabel(address) mustBe "Test"
     }
 
-
     "build label with two values" in {
 
       val address = Address(Some("Test"), None, None, None, None, Some("AB12CD"), None)
@@ -62,10 +62,14 @@ class AddressSpec extends SpecBase with OptionValues {
         Some("Test Line 4"),
         Some("Test Line 5"),
         Some("AB12CD"),
-        Some("GREAT BRITAIN"))
+        Some("GREAT BRITAIN")
+      )
 
-      Address.asLabel(address) mustBe "Test Line 1, Test Line 2, Test Line 3, Test Line 4, Test Line 5, AB12CD, GREAT BRITAIN"
+      Address.asLabel(
+        address
+      ) mustBe "Test Line 1, Test Line 2, Test Line 3, Test Line 4, Test Line 5, AB12CD, GREAT BRITAIN"
 
     }
   }
+
 }

@@ -37,12 +37,17 @@ import service.ClaimAmountService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
+class ConfirmationCurrentYearOnlyControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience {
 
-  val mockTaiConnector: TaiConnector = mock[TaiConnector]
+  val mockTaiConnector: TaiConnector             = mock[TaiConnector]
   val mockClaimAmountService: ClaimAmountService = mock[ClaimAmountService]
-  val claimAmountService = new ClaimAmountService(frontendAppConfig)
-  val claimAmount: Int = currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get
+  val claimAmountService                         = new ClaimAmountService(frontendAppConfig)
+  val claimAmount: Int                           = currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get
+
   val claimAmountsAndRates = StandardRate(
     frontendAppConfig.taxPercentageBasicRate,
     frontendAppConfig.taxPercentageHigherRate,
@@ -54,15 +59,18 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
 
     "return OK and the correct ConfirmationCurrentYearOnlyView for a GET for an increase" in {
       val ua = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(70)), TaiTaxYear()))).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(70)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(ua))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
-      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationCurrentYearOnlyController.onPageLoad().url)
 
@@ -76,15 +84,18 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
     "return OK and the correct ConfirmationCurrentYearOnlyView for a GET for a decrease" in {
 
       val ua = currentYearFullUserAnswers
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(120)), TaiTaxYear()))).success.value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(120)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(ua))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
-      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationCurrentYearOnlyController.onPageLoad().url)
 
@@ -102,8 +113,9 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
-      when(mockClaimAmountService.getRates(any(),any())).thenReturn(Seq(claimAmountsAndRates))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationCurrentYearOnlyController.onPageLoad().url)
 
@@ -156,19 +168,20 @@ class ConfirmationCurrentYearOnlyControllerSpec extends SpecBase with MockitoSug
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
 
       val request = FakeRequest(GET, ConfirmationCurrentYearOnlyController.onPageLoad().url)
 
       val result = route(application, request).value
 
-      whenReady(result) {
-        _ =>
-          val sessionRepository = application.injector.instanceOf[SessionRepository]
-          sessionRepository.get(Authed(userAnswersId)).map(_ mustBe None)
+      whenReady(result) { _ =>
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
+        sessionRepository.get(Authed(userAnswersId)).map(_ mustBe None)
       }
 
       application.stop()
     }
   }
+
 }

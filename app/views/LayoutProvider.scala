@@ -27,31 +27,38 @@ import views.html.playComponents.{AdditionalScript, HeadBlock}
 
 import javax.inject.Inject
 
-
 trait LayoutProvider {
-  //noinspection ScalaStyle
-  def apply(pageTitle: String,
-            showBackLink: Boolean = true,
-            timeout: Boolean = true,
-            showSignOut: Boolean = false,
-            scripts: Option[Html] = None,
-            stylesheets: Option[Html] = None,
-            serviceNameKeyOverride: Option[String] = None,
-            serviceUrlOverride: Option[String] = None
-           )(contentBlock: Html)(
-             implicit request: RequestHeader,
-             messages: Messages
-           ): HtmlFormat.Appendable
+
+  // noinspection ScalaStyle
+  def apply(
+      pageTitle: String,
+      showBackLink: Boolean = true,
+      timeout: Boolean = true,
+      showSignOut: Boolean = false,
+      scripts: Option[Html] = None,
+      stylesheets: Option[Html] = None,
+      serviceNameKeyOverride: Option[String] = None,
+      serviceUrlOverride: Option[String] = None
+  )(contentBlock: Html)(
+      implicit request: RequestHeader,
+      messages: Messages
+  ): HtmlFormat.Appendable
+
 }
 
-class OldLayoutProvider @Inject()(layout: views.html.Layout) extends LayoutProvider {
+class OldLayoutProvider @Inject() (layout: views.html.Layout) extends LayoutProvider {
 
-  //noinspection ScalaStyle
-  override def apply(pageTitle: String, showBackLink: Boolean, timeout: Boolean, showSignOut: Boolean,
-                     scripts: Option[Html], stylesheets: Option[Html],
-                     serviceNameKeyOverride: Option[String] = None,
-                     serviceUrlOverride: Option[String] = None)(contentBlock: Html)
-                    (implicit request: RequestHeader, messages: Messages): HtmlFormat.Appendable = {
+  // noinspection ScalaStyle
+  override def apply(
+      pageTitle: String,
+      showBackLink: Boolean,
+      timeout: Boolean,
+      showSignOut: Boolean,
+      scripts: Option[Html],
+      stylesheets: Option[Html],
+      serviceNameKeyOverride: Option[String] = None,
+      serviceUrlOverride: Option[String] = None
+  )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages): HtmlFormat.Appendable =
     layout(
       pageTitle = pageTitle,
       backLinkEnabled = showBackLink,
@@ -59,21 +66,28 @@ class OldLayoutProvider @Inject()(layout: views.html.Layout) extends LayoutProvi
       serviceNameKeyOverride = serviceNameKeyOverride,
       serviceUrlOverride = serviceUrlOverride
     )(contentBlock)
-  }
+
 }
 
+class NewLayoutProvider @Inject() (
+    wrapperService: WrapperService,
+    additionalScript: AdditionalScript,
+    headBlock: HeadBlock,
+    appConfig: FrontendAppConfig
+) extends LayoutProvider
+    with Logging {
 
-class NewLayoutProvider @Inject()(wrapperService: WrapperService,
-                                  additionalScript: AdditionalScript,
-                                  headBlock: HeadBlock,
-                                  appConfig: FrontendAppConfig) extends LayoutProvider with Logging {
-
-  //noinspection ScalaStyle
-  override def apply(pageTitle: String, showBackLink: Boolean, timeout: Boolean, showSignOut: Boolean,
-                     scripts: Option[Html], stylesheets: Option[Html],
-                     serviceNameKeyOverride: Option[String] = None,
-                     serviceUrlOverride: Option[String] = None)(contentBlock: Html)
-                    (implicit request: RequestHeader, messages: Messages): HtmlFormat.Appendable = {
+  // noinspection ScalaStyle
+  override def apply(
+      pageTitle: String,
+      showBackLink: Boolean,
+      timeout: Boolean,
+      showSignOut: Boolean,
+      scripts: Option[Html],
+      stylesheets: Option[Html],
+      serviceNameKeyOverride: Option[String] = None,
+      serviceUrlOverride: Option[String] = None
+  )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages): HtmlFormat.Appendable = {
     val hideAccountMenu = request.session.get("authToken").isEmpty
 
     wrapperService.standardScaLayout(
@@ -82,7 +96,8 @@ class NewLayoutProvider @Inject()(wrapperService: WrapperService,
       pageTitle = Some(s"$pageTitle - ${messages(serviceNameKeyOverride.getOrElse("service.name"))} - GOV.UK"),
       serviceNameKey = Some(serviceNameKeyOverride.getOrElse("service.name")),
       serviceURLs = ServiceURLs(
-        signOutUrl = if(!hideAccountMenu) Some(controllers.authenticated.routes.SignOutController.signOut.url) else None,
+        signOutUrl =
+          if (!hideAccountMenu) Some(controllers.authenticated.routes.SignOutController.signOut.url) else None,
         serviceUrl = Some(serviceUrlOverride.getOrElse(controllers.routes.IndexController.start.url))
       ),
       timeOutUrl = Some(controllers.authenticated.routes.SignOutController.signOut.url),
@@ -91,7 +106,8 @@ class NewLayoutProvider @Inject()(wrapperService: WrapperService,
       scripts = scripts.toSeq :+ additionalScript(),
       styleSheets = stylesheets.toSeq :+ headBlock(),
       fullWidth = false,
-      hideMenuBar = hideAccountMenu,
+      hideMenuBar = hideAccountMenu
     )(messages, request.withBody())
   }
+
 }

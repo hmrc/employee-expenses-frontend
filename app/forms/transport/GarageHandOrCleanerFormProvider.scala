@@ -26,4 +26,5 @@ class GarageHandOrCleanerFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("garageHandOrCleaner.error.required")
     )
+
 }

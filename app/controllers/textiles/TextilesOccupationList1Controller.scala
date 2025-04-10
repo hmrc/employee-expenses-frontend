@@ -34,52 +34,55 @@ import views.html.textiles.TextilesOccupationList1View
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TextilesOccupationList1Controller @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   sessionRepository: SessionRepository,
-                                                   @Named(textiles) navigator: Navigator,
-                                                   identify: UnauthenticatedIdentifierAction,
-                                                   getData: DataRetrievalAction,
-                                                   requireData: DataRequiredAction,
-                                                   formProvider: TextilesOccupationList1FormProvider,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   view: TextilesOccupationList1View
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class TextilesOccupationList1Controller @Inject() (
+    override val messagesApi: MessagesApi,
+    sessionRepository: SessionRepository,
+    @Named(textiles) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: TextilesOccupationList1FormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: TextilesOccupationList1View
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(TextilesOccupationList1Page) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(TextilesOccupationList1Page) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+        value =>
           for {
             updatedAnswers <- value match {
               case true =>
-                Future.fromTry(request.userAnswers.set(TextilesOccupationList1Page, value)
-                  .flatMap(_.set(ClaimAmount, ClaimAmounts.Textiles.list1))
+                Future.fromTry(
+                  request.userAnswers
+                    .set(TextilesOccupationList1Page, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.Textiles.list1))
                 )
-              case false => Future.fromTry(request.userAnswers.set(TextilesOccupationList1Page, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.Textiles.allOther))
-              )
+              case false =>
+                Future.fromTry(
+                  request.userAnswers
+                    .set(TextilesOccupationList1Page, value)
+                    .flatMap(_.set(ClaimAmount, ClaimAmounts.Textiles.allOther))
+                )
             }
             _ <- sessionRepository.set(request.identifier, updatedAnswers)
           } yield Redirect(navigator.nextPage(TextilesOccupationList1Page, mode)(updatedAnswers))
-        }
       )
   }
+
 }

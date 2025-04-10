@@ -28,4 +28,5 @@ class SameEmployerContributionAllYearsPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](SameEmployerContributionAllYearsPage)
   }
+
 }

@@ -36,7 +36,12 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
+class HealthcareList2ControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with IntegrationPatience
+    with OptionValues
+    with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -75,7 +80,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
     "redirect to the next page when false is submitted" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -98,7 +103,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
     "redirect to the next page when true is submitted" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -167,7 +172,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
     "save 'list2' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
       val ua1 = emptyUserAnswers
 
@@ -178,12 +183,15 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
       val request = FakeRequest(POST, healthcareList2Route).withFormUrlEncodedBody(("value", "true"))
 
       val ua2 = ua1
-        .set(ClaimAmount, ClaimAmounts.Healthcare.list2).success.value
-        .set(HealthcareList2Page, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Healthcare.list2)
+        .success
+        .value
+        .set(HealthcareList2Page, true)
+        .success
+        .value
 
-      whenReady(route(application, request).value) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      whenReady(route(application, request).value) { _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
       application.stop()
@@ -192,7 +200,7 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
     "dont save to ClaimAmount when 'No' is selected" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
       val ua1 = emptyUserAnswers
 
@@ -203,14 +211,16 @@ class HealthcareList2ControllerSpec extends SpecBase with ScalaFutures with Inte
       val request = FakeRequest(POST, healthcareList2Route).withFormUrlEncodedBody(("value", "false"))
 
       val ua2 = ua1
-        .set(HealthcareList2Page, false).success.value
+        .set(HealthcareList2Page, false)
+        .success
+        .value
 
-      whenReady(route(application, request).value) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      whenReady(route(application, request).value) { _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
       application.stop()
     }
   }
+
 }

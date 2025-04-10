@@ -24,7 +24,7 @@ import pages.clothing.ClothingPage
 import play.api.mvc.Call
 
 @Singleton
-class ClothingNavigator @Inject()() extends Navigator {
+class ClothingNavigator @Inject() () extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case ClothingPage => _ => routes.EmployerContributionController.onPageLoad(NormalMode)
@@ -33,6 +33,7 @@ class ClothingNavigator @Inject()() extends Navigator {
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case ClothingPage => _ => routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => routes.SessionExpiredController.onPageLoad
+    case _            => _ => routes.SessionExpiredController.onPageLoad
   }
+
 }

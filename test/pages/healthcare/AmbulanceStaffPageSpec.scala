@@ -28,4 +28,5 @@ class AmbulanceStaffPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](AmbulanceStaffPage)
   }
+
 }

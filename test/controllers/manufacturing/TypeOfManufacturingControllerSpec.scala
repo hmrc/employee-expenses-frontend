@@ -41,7 +41,8 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val typeOfManufacturingRoute: String = controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(NormalMode).url
+  lazy val typeOfManufacturingRoute: String =
+    controllers.manufacturing.routes.TypeOfManufacturingController.onPageLoad(NormalMode).url
 
   private val userAnswers = emptyUserAnswers
 
@@ -78,11 +79,13 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.manufacturing).toInstance(new FakeNavigator(onwardRoute))
+          )
           .build()
 
       val request =
@@ -146,28 +149,49 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
 
     for (trade <- TypeOfManufacturing.values) {
       val userAnswers2 = trade match {
-        case BrassCopper => userAnswers
-          .set(ClaimAmount, ClaimAmounts.Manufacturing.brassCopper).success.value
-          .set(TypeOfManufacturingPage, trade).success.value
+        case BrassCopper =>
+          userAnswers
+            .set(ClaimAmount, ClaimAmounts.Manufacturing.brassCopper)
+            .success
+            .value
+            .set(TypeOfManufacturingPage, trade)
+            .success
+            .value
         case Glass =>
           userAnswers
-            .set(ClaimAmount, ClaimAmounts.Manufacturing.glass).success.value
-            .set(TypeOfManufacturingPage, trade).success.value
+            .set(ClaimAmount, ClaimAmounts.Manufacturing.glass)
+            .success
+            .value
+            .set(TypeOfManufacturingPage, trade)
+            .success
+            .value
         case PreciousMetals =>
           userAnswers
-            .set(ClaimAmount, ClaimAmounts.Manufacturing.quarryingPreciousMetals).success.value
-            .set(TypeOfManufacturingPage, trade).success.value
-        case NoneOfAbove => userAnswers
-          .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-          .set(TypeOfManufacturingPage, trade).success.value
-        case _ => userAnswers
-          .set(TypeOfManufacturingPage, trade).success.value
+            .set(ClaimAmount, ClaimAmounts.Manufacturing.quarryingPreciousMetals)
+            .success
+            .value
+            .set(TypeOfManufacturingPage, trade)
+            .success
+            .value
+        case NoneOfAbove =>
+          userAnswers
+            .set(ClaimAmount, ClaimAmounts.defaultRate)
+            .success
+            .value
+            .set(TypeOfManufacturingPage, trade)
+            .success
+            .value
+        case _ =>
+          userAnswers
+            .set(TypeOfManufacturingPage, trade)
+            .success
+            .value
       }
 
       s"save correct amount to ClaimAmount when '$trade' is selected" in {
         val mockSessionRepository = mock[SessionRepository]
 
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
@@ -177,13 +201,11 @@ class TypeOfManufacturingControllerSpec extends SpecBase with ScalaFutures with 
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
-            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-        }
+        whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
         application.stop()
       }
     }
   }
+
 }

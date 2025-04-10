@@ -29,4 +29,5 @@ class ThirdIndustryOptionsPageSpec extends PageBehaviours {
 
     beRemovable[ThirdIndustryOptions](ThirdIndustryOptionsPage)
   }
+
 }

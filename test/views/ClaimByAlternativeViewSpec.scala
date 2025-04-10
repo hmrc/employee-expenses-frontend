@@ -20,7 +20,6 @@ import play.twirl.api.Html
 import views.newBehaviours.ViewBehaviours
 import views.html.ClaimByAlternativeView
 
-
 class ClaimByAlternativeViewSpec extends ViewBehaviours {
 
   val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -31,16 +30,21 @@ class ClaimByAlternativeViewSpec extends ViewBehaviours {
 
     val applyView = view.apply()(fakeRequest, messages)
 
-    behave like normalPage(applyView, "claimByAlternative")
+    behave.like(normalPage(applyView, "claimByAlternative"))
 
-    behave like pageWithBackLink(applyView)
+    behave.like(pageWithBackLink(applyView))
 
-    val link2: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.p87ClaimByPostUrl}">${messages("claimByAlternative.claimByPostLinkText")}</a>""")
+    val link2: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.p87ClaimByPostUrl}">${messages(
+        "claimByAlternative.claimByPostLinkText"
+      )}</a>""")
 
-    behave like pageWithBodyText(
-      applyView,
-      Html(messages("claimByAlternative.claimByPostLink", link2)).toString
+    behave.like(
+      pageWithBodyText(
+        applyView,
+        Html(messages("claimByAlternative.claimByPostLink", link2)).toString
+      )
     )
   }
-     application.stop()
+
+  application.stop()
 }

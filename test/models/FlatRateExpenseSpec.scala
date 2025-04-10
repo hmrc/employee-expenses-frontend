@@ -21,7 +21,6 @@ import play.api.libs.json.{JsValue, Json}
 
 class FlatRateExpenseSpec extends SpecBase {
 
-
   "FlatRateExpense" must {
     "return a flatRateExpense when passed valid Json" in {
       val flatRateExpense = validFlatRateJson.as[FlatRateExpense]
@@ -30,20 +29,19 @@ class FlatRateExpenseSpec extends SpecBase {
     }
   }
 
-  val validFlatRateJson: JsValue = Json.parse(
-    """
-      |   {
-      |        "nino": "EM329013",
-      |        "sequenceNumber": 201600003,
-      |        "taxYear": 2016,
-      |        "type": 56,
-      |        "source": 26,
-      |        "grossAmount": 60,
-      |        "receiptDate": null,
-      |        "captureDate": null,
-      |        "typeDescription": "Flat Rate Job Expenses",
-      |        "netAmount": null
-      |   }
-      |""".stripMargin)
+  val validFlatRateJson: JsValue = Json.parse("""
+                                                |   {
+                                                |        "nino": "EM329013",
+                                                |        "sequenceNumber": 201600003,
+                                                |        "taxYear": 2016,
+                                                |        "type": 56,
+                                                |        "source": 26,
+                                                |        "grossAmount": 60,
+                                                |        "receiptDate": null,
+                                                |        "captureDate": null,
+                                                |        "typeDescription": "Flat Rate Job Expenses",
+                                                |        "netAmount": null
+                                                |   }
+                                                |""".stripMargin)
 
 }

@@ -23,7 +23,7 @@ import views.html.CannotClaimExpenseView
 class CannotClaimExpenseViewSpec extends ViewBehaviours {
 
   val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-  val govUkUrl: String = frontendAppConfig.govUkUrl
+  val govUkUrl: String         = frontendAppConfig.govUkUrl
 
   "CannotClaimExpense view" must {
 
@@ -31,11 +31,11 @@ class CannotClaimExpenseViewSpec extends ViewBehaviours {
 
     val applyView = view.apply()(fakeRequest, messages)
 
-    behave like normalPage(applyView, "cannotClaimExpense")
+    behave.like(normalPage(applyView, "cannotClaimExpense"))
 
-    behave like pageWithBackLink(applyView)
+    behave.like(pageWithBackLink(applyView))
 
-    behave like pageWithBodyText(applyView, "cannotClaimExpense.body")
+    behave.like(pageWithBodyText(applyView, "cannotClaimExpense.body"))
 
   }
 

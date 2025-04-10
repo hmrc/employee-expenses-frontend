@@ -22,24 +22,30 @@ sealed trait TypeOfManufacturing
 
 object TypeOfManufacturing extends Enumerable.Implicits {
 
-  case object Aluminium extends WithName("aluminium") with TypeOfManufacturing
-  case object BrassCopper extends WithName("brassCopper") with TypeOfManufacturing
-  case object Glass extends WithName("glass") with TypeOfManufacturing
-  case object IronSteel extends WithName("ironSteel") with TypeOfManufacturing
+  case object Aluminium      extends WithName("aluminium") with TypeOfManufacturing
+  case object BrassCopper    extends WithName("brassCopper") with TypeOfManufacturing
+  case object Glass          extends WithName("glass") with TypeOfManufacturing
+  case object IronSteel      extends WithName("ironSteel") with TypeOfManufacturing
   case object PreciousMetals extends WithName("preciousMetals") with TypeOfManufacturing
-  case object WoodFurniture extends WithName("woodFurniture") with TypeOfManufacturing
-  case object Or extends WithName("or") with TypeOfManufacturing
-  case object NoneOfAbove extends WithName("none") with TypeOfManufacturing
+  case object WoodFurniture  extends WithName("woodFurniture") with TypeOfManufacturing
+  case object Or             extends WithName("or") with TypeOfManufacturing
+  case object NoneOfAbove    extends WithName("none") with TypeOfManufacturing
 
   val values: Seq[TypeOfManufacturing] = Seq(
-    Aluminium, BrassCopper, Glass, IronSteel, PreciousMetals, WoodFurniture, Or, NoneOfAbove
+    Aluminium,
+    BrassCopper,
+    Glass,
+    IronSteel,
+    PreciousMetals,
+    WoodFurniture,
+    Or,
+    NoneOfAbove
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map {
-    value =>
-      RadioCheckboxOption("typeOfManufacturing", value.toString)
-  }
+  val options: Seq[RadioCheckboxOption] =
+    values.map(value => RadioCheckboxOption("typeOfManufacturing", value.toString))
 
   implicit val enumerable: Enumerable[TypeOfManufacturing] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

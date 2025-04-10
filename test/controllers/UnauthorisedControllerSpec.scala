@@ -29,7 +29,8 @@ class UnauthorisedControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, routes.UnauthorisedController.onPageLoad.url).withSession(SessionKeys.sessionId -> "sessionId")
+      val request =
+        FakeRequest(GET, routes.UnauthorisedController.onPageLoad.url).withSession(SessionKeys.sessionId -> "sessionId")
 
       val result = route(application, request).value
 
@@ -38,4 +39,5 @@ class UnauthorisedControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

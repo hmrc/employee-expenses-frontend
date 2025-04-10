@@ -27,8 +27,7 @@ import pages.manufacturing._
 class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 
   private val navigator = new ManufacturingNavigator
-  private val modes = Seq(NormalMode, CheckMode)
-
+  private val modes     = Seq(NormalMode, CheckMode)
 
   "ManufacturingNavigator" when {
 
@@ -265,4 +264,5 @@ class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
       }
     }
   }
+
 }

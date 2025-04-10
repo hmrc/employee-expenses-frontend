@@ -28,4 +28,5 @@ class TransportVehicleTradeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[TransportVehicleTrade]("transportVehicleTrade.error.required")
     )
+
 }

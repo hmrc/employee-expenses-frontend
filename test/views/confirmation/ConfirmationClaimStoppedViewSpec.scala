@@ -39,16 +39,13 @@ class ConfirmationClaimStoppedViewSpec extends ViewBehaviours {
 
     val applyViewWithAuth = applyView()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like pageWithAccountMenu(applyViewWithAuth)
+    behave.like(pageWithAccountMenu(applyViewWithAuth))
 
     "display correct static text" in {
 
       val doc = asDocument(viewWithAnswers)
 
-      assertContainsMessages(doc,
-        "confirmation.heading.stoppedClaim",
-        "confirmation.noLongerGetAmount"
-      )
+      assertContainsMessages(doc, "confirmation.heading.stoppedClaim", "confirmation.noLongerGetAmount")
     }
 
     "behave like a normal page" when {

@@ -73,11 +73,13 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .build()
 
       val request =
@@ -139,12 +141,12 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
       application.stop()
     }
 
-    for (option <- TaxYearSelection.values) {
+    for (option <- TaxYearSelection.values)
       s"save '$option' when selected" in {
-        val ua1 = emptyUserAnswers
+        val ua1                                      = emptyUserAnswers
         val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
         val application = applicationBuilder(userAnswers = Some(ua1))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
@@ -156,13 +158,10 @@ class RemoveFRECodeControllerSpec extends SpecBase with ScalaFutures with Integr
 
         val ua2 = ua1.set(RemoveFRECodePage, option).success.value
 
-        whenReady(result) {
-          _ =>
-            verify(mockSessionRepository, times(1)).set(Authed(userAnswersId), ua2)
-        }
+        whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(Authed(userAnswersId), ua2))
 
         application.stop()
       }
-    }
   }
+
 }

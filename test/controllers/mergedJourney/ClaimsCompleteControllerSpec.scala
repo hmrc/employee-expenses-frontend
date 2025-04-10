@@ -34,9 +34,14 @@ import uk.gov.hmrc.http.HttpResponse
 import java.time.Instant
 import scala.concurrent.Future
 
-class ClaimsCompleteControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience with BeforeAndAfterEach {
+class ClaimsCompleteControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience
+    with BeforeAndAfterEach {
 
-  private val mockSessionRepository = mock[SessionRepository]
+  private val mockSessionRepository       = mock[SessionRepository]
   private val mockCitizenDetailsConnector = mock[CitizenDetailsConnector]
 
   override def beforeEach(): Unit = {
@@ -55,7 +60,13 @@ class ClaimsCompleteControllerSpec extends SpecBase with MockitoSugar with Scala
         )
         .build()
 
-      val testJourney = MergedJourney(userAnswersId, ClaimCompleteCurrentPrevious, ClaimCompleteCurrent, ClaimCompletePrevious, Instant.now())
+      val testJourney = MergedJourney(
+        userAnswersId,
+        ClaimCompleteCurrentPrevious,
+        ClaimCompleteCurrent,
+        ClaimCompletePrevious,
+        Instant.now()
+      )
       when(mockSessionRepository.getMergedJourney(any())).thenReturn(Future.successful(Some(testJourney)))
       when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
         .thenReturn(Future.successful(HttpResponse(OK, validAddressJson.toString)))
@@ -74,10 +85,16 @@ class ClaimsCompleteControllerSpec extends SpecBase with MockitoSugar with Scala
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val testJourney = MergedJourney(userAnswersId, ClaimCompleteCurrentPrevious, ClaimCompleteCurrent, ClaimCompletePrevious, Instant.now())
+      val testJourney = MergedJourney(
+        userAnswersId,
+        ClaimCompleteCurrentPrevious,
+        ClaimCompleteCurrent,
+        ClaimCompletePrevious,
+        Instant.now()
+      )
       when(mockSessionRepository.getMergedJourney(any())).thenReturn(Future.successful(Some(testJourney)))
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any())) thenReturn
-        Future.successful(HttpResponse(NOT_FOUND, Json.obj().toString()))
+      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(NOT_FOUND, Json.obj().toString())))
 
       val request = FakeRequest(GET, claimsCompleteUrl)
 
@@ -93,7 +110,8 @@ class ClaimsCompleteControllerSpec extends SpecBase with MockitoSugar with Scala
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
 
-      val testJourney = MergedJourney(userAnswersId, ClaimPending, ClaimCompleteCurrent, ClaimUnsuccessful, Instant.now())
+      val testJourney =
+        MergedJourney(userAnswersId, ClaimPending, ClaimCompleteCurrent, ClaimUnsuccessful, Instant.now())
       when(mockSessionRepository.getMergedJourney(any())).thenReturn(Future.successful(Some(testJourney)))
 
       val request = FakeRequest(GET, claimsCompleteUrl)
@@ -140,4 +158,5 @@ class ClaimsCompleteControllerSpec extends SpecBase with MockitoSugar with Scala
       application.stop()
     }
   }
+
 }

@@ -26,4 +26,5 @@ class CateringStaffNHSFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("cateringStaffNHS.error.required")
     )
+
 }

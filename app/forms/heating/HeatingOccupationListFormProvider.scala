@@ -26,4 +26,5 @@ class HeatingOccupationListFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("heatingOccupationList.error.required")
     )
+
 }

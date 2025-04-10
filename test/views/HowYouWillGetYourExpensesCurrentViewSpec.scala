@@ -27,16 +27,17 @@ class HowYouWillGetYourExpensesCurrentViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
 
-    def applyView(hasClaimIncreased: Boolean = true) = view.apply("onwardRoute", hasClaimIncreased)(fakeRequest, messages)
+    def applyView(hasClaimIncreased: Boolean = true) =
+      view.apply("onwardRoute", hasClaimIncreased)(fakeRequest, messages)
 
-    val applyViewWithAuth = view.apply("onwardRoute", true)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth =
+      view.apply("onwardRoute", true)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView(), "howYouWillGetYourExpenses")
+    behave.like(normalPage(applyView(), "howYouWillGetYourExpenses"))
 
-    behave like pageWithAccountMenu(applyViewWithAuth)
+    behave.like(pageWithAccountMenu(applyViewWithAuth))
 
-    behave like pageWithBackLink(applyView())
-
+    behave.like(pageWithBackLink(applyView()))
 
     "displays corrects text when claim amount increases" in {
 
@@ -52,5 +53,6 @@ class HowYouWillGetYourExpensesCurrentViewSpec extends ViewBehaviours {
       assertContainsMessages(doc, "howYouWillGetYourExpenses.item1more")
     }
   }
+
   application.stop()
 }

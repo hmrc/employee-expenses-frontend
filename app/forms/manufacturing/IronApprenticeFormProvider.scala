@@ -26,4 +26,5 @@ class IronApprenticeFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("ironApprentice.error.required")
     )
+
 }

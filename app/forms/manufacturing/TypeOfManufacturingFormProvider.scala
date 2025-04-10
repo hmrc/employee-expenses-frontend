@@ -27,4 +27,5 @@ class TypeOfManufacturingFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[TypeOfManufacturing]("typeOfManufacturing.error.required")
     )
+
 }

@@ -26,4 +26,5 @@ class PrintingOccupationList1FormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("printingOccupationList1.error.required")
     )
+
 }

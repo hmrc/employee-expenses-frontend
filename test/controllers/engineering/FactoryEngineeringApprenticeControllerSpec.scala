@@ -36,13 +36,19 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with OptionValues with IntegrationPatience {
+class FactoryEngineeringApprenticeControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with OptionValues
+    with IntegrationPatience {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
   private val userAnswers = emptyUserAnswers
 
-  lazy val factoryEngineeringApprenticeRoute: String = routes.FactoryEngineeringApprenticeController.onPageLoad(NormalMode).url
+  lazy val factoryEngineeringApprenticeRoute: String =
+    routes.FactoryEngineeringApprenticeController.onPageLoad(NormalMode).url
 
   "FactoryEngineeringApprentice Controller" must {
 
@@ -77,7 +83,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
     "redirect to the next page when answer is true" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -100,7 +106,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
     "redirect to the next page when answer is false" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -171,7 +177,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
   "save 'apprentice' to ClaimAmount when 'Yes' is selected" in {
     val mockSessionRepository = mock[SessionRepository]
 
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+    when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
     val application = applicationBuilder(userAnswers = Some(userAnswers))
       .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
       .build()
@@ -181,13 +187,14 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
     val result = route(application, request).value
 
     val userAnswers2 = userAnswers
-      .set(ClaimAmount, ClaimAmounts.FactoryEngineering.apprentice).success.value
-      .set(FactoryEngineeringApprenticePage, true).success.value
+      .set(ClaimAmount, ClaimAmounts.FactoryEngineering.apprentice)
+      .success
+      .value
+      .set(FactoryEngineeringApprenticePage, true)
+      .success
+      .value
 
-    whenReady(result) {
-      _ =>
-        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-    }
+    whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
     application.stop()
   }
@@ -195,7 +202,7 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
   "save no data to ClaimAmount when 'No' is selected" in {
     val mockSessionRepository = mock[SessionRepository]
 
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+    when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
     val application = applicationBuilder(userAnswers = Some(userAnswers))
       .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
       .build()
@@ -205,13 +212,13 @@ class FactoryEngineeringApprenticeControllerSpec extends SpecBase with ScalaFutu
     val result = route(application, request).value
 
     val userAnswers2 = userAnswers
-      .set(FactoryEngineeringApprenticePage,  false).success.value
+      .set(FactoryEngineeringApprenticePage, false)
+      .success
+      .value
 
-    whenReady(result) {
-      _ =>
-        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-    }
+    whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
     application.stop()
   }
+
 }

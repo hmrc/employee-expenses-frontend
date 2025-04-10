@@ -23,19 +23,20 @@ sealed trait WhichRailwayTrade
 object WhichRailwayTrade extends Enumerable.Implicits {
 
   case object VehicleRepairersWagonLifters extends WithName("vehicleRepairersWagonLifters") with WhichRailwayTrade
-  case object VehiclePainters extends WithName("vehiclePainters") with WhichRailwayTrade
-  case object Or extends WithName("or") with WhichRailwayTrade
-  case object NoneOfTheAbove extends WithName("noneOfTheAbove") with WhichRailwayTrade
+  case object VehiclePainters              extends WithName("vehiclePainters") with WhichRailwayTrade
+  case object Or                           extends WithName("or") with WhichRailwayTrade
+  case object NoneOfTheAbove               extends WithName("noneOfTheAbove") with WhichRailwayTrade
 
   val values: Seq[WhichRailwayTrade] = Seq(
-    VehiclePainters,VehicleRepairersWagonLifters, Or, NoneOfTheAbove
+    VehiclePainters,
+    VehicleRepairersWagonLifters,
+    Or,
+    NoneOfTheAbove
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map {
-    value =>
-      RadioCheckboxOption("whichRailwayTrade", value.toString)
-  }
+  val options: Seq[RadioCheckboxOption] = values.map(value => RadioCheckboxOption("whichRailwayTrade", value.toString))
 
   implicit val enumerable: Enumerable[WhichRailwayTrade] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

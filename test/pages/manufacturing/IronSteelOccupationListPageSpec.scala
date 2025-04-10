@@ -28,4 +28,5 @@ class IronSteelOccupationListPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](IronSteelOccupationListPage)
   }
+
 }

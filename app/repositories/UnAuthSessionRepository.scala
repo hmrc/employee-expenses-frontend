@@ -22,5 +22,9 @@ import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
 
 import scala.concurrent.ExecutionContext
 
-class UnAuthSessionRepository @Inject()(config: Configuration, mongo: MongoComponent, timestampSupport: TimestampSupport)
-                                       (implicit ec: ExecutionContext) extends UserAnswersCache("unauth-user-answers", config, mongo, timestampSupport)
+class UnAuthSessionRepository @Inject() (
+    config: Configuration,
+    mongo: MongoComponent,
+    timestampSupport: TimestampSupport
+)(implicit ec: ExecutionContext)
+    extends UserAnswersCache("unauth-user-answers", config, mongo, timestampSupport)

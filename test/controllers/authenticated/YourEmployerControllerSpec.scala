@@ -42,11 +42,11 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val mockTaiService = mock[TaiService]
-  private val mockSessionRepository = mock[SessionRepository]
+  private val mockTaiService             = mock[TaiService]
+  private val mockSessionRepository      = mock[SessionRepository]
   private val employmentSeq: Seq[String] = Seq("HMRC LongBenton")
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
   lazy val yourEmployerRoute: String = YourEmployerController.onPageLoad().url
 
@@ -54,7 +54,9 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "return OK for a GET and save employer data" in {
       val userAnswers = UserAnswers()
-        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -68,14 +70,13 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-          .set(YourEmployerNames, Seq("HMRC LongBenton")).success.value
+        .set(YourEmployerNames, Seq("HMRC LongBenton"))
+        .success
+        .value
 
       status(result) mustEqual OK
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(Authed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(Authed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -83,7 +84,9 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = currentYearFullUserAnswers
-        .set(YourEmployerPage, true).success.value
+        .set(YourEmployerPage, true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -103,11 +106,15 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "redirect to the next page when valid data is submitted" in {
       val userAnswers = UserAnswers()
-        .set(YourEmployerNames, employmentSeq).success.value
+        .set(YourEmployerNames, employmentSeq)
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
@@ -127,7 +134,9 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "return a Bad Request and errors when invalid data is submitted" in {
       val userAnswers = UserAnswers()
-        .set(YourEmployerNames, employmentSeq).success.value
+        .set(YourEmployerNames, employmentSeq)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .build()
@@ -177,7 +186,9 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
     "redirect to up Update your employer when no employer is located" in {
       val userAnswers = UserAnswers()
-        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear)).success.value
+        .set(TaxYearSelectionPage, Seq(TaxYearSelection.CurrentYear))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TaiService].toInstance(mockTaiService))
@@ -199,14 +210,16 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     "redirect to Session Expired for a POST if no tax year selection in user answers" in {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
       when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmployment))
 
       val request = FakeRequest(POST, yourEmployerRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -220,7 +233,9 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
     "redirect to Session Expired for a GET if no tax year selection in user answers" in {
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
@@ -241,7 +256,9 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       val ua1 = emptyUserAnswers.set(TaxYearSelectionPage, TaxYearSelection.values).success.value
       val application =
         applicationBuilder(userAnswers = Some(ua1))
-          .overrides(bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute)))
+          .overrides(
+            bind[Navigator].qualifiedWith(NavConstant.authenticated).toInstance(new FakeNavigator(onwardRoute))
+          )
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
@@ -258,4 +275,5 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
       application.stop()
     }
   }
+
 }

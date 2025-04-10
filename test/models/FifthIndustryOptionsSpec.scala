@@ -32,21 +32,20 @@ class FifthIndustryOptionsSpec extends AnyWordSpec with Matchers with ScalaCheck
 
       val gen = Gen.oneOf(FifthIndustryOptions.values.toSeq)
 
-      forAll(gen) {
-        fifthIndustryOptions =>
-
-          JsString(fifthIndustryOptions.toString).validate[FifthIndustryOptions].asOpt.value mustEqual fifthIndustryOptions
+      forAll(gen) { fifthIndustryOptions =>
+        JsString(fifthIndustryOptions.toString)
+          .validate[FifthIndustryOptions]
+          .asOpt
+          .value mustEqual fifthIndustryOptions
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!FifthIndustryOptions.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!FifthIndustryOptions.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[FifthIndustryOptions] mustEqual JsError("error.invalid")
+      forAll(gen) { invalidValue =>
+        JsString(invalidValue).validate[FifthIndustryOptions] mustEqual JsError("error.invalid")
       }
     }
 
@@ -54,11 +53,10 @@ class FifthIndustryOptionsSpec extends AnyWordSpec with Matchers with ScalaCheck
 
       val gen = Gen.oneOf(FifthIndustryOptions.values.toSeq)
 
-      forAll(gen) {
-        fifthIndustryOptions =>
-
-          Json.toJson(fifthIndustryOptions) mustEqual JsString(fifthIndustryOptions.toString)
+      forAll(gen) { fifthIndustryOptions =>
+        Json.toJson(fifthIndustryOptions) mustEqual JsString(fifthIndustryOptions.toString)
       }
     }
   }
+
 }

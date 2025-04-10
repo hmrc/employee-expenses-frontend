@@ -31,18 +31,19 @@ class FirstIndustryOptionsSpec extends AnyWordSpec with Matchers with ScalaCheck
     "Deserialise valid values" in {
 
       val gen = Gen.oneOf(FirstIndustryOptions.values.toSeq)
-      forAll(gen) {
-        firstIndustryOptionsPage =>
-          JsString(firstIndustryOptionsPage.toString).validate[FirstIndustryOptions].asOpt.value mustEqual firstIndustryOptionsPage
+      forAll(gen) { firstIndustryOptionsPage =>
+        JsString(firstIndustryOptionsPage.toString)
+          .validate[FirstIndustryOptions]
+          .asOpt
+          .value mustEqual firstIndustryOptionsPage
       }
     }
 
     "Fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!FirstIndustryOptions.values.map(_.toString).contains(_))
-      forAll(gen) {
-        invalidValue =>
-          JsString(invalidValue).validate[FirstIndustryOptions] mustEqual JsError("error.invalid")
+      val gen = arbitrary[String].suchThat(!FirstIndustryOptions.values.map(_.toString).contains(_))
+      forAll(gen) { invalidValue =>
+        JsString(invalidValue).validate[FirstIndustryOptions] mustEqual JsError("error.invalid")
       }
 
     }
@@ -50,9 +51,8 @@ class FirstIndustryOptionsSpec extends AnyWordSpec with Matchers with ScalaCheck
     "Serialise" in {
 
       val gen = Gen.oneOf(FirstIndustryOptions.values.toSeq)
-      forAll(gen) {
-        firstIndustryOptionsPage =>
-          Json.toJson(firstIndustryOptionsPage) mustEqual JsString(firstIndustryOptionsPage.toString)
+      forAll(gen) { firstIndustryOptionsPage =>
+        Json.toJson(firstIndustryOptionsPage) mustEqual JsString(firstIndustryOptionsPage.toString)
 
       }
     }

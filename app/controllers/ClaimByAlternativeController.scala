@@ -23,22 +23,20 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ClaimByAlternativeView
 
-class ClaimByAlternativeController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              identify: UnauthenticatedIdentifierAction,
-                                              getData: DataRetrievalAction,
-                                              requireData: DataRequiredAction,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: ClaimByAlternativeView
-                                     ) extends FrontendBaseController with I18nSupport {
+class ClaimByAlternativeController @Inject() (
+    override val messagesApi: MessagesApi,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    val controllerComponents: MessagesControllerComponents,
+    view: ClaimByAlternativeView
+) extends FrontendBaseController
+    with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
-      Ok(view())
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData)(implicit request => Ok(view()))
+
+  def onSubmit: Action[AnyContent] = identify.andThen(getData).andThen(requireData) {
+    Redirect("https://www.gov.uk/guidance/claim-income-tax-relief-for-your-employment-expenses-p87")
   }
 
-
-  def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData) {
-      Redirect("https://www.gov.uk/guidance/claim-income-tax-relief-for-your-employment-expenses-p87")
-  }
 }

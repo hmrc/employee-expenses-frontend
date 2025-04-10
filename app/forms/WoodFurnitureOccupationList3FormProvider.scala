@@ -27,4 +27,5 @@ class WoodFurnitureOccupationList3FormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("woodFurnitureOccupationList3.error.required")
     )
+
 }

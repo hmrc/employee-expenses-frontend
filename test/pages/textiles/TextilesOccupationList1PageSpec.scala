@@ -28,4 +28,5 @@ class TextilesOccupationList1PageSpec extends PageBehaviours {
 
     beRemovable[Boolean](TextilesOccupationList1Page)
   }
+
 }

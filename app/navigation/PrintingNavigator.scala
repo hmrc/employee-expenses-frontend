@@ -24,25 +24,25 @@ import pages.printing._
 import play.api.mvc.Call
 
 @Singleton
-class PrintingNavigator @Inject()() extends Navigator {
+class PrintingNavigator @Inject() () extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case PrintingOccupationList1Page => printingOccupationList1(NormalMode)
     case PrintingOccupationList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad
+    case _                           => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case PrintingOccupationList1Page => printingOccupationList1(CheckMode)
     case PrintingOccupationList2Page => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => controllers.routes.SessionExpiredController.onPageLoad
+    case _                           => _ => controllers.routes.SessionExpiredController.onPageLoad
   }
 
-  def printingOccupationList1 (mode: Mode)(userAnswers: UserAnswers): Call = {
+  def printingOccupationList1(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(PrintingOccupationList1Page) match {
-      case Some(true) => controllers.routes.EmployerContributionController.onPageLoad(mode)
+      case Some(true)  => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case Some(false) => routes.PrintingOccupationList2Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad
+      case _           => controllers.routes.SessionExpiredController.onPageLoad
     }
-  }
+
 }

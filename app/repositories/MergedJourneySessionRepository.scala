@@ -30,38 +30,40 @@ import scala.concurrent.duration.SECONDS
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class MergedJourneySessionRepository @Inject()(config: Configuration,
-                                               mongo: MongoComponent)
-                                              (implicit ec: ExecutionContext)
-  extends PlayMongoRepository[MergedJourney](
-    collectionName = "merged-journey-user-answers",
-    mongoComponent = mongo,
-    domainFormat = MergedJourney.format,
-    indexes = Seq(
-      IndexModel(
-        ascending("lastUpdated"),
-        IndexOptions()
-          .name("TTL")
-          .expireAfter(config.get[Int]("mongodb.mergedJourneyTimeToLiveInSeconds"), SECONDS)
+class MergedJourneySessionRepository @Inject() (config: Configuration, mongo: MongoComponent)(
+    implicit ec: ExecutionContext
+) extends PlayMongoRepository[MergedJourney](
+      collectionName = "merged-journey-user-answers",
+      mongoComponent = mongo,
+      domainFormat = MergedJourney.format,
+      indexes = Seq(
+        IndexModel(
+          ascending("lastUpdated"),
+          IndexOptions()
+            .name("TTL")
+            .expireAfter(config.get[Int]("mongodb.mergedJourneyTimeToLiveInSeconds"), SECONDS)
+        ),
+        IndexModel(
+          keys = ascending("internalId"),
+          indexOptions = IndexOptions()
+            .name("intId")
+            .unique(true)
+        )
       ),
-      IndexModel(
-        keys = ascending("internalId"),
-        indexOptions = IndexOptions()
-          .name("intId")
-          .unique(true)
-      )
-    ),
-    replaceIndexes = true
-  ) {
+      replaceIndexes = true
+    ) {
 
   def get(id: String): Future[Option[MergedJourney]] =
     collection.find[MergedJourney](and(equal("internalId", id))).headOption()
 
   def set(mergedJourney: MergedJourney): Future[Boolean] =
-    collection.replaceOne(
-      filter = equal("internalId", mergedJourney.internalId),
-      replacement = mergedJourney.copy(lastUpdated = Instant.now()),
-      options = ReplaceOptions().upsert(true)
-    ).toFuture().map(_.wasAcknowledged())
+    collection
+      .replaceOne(
+        filter = equal("internalId", mergedJourney.internalId),
+        replacement = mergedJourney.copy(lastUpdated = Instant.now()),
+        options = ReplaceOptions().upsert(true)
+      )
+      .toFuture()
+      .map(_.wasAcknowledged())
 
 }

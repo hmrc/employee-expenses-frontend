@@ -31,9 +31,13 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import utils.WireMockHelper
 
-
-class EmployeeWfhExpensesConnectorSpec extends SpecBase with MockitoSugar with WireMockHelper with GuiceOneAppPerSuite
-  with ScalaFutures with IntegrationPatience {
+class EmployeeWfhExpensesConnectorSpec
+    extends SpecBase
+    with MockitoSugar
+    with WireMockHelper
+    with GuiceOneAppPerSuite
+    with ScalaFutures
+    with IntegrationPatience {
 
   override implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
@@ -46,48 +50,49 @@ class EmployeeWfhExpensesConnectorSpec extends SpecBase with MockitoSugar with W
 
   private lazy val employeeWfhExpensesConnector = app.injector.instanceOf[EmployeeWfhExpensesConnector]
 
-  def stubCall(response: ResponseDefinitionBuilder): StubMapping = {
+  def stubCall(response: ResponseDefinitionBuilder): StubMapping =
     server.stubFor(
       get(urlPathMatching(s"/employee-working-from-home-expenses/claimed-all-years-status"))
         .willReturn(
           response
         )
     )
-  }
 
   "checkIfAllYearsClaimed" must {
     "handle http 200 response with true as success" in {
       stubCall(
         response = aResponse()
           .withStatus(OK)
-          .withBody(Json.obj(
-            "claimedAllYearsStatus" -> true
-          ).toString())
+          .withBody(
+            Json
+              .obj(
+                "claimedAllYearsStatus" -> true
+              )
+              .toString()
+          )
       )
 
-      whenReady(employeeWfhExpensesConnector.checkIfAllYearsClaimed(hc)) { result =>
-        result mustBe true
-      }
+      whenReady(employeeWfhExpensesConnector.checkIfAllYearsClaimed(hc))(result => result mustBe true)
     }
 
     "handle http 200 response with false as success" in {
       stubCall(
         response = aResponse()
           .withStatus(OK)
-          .withBody(Json.obj(
-            "claimedAllYearsStatus" -> false
-          ).toString())
+          .withBody(
+            Json
+              .obj(
+                "claimedAllYearsStatus" -> false
+              )
+              .toString()
+          )
       )
 
-      whenReady(employeeWfhExpensesConnector.checkIfAllYearsClaimed(hc)) { result =>
-        result mustBe false
-      }
+      whenReady(employeeWfhExpensesConnector.checkIfAllYearsClaimed(hc))(result => result mustBe false)
     }
 
-    "handle exception as a false response" in {
-      whenReady(employeeWfhExpensesConnector.checkIfAllYearsClaimed(hc)) { result =>
-        result mustBe false
-      }
-    }
+    "handle exception as a false response" in
+      whenReady(employeeWfhExpensesConnector.checkIfAllYearsClaimed(hc))(result => result mustBe false)
   }
+
 }

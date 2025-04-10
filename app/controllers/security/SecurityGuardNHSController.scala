@@ -33,47 +33,49 @@ import views.html.security.SecurityGuardNHSView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SecurityGuardNHSController @Inject()(
-                                            override val messagesApi: MessagesApi,
-                                            @Named(NavConstant.security) navigator: Navigator,
-                                            identify: UnauthenticatedIdentifierAction,
-                                            getData: DataRetrievalAction,
-                                            requireData: DataRequiredAction,
-                                            formProvider: SecurityGuardNHSFormProvider,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            view: SecurityGuardNHSView,
-                                            sessionRepository: SessionRepository
-                                          )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class SecurityGuardNHSController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.security) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: SecurityGuardNHSFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: SecurityGuardNHSView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(SecurityGuardNHSPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(SecurityGuardNHSPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value => {
+            val claimAmount = if (value) ClaimAmounts.Security.nhsSecurity else ClaimAmounts.defaultRate
+            for {
+              updatedAnswers <- Future.fromTry(
+                request.userAnswers
+                  .set(SecurityGuardNHSPage, value)
+                  .flatMap(_.set(ClaimAmount, claimAmount))
+              )
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(SecurityGuardNHSPage, mode)(updatedAnswers))
+          }
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          val claimAmount = if (value) ClaimAmounts.Security.nhsSecurity else ClaimAmounts.defaultRate
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SecurityGuardNHSPage, value)
-              .flatMap(_.set(ClaimAmount, claimAmount))
-            )
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(SecurityGuardNHSPage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

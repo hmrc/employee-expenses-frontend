@@ -19,7 +19,7 @@ package pages
 import models.FlatRateExpenseAmounts
 import play.api.libs.json.JsPath
 
-case object FREAmounts extends QuestionPage[Seq[FlatRateExpenseAmounts]]{
+case object FREAmounts extends QuestionPage[Seq[FlatRateExpenseAmounts]] {
 
   override def path: JsPath = JsPath \ toString
 

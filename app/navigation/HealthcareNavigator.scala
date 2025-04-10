@@ -25,7 +25,7 @@ import pages.healthcare._
 import play.api.mvc.Call
 
 @Singleton
-class HealthcareNavigator @Inject()() extends Navigator {
+class HealthcareNavigator @Inject() () extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case AmbulanceStaffPage  => ambulanceStaff(NormalMode)
@@ -40,8 +40,8 @@ class HealthcareNavigator @Inject()() extends Navigator {
   }
 
   def ambulanceStaff(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(AmbulanceStaffPage) match {
-    case Some(true) | Some(false)  => EmployerContributionController.onPageLoad(mode)
-    case _           => SessionExpiredController.onPageLoad
+    case Some(true) | Some(false) => EmployerContributionController.onPageLoad(mode)
+    case _                        => SessionExpiredController.onPageLoad
   }
 
   def healthcareList1(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(HealthcareList1Page) match {
@@ -55,4 +55,5 @@ class HealthcareNavigator @Inject()() extends Navigator {
     case Some(false) => AmbulanceStaffController.onPageLoad(mode)
     case _           => SessionExpiredController.onPageLoad
   }
+
 }

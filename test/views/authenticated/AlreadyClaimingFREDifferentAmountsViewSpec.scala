@@ -17,7 +17,14 @@
 package views.authenticated
 
 import forms.authenticated.AlreadyClaimingFREDifferentAmountsFormProvider
-import models.{AlreadyClaimingFREDifferentAmounts, FlatRateExpense, FlatRateExpenseAmounts, NormalMode, TaiTaxYear, TaxYearSelection}
+import models.{
+  AlreadyClaimingFREDifferentAmounts,
+  FlatRateExpense,
+  FlatRateExpenseAmounts,
+  NormalMode,
+  TaiTaxYear,
+  TaxYearSelection
+}
 import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -31,7 +38,10 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
   val form = new AlreadyClaimingFREDifferentAmountsFormProvider()()
 
   val userAnswers = currentYearFullUserAnswers
-    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+    .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+    .success
+    .value
+
   val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
   val view = application.injector.instanceOf[AlreadyClaimingFREDifferentAmountsView]
@@ -49,7 +59,10 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
       form,
       NormalMode,
       userAnswers.get(ClaimAmountAndAnyDeductions).value,
-      Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()), FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear().prev))
+      Seq(
+        FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()),
+        FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear().prev)
+      )
     )(fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
@@ -62,17 +75,20 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
 
   "AlreadyClaimingFREDifferentAmountsView" must {
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like optionsPage(form, applyView, AlreadyClaimingFREDifferentAmounts.options)
+    behave.like(optionsPage(form, applyView, AlreadyClaimingFREDifferentAmounts.options))
 
     "display correct body text" in {
       val doc = asDocument(applyView(form))
-      assertContainsText(doc, messages("alreadyClaimingFREDifferentAmounts.bodyText1", userAnswers.get(ClaimAmountAndAnyDeductions).value))
+      assertContainsText(
+        doc,
+        messages("alreadyClaimingFREDifferentAmounts.bodyText1", userAnswers.get(ClaimAmountAndAnyDeductions).value)
+      )
     }
 
     "contains correct column values for table" in {
@@ -84,7 +100,10 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
         (TaiTaxYear().year + 1).toString
       )
 
-      doc.getElementsByClass(s"fre-amount-${TaiTaxYear().year}").text mustBe messages("alreadyClaimingFREDifferentAmounts.tableAmountHeading","£100")
+      doc.getElementsByClass(s"fre-amount-${TaiTaxYear().year}").text mustBe messages(
+        "alreadyClaimingFREDifferentAmounts.tableAmountHeading",
+        "£100"
+      )
     }
   }
 

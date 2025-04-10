@@ -24,7 +24,7 @@ import pages.security.SecurityGuardNHSPage
 import play.api.mvc.Call
 
 @Singleton
-class SecurityNavigator @Inject()() extends Navigator {
+class SecurityNavigator @Inject() () extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case SecurityGuardNHSPage => _ => routes.EmployerContributionController.onPageLoad(NormalMode)
@@ -33,6 +33,7 @@ class SecurityNavigator @Inject()() extends Navigator {
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case SecurityGuardNHSPage => _ => routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => routes.SessionExpiredController.onPageLoad
+    case _                    => _ => routes.SessionExpiredController.onPageLoad
   }
+
 }

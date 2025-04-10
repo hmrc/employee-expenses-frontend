@@ -26,22 +26,20 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EmployeeWfhExpensesConnector @Inject()(appConfig: FrontendAppConfig,
-                                             httpClient: HttpClientV2)
-                                            (implicit executionContext: ExecutionContext) {
+class EmployeeWfhExpensesConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClientV2)(
+    implicit executionContext: ExecutionContext
+) {
 
   def checkIfAllYearsClaimed(headerCarrier: HeaderCarrier): Future[Boolean] = {
     implicit val hc: HeaderCarrier = headerCarrier.copy(extraHeaders = headerCarrier.headers(Seq(HeaderNames.COOKIE)))
-    val url: String = s"${appConfig.employeeWfhExpensesHost}/employee-working-from-home-expenses/claimed-all-years-status"
+    val url: String =
+      s"${appConfig.employeeWfhExpensesHost}/employee-working-from-home-expenses/claimed-all-years-status"
 
     httpClient
       .get(url"$url")
       .execute[HttpResponse]
-      .map { response =>
-        (response.json \ "claimedAllYearsStatus").as[Boolean]
-      }
-      .recoverWith {
-        case ex: Exception => Future.successful(false)
-      }
+      .map(response => (response.json \ "claimedAllYearsStatus").as[Boolean])
+      .recoverWith { case ex: Exception => Future.successful(false) }
   }
+
 }

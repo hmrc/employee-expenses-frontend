@@ -37,11 +37,17 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+class WhichRailwayTradeControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with OptionValues {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val whichRailwayTradeRoute: String = controllers.transport.routes.WhichRailwayTradeController.onPageLoad(NormalMode).url
+  lazy val whichRailwayTradeRoute: String =
+    controllers.transport.routes.WhichRailwayTradeController.onPageLoad(NormalMode).url
 
   private val userAnswers = emptyUserAnswers
 
@@ -78,7 +84,7 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -144,17 +150,18 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
       application.stop()
     }
 
-    for(trade <- WhichRailwayTrade.values if trade != WhichRailwayTrade.Or) {
+    for (trade <- WhichRailwayTrade.values if trade != WhichRailwayTrade.Or) {
       val claimAmount = trade match {
         case WhichRailwayTrade.VehiclePainters => ClaimAmounts.Transport.Railways.vehiclePainters
-        case WhichRailwayTrade.VehicleRepairersWagonLifters => ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
+        case WhichRailwayTrade.VehicleRepairersWagonLifters =>
+          ClaimAmounts.Transport.Railways.vehicleRepairersWagonLifters
         case _ => ClaimAmounts.Transport.Railways.allOther
       }
 
       s"save '$claimAmount' to ClaimAmount when '$trade' is selected" in {
         val mockSessionRepository = mock[SessionRepository]
 
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
@@ -164,16 +171,18 @@ class WhichRailwayTradeControllerSpec extends SpecBase with ScalaFutures with Mo
         val result = route(application, request).value
 
         val userAnswers2 = userAnswers
-          .set(ClaimAmount, claimAmount).success.value
-          .set(WhichRailwayTradePage, trade).success.value
+          .set(ClaimAmount, claimAmount)
+          .success
+          .value
+          .set(WhichRailwayTradePage, trade)
+          .success
+          .value
 
-        whenReady(result){
-          _ =>
-            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-        }
+        whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
         application.stop()
       }
     }
   }
+
 }

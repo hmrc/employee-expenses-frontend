@@ -26,20 +26,24 @@ class AlreadyClaimingFRESameAmountFormProviderSpec extends OptionFieldBehaviours
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "alreadyClaimingFRESameAmount.error.required"
 
-    behave like optionsField[AlreadyClaimingFRESameAmount](
-      form,
-      fieldName,
-      validValues = AlreadyClaimingFRESameAmount.values,
-      invalidError = FormError(fieldName, "error.invalid")
+    behave.like(
+      optionsField[AlreadyClaimingFRESameAmount](
+        form,
+        fieldName,
+        validValues = AlreadyClaimingFRESameAmount.values,
+        invalidError = FormError(fieldName, "error.invalid")
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
 

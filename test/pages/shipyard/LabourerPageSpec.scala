@@ -28,4 +28,5 @@ class LabourerPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](LabourerPage)
   }
+
 }

@@ -32,21 +32,17 @@ class TypeOfManufacturingSpec extends AnyWordSpec with Matchers with ScalaCheckP
 
       val gen = Gen.oneOf(TypeOfManufacturing.values.toSeq)
 
-      forAll(gen) {
-        typeOfManufacturing =>
-
-          JsString(typeOfManufacturing.toString).validate[TypeOfManufacturing].asOpt.value mustEqual typeOfManufacturing
+      forAll(gen) { typeOfManufacturing =>
+        JsString(typeOfManufacturing.toString).validate[TypeOfManufacturing].asOpt.value mustEqual typeOfManufacturing
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!TypeOfManufacturing.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!TypeOfManufacturing.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[TypeOfManufacturing] mustEqual JsError("error.invalid")
+      forAll(gen) { invalidValue =>
+        JsString(invalidValue).validate[TypeOfManufacturing] mustEqual JsError("error.invalid")
       }
     }
 
@@ -54,11 +50,10 @@ class TypeOfManufacturingSpec extends AnyWordSpec with Matchers with ScalaCheckP
 
       val gen = Gen.oneOf(TypeOfManufacturing.values.toSeq)
 
-      forAll(gen) {
-        typeOfManufacturing =>
-
-          Json.toJson(typeOfManufacturing) mustEqual JsString(typeOfManufacturing.toString)
+      forAll(gen) { typeOfManufacturing =>
+        Json.toJson(typeOfManufacturing) mustEqual JsString(typeOfManufacturing.toString)
       }
     }
   }
+
 }

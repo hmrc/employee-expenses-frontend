@@ -28,4 +28,5 @@ class ExpensesEmployerPaidPageSpec extends PageBehaviours {
 
     beRemovable[Int](ExpensesEmployerPaidPage)
   }
+
 }

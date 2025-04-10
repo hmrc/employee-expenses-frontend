@@ -23,20 +23,27 @@ sealed trait AncillaryEngineeringWhichTrade
 object AncillaryEngineeringWhichTrade extends Enumerable.Implicits {
 
   case object PatternMaker extends WithName("patternMaker") with AncillaryEngineeringWhichTrade
-  case object LabourerSupervisorOrUnskilledWorker extends WithName("labourerSupervisorOrUnskilledWorker") with AncillaryEngineeringWhichTrade
+
+  case object LabourerSupervisorOrUnskilledWorker
+      extends WithName("labourerSupervisorOrUnskilledWorker")
+      with AncillaryEngineeringWhichTrade
+
   case object ApprenticeOrStorekeeper extends WithName("apprenticeOrStorekeeper") with AncillaryEngineeringWhichTrade
-  case object Or extends WithName("or") with AncillaryEngineeringWhichTrade
-  case object NoneOfTheAbove extends WithName("noneOfTheAbove") with AncillaryEngineeringWhichTrade
+  case object Or                      extends WithName("or") with AncillaryEngineeringWhichTrade
+  case object NoneOfTheAbove          extends WithName("noneOfTheAbove") with AncillaryEngineeringWhichTrade
 
   val values: Seq[AncillaryEngineeringWhichTrade] = Seq(
-    ApprenticeOrStorekeeper, LabourerSupervisorOrUnskilledWorker, PatternMaker, Or, NoneOfTheAbove
+    ApprenticeOrStorekeeper,
+    LabourerSupervisorOrUnskilledWorker,
+    PatternMaker,
+    Or,
+    NoneOfTheAbove
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map {
-    value =>
-      RadioCheckboxOption("ancillaryEngineeringWhichTrade", value.toString)
-  }
+  val options: Seq[RadioCheckboxOption] =
+    values.map(value => RadioCheckboxOption("ancillaryEngineeringWhichTrade", value.toString))
 
   implicit val enumerable: Enumerable[AncillaryEngineeringWhichTrade] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

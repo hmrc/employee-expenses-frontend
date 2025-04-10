@@ -28,4 +28,5 @@ class AirlineJobListPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](AirlineJobListPage)
   }
+
 }

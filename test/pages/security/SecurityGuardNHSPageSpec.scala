@@ -28,4 +28,5 @@ class SecurityGuardNHSPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](SecurityGuardNHSPage)
   }
+
 }

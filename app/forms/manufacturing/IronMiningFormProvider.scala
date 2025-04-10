@@ -26,4 +26,5 @@ class IronMiningFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("ironMining.error.required")
     )
+
 }

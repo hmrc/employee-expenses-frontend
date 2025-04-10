@@ -26,11 +26,11 @@ import pages.police._
 
 class PoliceNavigatorSpec extends SpecBase with MockitoSugar {
   private val navigator = new PoliceNavigator
-  private val modes = Seq(NormalMode, CheckMode)
+  private val modes     = Seq(NormalMode, CheckMode)
 
   "PoliceNavigator" when {
 
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
 
         "go to SessionExpired when not a police page" in {
@@ -114,6 +114,6 @@ class PoliceNavigatorSpec extends SpecBase with MockitoSugar {
           }
         }
       }
-    }
   }
+
 }

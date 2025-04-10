@@ -26,20 +26,25 @@ class RemoveFRECodeFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "removeFRECode.error.required"
 
-    behave like optionsField[TaxYearSelection](
-      form,
-      fieldName,
-      validValues  = TaxYearSelection.values,
-      invalidError = FormError(fieldName, "error.invalid")
+    behave.like(
+      optionsField[TaxYearSelection](
+        form,
+        fieldName,
+        validValues = TaxYearSelection.values,
+        invalidError = FormError(fieldName, "error.invalid")
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

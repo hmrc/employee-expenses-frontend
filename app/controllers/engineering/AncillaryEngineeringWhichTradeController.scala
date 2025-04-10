@@ -33,53 +33,58 @@ import views.html.engineering.AncillaryEngineeringWhichTradeView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AncillaryEngineeringWhichTradeController @Inject()(
-                                                          override val messagesApi: MessagesApi,
-                                                          @Named(NavConstant.engineering) navigator: Navigator,
-                                                          identify: UnauthenticatedIdentifierAction,
-                                                          getData: DataRetrievalAction,
-                                                          requireData: DataRequiredAction,
-                                                          formProvider: AncillaryEngineeringWhichTradeFormProvider,
-                                                          val controllerComponents: MessagesControllerComponents,
-                                                          view: AncillaryEngineeringWhichTradeView,
-                                                          sessionRepository: SessionRepository
-                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class AncillaryEngineeringWhichTradeController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.engineering) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: AncillaryEngineeringWhichTradeFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: AncillaryEngineeringWhichTradeView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits {
 
   val form: Form[AncillaryEngineeringWhichTrade] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(AncillaryEngineeringWhichTradePage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(AncillaryEngineeringWhichTradePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value => {
+            val claimAmount = value match {
+              case AncillaryEngineeringWhichTrade.PatternMaker => ClaimAmounts.AncillaryEngineering.patternMaker
+              case AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker =>
+                ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
+              case AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper =>
+                ClaimAmounts.AncillaryEngineering.apprentice
+              case _ => ClaimAmounts.AncillaryEngineering.allOther
+            }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          val claimAmount = value match {
-            case AncillaryEngineeringWhichTrade.PatternMaker => ClaimAmounts.AncillaryEngineering.patternMaker
-            case AncillaryEngineeringWhichTrade.LabourerSupervisorOrUnskilledWorker => ClaimAmounts.AncillaryEngineering.labourerSupervisorUnskilledWorker
-            case AncillaryEngineeringWhichTrade.ApprenticeOrStorekeeper => ClaimAmounts.AncillaryEngineering.apprentice
-            case _ => ClaimAmounts.AncillaryEngineering.allOther
+            for {
+              updatedAnswers <- Future.fromTry(
+                request.userAnswers
+                  .set(AncillaryEngineeringWhichTradePage, value)
+                  .flatMap(_.set(ClaimAmount, claimAmount))
+              )
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(updatedAnswers))
           }
+        )
+    }
 
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AncillaryEngineeringWhichTradePage, value)
-              .flatMap(_.set(ClaimAmount, claimAmount))
-            )
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(AncillaryEngineeringWhichTradePage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

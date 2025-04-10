@@ -39,8 +39,14 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class ThirdIndustryOptionsControllerSpec extends SpecBase
-  with ScalaFutures with MockitoSugar with IntegrationPatience with ScalaCheckPropertyChecks with Generators with OptionValues {
+class ThirdIndustryOptionsControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with ScalaCheckPropertyChecks
+    with Generators
+    with OptionValues {
 
   private val userAnswers = emptyUserAnswers
 
@@ -81,7 +87,7 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -90,18 +96,16 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
 
       val thirdIndustryOptions: Gen[ThirdIndustryOptions] = Gen.oneOf(ThirdIndustryOptions.values)
 
-      forAll(thirdIndustryOptions) {
-        thirdIndustryOption =>
+      forAll(thirdIndustryOptions) { thirdIndustryOption =>
+        val request =
+          FakeRequest(POST, thirdIndustryOptionsRoute)
+            .withFormUrlEncodedBody(("value", thirdIndustryOption.toString))
 
-          val request =
-            FakeRequest(POST, thirdIndustryOptionsRoute)
-              .withFormUrlEncodedBody(("value", thirdIndustryOption.toString))
+        val result = route(application, request).value
 
-          val result = route(application, request).value
+        status(result) mustEqual SEE_OTHER
 
-          status(result) mustEqual SEE_OTHER
-
-          redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual onwardRoute.url
       }
 
       application.stop()
@@ -155,23 +159,41 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
 
     for (choice <- ThirdIndustryOptions.values) {
       val userAnswers2 = choice match {
-        case BanksBuildingSocieties => userAnswers
-          .set(ThirdIndustryOptionsPage, choice).success.value
-          .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-        case Leisure  => userAnswers
-          .set(ThirdIndustryOptionsPage, choice).success.value
-          .set(ClaimAmount, ClaimAmounts.leisure).success.value
-        case Prisons  => userAnswers
-          .set(ThirdIndustryOptionsPage, choice).success.value
-          .set(ClaimAmount, ClaimAmounts.prisons).success.value
-        case _ => userAnswers
-          .set(ThirdIndustryOptionsPage, choice).success.value
+        case BanksBuildingSocieties =>
+          userAnswers
+            .set(ThirdIndustryOptionsPage, choice)
+            .success
+            .value
+            .set(ClaimAmount, ClaimAmounts.defaultRate)
+            .success
+            .value
+        case Leisure =>
+          userAnswers
+            .set(ThirdIndustryOptionsPage, choice)
+            .success
+            .value
+            .set(ClaimAmount, ClaimAmounts.leisure)
+            .success
+            .value
+        case Prisons =>
+          userAnswers
+            .set(ThirdIndustryOptionsPage, choice)
+            .success
+            .value
+            .set(ClaimAmount, ClaimAmounts.prisons)
+            .success
+            .value
+        case _ =>
+          userAnswers
+            .set(ThirdIndustryOptionsPage, choice)
+            .success
+            .value
       }
 
       s"save correct data when '$choice' is selected" in {
         val mockSessionRepository = mock[SessionRepository]
 
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
@@ -180,13 +202,11 @@ class ThirdIndustryOptionsControllerSpec extends SpecBase
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
-            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-        }
+        whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
         application.stop()
       }
     }
   }
+
 }

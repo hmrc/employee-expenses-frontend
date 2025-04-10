@@ -16,7 +16,6 @@
 
 package navigation
 
-
 import base.SpecBase
 import controllers.routes.SessionExpiredController
 import models._
@@ -24,14 +23,13 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
 import pages.shipyard._
 
-
 class ShipyardNavigatorSpec extends SpecBase with MockitoSugar {
-  private val modes = Seq(NormalMode, CheckMode)
+  private val modes     = Seq(NormalMode, CheckMode)
   private val navigator = new ShipyardNavigator
 
   "ShipyardNavigator" when {
 
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
 
         "go to SessionExpired when not a shipyard page" in {
@@ -110,6 +108,6 @@ class ShipyardNavigatorSpec extends SpecBase with MockitoSugar {
             controllers.routes.EmployerContributionController.onPageLoad(mode)
         }
       }
-    }
   }
+
 }

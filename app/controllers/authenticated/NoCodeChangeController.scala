@@ -28,24 +28,25 @@ import views.html.authenticated.NoCodeChangeView
 
 import scala.concurrent.ExecutionContext
 
-class NoCodeChangeController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        identify: AuthenticatedIdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        auditConnector: AuditConnector,
-                                        view: NoCodeChangeView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class NoCodeChangeController @Inject() (
+    override val messagesApi: MessagesApi,
+    identify: AuthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    val controllerComponents: MessagesControllerComponents,
+    auditConnector: AuditConnector,
+    view: NoCodeChangeView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    auditConnector.sendExplicitAudit(
+      NoCodeChange.toString,
+      AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
+    )
 
-      auditConnector.sendExplicitAudit(
-        NoCodeChange.toString,
-        AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
-      )
-
-      Ok(view(request.userAnswers.isMergedJourney))
+    Ok(view(request.userAnswers.isMergedJourney))
   }
+
 }

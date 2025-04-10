@@ -33,55 +33,59 @@ import views.html.FifthIndustryOptionsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FifthIndustryOptionsController @Inject()(
-                                                override val messagesApi: MessagesApi,
-                                                sessionRepository: SessionRepository,
-                                                @Named(NavConstant.generic) navigator: Navigator,
-                                                identify: UnauthenticatedIdentifierAction,
-                                                getData: DataRetrievalAction,
-                                                requireData: DataRequiredAction,
-                                                formProvider: FifthIndustryOptionsFormProvider,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: FifthIndustryOptionsView
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class FifthIndustryOptionsController @Inject() (
+    override val messagesApi: MessagesApi,
+    sessionRepository: SessionRepository,
+    @Named(NavConstant.generic) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: FifthIndustryOptionsFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: FifthIndustryOptionsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(FifthIndustryOptionsPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(FifthIndustryOptionsPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <- value match {
+                case Forestry =>
+                  Future.fromTry(
+                    request.userAnswers
+                      .set(FifthIndustryOptionsPage, value)
+                      .flatMap(_.set(ClaimAmount, ClaimAmounts.forestry))
+                  )
+                case NoneOfAbove =>
+                  Future.fromTry(
+                    request.userAnswers
+                      .set(FifthIndustryOptionsPage, value)
+                      .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
+                  )
+                case _ =>
+                  Future.fromTry(request.userAnswers.set(FifthIndustryOptionsPage, value))
+              }
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(FifthIndustryOptionsPage, mode)(updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <- value match {
-              case Forestry =>
-                Future.fromTry(request.userAnswers.set(FifthIndustryOptionsPage, value)
-                  .flatMap(_.set(ClaimAmount, ClaimAmounts.forestry))
-                )
-              case NoneOfAbove =>
-                Future.fromTry(request.userAnswers.set(FifthIndustryOptionsPage, value)
-                  .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
-                )
-              case _ =>
-                Future.fromTry(request.userAnswers.set(FifthIndustryOptionsPage, value))
-            }
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(FifthIndustryOptionsPage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

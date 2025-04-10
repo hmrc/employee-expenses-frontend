@@ -37,7 +37,12 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience with OptionValues {
+class PoliceOfficerControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with MockitoSugar
+    with IntegrationPatience
+    with OptionValues {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -78,7 +83,7 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Mockit
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -148,7 +153,7 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Mockit
     "save 'policeOfficer' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -158,13 +163,14 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Mockit
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.Police.policeOfficer).success.value
-        .set(PoliceOfficerPage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Police.policeOfficer)
+        .success
+        .value
+        .set(PoliceOfficerPage, true)
+        .success
+        .value
 
-      whenReady(result){
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -172,7 +178,7 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Mockit
     "save 'defaultRate' to ClaimAmount when 'No' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(false)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(false))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -182,15 +188,17 @@ class PoliceOfficerControllerSpec extends SpecBase with ScalaFutures with Mockit
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-        .set(PoliceOfficerPage, false).success.value
+        .set(ClaimAmount, ClaimAmounts.defaultRate)
+        .success
+        .value
+        .set(PoliceOfficerPage, false)
+        .success
+        .value
 
-      whenReady(result){
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

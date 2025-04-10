@@ -36,11 +36,17 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
+class AmbulanceStaffControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with IntegrationPatience
+    with OptionValues
+    with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val ambulanceStaffRoute: String = controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode).url
+  lazy val ambulanceStaffRoute: String =
+    controllers.healthcare.routes.AmbulanceStaffController.onPageLoad(NormalMode).url
 
   "AmbulanceStaff Controller" must {
 
@@ -75,7 +81,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
     "redirect to the next page when true is submitted" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -98,7 +104,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
     "redirect to the next page when false is submitted" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -168,7 +174,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
     "save 'ambulanceStaff' to ClaimAmount when 'Yes' is selected" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
       val ua1 = emptyUserAnswers
 
@@ -179,12 +185,15 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
       val request = FakeRequest(POST, ambulanceStaffRoute).withFormUrlEncodedBody(("value", "true"))
 
       val ua2 = ua1
-        .set(ClaimAmount, ClaimAmounts.Healthcare.ambulanceStaff).success.value
-        .set(AmbulanceStaffPage, true).success.value
+        .set(ClaimAmount, ClaimAmounts.Healthcare.ambulanceStaff)
+        .success
+        .value
+        .set(AmbulanceStaffPage, true)
+        .success
+        .value
 
-      whenReady(route(application, request).value) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      whenReady(route(application, request).value) { _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
       application.stop()
@@ -193,7 +202,7 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
     "save 'allOther' to ClaimAmount when 'No' is selected" in {
       val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
       val ua1 = emptyUserAnswers
 
@@ -204,15 +213,19 @@ class AmbulanceStaffControllerSpec extends SpecBase with ScalaFutures with Integ
       val request = FakeRequest(POST, ambulanceStaffRoute).withFormUrlEncodedBody(("value", "false"))
 
       val ua2 = ua1
-        .set(ClaimAmount, ClaimAmounts.Healthcare.allOther).success.value
-        .set(AmbulanceStaffPage, false).success.value
+        .set(ClaimAmount, ClaimAmounts.Healthcare.allOther)
+        .success
+        .value
+        .set(AmbulanceStaffPage, false)
+        .success
+        .value
 
-      whenReady(route(application, request).value) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+      whenReady(route(application, request).value) { _ =>
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
       application.stop()
     }
   }
+
 }

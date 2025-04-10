@@ -28,4 +28,5 @@ class SpecialConstablePageSpec extends PageBehaviours {
 
     beRemovable[Boolean](SpecialConstablePage)
   }
+
 }

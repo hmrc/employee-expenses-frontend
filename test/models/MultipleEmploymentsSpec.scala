@@ -32,21 +32,17 @@ class MultipleEmploymentsSpec extends AnyWordSpec with Matchers with ScalaCheckP
 
       val gen = Gen.oneOf(MultipleEmployments.values)
 
-      forAll(gen) {
-        multipleEmployments =>
-
-          JsString(multipleEmployments.toString).validate[MultipleEmployments].asOpt.value mustEqual multipleEmployments
+      forAll(gen) { multipleEmployments =>
+        JsString(multipleEmployments.toString).validate[MultipleEmployments].asOpt.value mustEqual multipleEmployments
       }
     }
 
     "fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!MultipleEmployments.values.map(_.toString).contains(_))
+      val gen = arbitrary[String].suchThat(!MultipleEmployments.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[MultipleEmployments] mustEqual JsError("error.invalid")
+      forAll(gen) { invalidValue =>
+        JsString(invalidValue).validate[MultipleEmployments] mustEqual JsError("error.invalid")
       }
     }
 
@@ -54,12 +50,10 @@ class MultipleEmploymentsSpec extends AnyWordSpec with Matchers with ScalaCheckP
 
       val gen = Gen.oneOf(MultipleEmployments.values)
 
-      forAll(gen) {
-        multipleEmployments =>
-
-          Json.toJson(multipleEmployments) mustEqual JsString(multipleEmployments.toString)
+      forAll(gen) { multipleEmployments =>
+        Json.toJson(multipleEmployments) mustEqual JsString(multipleEmployments.toString)
       }
     }
   }
-}
 
+}

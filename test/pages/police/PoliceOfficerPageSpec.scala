@@ -28,4 +28,5 @@ class PoliceOfficerPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](PoliceOfficerPage)
   }
+
 }

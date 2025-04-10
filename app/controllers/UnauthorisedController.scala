@@ -23,20 +23,19 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesR
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.{IdentityVerificationFailedView, UnauthorisedView}
 
-class UnauthorisedController @Inject()(
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: UnauthorisedView,
-                                        ivFailedView: IdentityVerificationFailedView
-                                      ) extends FrontendBaseController with I18nSupport {
+class UnauthorisedController @Inject() (
+    val controllerComponents: MessagesControllerComponents,
+    view: UnauthorisedView,
+    ivFailedView: IdentityVerificationFailedView
+) extends FrontendBaseController
+    with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     hc.sessionId.map(_.value) match {
       case Some(id) => Ok(view(id))
-      case _ => Redirect(SessionExpiredController.onPageLoad)
+      case _        => Redirect(SessionExpiredController.onPageLoad)
     }
   }
 
-  def ivFailure: Action[AnyContent] = Action { implicit  request =>
-    Ok(ivFailedView()).withNewSession
-  }
+  def ivFailure: Action[AnyContent] = Action(implicit request => Ok(ivFailedView()).withNewSession)
 }

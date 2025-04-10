@@ -28,4 +28,5 @@ class PrintingOccupationList2PageSpec extends PageBehaviours {
 
     beRemovable[Boolean](PrintingOccupationList2Page)
   }
+
 }

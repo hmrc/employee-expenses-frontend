@@ -25,11 +25,11 @@ import pages.security.SecurityGuardNHSPage
 
 class SecurityNavigatorSpec extends SpecBase with MockitoSugar {
 
-  private val modes = Seq(NormalMode, CheckMode)
+  private val modes     = Seq(NormalMode, CheckMode)
   private val navigator = new SecurityNavigator
 
   "SecurityNavigator" when {
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
 
         "from SecurityGuardNHS" must {
@@ -55,6 +55,6 @@ class SecurityNavigatorSpec extends SpecBase with MockitoSugar {
           }
         }
       }
-    }
   }
+
 }

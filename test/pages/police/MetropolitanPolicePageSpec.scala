@@ -28,4 +28,5 @@ class MetropolitanPolicePageSpec extends PageBehaviours {
 
     beRemovable[Boolean](MetropolitanPolicePage)
   }
+
 }

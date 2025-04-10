@@ -22,10 +22,10 @@ import java.time.LocalDate
 import scala.util.matching.Regex
 
 object TaxYearDates {
-  val startDay = 6
+  val startDay   = 6
   val startMonth = 4
-  val endDay = 5
-  val endMonth = 4
+  val endDay     = 5
+  val endMonth   = 4
 }
 
 case class TaiTaxYear(year: Int) extends Ordered[TaiTaxYear] {
@@ -33,15 +33,15 @@ case class TaiTaxYear(year: Int) extends Ordered[TaiTaxYear] {
 
   require(year.toString.length == 4, "Invalid year")
 
-  def start: LocalDate = LocalDate.of(year, startMonth, startDay)
-  def end: LocalDate = LocalDate.of(year + 1, endMonth , endDay)
-  def next = TaiTaxYear(year + 1)
-  def prev = TaiTaxYear(year - 1)
-  def startPrev: LocalDate = LocalDate.of(prev.year, endMonth, startDay)
-  def endPrev: LocalDate = LocalDate.of(prev.year + 1, startMonth, endDay)
-  def compare(that: TaiTaxYear): Int = this.year compare that.year
-  def twoDigitRange = s"${start.getYear % 100}-${end.getYear % 100}"
-  def fourDigitRange = s"${start.getYear}-${end.getYear}"
+  def start: LocalDate               = LocalDate.of(year, startMonth, startDay)
+  def end: LocalDate                 = LocalDate.of(year + 1, endMonth, endDay)
+  def next                           = TaiTaxYear(year + 1)
+  def prev                           = TaiTaxYear(year - 1)
+  def startPrev: LocalDate           = LocalDate.of(prev.year, endMonth, startDay)
+  def endPrev: LocalDate             = LocalDate.of(prev.year + 1, startMonth, endDay)
+  def compare(that: TaiTaxYear): Int = this.year.compare(that.year)
+  def twoDigitRange                  = s"${start.getYear % 100}-${end.getYear % 100}"
+  def fourDigitRange                 = s"${start.getYear}-${end.getYear}"
 }
 
 object TaiTaxYear {
@@ -52,8 +52,7 @@ object TaiTaxYear {
     val naiveYear = TaiTaxYear(from.getYear)
     if (from.isBefore(naiveYear.start)) {
       naiveYear.prev
-    }
-    else {
+    } else {
       naiveYear
     }
   }
@@ -68,8 +67,8 @@ object TaiTaxYear {
           val year = yearStr.toInt
           val century = Option(cenStr).filter(_.nonEmpty) match {
             case None if year > 70 => 1900
-            case None => 2000
-            case Some(x) => x.toInt * 100
+            case None              => 2000
+            case Some(x)           => x.toInt * 100
           }
           Some(century + year)
         case _ => None
@@ -78,9 +77,10 @@ object TaiTaxYear {
 
     from match {
       case Year(year) => TaiTaxYear(year)
-      case YearRange(Year(fYear),Year(tYear)) if tYear == fYear + 1 =>
+      case YearRange(Year(fYear), Year(tYear)) if tYear == fYear + 1 =>
         TaiTaxYear(fYear)
       case x => throw new IllegalArgumentException(s"Cannot parse $x")
     }
   }
+
 }

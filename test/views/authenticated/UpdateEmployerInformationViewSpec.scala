@@ -32,11 +32,11 @@ class UpdateEmployerInformationViewSpec extends ViewBehaviours {
 
     val applyViewWithAuth = view.apply(nextPageURL)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave like normalPage(applyView, "updateEmployerInformation")
+    behave.like(normalPage(applyView, "updateEmployerInformation"))
 
-    behave like pageWithAccountMenu(applyViewWithAuth)
+    behave.like(pageWithAccountMenu(applyViewWithAuth))
 
-    behave like pageWithBackLink(applyView)
+    behave.like(pageWithBackLink(applyView))
   }
 
   application.stop()

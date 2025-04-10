@@ -28,14 +28,19 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class ConfirmationMergeJourneyControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
+class ConfirmationMergeJourneyControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
   "ConfirmationMergeJourneyController" must {
 
     "return OK and ConfirmationClaimStoppedView for a GET" in {
-      val userAnswers = currentYearFullUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYearMinus1).success.value
+      val userAnswers =
+        currentYearFullUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYearMinus1).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

@@ -29,4 +29,5 @@ trait QuestionPage[A] extends Page {
 
   def cleanup(value: Option[A], userAnswers: UserAnswers): Try[UserAnswers] =
     Success(userAnswers)
+
 }

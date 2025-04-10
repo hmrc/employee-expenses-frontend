@@ -26,28 +26,28 @@ import views.html.FirstIndustryOptionsView
 
 class FirstIndustryOptionsViewSpec extends OptionsViewBehaviours[FirstIndustryOptions] {
 
-  val messageKeyPrefix = "firstIndustryOptions"
-  val form = new FirstIndustryOptionsFormProvider()()
-  val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  val messageKeyPrefix               = "firstIndustryOptions"
+  val form                           = new FirstIndustryOptionsFormProvider()()
+  val application: Application       = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
   val view: FirstIndustryOptionsView = application.injector.instanceOf[FirstIndustryOptionsView]
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
     view.apply(form, NormalMode)(fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "FirstIndustryOptionsView" must {
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like optionsPage(form, applyView, FirstIndustryOptions.options)
+    behave.like(optionsPage(form, applyView, FirstIndustryOptions.options))
 
-    behave like pageWithBodyText(applyView(form), "firstIndustryOptions.heading")
+    behave.like(pageWithBodyText(applyView(form), "firstIndustryOptions.heading"))
 
     "must have the correct text of 'or' between last 2 radioButtons" in {
 

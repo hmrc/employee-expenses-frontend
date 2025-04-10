@@ -15,18 +15,17 @@
  */
 
 package views.transport
-  import play.twirl.api.Html
-  import views.html.transport.UseIformFreOnlyView
-  import views.newBehaviours.ViewBehaviours
 
+import play.twirl.api.Html
+import views.html.transport.UseIformFreOnlyView
+import views.newBehaviours.ViewBehaviours
 
-class  UseIformFreOnlyViewSpec extends ViewBehaviours{
+class UseIformFreOnlyViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "usePrintAndPostDetailed"
 
   val application = applicationBuilder()
     .build()
-
 
   val view = application.injector.instanceOf[UseIformFreOnlyView]
 
@@ -36,19 +35,18 @@ class  UseIformFreOnlyViewSpec extends ViewBehaviours{
 
   val claimByIformUrl: String = frontendAppConfig.employeeExpensesClaimByIformUrl
 
+  behave.like(normalPage(applyView, "usePrintAndPostDetailed"))
 
-  behave like normalPage(applyView, "usePrintAndPostDetailed")
-
-  behave like pageWithBackLink(applyView)
-
+  behave.like(pageWithBackLink(applyView))
 
   "when freJourneyEnabled is enabled- all new content is displayed for only uniformsClothingToolsView" in {
 
     val doc = asDocument(createView())
 
-    assertContainsMessages(doc, messages(s"${messageKeyPrefix}.uniformsClothingTools.1_freOnly_iform"))
+    assertContainsMessages(doc, messages(s"$messageKeyPrefix.uniformsClothingTools.1_freOnly_iform"))
 
   }
-  behave like pageWithButtonLink(applyView, claimByIformUrl,"continue")
+
+  behave.like(pageWithButtonLink(applyView, claimByIformUrl, "continue"))
 
 }

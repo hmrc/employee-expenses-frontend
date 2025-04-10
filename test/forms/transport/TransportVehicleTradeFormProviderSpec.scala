@@ -27,20 +27,25 @@ class TransportVehicleTradeFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "transportVehicleTrade.error.required"
 
-    behave like optionsField[TransportVehicleTrade](
-      form,
-      fieldName,
-      validValues  = TransportVehicleTrade.values,
-      invalidError = FormError(fieldName, "error.invalid")
+    behave.like(
+      optionsField[TransportVehicleTrade](
+        form,
+        fieldName,
+        validValues = TransportVehicleTrade.values,
+        invalidError = FormError(fieldName, "error.invalid")
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

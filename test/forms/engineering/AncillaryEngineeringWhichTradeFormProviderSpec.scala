@@ -26,20 +26,25 @@ class AncillaryEngineeringWhichTradeFormProviderSpec extends OptionFieldBehaviou
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "ancillaryEngineeringWhichTrade.error.required"
 
-    behave like optionsField[AncillaryEngineeringWhichTrade](
-      form,
-      fieldName,
-      validValues  = AncillaryEngineeringWhichTrade.values,
-      invalidError = FormError(fieldName, "error.invalid")
+    behave.like(
+      optionsField[AncillaryEngineeringWhichTrade](
+        form,
+        fieldName,
+        validValues = AncillaryEngineeringWhichTrade.values,
+        invalidError = FormError(fieldName, "error.invalid")
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

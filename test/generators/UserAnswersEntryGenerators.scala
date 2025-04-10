@@ -40,7 +40,8 @@ import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
-  implicit lazy val arbitraryConstructionOccupationsUserAnswersEntry: Arbitrary[(ConstructionOccupationsPage.type, JsValue)] =
+  implicit lazy val arbitraryConstructionOccupationsUserAnswersEntry
+      : Arbitrary[(ConstructionOccupationsPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[ConstructionOccupationsPage.type]
@@ -56,7 +57,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryTextilesOccupationList1UserAnswersEntry: Arbitrary[(TextilesOccupationList1Page.type, JsValue)] =
+  implicit lazy val arbitraryTextilesOccupationList1UserAnswersEntry
+      : Arbitrary[(TextilesOccupationList1Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[TextilesOccupationList1Page.type]
@@ -64,7 +66,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryApprenticeStorekeeperUserAnswersEntry: Arbitrary[(ShipyardApprenticeStorekeeperPage.type, JsValue)] =
+  implicit lazy val arbitraryApprenticeStorekeeperUserAnswersEntry
+      : Arbitrary[(ShipyardApprenticeStorekeeperPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[ShipyardApprenticeStorekeeperPage.type]
@@ -72,7 +75,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryShipyardOccupationList2UserAnswersEntry: Arbitrary[(ShipyardOccupationList2Page.type, JsValue)] =
+  implicit lazy val arbitraryShipyardOccupationList2UserAnswersEntry
+      : Arbitrary[(ShipyardOccupationList2Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[ShipyardOccupationList2Page.type]
@@ -80,7 +84,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryShipyardOccupationList1UserAnswersEntry: Arbitrary[(ShipyardOccupationList1Page.type, JsValue)] =
+  implicit lazy val arbitraryShipyardOccupationList1UserAnswersEntry
+      : Arbitrary[(ShipyardOccupationList1Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[ShipyardOccupationList1Page.type]
@@ -112,7 +117,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryAlreadyClaimingFREDifferentAmountsUserAnswersEntry: Arbitrary[(AlreadyClaimingFREDifferentAmountsPage.type, JsValue)] =
+  implicit lazy val arbitraryAlreadyClaimingFREDifferentAmountsUserAnswersEntry
+      : Arbitrary[(AlreadyClaimingFREDifferentAmountsPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[AlreadyClaimingFREDifferentAmountsPage.type]
@@ -120,7 +126,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryAlreadyClaimingFREUserAnswersEntry: Arbitrary[(AlreadyClaimingFRESameAmountPage.type, JsValue)] =
+  implicit lazy val arbitraryAlreadyClaimingFREUserAnswersEntry
+      : Arbitrary[(AlreadyClaimingFRESameAmountPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[AlreadyClaimingFRESameAmountPage.type]
@@ -128,7 +135,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitrarySameEmployerContributionAllYearsUserAnswersEntry: Arbitrary[(SameEmployerContributionAllYearsPage.type, JsValue)] =
+  implicit lazy val arbitrarySameEmployerContributionAllYearsUserAnswersEntry
+      : Arbitrary[(SameEmployerContributionAllYearsPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[SameEmployerContributionAllYearsPage.type]
@@ -176,7 +184,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryConstructionalEngineeringList3UserAnswersEntry: Arbitrary[(ConstructionalEngineeringList3Page.type, JsValue)] =
+  implicit lazy val arbitraryConstructionalEngineeringList3UserAnswersEntry
+      : Arbitrary[(ConstructionalEngineeringList3Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[ConstructionalEngineeringList3Page.type]
@@ -192,7 +201,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryHeatingOccupationListUserAnswersEntry: Arbitrary[(HeatingOccupationListPage.type, JsValue)] =
+  implicit lazy val arbitraryHeatingOccupationListUserAnswersEntry
+      : Arbitrary[(HeatingOccupationListPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[HeatingOccupationListPage.type]
@@ -200,7 +210,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryFourthIndustryOptionsUserAnswersEntry: Arbitrary[(FourthIndustryOptionsPage.type, JsValue)] =
+  implicit lazy val arbitraryFourthIndustryOptionsUserAnswersEntry
+      : Arbitrary[(FourthIndustryOptionsPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[FourthIndustryOptionsPage.type]
@@ -224,7 +235,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryCommunitySupportOfficerUserAnswersEntry: Arbitrary[(CommunitySupportOfficerPage.type, JsValue)] =
+  implicit lazy val arbitraryCommunitySupportOfficerUserAnswersEntry
+      : Arbitrary[(CommunitySupportOfficerPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[CommunitySupportOfficerPage.type]
@@ -248,7 +260,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryPrintingOccupationList2UserAnswersEntry: Arbitrary[(PrintingOccupationList2Page.type, JsValue)] =
+  implicit lazy val arbitraryPrintingOccupationList2UserAnswersEntry
+      : Arbitrary[(PrintingOccupationList2Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[PrintingOccupationList2Page.type]
@@ -272,7 +285,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryPrintingOccupationList1UserAnswersEntry: Arbitrary[(PrintingOccupationList1Page.type, JsValue)] =
+  implicit lazy val arbitraryPrintingOccupationList1UserAnswersEntry
+      : Arbitrary[(PrintingOccupationList1Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[PrintingOccupationList1Page.type]
@@ -296,7 +310,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryWoodFurnitureOccupationList2UserAnswersEntry: Arbitrary[(WoodFurnitureOccupationList2Page.type, JsValue)] =
+  implicit lazy val arbitraryWoodFurnitureOccupationList2UserAnswersEntry
+      : Arbitrary[(WoodFurnitureOccupationList2Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[WoodFurnitureOccupationList2Page.type]
@@ -304,7 +319,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryWoodFurnitureOccupationList3UserAnswersEntry: Arbitrary[(WoodFurnitureOccupationList3Page.type, JsValue)] =
+  implicit lazy val arbitraryWoodFurnitureOccupationList3UserAnswersEntry
+      : Arbitrary[(WoodFurnitureOccupationList3Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[WoodFurnitureOccupationList3Page.type]
@@ -312,7 +328,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryWoodFurnitureOccupationList1UserAnswersEntry: Arbitrary[(WoodFurnitureOccupationList1Page.type, JsValue)] =
+  implicit lazy val arbitraryWoodFurnitureOccupationList1UserAnswersEntry
+      : Arbitrary[(WoodFurnitureOccupationList1Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[WoodFurnitureOccupationList1Page.type]
@@ -328,7 +345,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryIronSteelOccupationListUserAnswersEntry: Arbitrary[(IronSteelOccupationListPage.type, JsValue)] =
+  implicit lazy val arbitraryIronSteelOccupationListUserAnswersEntry
+      : Arbitrary[(IronSteelOccupationListPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[IronSteelOccupationListPage.type]
@@ -336,7 +354,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryAluminiumOccupationList1UserAnswersEntry: Arbitrary[(AluminiumOccupationList1Page.type, JsValue)] =
+  implicit lazy val arbitraryAluminiumOccupationList1UserAnswersEntry
+      : Arbitrary[(AluminiumOccupationList1Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[AluminiumOccupationList1Page.type]
@@ -344,7 +363,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryAluminiumOccupationList2UserAnswersEntry: Arbitrary[(AluminiumOccupationList2Page.type, JsValue)] =
+  implicit lazy val arbitraryAluminiumOccupationList2UserAnswersEntry
+      : Arbitrary[(AluminiumOccupationList2Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[AluminiumOccupationList2Page.type]
@@ -352,7 +372,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryAluminiumOccupationList3UserAnswersEntry: Arbitrary[(AluminiumOccupationList3Page.type, JsValue)] =
+  implicit lazy val arbitraryAluminiumOccupationList3UserAnswersEntry
+      : Arbitrary[(AluminiumOccupationList3Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[AluminiumOccupationList3Page.type]
@@ -376,7 +397,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryFactoryEngineeringApprenticeUserAnswersEntry: Arbitrary[(FactoryEngineeringApprenticePage.type, JsValue)] =
+  implicit lazy val arbitraryFactoryEngineeringApprenticeUserAnswersEntry
+      : Arbitrary[(FactoryEngineeringApprenticePage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[FactoryEngineeringApprenticePage.type]
@@ -384,7 +406,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryTransportVehicleTradeUserAnswersEntry: Arbitrary[(TransportVehicleTradePage.type, JsValue)] =
+  implicit lazy val arbitraryTransportVehicleTradeUserAnswersEntry
+      : Arbitrary[(TransportVehicleTradePage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[TransportVehicleTradePage.type]
@@ -400,7 +423,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitrarySecondIndustryOptionsUserAnswersEntry: Arbitrary[(SecondIndustryOptionsPage.type, JsValue)] =
+  implicit lazy val arbitrarySecondIndustryOptionsUserAnswersEntry
+      : Arbitrary[(SecondIndustryOptionsPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[SecondIndustryOptionsPage.type]
@@ -424,7 +448,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryFactoryEngineeringList1UserAnswersEntry: Arbitrary[(FactoryEngineeringList1Page.type, JsValue)] =
+  implicit lazy val arbitraryFactoryEngineeringList1UserAnswersEntry
+      : Arbitrary[(FactoryEngineeringList1Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[FactoryEngineeringList1Page.type]
@@ -432,7 +457,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryFactoryEngineeringList2UserAnswersEntry: Arbitrary[(FactoryEngineeringList2Page.type, JsValue)] =
+  implicit lazy val arbitraryFactoryEngineeringList2UserAnswersEntry
+      : Arbitrary[(FactoryEngineeringList2Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[FactoryEngineeringList2Page.type]
@@ -440,7 +466,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryAncillaryEngineeringWhichTradeUserAnswersEntry: Arbitrary[(AncillaryEngineeringWhichTradePage.type, JsValue)] =
+  implicit lazy val arbitraryAncillaryEngineeringWhichTradeUserAnswersEntry
+      : Arbitrary[(AncillaryEngineeringWhichTradePage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[AncillaryEngineeringWhichTradePage.type]
@@ -456,7 +483,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryConstructionalEngineeringApprenticeUserAnswersEntry: Arbitrary[(ConstructionalEngineeringApprenticePage.type, JsValue)] =
+  implicit lazy val arbitraryConstructionalEngineeringApprenticeUserAnswersEntry
+      : Arbitrary[(ConstructionalEngineeringApprenticePage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[ConstructionalEngineeringApprenticePage.type]
@@ -464,7 +492,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryConstructionalEngineeringList2UserAnswersEntry: Arbitrary[(ConstructionalEngineeringList2Page.type, JsValue)] =
+  implicit lazy val arbitraryConstructionalEngineeringList2UserAnswersEntry
+      : Arbitrary[(ConstructionalEngineeringList2Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[ConstructionalEngineeringList2Page.type]
@@ -496,7 +525,8 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitraryConstructionalEngineeringList1UserAnswersEntry: Arbitrary[(ConstructionalEngineeringList1Page.type, JsValue)] =
+  implicit lazy val arbitraryConstructionalEngineeringList1UserAnswersEntry
+      : Arbitrary[(ConstructionalEngineeringList1Page.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[ConstructionalEngineeringList1Page.type]
@@ -551,4 +581,5 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
         value <- arbitrary[Int].map(Json.toJson(_))
       } yield (page, value)
     }
+
 }

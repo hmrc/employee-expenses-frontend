@@ -23,17 +23,17 @@ sealed trait AlreadyClaimingFRESameAmount
 object AlreadyClaimingFRESameAmount extends Enumerable.Implicits {
 
   case object NoChange extends WithName("noChange") with AlreadyClaimingFRESameAmount
-  case object Remove extends WithName("remove") with AlreadyClaimingFRESameAmount
+  case object Remove   extends WithName("remove") with AlreadyClaimingFRESameAmount
 
   val values: Seq[AlreadyClaimingFRESameAmount] = Seq(
-    NoChange, Remove
+    NoChange,
+    Remove
   )
 
-  val options: Seq[RadioCheckboxOption] = values.map {
-    value =>
-      RadioCheckboxOption("alreadyClaimingFRESameAmount", value.toString)
-  }
+  val options: Seq[RadioCheckboxOption] =
+    values.map(value => RadioCheckboxOption("alreadyClaimingFRESameAmount", value.toString))
 
   implicit val enumerable: Enumerable[AlreadyClaimingFRESameAmount] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

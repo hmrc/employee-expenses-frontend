@@ -32,44 +32,43 @@ import views.html.police.MetropolitanPoliceView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class MetropolitanPoliceController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              @Named(NavConstant.police) navigator: Navigator,
-                                              identify: UnauthenticatedIdentifierAction,
-                                              getData: DataRetrievalAction,
-                                              requireData: DataRequiredAction,
-                                              formProvider: MetropolitanPoliceFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: MetropolitanPoliceView,
-                                              sessionRepository: SessionRepository
-                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class MetropolitanPoliceController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.police) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: MetropolitanPoliceFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: MetropolitanPoliceView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(MetropolitanPolicePage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(MetropolitanPolicePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(MetropolitanPolicePage, value))
+              _              <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(MetropolitanPolicePage, mode)(updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(MetropolitanPolicePage, value))
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(MetropolitanPolicePage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

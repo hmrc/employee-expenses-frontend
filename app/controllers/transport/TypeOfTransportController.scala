@@ -33,49 +33,53 @@ import views.html.transport.TypeOfTransportView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TypeOfTransportController @Inject()(
-                                           override val messagesApi: MessagesApi,
-                                           @Named(NavConstant.transport) navigator: Navigator,
-                                           identify: UnauthenticatedIdentifierAction,
-                                           getData: DataRetrievalAction,
-                                           requireData: DataRequiredAction,
-                                           formProvider: TypeOfTransportFormProvider,
-                                           val controllerComponents: MessagesControllerComponents,
-                                           view: TypeOfTransportView,
-                                           sessionRepository: SessionRepository
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class TypeOfTransportController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.transport) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: TypeOfTransportFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: TypeOfTransportView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(TypeOfTransportPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(TypeOfTransportPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <-
+                if (value == TypeOfTransport.NoneOfTheAbove) {
+                  Future.fromTry(
+                    request.userAnswers
+                      .set(TypeOfTransportPage, value)
+                      .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
+                  )
+                } else {
+                  Future.fromTry(request.userAnswers.set(TypeOfTransportPage, value))
+                }
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(TypeOfTransportPage, mode)(updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <- if (value == TypeOfTransport.NoneOfTheAbove) {
-              Future.fromTry(request.userAnswers.set(TypeOfTransportPage, value)
-                .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))
-            } else {
-              Future.fromTry(request.userAnswers.set(TypeOfTransportPage, value))
-            }
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(TypeOfTransportPage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

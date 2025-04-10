@@ -110,4 +110,5 @@ trait ModelGenerators {
     Arbitrary {
       Gen.oneOf(FirstIndustryOptions.values)
     }
+
 }

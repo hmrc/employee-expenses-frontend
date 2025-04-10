@@ -24,15 +24,16 @@ import pages.heating.HeatingOccupationListPage
 import play.api.mvc.Call
 
 @Singleton
-class HeatingNavigator @Inject()() extends Navigator {
+class HeatingNavigator @Inject() () extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case HeatingOccupationListPage => _ => routes.EmployerContributionController.onPageLoad(NormalMode)
-    case _            => _ => routes.SessionExpiredController.onPageLoad
+    case _                         => _ => routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case HeatingOccupationListPage => _ => routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => routes.SessionExpiredController.onPageLoad
+    case _                         => _ => routes.SessionExpiredController.onPageLoad
   }
+
 }

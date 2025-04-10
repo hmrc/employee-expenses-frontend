@@ -30,17 +30,17 @@ import views.html.transport.UseIformFreOnlyView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UsePrintAndPostController @Inject()(
-                                           override val messagesApi: MessagesApi,
-                                           identify: UnauthenticatedIdentifierAction,
-                                           getData: DataRetrievalAction,
-                                           requireData: DataRequiredAction,
-                                           val controllerComponents: MessagesControllerComponents,
-                                           freOnlyPrintAndPostView:UseIformFreOnlyView,
-                                         ) extends FrontendBaseController with I18nSupport {
+class UsePrintAndPostController @Inject() (
+    override val messagesApi: MessagesApi,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    val controllerComponents: MessagesControllerComponents,
+    freOnlyPrintAndPostView: UseIformFreOnlyView
+) extends FrontendBaseController
+    with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
-      Ok(freOnlyPrintAndPostView())
-  }
+  def onPageLoad(): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData)(implicit request => Ok(freOnlyPrintAndPostView()))
+
 }

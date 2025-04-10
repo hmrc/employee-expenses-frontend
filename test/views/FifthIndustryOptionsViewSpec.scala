@@ -41,15 +41,15 @@ class FifthIndustryOptionsViewSpec extends OptionsViewBehaviours[FifthIndustryOp
 
   "FifthIndustryOptionsView" must {
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like optionsPage(form, applyView, FifthIndustryOptions.options)
+    behave.like(optionsPage(form, applyView, FifthIndustryOptions.options))
 
-    behave like pageWithBodyText(applyView(form), "fifthIndustryOptions.heading")
+    behave.like(pageWithBodyText(applyView(form), "fifthIndustryOptions.heading"))
 
     "must have the correct text of 'or' between last 2 radioButtons" in {
 
@@ -58,5 +58,6 @@ class FifthIndustryOptionsViewSpec extends OptionsViewBehaviours[FifthIndustryOp
       doc.getElementsByClass("govuk-radios__divider").text() mustBe messages("site.or")
     }
   }
+
   application.stop()
 }

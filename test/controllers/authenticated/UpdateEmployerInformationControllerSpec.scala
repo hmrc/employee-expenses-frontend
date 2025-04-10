@@ -39,4 +39,5 @@ class UpdateEmployerInformationControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

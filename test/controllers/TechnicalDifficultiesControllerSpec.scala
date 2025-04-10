@@ -38,5 +38,5 @@ class TechnicalDifficultiesControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
-}
 
+}

@@ -25,46 +25,43 @@ import pages.shipyard._
 import play.api.mvc.Call
 
 @Singleton
-class ShipyardNavigator @Inject()() extends Navigator {
+class ShipyardNavigator @Inject() () extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case ShipyardApprenticeStorekeeperPage   => shipyardApprenticeStoreKeeper(NormalMode)
-    case ShipyardOccupationList1Page => shipyardOccupationList1(NormalMode)
-    case ShipyardOccupationList2Page => shipyardOccupationList2(NormalMode)
-    case LabourerPage                => _ => EmployerContributionController.onPageLoad(NormalMode)
-    case _ => _                      => routes.SessionExpiredController.onPageLoad
+    case ShipyardApprenticeStorekeeperPage => shipyardApprenticeStoreKeeper(NormalMode)
+    case ShipyardOccupationList1Page       => shipyardOccupationList1(NormalMode)
+    case ShipyardOccupationList2Page       => shipyardOccupationList2(NormalMode)
+    case LabourerPage                      => _ => EmployerContributionController.onPageLoad(NormalMode)
+    case _                                 => _ => routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case ShipyardApprenticeStorekeeperPage   => shipyardApprenticeStoreKeeper(CheckMode)
-    case ShipyardOccupationList1Page => shipyardOccupationList1(CheckMode)
-    case ShipyardOccupationList2Page => shipyardOccupationList2(CheckMode)
-    case LabourerPage                => _ => EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _                      => routes.SessionExpiredController.onPageLoad
+    case ShipyardApprenticeStorekeeperPage => shipyardApprenticeStoreKeeper(CheckMode)
+    case ShipyardOccupationList1Page       => shipyardOccupationList1(CheckMode)
+    case ShipyardOccupationList2Page       => shipyardOccupationList2(CheckMode)
+    case LabourerPage                      => _ => EmployerContributionController.onPageLoad(CheckMode)
+    case _                                 => _ => routes.SessionExpiredController.onPageLoad
   }
 
-
-  def shipyardApprenticeStoreKeeper(mode: Mode)(userAnswers: UserAnswers): Call = {
+  def shipyardApprenticeStoreKeeper(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(ShipyardApprenticeStorekeeperPage) match {
-      case Some(true) => EmployerContributionController.onPageLoad(mode)
+      case Some(true)  => EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.shipyard.routes.ShipyardOccupationList1Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad
+      case _           => controllers.routes.SessionExpiredController.onPageLoad
     }
-  }
 
-  def shipyardOccupationList1(mode: Mode)(userAnswers: UserAnswers): Call = {
+  def shipyardOccupationList1(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(ShipyardOccupationList1Page) match {
-      case Some(true) => EmployerContributionController.onPageLoad(mode)
+      case Some(true)  => EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.shipyard.routes.ShipyardOccupationList2Controller.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad
+      case _           => controllers.routes.SessionExpiredController.onPageLoad
     }
-  }
 
-  def shipyardOccupationList2(mode: Mode)(userAnswers: UserAnswers): Call = {
+  def shipyardOccupationList2(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(ShipyardOccupationList2Page) match {
-      case Some(true) => EmployerContributionController.onPageLoad(mode)
+      case Some(true)  => EmployerContributionController.onPageLoad(mode)
       case Some(false) => controllers.shipyard.routes.LabourerController.onPageLoad(mode)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad
+      case _           => controllers.routes.SessionExpiredController.onPageLoad
     }
-  }
+
 }

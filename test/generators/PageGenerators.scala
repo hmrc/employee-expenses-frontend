@@ -64,13 +64,15 @@ trait PageGenerators {
   implicit lazy val arbitraryFifthIndustryOptionsPage: Arbitrary[FifthIndustryOptionsPage.type] =
     Arbitrary(FifthIndustryOptionsPage)
 
-  implicit lazy val arbitraryAlreadyClaimingFREDifferentAmountsPage: Arbitrary[AlreadyClaimingFREDifferentAmountsPage.type] =
+  implicit lazy val arbitraryAlreadyClaimingFREDifferentAmountsPage
+      : Arbitrary[AlreadyClaimingFREDifferentAmountsPage.type] =
     Arbitrary(AlreadyClaimingFREDifferentAmountsPage)
 
   implicit lazy val arbitraryAlreadyClaimingFREPage: Arbitrary[AlreadyClaimingFRESameAmountPage.type] =
     Arbitrary(AlreadyClaimingFRESameAmountPage)
 
-  implicit lazy val arbitrarySameEmployerContributionAllYearsPage: Arbitrary[SameEmployerContributionAllYearsPage.type] =
+  implicit lazy val arbitrarySameEmployerContributionAllYearsPage
+      : Arbitrary[SameEmployerContributionAllYearsPage.type] =
     Arbitrary(SameEmployerContributionAllYearsPage)
 
   implicit lazy val arbitraryChangeWhichTaxYearsPage: Arbitrary[ChangeWhichTaxYearsPage.type] =
@@ -196,7 +198,8 @@ trait PageGenerators {
   implicit lazy val arbitraryAncillaryEngineeringWhichTradePage: Arbitrary[AncillaryEngineeringWhichTradePage.type] =
     Arbitrary(AncillaryEngineeringWhichTradePage)
 
-  implicit lazy val arbitraryConstructionalEngineeringApprenticePage: Arbitrary[ConstructionalEngineeringApprenticePage.type] =
+  implicit lazy val arbitraryConstructionalEngineeringApprenticePage
+      : Arbitrary[ConstructionalEngineeringApprenticePage.type] =
     Arbitrary(ConstructionalEngineeringApprenticePage)
 
   implicit lazy val arbitraryConstructionalEngineeringList2Page: Arbitrary[ConstructionalEngineeringList2Page.type] =
@@ -231,4 +234,5 @@ trait PageGenerators {
 
   implicit lazy val arbitraryFirstIndustryOptionsPage: Arbitrary[FirstIndustryOptionsPage.type] =
     Arbitrary(FirstIndustryOptionsPage)
+
 }

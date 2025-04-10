@@ -28,4 +28,5 @@ class HeatingOccupationListPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](HeatingOccupationListPage)
   }
+
 }

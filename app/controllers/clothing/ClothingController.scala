@@ -33,47 +33,49 @@ import views.html.clothing.ClothingView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ClothingController @Inject()(
-                                    override val messagesApi: MessagesApi,
-                                    @Named(NavConstant.clothing) navigator: Navigator,
-                                    identify: UnauthenticatedIdentifierAction,
-                                    getData: DataRetrievalAction,
-                                    requireData: DataRequiredAction,
-                                    formProvider: ClothingFormProvider,
-                                    val controllerComponents: MessagesControllerComponents,
-                                    view: ClothingView,
-                                    sessionRepository: SessionRepository
-                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class ClothingController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.clothing) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: ClothingFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: ClothingView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(ClothingPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(ClothingPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value => {
+            val claimAmount = if (value) ClaimAmounts.Clothing.clothingList else ClaimAmounts.defaultRate
+            for {
+              updatedAnswers <- Future.fromTry(
+                request.userAnswers
+                  .set(ClothingPage, value)
+                  .flatMap(_.set(ClaimAmount, claimAmount))
+              )
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(ClothingPage, mode)(updatedAnswers))
+          }
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          val claimAmount = if (value) ClaimAmounts.Clothing.clothingList else ClaimAmounts.defaultRate
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ClothingPage, value)
-              .flatMap(_.set(ClaimAmount, claimAmount))
-            )
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(ClothingPage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

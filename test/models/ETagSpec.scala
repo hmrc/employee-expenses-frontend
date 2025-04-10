@@ -23,11 +23,10 @@ class ETagSpec extends SpecBase {
 
   "Etag" must {
     "successfully bind when passed valid JSON" in {
-      val validJson = Json.parse(
-        """
-          |{
-          |   "etag":"123"
-          |}
+      val validJson = Json.parse("""
+                                   |{
+                                   |   "etag":"123"
+                                   |}
         """.stripMargin)
 
       val etag = validJson.as[ETag]

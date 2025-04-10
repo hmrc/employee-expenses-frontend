@@ -26,20 +26,25 @@ class SecondIndustryOptionsFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "secondIndustryOptions.error.required"
 
-    behave like optionsField[SecondIndustryOptions](
-      form,
-      fieldName,
-      validValues  = SecondIndustryOptions.values,
-      invalidError = FormError(fieldName, "error.invalid")
+    behave.like(
+      optionsField[SecondIndustryOptions](
+        form,
+        fieldName,
+        validValues = SecondIndustryOptions.values,
+        invalidError = FormError(fieldName, "error.invalid")
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

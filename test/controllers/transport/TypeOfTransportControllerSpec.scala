@@ -79,7 +79,7 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -145,19 +145,27 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
       application.stop()
     }
 
-    for(transport <- TypeOfTransport.values) {
+    for (transport <- TypeOfTransport.values) {
       val userAnswers2 = transport match {
-        case NoneOfTheAbove => userAnswers
-          .set(TypeOfTransportPage, transport).success.value
-          .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-        case _ => userAnswers
-          .set(TypeOfTransportPage, transport).success.value
+        case NoneOfTheAbove =>
+          userAnswers
+            .set(TypeOfTransportPage, transport)
+            .success
+            .value
+            .set(ClaimAmount, ClaimAmounts.defaultRate)
+            .success
+            .value
+        case _ =>
+          userAnswers
+            .set(TypeOfTransportPage, transport)
+            .success
+            .value
       }
 
       s"save '$transport' when selected" in {
         val mockSessionRepository = mock[SessionRepository]
 
-        when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
@@ -167,13 +175,11 @@ class TypeOfTransportControllerSpec extends SpecBase with ScalaFutures with Mock
 
         val result = route(application, request).value
 
-        whenReady(result) {
-          _ =>
-            verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-        }
+        whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
         application.stop()
       }
     }
   }
+
 }

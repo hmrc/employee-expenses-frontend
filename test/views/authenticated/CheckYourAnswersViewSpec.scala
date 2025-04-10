@@ -31,34 +31,48 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
   "Index view" must {
     val cyaHelper = new CheckYourAnswersHelper(currentYearFullUserAnswers)
-    val sections = Seq(AnswerSection(None, Seq(
-      cyaHelper.industryType,
-      cyaHelper.employerContribution,
-      cyaHelper.expensesEmployerPaid,
-      cyaHelper.taxYearSelection
-    ).flatten))
+    val sections = Seq(
+      AnswerSection(
+        None,
+        Seq(
+          cyaHelper.industryType,
+          cyaHelper.employerContribution,
+          cyaHelper.expensesEmployerPaid,
+          cyaHelper.taxYearSelection
+        ).flatten
+      )
+    )
 
     def applyView(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre)(fakeRequest, messages)
+      application.injector
+        .instanceOf[CheckYourAnswersView]
+        .apply(sections, checkYourAnswersTextStopFre)(fakeRequest, messages)
 
     def applyViewWithAuth(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextStopFre)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+      application.injector
+        .instanceOf[CheckYourAnswersView]
+        .apply(sections, checkYourAnswersTextStopFre)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     def applyViewNewClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextNoFre)(fakeRequest, messages)
+      application.injector
+        .instanceOf[CheckYourAnswersView]
+        .apply(sections, checkYourAnswersTextNoFre)(fakeRequest, messages)
 
     def applyViewChangeClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
-      application.injector.instanceOf[CheckYourAnswersView].apply(sections, checkYourAnswersTextChangeFre)(fakeRequest, messages)
+      application.injector
+        .instanceOf[CheckYourAnswersView]
+        .apply(sections, checkYourAnswersTextChangeFre)(fakeRequest, messages)
 
-    behave like normalPage(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true), "checkYourAnswers")
+    behave.like(normalPage(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true), "checkYourAnswers"))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(FlatRateExpenseOptions.FRENoYears, removeFRE = true))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(FlatRateExpenseOptions.FRENoYears, removeFRE = true)))
 
     "display correct content" when {
       "new claim has been made" in {
         val doc = asDocument(applyViewNewClaim(FlatRateExpenseOptions.FRENoYears, removeFRE = false))
 
-        assertContainsMessages(doc,
+        assertContainsMessages(
+          doc,
           "checkYourAnswers.heading",
           "checkYourAnswers.confirmInformationNoFre",
           "checkYourAnswers.claimExpenses"
@@ -70,7 +84,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       "claim has been changed" in {
         val doc = asDocument(applyViewChangeClaim(FlatRateExpenseOptions.FRESomeYears, removeFRE = false))
 
-        assertContainsMessages(doc,
+        assertContainsMessages(
+          doc,
           "checkYourAnswers.heading",
           "checkYourAnswers.confirmInformationChangeFre",
           "checkYourAnswers.changeClaim"
@@ -82,7 +97,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       "claim has been stopped" in {
         val doc = asDocument(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true))
 
-        assertContainsMessages(doc,
+        assertContainsMessages(
+          doc,
           "checkYourAnswers.heading",
           "checkYourAnswers.confirmInformationChangeFre",
           "checkYourAnswers.stopClaim"

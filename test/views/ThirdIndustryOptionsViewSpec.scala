@@ -37,19 +37,19 @@ class ThirdIndustryOptionsViewSpec extends OptionsViewBehaviours[ThirdIndustryOp
     view.apply(form, NormalMode)(fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "ThirdIndustryOptionsView" must {
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+    behave.like(normalPage(applyView(form), messageKeyPrefix))
 
-    behave like pageWithAccountMenu(applyViewWithAuth(form))
+    behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 
-    behave like pageWithBackLink(applyView(form))
+    behave.like(pageWithBackLink(applyView(form)))
 
-    behave like optionsPage(form, applyView, ThirdIndustryOptions.options)
+    behave.like(optionsPage(form, applyView, ThirdIndustryOptions.options))
 
-    behave like pageWithBodyText(applyView(form), "thirdIndustryOptions.heading")
+    behave.like(pageWithBodyText(applyView(form), "thirdIndustryOptions.heading"))
 
     "must have the correct text of 'or' between last 2 radioButtons" in {
 

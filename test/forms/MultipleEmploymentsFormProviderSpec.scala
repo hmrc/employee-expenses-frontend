@@ -23,7 +23,7 @@ import play.api.data.FormError
 class MultipleEmploymentsFormProviderSpec extends OptionFieldBehaviours {
 
   val requiredKey = "multipleEmployments.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new MultipleEmploymentsFormProvider()()
 
@@ -31,17 +31,22 @@ class MultipleEmploymentsFormProviderSpec extends OptionFieldBehaviours {
 
     val fieldName = "value"
 
-    behave like optionsField[MultipleEmployments](
-      form,
-      fieldName,
-      validValues = MultipleEmployments.values,
-      invalidError = FormError(fieldName, "error.invalid")
+    behave.like(
+      optionsField[MultipleEmployments](
+        form,
+        fieldName,
+        validValues = MultipleEmployments.values,
+        invalidError = FormError(fieldName, "error.invalid")
+      )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+    behave.like(
+      mandatoryField(
+        form,
+        fieldName,
+        requiredError = FormError(fieldName, requiredKey)
+      )
     )
   }
+
 }

@@ -34,14 +34,16 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ClaimsCompleteController @Inject()(identify: MergedJourneyIdentifierAction,
-                                         sessionRepository: SessionRepository,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         claimsCompleteView: ClaimsCompleteView,
-                                         citizenDetailsConnector: CitizenDetailsConnector
-                                        )(implicit val ec: ExecutionContext,
-                                          appConfig: FrontendAppConfig)
-  extends FrontendBaseController with I18nSupport with Logging {
+class ClaimsCompleteController @Inject() (
+    identify: MergedJourneyIdentifierAction,
+    sessionRepository: SessionRepository,
+    val controllerComponents: MessagesControllerComponents,
+    claimsCompleteView: ClaimsCompleteView,
+    citizenDetailsConnector: CitizenDetailsConnector
+)(implicit val ec: ExecutionContext, appConfig: FrontendAppConfig)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   def show: Action[AnyContent] = identify.async { implicit request =>
     if (appConfig.mergedJourneyEnabled) {
@@ -49,23 +51,30 @@ class ClaimsCompleteController @Inject()(identify: MergedJourneyIdentifierAction
         case id: Authed =>
           sessionRepository.getMergedJourney(id.internalId).flatMap {
             case Some(journeyConfig) if !journeyConfig.claimList.contains(ClaimPending) =>
-              //We only want to generate the page if there are no pending claims
-              citizenDetailsConnector.getAddress(request.nino.get).map { response =>
-                Ok(claimsCompleteView(journeyConfig, Json.parse(response.body).validate[Address].asOpt))
-              }.recoverWith { //Should never happen as this same address check is made in all 3 journeys and failure would prevent users reaching this
-                case _ =>
-                  Future.successful(Ok(claimsCompleteView(journeyConfig, None)))
-              }
+              // We only want to generate the page if there are no pending claims
+              citizenDetailsConnector
+                .getAddress(request.nino.get)
+                .map { response =>
+                  Ok(claimsCompleteView(journeyConfig, Json.parse(response.body).validate[Address].asOpt))
+                }
+                .recoverWith { // Should never happen as this same address check is made in all 3 journeys and failure would prevent users reaching this
+                  case _ =>
+                    Future.successful(Ok(claimsCompleteView(journeyConfig, None)))
+                }
             case Some(_) =>
-              logger.warn(s"[ClaimsCompleteController][claimsComplete] Some claims are still pending," +
-                s" returning to Claim Expenses page. Session: ${hc.sessionId.toString}")
+              logger.warn(
+                s"[ClaimsCompleteController][claimsComplete] Some claims are still pending," +
+                  s" returning to Claim Expenses page. Session: ${hc.sessionId.toString}"
+              )
               Future.successful(Redirect(controllers.mergedJourney.routes.ClaimYourExpensesController.show))
             case _ =>
-              logger.warn(s"[ClaimsCompleteController][claimsComplete] Missing journey config," +
-                s" returning to Eligibility Checker. Session: ${hc.sessionId.toString}")
+              logger.warn(
+                s"[ClaimsCompleteController][claimsComplete] Missing journey config," +
+                  s" returning to Eligibility Checker. Session: ${hc.sessionId.toString}"
+              )
               Future.successful(Redirect(appConfig.eligibilityCheckerUrl))
           }
-        case _ => //Should never happen
+        case _ => // Should never happen
           Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
       }
     } else {

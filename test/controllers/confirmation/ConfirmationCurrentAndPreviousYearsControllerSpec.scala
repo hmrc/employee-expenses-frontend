@@ -37,12 +37,17 @@ import service.ClaimAmountService
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with MockitoSugar with ScalaFutures with IntegrationPatience {
+class ConfirmationCurrentAndPreviousYearsControllerSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaFutures
+    with IntegrationPatience {
 
-  val mockTaiConnector: TaiConnector = mock[TaiConnector]
+  val mockTaiConnector: TaiConnector             = mock[TaiConnector]
   val mockClaimAmountService: ClaimAmountService = mock[ClaimAmountService]
-  val claimAmountService = new ClaimAmountService(frontendAppConfig)
-  val claimAmount: Int = currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get
+  val claimAmountService                         = new ClaimAmountService(frontendAppConfig)
+  val claimAmount: Int                           = currentYearFullUserAnswers.get(ClaimAmountAndAnyDeductions).get
+
   val claimAmountsAndRates: StandardRate = StandardRate(
     frontendAppConfig.taxPercentageBasicRate,
     frontendAppConfig.taxPercentageHigherRate,
@@ -54,14 +59,17 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
     "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET with address" in {
 
       val answers = yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))
-        .set(CitizenDetailsAddress, address).success.value
+        .set(CitizenDetailsAddress, address)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(answers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
       when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationCurrentAndPreviousYearsController.onPageLoad().url)
@@ -76,15 +84,20 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
     "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET with address for an increase" in {
 
       val answers = yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))
-        .set(CitizenDetailsAddress, address).success.value
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(70)), TaiTaxYear()))).success.value
+        .set(CitizenDetailsAddress, address)
+        .success
+        .value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(70)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(answers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
       when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationCurrentAndPreviousYearsController.onPageLoad().url)
@@ -99,15 +112,20 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
     "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET with address for a decrease" in {
 
       val answers = yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))
-        .set(CitizenDetailsAddress, address).success.value
-        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()))).success.value
+        .set(CitizenDetailsAddress, address)
+        .success
+        .value
+        .set(FREAmounts, Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear())))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(answers))
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
       when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationCurrentAndPreviousYearsController.onPageLoad().url)
@@ -120,12 +138,15 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
     }
 
     "return OK and the correct ConfirmationCurrentAndPreviousYearsView for a GET without address" in {
-      val application = applicationBuilder(userAnswers = Some(yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1))))
+      val application = applicationBuilder(userAnswers =
+        Some(yearsUserAnswers(Seq(TaxYearSelection.CurrentYear, TaxYearSelection.CurrentYearMinus1)))
+      )
         .overrides(bind[TaiConnector].toInstance(mockTaiConnector))
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
       when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
       val request = FakeRequest(GET, ConfirmationCurrentAndPreviousYearsController.onPageLoad().url)
@@ -179,19 +200,20 @@ class ConfirmationCurrentAndPreviousYearsControllerSpec extends SpecBase with Mo
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+        .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
 
       val request = FakeRequest(GET, ConfirmationCurrentAndPreviousYearsController.onPageLoad().url)
 
       val result = route(application, request).value
 
-      whenReady(result) {
-        _ =>
-          val sessionRepository = application.injector.instanceOf[SessionRepository]
-          sessionRepository.get(Authed(userAnswersId)).map(_ mustBe None)
+      whenReady(result) { _ =>
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
+        sessionRepository.get(Authed(userAnswersId)).map(_ mustBe None)
       }
 
       application.stop()
     }
   }
+
 }

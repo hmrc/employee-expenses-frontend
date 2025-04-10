@@ -37,7 +37,12 @@ import service.ClaimAmountService
 
 import scala.concurrent.Future
 
-class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues with MockitoSugar {
+class ClaimAmountControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with IntegrationPatience
+    with OptionValues
+    with MockitoSugar {
 
   def asDocument(html: Html): Document = Jsoup.parse(html.toString())
 
@@ -47,12 +52,16 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       val claimAmount = 60
       val ua1 =
         emptyUserAnswers
-          .set(ClaimAmount, claimAmount).success.value
-          .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution).success.value
+          .set(ClaimAmount, claimAmount)
+          .success
+          .value
+          .set(EmployerContributionPage, EmployerContribution.YesEmployerContribution)
+          .success
+          .value
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
       val application = applicationBuilder(userAnswers = Some(ua1))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -65,13 +74,12 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       val ua2 = ua1.set(ClaimAmountAndAnyDeductions, claimAmountAndAnyDeductions).success.value
 
       val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
-      val result = route(application, request).value
+      val result  = route(application, request).value
 
-      whenReady(result) {
-        _ =>
-          status(result) mustEqual OK
+      whenReady(result) { _ =>
+        status(result) mustEqual OK
 
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
+        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
       }
 
       application.stop()
@@ -80,8 +88,8 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
     "redirect to Session Expired for a GET" when {
       "no existing data is found" in {
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-        val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
+        val result      = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad.url
@@ -93,8 +101,8 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
         val claimAmount = 180
         val userAnswers = UserAnswers(Json.obj(ClaimAmount.toString -> claimAmount))
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-        val request = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
-        val result = route(application, request).value
+        val request     = FakeRequest(GET, routes.ClaimAmountController.onPageLoad(NormalMode).url)
+        val result      = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad.url
@@ -103,4 +111,5 @@ class ClaimAmountControllerSpec extends SpecBase with ScalaFutures with Integrat
       }
     }
   }
+
 }

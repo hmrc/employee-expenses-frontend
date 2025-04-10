@@ -37,71 +37,72 @@ import views.html.authenticated.YourEmployerView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class YourEmployerController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        sessionRepository: SessionRepository,
-                                        @Named(NavConstant.authenticated) navigator: Navigator,
-                                        identify: AuthenticatedIdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: YourEmployerFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        taiService: TaiService,
-                                        view: YourEmployerView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class YourEmployerController @Inject() (
+    override val messagesApi: MessagesApi,
+    sessionRepository: SessionRepository,
+    @Named(NavConstant.authenticated) navigator: Navigator,
+    identify: AuthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: YourEmployerFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    taiService: TaiService,
+    view: YourEmployerView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { implicit request =>
+    val preparedForm = request.userAnswers.get(YourEmployerPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(YourEmployerPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      request.userAnswers.get(TaxYearSelectionPage) match {
-        case Some(taxYears) =>
-          taiService.employments(request.nino.get, taxYears.head).flatMap {
-            employments =>
-              if (employments.nonEmpty) {
-                val employerNames: Seq[String] = employments.map(_.name)
-                for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerNames, employerNames))
-                  _ <- sessionRepository.set(request.identifier, updatedAnswers)
-                } yield Ok(view(preparedForm, NormalMode, employerNames))
-              } else {
-                Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(NormalMode)))
-              }
-          }.recoverWith {
-            case e =>
-              logger.error(s"[YourEmployerController][taiService.employments] failed $e", e)
+    request.userAnswers.get(TaxYearSelectionPage) match {
+      case Some(taxYears) =>
+        taiService
+          .employments(request.nino.get, taxYears.head)
+          .flatMap { employments =>
+            if (employments.nonEmpty) {
+              val employerNames: Seq[String] = employments.map(_.name)
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerNames, employerNames))
+                _              <- sessionRepository.set(request.identifier, updatedAnswers)
+              } yield Ok(view(preparedForm, NormalMode, employerNames))
+            } else {
               Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(NormalMode)))
+            }
           }
-        case _ =>
-          Future.successful(Redirect(SessionExpiredController.onPageLoad))
-      }
+          .recoverWith { case e =>
+            logger.error(s"[YourEmployerController][taiService.employments] failed $e", e)
+            Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(NormalMode)))
+          }
+      case _ =>
+        Future.successful(Redirect(SessionExpiredController.onPageLoad))
+    }
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
-
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
       request.userAnswers.get(YourEmployerNames) match {
         case Some(employerNames) =>
 
-          form.bindFromRequest().fold(
-            (formWithErrors: Form[_]) =>
-              Future.successful(BadRequest(view(formWithErrors, mode, employerNames))),
-
-            value => {
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value))
-                _ <- sessionRepository.set(request.identifier, updatedAnswers)
-              } yield Redirect(navigator.nextPage(YourEmployerPage, mode)(updatedAnswers))
-            }
-          )
+          form
+            .bindFromRequest()
+            .fold(
+              (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode, employerNames))),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value))
+                  _              <- sessionRepository.set(request.identifier, updatedAnswers)
+                } yield Redirect(navigator.nextPage(YourEmployerPage, mode)(updatedAnswers))
+            )
         case _ =>
           Future.successful(Redirect(SessionExpiredController.onPageLoad))
       }
-  }
+    }
+
 }

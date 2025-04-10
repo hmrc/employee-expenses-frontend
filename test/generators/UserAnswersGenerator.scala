@@ -44,71 +44,71 @@ trait UserAnswersGenerator extends TryValues {
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
     arbitrary[(ConstructionOccupationsPage.type, JsValue)] ::
-    arbitrary[(CabinCrewPage.type, JsValue)] ::
-    arbitrary[(TextilesOccupationList1Page.type, JsValue)] ::
-    arbitrary[(ShipyardOccupationList1Page.type, JsValue)] ::
-    arbitrary[(ShipyardOccupationList2Page.type, JsValue)] ::
-    arbitrary[(ShipyardApprenticeStorekeeperPage.type, JsValue)] ::
-    arbitrary[(ShipyardOccupationList2Page.type, JsValue)] ::
-    arbitrary[(LabourerPage.type, JsValue)] ::
-    arbitrary[(DocksOccupationList1Page.type, JsValue)] ::
-    arbitrary[(FifthIndustryOptionsPage.type, JsValue)] ::
-    arbitrary[(AlreadyClaimingFREDifferentAmountsPage.type, JsValue)] ::
-    arbitrary[(AlreadyClaimingFRESameAmountPage.type, JsValue)] ::
-    arbitrary[(SameEmployerContributionAllYearsPage.type, JsValue)] ::
-    arbitrary[(RemoveFRECodePage.type, JsValue)] ::
-    arbitrary[(YourAddressPage.type, JsValue)] ::
-    arbitrary[(AluminiumApprenticePage.type, JsValue)] ::
-    arbitrary[(IronApprenticePage.type, JsValue)] ::
-    arbitrary[(YourEmployerPage.type, JsValue)] ::
-    arbitrary[(ConstructionalEngineeringList3Page.type, JsValue)] ::
-    arbitrary[(TaxYearSelectionPage.type, JsValue)] ::
-    arbitrary[(HeatingOccupationListPage.type, JsValue)] ::
-    arbitrary[(FourthIndustryOptionsPage.type, JsValue)] ::
-    arbitrary[(IronMiningPage.type, JsValue)] ::
-    arbitrary[(IronMiningListPage.type, JsValue)] ::
-    arbitrary[(CommunitySupportOfficerPage.type, JsValue)] ::
-    arbitrary[(MetropolitanPolicePage.type, JsValue)] ::
-    arbitrary[(ElectricalPage.type, JsValue)] ::
-    arbitrary[(PrintingOccupationList2Page.type, JsValue)] ::
-    arbitrary[(ThirdIndustryOptionsPage.type, JsValue)] ::
-    arbitrary[(SecurityGuardNHSPage.type, JsValue)] ::
-    arbitrary[(PrintingOccupationList1Page.type, JsValue)] ::
-    arbitrary[(ClothingPage.type, JsValue)] ::
-    arbitrary[(CateringStaffNHSPage.type, JsValue)] ::
-    arbitrary[(WoodFurnitureOccupationList2Page.type, JsValue)] ::
-    arbitrary[(WoodFurnitureOccupationList3Page.type, JsValue)] ::
-    arbitrary[(WoodFurnitureOccupationList1Page.type, JsValue)] ::
-    arbitrary[(IronSteelOccupationListPage.type, JsValue)] ::
-    arbitrary[(PoliceOfficerPage.type, JsValue)] ::
-    arbitrary[(AluminiumOccupationList1Page.type, JsValue)] ::
-    arbitrary[(AluminiumOccupationList2Page.type, JsValue)] ::
-    arbitrary[(AluminiumOccupationList3Page.type, JsValue)] ::
-    arbitrary[(SpecialConstablePage.type, JsValue)] ::
-    arbitrary[(TypeOfManufacturingPage.type, JsValue)] ::
-    arbitrary[(FactoryEngineeringApprenticePage.type, JsValue)] ::
-    arbitrary[(TransportVehicleTradePage.type, JsValue)] ::
-    arbitrary[(TransportCarpenterPage.type, JsValue)] ::
-    arbitrary[(SecondIndustryOptionsPage.type, JsValue)] ::
-    arbitrary[(GarageHandOrCleanerPage.type, JsValue)] ::
-    arbitrary[(WhichRailwayTradePage.type, JsValue)] ::
-    arbitrary[(FactoryEngineeringList1Page.type, JsValue)] ::
-    arbitrary[(FactoryEngineeringList2Page.type, JsValue)] ::
-    arbitrary[(AncillaryEngineeringWhichTradePage.type, JsValue)] ::
-    arbitrary[(HealthcareList2Page.type, JsValue)] ::
-    arbitrary[(ConstructionalEngineeringApprenticePage.type, JsValue)] ::
-    arbitrary[(ConstructionalEngineeringList2Page.type, JsValue)] ::
-    arbitrary[(HealthcareList1Page.type, JsValue)] ::
-    arbitrary[(AirlineJobListPage.type, JsValue)] ::
-    arbitrary[(TypeOfTransportPage.type, JsValue)] ::
-    arbitrary[(ConstructionalEngineeringList1Page.type, JsValue)] ::
-    arbitrary[(TypeOfEngineeringPage.type, JsValue)] ::
-    arbitrary[(AmbulanceStaffPage.type, JsValue)] ::
-    arbitrary[(EmployerContributionPage.type, JsValue)] ::
-    arbitrary[(MultipleEmploymentsPage.type, JsValue)] ::
-    arbitrary[(ExpensesEmployerPaidPage.type, JsValue)] ::
-    arbitrary[(FirstIndustryOptionsPage.type, JsValue)] ::
-    Nil
+      arbitrary[(CabinCrewPage.type, JsValue)] ::
+      arbitrary[(TextilesOccupationList1Page.type, JsValue)] ::
+      arbitrary[(ShipyardOccupationList1Page.type, JsValue)] ::
+      arbitrary[(ShipyardOccupationList2Page.type, JsValue)] ::
+      arbitrary[(ShipyardApprenticeStorekeeperPage.type, JsValue)] ::
+      arbitrary[(ShipyardOccupationList2Page.type, JsValue)] ::
+      arbitrary[(LabourerPage.type, JsValue)] ::
+      arbitrary[(DocksOccupationList1Page.type, JsValue)] ::
+      arbitrary[(FifthIndustryOptionsPage.type, JsValue)] ::
+      arbitrary[(AlreadyClaimingFREDifferentAmountsPage.type, JsValue)] ::
+      arbitrary[(AlreadyClaimingFRESameAmountPage.type, JsValue)] ::
+      arbitrary[(SameEmployerContributionAllYearsPage.type, JsValue)] ::
+      arbitrary[(RemoveFRECodePage.type, JsValue)] ::
+      arbitrary[(YourAddressPage.type, JsValue)] ::
+      arbitrary[(AluminiumApprenticePage.type, JsValue)] ::
+      arbitrary[(IronApprenticePage.type, JsValue)] ::
+      arbitrary[(YourEmployerPage.type, JsValue)] ::
+      arbitrary[(ConstructionalEngineeringList3Page.type, JsValue)] ::
+      arbitrary[(TaxYearSelectionPage.type, JsValue)] ::
+      arbitrary[(HeatingOccupationListPage.type, JsValue)] ::
+      arbitrary[(FourthIndustryOptionsPage.type, JsValue)] ::
+      arbitrary[(IronMiningPage.type, JsValue)] ::
+      arbitrary[(IronMiningListPage.type, JsValue)] ::
+      arbitrary[(CommunitySupportOfficerPage.type, JsValue)] ::
+      arbitrary[(MetropolitanPolicePage.type, JsValue)] ::
+      arbitrary[(ElectricalPage.type, JsValue)] ::
+      arbitrary[(PrintingOccupationList2Page.type, JsValue)] ::
+      arbitrary[(ThirdIndustryOptionsPage.type, JsValue)] ::
+      arbitrary[(SecurityGuardNHSPage.type, JsValue)] ::
+      arbitrary[(PrintingOccupationList1Page.type, JsValue)] ::
+      arbitrary[(ClothingPage.type, JsValue)] ::
+      arbitrary[(CateringStaffNHSPage.type, JsValue)] ::
+      arbitrary[(WoodFurnitureOccupationList2Page.type, JsValue)] ::
+      arbitrary[(WoodFurnitureOccupationList3Page.type, JsValue)] ::
+      arbitrary[(WoodFurnitureOccupationList1Page.type, JsValue)] ::
+      arbitrary[(IronSteelOccupationListPage.type, JsValue)] ::
+      arbitrary[(PoliceOfficerPage.type, JsValue)] ::
+      arbitrary[(AluminiumOccupationList1Page.type, JsValue)] ::
+      arbitrary[(AluminiumOccupationList2Page.type, JsValue)] ::
+      arbitrary[(AluminiumOccupationList3Page.type, JsValue)] ::
+      arbitrary[(SpecialConstablePage.type, JsValue)] ::
+      arbitrary[(TypeOfManufacturingPage.type, JsValue)] ::
+      arbitrary[(FactoryEngineeringApprenticePage.type, JsValue)] ::
+      arbitrary[(TransportVehicleTradePage.type, JsValue)] ::
+      arbitrary[(TransportCarpenterPage.type, JsValue)] ::
+      arbitrary[(SecondIndustryOptionsPage.type, JsValue)] ::
+      arbitrary[(GarageHandOrCleanerPage.type, JsValue)] ::
+      arbitrary[(WhichRailwayTradePage.type, JsValue)] ::
+      arbitrary[(FactoryEngineeringList1Page.type, JsValue)] ::
+      arbitrary[(FactoryEngineeringList2Page.type, JsValue)] ::
+      arbitrary[(AncillaryEngineeringWhichTradePage.type, JsValue)] ::
+      arbitrary[(HealthcareList2Page.type, JsValue)] ::
+      arbitrary[(ConstructionalEngineeringApprenticePage.type, JsValue)] ::
+      arbitrary[(ConstructionalEngineeringList2Page.type, JsValue)] ::
+      arbitrary[(HealthcareList1Page.type, JsValue)] ::
+      arbitrary[(AirlineJobListPage.type, JsValue)] ::
+      arbitrary[(TypeOfTransportPage.type, JsValue)] ::
+      arbitrary[(ConstructionalEngineeringList1Page.type, JsValue)] ::
+      arbitrary[(TypeOfEngineeringPage.type, JsValue)] ::
+      arbitrary[(AmbulanceStaffPage.type, JsValue)] ::
+      arbitrary[(EmployerContributionPage.type, JsValue)] ::
+      arbitrary[(MultipleEmploymentsPage.type, JsValue)] ::
+      arbitrary[(ExpensesEmployerPaidPage.type, JsValue)] ::
+      arbitrary[(FirstIndustryOptionsPage.type, JsValue)] ::
+      Nil
 
   implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {
 
@@ -116,17 +116,17 @@ trait UserAnswersGenerator extends TryValues {
 
     Arbitrary {
       for {
-        id      <- nonEmptyString
-        data    <- generators match {
+        id <- nonEmptyString
+        data <- generators match {
           case Nil => Gen.const(Map[QuestionPage[_], JsValue]())
           case _   => Gen.mapOf(oneOf(generators))
         }
-      } yield UserAnswers (
-        data = data.foldLeft(Json.obj()) {
-          case (obj, (path, value)) =>
-            obj.setObject(path.path, value).get
+      } yield UserAnswers(
+        data = data.foldLeft(Json.obj()) { case (obj, (path, value)) =>
+          obj.setObject(path.path, value).get
         }
       )
     }
   }
+
 }

@@ -22,15 +22,16 @@ import play.api.libs.json.{JsString, JsSuccess, Json}
 class ClaimStatusSpec extends SpecBase {
 
   val testId = "testId"
+
   val testData: Map[ClaimStatus, String] = Map(
-    ClaimCompleteCurrent -> "ClaimCompleteCurrent",
-    ClaimCompletePrevious -> "ClaimCompletePrevious",
+    ClaimCompleteCurrent         -> "ClaimCompleteCurrent",
+    ClaimCompletePrevious        -> "ClaimCompletePrevious",
     ClaimCompleteCurrentPrevious -> "ClaimCompleteCurrentPrevious",
-    ClaimSkipped -> "ClaimSkipped",
-    ClaimPending -> "ClaimPending",
-    ClaimStopped -> "ClaimStopped",
-    ClaimNotChanged -> "ClaimNotChanged",
-    ClaimUnsuccessful -> "ClaimUnsuccessful"
+    ClaimSkipped                 -> "ClaimSkipped",
+    ClaimPending                 -> "ClaimPending",
+    ClaimStopped                 -> "ClaimStopped",
+    ClaimNotChanged              -> "ClaimNotChanged",
+    ClaimUnsuccessful            -> "ClaimUnsuccessful"
   )
 
   "ClaimStatus" must {
@@ -46,4 +47,5 @@ class ClaimStatusSpec extends SpecBase {
       }
     }
   }
+
 }

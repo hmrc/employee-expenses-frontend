@@ -76,7 +76,7 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
     "redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
@@ -146,7 +146,7 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
     "save 'true' when 'Yes' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -157,12 +157,11 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(SpecialConstablePage, true).success.value
+        .set(SpecialConstablePage, true)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
@@ -170,7 +169,7 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
     "save 'false' when 'No' is selected" in {
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
         .build()
@@ -181,14 +180,14 @@ class SpecialConstableControllerSpec extends SpecBase with ScalaFutures with Moc
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(SpecialConstablePage, false).success.value
+        .set(SpecialConstablePage, false)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
   }
+
 }

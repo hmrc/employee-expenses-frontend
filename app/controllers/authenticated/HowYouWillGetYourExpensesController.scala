@@ -27,59 +27,66 @@ import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{HowYouWillGetYourExpensesCurrentAndPreviousYearView, HowYouWillGetYourExpensesCurrentView, HowYouWillGetYourExpensesPreviousView}
+import views.html.{
+  HowYouWillGetYourExpensesCurrentAndPreviousYearView,
+  HowYouWillGetYourExpensesCurrentView,
+  HowYouWillGetYourExpensesPreviousView
+}
 
-class HowYouWillGetYourExpensesController @Inject()(
-                                                     override val messagesApi: MessagesApi,
-                                                     identify: AuthenticatedIdentifierAction,
-                                                     getData: DataRetrievalAction,
-                                                     requireData: DataRequiredAction,
-                                                     val controllerComponents: MessagesControllerComponents,
-                                                     @Named(NavConstant.authenticated) navigator: Navigator,
-                                                     currentView: HowYouWillGetYourExpensesCurrentView,
-                                                     previousView: HowYouWillGetYourExpensesPreviousView,
-                                                     currentAndPreviousYearView: HowYouWillGetYourExpensesCurrentAndPreviousYearView
-                                                   ) extends FrontendBaseController with I18nSupport {
+class HowYouWillGetYourExpensesController @Inject() (
+    override val messagesApi: MessagesApi,
+    identify: AuthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    val controllerComponents: MessagesControllerComponents,
+    @Named(NavConstant.authenticated) navigator: Navigator,
+    currentView: HowYouWillGetYourExpensesCurrentView,
+    previousView: HowYouWillGetYourExpensesPreviousView,
+    currentAndPreviousYearView: HowYouWillGetYourExpensesCurrentAndPreviousYearView
+) extends FrontendBaseController
+    with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val redirectUrl = navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(request.userAnswers).url
 
-      val redirectUrl = navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(request.userAnswers).url
-
-      val taxYearSelection: Option[Seq[TaxYearSelection]] = (request.userAnswers.get(TaxYearSelectionPage),
-        request.userAnswers.get(ChangeWhichTaxYearsPage)) match {
-        case (Some(_), Some(changeYears)) => Some(changeYears)
+    val taxYearSelection: Option[Seq[TaxYearSelection]] =
+      (request.userAnswers.get(TaxYearSelectionPage), request.userAnswers.get(ChangeWhichTaxYearsPage)) match {
+        case (Some(_), Some(changeYears))   => Some(changeYears)
         case (Some(taxYearSelection), None) => Some(taxYearSelection)
-        case _ => None
+        case _                              => None
       }
 
-      val npsFreAmount: Option[FlatRateExpenseAmounts] = request.userAnswers.get(FREAmounts)
-        .flatMap(_.find(_.taxYear.year == TaxYearSelection.getTaxYear(CurrentYear)))
+    val npsFreAmount: Option[FlatRateExpenseAmounts] = request.userAnswers
+      .get(FREAmounts)
+      .flatMap(_.find(_.taxYear.year == TaxYearSelection.getTaxYear(CurrentYear)))
 
+    val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmountAndAnyDeductions)
 
-      val claimAmount: Option[Int] = request.userAnswers.get(ClaimAmountAndAnyDeductions)
+    taxYearSelection match {
+      case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) && taxYearSelection.length > 1 =>
+        Ok(
+          currentAndPreviousYearView(
+            redirectUrl,
+            containsCurrentYearMinus1(taxYearSelection),
+            hasClaimIncreased(npsFreAmount, claimAmount)
+          )
+        )
+      case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) =>
 
-      taxYearSelection match {
-        case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) && taxYearSelection.length > 1 =>
-          Ok(currentAndPreviousYearView(redirectUrl, containsCurrentYearMinus1(taxYearSelection), hasClaimIncreased(npsFreAmount,claimAmount)))
-        case Some(taxYearSelection) if taxYearSelection.contains(CurrentYear) =>
-
-          Ok(currentView(redirectUrl, hasClaimIncreased(npsFreAmount,claimAmount)))
-        case Some(taxYearSelection) =>
-          Ok(previousView(redirectUrl, containsCurrentYearMinus1(taxYearSelection)))
-        case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad)
-      }
-  }
-
-  private def containsCurrentYearMinus1(taxYearSelections: Seq[TaxYearSelection]): Boolean = {
-    taxYearSelections.contains(CurrentYearMinus1)
-  }
-
-  private def hasClaimIncreased(nspFreAmount: Option[FlatRateExpenseAmounts], claimAmount: Option[Int]): Boolean = {
-    (nspFreAmount, claimAmount) match {
-      case (Some(FlatRateExpenseAmounts(Some(npsAmount), _)), Some(claimAmount)) => npsAmount.grossAmount < claimAmount
-      case _ => true
+        Ok(currentView(redirectUrl, hasClaimIncreased(npsFreAmount, claimAmount)))
+      case Some(taxYearSelection) =>
+        Ok(previousView(redirectUrl, containsCurrentYearMinus1(taxYearSelection)))
+      case _ => Redirect(controllers.routes.SessionExpiredController.onPageLoad)
     }
   }
+
+  private def containsCurrentYearMinus1(taxYearSelections: Seq[TaxYearSelection]): Boolean =
+    taxYearSelections.contains(CurrentYearMinus1)
+
+  private def hasClaimIncreased(nspFreAmount: Option[FlatRateExpenseAmounts], claimAmount: Option[Int]): Boolean =
+    (nspFreAmount, claimAmount) match {
+      case (Some(FlatRateExpenseAmounts(Some(npsAmount), _)), Some(claimAmount)) => npsAmount.grossAmount < claimAmount
+      case _                                                                     => true
+    }
 
 }

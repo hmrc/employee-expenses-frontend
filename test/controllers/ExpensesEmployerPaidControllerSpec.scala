@@ -36,10 +36,10 @@ import scala.concurrent.Future
 
 class ExpensesEmployerPaidControllerSpec extends SpecBase with ScalaFutures with MockitoSugar with IntegrationPatience {
 
-  private val userAnswers = emptyUserAnswers
+  private val userAnswers           = emptyUserAnswers
   private val mockSessionRepository = mock[SessionRepository]
 
-  when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+  when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
 
   def onwardRoute: Call = Call("GET", "/foo")
 
@@ -153,15 +153,15 @@ class ExpensesEmployerPaidControllerSpec extends SpecBase with ScalaFutures with
       val result = route(application, request).value
 
       val userAnswers2 = userAnswers
-        .set(ExpensesEmployerPaidPage, 20).success.value
+        .set(ExpensesEmployerPaidPage, 20)
+        .success
+        .value
 
-      whenReady(result) {
-        _ =>
-          verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2)
-      }
+      whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), userAnswers2))
 
       application.stop()
     }
 
   }
+
 }

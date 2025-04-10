@@ -34,33 +34,39 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UnauthenticatedIdentifierActionImpl @Inject()(
-                                                     override val authConnector: AuthConnector,
-                                                     config: FrontendAppConfig,
-                                                     val parser: BodyParsers.Default
-                                                   )(implicit val executionContext: ExecutionContext) extends UnauthenticatedIdentifierAction with AuthorisedFunctions with Logging {
+class UnauthenticatedIdentifierActionImpl @Inject() (
+    override val authConnector: AuthConnector,
+    config: FrontendAppConfig,
+    val parser: BodyParsers.Default
+)(implicit val executionContext: ExecutionContext)
+    extends UnauthenticatedIdentifierAction
+    with AuthorisedFunctions
+    with Logging {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     authorised()
-      .retrieve(OptionalRetrieval("nino", Reads.StringReads) and OptionalRetrieval("internalId", Reads.StringReads)) {
-      x =>
-        val nino = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
-        val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
+      .retrieve(OptionalRetrieval("nino", Reads.StringReads).and(OptionalRetrieval("internalId", Reads.StringReads))) {
+        x =>
+          val nino       = x.a.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
+          val internalId = x.b.getOrElse(throw new UnauthorizedException("Unable to retrieve internalId"))
 
-        block(IdentifierRequest(request, Authed(internalId), Some(nino)))
-    }.recoverWith {
-      case _: AuthorisationException | _: HttpException =>
-        val sessionId: String = hc.sessionId.map(_.value).getOrElse(throw new Exception("no sessionId"))
-        block(IdentifierRequest(request, UnAuthed(sessionId)))
-      case e =>
-        logger.error(s"[UnauthenticatedIdentifierAction][authorised] failed $e", e)
-        Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad))
-    }
+          block(IdentifierRequest(request, Authed(internalId), Some(nino)))
+      }
+      .recoverWith {
+        case _: AuthorisationException | _: HttpException =>
+          val sessionId: String = hc.sessionId.map(_.value).getOrElse(throw new Exception("no sessionId"))
+          block(IdentifierRequest(request, UnAuthed(sessionId)))
+        case e =>
+          logger.error(s"[UnauthenticatedIdentifierAction][authorised] failed $e", e)
+          Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad))
+      }
   }
+
 }
 
-trait UnauthenticatedIdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]
-
+trait UnauthenticatedIdentifierAction
+    extends ActionBuilder[IdentifierRequest, AnyContent]
+    with ActionFunction[Request, IdentifierRequest]

@@ -29,7 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
-class NoCodeChangeControllerSpec extends SpecBase with MockitoSugar with ScalaFutures{
+class NoCodeChangeControllerSpec extends SpecBase with MockitoSugar with ScalaFutures {
 
   "NoCodeChange Controller" must {
 
@@ -47,22 +47,22 @@ class NoCodeChangeControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       status(result) mustEqual OK
 
-      whenReady(result) {
-        _ =>
+      whenReady(result) { _ =>
+        val captor = ArgumentCaptor.forClass(classOf[AuditData])
 
-          val captor = ArgumentCaptor.forClass(classOf[AuditData])
+        verify(mockAuditConnector, times(1))
+          .sendExplicitAudit(eqTo("noCodeChange"), captor.capture())(any(), any(), any())
 
-          verify(mockAuditConnector, times(1)).sendExplicitAudit(eqTo("noCodeChange"), captor.capture())(any(), any(), any())
+        val auditData = captor.getValue
 
-          val auditData = captor.getValue
-
-          auditData.nino mustEqual fakeNino
-          auditData.userAnswers mustEqual emptyUserAnswers.data
-          auditData.userAnswers mustBe a[JsObject]
+        auditData.nino mustEqual fakeNino
+        auditData.userAnswers mustEqual emptyUserAnswers.data
+        auditData.userAnswers mustBe a[JsObject]
       }
 
       application.stop()
     }
 
   }
+
 }

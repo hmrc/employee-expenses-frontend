@@ -28,4 +28,5 @@ class YourAddressPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](YourAddressPage)
   }
+
 }

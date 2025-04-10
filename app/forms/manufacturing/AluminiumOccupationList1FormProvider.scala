@@ -26,4 +26,5 @@ class AluminiumOccupationList1FormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("aluminiumOccupationList1.error.required")
     )
+
 }

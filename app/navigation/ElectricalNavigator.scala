@@ -24,15 +24,16 @@ import pages.electrical.ElectricalPage
 import play.api.mvc.Call
 
 @Singleton
-class ElectricalNavigator @Inject()() extends Navigator {
+class ElectricalNavigator @Inject() () extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case ElectricalPage => _ => routes.EmployerContributionController.onPageLoad(NormalMode)
-    case _            => _ => routes.SessionExpiredController.onPageLoad
+    case _              => _ => routes.SessionExpiredController.onPageLoad
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case ElectricalPage => _ => routes.EmployerContributionController.onPageLoad(CheckMode)
-    case _ => _ => routes.SessionExpiredController.onPageLoad
+    case _              => _ => routes.SessionExpiredController.onPageLoad
   }
+
 }

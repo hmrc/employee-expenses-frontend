@@ -33,58 +33,65 @@ import views.html.ThirdIndustryOptionsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ThirdIndustryOptionsController @Inject()(
-                                                override val messagesApi: MessagesApi,
-                                                @Named(NavConstant.generic) navigator: Navigator,
-                                                identify: UnauthenticatedIdentifierAction,
-                                                getData: DataRetrievalAction,
-                                                requireData: DataRequiredAction,
-                                                formProvider: ThirdIndustryOptionsFormProvider,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: ThirdIndustryOptionsView,
-                                                sessionRepository: SessionRepository
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+class ThirdIndustryOptionsController @Inject() (
+    override val messagesApi: MessagesApi,
+    @Named(NavConstant.generic) navigator: Navigator,
+    identify: UnauthenticatedIdentifierAction,
+    getData: DataRetrievalAction,
+    requireData: DataRequiredAction,
+    formProvider: ThirdIndustryOptionsFormProvider,
+    val controllerComponents: MessagesControllerComponents,
+    view: ThirdIndustryOptionsView,
+    sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(ThirdIndustryOptionsPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(ThirdIndustryOptionsPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <-
+                value match {
+                  case Leisure =>
+                    Future.fromTry(
+                      request.userAnswers
+                        .set(ThirdIndustryOptionsPage, value)
+                        .flatMap(_.set(ClaimAmount, ClaimAmounts.leisure))
+                    )
+                  case Prisons =>
+                    Future.fromTry(
+                      request.userAnswers
+                        .set(ThirdIndustryOptionsPage, value)
+                        .flatMap(_.set(ClaimAmount, ClaimAmounts.prisons))
+                    )
+                  case BanksBuildingSocieties =>
+                    Future.fromTry(
+                      request.userAnswers
+                        .set(ThirdIndustryOptionsPage, BanksBuildingSocieties)
+                        .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate))
+                    )
+                  case _ => Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value))
+                }
+              _ <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(ThirdIndustryOptionsPage, mode)(updatedAnswers))
+        )
+    }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value => {
-          for {
-            updatedAnswers <-
-              value match {
-                case Leisure =>
-                  Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value)
-                    .flatMap(_.set(ClaimAmount, ClaimAmounts.leisure))
-                  )
-                case Prisons =>
-                  Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value)
-                    .flatMap(_.set(ClaimAmount, ClaimAmounts.prisons))
-                  )
-                case BanksBuildingSocieties =>
-                  Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, BanksBuildingSocieties)
-                                 .flatMap(_.set(ClaimAmount, ClaimAmounts.defaultRate)))
-                case _ => Future.fromTry(request.userAnswers.set(ThirdIndustryOptionsPage, value))
-              }
-            _ <- sessionRepository.set(request.identifier, updatedAnswers)
-          } yield Redirect(navigator.nextPage(ThirdIndustryOptionsPage, mode)(updatedAnswers))
-        }
-      )
-  }
 }

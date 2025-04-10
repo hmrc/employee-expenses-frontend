@@ -20,7 +20,7 @@ import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
-class SignOutControllerSpec extends SpecBase{
+class SignOutControllerSpec extends SpecBase {
 
   "SignOutController" must {
 
@@ -39,4 +39,5 @@ class SignOutControllerSpec extends SpecBase{
       application.stop()
     }
   }
+
 }

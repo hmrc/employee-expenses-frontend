@@ -36,15 +36,21 @@ import repositories.SessionRepository
 
 import scala.concurrent.Future
 
-class DocksOccupationList1ControllerSpec extends SpecBase with ScalaFutures with IntegrationPatience with OptionValues
-  with MockitoSugar with BeforeAndAfterEach {
+class DocksOccupationList1ControllerSpec
+    extends SpecBase
+    with ScalaFutures
+    with IntegrationPatience
+    with OptionValues
+    with MockitoSugar
+    with BeforeAndAfterEach {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
   private val mockSessionRepository: SessionRepository = mock[SessionRepository]
+
   override def beforeEach(): Unit = {
     reset(mockSessionRepository)
-    when(mockSessionRepository.set(any(), any())) thenReturn Future.successful(true)
+    when(mockSessionRepository.set(any(), any())).thenReturn(Future.successful(true))
   }
 
   lazy val docksOccupationList1Route: String = routes.DocksOccupationList1Controller.onPageLoad(NormalMode).url
@@ -86,7 +92,8 @@ class DocksOccupationList1ControllerSpec extends SpecBase with ScalaFutures with
           .overrides(
             bind[Navigator].qualifiedWith(NavConstant.docks).toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
-          ).build()
+          )
+          .build()
 
       val request =
         FakeRequest(POST, docksOccupationList1Route)
@@ -162,15 +169,16 @@ class DocksOccupationList1ControllerSpec extends SpecBase with ScalaFutures with
 
     val ua2 =
       ua1
-        .set(ClaimAmount, ClaimAmounts.docksAndWaterways).success.value
-        .set(DocksOccupationList1Page, true).success.value
+        .set(ClaimAmount, ClaimAmounts.docksAndWaterways)
+        .success
+        .value
+        .set(DocksOccupationList1Page, true)
+        .success
+        .value
 
     val result = route(application, request).value
 
-    whenReady(result) {
-      _ =>
-        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
-    }
+    whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2))
 
     application.stop()
   }
@@ -188,16 +196,18 @@ class DocksOccupationList1ControllerSpec extends SpecBase with ScalaFutures with
 
     val ua2 =
       ua1
-        .set(ClaimAmount, ClaimAmounts.defaultRate).success.value
-        .set(DocksOccupationList1Page, false).success.value
+        .set(ClaimAmount, ClaimAmounts.defaultRate)
+        .success
+        .value
+        .set(DocksOccupationList1Page, false)
+        .success
+        .value
 
     val result = route(application, request).value
 
-    whenReady(result) {
-      _ =>
-        verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2)
-    }
+    whenReady(result)(_ => verify(mockSessionRepository, times(1)).set(UnAuthed(userAnswersId), ua2))
 
     application.stop()
   }
+
 }
