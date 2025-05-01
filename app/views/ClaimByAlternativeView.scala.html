@@ -26,6 +26,8 @@
 
 @()(implicit request: Request[_], messages: Messages)
 
+@claimOnlineLink = {<a class="govuk-link" href="@frontendAppConfig.claimByIformUrl">@messages("claimByAlternative.onlineFormLinkText")</a>}
+
 @claimByPostLink = {<a class="govuk-link" href="@frontendAppConfig.p87ClaimByPostUrl">@messages("claimByAlternative.claimByPostLinkText")</a>}
 
 @layout(
@@ -36,6 +38,6 @@
 
     @heading("claimByAlternative.heading")
 
-    <p class="govuk-body">@Html(messages("claimByAlternative.claimByPostLink",claimByPostLink))</p>
+  <p class="govuk-body">@Html(messages("claimByAlternative.paragraph", claimOnlineLink, claimByPostLink))</p>
   }
 }
