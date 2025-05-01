@@ -107,10 +107,11 @@ employerContribution.error.required = Select yes if your employer paid back any 
 employerContribution.yesEmployerContribution = Yes, my employer has paid back part of these expenses
 employerContribution.noEmployerContribution = No, my employer has not paid back any of these expenses
 
-claimByAlternative.title = If you are claiming for more than one job you must claim by post
-claimByAlternative.heading = If you are claiming for more than one job you must claim by post
-claimByAlternative.claimByPostLink = {0}
-claimByAlternative.claimByPostLinkText = Claim by post
+claimByAlternative.title = If you are claiming for more than one job you must use an online form or claim by post
+claimByAlternative.heading = If you are claiming for more than one job you must use an online form or claim by post
+claimByAlternative.paragraph = Use the {0} or {1}.
+claimByAlternative.onlineFormLinkText = online form
+claimByAlternative.claimByPostLinkText = claim by post
 
 multipleEmployments.title = How many jobs are you claiming for?
 multipleEmployments.heading = How many jobs are you claiming for?
