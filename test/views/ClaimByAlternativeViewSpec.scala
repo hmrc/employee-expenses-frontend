@@ -34,7 +34,9 @@ class ClaimByAlternativeViewSpec extends ViewBehaviours {
 
     behave.like(pageWithBackLink(applyView))
 
-    val link1: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.p87ClaimOnlineUrl}">${messages("claimByAlternative.onlineFormLinkText")}</a>""")
+    val link1: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.p87ClaimOnlineUrl}">${messages(
+        "claimByAlternative.onlineFormLinkText"
+      )}</a>""")
 
     val link2: Html = Html(s"""<a class="govuk-link" href="${frontendAppConfig.p87ClaimByPostUrl}">${messages(
         "claimByAlternative.claimByPostLinkText"
