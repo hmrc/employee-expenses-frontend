@@ -10,7 +10,7 @@ object AppDependencies {
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30"                    % mongoVersion,
     "uk.gov.hmrc"       %% "play-conditional-form-mapping-play-30" % "3.3.0",
     "uk.gov.hmrc"       %% "tax-year"                              % "5.0.0",
-    "uk.gov.hmrc"       %% "sca-wrapper-play-30"                   % "2.8.0"
+    "uk.gov.hmrc"       %% "sca-wrapper-play-30"                   % "2.9.0"
   )
 
   val test: Seq[ModuleID] = Seq(
