@@ -23,13 +23,13 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 class SignOutController @Inject() (
-    identify: UnauthenticatedIdentifierAction,
     val controllerComponents: MessagesControllerComponents,
-    appConfig: FrontendAppConfig
+    appConfig: FrontendAppConfig,
+    identify: UnauthenticatedIdentifierAction
 ) extends FrontendBaseController {
 
   def signOut: Action[AnyContent] = identify {
-    Redirect(appConfig.feedbackSurveyUrl).withNewSession
+    Redirect(appConfig.signOutUrl)
   }
 
 }
