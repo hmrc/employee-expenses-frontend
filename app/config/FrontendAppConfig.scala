@@ -75,9 +75,7 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
   lazy val updateAddressInfoUrl: String  = configuration.get[String]("updateAddressInfo.url")
   lazy val updateEmployerInfoUrl: String = configuration.get[String]("updateEmployerInfo.url")
 
-  lazy val feedbackSurveyUrl: String = configuration.get[String]("feedbackSurvey.url")
-  lazy val signOutUrl: String        = employeeExpensesFrontendUrl + "/sign-out"
-  lazy val keepAliveUrl: String      = configuration.get[String]("keepAlive.url")
+  lazy val keepAliveUrl: String = configuration.get[String]("keepAlive.url")
 
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")
@@ -107,4 +105,10 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
   lazy val startUrlPsubs: String         = configuration.get[String]("mergedJourney.professionalSubscriptionsUrl")
   lazy val startUrlFre: String           = configuration.get[String]("mergedJourney.employeeExpensesUrl")
   lazy val employeeExpensesClaimByIformUrl: String = configuration.get[String]("urls.employeeExpensesClaimByIformUrl")
+
+  lazy val feedbackSurveyUrl: String            = configuration.get[String]("feedbackSurvey.url")
+  private lazy val basGatewaySignOutUrl: String = servicesConfig.getString("bas-gateway-frontend.sign-out-url")
+
+  lazy val signOutUrl: String = s"$basGatewaySignOutUrl?continue=$feedbackSurveyUrl"
+
 }
