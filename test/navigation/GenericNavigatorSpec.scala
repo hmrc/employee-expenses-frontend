@@ -17,6 +17,7 @@
 package navigation
 
 import base.SpecBase
+import config.FrontendAppConfig
 import controllers.authenticated.routes._
 import controllers.docks.routes._
 import controllers.foodCatering.routes._
@@ -30,11 +31,15 @@ import models.FourthIndustryOptions._
 import models.SecondIndustryOptions._
 import models.ThirdIndustryOptions._
 import models._
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar.mock
 import pages._
+import play.api.mvc.Call
 
 class GenericNavigatorSpec extends SpecBase {
 
-  val navigator = new GenericNavigator
+  val mockAppConfig = mock[FrontendAppConfig]
+  val navigator = new GenericNavigator()(mockAppConfig)
 
   "Navigator" when {
 
@@ -63,11 +68,21 @@ class GenericNavigatorSpec extends SpecBase {
           ClaimByAlternativeController.onPageLoad()
       }
 
-      "go to ClaimByAlternativeController from MultipleEmploymentsPage when 'No' is selected" in {
+      "go to FirstIndustryController from MultipleEmploymentsPage when 'No' is selected and pega journey is disabled" in {
+        when(mockAppConfig.pegaJourneyEnabled).thenReturn(false)
         val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
 
         navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
           FirstIndustryOptionsController.onPageLoad(NormalMode)
+      }
+
+      "go to ClaimOnline in employee-expenses-tax-relief-frontend When 'No' is selected and pega journey is enabled" in {
+        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
+        val expectedCall = Call("GET", mockAppConfig.employeeTaxReliefExpensesClaimOnlineUrl)
+
+        when(mockAppConfig.pegaJourneyEnabled).thenReturn(true)
+        navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
+          expectedCall
       }
 
       "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
@@ -474,11 +489,21 @@ class GenericNavigatorSpec extends SpecBase {
           ClaimByAlternativeController.onPageLoad()
       }
 
-      "go to ClaimByAlternativeController from MultipleEmploymentsPage when 'No' is selected" in {
+      "go to FirstIndustryController from MultipleEmploymentsPage when 'No' is selected and pega journey is disabled" in {
+        when(mockAppConfig.pegaJourneyEnabled).thenReturn(false)
         val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
 
         navigator.nextPage(MultipleEmploymentsPage, CheckMode)(answers) mustBe
           FirstIndustryOptionsController.onPageLoad(CheckMode)
+      }
+
+      "go to ClaimOnline in employee-expenses-tax-relief-frontend When 'No' is selected and pega journey is enabled" in {
+        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
+        val expectedCall = Call("GET", mockAppConfig.employeeTaxReliefExpensesClaimOnlineUrl)
+
+        when(mockAppConfig.pegaJourneyEnabled).thenReturn(true)
+        navigator.nextPage(MultipleEmploymentsPage, CheckMode)(answers) mustBe
+          expectedCall
       }
 
       "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
