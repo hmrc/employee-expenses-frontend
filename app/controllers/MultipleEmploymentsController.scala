@@ -66,9 +66,9 @@ class MultipleEmploymentsController @Inject() (
           (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(MultipleEmploymentsPage, value))
-                _              <- sessionRepository.set(request.identifier, updatedAnswers)
-              } yield Redirect(navigator.nextPage(MultipleEmploymentsPage, mode)(updatedAnswers))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(MultipleEmploymentsPage, value))
+              _              <- sessionRepository.set(request.identifier, updatedAnswers)
+            } yield Redirect(navigator.nextPage(MultipleEmploymentsPage, mode)(updatedAnswers))
         )
     }
 

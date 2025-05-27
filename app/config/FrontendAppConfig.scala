@@ -30,7 +30,9 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
   lazy val taiHost: String                 = configuration.get[Service]("microservice.services.tai").baseUrl
   lazy val citizenDetailsUrl: String       = configuration.get[Service]("microservice.services.citizen-details").baseUrl
   lazy val employeeWfhExpensesHost: String = servicesConfig.baseUrl("employee-wfh-expenses-frontend")
-  lazy val employeeTaxReliefExpensesClaimOnlineUrl: String = configuration.get[String]("urls.employeeTaxReliefExpensesClaimOnlineUrl")
+
+  lazy val employeeTaxReliefExpensesClaimOnlineUrl: String =
+    configuration.get[String]("urls.employeeTaxReliefExpensesClaimOnlineUrl")
 
   lazy val authUrl: String          = configuration.get[Service]("microservice.services.auth").baseUrl
   lazy val loginUrl: String         = configuration.get[String]("urls.login")
