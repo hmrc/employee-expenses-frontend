@@ -100,9 +100,6 @@ class FrontendAppConfig @Inject() (val configuration: Configuration, val service
   lazy val mergedJourneyEnabled: Boolean =
     configuration.getOptional[Boolean]("feature-switch.merged-journey").getOrElse(false)
 
-  lazy val pegaJourneyEnabled: Boolean =
-    configuration.getOptional[Boolean]("feature-switch.pega-journey-enabled").getOrElse(false)
-
   lazy val eligibilityCheckerUrl: String = configuration.get[String]("mergedJourney.eligibilityCheckerFallbackUrl")
   lazy val startUrlWfh: String           = configuration.get[String]("mergedJourney.workingFromHomeExpensesUrl")
   lazy val startUrlPsubs: String         = configuration.get[String]("mergedJourney.professionalSubscriptionsUrl")

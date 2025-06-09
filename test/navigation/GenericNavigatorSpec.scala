@@ -68,8 +68,7 @@ class GenericNavigatorSpec extends SpecBase {
           ClaimByAlternativeController.onPageLoad()
       }
 
-      "go to FirstIndustryController from MultipleEmploymentsPage when 'No' is selected and pega journey is disabled" in {
-        when(mockAppConfig.pegaJourneyEnabled).thenReturn(false)
+      "go to FirstIndustryController from MultipleEmploymentsPage when 'No' is selected" in {
         val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
 
         navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
@@ -480,8 +479,7 @@ class GenericNavigatorSpec extends SpecBase {
           ClaimByAlternativeController.onPageLoad()
       }
 
-      "go to FirstIndustryController from MultipleEmploymentsPage when 'No' is selected and pega journey is disabled" in {
-        when(mockAppConfig.pegaJourneyEnabled).thenReturn(false)
+      "go to FirstIndustryController from MultipleEmploymentsPage when 'No' is selected" in {
         val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
 
         navigator.nextPage(MultipleEmploymentsPage, CheckMode)(answers) mustBe
