@@ -34,7 +34,6 @@ import models._
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar.mock
 import pages._
-import play.api.mvc.Call
 
 class GenericNavigatorSpec extends SpecBase {
 

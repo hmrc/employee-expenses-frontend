@@ -3,14 +3,14 @@ import sbt.*
 object AppDependencies {
 
   private val mongoVersion     = "2.6.0"
-  private val bootstrapVersion = "9.12.0"
+  private val bootstrapVersion = "9.13.0"
 
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30"                    % mongoVersion,
     "uk.gov.hmrc"       %% "play-conditional-form-mapping-play-30" % "3.3.0",
     "uk.gov.hmrc"       %% "tax-year"                              % "5.0.0",
-    "uk.gov.hmrc"       %% "sca-wrapper-play-30"                   % "2.10.0"
+    "uk.gov.hmrc"       %% "sca-wrapper-play-30"                   % "2.11.0"
   )
 
   val test: Seq[ModuleID] = Seq(
