@@ -39,7 +39,7 @@ import play.api.mvc.Call
 class GenericNavigatorSpec extends SpecBase {
 
   val mockAppConfig = mock[FrontendAppConfig]
-  val navigator     = new GenericNavigator()(mockAppConfig)
+  val navigator     = new GenericNavigator()
 
   "Navigator" when {
 
@@ -74,15 +74,6 @@ class GenericNavigatorSpec extends SpecBase {
 
         navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
           FirstIndustryOptionsController.onPageLoad(NormalMode)
-      }
-
-      "go to ClaimOnline in employee-expenses-tax-relief-frontend When 'No' is selected and pega journey is enabled" in {
-        val answers      = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
-        val expectedCall = Call("GET", mockAppConfig.employeeTaxReliefExpensesClaimOnlineUrl)
-
-        when(mockAppConfig.pegaJourneyEnabled).thenReturn(true)
-        navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
-          expectedCall
       }
 
       "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
@@ -495,15 +486,6 @@ class GenericNavigatorSpec extends SpecBase {
 
         navigator.nextPage(MultipleEmploymentsPage, CheckMode)(answers) mustBe
           FirstIndustryOptionsController.onPageLoad(CheckMode)
-      }
-
-      "go to ClaimOnline in employee-expenses-tax-relief-frontend When 'No' is selected and pega journey is enabled" in {
-        val answers      = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
-        val expectedCall = Call("GET", mockAppConfig.employeeTaxReliefExpensesClaimOnlineUrl)
-
-        when(mockAppConfig.pegaJourneyEnabled).thenReturn(true)
-        navigator.nextPage(MultipleEmploymentsPage, CheckMode)(answers) mustBe
-          expectedCall
       }
 
       "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
