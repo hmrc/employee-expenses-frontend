@@ -48,7 +48,7 @@ import pages._
 import play.api.mvc.Call
 
 @Singleton
-class GenericNavigator @Inject() (implicit appConfig: FrontendAppConfig) extends Navigator {
+class GenericNavigator @Inject() extends Navigator {
 
   protected def routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case MultipleEmploymentsPage              => multipleEmployments(NormalMode)
@@ -80,10 +80,8 @@ class GenericNavigator @Inject() (implicit appConfig: FrontendAppConfig) extends
   private def multipleEmployments(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(MultipleEmploymentsPage) match {
       case Some(MoreThanOneJob) => ClaimByAlternativeController.onPageLoad()
-      case Some(OneJob) if appConfig.pegaJourneyEnabled =>
-        Call("GET", appConfig.employeeTaxReliefExpensesClaimOnlineUrl)
-      case Some(OneJob) => FirstIndustryOptionsController.onPageLoad(mode)
-      case _            => SessionExpiredController.onPageLoad
+      case Some(OneJob)         => FirstIndustryOptionsController.onPageLoad(mode)
+      case _                    => SessionExpiredController.onPageLoad
     }
 
   private def firstIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
