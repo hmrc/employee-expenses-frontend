@@ -16,19 +16,13 @@
 
 package controllers.transport
 
-import config.{ClaimAmounts, NavConstant}
 import controllers.actions._
-import forms.transport.AirlineJobListFormProvider
-import models.Mode
-
-import javax.inject.{Inject, Named}
-import navigation.Navigator
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.transport.UseIformFreOnlyView
 
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.Inject
 
 class UsePrintAndPostController @Inject() (
     override val messagesApi: MessagesApi,

@@ -65,7 +65,7 @@ class MergedJourneyController @Inject() (
                     )
                   )
                 } else {
-                  Future.successful()
+                  Future.successful((): Unit)
                 }
               url =
                 if (wfhClaimedAlready) appConfig.p87ClaimOnlineUrl

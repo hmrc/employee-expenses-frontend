@@ -31,7 +31,6 @@ import models.FourthIndustryOptions._
 import models.SecondIndustryOptions._
 import models.ThirdIndustryOptions._
 import models._
-import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar.mock
 import pages._
 

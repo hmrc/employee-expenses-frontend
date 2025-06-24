@@ -45,6 +45,7 @@ object ClaimStatus {
     case ClaimStopped.key                 => ClaimStopped
     case ClaimNotChanged.key              => ClaimNotChanged
     case ClaimUnsuccessful.key            => ClaimUnsuccessful
+    case _                                => throw new IllegalArgumentException("Invalid claim status")
   }
 
   val reads: Reads[ClaimStatus]            = Reads(json => json.validate[String].map(mapping))

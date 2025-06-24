@@ -19,7 +19,6 @@ package navigation
 import base.SpecBase
 import controllers.transport.routes
 import models.TypeOfTransport.{NoneOfTheAbove, _}
-import models.WhichRailwayTrade._
 import models._
 import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
