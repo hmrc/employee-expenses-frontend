@@ -33,7 +33,6 @@ import controllers.security.routes._
 import controllers.shipyard.routes._
 import controllers.textiles.routes._
 import controllers.transport.routes._
-import config.FrontendAppConfig
 
 import javax.inject.{Inject, Singleton}
 import models.EmployerContribution.{NoEmployerContribution, YesEmployerContribution}

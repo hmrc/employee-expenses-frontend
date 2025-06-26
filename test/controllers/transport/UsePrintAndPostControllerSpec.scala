@@ -17,17 +17,18 @@
 package controllers.transport
 
 import base.SpecBase
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, verify, when}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.scalatestplus.mockito.MockitoSugar.mock
+import play.api.i18n.Messages
 import play.api.inject.bind
+import play.api.mvc.Request
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.HtmlFormat
 import views.html.transport.UseIformFreOnlyView
-import play.api.i18n.Messages
-import play.api.mvc.Request
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{reset, verify, when}
-import org.scalatestplus.mockito.MockitoSugar.mock
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class UsePrintAndPostControllerSpec extends SpecBase with BeforeAndAfterEach with BeforeAndAfterAll {

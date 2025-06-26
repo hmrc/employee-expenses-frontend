@@ -17,9 +17,11 @@
 package models.mergedJourney
 
 import base.SpecBase
+import generators.Generators
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.libs.json.{JsString, JsSuccess, Json}
 
-class ClaimStatusSpec extends SpecBase {
+class ClaimStatusSpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Generators {
 
   val testId = "testId"
 
@@ -46,6 +48,13 @@ class ClaimStatusSpec extends SpecBase {
         Json.fromJson[ClaimStatus](JsString(string)) mustBe JsSuccess(model)
       }
     }
+
+    "throw when given an invalid claim status string" in
+      forAll(stringsExceptSpecificValues(testData.values.toSeq)) { invalidStr =>
+        (the[IllegalArgumentException] thrownBy {
+          Json.fromJson[ClaimStatus](JsString(invalidStr))
+        } must have).message("Invalid claim status")
+      }
   }
 
 }
