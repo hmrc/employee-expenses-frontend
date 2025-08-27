@@ -35,3 +35,7 @@ bin
 *.iws
 migrations
 .bsp
+.bloop
+.metals
+project/.bloop
+project/metals.sbt
