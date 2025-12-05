@@ -69,7 +69,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with ScalaFuture
 
     "redirect to the confirmation page (which one is decided by Submission navigator logic)" when {
       "the SubmittedClaim session value is present" in {
-        val fakeRequest = FakeRequest("GET", routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+        val fakeRequest = FakeRequest("GET", routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url)
 
         val userAnswers = UserAnswers(
           Json.obj(SubmittedClaim.toString -> true)

@@ -29,7 +29,7 @@ class SignOutController @Inject() (
 ) extends FrontendBaseController {
 
   def signOut: Action[AnyContent] = identify {
-    Redirect(appConfig.signOutUrl)
+    Redirect(appConfig.signOutUrl).withNewSession
   }
 
 }

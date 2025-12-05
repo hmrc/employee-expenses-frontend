@@ -71,5 +71,5 @@ class IndexController @Inject() (
     }
   }
 
-  private lazy val firstPageInJourney = routes.MultipleEmploymentsController.onPageLoad(NormalMode)
+  private lazy val firstPageInJourney = routes.FirstIndustryOptionsController.onPageLoad(NormalMode)
 }
