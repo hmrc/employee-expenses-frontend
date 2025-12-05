@@ -39,7 +39,6 @@ import models.EmployerContribution.{NoEmployerContribution, YesEmployerContribut
 import models.FifthIndustryOptions._
 import models.FirstIndustryOptions._
 import models.FourthIndustryOptions._
-import models.MultipleEmployments._
 import models.SecondIndustryOptions._
 import models.ThirdIndustryOptions._
 import models._
@@ -50,7 +49,6 @@ import play.api.mvc.Call
 class GenericNavigator @Inject() extends Navigator {
 
   protected def routeMap: PartialFunction[Page, UserAnswers => Call] = {
-    case MultipleEmploymentsPage              => multipleEmployments(NormalMode)
     case FirstIndustryOptionsPage             => firstIndustryOptions(NormalMode)
     case SecondIndustryOptionsPage            => secondIndustryOptions(NormalMode)
     case ThirdIndustryOptionsPage             => thirdIndustryOptions(NormalMode)
@@ -64,7 +62,6 @@ class GenericNavigator @Inject() extends Navigator {
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
-    case MultipleEmploymentsPage              => multipleEmployments(CheckMode)
     case FirstIndustryOptionsPage             => firstIndustryOptions(CheckMode)
     case SecondIndustryOptionsPage            => secondIndustryOptions(CheckMode)
     case ThirdIndustryOptionsPage             => thirdIndustryOptions(CheckMode)
@@ -75,14 +72,6 @@ class GenericNavigator @Inject() extends Navigator {
     case SameEmployerContributionAllYearsPage => sameEmployerContributionAllYears(CheckMode)
     case _                                    => _ => CheckYourAnswersController.onPageLoad
   }
-
-  private def multipleEmployments(mode: Mode)(userAnswers: UserAnswers): Call =
-    userAnswers.get(MultipleEmploymentsPage) match {
-      case Some(MoreThanOneJob) => ClaimByAlternativeController.onPageLoad()
-      case Some(OneJob)         => FirstIndustryOptionsController.onPageLoad(mode)
-      case _                    => SessionExpiredController.onPageLoad
-    }
-
   private def firstIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(FirstIndustryOptionsPage) match {
       case Some(Engineering)                      => TypeOfEngineeringController.onPageLoad(mode)
