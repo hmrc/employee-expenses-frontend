@@ -72,6 +72,7 @@ class GenericNavigator @Inject() extends Navigator {
     case SameEmployerContributionAllYearsPage => sameEmployerContributionAllYears(CheckMode)
     case _                                    => _ => CheckYourAnswersController.onPageLoad
   }
+
   private def firstIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(FirstIndustryOptionsPage) match {
       case Some(Engineering)                      => TypeOfEngineeringController.onPageLoad(mode)

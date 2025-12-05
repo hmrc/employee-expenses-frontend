@@ -447,7 +447,6 @@ class GenericNavigatorSpec extends SpecBase {
         navigator.nextPage(ClaimAmount, CheckMode)(emptyUserAnswers) mustBe CheckYourAnswersController.onPageLoad
       }
 
-
       // FirstIndustryOptionsPage
 
       "go to TypeOfEngineeringController from FirstIndustryOptionsPage when Engineering is selected" in {
