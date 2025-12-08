@@ -69,7 +69,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       val result  = controller.onPageLoad()(request)
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+      redirectLocation(result) must contain(routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url)
       argCaptor.getValue.data mustBe Json.obj(MergedJourneyFlag.toString -> false)
     }
     "redirect to the first page of the application and create a user answers when user answers is empty when authed" in {
@@ -98,7 +98,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       val result  = controller.onPageLoad()(request)
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+      redirectLocation(result) must contain(routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url)
       argCaptor.getValue.data mustBe Json.obj(MergedJourneyFlag.toString -> false)
     }
     "redirect to the first page of the application and reset user answers when user answers is not empty when unauthed" in {
@@ -118,7 +118,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       val result = controller.onPageLoad()(request)
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+      redirectLocation(result) must contain(routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url)
       argCaptor.getValue.data mustBe Json.obj()
     }
     "redirect to the first page of the application and create a user answers when user answers is empty when unauthed" in {
@@ -138,7 +138,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       val result = controller.onPageLoad()(request)
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+      redirectLocation(result) must contain(routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url)
       argCaptor.getValue.data mustBe Json.obj()
     }
     "redirect to the first page of the application and create a user answers when user answers is empty when authed and on merged journey" in {
@@ -167,7 +167,7 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
       val result  = controller.onPageLoad(isMergedJourney = true)(request)
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result) must contain(routes.MultipleEmploymentsController.onPageLoad(NormalMode).url)
+      redirectLocation(result) must contain(routes.FirstIndustryOptionsController.onPageLoad(NormalMode).url)
       argCaptor.getValue.data mustBe Json.obj(MergedJourneyFlag.toString -> true)
     }
   }

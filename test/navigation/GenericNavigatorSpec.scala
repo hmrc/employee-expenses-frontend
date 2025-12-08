@@ -57,27 +57,6 @@ class GenericNavigatorSpec extends SpecBase {
           TaxYearSelectionController.onPageLoad(NormalMode)
       }
 
-      // MultipleEmploymentsPage
-
-      "go to ClaimByAlternativeController from MultipleEmploymentsPage when 'Yes' is selected" in {
-        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.MoreThanOneJob).success.value
-
-        navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
-          ClaimByAlternativeController.onPageLoad()
-      }
-
-      "go to FirstIndustryController from MultipleEmploymentsPage when 'No' is selected" in {
-        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
-
-        navigator.nextPage(MultipleEmploymentsPage, NormalMode)(answers) mustBe
-          FirstIndustryOptionsController.onPageLoad(NormalMode)
-      }
-
-      "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
-        navigator.nextPage(MultipleEmploymentsPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad
-      }
-
       // FirstIndustryOptionsPage
 
       "go to TypeOfEngineeringController from FirstIndustryOptionsPage when Engineering is selected" in {
@@ -466,27 +445,6 @@ class GenericNavigatorSpec extends SpecBase {
 
       "go to TaxYearSelectionController from ClaimAmountPage" in {
         navigator.nextPage(ClaimAmount, CheckMode)(emptyUserAnswers) mustBe CheckYourAnswersController.onPageLoad
-      }
-
-      // MultipleEmploymentsPage
-
-      "go to ClaimByAlternativeController from MultipleEmploymentsPage when 'Yes' is selected" in {
-        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.MoreThanOneJob).success.value
-
-        navigator.nextPage(MultipleEmploymentsPage, CheckMode)(answers) mustBe
-          ClaimByAlternativeController.onPageLoad()
-      }
-
-      "go to FirstIndustryController from MultipleEmploymentsPage when 'No' is selected" in {
-        val answers = emptyUserAnswers.set(MultipleEmploymentsPage, MultipleEmployments.OneJob).success.value
-
-        navigator.nextPage(MultipleEmploymentsPage, CheckMode)(answers) mustBe
-          FirstIndustryOptionsController.onPageLoad(CheckMode)
-      }
-
-      "go to SessionExpiredController from MultipleEmploymentsPage when no data is available" in {
-        navigator.nextPage(MultipleEmploymentsPage, CheckMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad
       }
 
       // FirstIndustryOptionsPage
