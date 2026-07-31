@@ -46,7 +46,7 @@ trait Mappings extends Formatters with Constraints {
     of(booleanFormatter(requiredKey, invalidKey))
 
   protected def enumerable[A](requiredKey: String = "error.required", invalidKey: String = "error.invalid")(
-      implicit ev: Enumerable[A]
+      using ev: Enumerable[A]
   ): FieldMapping[A] =
     of(enumerableFormatter[A](requiredKey, invalidKey))
 

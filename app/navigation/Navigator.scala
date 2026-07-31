@@ -32,7 +32,7 @@ trait Navigator {
     case NormalMode =>
       routeMap.lift(page).getOrElse(_ => IndexController.start)
     case CheckMode =>
-      checkRouteMap.lift(page).getOrElse(_ => CheckYourAnswersController.onPageLoad)
+      checkRouteMap.lift(page).getOrElse(_ => CheckYourAnswersController.onPageLoad())
   }
 
 }

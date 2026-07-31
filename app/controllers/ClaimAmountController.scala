@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.{FrontendAppConfig, NavConstant}
+import config.NavConstant
 import controllers.actions._
 import javax.inject.{Inject, Named}
 import models.{Mode, ScottishRate, StandardRate}
@@ -32,7 +32,6 @@ import views.html.ClaimAmountView
 import scala.concurrent.{ExecutionContext, Future}
 
 class ClaimAmountController @Inject() (
-    appConfig: FrontendAppConfig,
     override val messagesApi: MessagesApi,
     @Named(NavConstant.generic) navigator: Navigator,
     identify: UnauthenticatedIdentifierAction,
@@ -41,7 +40,6 @@ class ClaimAmountController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     view: ClaimAmountView,
     claimAmountService: ClaimAmountService,
-    config: FrontendAppConfig,
     sessionRepository: SessionRepository
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController

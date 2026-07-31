@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.{FrontendAppConfig, NavConstant}
+import config.NavConstant
 import controllers.actions._
 import forms.ExpensesEmployerPaidFormProvider
 import javax.inject.{Inject, Named}
@@ -41,7 +41,6 @@ class ExpensesEmployerPaidController @Inject() (
     formProvider: ExpensesEmployerPaidFormProvider,
     val controllerComponents: MessagesControllerComponents,
     view: ExpensesEmployerPaidView,
-    config: FrontendAppConfig,
     sessionRepository: SessionRepository
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController

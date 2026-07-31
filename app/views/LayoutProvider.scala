@@ -16,7 +16,6 @@
 
 package views
 
-import config.FrontendAppConfig
 import play.api.Logging
 import play.api.i18n.Messages
 import play.api.mvc.RequestHeader
@@ -72,8 +71,7 @@ class OldLayoutProvider @Inject() (layout: views.html.Layout) extends LayoutProv
 class NewLayoutProvider @Inject() (
     wrapperService: WrapperService,
     additionalScript: AdditionalScript,
-    headBlock: HeadBlock,
-    appConfig: FrontendAppConfig
+    headBlock: HeadBlock
 ) extends LayoutProvider
     with Logging {
 

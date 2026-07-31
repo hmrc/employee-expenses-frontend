@@ -17,7 +17,6 @@
 package controllers.actions
 
 import com.google.inject.Inject
-import config.FrontendAppConfig
 import controllers.routes.TechnicalDifficultiesController
 
 import javax.inject.Singleton
@@ -36,7 +35,6 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class UnauthenticatedIdentifierActionImpl @Inject() (
     override val authConnector: AuthConnector,
-    config: FrontendAppConfig,
     val parser: BodyParsers.Default
 )(implicit val executionContext: ExecutionContext)
     extends UnauthenticatedIdentifierAction

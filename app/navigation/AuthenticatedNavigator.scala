@@ -47,8 +47,8 @@ class AuthenticatedNavigator @Inject() () extends Navigator {
     case AlreadyClaimingFRESameAmountPage       => alreadyClaimingFRESameAmount(NormalMode)
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(NormalMode)
     case UpdateYourEmployerInformationPage      => _ => HowYouWillGetYourExpensesController.onPageLoad()
-    case RemoveFRECodePage                      => _ => CheckYourAnswersController.onPageLoad
-    case ChangeWhichTaxYearsPage                => _ => CheckYourAnswersController.onPageLoad
+    case RemoveFRECodePage                      => _ => CheckYourAnswersController.onPageLoad()
+    case ChangeWhichTaxYearsPage                => _ => CheckYourAnswersController.onPageLoad()
     case CheckYourAnswersPage                   => _ => YourAddressController.onPageLoad(NormalMode)
     case YourAddressPage                        => yourAddress
     case YourEmployerPage                       => yourEmployer
@@ -62,8 +62,8 @@ class AuthenticatedNavigator @Inject() () extends Navigator {
     case AlreadyClaimingFREDifferentAmountsPage => alreadyClaimingFREDifferentAmount(CheckMode)
     case AlreadyClaimingFRESameAmountPage       => alreadyClaimingFRESameAmount(CheckMode)
     case UpdateYourEmployerInformationPage      => _ => HowYouWillGetYourExpensesController.onPageLoad()
-    case ChangeWhichTaxYearsPage                => _ => CheckYourAnswersController.onPageLoad
-    case _                                      => _ => CheckYourAnswersController.onPageLoad
+    case ChangeWhichTaxYearsPage                => _ => CheckYourAnswersController.onPageLoad()
+    case _                                      => _ => CheckYourAnswersController.onPageLoad()
   }
 
   private def yourAddress(userAnswers: UserAnswers): Call = {
@@ -93,7 +93,7 @@ class AuthenticatedNavigator @Inject() () extends Navigator {
   }
 
   private def taxYearSelection(mode: Mode)(userAnswers: UserAnswers): Call = userAnswers.get(FREResponse) match {
-    case Some(FRENoYears) => CheckYourAnswersController.onPageLoad
+    case Some(FRENoYears) => CheckYourAnswersController.onPageLoad()
     case Some(FREAllYearsAllAmountsSameAsClaimAmount) =>
       AlreadyClaimingFRESameAmountController.onPageLoad(mode)
     case Some(FRESomeYears) =>

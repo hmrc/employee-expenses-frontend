@@ -21,7 +21,6 @@
 
 @this(
         layout: views.LayoutProvider,
-        formHelper: FormWithCSRF,
         heading: playComponents.heading
 )
 
@@ -57,5 +56,5 @@
         </strong>
     </div>
 
-    @playComponents.button_link(messageKey = s"site.${checkYourAnswersText.button}", href = CheckYourAnswersController.acceptAndClaim.url, id="submit", classes="govuk-button")
+    @playComponents.button_link(messageKey = s"site.${checkYourAnswersText.button}", href = CheckYourAnswersController.acceptAndClaim().url, id="submit", classes="govuk-button")
 }

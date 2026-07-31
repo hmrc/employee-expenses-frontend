@@ -56,6 +56,6 @@ object Address {
       .and((__ \ "address" \ "line4").writeNullable[String])
       .and((__ \ "address" \ "line5").writeNullable[String])
       .and((__ \ "address" \ "postcode").writeNullable[String])
-      .and((__ \ "address" \ "country").writeNullable[String])(unlift(Address.unapply))
+      .and((__ \ "address" \ "country").writeNullable[String])(address => Tuple.fromProductTyped(address))
 
 }

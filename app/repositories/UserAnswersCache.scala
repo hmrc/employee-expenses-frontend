@@ -34,9 +34,9 @@ abstract class UserAnswersCache @Inject() (
 )(implicit ec: ExecutionContext)
     extends EntityCache[String, UserAnswers] {
 
-  lazy val format: Format[UserAnswers] = UserAnswers.format
+  override val format: Format[UserAnswers] = UserAnswers.format
 
-  lazy val cacheRepo: MongoCacheRepository[String] = new MongoCacheRepository(
+  override val cacheRepo: MongoCacheRepository[String] = new MongoCacheRepository(
     mongoComponent = mongo,
     collectionName = collectionName,
     ttl = Duration(config.get[Int]("mongodb.timeToLiveInSeconds"), SECONDS),

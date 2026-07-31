@@ -12,15 +12,20 @@ lazy val root = (project in file("."))
   .settings(inConfig(Test)(testSettings): _*)
   .settings(
     majorVersion := 1,
-    scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s",
-    scalacOptions += "-Wconf:src=routes/.*:s"
+    scalacOptions ++= Seq(
+      "-Wconf:src=routes/.*:s",
+      "-Wconf:msg=unused import&src=html/.*:s",
+      "-Wconf:cat=deprecation:s",
+      "-Wconf:msg=Flag.*repeatedly:s",
+      "-explain"
+    )
   )
   .settings(
     isPublicArtefact := true
   )
   .settings(
     name         := appName,
-    scalaVersion := "2.13.18",
+    scalaVersion := "3.3.7",
     RoutesKeys.routesImport += "models._, models.mergedJourney.ClaimStatus, models.mergedJourney.ClaimStatus.urlBinder",
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",

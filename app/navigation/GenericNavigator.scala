@@ -70,7 +70,7 @@ class GenericNavigator @Inject() extends Navigator {
     case EmployerContributionPage             => employerContribution(CheckMode)
     case ExpensesEmployerPaidPage             => expensesEmployerPaid(CheckMode)
     case SameEmployerContributionAllYearsPage => sameEmployerContributionAllYears(CheckMode)
-    case _                                    => _ => CheckYourAnswersController.onPageLoad
+    case _                                    => _ => CheckYourAnswersController.onPageLoad()
   }
 
   private def firstIndustryOptions(mode: Mode)(userAnswers: UserAnswers): Call =

@@ -20,9 +20,6 @@
 
 @this(
     hmrcAccountMenu: HmrcAccountMenu,
-    hmrcHead: HmrcHead,
-    hmrcStandardHeader: HmrcStandardHeader,
-    hmrcStandardFooter: HmrcStandardFooter,
     hmrcScripts: HmrcScripts,
     hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
@@ -35,7 +32,6 @@
 @(pageTitle: String,
 timeoutEnabled: Boolean = true,
 backLinkEnabled: Boolean = true,
-accountMenuEnabled: Boolean = true,
         serviceNameKeyOverride: Option[String] = None,
         serviceUrlOverride: Option[String] = None)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 

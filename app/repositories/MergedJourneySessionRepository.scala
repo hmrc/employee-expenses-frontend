@@ -41,7 +41,7 @@ class MergedJourneySessionRepository @Inject() (config: Configuration, mongo: Mo
           ascending("lastUpdated"),
           IndexOptions()
             .name("TTL")
-            .expireAfter(config.get[Int]("mongodb.mergedJourneyTimeToLiveInSeconds"), SECONDS)
+            .expireAfter(config.get[Long]("mongodb.mergedJourneyTimeToLiveInSeconds"), SECONDS)
         ),
         IndexModel(
           keys = ascending("internalId"),

@@ -43,7 +43,6 @@
             legendClass = Some("govuk-!-margin-bottom-7 govuk-fieldset__legend--xl"),
             hint = Some(messages("taxYearSelection.bodyText") + <br/> + messages("taxYearSelection.listHint")),
             hintClass = Some("govuk-!-margin-bottom-4"),
-            describedBy = Some("select-all-hint"),
             inputs = TaxYearSelection.options.map { option =>
                 CheckboxItem(
                     content = HtmlContent(option.message.html),
@@ -53,7 +52,6 @@
                     ))} else None
                 )
             },
-            textBlock = Some(messages("taxYearSelection.bodyText")),
             headingIsLegend = true
         )
 
