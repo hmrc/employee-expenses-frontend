@@ -26,7 +26,7 @@
     input_tax_year: playComponents.input_tax_year
 )
 
-@(form: Form[Seq[TaxYearSelection]], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[Seq[TaxYearSelection]], mode: Mode)(using request: Request[_], messages: Messages)
 
 
 @layout(

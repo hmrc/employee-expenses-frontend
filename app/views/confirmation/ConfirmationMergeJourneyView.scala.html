@@ -21,7 +21,7 @@
     p: playComponents.p
 )
 
-@(continueUrl: String)(implicit request: Request[_], messages: Messages)
+@(continueUrl: String)(using request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages("confirmationMergeJourney.title"),

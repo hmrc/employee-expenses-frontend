@@ -19,7 +19,7 @@
     heading: playComponents.heading
 )
 
-@(nextServiceUrl: Option[String] = None)(implicit request: Request[_], messages: Messages)
+@(nextServiceUrl: Option[String] = None)(using request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages("cannotClaimExpense.title")

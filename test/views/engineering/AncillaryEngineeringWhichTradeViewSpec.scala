@@ -34,10 +34,10 @@ class AncillaryEngineeringWhichTradeViewSpec extends OptionsViewBehaviours[Ancil
   val view = application.injector.instanceOf[AncillaryEngineeringWhichTradeView]
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode)(fakeRequest, messages)
+    view.apply(form, NormalMode)(using fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    view.apply(form, NormalMode)(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "AncillaryEngineeringWhichTradeView" must {
 

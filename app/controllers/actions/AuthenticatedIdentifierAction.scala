@@ -59,7 +59,7 @@ class AuthenticatedIdentifierActionImpl @Inject() (
         case _ ~ _ ~ Some(AffinityGroup.Agent) ~ _ =>
           Future(Redirect(controllers.routes.UnauthorisedController.onPageLoad))
         case _ ~ _ ~ Some(AffinityGroup.Individual | AffinityGroup.Organisation) ~ LT200(_) =>
-          Future.successful(upliftIfSessionNotExpired(hc.sessionId.map(_.value))(request))
+          Future.successful(upliftIfSessionNotExpired(hc.sessionId.map(_.value))(using request))
         case Some(nino) ~ Some(internalId) ~ _ ~ _ =>
           block(
             IdentifierRequest(
@@ -75,7 +75,7 @@ class AuthenticatedIdentifierActionImpl @Inject() (
         case _: NoActiveSession =>
           unauthorised(hc.sessionId.map(_.value), request)
         case _: InsufficientConfidenceLevel =>
-          upliftIfSessionNotExpired(hc.sessionId.map(_.value))(request)
+          upliftIfSessionNotExpired(hc.sessionId.map(_.value))(using request)
         case _: AuthorisationException =>
           Redirect(controllers.routes.UnauthorisedController.onPageLoad)
         case e =>
@@ -99,7 +99,7 @@ class AuthenticatedIdentifierActionImpl @Inject() (
         s"&failureURL=${config.unauthorisedCallback}"
     )
 
-  def upliftIfSessionNotExpired(sessionId: Option[String])(implicit request: Request[_]): Result =
+  def upliftIfSessionNotExpired(sessionId: Option[String])(using request: Request[_]): Result =
     sessionId match {
       case Some(id) => insufficientConfidence(request.getQueryString("key").getOrElse(id), request)
       case _        => Redirect(controllers.routes.SessionExpiredController.onPageLoad)

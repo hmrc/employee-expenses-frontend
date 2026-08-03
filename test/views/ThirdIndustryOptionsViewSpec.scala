@@ -34,10 +34,10 @@ class ThirdIndustryOptionsViewSpec extends OptionsViewBehaviours[ThirdIndustryOp
   val view = application.injector.instanceOf[ThirdIndustryOptionsView]
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode)(fakeRequest, messages)
+    view.apply(form, NormalMode)(using fakeRequest, messages)
 
   def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    view.apply(form, NormalMode)(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "ThirdIndustryOptionsView" must {
 

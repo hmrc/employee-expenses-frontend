@@ -27,7 +27,7 @@
         submitButton: playComponents.submit_button
 )
 
-@(form: Form[_], mode: Mode, employers: Seq[String])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, employers: Seq[String])(using request: Request[_], messages: Messages)
 
   @layout(
     pageTitle = s"${errorPrefix(form)} ${messages("yourEmployer.title")}"

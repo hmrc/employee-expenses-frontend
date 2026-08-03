@@ -30,7 +30,7 @@ class HowYouWillGetYourExpensesPreviousViewSpec extends ViewBehaviours {
 
     def applyView(currentYearMinus1: Boolean, authorised: Boolean = true) = {
       val request = if (authorised) fakeRequest.withSession(("authToken", "SomeAuthToken")) else fakeRequest
-      view.apply("onwardRoute", currentYearMinus1)(request, messages)
+      view.apply("onwardRoute", currentYearMinus1)(using request, messages)
     }
 
     behave.like(normalPage(applyView(true, false), "howYouWillGetYourExpenses"))

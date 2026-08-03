@@ -72,7 +72,10 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
         address: Option[Address] = None,
         freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
     )(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view.apply(claimAmountsAndRates, claimAmount, address, currentYearMinus1, freResponse)(fakeRequest, messages)
+      view.apply(claimAmountsAndRates, claimAmount, address, currentYearMinus1, freResponse)(
+        using fakeRequest,
+        messages
+      )
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 

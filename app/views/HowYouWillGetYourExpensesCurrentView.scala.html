@@ -19,7 +19,7 @@
     heading: playComponents.heading
 )
 
-@(href: String, hasClaimIncreased: Boolean)(implicit request: Request[_], messages: Messages)
+@(href: String, hasClaimIncreased: Boolean)(using request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages("howYouWillGetYourExpenses.title")

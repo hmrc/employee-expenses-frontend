@@ -19,7 +19,7 @@
     heading: playComponents.heading
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@()(using request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages("index.title")

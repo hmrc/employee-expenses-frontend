@@ -26,7 +26,7 @@
         standardRate: StandardRate,
         scottishRate: ScottishRate,
         onwardRoute: String
-)(implicit request: Request[_], messages: Messages)
+)(using request: Request[_], messages: Messages)
 
     @bulletList(items: Seq[String]) = {
         <ul class="govuk-list govuk-list--bullet govuk-list--spaced">

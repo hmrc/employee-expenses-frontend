@@ -31,9 +31,9 @@ class NoCodeChangeViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[NoCodeChangeView]
 
-    val applyView = view.apply()(fakeRequest, messages)
+    val applyView = view.apply()(using fakeRequest, messages)
 
-    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth = view.apply()(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave.like(normalPage(applyView, "noCodeChange"))
 
@@ -48,7 +48,7 @@ class NoCodeChangeViewSpec extends ViewBehaviours {
     behave.like(pageWithBodyText(applyViewWithAuth, Html(messages("noCodeChange.guidance2", link)).toString))
 
     val applyViewMergeJourneyWithAuth =
-      view.apply(isMergeJourney = true)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+      view.apply(isMergeJourney = true)(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave.like(
       pageWithButtonLink(

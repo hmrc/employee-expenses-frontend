@@ -32,7 +32,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
         ClaimCompleteCurrentPrevious,
         ClaimCompletePrevious
       )
-      val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+      val doc = asDocument(view(testJourney, None)(using fakeRequest, messages, frontendAppConfig))
 
       assertPageTitleEqualsMessage(doc, "claimsComplete.title")
     }
@@ -43,7 +43,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
         ClaimCompletePrevious,
         ClaimCompleteCurrentPrevious
       )
-      val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+      val doc = asDocument(view(testJourney, None)(using fakeRequest, messages, frontendAppConfig))
       assertRenderedByClass(doc, "govuk-panel govuk-panel--confirmation")
     }
     "display the correct list of claims" when {
@@ -54,7 +54,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimCompletePrevious,
           ClaimCompleteCurrentPrevious
         )
-        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+        val doc = asDocument(view(testJourney, None)(using fakeRequest, messages, frontendAppConfig))
 
         assertContainsMessages(
           doc,
@@ -72,7 +72,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimSkipped,
           ClaimCompleteCurrentPrevious
         )
-        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+        val doc = asDocument(view(testJourney, None)(using fakeRequest, messages, frontendAppConfig))
 
         assertContainsMessages(doc, "claimsComplete.para.claims", "claimsComplete.list.wfh", "claimsComplete.list.fre")
         assertDoesNotContainMessages(doc, "claimsComplete.para.claimsTried", "claimsComplete.list.psubs")
@@ -84,7 +84,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimUnsuccessful,
           ClaimNotChanged
         )
-        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+        val doc = asDocument(view(testJourney, None)(using fakeRequest, messages, frontendAppConfig))
 
         assertContainsMessages(
           doc,
@@ -102,7 +102,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimUnsuccessful,
           ClaimNotChanged
         )
-        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+        val doc = asDocument(view(testJourney, None)(using fakeRequest, messages, frontendAppConfig))
 
         assertContainsMessages(
           doc,
@@ -121,7 +121,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimCompleteCurrent,
           ClaimCompleteCurrent
         )
-        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+        val doc = asDocument(view(testJourney, None)(using fakeRequest, messages, frontendAppConfig))
 
         assertContainsMessages(doc, "claimsComplete.current.heading", "claimsComplete.current.para")
         assertDoesNotContainMessages(
@@ -141,7 +141,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimCompletePrevious,
           ClaimCompletePrevious
         )
-        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+        val doc = asDocument(view(testJourney, None)(using fakeRequest, messages, frontendAppConfig))
 
         assertContainsMessages(doc, "claimsComplete.previous.heading", "claimsComplete.previous.para.claims")
         assertDoesNotContainMessages(
@@ -162,7 +162,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimCompletePrevious,
           ClaimCompleteCurrentPrevious
         )
-        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+        val doc = asDocument(view(testJourney, None)(using fakeRequest, messages, frontendAppConfig))
 
         assertContainsMessages(
           doc,
@@ -186,7 +186,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimUnsuccessful,
           ClaimNotChanged
         )
-        val doc = asDocument(view(testJourney, None)(fakeRequest, messages, frontendAppConfig))
+        val doc = asDocument(view(testJourney, None)(using fakeRequest, messages, frontendAppConfig))
 
         assertContainsMessages(
           doc,
@@ -209,7 +209,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimCompleteCurrent,
           ClaimCompleteCurrent
         )
-        val applyView = view(testJourney, Some(address))(fakeRequest, messages, frontendAppConfig)
+        val applyView = view(testJourney, Some(address))(using fakeRequest, messages, frontendAppConfig)
         val doc       = asDocument(applyView)
 
         assertContainsMessages(
@@ -228,7 +228,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimCompleteCurrent,
           ClaimCompleteCurrent
         )
-        val applyView = view(testJourney, None)(fakeRequest, messages, frontendAppConfig)
+        val applyView = view(testJourney, None)(using fakeRequest, messages, frontendAppConfig)
         val doc       = asDocument(applyView)
 
         assertContainsMessages(
@@ -249,7 +249,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimCompleteCurrent,
           ClaimCompleteCurrent
         )
-        val applyView = view(testJourney, Some(address))(fakeRequest, messages, frontendAppConfig)
+        val applyView = view(testJourney, Some(address))(using fakeRequest, messages, frontendAppConfig)
 
         behave.like(
           pageWithLink(applyView, frontendAppConfig.updateAddressInfoUrl, "claimsComplete.address.updateAddress.link")
@@ -262,7 +262,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
           ClaimCompleteCurrent,
           ClaimCompleteCurrent
         )
-        val applyView = view(testJourney, None)(fakeRequest, messages, frontendAppConfig)
+        val applyView = view(testJourney, None)(using fakeRequest, messages, frontendAppConfig)
 
         behave.like(
           pageWithLink(applyView, frontendAppConfig.updateAddressInfoUrl, "claimsComplete.noAddress.updateAddress.link")
@@ -276,7 +276,7 @@ class ClaimsCompleteViewSpec extends ViewBehaviours {
         ClaimCompleteCurrent,
         ClaimCompleteCurrent
       )
-      val applyView = view(testJourney, Some(address))(fakeRequest, messages, frontendAppConfig)
+      val applyView = view(testJourney, Some(address))(using fakeRequest, messages, frontendAppConfig)
       val doc       = asDocument(applyView)
 
       assertContainsMessages(doc, "claimsComplete.feedback.link", "claimsComplete.feedback.end")

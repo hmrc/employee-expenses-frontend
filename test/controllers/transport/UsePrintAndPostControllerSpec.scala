@@ -47,7 +47,7 @@ class UsePrintAndPostControllerSpec extends SpecBase with BeforeAndAfterEach wit
     reset(
       useIformFreOnlyView
     )
-    when(useIformFreOnlyView.apply()(any[Request[_]], any[Messages])).thenReturn(HtmlFormat.empty)
+    when(useIformFreOnlyView.apply()(using any[Request[_]], any[Messages])).thenReturn(HtmlFormat.empty)
   }
 
   override def afterAll(): Unit = {
@@ -66,7 +66,7 @@ class UsePrintAndPostControllerSpec extends SpecBase with BeforeAndAfterEach wit
       for {
         result <- route(application, testRequest).value
         _ = result.header.status mustBe OK
-        _ = verify(useIformFreOnlyView).apply()(any[Request[_]], any[Messages])
+        _ = verify(useIformFreOnlyView).apply()(using any[Request[_]], any[Messages])
       } yield ()
     }
 
