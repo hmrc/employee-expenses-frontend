@@ -33,7 +33,7 @@ object AlreadyClaimingFRESameAmount extends Enumerable.Implicits {
   val options: Seq[RadioCheckboxOption] =
     values.map(value => RadioCheckboxOption("alreadyClaimingFRESameAmount", value.toString))
 
-  implicit val enumerable: Enumerable[AlreadyClaimingFRESameAmount] =
+  given enumerable: Enumerable[AlreadyClaimingFRESameAmount] =
     Enumerable(values.map(v => v.toString -> v): _*)
 
 }

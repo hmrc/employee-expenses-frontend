@@ -17,9 +17,11 @@
 package controllers.authenticated
 
 import config.NavConstant
-import controllers.actions._
+import controllers.actions.*
+
 import javax.inject.{Inject, Named}
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.authenticated.UpdateYourEmployerInformationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -38,7 +40,8 @@ class UpdateEmployerInformationController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     Ok(view(navigator.nextPage(UpdateYourEmployerInformationPage, mode)(request.userAnswers).url))
   }
 

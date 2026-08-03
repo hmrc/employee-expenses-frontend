@@ -38,7 +38,7 @@ class AuthSessionRepositorySpec
     with ScalaFutures
     with DefaultPlayMongoRepositorySupport[CacheItem] {
 
-  implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
+  given ExecutionContext = scala.concurrent.ExecutionContext.global
 
   val authSessionRepo = new AuthSessionRepository(
     config = Configuration.from(Map("mongodb.timeToLiveInSeconds" -> 60)),

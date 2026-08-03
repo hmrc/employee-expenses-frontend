@@ -17,8 +17,9 @@
 package controllers.confirmation
 
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
-import controllers.routes._
+import controllers.routes.*
 import models.TaxYearSelection.CurrentYear
+import models.requests.DataRequest
 import models.{Address, FlatRateExpenseAmounts, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.YourEmployerPage
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
@@ -41,12 +42,13 @@ class ConfirmationCurrentYearOnlyController @Inject() (
     claimAmountService: ClaimAmountService,
     taiService: TaiService,
     confirmationCurrentYearOnlyView: ConfirmationCurrentYearOnlyView
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
 
-  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { implicit request =>
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { request =>
+    given DataRequest[AnyContent] = request
     val npsFreAmount = request.userAnswers
       .get(FREAmounts)
       .flatMap(_.find(_.taxYear.year == TaxYearSelection.getTaxYear(CurrentYear))) match {

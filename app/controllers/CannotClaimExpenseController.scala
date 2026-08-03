@@ -16,9 +16,10 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import controllers.mergedJourney.routes.MergedJourneyController
 import models.mergedJourney.ClaimUnsuccessful
+import models.requests.DataRequest
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -39,7 +40,8 @@ class CannotClaimExpenseController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     if (request.userAnswers.isMergedJourney == true) {
       Ok(view(Some(MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimUnsuccessful).url)))
     } else {

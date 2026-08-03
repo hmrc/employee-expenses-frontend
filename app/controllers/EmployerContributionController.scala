@@ -17,8 +17,10 @@
 package controllers
 
 import config.NavConstant
-import controllers.actions._
+import controllers.actions.*
 import forms.EmployerContributionFormProvider
+import models.requests.DataRequest
+
 import javax.inject.{Inject, Named}
 import models.{Enumerable, Mode}
 import navigation.Navigator
@@ -49,7 +51,8 @@ class EmployerContributionController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(EmployerContributionPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -59,7 +62,8 @@ class EmployerContributionController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       form
         .bindFromRequest()
         .fold(

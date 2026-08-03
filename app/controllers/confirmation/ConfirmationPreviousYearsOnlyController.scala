@@ -17,7 +17,8 @@
 package controllers.confirmation
 
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
-import controllers.routes._
+import controllers.routes.*
+import models.requests.DataRequest
 import models.{Address, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.TaxYearSelectionPage
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREResponse}
@@ -40,12 +41,13 @@ class ConfirmationPreviousYearsOnlyController @Inject() (
     claimAmountService: ClaimAmountService,
     taiService: TaiService,
     confirmationPreviousYearsOnlyView: ConfirmationPreviousYearsOnlyView
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
 
-  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { implicit request =>
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { request =>
+    given DataRequest[AnyContent] = request
     (
       request.userAnswers.get(FREResponse),
       request.userAnswers.get(ClaimAmountAndAnyDeductions),

@@ -31,7 +31,7 @@ abstract class UserAnswersCache @Inject() (
     config: Configuration,
     mongo: MongoComponent,
     timestampSupport: TimestampSupport
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends EntityCache[String, UserAnswers] {
 
   override val format: Format[UserAnswers] = UserAnswers.format

@@ -44,14 +44,15 @@ class CateringStaffNHSController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     view: CateringStaffNHSView,
     sessionRepository: SessionRepository
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData) { implicit request: DataRequest[AnyContent] =>
+    identify.andThen(getData).andThen(requireData) { request =>
+      given DataRequest[AnyContent] = request
       val preparedForm = request.userAnswers.get(CateringStaffNHSPage) match {
         case None        => form
         case Some(value) => form.fill(value)
@@ -60,7 +61,8 @@ class CateringStaffNHSController @Inject() (
       Ok(view(preparedForm, mode))
     }
 
-  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { request =>
+    given DataRequest[AnyContent] = request
     form
       .bindFromRequest()
       .fold(

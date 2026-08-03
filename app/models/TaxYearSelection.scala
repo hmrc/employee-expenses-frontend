@@ -60,7 +60,7 @@ object TaxYearSelection extends Enumerable.Implicits {
       messageArgs = Seq(taxYear.startYear.toString.format("YYYY"), taxYear.finishYear.toString.format("YYYY")): _*
     )
 
-  implicit val enumerable: Enumerable[TaxYearSelection] =
+  given enumerable: Enumerable[TaxYearSelection] =
     Enumerable(values.map(v => v.toString -> v): _*)
 
   def getTaxYear(year: TaxYearSelection): Int = year match {

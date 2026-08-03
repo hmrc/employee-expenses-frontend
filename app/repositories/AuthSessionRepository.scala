@@ -26,5 +26,5 @@ class AuthSessionRepository @Inject() (
     config: Configuration,
     mongo: MongoComponent,
     timestampSupport: TimestampSupport
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends UserAnswersCache("auth-user-answers", config, mongo, timestampSupport)

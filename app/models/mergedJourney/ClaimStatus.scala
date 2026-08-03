@@ -48,11 +48,11 @@ object ClaimStatus {
     case _                                => throw new IllegalArgumentException("Invalid claim status")
   }
 
-  val reads: Reads[ClaimStatus]            = Reads(json => json.validate[String].map(mapping))
-  val writes: Writes[ClaimStatus]          = Writes(state => JsString(state.toString))
-  implicit val format: Format[ClaimStatus] = Format(reads, writes)
+  val reads: Reads[ClaimStatus]     = Reads(json => json.validate[String].map(mapping))
+  val writes: Writes[ClaimStatus]   = Writes(state => JsString(state.toString))
+  given format: Format[ClaimStatus] = Format(reads, writes)
 
-  implicit def urlBinder(implicit stringBinder: QueryStringBindable[String]): QueryStringBindable[ClaimStatus] =
+  given urlBinder(using stringBinder: QueryStringBindable[String]): QueryStringBindable[ClaimStatus] =
     new QueryStringBindable[ClaimStatus] {
       override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, ClaimStatus]] =
         stringBinder.bind("status", params).map {

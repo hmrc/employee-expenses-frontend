@@ -18,10 +18,12 @@ package controllers.docks
 
 import config.ClaimAmounts
 import config.NavConstant.docks
-import controllers.actions._
+import controllers.actions.*
 import forms.docks.DocksOccupationList1FormProvider
+
 import javax.inject.{Inject, Named}
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.ClaimAmount
 import pages.docks.DocksOccupationList1Page
@@ -44,13 +46,14 @@ class DocksOccupationList1Controller @Inject() (
     formProvider: DocksOccupationList1FormProvider,
     val controllerComponents: MessagesControllerComponents,
     view: DocksOccupationList1View
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(DocksOccupationList1Page) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -59,7 +62,8 @@ class DocksOccupationList1Controller @Inject() (
     Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { request =>
+    given DataRequest[AnyContent] = request
     form
       .bindFromRequest()
       .fold(

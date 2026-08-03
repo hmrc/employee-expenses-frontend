@@ -17,12 +17,14 @@
 package controllers.authenticated
 
 import config.NavConstant
-import controllers.actions._
+import controllers.actions.*
+
 import javax.inject.{Inject, Named}
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
+import models.requests.DataRequest
 import models.{FlatRateExpenseAmounts, NormalMode, TaxYearSelection}
 import navigation.Navigator
-import pages.authenticated._
+import pages.authenticated.*
 import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -46,7 +48,8 @@ class HowYouWillGetYourExpensesController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val redirectUrl = navigator.nextPage(HowYouWillGetYourExpensesPage, NormalMode)(request.userAnswers).url
 
     val taxYearSelection: Option[Seq[TaxYearSelection]] =

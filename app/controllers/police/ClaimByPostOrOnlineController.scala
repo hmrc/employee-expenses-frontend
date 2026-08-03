@@ -17,7 +17,9 @@
 package controllers.police
 
 import config.FrontendAppConfig
-import controllers.actions._
+import controllers.actions.*
+import models.requests.DataRequest
+
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -36,6 +38,9 @@ class ClaimByPostOrOnlineController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData)(implicit request => Ok(view(frontendAppConfig.p87Url)))
+    identify.andThen(getData).andThen(requireData) { request =>
+      given DataRequest[AnyContent] = request
+      Ok(view(frontendAppConfig.p87Url))
+    }
 
 }

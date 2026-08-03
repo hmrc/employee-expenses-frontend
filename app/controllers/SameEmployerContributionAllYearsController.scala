@@ -17,10 +17,12 @@
 package controllers
 
 import config.NavConstant
-import controllers.actions._
+import controllers.actions.*
 import forms.SameEmployerContributionAllYearsFormProvider
+
 import javax.inject.{Inject, Named}
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.{ExpensesEmployerPaidPage, SameEmployerContributionAllYearsPage}
 import play.api.data.Form
@@ -42,13 +44,14 @@ class SameEmployerContributionAllYearsController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     view: SameEmployerContributionAllYearsView,
     sessionRepository: SessionRepository
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(SameEmployerContributionAllYearsPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -61,7 +64,8 @@ class SameEmployerContributionAllYearsController @Inject() (
 
   }
 
-  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { request =>
+    given DataRequest[AnyContent] = request
     request.userAnswers.get(ExpensesEmployerPaidPage) match {
       case Some(contribution) =>
         form

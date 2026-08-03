@@ -63,6 +63,6 @@ final case class UserAnswers(data: JsObject = Json.obj()) {
 
 object UserAnswers {
 
-  implicit val format: Format[UserAnswers] = Json.format[UserAnswers]
+  given format: Format[UserAnswers] = Json.format[UserAnswers]
 
 }

@@ -17,10 +17,12 @@
 package controllers.manufacturing
 
 import config.{ClaimAmounts, NavConstant}
-import controllers.actions._
+import controllers.actions.*
 import forms.manufacturing.TypeOfManufacturingFormProvider
+
 import javax.inject.{Inject, Named}
-import models.TypeOfManufacturing._
+import models.TypeOfManufacturing.*
+import models.requests.DataRequest
 import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.ClaimAmount
@@ -44,14 +46,15 @@ class TypeOfManufacturingController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     view: TypeOfManufacturingView,
     sessionRepository: SessionRepository
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Enumerable.Implicits {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(TypeOfManufacturingPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -61,7 +64,8 @@ class TypeOfManufacturingController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       form
         .bindFromRequest()
         .fold(

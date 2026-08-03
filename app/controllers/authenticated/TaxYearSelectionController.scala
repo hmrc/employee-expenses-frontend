@@ -17,11 +17,13 @@
 package controllers.authenticated
 
 import config.NavConstant
-import controllers.actions._
-import controllers.routes._
+import controllers.actions.*
+import controllers.routes.*
 import forms.authenticated.TaxYearSelectionFormProvider
+
 import javax.inject.{Inject, Named}
-import models.FlatRateExpenseOptions._
+import models.FlatRateExpenseOptions.*
+import models.requests.DataRequest
 import models.{Enumerable, Mode, TaxYearSelection}
 import navigation.Navigator
 import pages.authenticated.TaxYearSelectionPage
@@ -47,14 +49,15 @@ class TaxYearSelectionController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     view: TaxYearSelectionView,
     taiService: TaiService
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Enumerable.Implicits {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm: Form[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -64,7 +67,8 @@ class TaxYearSelectionController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       form
         .bindFromRequest()
         .fold(

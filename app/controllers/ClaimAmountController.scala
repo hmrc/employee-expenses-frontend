@@ -17,7 +17,9 @@
 package controllers
 
 import config.NavConstant
-import controllers.actions._
+import controllers.actions.*
+import models.requests.DataRequest
+
 import javax.inject.{Inject, Named}
 import models.{Mode, ScottishRate, StandardRate}
 import navigation.Navigator
@@ -48,7 +50,8 @@ class ClaimAmountController @Inject() (
   import claimAmountService._
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       (
         request.userAnswers.get(EmployerContributionPage),
         request.userAnswers.get(ClaimAmount),

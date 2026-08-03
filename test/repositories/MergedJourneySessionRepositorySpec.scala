@@ -35,7 +35,7 @@ class MergedJourneySessionRepositorySpec
     with ScalaFutures
     with DefaultPlayMongoRepositorySupport[MergedJourney] {
 
-  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+  given ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = 30.seconds, interval = 100.millis)
 

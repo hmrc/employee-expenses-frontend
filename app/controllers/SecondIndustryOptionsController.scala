@@ -19,9 +19,10 @@ package controllers
 import com.google.inject.Inject
 import com.google.inject.name.Named
 import config.{ClaimAmounts, NavConstant}
-import controllers.actions._
+import controllers.actions.*
 import forms.SecondIndustryOptionsFormProvider
 import models.SecondIndustryOptions.Education
+import models.requests.DataRequest
 import models.{Enumerable, Mode, SecondIndustryOptions}
 import navigation.Navigator
 import pages.{ClaimAmount, SecondIndustryOptionsPage}
@@ -51,7 +52,8 @@ class SecondIndustryOptionsController @Inject() (
 
   val form: Form[SecondIndustryOptions] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(SecondIndustryOptionsPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -61,7 +63,8 @@ class SecondIndustryOptionsController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       form
         .bindFromRequest()
         .fold(

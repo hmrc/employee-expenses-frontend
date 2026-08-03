@@ -31,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class MergedJourneySessionRepository @Inject() (config: Configuration, mongo: MongoComponent)(
-    implicit ec: ExecutionContext
+    using ExecutionContext
 ) extends PlayMongoRepository[MergedJourney](
       collectionName = "merged-journey-user-answers",
       mongoComponent = mongo,

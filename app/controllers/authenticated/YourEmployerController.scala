@@ -17,10 +17,11 @@
 package controllers.authenticated
 
 import config.NavConstant
-import controllers.actions._
-import controllers.authenticated.routes._
-import controllers.routes._
+import controllers.actions.*
+import controllers.authenticated.routes.*
+import controllers.routes.*
 import forms.authenticated.YourEmployerFormProvider
+import models.requests.DataRequest
 
 import javax.inject.{Inject, Named}
 import models.{Mode, NormalMode}
@@ -48,14 +49,15 @@ class YourEmployerController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     taiService: TaiService,
     view: YourEmployerView
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { implicit request =>
+  def onPageLoad(): Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(YourEmployerPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -86,7 +88,8 @@ class YourEmployerController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       request.userAnswers.get(YourEmployerNames) match {
         case Some(employerNames) =>
 

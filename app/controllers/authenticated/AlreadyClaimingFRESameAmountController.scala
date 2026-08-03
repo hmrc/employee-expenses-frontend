@@ -17,10 +17,12 @@
 package controllers.authenticated
 
 import config.NavConstant
-import controllers.actions._
+import controllers.actions.*
 import forms.authenticated.AlreadyClaimingFRESameAmountFormProvider
+
 import javax.inject.{Inject, Named}
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.authenticated.AlreadyClaimingFRESameAmountPage
 import pages.{ClaimAmountAndAnyDeductions, FREAmounts}
@@ -43,13 +45,14 @@ class AlreadyClaimingFRESameAmountController @Inject() (
     formProvider: AlreadyClaimingFRESameAmountFormProvider,
     val controllerComponents: MessagesControllerComponents,
     view: AlreadyClaimingFRESameAmountView
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(AlreadyClaimingFRESameAmountPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -64,7 +67,8 @@ class AlreadyClaimingFRESameAmountController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.userAnswers.get(FREAmounts)) match {
         case (Some(claimAmount), Some(freAmounts)) =>
           form

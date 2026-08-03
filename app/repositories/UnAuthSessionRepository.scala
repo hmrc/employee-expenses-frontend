@@ -26,5 +26,5 @@ class UnAuthSessionRepository @Inject() (
     config: Configuration,
     mongo: MongoComponent,
     timestampSupport: TimestampSupport
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends UserAnswersCache("unauth-user-answers", config, mongo, timestampSupport)
