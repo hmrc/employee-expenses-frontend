@@ -21,7 +21,7 @@
         label: String,
         hint: Option[String] = None,
         inputType: Option[String] = Some("text")
-)(implicit messages: Messages)
+)(using messages: Messages)
 
 @govukInput(Input(
     id = field.id,

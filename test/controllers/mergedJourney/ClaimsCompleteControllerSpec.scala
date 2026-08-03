@@ -68,7 +68,7 @@ class ClaimsCompleteControllerSpec
         Instant.now()
       )
       when(mockSessionRepository.getMergedJourney(any())).thenReturn(Future.successful(Some(testJourney)))
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(OK, validAddressJson.toString)))
 
       val request = FakeRequest(GET, claimsCompleteUrl)
@@ -93,7 +93,7 @@ class ClaimsCompleteControllerSpec
         Instant.now()
       )
       when(mockSessionRepository.getMergedJourney(any())).thenReturn(Future.successful(Some(testJourney)))
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(NOT_FOUND, Json.obj().toString())))
 
       val request = FakeRequest(GET, claimsCompleteUrl)

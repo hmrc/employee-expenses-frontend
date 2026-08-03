@@ -18,7 +18,7 @@
         claimAmountsAndRates: Seq[Rates],
         claimAmount: Int,
         keyPrefix: Option[String] = Some("confirmation")
-)(implicit messages: Messages)
+)(using messages: Messages)
 
 @for(rate <- claimAmountsAndRates) {
   @rate match {

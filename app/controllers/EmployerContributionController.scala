@@ -42,7 +42,7 @@ class EmployerContributionController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     view: EmployerContributionView,
     sessionRepository: SessionRepository
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Enumerable.Implicits {

@@ -99,9 +99,9 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
 
-      when(mockTaiService.freResponse(any(), any(), any())(any(), any()))
+      when(mockTaiService.freResponse(any(), any(), any())(using any(), any()))
         .thenReturn(Future.successful(FlatRateExpenseOptions.FRENoYears))
-      when(mockTaiService.getFREAmount(any(), any())(any(), any()))
+      when(mockTaiService.getFREAmount(any(), any())(using any(), any()))
         .thenReturn(Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019)))))
 
       val request =
@@ -141,9 +141,9 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
-      when(mockTaiService.freResponse(any(), any(), any())(any(), any()))
+      when(mockTaiService.freResponse(any(), any(), any())(using any(), any()))
         .thenReturn(Future.successful(FlatRateExpenseOptions.FRENoYears))
-      when(mockTaiService.getFREAmount(any(), any())(any(), any()))
+      when(mockTaiService.getFREAmount(any(), any())(using any(), any()))
         .thenReturn(Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019)))))
 
       val request =

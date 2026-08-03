@@ -44,7 +44,7 @@ class SecondIndustryOptionsController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     view: SecondIndustryOptionsView,
     sessionRepository: SessionRepository
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Enumerable.Implicits {

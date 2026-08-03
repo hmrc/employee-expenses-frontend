@@ -43,7 +43,7 @@ class FifthIndustryOptionsController @Inject() (
     formProvider: FifthIndustryOptionsFormProvider,
     val controllerComponents: MessagesControllerComponents,
     view: FifthIndustryOptionsView
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Enumerable.Implicits {

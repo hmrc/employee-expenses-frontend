@@ -20,7 +20,7 @@
     layout: views.LayoutProvider,
 )
 
-@(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader, messages: Messages)
+@(pageTitle: String, heading: String, message: String)(using request: RequestHeader, messages: Messages)
 
 @mainContent = {
  <h1 class="govuk-heading-xl">@heading</h1>

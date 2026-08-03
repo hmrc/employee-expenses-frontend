@@ -22,6 +22,8 @@ import controllers.authenticated.routes.SubmissionController
 import controllers.confirmation.routes._
 import controllers.routes.{PhoneUsController, SessionExpiredController, TechnicalDifficultiesController}
 import models.FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount
+import scala.concurrent.ExecutionContext.Implicits.global
+
 import models.TaxYearSelection.{
   CurrentYear,
   CurrentYearMinus1,
@@ -85,7 +87,7 @@ class SubmissionControllerSpec
     "remove" when {
 
       "removeFRE and redirect to ConfirmationClaimStoppedController when submission success" in {
-        when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.removeFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(NO_CONTENT, ""))))
 
         val userAnswers = minimumUserAnswers
@@ -130,7 +132,7 @@ class SubmissionControllerSpec
       }
 
       "redirect to tech difficulties when removeFRE fails" in {
-        when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.removeFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(INTERNAL_SERVER_ERROR, ""))))
 
         val userAnswers = minimumUserAnswers
@@ -175,7 +177,7 @@ class SubmissionControllerSpec
       }
 
       "not removeFRE and not audit and redirect to PhoneUsController when citizen details returns 423" in {
-        when(mockSubmissionService.removeFRE(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.removeFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(LOCKED, ""))))
 
         val userAnswers = minimumUserAnswers
@@ -216,7 +218,7 @@ class SubmissionControllerSpec
     "submit" must {
 
       "submitFRE and redirect to ConfirmationCurrentYearOnlyController when submission success" in {
-        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.submitFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(NO_CONTENT, ""))))
 
         val application = applicationBuilder(Some(currentYearFullUserAnswers))
@@ -253,7 +255,7 @@ class SubmissionControllerSpec
       }
 
       "submitFRE and redirect to ConfirmationCurrentAndPreviousYearsController when submission success" in {
-        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.submitFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(NO_CONTENT, ""))))
 
         val userAnswers = minimumUserAnswers
@@ -298,7 +300,7 @@ class SubmissionControllerSpec
       }
 
       "not submitFRE and not audit and redirect to PhoneUsController when citizen details returns 423" in {
-        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.submitFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(LOCKED, ""))))
 
         val userAnswers = minimumUserAnswers
@@ -337,7 +339,7 @@ class SubmissionControllerSpec
       }
 
       "submitFRE and redirect to ConfirmationPreviousYearsOnlyController when submission success" in {
-        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.submitFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(NO_CONTENT, ""))))
 
         val userAnswers = minimumUserAnswers
@@ -382,7 +384,7 @@ class SubmissionControllerSpec
       }
 
       "redirect to tech difficulties when submitFRE fails" in {
-        when(mockSubmissionService.submitFRE(any(), any(), any())(any(), any()))
+        when(mockSubmissionService.submitFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(Seq(HttpResponse(INTERNAL_SERVER_ERROR, ""))))
 
         val application = applicationBuilder(Some(currentYearFullUserAnswers))
@@ -419,13 +421,13 @@ class SubmissionControllerSpec
       }
 
       "submit the correct number of time for new claims" in {
-        when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
+        when(mockCitizenDetailsConnector.getEtag(any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(OK, validEtagJson.toString)))
 
-        when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
+        when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         val userAnswers = currentYearFullUserAnswers
@@ -451,7 +453,7 @@ class SubmissionControllerSpec
         val result  = route(application, request).value
 
         whenReady(result) { _ =>
-          verify(mockTaiConnector, times(5)).taiFREUpdate(any(), any(), any(), any())(any(), any())
+          verify(mockTaiConnector, times(5)).taiFREUpdate(any(), any(), any(), any())(using any(), any())
 
           verify(mockAuditConnector, times(1)).sendExplicitAudit(
             eqTo(UpdateFlatRateExpenseSuccess.toString),
@@ -463,13 +465,13 @@ class SubmissionControllerSpec
       }
 
       "submit the correct number of time for change claims" in {
-        when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
+        when(mockCitizenDetailsConnector.getEtag(any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(OK, validEtagJson.toString)))
 
-        when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
+        when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         val userAnswers = minimumUserAnswers
@@ -501,7 +503,7 @@ class SubmissionControllerSpec
         val result  = route(application, request).value
 
         whenReady(result) { _ =>
-          verify(mockTaiConnector, times(2)).taiFREUpdate(any(), any(), any(), any())(any(), any())
+          verify(mockTaiConnector, times(2)).taiFREUpdate(any(), any(), any(), any())(using any(), any())
 
           verify(mockAuditConnector, times(1)).sendExplicitAudit(
             eqTo(UpdateFlatRateExpenseSuccess.toString),
@@ -513,13 +515,13 @@ class SubmissionControllerSpec
       }
 
       "submit the correct number of time for remove claims" in {
-        when(mockCitizenDetailsConnector.getEtag(any())(any(), any()))
+        when(mockCitizenDetailsConnector.getEtag(any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(OK, validEtagJson.toString)))
 
-        when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(any(), any()))
+        when(mockTaiConnector.taiFREUpdate(any(), any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         val userAnswers = minimumUserAnswers
@@ -546,7 +548,7 @@ class SubmissionControllerSpec
         val result = route(application, request).value
 
         whenReady(result) { _ =>
-          verify(mockTaiConnector, times(3)).taiFREUpdate(any(), any(), any(), any())(any(), any())
+          verify(mockTaiConnector, times(3)).taiFREUpdate(any(), any(), any(), any())(using any(), any())
 
           verify(mockAuditConnector, times(1)).sendExplicitAudit(
             eqTo(UpdateFlatRateExpenseSuccess.toString),

@@ -404,7 +404,7 @@ class FakeFailingAuthConnector @Inject() (exceptionToReturn: Throwable) extends 
   val serviceUrl: String = ""
 
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(
-      implicit hc: HeaderCarrier,
+      using hc: HeaderCarrier,
       ec: ExecutionContext
   ): Future[A] =
     Future.failed(exceptionToReturn)
@@ -415,7 +415,7 @@ class FakePassingAuthConnector @Inject() (stubbedRetrievalResult: Future[_]) ext
   val serviceUrl: String = ""
 
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(
-      implicit hc: HeaderCarrier,
+      using hc: HeaderCarrier,
       ec: ExecutionContext
   ): Future[A] =
     stubbedRetrievalResult.map(_.asInstanceOf[A])(global)

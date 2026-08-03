@@ -68,7 +68,7 @@ class YourAddressControllerSpec
   "YourAddress Controller" must {
 
     "redirect to next page for a GET and save address to CitizensDetailsAddress" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(OK, validAddressJson.toString)))
       when(mockSessionRepository.set(any(), any()))
         .thenReturn(Future.successful(true))
@@ -98,7 +98,7 @@ class YourAddressControllerSpec
         .overrides(bind[CitizenDetailsConnector].toInstance(mockCitizenDetailsConnector))
         .build()
 
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(OK, emptyAddressJson.toString)))
 
       val request =
@@ -114,7 +114,7 @@ class YourAddressControllerSpec
     }
 
     "redirect to HowWillYouGetYourExpenses if 404 returned from getAddress" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(NOT_FOUND, "")))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
@@ -131,7 +131,7 @@ class YourAddressControllerSpec
     }
 
     "redirect to Phone Us if 423 returned from getAddress" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(LOCKED, "")))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
@@ -149,7 +149,7 @@ class YourAddressControllerSpec
     }
 
     "redirect to NextPage if 500 returned from getAddress" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, "")))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
@@ -167,7 +167,7 @@ class YourAddressControllerSpec
     }
 
     "redirect to NextPage if any other status returned from getAddress" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(123, "")))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
@@ -185,7 +185,7 @@ class YourAddressControllerSpec
     }
 
     "redirect to Technical Difficulties when call to CitizensDetails fails" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.failed(new Exception("error")))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))
@@ -203,7 +203,7 @@ class YourAddressControllerSpec
     }
 
     "redirect to CheckYourAnswers when could not parse Json to Address model" in {
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(OK, incorrectJson.toString)))
 
       val application = applicationBuilder(userAnswers = Some(minimumUserAnswers), onwardRoute = Some(onwardRoute))

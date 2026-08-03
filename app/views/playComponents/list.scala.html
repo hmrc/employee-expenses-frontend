@@ -21,7 +21,7 @@
         addCssClass: Option[String] = None,
         listText: Option[String] = None,
         bulletList: Seq[String]
-)(implicit messages: Messages)
+)(using messages: Messages)
 
 @cssClass = @{
     if(addCssClass.isDefined) s"form-group ${addCssClass.get}" else "form-group"

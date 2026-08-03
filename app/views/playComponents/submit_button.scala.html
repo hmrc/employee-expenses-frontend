@@ -16,7 +16,7 @@
 
 @this(govukButton : GovukButton)
 
-@(buttonTextKey: String = "site.continue")(implicit messages: Messages)
+@(buttonTextKey: String = "site.continue")(using messages: Messages)
 
 @govukButton(
  Button(

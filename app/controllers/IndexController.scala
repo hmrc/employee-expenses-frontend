@@ -35,7 +35,7 @@ class IndexController @Inject() (
     getData: DataRetrievalAction,
     sessionRepository: SessionRepository,
     appConfig: FrontendAppConfig
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 

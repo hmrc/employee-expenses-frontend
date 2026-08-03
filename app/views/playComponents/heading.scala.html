@@ -20,7 +20,7 @@
         headingKey: String,
         headingSize: String = "govuk-heading-xl",
         secondaryHeaderKey: Option[String] = None
-)(implicit messages: Messages)
+)(using messages: Messages)
 
 @if(secondaryHeaderKey.isDefined) {
 <header class="page-header">

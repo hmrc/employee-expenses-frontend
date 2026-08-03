@@ -27,7 +27,7 @@
         inputs: Seq[CheckboxItem],
         headingIsLegend: Boolean = false
 
-)(implicit messages: Messages)
+)(using messages: Messages)
 
 @govukCheckboxes(Checkboxes(
     fieldset = Some(Fieldset(

@@ -41,7 +41,7 @@ class ClaimAmountController @Inject() (
     view: ClaimAmountView,
     claimAmountService: ClaimAmountService,
     sessionRepository: SessionRepository
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 

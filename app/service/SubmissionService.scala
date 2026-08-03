@@ -32,7 +32,7 @@ class SubmissionService @Inject() (
 ) extends Logging {
 
   def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection], currentDate: LocalDate = LocalDate.now())(
-      implicit hc: HeaderCarrier,
+      using hc: HeaderCarrier,
       ec: ExecutionContext
   ): Future[Seq[TaxYearSelection]] =
 
@@ -61,7 +61,7 @@ class SubmissionService @Inject() (
     }
 
   def submitFRE(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int)(
-      implicit hc: HeaderCarrier,
+      using hc: HeaderCarrier,
       ec: ExecutionContext
   ): Future[Seq[HttpResponse]] =
 
@@ -73,7 +73,7 @@ class SubmissionService @Inject() (
     }
 
   def removeFRE(nino: String, taxYears: Seq[TaxYearSelection], removeYear: TaxYearSelection)(
-      implicit hc: HeaderCarrier,
+      using hc: HeaderCarrier,
       ec: ExecutionContext
   ): Future[Seq[HttpResponse]] = {
 

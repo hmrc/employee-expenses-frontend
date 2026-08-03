@@ -64,7 +64,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec
           .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
           .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(using any(), any()))
         .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
       when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
@@ -88,7 +88,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(using any(), any()))
         .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
       when(mockClaimAmountService.getRates(any(), any())).thenReturn(Seq(claimAmountsAndRates))
 
@@ -108,7 +108,8 @@ class ConfirmationPreviousYearsOnlyControllerSpec
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any())).thenReturn(Future.failed(new Exception))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(using any(), any()))
+        .thenReturn(Future.failed(new Exception))
 
       val request = FakeRequest(GET, ConfirmationPreviousYearsOnlyController.onPageLoad().url)
 
@@ -143,7 +144,7 @@ class ConfirmationPreviousYearsOnlyControllerSpec
         .overrides(bind[ClaimAmountService].toInstance(mockClaimAmountService))
         .build()
 
-      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(any(), any()))
+      when(mockTaiConnector.taiTaxCodeRecords(any(), any())(using any(), any()))
         .thenReturn(Future.successful(Seq(TaxCodeRecord("850L", Live))))
 
       val request = FakeRequest(GET, ConfirmationPreviousYearsOnlyController.onPageLoad().url)

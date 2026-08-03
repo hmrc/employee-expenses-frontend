@@ -33,8 +33,7 @@
         mode: Mode,
         claimAmount: Int,
         freAmounts: Seq[FlatRateExpenseAmounts]
-)(implicit
-        request: Request[_],
+)(using request: Request[_],
         messages: Messages
 )
 

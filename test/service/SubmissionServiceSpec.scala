@@ -58,7 +58,7 @@ class SubmissionServiceSpec
 
       "return correct taxYears when date is before April 6th and currentYear is passed in and no next year record" in {
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(BAD_REQUEST, "")))
 
         val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear, beforeApril)
@@ -73,7 +73,7 @@ class SubmissionServiceSpec
 
       "return correct taxYear when date is before April 6th and currentYear is passed in and next year record available" in {
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(OK, "")))
 
         val result = submissionService.getTaxYearsToUpdate(fakeNino, taxYearsWithCurrentYear, beforeApril)
@@ -89,7 +89,7 @@ class SubmissionServiceSpec
       }
 
       "return correct data when date is in April, current year and next year record is available" in {
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(OK, "")))
 
         val result = submissionService.getTaxYearsToUpdate(fakeNino, currentTaxYear, april5th)
@@ -116,7 +116,7 @@ class SubmissionServiceSpec
       }
 
       "return correct data when no current year in selection" in {
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, "")))
 
         val result = submissionService.getTaxYearsToUpdate(fakeNino, taxYearsWithoutCurrentYear, beforeApril)
@@ -131,10 +131,10 @@ class SubmissionServiceSpec
 
     "submitFRE" must {
       "return true when give 204 response" in {
-        when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
+        when(mockTaiService.updateFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(OK, "")))
 
         val result: Future[Seq[HttpResponse]] = submissionService.submitFRE(fakeNino, currentTaxYear, claimAmount)
@@ -146,10 +146,10 @@ class SubmissionServiceSpec
       }
 
       "return false when give 500 response" in {
-        when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
+        when(mockTaiService.updateFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, "")))
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(OK, "")))
 
         val result = submissionService.submitFRE(fakeNino, currentTaxYear, claimAmount)
@@ -163,10 +163,10 @@ class SubmissionServiceSpec
 
     "removeFRE" must {
       "return 204 when given 204 response" in {
-        when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
+        when(mockTaiService.updateFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(OK, "")))
 
         val result = submissionService.removeFRE(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
@@ -178,10 +178,10 @@ class SubmissionServiceSpec
       }
 
       "return false when give 500 response" in {
-        when(mockTaiService.updateFRE(any(), any(), any())(any(), any()))
+        when(mockTaiService.updateFRE(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(INTERNAL_SERVER_ERROR, "")))
 
-        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(any(), any()))
+        when(mockTaiConnector.taiTaxAccountSummary(any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(NO_CONTENT, "")))
 
         val result = submissionService.removeFRE(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)

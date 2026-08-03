@@ -63,7 +63,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
-      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmployment))
+      when(mockTaiService.employments(any(), any())(using any(), any())).thenReturn(Future.successful(taiEmployment))
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
@@ -93,7 +93,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
-      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmployment))
+      when(mockTaiService.employments(any(), any())(using any(), any())).thenReturn(Future.successful(taiEmployment))
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
@@ -194,7 +194,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
         .overrides(bind[TaiService].toInstance(mockTaiService))
         .build()
 
-      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(Seq.empty))
+      when(mockTaiService.employments(any(), any())(using any(), any())).thenReturn(Future.successful(Seq.empty))
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
@@ -216,7 +216,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
-      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmployment))
+      when(mockTaiService.employments(any(), any())(using any(), any())).thenReturn(Future.successful(taiEmployment))
 
       val request = FakeRequest(POST, yourEmployerRoute)
         .withFormUrlEncodedBody(("value", "true"))
@@ -239,7 +239,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
-      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.successful(taiEmployment))
+      when(mockTaiService.employments(any(), any())(using any(), any())).thenReturn(Future.successful(taiEmployment))
 
       val request = FakeRequest(GET, yourEmployerRoute)
 
@@ -262,7 +262,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
-      when(mockTaiService.employments(any(), any())(any(), any())).thenReturn(Future.failed(new Exception))
+      when(mockTaiService.employments(any(), any())(using any(), any())).thenReturn(Future.failed(new Exception))
 
       val request = FakeRequest(GET, yourEmployerRoute)
 

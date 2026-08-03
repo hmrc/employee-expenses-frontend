@@ -27,7 +27,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class EmployeeWfhExpensesConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClientV2)(
-    implicit executionContext: ExecutionContext
+    using ExecutionContext
 ) {
 
   def checkIfAllYearsClaimed(headerCarrier: HeaderCarrier): Future[Boolean] = {

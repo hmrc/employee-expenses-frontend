@@ -83,7 +83,7 @@ class SubmissionController @Inject() (
       auditData: AuditData,
       userAnswers: UserAnswers,
       identifier: IdentifierType
-  )(implicit hc: HeaderCarrier): Result =
+  )(using hc: HeaderCarrier): Result =
 
     if (result.nonEmpty && result.forall(_.status == 204)) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)

@@ -30,7 +30,7 @@ class CitizenDetailsConnectorImpl @Inject() (appConfig: FrontendAppConfig, httpC
     extends CitizenDetailsConnector
     with HttpResponseHelper {
 
-  override def getEtag(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  override def getEtag(nino: String)(using hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
     val etagUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/etag"
 
@@ -40,7 +40,7 @@ class CitizenDetailsConnectorImpl @Inject() (appConfig: FrontendAppConfig, httpC
       .flatMap(response => Future.successful(response))
   }
 
-  override def getAddress(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  override def getAddress(nino: String)(using hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
 
     val designatoryDetailsUrl: String = s"${appConfig.citizenDetailsUrl}/citizen-details/$nino/designatory-details"
 
@@ -54,7 +54,7 @@ class CitizenDetailsConnectorImpl @Inject() (appConfig: FrontendAppConfig, httpC
 
 @ImplementedBy(classOf[CitizenDetailsConnectorImpl])
 trait CitizenDetailsConnector {
-  def getEtag(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
+  def getEtag(nino: String)(using hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
 
-  def getAddress(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
+  def getAddress(nino: String)(using hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse]
 }
