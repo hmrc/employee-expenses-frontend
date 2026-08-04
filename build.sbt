@@ -9,7 +9,7 @@ lazy val appName: String = "employee-expenses-frontend"
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
-  .settings(inConfig(Test)(testSettings): _*)
+  .settings(inConfig(Test)(testSettings)*)
   .settings(
     majorVersion := 1,
     scalacOptions ++= Seq(

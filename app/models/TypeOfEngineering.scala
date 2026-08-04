@@ -39,6 +39,6 @@ object TypeOfEngineering extends Enumerable.Implicits {
   val options: Seq[RadioCheckboxOption] = values.map(value => RadioCheckboxOption("typeOfEngineering", value.toString))
 
   given enumerable: Enumerable[TypeOfEngineering] =
-    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+    Enumerable(values.toSeq.map(v => v.toString -> v)*)
 
 }

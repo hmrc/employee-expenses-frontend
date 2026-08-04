@@ -48,6 +48,6 @@ object TransportVehicleTrade extends Enumerable.Implicits {
     values.map(value => RadioCheckboxOption("transportVehicleTrade", value.toString))
 
   given enumerable: Enumerable[TransportVehicleTrade] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+    Enumerable(values.map(v => v.toString -> v)*)
 
 }

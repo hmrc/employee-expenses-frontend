@@ -25,7 +25,7 @@ case class Message(key: String, args: Any*) {
     Html(string)
 
   def string(using messages: Messages): String =
-    messages(key, args: _*)
+    messages(key, args*)
 
 }
 
@@ -37,7 +37,7 @@ object RadioCheckboxOption {
     RadioCheckboxOption(
       id = s"$keyPrefix.$option",
       value = option,
-      message = Message(s"$keyPrefix.$option", messageArgs: _*)
+      message = Message(s"$keyPrefix.$option", messageArgs*)
     )
 
 }

@@ -44,6 +44,6 @@ object FirstIndustryOptions extends Enumerable.Implicits {
     values.map(value => RadioCheckboxOption("firstIndustryOptions", value.toString))
 
   given enumerable: Enumerable[FirstIndustryOptions] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+    Enumerable(values.map(v => v.toString -> v)*)
 
 }

@@ -36,6 +36,6 @@ object AlreadyClaimingFREDifferentAmounts extends Enumerable.Implicits {
     values.map(value => RadioCheckboxOption("alreadyClaimingFREDifferentAmounts", value.toString))
 
   given enumerable: Enumerable[AlreadyClaimingFREDifferentAmounts] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+    Enumerable(values.map(v => v.toString -> v)*)
 
 }
