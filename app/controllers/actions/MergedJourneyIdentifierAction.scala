@@ -30,7 +30,7 @@ class MergedJourneyIdentifierActionImpl @Inject() (
     override val authConnector: AuthConnector,
     config: FrontendAppConfig,
     override val parser: BodyParsers.Default
-)(implicit override val executionContext: ExecutionContext)
+)(using ExecutionContext)
     extends AuthenticatedIdentifierActionImpl(authConnector, config, parser)
     with MergedJourneyIdentifierAction {
 
