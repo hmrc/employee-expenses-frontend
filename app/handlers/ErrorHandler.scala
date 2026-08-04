@@ -46,7 +46,7 @@ class ErrorHandler @Inject() (
 
     if (statusCode == FORBIDDEN) {
 
-      implicit val implicitRequest: RequestHeader = request
+      given implicitRequest: RequestHeader = request
 
       logger.info(s"Forbidden request with message: $message")
 

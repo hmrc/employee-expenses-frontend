@@ -46,7 +46,7 @@ case class TaiTaxYear(year: Int) extends Ordered[TaiTaxYear] {
 
 object TaiTaxYear {
 
-  implicit val format: Format[TaiTaxYear] = Json.format[TaiTaxYear]
+  given format: Format[TaiTaxYear] = Json.format[TaiTaxYear]
 
   def apply(from: LocalDate = LocalDate.now()): TaiTaxYear = {
     val naiveYear = TaiTaxYear(from.getYear)

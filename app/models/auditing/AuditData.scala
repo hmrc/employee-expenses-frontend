@@ -21,5 +21,5 @@ import play.api.libs.json._
 case class AuditData(nino: String, userAnswers: JsObject)
 
 object AuditData {
-  implicit lazy val format: Format[AuditData] = Json.format[AuditData]
+  given format: Format[AuditData] = Json.format[AuditData]
 }

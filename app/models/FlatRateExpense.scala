@@ -21,5 +21,5 @@ import play.api.libs.json._
 case class FlatRateExpense(grossAmount: Int)
 
 object FlatRateExpense {
-  implicit val format: Format[FlatRateExpense] = Json.format[FlatRateExpense]
+  given format: Format[FlatRateExpense] = Json.format[FlatRateExpense]
 }

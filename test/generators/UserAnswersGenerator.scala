@@ -110,7 +110,7 @@ trait UserAnswersGenerator extends TryValues {
       arbitrary[(FirstIndustryOptionsPage.type, JsValue)] ::
       Nil
 
-  implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {
+  given arbitraryUserData: Arbitrary[UserAnswers] = {
 
     import models._
 

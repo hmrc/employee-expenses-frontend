@@ -255,7 +255,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   def fakeRequest = FakeRequest("", "")
 
-  implicit def messages: Messages = messagesApi.preferred(fakeRequest)
+  given messages: Messages = messagesApi.preferred(fakeRequest)
 
   protected def applicationBuilder(
       userAnswers: Option[UserAnswers] = None,
