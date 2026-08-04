@@ -22,7 +22,7 @@ import controllers.printing.routes
 import controllers.routes.SessionExpiredController
 import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
-import pages.printing._
+import pages.printing.*
 
 class PrintingNavigatorSpec extends SpecBase with MockitoSugar {
   private val navigator = new PrintingNavigator

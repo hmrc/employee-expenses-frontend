@@ -17,7 +17,7 @@
 package controllers.foodCatering
 
 import config.{ClaimAmounts, NavConstant}
-import controllers.actions._
+import controllers.actions.*
 import forms.foodCatering.CateringStaffNHSFormProvider
 import javax.inject.{Inject, Named}
 import models.Mode

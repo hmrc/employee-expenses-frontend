@@ -18,14 +18,14 @@ package service
 
 import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
-import models.FlatRateExpenseOptions._
-import models.TaxYearSelection._
+import models.FlatRateExpenseOptions.*
+import models.TaxYearSelection.*
 import models.{FlatRateExpense, FlatRateExpenseAmounts, TaiTaxYear}
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.*
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.http.Status._
+import play.api.http.Status.*
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global

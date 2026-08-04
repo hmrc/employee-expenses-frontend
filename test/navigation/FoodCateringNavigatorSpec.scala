@@ -19,7 +19,7 @@ package navigation
 import base.SpecBase
 import models.{CheckMode, NormalMode}
 import pages.foodCatering.CateringStaffNHSPage
-import controllers.routes._
+import controllers.routes.*
 
 class FoodCateringNavigatorSpec extends SpecBase {
   private val modes     = Seq(NormalMode, CheckMode)

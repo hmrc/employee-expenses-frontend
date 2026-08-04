@@ -17,16 +17,16 @@
 package controllers.confirmation
 
 import base.SpecBase
-import controllers.confirmation.routes._
+import controllers.confirmation.routes.*
 import controllers.routes.SessionExpiredController
-import models.TaxYearSelection._
-import models._
+import models.TaxYearSelection.*
+import models.*
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.authenticated._
+import pages.authenticated.*
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 
 class ConfirmationMergeJourneyControllerSpec
     extends SpecBase

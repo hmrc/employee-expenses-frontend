@@ -29,7 +29,7 @@ object TaxYearDates {
 }
 
 case class TaiTaxYear(year: Int) extends Ordered[TaiTaxYear] {
-  import TaxYearDates._
+  import TaxYearDates.*
 
   require(year.toString.length == 4, "Invalid year")
 

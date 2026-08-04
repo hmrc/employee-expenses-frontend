@@ -16,10 +16,10 @@
 
 package navigation
 
-import controllers.routes._
-import controllers.authenticated.routes._
-import models._
-import pages._
+import controllers.routes.*
+import controllers.authenticated.routes.*
+import models.*
+import pages.*
 import play.api.mvc.Call
 
 trait Navigator {

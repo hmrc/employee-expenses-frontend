@@ -47,7 +47,7 @@ class ClaimAmountController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  import claimAmountService._
+  import claimAmountService.*
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     identify.andThen(getData).andThen(requireData).async { request =>

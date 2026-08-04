@@ -32,7 +32,7 @@
 
 package views
 
-import models.TaxYearSelection._
+import models.TaxYearSelection.*
 import views.newBehaviours.ViewBehaviours
 import views.html.HowYouWillGetYourExpensesCurrentAndPreviousYearView
 

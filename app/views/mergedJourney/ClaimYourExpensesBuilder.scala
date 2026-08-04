@@ -17,7 +17,7 @@
 package views.mergedJourney
 
 import config.FrontendAppConfig
-import models.mergedJourney._
+import models.mergedJourney.*
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Tag, Text}
@@ -25,7 +25,7 @@ import uk.gov.hmrc.govukfrontend.views.html.components.GovukTag
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.timeline.Event
 import uk.gov.hmrc.http.InternalServerException
 import views.html.playComponents
-import views.mergedJourney.ClaimYourExpensesBuilder._
+import views.mergedJourney.ClaimYourExpensesBuilder.*
 
 import javax.inject.{Inject, Singleton}
 

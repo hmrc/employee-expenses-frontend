@@ -18,10 +18,10 @@ package navigation
 
 import controllers.transport.routes
 import javax.inject.{Inject, Singleton}
-import models.TypeOfTransport._
-import models._
+import models.TypeOfTransport.*
+import models.*
 import pages.Page
-import pages.transport._
+import pages.transport.*
 import play.api.mvc.Call
 
 @Singleton

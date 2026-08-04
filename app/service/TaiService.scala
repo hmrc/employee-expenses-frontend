@@ -18,8 +18,8 @@ package service
 
 import com.google.inject.Inject
 import connectors.{CitizenDetailsConnector, TaiConnector}
-import models.FlatRateExpenseOptions._
-import models._
+import models.FlatRateExpenseOptions.*
+import models.*
 import play.api.Logging
 import play.api.libs.json.{JsError, JsSuccess, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}

@@ -17,17 +17,17 @@
 package connectors
 
 import base.SpecBase
-import com.github.tomakehurst.wiremock.client.WireMock._
-import models.TaxCodeStatus._
-import models._
+import com.github.tomakehurst.wiremock.client.WireMock.*
+import models.TaxCodeStatus.*
+import models.*
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
-import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.*
 import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global

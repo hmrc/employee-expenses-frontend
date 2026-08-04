@@ -16,12 +16,12 @@
 
 package navigation
 
-import controllers.routes._
-import controllers.healthcare.routes._
+import controllers.routes.*
+import controllers.healthcare.routes.*
 import javax.inject.{Inject, Singleton}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
-import pages.healthcare._
+import pages.healthcare.*
 import play.api.mvc.Call
 
 @Singleton

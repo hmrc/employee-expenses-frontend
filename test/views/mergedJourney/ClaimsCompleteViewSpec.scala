@@ -16,7 +16,7 @@
 
 package views.mergedJourney
 
-import models.mergedJourney._
+import models.mergedJourney.*
 import views.html.mergedJourney.ClaimsCompleteView
 import views.newBehaviours.ViewBehaviours
 

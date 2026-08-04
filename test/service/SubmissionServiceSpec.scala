@@ -19,14 +19,14 @@ package service
 import base.SpecBase
 import connectors.TaiConnector
 import models.{TaiTaxYear, TaxYearSelection}
-import models.TaxYearSelection._
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
+import models.TaxYearSelection.*
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.http.HttpResponse
-import play.api.http.Status._
+import play.api.http.Status.*
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global

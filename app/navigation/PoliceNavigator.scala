@@ -16,11 +16,11 @@
 
 package navigation
 
-import controllers.police._
+import controllers.police.*
 import javax.inject.{Inject, Singleton}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
-import pages.police._
+import pages.police.*
 import play.api.mvc.Call
 
 @Singleton

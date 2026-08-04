@@ -17,11 +17,11 @@
 package navigation
 
 import base.SpecBase
-import models.TypeOfEngineering._
-import models._
+import models.TypeOfEngineering.*
+import models.*
 import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
-import pages.engineering._
+import pages.engineering.*
 
 class EngineeringNavigatorSpec extends SpecBase with MockitoSugar {
   private val modes     = Seq(NormalMode, CheckMode)

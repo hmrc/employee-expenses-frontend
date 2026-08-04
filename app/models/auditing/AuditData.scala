@@ -16,7 +16,7 @@
 
 package models.auditing
 
-import play.api.libs.json._
+import play.api.libs.json.*
 
 case class AuditData(nino: String, userAnswers: JsObject)
 

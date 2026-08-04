@@ -18,7 +18,7 @@ package service
 
 import com.google.inject.Inject
 import connectors.TaiConnector
-import models.TaxYearSelection._
+import models.TaxYearSelection.*
 import models.{TaiTaxYear, TaxYearSelection}
 import play.api.Logging
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}

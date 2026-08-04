@@ -26,17 +26,17 @@ lazy val root = (project in file("."))
   .settings(
     name         := appName,
     scalaVersion := "3.3.7",
-    RoutesKeys.routesImport += "models._, models.mergedJourney.ClaimStatus, models.mergedJourney.ClaimStatus.urlBinder",
+    RoutesKeys.routesImport += "models.*, models.mergedJourney.ClaimStatus, models.mergedJourney.ClaimStatus.urlBinder",
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",
-      "play.twirl.api.HtmlFormat._",
-      "views.ViewUtils._",
+      "play.twirl.api.HtmlFormat.*",
+      "views.ViewUtils.*",
       "models.Mode",
-      "controllers.routes._",
-      "uk.gov.hmrc.govukfrontend.views.html.components._",
-      "uk.gov.hmrc.hmrcfrontend.views.html.components._",
-      "uk.gov.hmrc.hmrcfrontend.views.html.helpers._",
-      "uk.gov.hmrc.govukfrontend.views.html.components.implicits._"
+      "controllers.routes.*",
+      "uk.gov.hmrc.govukfrontend.views.html.components.*",
+      "uk.gov.hmrc.hmrcfrontend.views.html.components.*",
+      "uk.gov.hmrc.hmrcfrontend.views.html.helpers.*",
+      "uk.gov.hmrc.govukfrontend.views.html.components.implicits.*"
     ),
     PlayKeys.playDefaultPort := 9334,
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*filters.*;.*handlers.*;.*components.*;.*repositories.*;" +

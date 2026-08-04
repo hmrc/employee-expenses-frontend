@@ -19,7 +19,7 @@ package controllers.construction
 import base.SpecBase
 import config.ClaimAmounts
 import controllers.actions.UnAuthed
-import controllers.routes._
+import controllers.routes.*
 import models.ConstructionOccupations.{
   AsphaltOrCement,
   BuildingMaterials,
@@ -42,7 +42,7 @@ import pages.construction.ConstructionOccupationsPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 
 import scala.concurrent.Future

@@ -22,7 +22,7 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.newBehaviours.YesNoViewBehaviours
 import views.html.security.SecurityGuardNHSView
-import controllers.security.routes._
+import controllers.security.routes.*
 
 class SecurityGuardNHSViewSpec extends YesNoViewBehaviours {
 

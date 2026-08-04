@@ -18,11 +18,11 @@ package navigation
 
 import base.SpecBase
 import controllers.police.routes
-import controllers.routes._
+import controllers.routes.*
 import models.{CheckMode, NormalMode}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
-import pages.police._
+import pages.police.*
 
 class PoliceNavigatorSpec extends SpecBase with MockitoSugar {
   private val navigator = new PoliceNavigator

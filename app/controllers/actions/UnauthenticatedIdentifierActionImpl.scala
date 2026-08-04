@@ -24,8 +24,8 @@ import models.requests.IdentifierRequest
 import play.api.Logging
 import play.api.libs.json.Reads
 import play.api.mvc.Results.Redirect
-import play.api.mvc._
-import uk.gov.hmrc.auth.core._
+import play.api.mvc.*
+import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.retrieve.OptionalRetrieval
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, UnauthorizedException}
 import uk.gov.hmrc.play.http.HeaderCarrierConverter

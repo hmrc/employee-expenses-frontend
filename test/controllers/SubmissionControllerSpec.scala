@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
 import controllers.authenticated.routes.SubmissionController
-import controllers.confirmation.routes._
+import controllers.confirmation.routes.*
 import controllers.routes.{PhoneUsController, SessionExpiredController, TechnicalDifficultiesController}
 import models.FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount
 import scala.concurrent.ExecutionContext.Implicits.global

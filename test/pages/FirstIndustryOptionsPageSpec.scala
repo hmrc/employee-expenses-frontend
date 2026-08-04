@@ -16,10 +16,10 @@
 
 package pages
 
-import models._
-import pages.authenticated._
+import models.*
+import pages.authenticated.*
 import pages.behaviours.PageBehaviours
-import pages.construction._
+import pages.construction.*
 import scala.language.implicitConversions
 
 class FirstIndustryOptionsPageSpec extends PageBehaviours {

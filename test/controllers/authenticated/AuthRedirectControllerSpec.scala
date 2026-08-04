@@ -18,19 +18,19 @@ package controllers.authenticated
 
 import base.SpecBase
 import controllers.actions.{Authed, UnAuthed}
-import controllers.authenticated.routes._
-import controllers.routes._
+import controllers.authenticated.routes.*
+import controllers.routes.*
 import models.{NormalMode, UserAnswers}
 import models.requests.IdentifierRequest
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers._
+import org.mockito.ArgumentMatchers.*
 import org.mockito.ArgumentMatchers.{eq => eqTo}
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 
 import scala.concurrent.Future

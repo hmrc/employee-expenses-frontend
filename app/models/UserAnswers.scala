@@ -17,8 +17,8 @@
 package models
 
 import pages.mergedJourney.MergedJourneyFlag
-import pages._
-import play.api.libs.json._
+import pages.*
+import play.api.libs.json.*
 
 import scala.util.{Failure, Success, Try}
 

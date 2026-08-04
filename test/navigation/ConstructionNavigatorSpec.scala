@@ -19,7 +19,7 @@ package navigation
 import base.SpecBase
 import models.{CheckMode, ConstructionOccupations, NormalMode}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.construction._
+import pages.construction.*
 
 class ConstructionNavigatorSpec extends SpecBase with MockitoSugar {
   private val modes     = Seq(NormalMode, CheckMode)

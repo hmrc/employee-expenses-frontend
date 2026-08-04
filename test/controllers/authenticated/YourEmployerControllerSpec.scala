@@ -19,12 +19,12 @@ package controllers.authenticated
 import base.SpecBase
 import config.NavConstant
 import controllers.actions.Authed
-import controllers.authenticated.routes._
-import controllers.routes._
+import controllers.authenticated.routes.*
+import controllers.routes.*
 import models.{NormalMode, TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.*
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerNames, YourEmployerPage}
@@ -32,7 +32,7 @@ import play.api.http.Status.OK
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import service.TaiService
 

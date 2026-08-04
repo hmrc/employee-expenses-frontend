@@ -16,17 +16,17 @@
 
 package utils
 
-import controllers.authenticated.routes._
-import controllers.routes._
+import controllers.authenticated.routes.*
+import controllers.routes.*
 import models.FifthIndustryOptions
-import models.FifthIndustryOptions._
-import models.FirstIndustryOptions._
-import models.FourthIndustryOptions._
-import models.SecondIndustryOptions._
-import models.ThirdIndustryOptions._
-import models._
-import pages._
-import pages.authenticated._
+import models.FifthIndustryOptions.*
+import models.FirstIndustryOptions.*
+import models.FourthIndustryOptions.*
+import models.SecondIndustryOptions.*
+import models.ThirdIndustryOptions.*
+import models.*
+import pages.*
+import pages.authenticated.*
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 

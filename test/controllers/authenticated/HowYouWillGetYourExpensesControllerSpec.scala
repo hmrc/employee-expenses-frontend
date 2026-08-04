@@ -20,13 +20,13 @@ import base.SpecBase
 import generators.Generators
 import models.FlatRateExpenseOptions.FRENoYears
 import models.{EmployerContribution, FlatRateExpense, FlatRateExpenseAmounts, TaiTaxYear, TaxYearSelection}
-import models.TaxYearSelection._
+import models.TaxYearSelection.*
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.{ClaimAmount, ClaimAmountAndAnyDeductions, EmployerContributionPage, FREAmounts, FREResponse}
-import pages.authenticated._
+import pages.authenticated.*
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 
 class HowYouWillGetYourExpensesControllerSpec
     extends SpecBase

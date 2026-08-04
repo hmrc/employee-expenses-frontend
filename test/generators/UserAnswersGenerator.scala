@@ -20,23 +20,23 @@ import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
-import pages._
-import pages.authenticated._
+import pages.*
+import pages.authenticated.*
 import pages.clothing.ClothingPage
-import pages.construction._
+import pages.construction.*
 import pages.docks.DocksOccupationList1Page
 import pages.electrical.ElectricalPage
-import pages.engineering._
-import pages.foodCatering._
-import pages.healthcare._
-import pages.heating._
-import pages.manufacturing._
-import pages.police._
-import pages.printing._
-import pages.security._
-import pages.shipyard._
+import pages.engineering.*
+import pages.foodCatering.*
+import pages.healthcare.*
+import pages.heating.*
+import pages.manufacturing.*
+import pages.police.*
+import pages.printing.*
+import pages.security.*
+import pages.shipyard.*
 import pages.textiles.TextilesOccupationList1Page
-import pages.transport._
+import pages.transport.*
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends TryValues {
@@ -112,7 +112,7 @@ trait UserAnswersGenerator extends TryValues {
 
   given arbitraryUserData: Arbitrary[UserAnswers] = {
 
-    import models._
+    import models.*
 
     Arbitrary {
       for {

@@ -18,10 +18,10 @@ package navigation
 
 import base.SpecBase
 import controllers.routes.SessionExpiredController
-import models._
+import models.*
 import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
-import pages.shipyard._
+import pages.shipyard.*
 
 class ShipyardNavigatorSpec extends SpecBase with MockitoSugar {
   private val modes     = Seq(NormalMode, CheckMode)

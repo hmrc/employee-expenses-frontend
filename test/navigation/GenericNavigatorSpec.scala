@@ -18,21 +18,21 @@ package navigation
 
 import base.SpecBase
 import config.FrontendAppConfig
-import controllers.authenticated.routes._
-import controllers.docks.routes._
-import controllers.foodCatering.routes._
-import controllers.routes._
-import controllers.shipyard.routes._
-import controllers.textiles.routes._
-import controllers.construction.routes._
-import models.FifthIndustryOptions._
-import models.FirstIndustryOptions._
-import models.FourthIndustryOptions._
-import models.SecondIndustryOptions._
-import models.ThirdIndustryOptions._
-import models._
+import controllers.authenticated.routes.*
+import controllers.docks.routes.*
+import controllers.foodCatering.routes.*
+import controllers.routes.*
+import controllers.shipyard.routes.*
+import controllers.textiles.routes.*
+import controllers.construction.routes.*
+import models.FifthIndustryOptions.*
+import models.FirstIndustryOptions.*
+import models.FourthIndustryOptions.*
+import models.SecondIndustryOptions.*
+import models.ThirdIndustryOptions.*
+import models.*
 import org.scalatestplus.mockito.MockitoSugar.mock
-import pages._
+import pages.*
 
 class GenericNavigatorSpec extends SpecBase {
 

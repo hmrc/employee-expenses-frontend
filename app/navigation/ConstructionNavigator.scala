@@ -19,7 +19,7 @@ package navigation
 import javax.inject.{Inject, Singleton}
 import models.{CheckMode, NormalMode, UserAnswers}
 import pages.Page
-import pages.construction._
+import pages.construction.*
 import play.api.mvc.Call
 
 @Singleton

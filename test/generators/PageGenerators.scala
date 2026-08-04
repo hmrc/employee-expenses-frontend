@@ -17,22 +17,22 @@
 package generators
 
 import org.scalacheck.Arbitrary
-import pages._
-import pages.authenticated._
-import pages.clothing._
-import pages.construction._
+import pages.*
+import pages.authenticated.*
+import pages.clothing.*
+import pages.construction.*
 import pages.docks.DocksOccupationList1Page
 import pages.electrical.ElectricalPage
-import pages.healthcare._
-import pages.engineering._
-import pages.manufacturing._
-import pages.police._
-import pages.transport._
-import pages.foodCatering._
-import pages.heating._
-import pages.security._
-import pages.printing._
-import pages.shipyard._
+import pages.healthcare.*
+import pages.engineering.*
+import pages.manufacturing.*
+import pages.police.*
+import pages.transport.*
+import pages.foodCatering.*
+import pages.heating.*
+import pages.security.*
+import pages.printing.*
+import pages.shipyard.*
 import pages.textiles.TextilesOccupationList1Page
 
 trait PageGenerators {

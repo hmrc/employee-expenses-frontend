@@ -25,7 +25,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.{OptionValues, TryValues}
 import pages.QuestionPage
-import play.api.libs.json._
+import play.api.libs.json.*
 
 trait PageBehaviours
     extends AnyWordSpec

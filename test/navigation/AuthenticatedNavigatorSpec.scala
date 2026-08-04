@@ -17,12 +17,12 @@
 package navigation
 
 import base.SpecBase
-import controllers.authenticated.routes._
-import controllers.confirmation.routes._
-import controllers.routes._
-import controllers.mergedJourney.routes._
+import controllers.authenticated.routes.*
+import controllers.confirmation.routes.*
+import controllers.routes.*
+import controllers.mergedJourney.routes.*
 import models.AlreadyClaimingFREDifferentAmounts.{Change, NoChange, Remove}
-import models.FlatRateExpenseOptions._
+import models.FlatRateExpenseOptions.*
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, _}
 import models.mergedJourney.{ClaimCompleteCurrent, ClaimCompleteCurrentPrevious, ClaimCompletePrevious}
 import models.{
@@ -32,7 +32,7 @@ import models.{
   NormalMode,
   TaxYearSelection
 }
-import pages.authenticated._
+import pages.authenticated.*
 import pages.confirmation.ConfirmationMergeJourneyPage
 import pages.mergedJourney.MergedJourneyFlag
 import pages.{CitizenDetailsAddress, FREResponse}

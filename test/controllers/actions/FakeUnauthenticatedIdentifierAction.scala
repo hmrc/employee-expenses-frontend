@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import javax.inject.Inject
 import models.requests.IdentifierRequest
-import play.api.mvc._
+import play.api.mvc.*
 
 import scala.concurrent.{ExecutionContext, Future}
 
