@@ -31,10 +31,10 @@ class FirstIndustryOptionsViewSpec extends OptionsViewBehaviours[FirstIndustryOp
   val application: Application       = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
   val view: FirstIndustryOptionsView = application.injector.instanceOf[FirstIndustryOptionsView]
 
-  def applyView(form: Form[_]): HtmlFormat.Appendable =
+  def applyView(form: Form[?]): HtmlFormat.Appendable =
     view.apply(form, NormalMode)(using fakeRequest, messages)
 
-  def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
+  def applyViewWithAuth(form: Form[?]): HtmlFormat.Appendable =
     view.apply(form, NormalMode)(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "FirstIndustryOptionsView" must {

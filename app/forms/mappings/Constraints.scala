@@ -77,7 +77,7 @@ trait Constraints {
         Invalid(errorKey, maximum)
     }
 
-  protected def nonEmptySeq(errorKey: String): Constraint[Seq[_]] = Constraint {
+  protected def nonEmptySeq(errorKey: String): Constraint[Seq[?]] = Constraint {
     case seq: Seq[?] =>
       if (seq.nonEmpty) Valid else Invalid(errorKey)
     case _ =>

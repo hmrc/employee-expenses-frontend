@@ -29,11 +29,11 @@
 )
 
 @(
-        form: Form[_],
+        form: Form[?],
         mode: Mode,
         claimAmount: Int,
         freAmounts: Seq[FlatRateExpenseAmounts]
-)(using request: Request[_],
+)(using request: Request[?],
         messages: Messages
 )
 

@@ -68,7 +68,7 @@ class WhichRailwayTradeController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode))),
           value => {
             val claimAmount = value match {
               case WhichRailwayTrade.VehiclePainters => ClaimAmounts.Transport.Railways.vehiclePainters

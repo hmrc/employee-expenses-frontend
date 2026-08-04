@@ -27,7 +27,7 @@
     input_checkbox_table: playComponents.input_checkbox_table
 )
 
-@(form: Form[Seq[TaxYearSelection]], mode: Mode, yearsAndAmounts: Seq[(RadioCheckboxOption, Int)])(using request: Request[_], messages: Messages)
+@(form: Form[Seq[TaxYearSelection]], mode: Mode, yearsAndAmounts: Seq[(RadioCheckboxOption, Int)])(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = s"${errorPrefix(form)} ${messages("changeWhichTaxYears.title")}"

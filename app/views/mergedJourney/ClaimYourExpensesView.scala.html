@@ -25,7 +25,7 @@
         p: playComponents.p
 )
 
-@(journeyConfig: MergedJourney)(using request: Request[_], messages: Messages)
+@(journeyConfig: MergedJourney)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = s"${messages("claimYourExpenses.title")}",

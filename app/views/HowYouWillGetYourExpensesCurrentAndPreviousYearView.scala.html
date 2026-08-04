@@ -21,7 +21,7 @@
     heading: playComponents.heading
 )
 
-@(href: String, currentYearMinus1Selected: Boolean, hasClaimIncreased: Boolean)(using request: Request[_], messages: Messages)
+@(href: String, currentYearMinus1Selected: Boolean, hasClaimIncreased: Boolean)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("howYouWillGetYourExpenses.title")

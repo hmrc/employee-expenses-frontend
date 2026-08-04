@@ -28,7 +28,7 @@
     govukSummaryList : GovukSummaryList
     )
 
-@(form: Form[_], mode: Mode, claimAmount: Int, freAmounts: Seq[FlatRateExpenseAmounts])(using request: Request[_], messages: Messages)
+@(form: Form[?], mode: Mode, claimAmount: Int, freAmounts: Seq[FlatRateExpenseAmounts])(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = s"${errorPrefix(form)} ${messages("alreadyClaimingFRESameAmount.title")}"

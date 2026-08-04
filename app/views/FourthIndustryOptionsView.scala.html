@@ -26,7 +26,7 @@
     input_radio: playComponents.input_radio
 )
 
-@(form: Form[_], mode: Mode)(using request: Request[_], messages: Messages)
+@(form: Form[?], mode: Mode)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = s"${errorPrefix(form)} ${messages("fourthIndustryOptions.title")}"

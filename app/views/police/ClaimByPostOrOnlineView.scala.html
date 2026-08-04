@@ -19,7 +19,7 @@
     heading: playComponents.heading
 )
 
-@(p87Url: String)(using request: Request[_], messages: Messages)
+@(p87Url: String)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("claimByPostOrOnline.title")

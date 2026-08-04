@@ -74,7 +74,7 @@ class AlreadyClaimingFRESameAmountController @Inject() (
           form
             .bindFromRequest()
             .fold(
-              (formWithErrors: Form[_]) =>
+              (formWithErrors: Form[?]) =>
                 Future.successful(BadRequest(view(formWithErrors, mode, claimAmount, freAmounts))),
               value =>
                 for {

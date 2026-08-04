@@ -22,7 +22,7 @@
     frontendAppConfig: FrontendAppConfig
 )
 
-@()(using request: Request[_], messages: Messages)
+@()(using request: Request[?], messages: Messages)
 
 @printAndPostLink = {<a class="govuk-link" href=@frontendAppConfig.p87ClaimByPostUrl >@messages("ivFailed.printAndPost")</a>}
 @helplineLink = {<a class="govuk-link" href=@frontendAppConfig.contactHMRC >@messages("ivFailed.helpline")</a>}

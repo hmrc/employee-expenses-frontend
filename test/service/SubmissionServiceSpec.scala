@@ -140,7 +140,7 @@ class SubmissionServiceSpec
         val result: Future[Seq[HttpResponse]] = submissionService.submitFRE(fakeNino, currentTaxYear, claimAmount)
 
         whenReady(result) { res =>
-          res mustBe a[Seq[_]]
+          res mustBe a[Seq[?]]
           res.head.status mustBe 204
         }
       }
@@ -155,7 +155,7 @@ class SubmissionServiceSpec
         val result = submissionService.submitFRE(fakeNino, currentTaxYear, claimAmount)
 
         whenReady(result) { res =>
-          res mustBe a[Seq[_]]
+          res mustBe a[Seq[?]]
           res.head.status mustBe 500
         }
       }
@@ -172,7 +172,7 @@ class SubmissionServiceSpec
         val result = submissionService.removeFRE(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
 
         whenReady(result) { res =>
-          res mustBe a[Seq[_]]
+          res mustBe a[Seq[?]]
           res.head.status mustBe 204
         }
       }
@@ -187,7 +187,7 @@ class SubmissionServiceSpec
         val result = submissionService.removeFRE(fakeNino, currentTaxYear, TaxYearSelection.CurrentYear)
 
         whenReady(result) { res =>
-          res mustBe a[Seq[_]]
+          res mustBe a[Seq[?]]
           res.head.status mustBe 500
         }
       }

@@ -66,7 +66,7 @@ class AluminiumOccupationList2Controller @Inject() (
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+        (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
             updatedAnswers <-

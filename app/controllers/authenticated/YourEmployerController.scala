@@ -96,7 +96,7 @@ class YourEmployerController @Inject() (
           form
             .bindFromRequest()
             .fold(
-              (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode, employerNames))),
+              (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode, employerNames))),
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value))

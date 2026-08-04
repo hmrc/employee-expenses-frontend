@@ -37,10 +37,10 @@ class YourEmployerViewSpec extends YesNoViewBehaviours {
 
     val view = application.injector.instanceOf[YourEmployerView]
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[?]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, employerName)(using fakeRequest, messages)
 
-    def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
+    def applyViewWithAuth(form: Form[?]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, employerName)(
         using fakeRequest.withSession(("authToken", "SomeAuthToken")),
         messages

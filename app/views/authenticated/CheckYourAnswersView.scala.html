@@ -27,7 +27,7 @@
 @(
         answerSections: Seq[Section],
         checkYourAnswersText: CheckYourAnswersText
-)(using request: Request[_], messages: Messages)
+)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("checkYourAnswers.title")

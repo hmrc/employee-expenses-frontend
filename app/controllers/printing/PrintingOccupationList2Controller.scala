@@ -67,7 +67,7 @@ class PrintingOccupationList2Controller @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode))),
           value => {
             val claimAmount = if (value) ClaimAmounts.Printing.list2 else ClaimAmounts.Printing.allOther
             for {

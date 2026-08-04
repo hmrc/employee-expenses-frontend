@@ -21,7 +21,7 @@
         heading: playComponents.heading
 )
 
-@(nextPageURL: String)(using request: Request[_], messages: Messages)
+@(nextPageURL: String)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("updateEmployerInformation.title")

@@ -71,7 +71,7 @@ class SameEmployerContributionAllYearsController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode, contribution))),
+            (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode, contribution))),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(SameEmployerContributionAllYearsPage, value))

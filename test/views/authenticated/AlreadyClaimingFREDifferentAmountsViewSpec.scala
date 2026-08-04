@@ -46,7 +46,7 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
 
   val view = application.injector.instanceOf[AlreadyClaimingFREDifferentAmountsView]
 
-  def applyView(form: Form[_]): HtmlFormat.Appendable =
+  def applyView(form: Form[?]): HtmlFormat.Appendable =
     view.apply(
       form,
       NormalMode,
@@ -54,7 +54,7 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
       userAnswers.get(FREAmounts).get
     )(using fakeRequest, messages)
 
-  def applyViewMultipleYears(form: Form[_]): HtmlFormat.Appendable =
+  def applyViewMultipleYears(form: Form[?]): HtmlFormat.Appendable =
     view.apply(
       form,
       NormalMode,
@@ -65,7 +65,7 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
       )
     )(using fakeRequest, messages)
 
-  def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
+  def applyViewWithAuth(form: Form[?]): HtmlFormat.Appendable =
     view.apply(
       form,
       NormalMode,

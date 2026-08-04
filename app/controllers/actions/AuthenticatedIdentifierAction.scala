@@ -84,7 +84,7 @@ class AuthenticatedIdentifierActionImpl @Inject() (
       }
   }
 
-  def unauthorised(sessionId: Option[String], request: Request[_]): Result =
+  def unauthorised(sessionId: Option[String], request: Request[?]): Result =
     sessionId match {
       case Some(id) =>
         Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + id}")))
@@ -92,14 +92,14 @@ class AuthenticatedIdentifierActionImpl @Inject() (
         Redirect(controllers.routes.SessionExpiredController.onPageLoad)
     }
 
-  def insufficientConfidence(queryString: String, request: Request[_]): Result =
+  def insufficientConfidence(queryString: String, request: Request[?]): Result =
     Redirect(
       s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200" +
         s"&completionURL=${config.authorisedCallback + queryString}" +
         s"&failureURL=${config.unauthorisedCallback}"
     )
 
-  def upliftIfSessionNotExpired(sessionId: Option[String])(using request: Request[_]): Result =
+  def upliftIfSessionNotExpired(sessionId: Option[String])(using request: Request[?]): Result =
     sessionId match {
       case Some(id) => insufficientConfidence(request.getQueryString("key").getOrElse(id), request)
       case _        => Redirect(controllers.routes.SessionExpiredController.onPageLoad)

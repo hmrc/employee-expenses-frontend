@@ -410,7 +410,7 @@ class FakeFailingAuthConnector @Inject() (exceptionToReturn: Throwable) extends 
 
 }
 
-class FakePassingAuthConnector @Inject() (stubbedRetrievalResult: Future[_]) extends AuthConnector {
+class FakePassingAuthConnector @Inject() (stubbedRetrievalResult: Future[?]) extends AuthConnector {
   val serviceUrl: String = ""
 
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(

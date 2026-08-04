@@ -18,7 +18,7 @@
         layout: views.LayoutProvider
 )
 
-@(nextServiceUrl: Option[String] = None)(using request: Request[_], messages: Messages)
+@(nextServiceUrl: Option[String] = None)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("confirmation.titleStopped"),

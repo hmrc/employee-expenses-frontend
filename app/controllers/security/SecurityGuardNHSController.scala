@@ -67,7 +67,7 @@ class SecurityGuardNHSController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode))),
           value => {
             val claimAmount = if (value) ClaimAmounts.Security.nhsSecurity else ClaimAmounts.defaultRate
             for {
