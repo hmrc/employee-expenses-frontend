@@ -41,7 +41,7 @@ class ClaimsCompleteController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     claimsCompleteView: ClaimsCompleteView,
     citizenDetailsConnector: CitizenDetailsConnector
-)(implicit val ec: ExecutionContext, appConfig: FrontendAppConfig)
+)(using ec: ExecutionContext, appConfig: FrontendAppConfig)
     extends FrontendBaseController
     with I18nSupport
     with Logging {

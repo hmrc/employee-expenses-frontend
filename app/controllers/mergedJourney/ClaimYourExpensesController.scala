@@ -38,7 +38,7 @@ class ClaimYourExpensesController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     claimYourExpensesView: ClaimYourExpensesView,
     appConfig: FrontendAppConfig
-)(implicit val ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {

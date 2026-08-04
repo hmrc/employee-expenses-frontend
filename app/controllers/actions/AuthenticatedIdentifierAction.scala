@@ -33,7 +33,7 @@ class AuthenticatedIdentifierActionImpl @Inject() (
     override val authConnector: AuthConnector,
     config: FrontendAppConfig,
     val parser: BodyParsers.Default
-)(implicit val executionContext: ExecutionContext)
+)(using override val executionContext: ExecutionContext)
     extends AuthenticatedIdentifierAction
     with AuthorisedFunctions
     with Logging {
@@ -47,7 +47,7 @@ class AuthenticatedIdentifierActionImpl @Inject() (
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    given hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     authorised()
       .retrieve(

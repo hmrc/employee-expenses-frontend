@@ -36,14 +36,14 @@ import scala.concurrent.{ExecutionContext, Future}
 class UnauthenticatedIdentifierActionImpl @Inject() (
     override val authConnector: AuthConnector,
     val parser: BodyParsers.Default
-)(implicit val executionContext: ExecutionContext)
+)(using override val executionContext: ExecutionContext)
     extends UnauthenticatedIdentifierAction
     with AuthorisedFunctions
     with Logging {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    given hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     authorised()
       .retrieve(OptionalRetrieval("nino", Reads.StringReads).and(OptionalRetrieval("internalId", Reads.StringReads))) {

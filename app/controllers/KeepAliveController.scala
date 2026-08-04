@@ -31,7 +31,7 @@ class KeepAliveController @Inject() (
     identify: AuthenticatedIdentifierAction,
     sessionRepository: SessionRepository,
     val controllerComponents: MessagesControllerComponents
-)(implicit val ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 

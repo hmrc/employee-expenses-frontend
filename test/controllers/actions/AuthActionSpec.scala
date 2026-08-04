@@ -31,7 +31,6 @@ import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys, UnauthorizedException}
 import utils.RetrievalOps._
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -64,7 +63,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
       mockAuthConnector,
       mockAppConfig,
       mockBodyParsers
-    )(implicitly)
+    )
 
     new Harness(authAction)
   }

@@ -48,7 +48,7 @@ class UnAuthSessionRepositorySpec
 
   override val repository: MongoCacheRepository[String] = unauthSessionRepo.cacheRepo
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  override given app: Application = new GuiceApplicationBuilder()
     .overrides(
       bind[UnAuthSessionRepository].toInstance(unauthSessionRepo)
     )

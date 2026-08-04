@@ -41,7 +41,6 @@ object Service {
     Service(host, port, protocol)
   }
 
-  implicit def convertToString(service: Service): String =
-    service.baseUrl
+  given Conversion[Service, String] = _.baseUrl
 
 }

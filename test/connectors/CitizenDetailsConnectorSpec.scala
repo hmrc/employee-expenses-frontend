@@ -38,7 +38,7 @@ class CitizenDetailsConnectorSpec
     with ScalaFutures
     with IntegrationPatience {
 
-  override implicit lazy val app: Application =
+  override given app: Application =
     new GuiceApplicationBuilder()
       .configure(
         conf = "microservice.services.citizen-details.port" -> server.port

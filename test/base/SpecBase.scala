@@ -245,7 +245,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   def emptyUserAnswers = UserAnswers()
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   def injector: Injector = app.injector
 

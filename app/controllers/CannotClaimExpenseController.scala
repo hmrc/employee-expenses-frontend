@@ -36,7 +36,7 @@ class CannotClaimExpenseController @Inject() (
     requireData: DataRequiredAction,
     val controllerComponents: MessagesControllerComponents,
     view: CannotClaimExpenseView
-)(implicit val ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 

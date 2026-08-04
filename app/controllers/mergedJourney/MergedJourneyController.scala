@@ -41,7 +41,7 @@ class MergedJourneyController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     employeeWfhExpensesConnector: EmployeeWfhExpensesConnector,
     appConfig: FrontendAppConfig
-)(implicit val ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {

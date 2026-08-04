@@ -35,7 +35,7 @@ class ConfirmationClaimStoppedController @Inject() (
     requireData: DataRequiredAction,
     val controllerComponents: MessagesControllerComponents,
     confirmationClaimStoppedView: ConfirmationClaimStoppedView
-)(implicit val ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 

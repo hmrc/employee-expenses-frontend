@@ -32,7 +32,7 @@ import scala.reflect.ClassTag
 
 trait Defaulting extends Logging {
 
-  def withDefaultToEmptySeq[T: ClassTag](response: HttpResponse)(implicit reads: Reads[Seq[T]]): Seq[T] =
+  def withDefaultToEmptySeq[T: ClassTag](response: HttpResponse)(using reads: Reads[Seq[T]]): Seq[T] =
 
     response.status match {
       case 200 =>

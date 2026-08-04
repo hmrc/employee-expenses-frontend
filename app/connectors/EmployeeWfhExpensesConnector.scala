@@ -31,7 +31,7 @@ class EmployeeWfhExpensesConnector @Inject() (appConfig: FrontendAppConfig, http
 ) {
 
   def checkIfAllYearsClaimed(headerCarrier: HeaderCarrier): Future[Boolean] = {
-    implicit val hc: HeaderCarrier = headerCarrier.copy(extraHeaders = headerCarrier.headers(Seq(HeaderNames.COOKIE)))
+    given hc: HeaderCarrier = headerCarrier.copy(extraHeaders = headerCarrier.headers(Seq(HeaderNames.COOKIE)))
     val url: String =
       s"${appConfig.employeeWfhExpensesHost}/employee-working-from-home-expenses/claimed-all-years-status"
 
