@@ -37,7 +37,7 @@ class MergedJourneySessionRepositorySpec
 
   given ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
-  override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = 30.seconds, interval = 100.millis)
+  given PatienceConfig = PatienceConfig(timeout = 30.seconds, interval = 100.millis)
 
   override val repository: MergedJourneySessionRepository = new MergedJourneySessionRepository(
     config = Configuration.from(Map("mongodb.mergedJourneyTimeToLiveInSeconds" -> 60)),

@@ -20,7 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import controllers.actions.*
 import controllers.authenticated.routes.*
 import controllers.routes.*
-import models.requests.{DataRequest, IdentifierRequest}
+import models.requests.IdentifierRequest
 import models.{NormalMode, UserAnswers}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

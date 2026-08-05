@@ -19,7 +19,6 @@ package controllers.confirmation
 import base.SpecBase
 import controllers.actions.Authed
 import controllers.confirmation.routes.*
-import models.TaxYearSelection.*
 import models.*
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar

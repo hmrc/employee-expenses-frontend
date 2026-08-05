@@ -22,7 +22,6 @@ import controllers.routes.*
 import forms.authenticated.TaxYearSelectionFormProvider
 
 import javax.inject.{Inject, Named}
-import models.FlatRateExpenseOptions.*
 import models.requests.DataRequest
 import models.{Enumerable, Mode, TaxYearSelection}
 import navigation.Navigator

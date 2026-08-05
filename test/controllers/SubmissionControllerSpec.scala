@@ -22,16 +22,8 @@ import controllers.authenticated.routes.SubmissionController
 import controllers.confirmation.routes.*
 import controllers.routes.{PhoneUsController, SessionExpiredController, TechnicalDifficultiesController}
 import models.FlatRateExpenseOptions.FREAllYearsAllAmountsSameAsClaimAmount
-import scala.concurrent.ExecutionContext.Implicits.global
 
-import models.TaxYearSelection.{
-  CurrentYear,
-  CurrentYearMinus1,
-  CurrentYearMinus2,
-  CurrentYearMinus3,
-  CurrentYearMinus4,
-  _
-}
+import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1, CurrentYearMinus2, CurrentYearMinus3, CurrentYearMinus4}
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
 import models.{AlreadyClaimingFREDifferentAmounts, TaxYearSelection}
