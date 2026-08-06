@@ -21,5 +21,5 @@ import play.api.libs.json.{Format, Json}
 case class FlatRateExpenseAmounts(freAmount: Option[FlatRateExpense], taxYear: TaiTaxYear)
 
 object FlatRateExpenseAmounts {
-  given format: Format[FlatRateExpenseAmounts] = Json.format[FlatRateExpenseAmounts]
+  given Format[FlatRateExpenseAmounts] = Json.format[FlatRateExpenseAmounts]
 }

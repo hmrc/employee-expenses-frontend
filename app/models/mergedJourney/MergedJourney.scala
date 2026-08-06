@@ -32,6 +32,6 @@ case class MergedJourney(
 }
 
 object MergedJourney {
-  given instantFormat: Format[Instant] = MongoJavatimeFormats.instantFormat
-  given format: Format[MergedJourney]  = Json.format[MergedJourney]
+  given Format[Instant]               = MongoJavatimeFormats.instantFormat
+  given format: Format[MergedJourney] = Json.format[MergedJourney]
 }

@@ -21,9 +21,9 @@ import play.api.libs.json.*
 case class TaxCodeRecord(taxCode: String, status: TaxCodeStatus)
 
 object TaxCodeRecord {
-  given reads: Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
+  given Reads[TaxCodeRecord] = Json.format[TaxCodeRecord]
 
-  given listReads: Reads[Seq[TaxCodeRecord]] =
+  given Reads[Seq[TaxCodeRecord]] =
     (__ \ "data").read(Reads.seq[TaxCodeRecord])
 
 }

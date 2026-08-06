@@ -22,10 +22,10 @@ case class Employment(name: String)
 
 object Employment {
 
-  given formats: Format[Employment] =
+  given Format[Employment] =
     Json.format[Employment]
 
-  given listReads: Reads[Seq[Employment]] =
+  given Reads[Seq[Employment]] =
     (__ \ "data" \ "employments").read(Reads.seq[Employment])
 
   def asLabel(names: Seq[String]): String = s"<p>${names.mkString("<br>")}</p>"

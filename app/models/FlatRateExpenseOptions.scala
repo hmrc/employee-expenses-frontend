@@ -35,7 +35,7 @@ object FlatRateExpenseOptions extends Enumerable.Implicits {
     TechnicalDifficulties
   )
 
-  given enumerable: Enumerable[FlatRateExpenseOptions] =
+  given Enumerable[FlatRateExpenseOptions] =
     Enumerable(values.map(v => v.toString -> v)*)
 
 }

@@ -42,7 +42,7 @@ object TypeOfTransport extends Enumerable.Implicits {
 
   val options: Seq[RadioCheckboxOption] = values.map(value => RadioCheckboxOption("typeOfTransport", value.toString))
 
-  given enumerable: Enumerable[TypeOfTransport] =
+  given Enumerable[TypeOfTransport] =
     Enumerable(values.toSeq.map(v => v.toString -> v)*)
 
 }

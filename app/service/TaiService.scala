@@ -32,7 +32,7 @@ class TaiService @Inject() (taiConnector: TaiConnector, citizenDetailsConnector:
   def employments(
       nino: String,
       taxYearSelection: TaxYearSelection
-  )(using hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Employment]] = {
+  )(using HeaderCarrier, ExecutionContext): Future[Seq[Employment]] = {
 
     val taxYear: TaiTaxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYearSelection))
 
@@ -40,15 +40,15 @@ class TaiService @Inject() (taiConnector: TaiConnector, citizenDetailsConnector:
   }
 
   def taxCodeRecords(nino: String, year: TaiTaxYear)(
-      using hc: HeaderCarrier,
-      ec: ExecutionContext
+      using HeaderCarrier,
+      ExecutionContext
   ): Future[Seq[TaxCodeRecord]] =
 
     taiConnector.taiTaxCodeRecords(nino, year)
 
   def updateFRE(nino: String, year: TaiTaxYear, grossAmount: Int)(
-      using hc: HeaderCarrier,
-      ec: ExecutionContext
+      using HeaderCarrier,
+      ExecutionContext
   ): Future[HttpResponse] =
 
     citizenDetailsConnector.getEtag(nino).flatMap { response =>
@@ -69,7 +69,7 @@ class TaiService @Inject() (taiConnector: TaiConnector, citizenDetailsConnector:
   def getFREAmount(
       taxYearSelection: Seq[TaxYearSelection],
       nino: String
-  )(using hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[FlatRateExpenseAmounts]] = {
+  )(using HeaderCarrier, ExecutionContext): Future[Seq[FlatRateExpenseAmounts]] = {
 
     val taxYears: Seq[TaiTaxYear] = taxYearSelection.map(x => TaiTaxYear(TaxYearSelection.getTaxYear(x)))
 
@@ -81,8 +81,8 @@ class TaiService @Inject() (taiConnector: TaiConnector, citizenDetailsConnector:
   }
 
   def freResponse(taxYears: Seq[TaxYearSelection], nino: String, claimAmount: Int)(
-      using hc: HeaderCarrier,
-      ec: ExecutionContext
+      using HeaderCarrier,
+      ExecutionContext
   ): Future[FlatRateExpenseOptions] =
 
     getFREAmount(taxYears, nino).map {

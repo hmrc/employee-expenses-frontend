@@ -22,10 +22,10 @@ import play.api.libs.json.*
 
 trait MongoDateTimeFormats {
 
-  given localDateTimeRead: Reads[LocalDateTime] =
+  given Reads[LocalDateTime] =
     (__ \ "$date").read[Long].map(millis => LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC))
 
-  given localDateTimeWrite: Writes[LocalDateTime] = new Writes[LocalDateTime] {
+  given Writes[LocalDateTime] = new Writes[LocalDateTime] {
     def writes(dateTime: LocalDateTime): JsValue = Json.obj(
       "$date" -> dateTime.atZone(ZoneOffset.UTC).toInstant.toEpochMilli
     )

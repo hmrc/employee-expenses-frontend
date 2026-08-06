@@ -21,5 +21,5 @@ import play.api.libs.json.*
 case class AuditData(nino: String, userAnswers: JsObject)
 
 object AuditData {
-  given format: Format[AuditData] = Json.format[AuditData]
+  given Format[AuditData] = Json.format[AuditData]
 }

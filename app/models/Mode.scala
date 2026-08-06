@@ -25,7 +25,7 @@ case object NormalMode extends Mode
 
 object Mode {
 
-  given jsLiteral: JavascriptLiteral[Mode] = new JavascriptLiteral[Mode] {
+  given JavascriptLiteral[Mode] = new JavascriptLiteral[Mode] {
     override def to(value: Mode): String = value match {
       case NormalMode => "NormalMode"
       case CheckMode  => "CheckMode"

@@ -21,5 +21,5 @@ import play.api.libs.json.{Format, Json}
 case class ETag(etag: String)
 
 object ETag {
-  given format: Format[ETag] = Json.format[ETag]
+  given Format[ETag] = Json.format[ETag]
 }

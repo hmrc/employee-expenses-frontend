@@ -58,7 +58,7 @@ class TaiConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClie
   def taiEmployments(
       nino: String,
       taxYear: TaiTaxYear
-  )(using hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[Employment]] = {
+  )(using HeaderCarrier, ExecutionContext): Future[Seq[Employment]] = {
 
     val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/employments/years/${taxYear.year}"
 
@@ -71,7 +71,7 @@ class TaiConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClie
   def getFlatRateExpense(
       nino: String,
       taxYear: TaiTaxYear
-  )(using hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[FlatRateExpense]] = {
+  )(using HeaderCarrier, ExecutionContext): Future[Seq[FlatRateExpense]] = {
 
     val taiUrl: String =
       s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/expenses/employee-expenses/${appConfig.flatRateExpenseId}"
@@ -83,8 +83,8 @@ class TaiConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClie
   }
 
   def taiFREUpdate(nino: String, taxYear: TaiTaxYear, version: Int, grossAmount: Int)(
-      using hc: HeaderCarrier,
-      ec: ExecutionContext
+      using HeaderCarrier,
+      ExecutionContext
   ): Future[HttpResponse] = {
 
     val taiUrl: String =
@@ -101,7 +101,7 @@ class TaiConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClie
   def taiTaxCodeRecords(
       nino: String,
       taxYear: TaiTaxYear
-  )(using hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[TaxCodeRecord]] = {
+  )(using HeaderCarrier, ExecutionContext): Future[Seq[TaxCodeRecord]] = {
 
     val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/income/tax-code-incomes"
 
@@ -114,7 +114,7 @@ class TaiConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClie
   def taiTaxAccountSummary(
       nino: String,
       taxYear: TaiTaxYear
-  )(using hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  )(using HeaderCarrier, ExecutionContext): Future[HttpResponse] = {
 
     val taiUrl: String = s"${appConfig.taiHost}/tai/$nino/tax-account/${taxYear.year}/summary"
 
