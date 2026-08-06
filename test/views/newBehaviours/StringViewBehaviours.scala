@@ -27,7 +27,6 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
       form: Form[String],
       createView: Form[String] => HtmlFormat.Appendable,
       messageKeyPrefix: String,
-      expectedFormAction: String,
       expectedHintKey: Option[String] = None
   ) =
 

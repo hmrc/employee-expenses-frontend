@@ -75,6 +75,7 @@ class SubmissionController @Inject() (
       case _ =>
         Future.successful(Redirect(baseRoutes.SessionExpiredController.onPageLoad))
     }
+
   }
 
   private def auditAndRedirect(

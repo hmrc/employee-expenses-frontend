@@ -18,18 +18,18 @@ package controllers.authenticated
 
 import com.google.inject.Inject
 import config.NavConstant
-import controllers.actions._
-import controllers.routes._
+import controllers.actions.*
+import controllers.routes.*
+
 import javax.inject.Named
-import models.FlatRateExpenseOptions._
+import models.FlatRateExpenseOptions.*
+import models.requests.DataRequest
 import models.{CheckYourAnswersText, FlatRateExpenseOptions, NormalMode}
 import navigation.Navigator
 import pages.FREResponse
-import pages.authenticated._
+import pages.authenticated.*
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
-import service.SubmissionService
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import play.api.mvc.*
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.CheckYourAnswersHelper
 import viewmodels.AnswerSection
@@ -41,16 +41,15 @@ class CheckYourAnswersController @Inject() (
     getData: DataRetrievalAction,
     requireData: DataRequiredAction,
     @Named(NavConstant.authenticated) navigator: Navigator,
-    submissionService: SubmissionService,
     val controllerComponents: MessagesControllerComponents,
-    view: CheckYourAnswersView,
-    auditConnector: AuditConnector
+    view: CheckYourAnswersView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
-    val cyaHelper          = new CheckYourAnswersHelper(request.userAnswers)
-    val removeFre: Boolean = request.userAnswers.get(RemoveFRECodePage).isDefined
+  def onPageLoad(): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
+    val cyaHelper                 = new CheckYourAnswersHelper(request.userAnswers)
+    val removeFre: Boolean        = request.userAnswers.get(RemoveFRECodePage).isDefined
 
     request.userAnswers.get(FREResponse) match {
       case Some(freResponse) =>
@@ -108,7 +107,7 @@ class CheckYourAnswersController @Inject() (
         )
     }
 
-  def acceptAndClaim(): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def acceptAndClaim(): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
     Redirect(navigator.nextPage(CheckYourAnswersPage, NormalMode)(request.userAnswers))
   }
 

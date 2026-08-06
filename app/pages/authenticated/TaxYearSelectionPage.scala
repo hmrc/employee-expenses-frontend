@@ -19,6 +19,7 @@ package pages.authenticated
 import models.{TaxYearSelection, UserAnswers}
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+import scala.language.implicitConversions
 
 import scala.util.Try
 

@@ -68,8 +68,6 @@ class ConfirmationCurrentAndPreviousYearsViewSpec extends ViewBehaviours {
         claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
         claimAmount: Int = claimAmount,
         updateEmployer: Option[Boolean] = Some(false),
-        updateAddress: Boolean = false,
-        currentYearMinus1: Boolean = true,
         freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears,
         address: Option[Address] = None,
         hasClaimIncreased: Boolean = true,
@@ -112,7 +110,7 @@ class ConfirmationCurrentAndPreviousYearsViewSpec extends ViewBehaviours {
 
     "not display currentYearMinusOneDelay when currentYearMinus1 is false" in {
 
-      val doc = asDocument(applyView(currentYearMinus1 = false)(fakeRequest, messages))
+      val doc = asDocument(applyView()(fakeRequest, messages))
 
       assertTextNotRendered(doc, messages("confirmation.currentYearMinusOneDelay"))
     }

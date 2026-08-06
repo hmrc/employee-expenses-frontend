@@ -54,7 +54,7 @@ class UnauthenticatedIdentifierActionSpec
 
       val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, frontendAppConfig, bodyParsers)
+      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, bodyParsers)
       val controller   = new Harness(unAuthAction)
       val result       = controller.onPageLoad()(fakeRequest)
 
@@ -74,7 +74,7 @@ class UnauthenticatedIdentifierActionSpec
 
       val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, frontendAppConfig, bodyParsers)
+      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, bodyParsers)
 
       val controller = new Harness(unAuthAction)
 
@@ -96,7 +96,7 @@ class UnauthenticatedIdentifierActionSpec
 
       val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, frontendAppConfig, bodyParsers)
+      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, bodyParsers)
 
       val controller = new Harness(unAuthAction)
 
@@ -122,7 +122,7 @@ class UnauthenticatedIdentifierActionSpec
 
       val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, frontendAppConfig, bodyParsers)
+      val unAuthAction = new UnauthenticatedIdentifierActionImpl(authConnector, bodyParsers)
 
       val controller = new Harness(unAuthAction)
 

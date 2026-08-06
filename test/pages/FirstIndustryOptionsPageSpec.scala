@@ -20,6 +20,7 @@ import models._
 import pages.authenticated._
 import pages.behaviours.PageBehaviours
 import pages.construction._
+import scala.language.implicitConversions
 
 class FirstIndustryOptionsPageSpec extends PageBehaviours {
 

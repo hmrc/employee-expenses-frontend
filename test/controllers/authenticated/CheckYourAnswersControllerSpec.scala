@@ -57,7 +57,7 @@ class CheckYourAnswersControllerSpec
       "return OK for a GET for a stopped claim" in {
         val userAnswers = minimumUserAnswers.set(FREResponse, FRENoYears).success.value
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
+        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
         val result      = route(application, request).value
 
         status(result) mustEqual OK
@@ -71,7 +71,7 @@ class CheckYourAnswersControllerSpec
           .success
           .value
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
+        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
         val result      = route(application, request).value
 
         status(result) mustEqual OK
@@ -81,7 +81,7 @@ class CheckYourAnswersControllerSpec
 
       "return OK for a GET for a new claim" in {
         val application = applicationBuilder(userAnswers = Some(currentYearFullUserAnswers)).build()
-        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
+        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
         val result      = route(application, request).value
 
         status(result) mustEqual OK
@@ -91,7 +91,7 @@ class CheckYourAnswersControllerSpec
 
       "redirect to session expired when no freResponse is found" in {
         val application = applicationBuilder(userAnswers = Some(minimumUserAnswers)).build()
-        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
+        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
         val result      = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
@@ -101,7 +101,7 @@ class CheckYourAnswersControllerSpec
 
       "redirect to Session Expired for a GET if no existing data is found" in {
         val application = applicationBuilder(userAnswers = None).build()
-        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad.url)
+        val request     = FakeRequest(GET, CheckYourAnswersController.onPageLoad().url)
         val result      = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
@@ -115,7 +115,7 @@ class CheckYourAnswersControllerSpec
       "redirect to next page" in {
         val onwardRoute: Call = Call("GET", "/foo")
         val application       = applicationBuilder(Some(emptyUserAnswers), onwardRoute = Some(onwardRoute)).build()
-        val request           = FakeRequest(GET, CheckYourAnswersController.acceptAndClaim.url)
+        val request           = FakeRequest(GET, CheckYourAnswersController.acceptAndClaim().url)
         val result            = route(application, request).value
 
         status(result) mustEqual SEE_OTHER

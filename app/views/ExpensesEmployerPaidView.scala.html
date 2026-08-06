@@ -20,7 +20,6 @@
     layout: views.LayoutProvider,
     formHelper: FormWithCSRF,
     errorSummary: playComponents.error_summary,
-    heading: playComponents.heading,
     submitButton: playComponents.submit_button,
     inputTextCurrency: playComponents.input_text_currency
 )
@@ -31,16 +30,14 @@
     pageTitle = s"${errorPrefix(form)} ${messages("expensesEmployerPaid.title")}"
     ) {
 
-    @formHelper(action = ExpensesEmployerPaidController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.ExpensesEmployerPaidController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @errorSummary(form.errors)
 
         @inputTextCurrency(
             field = form("value"),
             label = messages("expensesEmployerPaid.heading"),
-            labelClass=Some("visually-hidden"),
             hint = Some(messages("expensesEmployerPaid.hint")),
-            inputType = Some("numeric")
         )
 
         @submitButton()

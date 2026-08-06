@@ -30,7 +30,7 @@ import pages.authenticated._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
+class CheckYourAnswersHelper(userAnswers: UserAnswers)(using messages: Messages) {
 
   def removeFRECode: Option[AnswerRow] = userAnswers.get(RemoveFRECodePage).map { x =>
     AnswerRow(

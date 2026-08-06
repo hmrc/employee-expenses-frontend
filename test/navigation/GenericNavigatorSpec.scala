@@ -374,7 +374,7 @@ class GenericNavigatorSpec extends SpecBase {
       "go to CheckYourAnswers from a page that doesn't exist in the edit route map" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, CheckMode)(UserAnswers()) mustBe CheckYourAnswersController.onPageLoad
+        navigator.nextPage(UnknownPage, CheckMode)(UserAnswers()) mustBe CheckYourAnswersController.onPageLoad()
       }
 
       // EmployerContributionPage
@@ -444,7 +444,7 @@ class GenericNavigatorSpec extends SpecBase {
       }
 
       "go to TaxYearSelectionController from ClaimAmountPage" in {
-        navigator.nextPage(ClaimAmount, CheckMode)(emptyUserAnswers) mustBe CheckYourAnswersController.onPageLoad
+        navigator.nextPage(ClaimAmount, CheckMode)(emptyUserAnswers) mustBe CheckYourAnswersController.onPageLoad()
       }
 
       // FirstIndustryOptionsPage

@@ -53,7 +53,6 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
-        frontendAppConfig,
         app.injector.instanceOf[BodyParsers.Default]
       )
 
@@ -82,7 +81,6 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
-        frontendAppConfig,
         app.injector.instanceOf[BodyParsers.Default]
       )
 
@@ -151,7 +149,6 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
-        frontendAppConfig,
         app.injector.instanceOf[BodyParsers.Default]
       )
 
@@ -180,7 +177,6 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
-        frontendAppConfig,
         app.injector.instanceOf[BodyParsers.Default]
       )
 
@@ -205,7 +201,6 @@ class IndexControllerSpec extends SpecBase with ScalaFutures with MockitoSugar w
 
       val passingAuthAction = new UnauthenticatedIdentifierActionImpl(
         mockAuthConnector,
-        frontendAppConfig,
         app.injector.instanceOf[BodyParsers.Default]
       )
 

@@ -46,7 +46,7 @@ class AuthSessionRepositorySpec
     timestampSupport = new CurrentTimestampSupport()
   )
 
-  override lazy val repository: MongoCacheRepository[String] = authSessionRepo.cacheRepo
+  override val repository: MongoCacheRepository[String] = authSessionRepo.cacheRepo
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(

@@ -54,7 +54,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
             .value
 
           navigator.nextPage(TaxYearSelectionPage, NormalMode)(ua) mustBe
-            CheckYourAnswersController.onPageLoad
+            CheckYourAnswersController.onPageLoad()
         }
 
         "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
@@ -129,12 +129,12 @@ class AuthenticatedNavigatorSpec extends SpecBase {
         val ua = emptyUserAnswers.set(RemoveFRECodePage, TaxYearSelection.CurrentYear).success.value
 
         navigator.nextPage(RemoveFRECodePage, NormalMode)(ua) mustBe
-          CheckYourAnswersController.onPageLoad
+          CheckYourAnswersController.onPageLoad()
       }
 
       "go to Check Your Answers from ChangeWhichTaxYearsPage" in {
         navigator.nextPage(ChangeWhichTaxYearsPage, NormalMode)(emptyUserAnswers) mustBe
-          CheckYourAnswersController.onPageLoad
+          CheckYourAnswersController.onPageLoad()
       }
 
       "go to YourAddressController from YourEmployer when answered true" in {
@@ -302,7 +302,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "go to CheckYourAnswers from UpdateYourAddressPage" in {
         navigator.nextPage(UpdateYourAddressPage, CheckMode)(emptyUserAnswers) mustBe
-          CheckYourAnswersController.onPageLoad
+          CheckYourAnswersController.onPageLoad()
       }
 
       "go to HowYouWillGetYourExpenses from UpdateEmployerInformation when YourAddress is defined" in {
@@ -316,13 +316,13 @@ class AuthenticatedNavigatorSpec extends SpecBase {
       "go to CheckYourAnswers from ChangeWhichTaxYear when YourEmployer is not defined and CurrentYear is selected" in {
         val userAnswers = emptyUserAnswers.set(ChangeWhichTaxYearsPage, Seq(CurrentYear)).success.value
         navigator.nextPage(ChangeWhichTaxYearsPage, CheckMode)(userAnswers) mustBe
-          CheckYourAnswersController.onPageLoad
+          CheckYourAnswersController.onPageLoad()
       }
 
       "go to CheckYourAnswers from ChangeWhichTaxYear when YourEmployer is not defined and CurrentYear is not selected" in {
         val userAnswers = emptyUserAnswers.set(TaxYearSelectionPage, Seq(CurrentYearMinus1)).success.value
         navigator.nextPage(ChangeWhichTaxYearsPage, CheckMode)(userAnswers) mustBe
-          CheckYourAnswersController.onPageLoad
+          CheckYourAnswersController.onPageLoad()
       }
 
       "go to CheckYourAnswers from ChangeWhichTaxYear when YourEmployer is defined and CurrentYear is selected" in {
@@ -335,7 +335,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
           .value
 
         navigator.nextPage(ChangeWhichTaxYearsPage, CheckMode)(userAnswers) mustBe
-          CheckYourAnswersController.onPageLoad
+          CheckYourAnswersController.onPageLoad()
       }
 
       "from TaxYearSelection" must {
@@ -349,7 +349,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
             .value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
-            CheckYourAnswersController.onPageLoad
+            CheckYourAnswersController.onPageLoad()
         }
 
         "go to Check your answers when answered and freResponse returns FRENoYears and doesn't have  currentYear" in {
@@ -362,7 +362,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
             .value
 
           navigator.nextPage(TaxYearSelectionPage, CheckMode)(ua) mustBe
-            CheckYourAnswersController.onPageLoad
+            CheckYourAnswersController.onPageLoad()
         }
 
         "go to AlreadyClaimingFRESameAmount when answered and freResponse returns FREAllYearsAllAmountsSameAsClaimAmount" in {
@@ -447,7 +447,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
         val ua = emptyUserAnswers.set(CitizenDetailsAddress, address).success.value
 
         navigator.nextPage(YourAddressPage, CheckMode)(ua) mustBe
-          CheckYourAnswersController.onPageLoad
+          CheckYourAnswersController.onPageLoad()
       }
     }
   }
