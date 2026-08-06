@@ -37,199 +37,199 @@ import pages.textiles.TextilesOccupationList1Page
 
 trait PageGenerators {
 
-  given arbitraryConstructionOccupationsPage: Arbitrary[ConstructionOccupationsPage.type] =
+  given Arbitrary[ConstructionOccupationsPage.type] =
     Arbitrary(ConstructionOccupationsPage)
 
-  given arbitraryCabinCrewPage: Arbitrary[CabinCrewPage.type] =
+  given Arbitrary[CabinCrewPage.type] =
     Arbitrary(CabinCrewPage)
 
-  given arbitraryTextilesOccupationList1Page: Arbitrary[TextilesOccupationList1Page.type] =
+  given Arbitrary[TextilesOccupationList1Page.type] =
     Arbitrary(TextilesOccupationList1Page)
 
-  given arbitraryDocksOccupationList1Page: Arbitrary[DocksOccupationList1Page.type] =
+  given Arbitrary[DocksOccupationList1Page.type] =
     Arbitrary(DocksOccupationList1Page)
 
-  given arbitraryLabourerPage: Arbitrary[LabourerPage.type] =
+  given Arbitrary[LabourerPage.type] =
     Arbitrary(LabourerPage)
 
-  given arbitraryShipyardApprenticeStorekeeperPage: Arbitrary[ShipyardApprenticeStorekeeperPage.type] =
+  given Arbitrary[ShipyardApprenticeStorekeeperPage.type] =
     Arbitrary(ShipyardApprenticeStorekeeperPage)
 
-  given arbitraryShipyardOccupationList2Page: Arbitrary[ShipyardOccupationList2Page.type] =
+  given Arbitrary[ShipyardOccupationList2Page.type] =
     Arbitrary(ShipyardOccupationList2Page)
 
-  given arbitraryShipyardOccupationList1Page: Arbitrary[ShipyardOccupationList1Page.type] =
+  given Arbitrary[ShipyardOccupationList1Page.type] =
     Arbitrary(ShipyardOccupationList1Page)
 
-  given arbitraryFifthIndustryOptionsPage: Arbitrary[FifthIndustryOptionsPage.type] =
+  given Arbitrary[FifthIndustryOptionsPage.type] =
     Arbitrary(FifthIndustryOptionsPage)
 
-  given arbitraryAlreadyClaimingFREDifferentAmountsPage: Arbitrary[AlreadyClaimingFREDifferentAmountsPage.type] =
+  given Arbitrary[AlreadyClaimingFREDifferentAmountsPage.type] =
     Arbitrary(AlreadyClaimingFREDifferentAmountsPage)
 
-  given arbitraryAlreadyClaimingFREPage: Arbitrary[AlreadyClaimingFRESameAmountPage.type] =
+  given Arbitrary[AlreadyClaimingFRESameAmountPage.type] =
     Arbitrary(AlreadyClaimingFRESameAmountPage)
 
-  given arbitrarySameEmployerContributionAllYearsPage: Arbitrary[SameEmployerContributionAllYearsPage.type] =
+  given Arbitrary[SameEmployerContributionAllYearsPage.type] =
     Arbitrary(SameEmployerContributionAllYearsPage)
 
-  given arbitraryChangeWhichTaxYearsPage: Arbitrary[ChangeWhichTaxYearsPage.type] =
+  given Arbitrary[ChangeWhichTaxYearsPage.type] =
     Arbitrary(ChangeWhichTaxYearsPage)
 
-  given arbitraryRemoveFRECodePage: Arbitrary[RemoveFRECodePage.type] =
+  given Arbitrary[RemoveFRECodePage.type] =
     Arbitrary(RemoveFRECodePage)
 
-  given arbitraryAluminiumApprenticePage: Arbitrary[AluminiumApprenticePage.type] =
+  given Arbitrary[AluminiumApprenticePage.type] =
     Arbitrary(AluminiumApprenticePage)
 
-  given arbitraryIronApprenticePage: Arbitrary[IronApprenticePage.type] =
+  given Arbitrary[IronApprenticePage.type] =
     Arbitrary(IronApprenticePage)
 
-  given arbitraryYourAddressPage: Arbitrary[YourAddressPage.type] =
+  given Arbitrary[YourAddressPage.type] =
     Arbitrary(YourAddressPage)
 
-  given arbitraryYourEmployerPage: Arbitrary[YourEmployerPage.type] =
+  given Arbitrary[YourEmployerPage.type] =
     Arbitrary(YourEmployerPage)
 
-  given arbitraryConstructionalEngineeringList3Page: Arbitrary[ConstructionalEngineeringList3Page.type] =
+  given Arbitrary[ConstructionalEngineeringList3Page.type] =
     Arbitrary(ConstructionalEngineeringList3Page)
 
-  given arbitraryHeatingOccupationListPage: Arbitrary[HeatingOccupationListPage.type] =
+  given Arbitrary[HeatingOccupationListPage.type] =
     Arbitrary(HeatingOccupationListPage)
 
-  given arbitraryTaxYearSelectionPage: Arbitrary[TaxYearSelectionPage.type] =
+  given Arbitrary[TaxYearSelectionPage.type] =
     Arbitrary(TaxYearSelectionPage)
 
-  given arbitraryFourthIndustryOptionsPage: Arbitrary[FourthIndustryOptionsPage.type] =
+  given Arbitrary[FourthIndustryOptionsPage.type] =
     Arbitrary(FourthIndustryOptionsPage)
 
-  given arbitraryIronMiningPage: Arbitrary[IronMiningPage.type] =
+  given Arbitrary[IronMiningPage.type] =
     Arbitrary(IronMiningPage)
 
-  given arbitraryIronMiningListPage: Arbitrary[IronMiningListPage.type] =
+  given Arbitrary[IronMiningListPage.type] =
     Arbitrary(IronMiningListPage)
 
-  given arbitraryCommunitySupportOfficerPage: Arbitrary[CommunitySupportOfficerPage.type] =
+  given Arbitrary[CommunitySupportOfficerPage.type] =
     Arbitrary(CommunitySupportOfficerPage)
 
-  given arbitraryMetropolitanPolicePage: Arbitrary[MetropolitanPolicePage.type] =
+  given Arbitrary[MetropolitanPolicePage.type] =
     Arbitrary(MetropolitanPolicePage)
 
-  given arbitraryElectricalPage: Arbitrary[ElectricalPage.type] =
+  given Arbitrary[ElectricalPage.type] =
     Arbitrary(ElectricalPage)
 
-  given arbitraryPrintingOccupationList2Page: Arbitrary[PrintingOccupationList2Page.type] =
+  given Arbitrary[PrintingOccupationList2Page.type] =
     Arbitrary(PrintingOccupationList2Page)
 
-  given arbitraryThirdIndustryOptionsPage: Arbitrary[ThirdIndustryOptionsPage.type] =
+  given Arbitrary[ThirdIndustryOptionsPage.type] =
     Arbitrary(ThirdIndustryOptionsPage)
 
-  given arbitraryPrintingOccupationList1Page: Arbitrary[PrintingOccupationList1Page.type] =
+  given Arbitrary[PrintingOccupationList1Page.type] =
     Arbitrary(PrintingOccupationList1Page)
 
-  given arbitraryAluminiumOccupationList3Page: Arbitrary[AluminiumOccupationList3Page.type] =
+  given Arbitrary[AluminiumOccupationList3Page.type] =
     Arbitrary(AluminiumOccupationList3Page)
 
-  given arbitrarySecurityGuardNHSPage: Arbitrary[SecurityGuardNHSPage.type] =
+  given Arbitrary[SecurityGuardNHSPage.type] =
     Arbitrary(SecurityGuardNHSPage)
 
-  given arbitraryClothingPage: Arbitrary[ClothingPage.type] =
+  given Arbitrary[ClothingPage.type] =
     Arbitrary(ClothingPage)
 
-  given arbitraryCateringStaffNHSPage: Arbitrary[CateringStaffNHSPage.type] =
+  given Arbitrary[CateringStaffNHSPage.type] =
     Arbitrary(CateringStaffNHSPage)
 
-  given arbitraryWoodFurnitureOccupationList2Page: Arbitrary[WoodFurnitureOccupationList2Page.type] =
+  given Arbitrary[WoodFurnitureOccupationList2Page.type] =
     Arbitrary(WoodFurnitureOccupationList2Page)
 
-  given arbitraryWoodFurnitureOccupationList3Page: Arbitrary[WoodFurnitureOccupationList3Page.type] =
+  given Arbitrary[WoodFurnitureOccupationList3Page.type] =
     Arbitrary(WoodFurnitureOccupationList3Page)
 
-  given arbitraryWoodFurnitureOccupationList1Page: Arbitrary[WoodFurnitureOccupationList1Page.type] =
+  given Arbitrary[WoodFurnitureOccupationList1Page.type] =
     Arbitrary(WoodFurnitureOccupationList1Page)
 
-  given arbitraryPoliceOfficerPage: Arbitrary[PoliceOfficerPage.type] =
+  given Arbitrary[PoliceOfficerPage.type] =
     Arbitrary(PoliceOfficerPage)
 
-  given arbitraryIronSteelOccupationListPage: Arbitrary[IronSteelOccupationListPage.type] =
+  given Arbitrary[IronSteelOccupationListPage.type] =
     Arbitrary(IronSteelOccupationListPage)
 
-  given arbitraryAluminiumOccupationList2Page: Arbitrary[AluminiumOccupationList2Page.type] =
+  given Arbitrary[AluminiumOccupationList2Page.type] =
     Arbitrary(AluminiumOccupationList2Page)
 
-  given arbitrarySpecialConstablePage: Arbitrary[SpecialConstablePage.type] =
+  given Arbitrary[SpecialConstablePage.type] =
     Arbitrary(SpecialConstablePage)
 
-  given arbitraryAluminiumOccupationList1Page: Arbitrary[AluminiumOccupationList1Page.type] =
+  given Arbitrary[AluminiumOccupationList1Page.type] =
     Arbitrary(AluminiumOccupationList1Page)
 
-  given arbitraryTypeOfManufacturingPage: Arbitrary[TypeOfManufacturingPage.type] =
+  given Arbitrary[TypeOfManufacturingPage.type] =
     Arbitrary(TypeOfManufacturingPage)
 
-  given arbitraryTransportVehicleTradePage: Arbitrary[TransportVehicleTradePage.type] =
+  given Arbitrary[TransportVehicleTradePage.type] =
     Arbitrary(TransportVehicleTradePage)
 
-  given arbitraryFactoryEngineeringApprenticePage: Arbitrary[FactoryEngineeringApprenticePage.type] =
+  given Arbitrary[FactoryEngineeringApprenticePage.type] =
     Arbitrary(FactoryEngineeringApprenticePage)
 
-  given arbitraryTransportCarpenterPage: Arbitrary[TransportCarpenterPage.type] =
+  given Arbitrary[TransportCarpenterPage.type] =
     Arbitrary(TransportCarpenterPage)
 
-  given arbitrarySecondIndustryOptionsPage: Arbitrary[SecondIndustryOptionsPage.type] =
+  given Arbitrary[SecondIndustryOptionsPage.type] =
     Arbitrary(SecondIndustryOptionsPage)
 
-  given arbitraryGarageHandOrCleanerPage: Arbitrary[GarageHandOrCleanerPage.type] =
+  given Arbitrary[GarageHandOrCleanerPage.type] =
     Arbitrary(GarageHandOrCleanerPage)
 
-  given arbitraryWhichRailwayTradePage: Arbitrary[WhichRailwayTradePage.type] =
+  given Arbitrary[WhichRailwayTradePage.type] =
     Arbitrary(WhichRailwayTradePage)
 
-  given arbitraryFactoryEngineeringList1Page: Arbitrary[FactoryEngineeringList1Page.type] =
+  given Arbitrary[FactoryEngineeringList1Page.type] =
     Arbitrary(FactoryEngineeringList1Page)
 
-  given arbitraryFactoryEngineeringList2Page: Arbitrary[FactoryEngineeringList2Page.type] =
+  given Arbitrary[FactoryEngineeringList2Page.type] =
     Arbitrary(FactoryEngineeringList2Page)
 
-  given arbitraryHealthcareList2Page: Arbitrary[HealthcareList2Page.type] =
+  given Arbitrary[HealthcareList2Page.type] =
     Arbitrary(HealthcareList2Page)
 
-  given arbitraryAncillaryEngineeringWhichTradePage: Arbitrary[AncillaryEngineeringWhichTradePage.type] =
+  given Arbitrary[AncillaryEngineeringWhichTradePage.type] =
     Arbitrary(AncillaryEngineeringWhichTradePage)
 
-  given arbitraryConstructionalEngineeringApprenticePage: Arbitrary[ConstructionalEngineeringApprenticePage.type] =
+  given Arbitrary[ConstructionalEngineeringApprenticePage.type] =
     Arbitrary(ConstructionalEngineeringApprenticePage)
 
-  given arbitraryConstructionalEngineeringList2Page: Arbitrary[ConstructionalEngineeringList2Page.type] =
+  given Arbitrary[ConstructionalEngineeringList2Page.type] =
     Arbitrary(ConstructionalEngineeringList2Page)
 
-  given arbitraryHealthcareList1Page: Arbitrary[HealthcareList1Page.type] =
+  given Arbitrary[HealthcareList1Page.type] =
     Arbitrary(HealthcareList1Page)
 
-  given arbitraryAirlineJobListPage: Arbitrary[AirlineJobListPage.type] =
+  given Arbitrary[AirlineJobListPage.type] =
     Arbitrary(AirlineJobListPage)
 
-  given arbitraryTypeOfTransportPage: Arbitrary[TypeOfTransportPage.type] =
+  given Arbitrary[TypeOfTransportPage.type] =
     Arbitrary(TypeOfTransportPage)
 
-  given arbitraryConstructionalEngineeringList1Page: Arbitrary[ConstructionalEngineeringList1Page.type] =
+  given Arbitrary[ConstructionalEngineeringList1Page.type] =
     Arbitrary(ConstructionalEngineeringList1Page)
 
-  given arbitraryTypeOfEngineeringPage: Arbitrary[TypeOfEngineeringPage.type] =
+  given Arbitrary[TypeOfEngineeringPage.type] =
     Arbitrary(TypeOfEngineeringPage)
 
-  given arbitraryAmbulanceStaffPage: Arbitrary[AmbulanceStaffPage.type] =
+  given Arbitrary[AmbulanceStaffPage.type] =
     Arbitrary(AmbulanceStaffPage)
 
-  given arbitraryEmployerContributionPage: Arbitrary[EmployerContributionPage.type] =
+  given Arbitrary[EmployerContributionPage.type] =
     Arbitrary(EmployerContributionPage)
 
-  given arbitraryMultipleEmploymentsPage: Arbitrary[MultipleEmploymentsPage.type] =
+  given Arbitrary[MultipleEmploymentsPage.type] =
     Arbitrary(MultipleEmploymentsPage)
 
-  given arbitraryExpensesEmployerPaidPage: Arbitrary[ExpensesEmployerPaidPage.type] =
+  given Arbitrary[ExpensesEmployerPaidPage.type] =
     Arbitrary(ExpensesEmployerPaidPage)
 
-  given arbitraryFirstIndustryOptionsPage: Arbitrary[FirstIndustryOptionsPage.type] =
+  given Arbitrary[FirstIndustryOptionsPage.type] =
     Arbitrary(FirstIndustryOptionsPage)
 
 }

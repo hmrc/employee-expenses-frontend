@@ -21,92 +21,92 @@ import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
-  given arbitraryConstructionOccupations: Arbitrary[ConstructionOccupations] =
+  given Arbitrary[ConstructionOccupations] =
     Arbitrary {
       Gen.oneOf(ConstructionOccupations.values.toSeq)
     }
 
-  given arbitraryTaxCodeStatus: Arbitrary[TaxCodeStatus] =
+  given Arbitrary[TaxCodeStatus] =
     Arbitrary {
       Gen.oneOf(TaxCodeStatus.values)
     }
 
-  given arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
+  given Arbitrary[EmployerContribution] =
     Arbitrary {
       Gen.oneOf(EmployerContribution.values)
     }
 
-  given arbitraryFifthIndustryOptions: Arbitrary[FifthIndustryOptions] =
+  given Arbitrary[FifthIndustryOptions] =
     Arbitrary {
       Gen.oneOf(FifthIndustryOptions.values)
     }
 
-  given arbitraryMultipleEmployments: Arbitrary[MultipleEmployments] =
+  given Arbitrary[MultipleEmployments] =
     Arbitrary {
       Gen.oneOf(MultipleEmployments.values)
     }
 
-  given arbitraryAlreadyClaimingFREDifferentAmounts: Arbitrary[AlreadyClaimingFREDifferentAmounts] =
+  given Arbitrary[AlreadyClaimingFREDifferentAmounts] =
     Arbitrary {
       Gen.oneOf(AlreadyClaimingFREDifferentAmounts.values)
     }
 
-  given arbitraryAlreadyClaimingFRESameAmount: Arbitrary[AlreadyClaimingFRESameAmount] =
+  given Arbitrary[AlreadyClaimingFRESameAmount] =
     Arbitrary {
       Gen.oneOf(AlreadyClaimingFRESameAmount.values)
     }
 
-  given arbitraryTaxYearSelection: Arbitrary[TaxYearSelection] =
+  given Arbitrary[TaxYearSelection] =
     Arbitrary {
       Gen.oneOf(TaxYearSelection.values)
     }
 
-  given arbitraryFourthIndustryOptions: Arbitrary[FourthIndustryOptions] =
+  given Arbitrary[FourthIndustryOptions] =
     Arbitrary {
       Gen.oneOf(FourthIndustryOptions.values)
     }
 
-  given arbitraryThirdIndustryOptions: Arbitrary[ThirdIndustryOptions] =
+  given Arbitrary[ThirdIndustryOptions] =
     Arbitrary {
       Gen.oneOf(ThirdIndustryOptions.values)
     }
 
-  given arbitraryTypeOfManufacturing: Arbitrary[TypeOfManufacturing] =
+  given Arbitrary[TypeOfManufacturing] =
     Arbitrary {
       Gen.oneOf(TypeOfManufacturing.values)
     }
 
-  given arbitraryTransportVehicleTrade: Arbitrary[TransportVehicleTrade] =
+  given Arbitrary[TransportVehicleTrade] =
     Arbitrary {
       Gen.oneOf(TransportVehicleTrade.values)
     }
 
-  given arbitrarySecondIndustryOptions: Arbitrary[SecondIndustryOptions] =
+  given Arbitrary[SecondIndustryOptions] =
     Arbitrary {
       Gen.oneOf(SecondIndustryOptions.values)
     }
 
-  given arbitraryWhichRailwayTrade: Arbitrary[WhichRailwayTrade] =
+  given Arbitrary[WhichRailwayTrade] =
     Arbitrary {
       Gen.oneOf(WhichRailwayTrade.values)
     }
 
-  given arbitraryAncillaryEngineeringWhichTrade: Arbitrary[AncillaryEngineeringWhichTrade] =
+  given Arbitrary[AncillaryEngineeringWhichTrade] =
     Arbitrary {
       Gen.oneOf(AncillaryEngineeringWhichTrade.values)
     }
 
-  given arbitraryTypeOfTransport: Arbitrary[TypeOfTransport] =
+  given Arbitrary[TypeOfTransport] =
     Arbitrary {
       Gen.oneOf(TypeOfTransport.values)
     }
 
-  given arbitraryTypeOfEngineering: Arbitrary[TypeOfEngineering] =
+  given Arbitrary[TypeOfEngineering] =
     Arbitrary {
       Gen.oneOf(TypeOfEngineering.values)
     }
 
-  given arbitraryFirstIndustryOptions: Arbitrary[FirstIndustryOptions] =
+  given Arbitrary[FirstIndustryOptions] =
     Arbitrary {
       Gen.oneOf(FirstIndustryOptions.values)
     }

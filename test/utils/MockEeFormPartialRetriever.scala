@@ -32,8 +32,8 @@ class MockEeFormPartialRetriever @Inject() (
     with MockitoSugar {
 
   override def getPartialContentAsync(url: String, templateParameters: Map[String, String], errorMessage: Html)(
-      using ec: ExecutionContext,
-      request: RequestHeader
+      using ExecutionContext,
+      RequestHeader
   ): Future[Html] =
     Future.successful(Html(""))
 

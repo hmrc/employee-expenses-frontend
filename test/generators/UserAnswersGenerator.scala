@@ -110,7 +110,7 @@ trait UserAnswersGenerator extends TryValues {
       arbitrary[(FirstIndustryOptionsPage.type, JsValue)] ::
       Nil
 
-  given arbitraryUserData: Arbitrary[UserAnswers] = {
+  given Arbitrary[UserAnswers] = {
 
     import models.*
 
