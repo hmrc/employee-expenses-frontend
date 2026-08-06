@@ -19,7 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.routes
 import models.{CheckMode, NormalMode}
-import pages.healthcare._
+import pages.healthcare.*
 
 class HealthcareNavigatorSpec extends SpecBase {
   private val modes     = Seq(NormalMode, CheckMode)

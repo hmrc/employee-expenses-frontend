@@ -16,7 +16,7 @@
 
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
 @import models.CheckYourAnswersText
-@import controllers.authenticated.routes._
+@import controllers.authenticated.routes.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
 @this(
@@ -27,7 +27,7 @@
 @(
         answerSections: Seq[Section],
         checkYourAnswersText: CheckYourAnswersText
-)(implicit request: Request[_], messages: Messages)
+)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("checkYourAnswers.title")

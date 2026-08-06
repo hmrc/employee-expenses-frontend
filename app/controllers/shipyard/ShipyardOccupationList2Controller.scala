@@ -17,10 +17,12 @@
 package controllers.shipyard
 
 import config.{ClaimAmounts, NavConstant}
-import controllers.actions._
+import controllers.actions.*
 import forms.shipyard.ShipyardOccupationList2FormProvider
+
 import javax.inject.{Inject, Named}
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.ClaimAmount
 import pages.shipyard.ShipyardOccupationList2Page
@@ -29,7 +31,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.shipyard._
+import views.html.shipyard.*
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,13 +45,14 @@ class ShipyardOccupationList2Controller @Inject() (
     formProvider: ShipyardOccupationList2FormProvider,
     val controllerComponents: MessagesControllerComponents,
     view: ShipyardOccupationList2View
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(ShipyardOccupationList2Page) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -58,11 +61,12 @@ class ShipyardOccupationList2Controller @Inject() (
     Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { request =>
+    given DataRequest[AnyContent] = request
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+        (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
             updatedAnswers <-

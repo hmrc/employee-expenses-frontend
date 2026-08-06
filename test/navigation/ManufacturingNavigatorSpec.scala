@@ -18,11 +18,11 @@ package navigation
 
 import base.SpecBase
 import controllers.manufacturing.routes
-import models.TypeOfManufacturing._
-import models._
+import models.TypeOfManufacturing.*
+import models.*
 import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
-import pages.manufacturing._
+import pages.manufacturing.*
 
 class ManufacturingNavigatorSpec extends SpecBase with MockitoSugar {
 

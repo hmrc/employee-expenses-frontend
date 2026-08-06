@@ -15,7 +15,7 @@
  *@
 
 @import config.FrontendAppConfig
-@()(implicit messages: Messages, appConfig: FrontendAppConfig)
+@()(using messages: Messages, appConfig: FrontendAppConfig)
 
 <h2 class="heading-medium">@messages("confirmation.updateEmployerInfo")</h2>
 <p>@messages("confirmation.employerChange")</p>

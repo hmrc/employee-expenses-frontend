@@ -20,7 +20,7 @@ import controllers.printing.routes
 import javax.inject.{Inject, Singleton}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
-import pages.printing._
+import pages.printing.*
 import play.api.mvc.Call
 
 @Singleton

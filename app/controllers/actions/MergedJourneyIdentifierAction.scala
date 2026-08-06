@@ -19,7 +19,7 @@ package controllers.actions
 import config.FrontendAppConfig
 import models.requests.IdentifierRequest
 import play.api.mvc.Results.Redirect
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.auth.core.AuthConnector
 
 import java.net.URLEncoder
@@ -30,14 +30,14 @@ class MergedJourneyIdentifierActionImpl @Inject() (
     override val authConnector: AuthConnector,
     config: FrontendAppConfig,
     override val parser: BodyParsers.Default
-)(implicit override val executionContext: ExecutionContext)
+)(using ExecutionContext)
     extends AuthenticatedIdentifierActionImpl(authConnector, config, parser)
     with MergedJourneyIdentifierAction {
 
-  override def unauthorised(sessionId: Option[String], request: Request[_]): Result =
+  override def unauthorised(sessionId: Option[String], request: Request[?]): Result =
     Redirect(config.loginUrl, Map("continue" -> Seq(request.uri)))
 
-  override def insufficientConfidence(queryString: String, request: Request[_]): Result =
+  override def insufficientConfidence(queryString: String, request: Request[?]): Result =
     Redirect(
       s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200" +
         s"&completionURL=${URLEncoder.encode(request.uri, "UTF-8")}" +

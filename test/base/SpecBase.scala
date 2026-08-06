@@ -17,18 +17,18 @@
 package base
 
 import config.{FrontendAppConfig, NavConstant}
-import controllers.actions._
+import controllers.actions.*
 import models.AlreadyClaimingFRESameAmount.Remove
 import models.FirstIndustryOptions.{Healthcare, Retail}
 import models.FlatRateExpenseOptions.FRENoYears
 import models.TaxYearSelection.{CurrentYear, CurrentYearMinus1}
-import models._
+import models.*
 import navigation.{FakeNavigator, Navigator}
 import org.scalatest.TryValues
 import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice._
-import pages._
-import pages.authenticated._
+import org.scalatestplus.play.guice.*
+import pages.*
+import pages.authenticated.*
 import pages.healthcare.HealthcareList1Page
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -245,7 +245,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   def emptyUserAnswers = UserAnswers()
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   def injector: Injector = app.injector
 
@@ -255,7 +255,7 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite with TryValues {
 
   def fakeRequest = FakeRequest("", "")
 
-  implicit def messages: Messages = messagesApi.preferred(fakeRequest)
+  given messages: Messages = messagesApi.preferred(fakeRequest)
 
   protected def applicationBuilder(
       userAnswers: Option[UserAnswers] = None,

@@ -22,7 +22,7 @@
     heading: playComponents.heading
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@()(using request: Request[?], messages: Messages)
 
 @link = {
     <a class="govuk-link" href=@frontendAppConfig.contactHMRC>@messages("phoneUs.paragraph.linkText")</a>

@@ -14,14 +14,14 @@
  * limitations under the License.
  *@
 
-@import controllers.authenticated.routes._
+@import controllers.authenticated.routes.*
 
 @this(
         layout: views.LayoutProvider,
         heading: playComponents.heading
 )
 
-@(nextPageURL: String)(implicit request: Request[_], messages: Messages)
+@(nextPageURL: String)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("updateEmployerInformation.title")

@@ -23,7 +23,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.api.{Application, Configuration}
 import uk.gov.hmrc.mongo.CurrentTimestampSupport
 import uk.gov.hmrc.mongo.cache.{CacheItem, MongoCacheRepository}
@@ -38,7 +38,7 @@ class UnAuthSessionRepositorySpec
     with ScalaFutures
     with DefaultPlayMongoRepositorySupport[CacheItem] {
 
-  implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
+  given ExecutionContext = scala.concurrent.ExecutionContext.global
 
   val unauthSessionRepo = new UnAuthSessionRepository(
     config = Configuration.from(Map("mongodb.timeToLiveInSeconds" -> 60)),
@@ -48,7 +48,7 @@ class UnAuthSessionRepositorySpec
 
   override val repository: MongoCacheRepository[String] = unauthSessionRepo.cacheRepo
 
-  override implicit lazy val app: Application = new GuiceApplicationBuilder()
+  override given app: Application = new GuiceApplicationBuilder()
     .overrides(
       bind[UnAuthSessionRepository].toInstance(unauthSessionRepo)
     )

@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.manufacturing.routes._
+@import controllers.manufacturing.routes.*
 @import models.Mode
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
@@ -28,7 +28,7 @@
         list: playComponents.list
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[?], mode: Mode)(using request: Request[?], messages: Messages)
 
     @layout(
         pageTitle = s"${errorPrefix(form)} ${messages("aluminiumOccupationList3.title")}"

@@ -17,9 +17,10 @@
 package controllers.authenticated
 
 import com.google.inject.{Inject, Singleton}
-import controllers.actions._
-import controllers.authenticated.routes._
-import controllers.routes._
+import controllers.actions.*
+import controllers.authenticated.routes.*
+import controllers.routes.*
+import models.requests.IdentifierRequest
 import models.{NormalMode, UserAnswers}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -32,11 +33,12 @@ class AuthRedirectController @Inject() (
     identify: AuthenticatedIdentifierAction,
     val controllerComponents: MessagesControllerComponents,
     sessionRepository: SessionRepository
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController {
 
-  def onPageLoad(key: String): Action[AnyContent] = identify.async { implicit request =>
-    val id: Authed = request.identifier.asInstanceOf[Authed]
+  def onPageLoad(key: String): Action[AnyContent] = identify.async { request =>
+    given IdentifierRequest[AnyContent] = request
+    val id: Authed                      = request.identifier.asInstanceOf[Authed]
 
     sessionRepository.get(UnAuthed(key)).flatMap { unAuthUA =>
       sessionRepository.get(id).flatMap { authUA =>

@@ -16,10 +16,12 @@
 
 package controllers.authenticated
 
-import controllers.actions._
+import controllers.actions.*
+
 import javax.inject.Inject
 import models.auditing.AuditData
 import models.auditing.AuditEventType.NoCodeChange
+import models.requests.DataRequest
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
@@ -36,11 +38,12 @@ class NoCodeChangeController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     auditConnector: AuditConnector,
     view: NoCodeChangeView
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     auditConnector.sendExplicitAudit(
       NoCodeChange.toString,
       AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)

@@ -28,10 +28,10 @@ class HowYouWillGetYourExpensesCurrentViewSpec extends ViewBehaviours {
     val view = application.injector.instanceOf[HowYouWillGetYourExpensesCurrentView]
 
     def applyView(hasClaimIncreased: Boolean = true) =
-      view.apply("onwardRoute", hasClaimIncreased)(fakeRequest, messages)
+      view.apply("onwardRoute", hasClaimIncreased)(using fakeRequest, messages)
 
     val applyViewWithAuth =
-      view.apply("onwardRoute", true)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+      view.apply("onwardRoute", true)(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave.like(normalPage(applyView(), "howYouWillGetYourExpenses"))
 

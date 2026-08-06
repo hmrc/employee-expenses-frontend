@@ -15,9 +15,9 @@
  *@
 
 @import viewmodels.AnswerSection
-@import views.html._
+@import views.html.*
 
-@(answerSection: AnswerSection)(implicit messages: Messages)
+@(answerSection: AnswerSection)(using messages: Messages)
 
 @if(answerSection.headingKey.isDefined){
     <h2 class="govuk-heading-m">@messages(answerSection.headingKey.get)</h2>

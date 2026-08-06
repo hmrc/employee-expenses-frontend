@@ -17,12 +17,12 @@
 package utils
 
 import base.SpecBase
-import models.AlreadyClaimingFREDifferentAmounts._
-import models._
+import models.AlreadyClaimingFREDifferentAmounts.*
+import models.*
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages._
-import pages.authenticated._
+import pages.*
+import pages.authenticated.*
 
 class CheckYourAnswersHelperSpec extends SpecBase with ScalaCheckPropertyChecks {
 

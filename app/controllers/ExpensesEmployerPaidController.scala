@@ -17,10 +17,12 @@
 package controllers
 
 import config.NavConstant
-import controllers.actions._
+import controllers.actions.*
 import forms.ExpensesEmployerPaidFormProvider
+
 import javax.inject.{Inject, Named}
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.ExpensesEmployerPaidPage
 import play.api.data.Form
@@ -42,13 +44,14 @@ class ExpensesEmployerPaidController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     view: ExpensesEmployerPaidView,
     sessionRepository: SessionRepository
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(ExpensesEmployerPaidPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -58,11 +61,12 @@ class ExpensesEmployerPaidController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(ExpensesEmployerPaidPage, value))

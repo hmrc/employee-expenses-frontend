@@ -81,7 +81,7 @@ class ConfirmationCurrentAndPreviousYearsViewSpec extends ViewBehaviours {
         hasClaimIncreased,
         freResponse,
         npsFreAmount
-      )(fakeRequest, messages)
+      )(using fakeRequest, messages)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 

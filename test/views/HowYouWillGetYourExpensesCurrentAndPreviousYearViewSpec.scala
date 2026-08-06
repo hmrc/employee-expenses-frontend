@@ -32,7 +32,7 @@
 
 package views
 
-import models.TaxYearSelection._
+import models.TaxYearSelection.*
 import views.newBehaviours.ViewBehaviours
 import views.html.HowYouWillGetYourExpensesCurrentAndPreviousYearView
 
@@ -46,7 +46,7 @@ class HowYouWillGetYourExpensesCurrentAndPreviousYearViewSpec extends ViewBehavi
 
     def applyView(currentYearMinus1: Boolean, authorised: Boolean = true) = {
       val request = if (authorised) fakeRequest.withSession(("authToken", "SomeAuthToken")) else fakeRequest
-      view.apply("onwardRoute", currentYearMinus1, true)(request, messages)
+      view.apply("onwardRoute", currentYearMinus1, true)(using request, messages)
     }
 
     behave.like(normalPage(applyView(true, false), "howYouWillGetYourExpenses"))

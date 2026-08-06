@@ -18,7 +18,7 @@
 @import models.Address
 
 
-@(address: Option[Address], employerCorrect: Option[Boolean], updateAddressInfoUrl: String, updateEmployerInfoUrl: String)(implicit messages: Messages)
+@(address: Option[Address], employerCorrect: Option[Boolean], updateAddressInfoUrl: String, updateEmployerInfoUrl: String)(using messages: Messages)
 
 <h2 class="govuk-heading-l">@messages("confirmation.checkAddress.heading")</h2>
 

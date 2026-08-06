@@ -28,7 +28,7 @@ class SessionRepository @Inject() (
     authSessionRepository: AuthSessionRepository,
     unAuthSessionRepository: UnAuthSessionRepository,
     mergedJourneySessionRepository: MergedJourneySessionRepository
-)(implicit ec: ExecutionContext) {
+)(using ExecutionContext) {
 
   def get(identifierType: IdentifierType): Future[Option[UserAnswers]] =
     identifierType match {

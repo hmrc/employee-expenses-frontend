@@ -39,8 +39,8 @@ trait LayoutProvider {
       serviceNameKeyOverride: Option[String] = None,
       serviceUrlOverride: Option[String] = None
   )(contentBlock: Html)(
-      implicit request: RequestHeader,
-      messages: Messages
+      using RequestHeader,
+      Messages
   ): HtmlFormat.Appendable
 
 }
@@ -57,7 +57,7 @@ class OldLayoutProvider @Inject() (layout: views.html.Layout) extends LayoutProv
       stylesheets: Option[Html],
       serviceNameKeyOverride: Option[String] = None,
       serviceUrlOverride: Option[String] = None
-  )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages): HtmlFormat.Appendable =
+  )(contentBlock: Html)(using RequestHeader, Messages): HtmlFormat.Appendable =
     layout(
       pageTitle = pageTitle,
       backLinkEnabled = showBackLink,
@@ -85,7 +85,7 @@ class NewLayoutProvider @Inject() (
       stylesheets: Option[Html],
       serviceNameKeyOverride: Option[String] = None,
       serviceUrlOverride: Option[String] = None
-  )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages): HtmlFormat.Appendable = {
+  )(contentBlock: Html)(using request: RequestHeader, messages: Messages): HtmlFormat.Appendable = {
     val hideAccountMenu = request.session.get("authToken").isEmpty
 
     wrapperService.standardScaLayout(

@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.foodCatering.routes._
+@import controllers.foodCatering.routes.*
 @import models.Mode
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
@@ -26,7 +26,7 @@
     submitButton: playComponents.submit_button
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[?], mode: Mode)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = s"${errorPrefix(form)} ${messages("cateringStaffNHS.title")}"

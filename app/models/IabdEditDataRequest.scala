@@ -21,5 +21,5 @@ import play.api.libs.json.{Format, Json}
 case class IabdEditDataRequest(version: Int, grossAmount: Int)
 
 object IabdEditDataRequest {
-  implicit val formats: Format[IabdEditDataRequest] = Json.format[IabdEditDataRequest]
+  given Format[IabdEditDataRequest] = Json.format[IabdEditDataRequest]
 }

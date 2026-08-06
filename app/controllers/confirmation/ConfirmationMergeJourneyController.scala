@@ -20,6 +20,7 @@ import config.NavConstant
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
 import controllers.routes.SessionExpiredController
 import models.NormalMode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import pages.confirmation.ConfirmationMergeJourneyPage
@@ -42,7 +43,8 @@ class ConfirmationMergeJourneyController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     (
       request.userAnswers.get(FREResponse),
       request.userAnswers.get(YourEmployerPage),

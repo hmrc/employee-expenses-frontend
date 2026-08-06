@@ -19,7 +19,7 @@ package controllers.authenticated
 import base.SpecBase
 import models.NormalMode
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 
 class UpdateEmployerInformationControllerSpec extends SpecBase {
   val nextPageURL = "/employee-expenses/how-you-will-get-your-expenses"

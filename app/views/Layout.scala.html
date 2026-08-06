@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accountmenu.YourProfile
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.*
 
 @this(
     hmrcAccountMenu: HmrcAccountMenu,
@@ -33,7 +33,7 @@
 timeoutEnabled: Boolean = true,
 backLinkEnabled: Boolean = true,
         serviceNameKeyOverride: Option[String] = None,
-        serviceUrlOverride: Option[String] = None)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
+        serviceUrlOverride: Option[String] = None)(contentBlock: Html)(using request: RequestHeader, messages: Messages)
 
 @accountMenu = {
     @if(request.session.get("authToken")){

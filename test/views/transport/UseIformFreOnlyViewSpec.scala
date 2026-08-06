@@ -29,9 +29,9 @@ class UseIformFreOnlyViewSpec extends ViewBehaviours {
 
   val view = application.injector.instanceOf[UseIformFreOnlyView]
 
-  def createView(): Html = view.apply()(fakeRequest, messages)
+  def createView(): Html = view.apply()(using fakeRequest, messages)
 
-  val applyView = view.apply()(fakeRequest, messages)
+  val applyView = view.apply()(using fakeRequest, messages)
 
   val claimByIformUrl: String = frontendAppConfig.employeeExpensesClaimByIformUrl
 

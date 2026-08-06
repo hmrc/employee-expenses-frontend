@@ -46,15 +46,15 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
 
   val view = application.injector.instanceOf[AlreadyClaimingFREDifferentAmountsView]
 
-  def applyView(form: Form[_]): HtmlFormat.Appendable =
+  def applyView(form: Form[?]): HtmlFormat.Appendable =
     view.apply(
       form,
       NormalMode,
       userAnswers.get(ClaimAmountAndAnyDeductions).get,
       userAnswers.get(FREAmounts).get
-    )(fakeRequest, messages)
+    )(using fakeRequest, messages)
 
-  def applyViewMultipleYears(form: Form[_]): HtmlFormat.Appendable =
+  def applyViewMultipleYears(form: Form[?]): HtmlFormat.Appendable =
     view.apply(
       form,
       NormalMode,
@@ -63,15 +63,15 @@ class AlreadyClaimingFREDifferentAmountsViewSpec extends OptionsViewBehaviours[A
         FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear()),
         FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear().prev)
       )
-    )(fakeRequest, messages)
+    )(using fakeRequest, messages)
 
-  def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
+  def applyViewWithAuth(form: Form[?]): HtmlFormat.Appendable =
     view.apply(
       form,
       NormalMode,
       userAnswers.get(ClaimAmountAndAnyDeductions).value,
       userAnswers.get(FREAmounts).value
-    )(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    )(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "AlreadyClaimingFREDifferentAmountsView" must {
 

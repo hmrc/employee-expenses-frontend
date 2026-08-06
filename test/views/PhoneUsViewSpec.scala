@@ -28,9 +28,9 @@ class PhoneUsViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[PhoneUsView]
 
-    val applyView = view.apply()(fakeRequest, messages)
+    val applyView = view.apply()(using fakeRequest, messages)
 
-    val applyViewWithAuth = view.apply()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth = view.apply()(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave.like(normalPage(applyView, "phoneUs"))
 

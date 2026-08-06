@@ -80,7 +80,7 @@ class ClaimAmountViewSpec extends ViewBehaviours {
       claimAmountsAndRates(),
       scottishClaimAmountsAndRates(),
       onwardRoute
-    )(fakeRequest, messages)
+    )(using fakeRequest, messages)
 
     val applyViewWithEmployerContribution = view.apply(
       claimAmount,
@@ -88,7 +88,7 @@ class ClaimAmountViewSpec extends ViewBehaviours {
       claimAmountsAndRates(someEmployerContribution),
       scottishClaimAmountsAndRates(someEmployerContribution),
       onwardRoute
-    )(fakeRequest, messages)
+    )(using fakeRequest, messages)
 
     val applyViewWithAuth = view.apply(
       claimAmount,
@@ -96,7 +96,7 @@ class ClaimAmountViewSpec extends ViewBehaviours {
       claimAmountsAndRates(),
       scottishClaimAmountsAndRates(),
       onwardRoute
-    )(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    )(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave.like(normalPage(applyView, "claimAmount"))
 

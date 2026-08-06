@@ -32,13 +32,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class ErrorHandler @Inject() (
     val messagesApi: MessagesApi,
     view: ErrorTemplate
-)(implicit val ec: ExecutionContext)
+)(using override val ec: ExecutionContext)
     extends FrontendErrorHandler
     with I18nSupport
     with Logging {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(
-      implicit request: RequestHeader
+      using request: RequestHeader
   ): Future[Html] =
     Future.successful(view(pageTitle, heading, message))
 
@@ -46,7 +46,7 @@ class ErrorHandler @Inject() (
 
     if (statusCode == FORBIDDEN) {
 
-      implicit val implicitRequest: RequestHeader = request
+      given implicitRequest: RequestHeader = request
 
       logger.info(s"Forbidden request with message: $message")
 

@@ -18,18 +18,18 @@ package controllers.authenticated
 
 import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
-import controllers.authenticated.routes._
-import controllers.routes._
+import controllers.authenticated.routes.*
+import controllers.routes.*
 import models.FlatRateExpenseOptions
-import models.FlatRateExpenseOptions._
-import org.mockito.Mockito._
+import models.FlatRateExpenseOptions.*
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.FREResponse
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import service.SubmissionService
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 

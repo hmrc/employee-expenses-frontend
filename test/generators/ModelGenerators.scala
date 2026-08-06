@@ -16,97 +16,97 @@
 
 package generators
 
-import models._
+import models.*
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
 
-  implicit lazy val arbitraryConstructionOccupations: Arbitrary[ConstructionOccupations] =
+  given Arbitrary[ConstructionOccupations] =
     Arbitrary {
       Gen.oneOf(ConstructionOccupations.values.toSeq)
     }
 
-  implicit lazy val arbitraryTaxCodeStatus: Arbitrary[TaxCodeStatus] =
+  given Arbitrary[TaxCodeStatus] =
     Arbitrary {
       Gen.oneOf(TaxCodeStatus.values)
     }
 
-  implicit lazy val arbitraryEmployerContribution: Arbitrary[EmployerContribution] =
+  given Arbitrary[EmployerContribution] =
     Arbitrary {
       Gen.oneOf(EmployerContribution.values)
     }
 
-  implicit lazy val arbitraryFifthIndustryOptions: Arbitrary[FifthIndustryOptions] =
+  given Arbitrary[FifthIndustryOptions] =
     Arbitrary {
       Gen.oneOf(FifthIndustryOptions.values)
     }
 
-  implicit lazy val arbitraryMultipleEmployments: Arbitrary[MultipleEmployments] =
+  given Arbitrary[MultipleEmployments] =
     Arbitrary {
       Gen.oneOf(MultipleEmployments.values)
     }
 
-  implicit lazy val arbitraryAlreadyClaimingFREDifferentAmounts: Arbitrary[AlreadyClaimingFREDifferentAmounts] =
+  given Arbitrary[AlreadyClaimingFREDifferentAmounts] =
     Arbitrary {
       Gen.oneOf(AlreadyClaimingFREDifferentAmounts.values)
     }
 
-  implicit lazy val arbitraryAlreadyClaimingFRESameAmount: Arbitrary[AlreadyClaimingFRESameAmount] =
+  given Arbitrary[AlreadyClaimingFRESameAmount] =
     Arbitrary {
       Gen.oneOf(AlreadyClaimingFRESameAmount.values)
     }
 
-  implicit lazy val arbitraryTaxYearSelection: Arbitrary[TaxYearSelection] =
+  given Arbitrary[TaxYearSelection] =
     Arbitrary {
       Gen.oneOf(TaxYearSelection.values)
     }
 
-  implicit lazy val arbitraryFourthIndustryOptions: Arbitrary[FourthIndustryOptions] =
+  given Arbitrary[FourthIndustryOptions] =
     Arbitrary {
       Gen.oneOf(FourthIndustryOptions.values)
     }
 
-  implicit lazy val arbitraryThirdIndustryOptions: Arbitrary[ThirdIndustryOptions] =
+  given Arbitrary[ThirdIndustryOptions] =
     Arbitrary {
       Gen.oneOf(ThirdIndustryOptions.values)
     }
 
-  implicit lazy val arbitraryTypeOfManufacturing: Arbitrary[TypeOfManufacturing] =
+  given Arbitrary[TypeOfManufacturing] =
     Arbitrary {
       Gen.oneOf(TypeOfManufacturing.values)
     }
 
-  implicit lazy val arbitraryTransportVehicleTrade: Arbitrary[TransportVehicleTrade] =
+  given Arbitrary[TransportVehicleTrade] =
     Arbitrary {
       Gen.oneOf(TransportVehicleTrade.values)
     }
 
-  implicit lazy val arbitrarySecondIndustryOptions: Arbitrary[SecondIndustryOptions] =
+  given Arbitrary[SecondIndustryOptions] =
     Arbitrary {
       Gen.oneOf(SecondIndustryOptions.values)
     }
 
-  implicit lazy val arbitraryWhichRailwayTrade: Arbitrary[WhichRailwayTrade] =
+  given Arbitrary[WhichRailwayTrade] =
     Arbitrary {
       Gen.oneOf(WhichRailwayTrade.values)
     }
 
-  implicit lazy val arbitraryAncillaryEngineeringWhichTrade: Arbitrary[AncillaryEngineeringWhichTrade] =
+  given Arbitrary[AncillaryEngineeringWhichTrade] =
     Arbitrary {
       Gen.oneOf(AncillaryEngineeringWhichTrade.values)
     }
 
-  implicit lazy val arbitraryTypeOfTransport: Arbitrary[TypeOfTransport] =
+  given Arbitrary[TypeOfTransport] =
     Arbitrary {
       Gen.oneOf(TypeOfTransport.values)
     }
 
-  implicit lazy val arbitraryTypeOfEngineering: Arbitrary[TypeOfEngineering] =
+  given Arbitrary[TypeOfEngineering] =
     Arbitrary {
       Gen.oneOf(TypeOfEngineering.values)
     }
 
-  implicit lazy val arbitraryFirstIndustryOptions: Arbitrary[FirstIndustryOptions] =
+  given Arbitrary[FirstIndustryOptions] =
     Arbitrary {
       Gen.oneOf(FirstIndustryOptions.values)
     }

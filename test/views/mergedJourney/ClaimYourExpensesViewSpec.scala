@@ -16,7 +16,7 @@
 
 package views.mergedJourney
 
-import models.mergedJourney._
+import models.mergedJourney.*
 import views.html.mergedJourney.ClaimYourExpensesView
 import views.newBehaviours.ViewBehaviours
 
@@ -32,7 +32,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         ClaimCompleteCurrentPrevious,
         ClaimCompletePrevious
       )
-      val doc = asDocument(view(testJourney)(fakeRequest, messages))
+      val doc = asDocument(view(testJourney)(using fakeRequest, messages))
 
       assertPageTitleEqualsMessage(doc, "claimYourExpenses.title")
     }
@@ -43,7 +43,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         ClaimPending,
         ClaimPending
       )
-      val applyView = view(testJourney)(fakeRequest, messages)
+      val applyView = view(testJourney)(using fakeRequest, messages)
 
       behave.like(pageWithButtonLink(applyView, frontendAppConfig.startUrlWfh, "site.continue"))
     }
@@ -54,7 +54,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         ClaimPending,
         ClaimPending
       )
-      val applyView = view(testJourney)(fakeRequest, messages)
+      val applyView = view(testJourney)(using fakeRequest, messages)
 
       behave.like(pageWithButtonLink(applyView, frontendAppConfig.startUrlPsubs, "site.continue"))
     }
@@ -65,7 +65,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         ClaimCompleteCurrent,
         ClaimPending
       )
-      val applyView = view(testJourney)(fakeRequest, messages)
+      val applyView = view(testJourney)(using fakeRequest, messages)
 
       behave.like(pageWithButtonLink(applyView, frontendAppConfig.startUrlFre, "site.continue"))
     }
@@ -76,7 +76,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         ClaimCompleteCurrent,
         ClaimCompleteCurrent
       )
-      val applyView = view(testJourney)(fakeRequest, messages)
+      val applyView = view(testJourney)(using fakeRequest, messages)
 
       behave.like(
         pageWithButtonLink(
@@ -93,7 +93,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         ClaimCompleteCurrentPrevious,
         ClaimCompletePrevious
       )
-      val doc = asDocument(view(testJourney)(fakeRequest, messages))
+      val doc = asDocument(view(testJourney)(using fakeRequest, messages))
 
       assertContainsMessages(
         doc,
@@ -112,7 +112,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
         ClaimPending,
         ClaimPending
       )
-      val doc = asDocument(view(testJourney)(fakeRequest, messages))
+      val doc = asDocument(view(testJourney)(using fakeRequest, messages))
 
       assertContainsMessages(
         doc,
@@ -132,7 +132,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
           ClaimPending,
           ClaimPending
         )
-        val doc = asDocument(view(testJourney)(fakeRequest, messages))
+        val doc = asDocument(view(testJourney)(using fakeRequest, messages))
 
         assertContainsMessages(
           doc,
@@ -153,7 +153,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
           ClaimCompletePrevious,
           ClaimCompleteCurrentPrevious
         )
-        val doc = asDocument(view(testJourney)(fakeRequest, messages))
+        val doc = asDocument(view(testJourney)(using fakeRequest, messages))
 
         assertContainsMessages(
           doc,
@@ -171,7 +171,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
           ClaimStopped,
           ClaimUnsuccessful
         )
-        val doc = asDocument(view(testJourney)(fakeRequest, messages))
+        val doc = asDocument(view(testJourney)(using fakeRequest, messages))
 
         assertContainsMessages(
           doc,
@@ -190,7 +190,7 @@ class ClaimYourExpensesViewSpec extends ViewBehaviours {
           ClaimNotChanged,
           ClaimNotChanged
         )
-        val doc = asDocument(view(testJourney)(fakeRequest, messages))
+        val doc = asDocument(view(testJourney)(using fakeRequest, messages))
 
         assertContainsMessages(
           doc,

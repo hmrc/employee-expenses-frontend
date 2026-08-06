@@ -18,7 +18,7 @@ package controllers.police
 
 import base.SpecBase
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 
 class ClaimByPostOrOnlineControllerSpec extends SpecBase {
 

@@ -17,10 +17,12 @@
 package controllers.shipyard
 
 import config.{ClaimAmounts, NavConstant}
-import controllers.actions._
+import controllers.actions.*
 import forms.shipyard.ShipyardOccupationList1FormProvider
+
 import javax.inject.{Inject, Named}
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.ClaimAmount
 import pages.shipyard.ShipyardOccupationList1Page
@@ -43,13 +45,14 @@ class ShipyardOccupationList1Controller @Inject() (
     formProvider: ShipyardOccupationList1FormProvider,
     val controllerComponents: MessagesControllerComponents,
     view: ShipyardOccupationList1View
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(ShipyardOccupationList1Page) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -58,11 +61,12 @@ class ShipyardOccupationList1Controller @Inject() (
     Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { implicit request =>
+  def onSubmit(mode: Mode) = identify.andThen(getData).andThen(requireData).async { request =>
+    given DataRequest[AnyContent] = request
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+        (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
             updatedAnswers <-

@@ -57,11 +57,11 @@ object TaxYearSelection extends Enumerable.Implicits {
     RadioCheckboxOption(
       keyPrefix = "taxYearSelection",
       option = s"$option",
-      messageArgs = Seq(taxYear.startYear.toString.format("YYYY"), taxYear.finishYear.toString.format("YYYY")): _*
+      messageArgs = Seq(taxYear.startYear.toString.format("YYYY"), taxYear.finishYear.toString.format("YYYY"))*
     )
 
-  implicit val enumerable: Enumerable[TaxYearSelection] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+  given enumerable: Enumerable[TaxYearSelection] =
+    Enumerable(values.map(v => v.toString -> v)*)
 
   def getTaxYear(year: TaxYearSelection): Int = year match {
     case NextYear          => TaxYear.current.next.startYear

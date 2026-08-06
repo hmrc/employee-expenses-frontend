@@ -18,7 +18,7 @@ package controllers.authenticated
 
 import base.SpecBase
 import config.NavConstant
-import controllers.routes._
+import controllers.routes.*
 import models.{
   FlatRateExpense,
   FlatRateExpenseAmounts,
@@ -29,8 +29,8 @@ import models.{
   UserAnswers
 }
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.*
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.ClaimAmountAndAnyDeductions
@@ -38,7 +38,7 @@ import pages.authenticated.TaxYearSelectionPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import service.TaiService
 
@@ -99,9 +99,9 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
 
-      when(mockTaiService.freResponse(any(), any(), any())(any(), any()))
+      when(mockTaiService.freResponse(any(), any(), any())(using any(), any()))
         .thenReturn(Future.successful(FlatRateExpenseOptions.FRENoYears))
-      when(mockTaiService.getFREAmount(any(), any())(any(), any()))
+      when(mockTaiService.getFREAmount(any(), any())(using any(), any()))
         .thenReturn(Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019)))))
 
       val request =
@@ -141,9 +141,9 @@ class TaxYearSelectionControllerSpec extends SpecBase with MockitoSugar with Sca
           .overrides(bind[TaiService].toInstance(mockTaiService))
           .build()
 
-      when(mockTaiService.freResponse(any(), any(), any())(any(), any()))
+      when(mockTaiService.freResponse(any(), any(), any())(using any(), any()))
         .thenReturn(Future.successful(FlatRateExpenseOptions.FRENoYears))
-      when(mockTaiService.getFREAmount(any(), any())(any(), any()))
+      when(mockTaiService.getFREAmount(any(), any())(using any(), any()))
         .thenReturn(Future.successful(Seq(FlatRateExpenseAmounts(Some(FlatRateExpense(100)), TaiTaxYear(2019)))))
 
       val request =

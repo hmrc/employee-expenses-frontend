@@ -52,15 +52,15 @@ class AlreadyClaimingFRESameAmountViewSpec extends OptionsViewBehaviours[Already
 
     val view = application.injector.instanceOf[AlreadyClaimingFRESameAmountView]
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(fakeRequest, messages)
+    def applyView(form: Form[?]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(using fakeRequest, messages)
 
-    def applyViewSingleYear(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmount)(fakeRequest, messages)
+    def applyViewSingleYear(form: Form[?]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmount)(using fakeRequest, messages)
 
-    def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
+    def applyViewWithAuth(form: Form[?]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, fakeClaimAmount, fakeFreAmounts)(
-        fakeRequest.withSession(("authToken", "SomeAuthToken")),
+        using fakeRequest.withSession(("authToken", "SomeAuthToken")),
         messages
       )
 

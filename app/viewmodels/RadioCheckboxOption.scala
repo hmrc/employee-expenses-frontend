@@ -21,11 +21,11 @@ import play.twirl.api.{Html, HtmlFormat}
 
 case class Message(key: String, args: Any*) {
 
-  def html(implicit messages: Messages): HtmlFormat.Appendable =
+  def html(using Messages): HtmlFormat.Appendable =
     Html(string)
 
-  def string(implicit messages: Messages): String =
-    messages(key, args: _*)
+  def string(using messages: Messages): String =
+    messages(key, args*)
 
 }
 
@@ -37,7 +37,7 @@ object RadioCheckboxOption {
     RadioCheckboxOption(
       id = s"$keyPrefix.$option",
       value = option,
-      message = Message(s"$keyPrefix.$option", messageArgs: _*)
+      message = Message(s"$keyPrefix.$option", messageArgs*)
     )
 
 }

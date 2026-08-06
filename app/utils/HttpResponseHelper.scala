@@ -35,7 +35,7 @@ trait HttpResponseHelper {
 
   class JsonParsed[A] {
 
-    def unapply(response: HttpResponse)(using rds: Reads[A]): Option[JsResult[A]] = {
+    def unapply(response: HttpResponse)(using Reads[A]): Option[JsResult[A]] = {
       val json = Option(response.json).getOrElse(JsNull)
       Some(Json.fromJson[A](json))
     }
@@ -46,7 +46,7 @@ trait HttpResponseHelper {
     def apply[A] = new JsonParsed[A]
   }
 
-  given httpReads: HttpReads[HttpResponse] =
+  given HttpReads[HttpResponse] =
     new HttpReads[HttpResponse] {
       override def read(method: String, url: String, response: HttpResponse): HttpResponse =
         response

@@ -22,7 +22,7 @@
         heading: playComponents.heading
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@()(using request: Request[?], messages: Messages)
 
 @link = {<a id="link" class="govuk-link" href=@frontendAppConfig.jobExpensesLink>@messages("cannotClaim.link")</a>}
 

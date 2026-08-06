@@ -18,8 +18,10 @@ package controllers
 
 import com.google.inject.Inject
 import config.{ClaimAmounts, NavConstant}
-import controllers.actions._
+import controllers.actions.*
 import forms.FirstIndustryOptionsFormProvider
+import models.requests.DataRequest
+
 import javax.inject.Named
 import models.{Enumerable, FirstIndustryOptions, Mode}
 import navigation.Navigator
@@ -43,14 +45,15 @@ class FirstIndustryOptionsController @Inject() (
     view: FirstIndustryOptionsView,
     @Named(NavConstant.generic) navigator: Navigator,
     sessionRepository: SessionRepository
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Enumerable.Implicits {
 
   val form: Form[FirstIndustryOptions] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(FirstIndustryOptionsPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -60,11 +63,12 @@ class FirstIndustryOptionsController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
               updatedAnswers <-

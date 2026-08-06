@@ -19,10 +19,10 @@ package navigation
 import base.SpecBase
 import controllers.transport.routes
 import models.TypeOfTransport.{NoneOfTheAbove, _}
-import models._
+import models.*
 import org.scalatestplus.mockito.MockitoSugar
 import pages.Page
-import pages.transport._
+import pages.transport.*
 
 class TransportNavigatorSpec extends SpecBase with MockitoSugar {
 

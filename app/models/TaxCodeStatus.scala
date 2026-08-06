@@ -26,7 +26,7 @@ object TaxCodeStatus extends Enumerable.Implicits {
 
   val values: Seq[TaxCodeStatus] = Seq(Live, PotentiallyCeased, Ceased)
 
-  implicit val enumerable: Enumerable[TaxCodeStatus] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+  given enumerable: Enumerable[TaxCodeStatus] =
+    Enumerable(values.map(v => v.toString -> v)*)
 
 }

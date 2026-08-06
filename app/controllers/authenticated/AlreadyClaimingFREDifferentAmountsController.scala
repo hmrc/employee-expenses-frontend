@@ -17,8 +17,10 @@
 package controllers.authenticated
 
 import config.NavConstant
-import controllers.actions._
+import controllers.actions.*
 import forms.authenticated.AlreadyClaimingFREDifferentAmountsFormProvider
+import models.requests.DataRequest
+
 import javax.inject.{Inject, Named}
 import models.{Enumerable, Mode}
 import navigation.Navigator
@@ -43,14 +45,15 @@ class AlreadyClaimingFREDifferentAmountsController @Inject() (
     formProvider: AlreadyClaimingFREDifferentAmountsFormProvider,
     val controllerComponents: MessagesControllerComponents,
     view: AlreadyClaimingFREDifferentAmountsView
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Enumerable.Implicits {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(AlreadyClaimingFREDifferentAmountsPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -65,13 +68,14 @@ class AlreadyClaimingFREDifferentAmountsController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.userAnswers.get(FREAmounts)) match {
         case (Some(claimAmount), Some(freAmounts)) =>
           form
             .bindFromRequest()
             .fold(
-              (formWithErrors: Form[_]) =>
+              (formWithErrors: Form[?]) =>
                 Future.successful(BadRequest(view(formWithErrors, mode, claimAmount, freAmounts))),
               value =>
                 for {

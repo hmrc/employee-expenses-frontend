@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import models.FlatRateExpenseOptions._
+@import models.FlatRateExpenseOptions.*
 @import models.Address
 @import config.FrontendAppConfig
 
@@ -31,7 +31,7 @@
         hasClaimIncreased: Boolean,
         freResponse: FlatRateExpenseOptions,
         npsFreAmount: Int
-)(implicit request: Request[_], messages: Messages)
+)(using request: Request[?], messages: Messages)
 
 @title = @{
     if(freResponse == FREAllYearsAllAmountsSameAsClaimAmount || freResponse == FRESomeYears) "titleChanged" else "title"

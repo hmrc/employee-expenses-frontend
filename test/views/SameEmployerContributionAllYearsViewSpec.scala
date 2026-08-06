@@ -37,11 +37,14 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
 
     val view = application.injector.instanceOf[SameEmployerContributionAllYearsView]
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, contribution)(fakeRequest, messages)
+    def applyView(form: Form[?]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode, contribution)(using fakeRequest, messages)
 
-    def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, contribution)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    def applyViewWithAuth(form: Form[?]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode, contribution)(
+        using fakeRequest.withSession(("authToken", "SomeAuthToken")),
+        messages
+      )
 
     behave.like(pageWithAccountMenu(applyViewWithAuth(form)))
 

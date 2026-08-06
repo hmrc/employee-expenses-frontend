@@ -18,14 +18,14 @@ package service
 
 import base.SpecBase
 import connectors.{CitizenDetailsConnector, TaiConnector}
-import models.FlatRateExpenseOptions._
-import models.TaxYearSelection._
+import models.FlatRateExpenseOptions.*
+import models.TaxYearSelection.*
 import models.{FlatRateExpense, FlatRateExpenseAmounts, TaiTaxYear}
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.*
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.http.Status._
+import play.api.http.Status.*
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -123,7 +123,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
       "return FRENoYears when only 200 empty FRE array is returned for all tax years" in {
         when(
           mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(
-            any[HeaderCarrier](),
+            using any[HeaderCarrier](),
             any[ExecutionContext]()
           )
         )
@@ -140,7 +140,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
       "return FRENoYears when FRE amount 0 returned for all tax years" in {
         when(
           mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(
-            any[HeaderCarrier](),
+            using any[HeaderCarrier](),
             any[ExecutionContext]()
           )
         )
@@ -157,7 +157,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
       "return FRENoYears when freResponse contains combination of undefined and 0 amounts" in {
         when(
           mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(
-            any[HeaderCarrier](),
+            using any[HeaderCarrier](),
             any[ExecutionContext]()
           )
         )
@@ -174,7 +174,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
       "return FREAllYearsAllAmountsSameAsClaimAmount grossAmount is the same as claimAmount for all tax years" in {
         when(
           mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(
-            any[HeaderCarrier](),
+            using any[HeaderCarrier](),
             any[ExecutionContext]()
           )
         )
@@ -191,7 +191,7 @@ class TaiServiceSpec extends SpecBase with MockitoSugar with ScalaFutures with I
       "return FRESomeYears for all other combinations of freAmount (empty, 0, > 0)" in {
         when(
           mockTaiConnector.getFlatRateExpense(anyString(), any[TaiTaxYear]())(
-            any[HeaderCarrier](),
+            using any[HeaderCarrier](),
             any[ExecutionContext]()
           )
         )

@@ -17,222 +17,219 @@
 package generators
 
 import org.scalacheck.Arbitrary
-import pages._
-import pages.authenticated._
-import pages.clothing._
-import pages.construction._
+import pages.*
+import pages.authenticated.*
+import pages.clothing.*
+import pages.construction.*
 import pages.docks.DocksOccupationList1Page
 import pages.electrical.ElectricalPage
-import pages.healthcare._
-import pages.engineering._
-import pages.manufacturing._
-import pages.police._
-import pages.transport._
-import pages.foodCatering._
-import pages.heating._
-import pages.security._
-import pages.printing._
-import pages.shipyard._
+import pages.healthcare.*
+import pages.engineering.*
+import pages.manufacturing.*
+import pages.police.*
+import pages.transport.*
+import pages.foodCatering.*
+import pages.heating.*
+import pages.security.*
+import pages.printing.*
+import pages.shipyard.*
 import pages.textiles.TextilesOccupationList1Page
 
 trait PageGenerators {
 
-  implicit lazy val arbitraryConstructionOccupationsPage: Arbitrary[ConstructionOccupationsPage.type] =
+  given Arbitrary[ConstructionOccupationsPage.type] =
     Arbitrary(ConstructionOccupationsPage)
 
-  implicit lazy val arbitraryCabinCrewPage: Arbitrary[CabinCrewPage.type] =
+  given Arbitrary[CabinCrewPage.type] =
     Arbitrary(CabinCrewPage)
 
-  implicit lazy val arbitraryTextilesOccupationList1Page: Arbitrary[TextilesOccupationList1Page.type] =
+  given Arbitrary[TextilesOccupationList1Page.type] =
     Arbitrary(TextilesOccupationList1Page)
 
-  implicit lazy val arbitraryDocksOccupationList1Page: Arbitrary[DocksOccupationList1Page.type] =
+  given Arbitrary[DocksOccupationList1Page.type] =
     Arbitrary(DocksOccupationList1Page)
 
-  implicit lazy val arbitraryLabourerPage: Arbitrary[LabourerPage.type] =
+  given Arbitrary[LabourerPage.type] =
     Arbitrary(LabourerPage)
 
-  implicit lazy val arbitraryShipyardApprenticeStorekeeperPage: Arbitrary[ShipyardApprenticeStorekeeperPage.type] =
+  given Arbitrary[ShipyardApprenticeStorekeeperPage.type] =
     Arbitrary(ShipyardApprenticeStorekeeperPage)
 
-  implicit lazy val arbitraryShipyardOccupationList2Page: Arbitrary[ShipyardOccupationList2Page.type] =
+  given Arbitrary[ShipyardOccupationList2Page.type] =
     Arbitrary(ShipyardOccupationList2Page)
 
-  implicit lazy val arbitraryShipyardOccupationList1Page: Arbitrary[ShipyardOccupationList1Page.type] =
+  given Arbitrary[ShipyardOccupationList1Page.type] =
     Arbitrary(ShipyardOccupationList1Page)
 
-  implicit lazy val arbitraryFifthIndustryOptionsPage: Arbitrary[FifthIndustryOptionsPage.type] =
+  given Arbitrary[FifthIndustryOptionsPage.type] =
     Arbitrary(FifthIndustryOptionsPage)
 
-  implicit lazy val arbitraryAlreadyClaimingFREDifferentAmountsPage
-      : Arbitrary[AlreadyClaimingFREDifferentAmountsPage.type] =
+  given Arbitrary[AlreadyClaimingFREDifferentAmountsPage.type] =
     Arbitrary(AlreadyClaimingFREDifferentAmountsPage)
 
-  implicit lazy val arbitraryAlreadyClaimingFREPage: Arbitrary[AlreadyClaimingFRESameAmountPage.type] =
+  given Arbitrary[AlreadyClaimingFRESameAmountPage.type] =
     Arbitrary(AlreadyClaimingFRESameAmountPage)
 
-  implicit lazy val arbitrarySameEmployerContributionAllYearsPage
-      : Arbitrary[SameEmployerContributionAllYearsPage.type] =
+  given Arbitrary[SameEmployerContributionAllYearsPage.type] =
     Arbitrary(SameEmployerContributionAllYearsPage)
 
-  implicit lazy val arbitraryChangeWhichTaxYearsPage: Arbitrary[ChangeWhichTaxYearsPage.type] =
+  given Arbitrary[ChangeWhichTaxYearsPage.type] =
     Arbitrary(ChangeWhichTaxYearsPage)
 
-  implicit lazy val arbitraryRemoveFRECodePage: Arbitrary[RemoveFRECodePage.type] =
+  given Arbitrary[RemoveFRECodePage.type] =
     Arbitrary(RemoveFRECodePage)
 
-  implicit lazy val arbitraryAluminiumApprenticePage: Arbitrary[AluminiumApprenticePage.type] =
+  given Arbitrary[AluminiumApprenticePage.type] =
     Arbitrary(AluminiumApprenticePage)
 
-  implicit lazy val arbitraryIronApprenticePage: Arbitrary[IronApprenticePage.type] =
+  given Arbitrary[IronApprenticePage.type] =
     Arbitrary(IronApprenticePage)
 
-  implicit lazy val arbitraryYourAddressPage: Arbitrary[YourAddressPage.type] =
+  given Arbitrary[YourAddressPage.type] =
     Arbitrary(YourAddressPage)
 
-  implicit lazy val arbitraryYourEmployerPage: Arbitrary[YourEmployerPage.type] =
+  given Arbitrary[YourEmployerPage.type] =
     Arbitrary(YourEmployerPage)
 
-  implicit lazy val arbitraryConstructionalEngineeringList3Page: Arbitrary[ConstructionalEngineeringList3Page.type] =
+  given Arbitrary[ConstructionalEngineeringList3Page.type] =
     Arbitrary(ConstructionalEngineeringList3Page)
 
-  implicit lazy val arbitraryHeatingOccupationListPage: Arbitrary[HeatingOccupationListPage.type] =
+  given Arbitrary[HeatingOccupationListPage.type] =
     Arbitrary(HeatingOccupationListPage)
 
-  implicit lazy val arbitraryTaxYearSelectionPage: Arbitrary[TaxYearSelectionPage.type] =
+  given Arbitrary[TaxYearSelectionPage.type] =
     Arbitrary(TaxYearSelectionPage)
 
-  implicit lazy val arbitraryFourthIndustryOptionsPage: Arbitrary[FourthIndustryOptionsPage.type] =
+  given Arbitrary[FourthIndustryOptionsPage.type] =
     Arbitrary(FourthIndustryOptionsPage)
 
-  implicit lazy val arbitraryIronMiningPage: Arbitrary[IronMiningPage.type] =
+  given Arbitrary[IronMiningPage.type] =
     Arbitrary(IronMiningPage)
 
-  implicit lazy val arbitraryIronMiningListPage: Arbitrary[IronMiningListPage.type] =
+  given Arbitrary[IronMiningListPage.type] =
     Arbitrary(IronMiningListPage)
 
-  implicit lazy val arbitraryCommunitySupportOfficerPage: Arbitrary[CommunitySupportOfficerPage.type] =
+  given Arbitrary[CommunitySupportOfficerPage.type] =
     Arbitrary(CommunitySupportOfficerPage)
 
-  implicit lazy val arbitraryMetropolitanPolicePage: Arbitrary[MetropolitanPolicePage.type] =
+  given Arbitrary[MetropolitanPolicePage.type] =
     Arbitrary(MetropolitanPolicePage)
 
-  implicit lazy val arbitraryElectricalPage: Arbitrary[ElectricalPage.type] =
+  given Arbitrary[ElectricalPage.type] =
     Arbitrary(ElectricalPage)
 
-  implicit lazy val arbitraryPrintingOccupationList2Page: Arbitrary[PrintingOccupationList2Page.type] =
+  given Arbitrary[PrintingOccupationList2Page.type] =
     Arbitrary(PrintingOccupationList2Page)
 
-  implicit lazy val arbitraryThirdIndustryOptionsPage: Arbitrary[ThirdIndustryOptionsPage.type] =
+  given Arbitrary[ThirdIndustryOptionsPage.type] =
     Arbitrary(ThirdIndustryOptionsPage)
 
-  implicit lazy val arbitraryPrintingOccupationList1Page: Arbitrary[PrintingOccupationList1Page.type] =
+  given Arbitrary[PrintingOccupationList1Page.type] =
     Arbitrary(PrintingOccupationList1Page)
 
-  implicit lazy val arbitraryAluminiumOccupationList3Page: Arbitrary[AluminiumOccupationList3Page.type] =
+  given Arbitrary[AluminiumOccupationList3Page.type] =
     Arbitrary(AluminiumOccupationList3Page)
 
-  implicit lazy val arbitrarySecurityGuardNHSPage: Arbitrary[SecurityGuardNHSPage.type] =
+  given Arbitrary[SecurityGuardNHSPage.type] =
     Arbitrary(SecurityGuardNHSPage)
 
-  implicit lazy val arbitraryClothingPage: Arbitrary[ClothingPage.type] =
+  given Arbitrary[ClothingPage.type] =
     Arbitrary(ClothingPage)
 
-  implicit lazy val arbitraryCateringStaffNHSPage: Arbitrary[CateringStaffNHSPage.type] =
+  given Arbitrary[CateringStaffNHSPage.type] =
     Arbitrary(CateringStaffNHSPage)
 
-  implicit lazy val arbitraryWoodFurnitureOccupationList2Page: Arbitrary[WoodFurnitureOccupationList2Page.type] =
+  given Arbitrary[WoodFurnitureOccupationList2Page.type] =
     Arbitrary(WoodFurnitureOccupationList2Page)
 
-  implicit lazy val arbitraryWoodFurnitureOccupationList3Page: Arbitrary[WoodFurnitureOccupationList3Page.type] =
+  given Arbitrary[WoodFurnitureOccupationList3Page.type] =
     Arbitrary(WoodFurnitureOccupationList3Page)
 
-  implicit lazy val arbitraryWoodFurnitureOccupationList1Page: Arbitrary[WoodFurnitureOccupationList1Page.type] =
+  given Arbitrary[WoodFurnitureOccupationList1Page.type] =
     Arbitrary(WoodFurnitureOccupationList1Page)
 
-  implicit lazy val arbitraryPoliceOfficerPage: Arbitrary[PoliceOfficerPage.type] =
+  given Arbitrary[PoliceOfficerPage.type] =
     Arbitrary(PoliceOfficerPage)
 
-  implicit lazy val arbitraryIronSteelOccupationListPage: Arbitrary[IronSteelOccupationListPage.type] =
+  given Arbitrary[IronSteelOccupationListPage.type] =
     Arbitrary(IronSteelOccupationListPage)
 
-  implicit lazy val arbitraryAluminiumOccupationList2Page: Arbitrary[AluminiumOccupationList2Page.type] =
+  given Arbitrary[AluminiumOccupationList2Page.type] =
     Arbitrary(AluminiumOccupationList2Page)
 
-  implicit lazy val arbitrarySpecialConstablePage: Arbitrary[SpecialConstablePage.type] =
+  given Arbitrary[SpecialConstablePage.type] =
     Arbitrary(SpecialConstablePage)
 
-  implicit lazy val arbitraryAluminiumOccupationList1Page: Arbitrary[AluminiumOccupationList1Page.type] =
+  given Arbitrary[AluminiumOccupationList1Page.type] =
     Arbitrary(AluminiumOccupationList1Page)
 
-  implicit lazy val arbitraryTypeOfManufacturingPage: Arbitrary[TypeOfManufacturingPage.type] =
+  given Arbitrary[TypeOfManufacturingPage.type] =
     Arbitrary(TypeOfManufacturingPage)
 
-  implicit lazy val arbitraryTransportVehicleTradePage: Arbitrary[TransportVehicleTradePage.type] =
+  given Arbitrary[TransportVehicleTradePage.type] =
     Arbitrary(TransportVehicleTradePage)
 
-  implicit lazy val arbitraryFactoryEngineeringApprenticePage: Arbitrary[FactoryEngineeringApprenticePage.type] =
+  given Arbitrary[FactoryEngineeringApprenticePage.type] =
     Arbitrary(FactoryEngineeringApprenticePage)
 
-  implicit lazy val arbitraryTransportCarpenterPage: Arbitrary[TransportCarpenterPage.type] =
+  given Arbitrary[TransportCarpenterPage.type] =
     Arbitrary(TransportCarpenterPage)
 
-  implicit lazy val arbitrarySecondIndustryOptionsPage: Arbitrary[SecondIndustryOptionsPage.type] =
+  given Arbitrary[SecondIndustryOptionsPage.type] =
     Arbitrary(SecondIndustryOptionsPage)
 
-  implicit lazy val arbitraryGarageHandOrCleanerPage: Arbitrary[GarageHandOrCleanerPage.type] =
+  given Arbitrary[GarageHandOrCleanerPage.type] =
     Arbitrary(GarageHandOrCleanerPage)
 
-  implicit lazy val arbitraryWhichRailwayTradePage: Arbitrary[WhichRailwayTradePage.type] =
+  given Arbitrary[WhichRailwayTradePage.type] =
     Arbitrary(WhichRailwayTradePage)
 
-  implicit lazy val arbitraryFactoryEngineeringList1Page: Arbitrary[FactoryEngineeringList1Page.type] =
+  given Arbitrary[FactoryEngineeringList1Page.type] =
     Arbitrary(FactoryEngineeringList1Page)
 
-  implicit lazy val arbitraryFactoryEngineeringList2Page: Arbitrary[FactoryEngineeringList2Page.type] =
+  given Arbitrary[FactoryEngineeringList2Page.type] =
     Arbitrary(FactoryEngineeringList2Page)
 
-  implicit lazy val arbitraryHealthcareList2Page: Arbitrary[HealthcareList2Page.type] =
+  given Arbitrary[HealthcareList2Page.type] =
     Arbitrary(HealthcareList2Page)
 
-  implicit lazy val arbitraryAncillaryEngineeringWhichTradePage: Arbitrary[AncillaryEngineeringWhichTradePage.type] =
+  given Arbitrary[AncillaryEngineeringWhichTradePage.type] =
     Arbitrary(AncillaryEngineeringWhichTradePage)
 
-  implicit lazy val arbitraryConstructionalEngineeringApprenticePage
-      : Arbitrary[ConstructionalEngineeringApprenticePage.type] =
+  given Arbitrary[ConstructionalEngineeringApprenticePage.type] =
     Arbitrary(ConstructionalEngineeringApprenticePage)
 
-  implicit lazy val arbitraryConstructionalEngineeringList2Page: Arbitrary[ConstructionalEngineeringList2Page.type] =
+  given Arbitrary[ConstructionalEngineeringList2Page.type] =
     Arbitrary(ConstructionalEngineeringList2Page)
 
-  implicit lazy val arbitraryHealthcareList1Page: Arbitrary[HealthcareList1Page.type] =
+  given Arbitrary[HealthcareList1Page.type] =
     Arbitrary(HealthcareList1Page)
 
-  implicit lazy val arbitraryAirlineJobListPage: Arbitrary[AirlineJobListPage.type] =
+  given Arbitrary[AirlineJobListPage.type] =
     Arbitrary(AirlineJobListPage)
 
-  implicit lazy val arbitraryTypeOfTransportPage: Arbitrary[TypeOfTransportPage.type] =
+  given Arbitrary[TypeOfTransportPage.type] =
     Arbitrary(TypeOfTransportPage)
 
-  implicit lazy val arbitraryConstructionalEngineeringList1Page: Arbitrary[ConstructionalEngineeringList1Page.type] =
+  given Arbitrary[ConstructionalEngineeringList1Page.type] =
     Arbitrary(ConstructionalEngineeringList1Page)
 
-  implicit lazy val arbitraryTypeOfEngineeringPage: Arbitrary[TypeOfEngineeringPage.type] =
+  given Arbitrary[TypeOfEngineeringPage.type] =
     Arbitrary(TypeOfEngineeringPage)
 
-  implicit lazy val arbitraryAmbulanceStaffPage: Arbitrary[AmbulanceStaffPage.type] =
+  given Arbitrary[AmbulanceStaffPage.type] =
     Arbitrary(AmbulanceStaffPage)
 
-  implicit lazy val arbitraryEmployerContributionPage: Arbitrary[EmployerContributionPage.type] =
+  given Arbitrary[EmployerContributionPage.type] =
     Arbitrary(EmployerContributionPage)
 
-  implicit lazy val arbitraryMultipleEmploymentsPage: Arbitrary[MultipleEmploymentsPage.type] =
+  given Arbitrary[MultipleEmploymentsPage.type] =
     Arbitrary(MultipleEmploymentsPage)
 
-  implicit lazy val arbitraryExpensesEmployerPaidPage: Arbitrary[ExpensesEmployerPaidPage.type] =
+  given Arbitrary[ExpensesEmployerPaidPage.type] =
     Arbitrary(ExpensesEmployerPaidPage)
 
-  implicit lazy val arbitraryFirstIndustryOptionsPage: Arbitrary[FirstIndustryOptionsPage.type] =
+  given Arbitrary[FirstIndustryOptionsPage.type] =
     Arbitrary(FirstIndustryOptionsPage)
 
 }

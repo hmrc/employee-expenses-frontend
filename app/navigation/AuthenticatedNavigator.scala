@@ -16,16 +16,16 @@
 
 package navigation
 
-import controllers.authenticated.routes._
-import controllers.confirmation.routes._
+import controllers.authenticated.routes.*
+import controllers.confirmation.routes.*
 import controllers.mergedJourney.routes.MergedJourneyController
-import controllers.routes._
+import controllers.routes.*
 
 import javax.inject.{Inject, Singleton}
-import models.AlreadyClaimingFREDifferentAmounts._
-import models.FlatRateExpenseOptions._
+import models.AlreadyClaimingFREDifferentAmounts.*
+import models.FlatRateExpenseOptions.*
 import models.TaxYearSelection.{CurrentYear, containsCurrent, containsPrevious}
-import models._
+import models.*
 import models.mergedJourney.{
   ClaimCompleteCurrent,
   ClaimCompleteCurrentPrevious,
@@ -33,7 +33,7 @@ import models.mergedJourney.{
   ClaimStatus,
   ClaimUnsuccessful
 }
-import pages.authenticated._
+import pages.authenticated.*
 import pages.confirmation.ConfirmationMergeJourneyPage
 import pages.mergedJourney.MergedJourneyFlag
 import pages.{FREResponse, Page}

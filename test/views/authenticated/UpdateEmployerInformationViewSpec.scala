@@ -28,9 +28,10 @@ class UpdateEmployerInformationViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[UpdateEmployerInformationView]
 
-    val applyView = view.apply(nextPageURL)(fakeRequest, messages)
+    val applyView = view.apply(nextPageURL)(using fakeRequest, messages)
 
-    val applyViewWithAuth = view.apply(nextPageURL)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth =
+      view.apply(nextPageURL)(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave.like(normalPage(applyView, "updateEmployerInformation"))
 

@@ -20,10 +20,10 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import models.requests.IdentifierRequest
 import play.api.Logging
-import play.api.mvc.Results._
-import play.api.mvc._
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve._
+import play.api.mvc.Results.*
+import play.api.mvc.*
+import uk.gov.hmrc.auth.core.*
+import uk.gov.hmrc.auth.core.retrieve.*
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
@@ -33,7 +33,7 @@ class AuthenticatedIdentifierActionImpl @Inject() (
     override val authConnector: AuthConnector,
     config: FrontendAppConfig,
     val parser: BodyParsers.Default
-)(implicit val executionContext: ExecutionContext)
+)(using override val executionContext: ExecutionContext)
     extends AuthenticatedIdentifierAction
     with AuthorisedFunctions
     with Logging {
@@ -47,7 +47,7 @@ class AuthenticatedIdentifierActionImpl @Inject() (
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    given hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     authorised()
       .retrieve(
@@ -59,7 +59,7 @@ class AuthenticatedIdentifierActionImpl @Inject() (
         case _ ~ _ ~ Some(AffinityGroup.Agent) ~ _ =>
           Future(Redirect(controllers.routes.UnauthorisedController.onPageLoad))
         case _ ~ _ ~ Some(AffinityGroup.Individual | AffinityGroup.Organisation) ~ LT200(_) =>
-          Future.successful(upliftIfSessionNotExpired(hc.sessionId.map(_.value))(request))
+          Future.successful(upliftIfSessionNotExpired(hc.sessionId.map(_.value))(using request))
         case Some(nino) ~ Some(internalId) ~ _ ~ _ =>
           block(
             IdentifierRequest(
@@ -75,7 +75,7 @@ class AuthenticatedIdentifierActionImpl @Inject() (
         case _: NoActiveSession =>
           unauthorised(hc.sessionId.map(_.value), request)
         case _: InsufficientConfidenceLevel =>
-          upliftIfSessionNotExpired(hc.sessionId.map(_.value))(request)
+          upliftIfSessionNotExpired(hc.sessionId.map(_.value))(using request)
         case _: AuthorisationException =>
           Redirect(controllers.routes.UnauthorisedController.onPageLoad)
         case e =>
@@ -84,7 +84,7 @@ class AuthenticatedIdentifierActionImpl @Inject() (
       }
   }
 
-  def unauthorised(sessionId: Option[String], request: Request[_]): Result =
+  def unauthorised(sessionId: Option[String], request: Request[?]): Result =
     sessionId match {
       case Some(id) =>
         Redirect(config.loginUrl, Map("continue" -> Seq(s"${config.loginContinueUrl + id}")))
@@ -92,14 +92,14 @@ class AuthenticatedIdentifierActionImpl @Inject() (
         Redirect(controllers.routes.SessionExpiredController.onPageLoad)
     }
 
-  def insufficientConfidence(queryString: String, request: Request[_]): Result =
+  def insufficientConfidence(queryString: String, request: Request[?]): Result =
     Redirect(
       s"${config.ivUpliftUrl}?origin=EE&confidenceLevel=200" +
         s"&completionURL=${config.authorisedCallback + queryString}" +
         s"&failureURL=${config.unauthorisedCallback}"
     )
 
-  def upliftIfSessionNotExpired(sessionId: Option[String])(implicit request: Request[_]): Result =
+  def upliftIfSessionNotExpired(sessionId: Option[String])(using request: Request[?]): Result =
     sessionId match {
       case Some(id) => insufficientConfidence(request.getQueryString("key").getOrElse(id), request)
       case _        => Redirect(controllers.routes.SessionExpiredController.onPageLoad)

@@ -18,7 +18,7 @@ package service
 
 import com.google.inject.Inject
 import connectors.TaiConnector
-import models.TaxYearSelection._
+import models.TaxYearSelection.*
 import models.{TaiTaxYear, TaxYearSelection}
 import play.api.Logging
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -32,8 +32,8 @@ class SubmissionService @Inject() (
 ) extends Logging {
 
   def getTaxYearsToUpdate(nino: String, taxYears: Seq[TaxYearSelection], currentDate: LocalDate = LocalDate.now())(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext
+      using HeaderCarrier,
+      ExecutionContext
   ): Future[Seq[TaxYearSelection]] =
 
     if (
@@ -61,8 +61,8 @@ class SubmissionService @Inject() (
     }
 
   def submitFRE(nino: String, taxYears: Seq[TaxYearSelection], claimAmount: Int)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext
+      using HeaderCarrier,
+      ExecutionContext
   ): Future[Seq[HttpResponse]] =
 
     getTaxYearsToUpdate(nino, taxYears).flatMap { claimYears =>
@@ -73,8 +73,8 @@ class SubmissionService @Inject() (
     }
 
   def removeFRE(nino: String, taxYears: Seq[TaxYearSelection], removeYear: TaxYearSelection)(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext
+      using HeaderCarrier,
+      ExecutionContext
   ): Future[Seq[HttpResponse]] = {
 
     val removeTaxYears = taxYears.take(TaxYearSelection.values.indexOf(removeYear) + 1)
@@ -89,7 +89,7 @@ class SubmissionService @Inject() (
 
   private def futureSequence[I, O](
       inputs: Seq[I]
-  )(flatMapFunction: I => Future[O])(implicit ec: ExecutionContext): Future[Seq[O]] =
+  )(flatMapFunction: I => Future[O])(using ExecutionContext): Future[Seq[O]] =
     inputs.foldLeft(Future.successful(Seq.empty[O]))((previousFutureResult, nextInput) =>
       for {
         futureSeq <- previousFutureResult

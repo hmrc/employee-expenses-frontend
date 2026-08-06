@@ -46,22 +46,25 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     def applyView(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
       application.injector
         .instanceOf[CheckYourAnswersView]
-        .apply(sections, checkYourAnswersTextStopFre)(fakeRequest, messages)
+        .apply(sections, checkYourAnswersTextStopFre)(using fakeRequest, messages)
 
     def applyViewWithAuth(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
       application.injector
         .instanceOf[CheckYourAnswersView]
-        .apply(sections, checkYourAnswersTextStopFre)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+        .apply(sections, checkYourAnswersTextStopFre)(
+          using fakeRequest.withSession(("authToken", "SomeAuthToken")),
+          messages
+        )
 
     def applyViewNewClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
       application.injector
         .instanceOf[CheckYourAnswersView]
-        .apply(sections, checkYourAnswersTextNoFre)(fakeRequest, messages)
+        .apply(sections, checkYourAnswersTextNoFre)(using fakeRequest, messages)
 
     def applyViewChangeClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
       application.injector
         .instanceOf[CheckYourAnswersView]
-        .apply(sections, checkYourAnswersTextChangeFre)(fakeRequest, messages)
+        .apply(sections, checkYourAnswersTextChangeFre)(using fakeRequest, messages)
 
     behave.like(normalPage(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true), "checkYourAnswers"))
 

@@ -16,7 +16,7 @@
 
 @import viewmodels.AnswerRow
 
-@(row: AnswerRow)(implicit messages: Messages)
+@(row: AnswerRow)(using messages: Messages)
 
 @hiddenLabel = @{
     row.label + ".hidden"
@@ -31,7 +31,7 @@
 }
 
 <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">@Html(messages(row.label, row.labelArgs: _*))</dt>
+    <dt class="govuk-summary-list__key">@Html(messages(row.label, row.labelArgs*))</dt>
     <dd class="govuk-summary-list__value">@rowAnswer</dd>
     <dd class="govuk-summary-list__actions">
         @if(row.changeUrl) {
@@ -48,7 +48,7 @@
                 @if(row.hiddenText){
                     <span class="govuk-visually-hidden">@messages(row.hiddenText.get)</span>
                 } else {
-                    <span class="govuk-visually-hidden">@messages("site.hidden-edit", messages(row.label, row.labelArgs: _*).toLowerCase)</span>
+                    <span class="govuk-visually-hidden">@messages("site.hidden-edit", messages(row.label, row.labelArgs*).toLowerCase)</span>
                 }
             }
         </a>

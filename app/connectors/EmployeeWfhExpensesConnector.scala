@@ -18,7 +18,7 @@ package connectors
 
 import config.FrontendAppConfig
 import play.api.http.HeaderNames
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
@@ -27,11 +27,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class EmployeeWfhExpensesConnector @Inject() (appConfig: FrontendAppConfig, httpClient: HttpClientV2)(
-    implicit executionContext: ExecutionContext
+    using ExecutionContext
 ) {
 
   def checkIfAllYearsClaimed(headerCarrier: HeaderCarrier): Future[Boolean] = {
-    implicit val hc: HeaderCarrier = headerCarrier.copy(extraHeaders = headerCarrier.headers(Seq(HeaderNames.COOKIE)))
+    given hc: HeaderCarrier = headerCarrier.copy(extraHeaders = headerCarrier.headers(Seq(HeaderNames.COOKIE)))
     val url: String =
       s"${appConfig.employeeWfhExpensesHost}/employee-working-from-home-expenses/claimed-all-years-status"
 

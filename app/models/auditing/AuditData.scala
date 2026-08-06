@@ -16,10 +16,10 @@
 
 package models.auditing
 
-import play.api.libs.json._
+import play.api.libs.json.*
 
 case class AuditData(nino: String, userAnswers: JsObject)
 
 object AuditData {
-  implicit lazy val format: Format[AuditData] = Json.format[AuditData]
+  given Format[AuditData] = Json.format[AuditData]
 }

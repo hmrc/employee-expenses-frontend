@@ -17,10 +17,11 @@
 package controllers.authenticated
 
 import config.NavConstant
-import controllers.actions._
-import controllers.{routes => baseRoutes}
+import controllers.actions.*
+import controllers.routes as baseRoutes
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
+import models.requests.DataRequest
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage, Submission, TaxYearSelectionPage}
@@ -46,11 +47,12 @@ class SubmissionController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     @Named(NavConstant.authenticated) navigator: Navigator,
     sessionRepository: SessionRepository
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  def onSubmit: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { implicit request =>
+  def onSubmit: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { request =>
+    given DataRequest[AnyContent] = request
     val dataToAudit: AuditData =
       AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
 
@@ -83,7 +85,7 @@ class SubmissionController @Inject() (
       auditData: AuditData,
       userAnswers: UserAnswers,
       identifier: IdentifierType
-  )(implicit hc: HeaderCarrier): Result =
+  )(using HeaderCarrier): Result =
 
     if (result.nonEmpty && result.forall(_.status == 204)) {
       auditConnector.sendExplicitAudit(UpdateFlatRateExpenseSuccess.toString, auditData)

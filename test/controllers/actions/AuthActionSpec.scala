@@ -25,13 +25,12 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core._
+import play.api.test.Helpers.*
+import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys, UnauthorizedException}
-import utils.RetrievalOps._
-
+import utils.RetrievalOps.*
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -64,7 +63,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
       mockAuthConnector,
       mockAppConfig,
       mockBodyParsers
-    )(implicitly)
+    )
 
     new Harness(authAction)
   }
@@ -404,19 +403,19 @@ class FakeFailingAuthConnector @Inject() (exceptionToReturn: Throwable) extends 
   val serviceUrl: String = ""
 
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext
+      using HeaderCarrier,
+      ExecutionContext
   ): Future[A] =
     Future.failed(exceptionToReturn)
 
 }
 
-class FakePassingAuthConnector @Inject() (stubbedRetrievalResult: Future[_]) extends AuthConnector {
+class FakePassingAuthConnector @Inject() (stubbedRetrievalResult: Future[?]) extends AuthConnector {
   val serviceUrl: String = ""
 
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(
-      implicit hc: HeaderCarrier,
-      ec: ExecutionContext
+      using HeaderCarrier,
+      ExecutionContext
   ): Future[A] =
     stubbedRetrievalResult.map(_.asInstanceOf[A])(global)
 

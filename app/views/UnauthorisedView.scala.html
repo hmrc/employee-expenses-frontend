@@ -22,7 +22,7 @@
     frontendAppConfig: FrontendAppConfig
 )
 
-@(id: String)(implicit request: Request[_], messages: Messages)
+@(id: String)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("unauthorised.title"), showBackLink = false

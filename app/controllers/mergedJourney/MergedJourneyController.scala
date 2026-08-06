@@ -19,9 +19,10 @@ package controllers.mergedJourney
 import config.FrontendAppConfig
 import connectors.EmployeeWfhExpensesConnector
 import controllers.actions.{Authed, MergedJourneyIdentifierAction}
-import controllers.mergedJourney.MergedJourneyController._
+import controllers.mergedJourney.MergedJourneyController.*
 import controllers.routes
-import models.mergedJourney._
+import models.mergedJourney.*
+import models.requests.IdentifierRequest
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -40,14 +41,15 @@ class MergedJourneyController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     employeeWfhExpensesConnector: EmployeeWfhExpensesConnector,
     appConfig: FrontendAppConfig
-)(implicit val ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
 
   // This route is used by the eligibility checker to initiate a journey to claim multiple expenses
   def setupMergedJourney(wfh: Boolean, psubs: Boolean, fre: Boolean): Action[AnyContent] =
-    identify.async { implicit request =>
+    identify.async { request =>
+      given IdentifierRequest[AnyContent] = request
       if (appConfig.mergedJourneyEnabled) {
         request.identifier match {
           case id: Authed if List(wfh, psubs, fre).count(_ == true) > 1 =>
@@ -85,7 +87,8 @@ class MergedJourneyController @Inject() (
 
   // This route is used at the end of each individual claim within the merged journey or on kickouts
   def mergedJourneyContinue(journey: String, state: ClaimStatus): Action[AnyContent] =
-    identify.async { implicit request =>
+    identify.async { request =>
+      given IdentifierRequest[AnyContent] = request
       if (appConfig.mergedJourneyEnabled) {
         request.identifier match {
           case id: Authed =>
@@ -114,7 +117,8 @@ class MergedJourneyController @Inject() (
       }
     }
 
-  def mergedJourneyRefreshSession: Action[AnyContent] = identify.async { implicit request =>
+  def mergedJourneyRefreshSession: Action[AnyContent] = identify.async { request =>
+    given IdentifierRequest[AnyContent] = request
     request.identifier match {
       case id: Authed =>
         sessionRepository.updateMergedJourneyTimeToLive(id).map {

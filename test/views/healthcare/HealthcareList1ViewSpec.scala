@@ -35,11 +35,11 @@ class HealthcareList1ViewSpec extends YesNoViewBehaviours {
 
     val view = application.injector.instanceOf[HealthcareList1View]
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest, messages)
+    def applyView(form: Form[?]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode)(using fakeRequest, messages)
 
-    def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    def applyViewWithAuth(form: Form[?]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode)(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave.like(normalPage(applyView(form), messageKeyPrefix))
 

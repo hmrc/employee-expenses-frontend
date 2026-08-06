@@ -18,8 +18,8 @@ package config
 
 import com.google.inject.AbstractModule
 import com.google.inject.name.Names
-import controllers.actions._
-import navigation._
+import controllers.actions.*
+import navigation.*
 import play.api.{Configuration, Environment}
 import views.{LayoutProvider, NewLayoutProvider, OldLayoutProvider}
 

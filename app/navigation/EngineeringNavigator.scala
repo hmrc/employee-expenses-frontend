@@ -18,9 +18,9 @@ package navigation
 
 import controllers.routes
 import javax.inject.{Inject, Singleton}
-import models.TypeOfEngineering._
+import models.TypeOfEngineering.*
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
-import pages.engineering._
+import pages.engineering.*
 import pages.Page
 import play.api.mvc.Call
 

@@ -18,8 +18,9 @@ package controllers.authenticated
 
 import config.NavConstant
 import connectors.CitizenDetailsConnector
-import controllers.actions._
-import controllers.routes._
+import controllers.actions.*
+import controllers.routes.*
+import models.requests.DataRequest
 
 import javax.inject.{Inject, Named}
 import models.{Address, Mode}
@@ -44,13 +45,14 @@ class YourAddressController @Inject() (
     getData: DataRetrievalAction,
     requireData: DataRequiredAction,
     val controllerComponents: MessagesControllerComponents
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       citizenDetailsConnector
         .getAddress(request.nino.get)
         .flatMap { response =>

@@ -15,9 +15,9 @@
  *@
 
 @import viewmodels.RepeaterAnswerSection
-@import views.html._
+@import views.html.*
 
-@(answerSection: RepeaterAnswerSection)(implicit messages: Messages)
+@(answerSection: RepeaterAnswerSection)(using messages: Messages)
 
 <h2 class="govuk-heading-m">@messages(answerSection.headingKey)</h2>
 

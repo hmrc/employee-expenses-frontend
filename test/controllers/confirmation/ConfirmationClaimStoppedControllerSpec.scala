@@ -18,14 +18,13 @@ package controllers.confirmation
 
 import base.SpecBase
 import controllers.actions.Authed
-import controllers.confirmation.routes._
-import models.TaxYearSelection._
-import models._
+import controllers.confirmation.routes.*
+import models.*
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.authenticated._
+import pages.authenticated.*
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 
 import scala.concurrent.ExecutionContext.Implicits.global

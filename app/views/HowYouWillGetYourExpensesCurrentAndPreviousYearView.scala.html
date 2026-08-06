@@ -14,14 +14,14 @@
  * limitations under the License.
  *@
 
-@import models.TaxYearSelection._
+@import models.TaxYearSelection.*
 
 @this(
     layout: views.LayoutProvider,
     heading: playComponents.heading
 )
 
-@(href: String, currentYearMinus1Selected: Boolean, hasClaimIncreased: Boolean)(implicit request: Request[_], messages: Messages)
+@(href: String, currentYearMinus1Selected: Boolean, hasClaimIncreased: Boolean)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("howYouWillGetYourExpenses.title")

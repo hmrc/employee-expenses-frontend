@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.authenticated.routes._
+@import controllers.authenticated.routes.*
 @import models.{Mode, TaxYearSelection}
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 
@@ -26,7 +26,7 @@
     inputRadio: playComponents.input_radio
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[?], mode: Mode)(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = s"${errorPrefix(form)} ${messages("removeFRECode.title")}"

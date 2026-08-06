@@ -19,16 +19,16 @@ package controllers.mergedJourney
 import base.SpecBase
 import connectors.EmployeeWfhExpensesConnector
 import controllers.actions.Authed
-import models.mergedJourney._
+import models.mergedJourney.*
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqs}
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import uk.gov.hmrc.http.InternalServerException
 

@@ -19,6 +19,7 @@ package controllers.mergedJourney
 import config.FrontendAppConfig
 import controllers.actions.{Authed, MergedJourneyIdentifierAction}
 import controllers.routes
+import models.requests.IdentifierRequest
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,12 +38,13 @@ class ClaimYourExpensesController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     claimYourExpensesView: ClaimYourExpensesView,
     appConfig: FrontendAppConfig
-)(implicit val ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
 
-  def show: Action[AnyContent] = identify.async { implicit request =>
+  def show: Action[AnyContent] = identify.async { request =>
+    given IdentifierRequest[AnyContent] = request
     if (appConfig.mergedJourneyEnabled) {
       request.identifier match {
         case id: Authed =>

@@ -24,8 +24,8 @@ import models.requests.IdentifierRequest
 import play.api.Logging
 import play.api.libs.json.Reads
 import play.api.mvc.Results.Redirect
-import play.api.mvc._
-import uk.gov.hmrc.auth.core._
+import play.api.mvc.*
+import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.retrieve.OptionalRetrieval
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, UnauthorizedException}
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
@@ -36,14 +36,14 @@ import scala.concurrent.{ExecutionContext, Future}
 class UnauthenticatedIdentifierActionImpl @Inject() (
     override val authConnector: AuthConnector,
     val parser: BodyParsers.Default
-)(implicit val executionContext: ExecutionContext)
+)(using override val executionContext: ExecutionContext)
     extends UnauthenticatedIdentifierAction
     with AuthorisedFunctions
     with Logging {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    given hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     authorised()
       .retrieve(OptionalRetrieval("nino", Reads.StringReads).and(OptionalRetrieval("internalId", Reads.StringReads))) {

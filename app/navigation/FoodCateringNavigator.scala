@@ -16,7 +16,7 @@
 
 package navigation
 
-import controllers.routes._
+import controllers.routes.*
 import javax.inject.{Inject, Singleton}
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page

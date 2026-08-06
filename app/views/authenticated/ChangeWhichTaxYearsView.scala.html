@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.authenticated.routes._
+@import controllers.authenticated.routes.*
 @import models.Mode
 @import viewmodels.RadioCheckboxOption
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
@@ -27,7 +27,7 @@
     input_checkbox_table: playComponents.input_checkbox_table
 )
 
-@(form: Form[Seq[TaxYearSelection]], mode: Mode, yearsAndAmounts: Seq[(RadioCheckboxOption, Int)])(implicit request: Request[_], messages: Messages)
+@(form: Form[Seq[TaxYearSelection]], mode: Mode, yearsAndAmounts: Seq[(RadioCheckboxOption, Int)])(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = s"${errorPrefix(form)} ${messages("changeWhichTaxYears.title")}"

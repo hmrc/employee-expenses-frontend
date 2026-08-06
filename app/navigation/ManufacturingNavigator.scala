@@ -18,10 +18,10 @@ package navigation
 
 import controllers.manufacturing.routes
 import javax.inject.{Inject, Singleton}
-import models.TypeOfManufacturing._
+import models.TypeOfManufacturing.*
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.Page
-import pages.manufacturing._
+import pages.manufacturing.*
 import play.api.mvc.Call
 
 @Singleton

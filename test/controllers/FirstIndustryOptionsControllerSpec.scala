@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import config.{ClaimAmounts, NavConstant}
 import generators.Generators
-import models.FirstIndustryOptions._
+import models.FirstIndustryOptions.*
 import models.{FirstIndustryOptions, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -35,7 +35,7 @@ import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 
 import scala.concurrent.Future

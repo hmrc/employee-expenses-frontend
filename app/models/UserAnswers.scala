@@ -17,8 +17,8 @@
 package models
 
 import pages.mergedJourney.MergedJourneyFlag
-import pages._
-import play.api.libs.json._
+import pages.*
+import play.api.libs.json.*
 
 import scala.util.{Failure, Success, Try}
 
@@ -26,10 +26,10 @@ final case class UserAnswers(data: JsObject = Json.obj()) {
 
   def isMergedJourney: Boolean = get(MergedJourneyFlag).getOrElse(false)
 
-  def get[A](page: QuestionPage[A])(implicit rds: Reads[A]): Option[A] =
+  def get[A](page: QuestionPage[A])(using Reads[A]): Option[A] =
     Reads.optionNoError(Reads.at(page.path)).reads(data).getOrElse(None)
 
-  def set[A](page: QuestionPage[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
+  def set[A](page: QuestionPage[A], value: A)(using Writes[A]): Try[UserAnswers] = {
 
     val updatedData = data.setObject(page.path, Json.toJson(value)) match {
       case JsSuccess(jsValue, _) =>
@@ -63,6 +63,6 @@ final case class UserAnswers(data: JsObject = Json.obj()) {
 
 object UserAnswers {
 
-  implicit val format: Format[UserAnswers] = Json.format[UserAnswers]
+  given format: Format[UserAnswers] = Json.format[UserAnswers]
 
 }

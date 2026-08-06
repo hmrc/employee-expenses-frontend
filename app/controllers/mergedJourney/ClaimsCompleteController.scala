@@ -21,7 +21,8 @@ import connectors.CitizenDetailsConnector
 import controllers.actions.{Authed, MergedJourneyIdentifierAction}
 import controllers.routes
 import models.Address
-import models.mergedJourney._
+import models.mergedJourney.*
+import models.requests.IdentifierRequest
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
@@ -40,12 +41,13 @@ class ClaimsCompleteController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     claimsCompleteView: ClaimsCompleteView,
     citizenDetailsConnector: CitizenDetailsConnector
-)(implicit val ec: ExecutionContext, appConfig: FrontendAppConfig)
+)(using ec: ExecutionContext, appConfig: FrontendAppConfig)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
 
-  def show: Action[AnyContent] = identify.async { implicit request =>
+  def show: Action[AnyContent] = identify.async { request =>
+    given IdentifierRequest[AnyContent] = request
     if (appConfig.mergedJourneyEnabled) {
       request.identifier match {
         case id: Authed =>

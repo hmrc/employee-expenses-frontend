@@ -30,7 +30,7 @@ trait Constraints {
 
   protected def minimumValue[A](minimum: A, errorKey: String)(using ev: Ordering[A]): Constraint[A] =
     Constraint { input =>
-      import ev._
+      import ev.*
 
       if (input >= minimum) {
         Valid
@@ -41,7 +41,7 @@ trait Constraints {
 
   protected def maximumValue[A](maximum: A, errorKey: String)(using ev: Ordering[A]): Constraint[A] =
     Constraint { input =>
-      import ev._
+      import ev.*
 
       if (input <= maximum) {
         Valid
@@ -52,7 +52,7 @@ trait Constraints {
 
   protected def inRange[A](minimum: A, maximum: A, errorKey: String)(using ev: Ordering[A]): Constraint[A] =
     Constraint { input =>
-      import ev._
+      import ev.*
 
       if (input >= minimum && input <= maximum) {
         Valid
@@ -77,7 +77,7 @@ trait Constraints {
         Invalid(errorKey, maximum)
     }
 
-  protected def nonEmptySeq(errorKey: String): Constraint[Seq[_]] = Constraint {
+  protected def nonEmptySeq(errorKey: String): Constraint[Seq[?]] = Constraint {
     case seq: Seq[?] =>
       if (seq.nonEmpty) Valid else Invalid(errorKey)
     case _ =>

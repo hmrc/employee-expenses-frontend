@@ -23,7 +23,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.time.SpanSugar.convertIntToGrainOfTime
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
 import scala.concurrent.ExecutionContext
@@ -35,9 +35,9 @@ class MergedJourneySessionRepositorySpec
     with ScalaFutures
     with DefaultPlayMongoRepositorySupport[MergedJourney] {
 
-  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+  given ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
-  override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = 30.seconds, interval = 100.millis)
+  given PatienceConfig = PatienceConfig(timeout = 30.seconds, interval = 100.millis)
 
   override val repository: MergedJourneySessionRepository = new MergedJourneySessionRepository(
     config = Configuration.from(Map("mongodb.mergedJourneyTimeToLiveInSeconds" -> 60)),

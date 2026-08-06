@@ -33,11 +33,11 @@ class TransportVehicleTradeViewSpec extends OptionsViewBehaviours[TransportVehic
 
   val view = application.injector.instanceOf[TransportVehicleTradeView]
 
-  def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode)(fakeRequest, messages)
+  def applyView(form: Form[?]): HtmlFormat.Appendable =
+    view.apply(form, NormalMode)(using fakeRequest, messages)
 
-  def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+  def applyViewWithAuth(form: Form[?]): HtmlFormat.Appendable =
+    view.apply(form, NormalMode)(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
   "TransportVehicleTradeView" must {
 

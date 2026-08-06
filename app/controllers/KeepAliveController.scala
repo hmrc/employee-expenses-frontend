@@ -17,6 +17,7 @@
 package controllers
 
 import controllers.actions.{Authed, AuthenticatedIdentifierAction}
+import models.requests.IdentifierRequest
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -30,12 +31,13 @@ class KeepAliveController @Inject() (
     identify: AuthenticatedIdentifierAction,
     sessionRepository: SessionRepository,
     val controllerComponents: MessagesControllerComponents
-)(implicit val ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  def keepAlive: Action[AnyContent] = identify.async { implicit request =>
-    val id = request.identifier.asInstanceOf[Authed]
+  def keepAlive: Action[AnyContent] = identify.async { request =>
+    given IdentifierRequest[AnyContent] = request
+    val id                              = request.identifier.asInstanceOf[Authed]
 
     sessionRepository.updateTimeToLive(id).map {
       case true => Ok("OK")

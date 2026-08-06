@@ -27,7 +27,7 @@
         headingIsLegend: Boolean = false,
         classes: String = ""
 
-)(implicit messages: Messages)
+)(using messages: Messages)
 
 @govukCheckboxes(Checkboxes(
     fieldset = Some(Fieldset(

@@ -32,12 +32,12 @@ class ConfirmationMergeJourneyViewSpec extends ViewBehaviours {
 
     val view = application.injector.instanceOf[ConfirmationMergeJourneyView]
 
-    def applyView()(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view(continueUrl = "some-url")(fakeRequest, messages)
+    def applyView()(using fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
+      view(continueUrl = "some-url")(using fakeRequest, messages)
 
-    val viewWithAnswers = applyView()(fakeRequest, messages)
+    val viewWithAnswers = applyView()(using fakeRequest, messages)
 
-    val applyViewWithAuth = applyView()(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    val applyViewWithAuth = applyView()(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave.like(pageWithAccountMenu(applyViewWithAuth))
 

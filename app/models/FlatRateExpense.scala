@@ -16,10 +16,10 @@
 
 package models
 
-import play.api.libs.json._
+import play.api.libs.json.*
 
 case class FlatRateExpense(grossAmount: Int)
 
 object FlatRateExpense {
-  implicit val format: Format[FlatRateExpense] = Json.format[FlatRateExpense]
+  given Format[FlatRateExpense] = Json.format[FlatRateExpense]
 }

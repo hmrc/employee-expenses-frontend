@@ -16,33 +16,33 @@
 
 package navigation
 
-import controllers.authenticated.routes._
-import controllers.clothing.routes._
-import controllers.construction.routes._
-import controllers.docks.routes._
-import controllers.electrical.routes._
-import controllers.engineering.routes._
-import controllers.foodCatering.routes._
-import controllers.healthcare.routes._
-import controllers.heating.routes._
-import controllers.manufacturing.routes._
-import controllers.police.routes._
-import controllers.printing.routes._
-import controllers.routes._
-import controllers.security.routes._
-import controllers.shipyard.routes._
-import controllers.textiles.routes._
-import controllers.transport.routes._
+import controllers.authenticated.routes.*
+import controllers.clothing.routes.*
+import controllers.construction.routes.*
+import controllers.docks.routes.*
+import controllers.electrical.routes.*
+import controllers.engineering.routes.*
+import controllers.foodCatering.routes.*
+import controllers.healthcare.routes.*
+import controllers.heating.routes.*
+import controllers.manufacturing.routes.*
+import controllers.police.routes.*
+import controllers.printing.routes.*
+import controllers.routes.*
+import controllers.security.routes.*
+import controllers.shipyard.routes.*
+import controllers.textiles.routes.*
+import controllers.transport.routes.*
 
 import javax.inject.{Inject, Singleton}
 import models.EmployerContribution.{NoEmployerContribution, YesEmployerContribution}
-import models.FifthIndustryOptions._
-import models.FirstIndustryOptions._
-import models.FourthIndustryOptions._
-import models.SecondIndustryOptions._
-import models.ThirdIndustryOptions._
-import models._
-import pages._
+import models.FifthIndustryOptions.*
+import models.FirstIndustryOptions.*
+import models.FourthIndustryOptions.*
+import models.SecondIndustryOptions.*
+import models.ThirdIndustryOptions.*
+import models.*
+import pages.*
 import play.api.mvc.Call
 
 @Singleton

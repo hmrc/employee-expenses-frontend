@@ -17,8 +17,10 @@
 package controllers.transport
 
 import config.{ClaimAmounts, NavConstant}
-import controllers.actions._
+import controllers.actions.*
 import forms.TransportVehicleTradeFormProvider
+import models.requests.DataRequest
+
 import javax.inject.{Inject, Named}
 import models.{Enumerable, Mode, TransportVehicleTrade}
 import navigation.Navigator
@@ -43,14 +45,15 @@ class TransportVehicleTradeController @Inject() (
     val controllerComponents: MessagesControllerComponents,
     view: TransportVehicleTradeView,
     sessionRepository: SessionRepository
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Enumerable.Implicits {
 
   val form: Form[TransportVehicleTrade] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(TransportVehicleTradePage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -60,11 +63,12 @@ class TransportVehicleTradeController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, mode))),
+          (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode))),
           value => {
             val claimAmount = value match {
               case TransportVehicleTrade.Builder => ClaimAmounts.Transport.VehicleTrade.buildersRepairersWagonLifters

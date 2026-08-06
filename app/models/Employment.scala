@@ -16,16 +16,16 @@
 
 package models
 
-import play.api.libs.json._
+import play.api.libs.json.*
 
 case class Employment(name: String)
 
 object Employment {
 
-  implicit val formats: Format[Employment] =
+  given Format[Employment] =
     Json.format[Employment]
 
-  implicit val listReads: Reads[Seq[Employment]] =
+  given Reads[Seq[Employment]] =
     (__ \ "data" \ "employments").read(Reads.seq[Employment])
 
   def asLabel(names: Seq[String]): String = s"<p>${names.mkString("<br>")}</p>"

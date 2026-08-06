@@ -22,7 +22,7 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.newBehaviours.YesNoViewBehaviours
 import views.html.security.SecurityGuardNHSView
-import controllers.security.routes._
+import controllers.security.routes.*
 
 class SecurityGuardNHSViewSpec extends YesNoViewBehaviours {
 
@@ -36,11 +36,11 @@ class SecurityGuardNHSViewSpec extends YesNoViewBehaviours {
 
     val view = application.injector.instanceOf[SecurityGuardNHSView]
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest, messages)
+    def applyView(form: Form[?]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode)(using fakeRequest, messages)
 
-    def applyViewWithAuth(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode)(fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
+    def applyViewWithAuth(form: Form[?]): HtmlFormat.Appendable =
+      view.apply(form, NormalMode)(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
     behave.like(normalPage(applyView(form), messageKeyPrefix))
 

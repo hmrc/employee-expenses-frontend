@@ -33,7 +33,7 @@ class ConfirmationClaimStoppedViewSpec extends ViewBehaviours {
     val view = application.injector.instanceOf[ConfirmationClaimStoppedView]
 
     def applyView()(fakeRequest: FakeRequest[AnyContent], messages: Messages): Html =
-      view()(fakeRequest, messages)
+      view()(using fakeRequest, messages)
 
     val viewWithAnswers = applyView()(fakeRequest, messages)
 

@@ -17,7 +17,7 @@
 package views.mergedJourney
 
 import config.FrontendAppConfig
-import models.mergedJourney._
+import models.mergedJourney.*
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Tag, Text}
@@ -25,7 +25,7 @@ import uk.gov.hmrc.govukfrontend.views.html.components.GovukTag
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.timeline.Event
 import uk.gov.hmrc.http.InternalServerException
 import views.html.playComponents
-import views.mergedJourney.ClaimYourExpensesBuilder._
+import views.mergedJourney.ClaimYourExpensesBuilder.*
 
 import javax.inject.{Inject, Singleton}
 
@@ -44,7 +44,7 @@ class ClaimYourExpensesBuilder @Inject() (govukTag: GovukTag, p: playComponents.
         controllers.mergedJourney.routes.ClaimsCompleteController.show.url
     }
 
-  def events(journeyConfig: MergedJourney)(implicit messages: Messages): Seq[Event] = {
+  def events(journeyConfig: MergedJourney)(using messages: Messages): Seq[Event] = {
     val journeys =
       Seq((journeyConfig.wfh, wfhJourney), (journeyConfig.psubs, psubsJourney), (journeyConfig.fre, freJourney))
         .filterNot(_._1 == ClaimSkipped)
@@ -66,7 +66,7 @@ class ClaimYourExpensesBuilder @Inject() (govukTag: GovukTag, p: playComponents.
   }
 
   private def eventTag(status: ClaimStatus, isFirstPending: Boolean)(
-      implicit messages: Messages
+      using messages: Messages
   ): HtmlFormat.Appendable =
     status match {
       case ClaimPending if isFirstPending =>
@@ -113,7 +113,7 @@ class ClaimYourExpensesBuilder @Inject() (govukTag: GovukTag, p: playComponents.
     }
 
   private def eventDescription(status: ClaimStatus, journey: String, isFirstPending: Boolean)(
-      implicit messages: Messages
+      using messages: Messages
   ): Html =
     (status, journey) match {
       case (ClaimPending, _) if isFirstPending =>

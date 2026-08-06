@@ -14,11 +14,11 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
 
 @this(govukBackLink : GovukBackLink)
 
-@()(implicit messages: Messages)
+@()(using messages: Messages)
 
 @govukBackLink(BackLink(
     href = "javascript:history.back()",

@@ -17,8 +17,10 @@
 package controllers.authenticated
 
 import config.NavConstant
-import controllers.actions._
+import controllers.actions.*
 import forms.authenticated.ChangeWhichTaxYearsFormProvider
+import models.requests.DataRequest
+
 import javax.inject.{Inject, Named}
 import models.{Enumerable, Mode, TaxYearSelection}
 import navigation.Navigator
@@ -44,14 +46,15 @@ class ChangeWhichTaxYearsController @Inject() (
     formProvider: ChangeWhichTaxYearsFormProvider,
     val controllerComponents: MessagesControllerComponents,
     view: ChangeWhichTaxYearsView
-)(implicit ec: ExecutionContext)
+)(using ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Enumerable.Implicits {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
+    given DataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(ChangeWhichTaxYearsPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -69,7 +72,8 @@ class ChangeWhichTaxYearsController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { implicit request =>
+    identify.andThen(getData).andThen(requireData).async { request =>
+      given DataRequest[AnyContent] = request
       (request.userAnswers.get(TaxYearSelectionPage), request.userAnswers.get(FREAmounts)) match {
         case (Some(selectedTaxYears), Some(flatRateExpenses)) =>
           val taxYears: Seq[RadioCheckboxOption] =

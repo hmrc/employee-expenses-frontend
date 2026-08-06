@@ -18,16 +18,16 @@ package controllers.mergedJourney
 
 import base.SpecBase
 import connectors.CitizenDetailsConnector
-import models.mergedJourney._
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
+import models.mergedJourney.*
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HttpResponse
 
@@ -68,7 +68,7 @@ class ClaimsCompleteControllerSpec
         Instant.now()
       )
       when(mockSessionRepository.getMergedJourney(any())).thenReturn(Future.successful(Some(testJourney)))
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(OK, validAddressJson.toString)))
 
       val request = FakeRequest(GET, claimsCompleteUrl)
@@ -93,7 +93,7 @@ class ClaimsCompleteControllerSpec
         Instant.now()
       )
       when(mockSessionRepository.getMergedJourney(any())).thenReturn(Future.successful(Some(testJourney)))
-      when(mockCitizenDetailsConnector.getAddress(any())(any(), any()))
+      when(mockCitizenDetailsConnector.getAddress(any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(NOT_FOUND, Json.obj().toString())))
 
       val request = FakeRequest(GET, claimsCompleteUrl)
