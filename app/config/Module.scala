@@ -20,12 +20,8 @@ import com.google.inject.AbstractModule
 import com.google.inject.name.Names
 import controllers.actions.*
 import navigation.*
-import play.api.{Configuration, Environment}
-import views.{LayoutProvider, NewLayoutProvider, OldLayoutProvider}
 
-class Module(environment: Environment, configuration: Configuration) extends AbstractModule {
-
-  val scaWrapperEnabled: Boolean = configuration.getOptional[Boolean]("feature-switch.sca-wrapper").getOrElse(false)
+class Module extends AbstractModule {
 
   override def configure(): Unit = {
 
@@ -53,12 +49,6 @@ class Module(environment: Environment, configuration: Configuration) extends Abs
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.shipyard)).to(classOf[ShipyardNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.docks)).to(classOf[DocksNavigator])
     bind(classOf[Navigator]).annotatedWith(Names.named(NavConstant.textiles)).to(classOf[TextilesNavigator])
-
-    if (scaWrapperEnabled) {
-      bind(classOf[LayoutProvider]).to(classOf[NewLayoutProvider]).asEagerSingleton()
-    } else {
-      bind(classOf[LayoutProvider]).to(classOf[OldLayoutProvider]).asEagerSingleton()
-    }
   }
 
 }

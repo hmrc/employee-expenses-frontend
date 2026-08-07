@@ -27,7 +27,8 @@
 @()(using request: Request[?], messages: Messages)
 
 @layout(
-    pageTitle = messages("usePrintAndPostDetailed.title")
+    pageTitle = messages("usePrintAndPostDetailed.title"),
+    showSignOut = true,
 ) {
 
     @heading(messages("usePrintAndPostDetailed.heading"))
