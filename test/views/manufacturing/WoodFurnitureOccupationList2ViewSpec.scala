@@ -16,7 +16,7 @@
 
 package views.manufacturing
 
-import forms.WoodFurnitureOccupationList2FormProvider
+import forms.manufacturing.WoodFurnitureOccupationList2FormProvider
 import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

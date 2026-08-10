@@ -17,12 +17,12 @@
 package views.newBehaviours
 
 import org.jsoup.Jsoup
-import play.twirl.api.HtmlFormat
+import play.twirl.api.Html
 import views.NewViewSpecBase
 
 trait ViewBehaviours extends NewViewSpecBase {
 
-  def normalPage(view: HtmlFormat.Appendable, messageKeyPrefix: String, expectedGuidanceKeys: String*): Unit =
+  def normalPage(view: Html, messageKeyPrefix: String, expectedGuidanceKeys: String*): Unit =
 
     "behave like a normal page" when {
 
@@ -31,7 +31,7 @@ trait ViewBehaviours extends NewViewSpecBase {
         "have the correct banner title" in {
 
           val doc = asDocument(view)
-          assertRenderedByCssSelector(doc, "div.govuk-header__content")
+          assertRenderedByCssSelector(doc, "span.govuk-service-navigation__service-name")
         }
 
         "hide account menu when user not logged in" in {
@@ -65,12 +65,12 @@ trait ViewBehaviours extends NewViewSpecBase {
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedByCssSelector(doc, "nav.hmrc-language-select")
+          assertRenderedByCssSelector(doc, "nav.hmrc-service-navigation-language-select")
         }
       }
     }
 
-  def pageWithAccountMenu(view: HtmlFormat.Appendable): Unit =
+  def pageWithAccountMenu(view: Html): Unit =
 
     "behave like a normal page with account menu" when {
 
@@ -79,18 +79,18 @@ trait ViewBehaviours extends NewViewSpecBase {
         "show account menu when user logged in" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "secondary-nav")
+          assertRenderedByCssSelector(doc, "nav.govuk-service-navigation__wrapper")
         }
 
         "have the sign-out option rendered" in {
 
           val doc = asDocument(view)
-          doc.select("ul.hmrc-account-menu__main > li:nth-child(5)").text() mustBe "Sign out"
+          doc.select("a.hmrc-sign-out-nav__link").text() mustBe "Sign out"
         }
       }
     }
 
-  def pageWithBackLink(view: HtmlFormat.Appendable): Unit =
+  def pageWithBackLink(view: Html): Unit =
 
     "behave like a page with a back link" must {
 
@@ -101,7 +101,7 @@ trait ViewBehaviours extends NewViewSpecBase {
       }
     }
 
-  def pageWithList(view: HtmlFormat.Appendable, pageKey: String, bulletList: Seq[String]): Unit =
+  def pageWithList(view: Html, pageKey: String, bulletList: Seq[String]): Unit =
 
     "behave like a page with a list" must {
 
@@ -118,14 +118,14 @@ trait ViewBehaviours extends NewViewSpecBase {
       }
     }
 
-  def pageWithSecondaryHeader(view: HtmlFormat.Appendable, heading: String): Unit =
+  def pageWithSecondaryHeader(view: Html, heading: String): Unit =
 
     "behave like a page with a secondary header" in {
 
       Jsoup.parse(view.toString()).getElementsByClass("heading-secondary").text() must include(heading)
     }
 
-  def pageWithButtonLink(view: HtmlFormat.Appendable, url: String, id: String): Unit =
+  def pageWithButtonLink(view: Html, url: String, id: String): Unit =
 
     "behave like a page with a button link" must {
 
@@ -143,7 +143,7 @@ trait ViewBehaviours extends NewViewSpecBase {
       }
     }
 
-  def pageWithBodyText(view: HtmlFormat.Appendable, messageKey: String*): Unit =
+  def pageWithBodyText(view: Html, messageKey: String*): Unit =
 
     "behave like a page with body text" must {
 
@@ -154,7 +154,7 @@ trait ViewBehaviours extends NewViewSpecBase {
       }
     }
 
-  def pageWithHyperLink(view: HtmlFormat.Appendable, url: String, id: String = "link"): Unit =
+  def pageWithHyperLink(view: Html, url: String, id: String = "link"): Unit =
 
     "behave like a page with a url link" must {
       "display link" in {
@@ -163,7 +163,7 @@ trait ViewBehaviours extends NewViewSpecBase {
       }
     }
 
-  def pageWithLink(view: HtmlFormat.Appendable, url: String, text: String): Unit =
+  def pageWithLink(view: Html, url: String, text: String): Unit =
 
     "behave like a page with a url link" must {
       "display link" in {

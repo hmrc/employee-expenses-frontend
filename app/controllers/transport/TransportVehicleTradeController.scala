@@ -18,7 +18,7 @@ package controllers.transport
 
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.*
-import forms.TransportVehicleTradeFormProvider
+import forms.transport.TransportVehicleTradeFormProvider
 import models.requests.DataRequest
 
 import javax.inject.{Inject, Named}

@@ -16,7 +16,7 @@
 
 package views.transport
 
-import forms.TransportVehicleTradeFormProvider
+import forms.transport.TransportVehicleTradeFormProvider
 import models.{NormalMode, TransportVehicleTrade}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat

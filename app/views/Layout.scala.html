@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.ServiceURLs
 @import uk.gov.hmrc.sca.services.WrapperService
+@import uk.gov.hmrc.sca.config.BackLinkConfig
 @import views.html.playComponents.{AdditionalScript, HeadBlock}
 
 @this(
@@ -56,12 +57,12 @@
             },
             serviceUrl = Some(serviceUrlOverride.getOrElse(controllers.routes.IndexController.start.url))
         ),
-        timeOutUrl = Some(controllers.authenticated.routes.SignOutController.signOut.url),
-        keepAliveUrl = controllers.routes.KeepAliveController.keepAlive.url,
-        showBackLinkJS = showBackLink,
+        backLinkConfig = Option.when(showBackLink) {
+            BackLinkConfig.JsBack
+        },
         scripts = scripts.toSeq :+ additionalScript(),
         styleSheets = stylesheets.toSeq :+ headBlock(),
         fullWidth = false,
         hideMenuBar = hideAccountMenu
-    )(messages, request.withBody((): Unit))
+    )(messages, request)
 }

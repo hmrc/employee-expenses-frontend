@@ -52,7 +52,7 @@ class ConfirmationMergeJourneyViewSpec extends ViewBehaviours {
 
         "have the correct banner title" in {
           val doc = asDocument(viewWithAnswers)
-          assertRenderedByCssSelector(doc, "div.govuk-header__content")
+          assertRenderedByCssSelector(doc, "span.govuk-service-navigation__service-name")
         }
 
         "have a confirmation panel" in {
@@ -90,7 +90,7 @@ class ConfirmationMergeJourneyViewSpec extends ViewBehaviours {
         "display language toggles" in {
 
           val doc = asDocument(viewWithAnswers)
-          assertRenderedByCssSelector(doc, ".hmrc-language-select")
+          assertRenderedByCssSelector(doc, "nav.hmrc-service-navigation-language-select")
         }
 
         "display a continue buttow with correct url" in {

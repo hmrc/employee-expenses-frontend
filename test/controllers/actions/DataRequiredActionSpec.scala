@@ -17,12 +17,12 @@
 package controllers.actions
 
 import base.SpecBase
-import controllers.confirmation.{routes => confRoutes}
+import controllers.confirmation.routes as confRoutes
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{NormalMode, UserAnswers}
 import navigation.AuthenticatedNavigator
-import org.mockito.ArgumentMatchers.{eq => eqs}
+import org.mockito.ArgumentMatchers.eq as eqs
 import org.mockito.Mockito.when
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.mockito.MockitoSugar

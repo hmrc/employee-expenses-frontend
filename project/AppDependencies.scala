@@ -3,7 +3,7 @@ import sbt.*
 object AppDependencies {
 
   private val mongoVersion          = "2.13.0"
-  private val scaWrapperPlayVersion = "5.5.0"
+  private val scaWrapperPlayVersion = "6.0.0"
 
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
@@ -16,7 +16,7 @@ object AppDependencies {
   val test: Seq[ModuleID] = Seq(
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-test-play-30"  % mongoVersion,
     "uk.gov.hmrc"       %% "sca-wrapper-test-play-30" % scaWrapperPlayVersion,
-    "org.scalatestplus" %% "scalacheck-1-17"          % "3.2.18.0"
+    "org.scalatestplus" %% "scalacheck-1-17"          % "3.2.18.0",
   ).map(_ % Test)
 
   def apply(): Seq[ModuleID] = compile ++ test

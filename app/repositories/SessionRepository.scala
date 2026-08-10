@@ -51,12 +51,6 @@ class SessionRepository @Inject() (
       case id: UnAuthed => unAuthSessionRepository.remove(id.sessionId)
     }
 
-  def updateTimeToLive(id: Authed): Future[Boolean] =
-    get(id).flatMap {
-      case Some(ua) => set(id, ua)
-      case _        => Future.successful(false)
-    }
-
   def getMergedJourney(internalId: String): Future[Option[MergedJourney]] =
     mergedJourneySessionRepository.get(internalId)
 
