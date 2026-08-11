@@ -55,7 +55,7 @@ class ConfirmationClaimStoppedViewSpec extends ViewBehaviours {
         "have the correct banner title" in {
 
           val doc = asDocument(viewWithAnswers)
-          assertRenderedByCssSelector(doc, "div.govuk-header__content")
+          assertRenderedByCssSelector(doc, "span.govuk-service-navigation__service-name")
         }
 
         "hide account menu when user not logged in" in {
@@ -83,7 +83,7 @@ class ConfirmationClaimStoppedViewSpec extends ViewBehaviours {
         "display language toggles" in {
 
           val doc = asDocument(viewWithAnswers)
-          assertRenderedByCssSelector(doc, ".hmrc-language-select")
+          assertRenderedByCssSelector(doc, "nav.hmrc-service-navigation-language-select")
         }
       }
     }

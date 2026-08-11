@@ -57,7 +57,7 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "have the correct banner title" in {
 
           val doc = asDocument(applyView(form))
-          assertRenderedByCssSelector(doc, "div.govuk-header__content")
+          assertRenderedByCssSelector(doc, "span.govuk-service-navigation__service-name")
         }
 
         "hide account menu when user not logged in" in {
@@ -85,7 +85,7 @@ class SameEmployerContributionAllYearsViewSpec extends YesNoViewBehaviours {
         "display language toggles" in {
 
           val doc = asDocument(applyView(form))
-          assertRenderedByCssSelector(doc, "nav.hmrc-language-select")
+          assertRenderedByCssSelector(doc, "nav.hmrc-service-navigation-language-select")
         }
       }
     }

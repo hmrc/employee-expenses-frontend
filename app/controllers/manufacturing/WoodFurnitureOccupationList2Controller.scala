@@ -18,7 +18,7 @@ package controllers.manufacturing
 
 import config.{ClaimAmounts, NavConstant}
 import controllers.actions.*
-import forms.WoodFurnitureOccupationList2FormProvider
+import forms.manufacturing.WoodFurnitureOccupationList2FormProvider
 
 import javax.inject.{Inject, Named}
 import models.Mode

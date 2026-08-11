@@ -16,7 +16,6 @@
 
 package forms.transport
 
-import forms.TransportVehicleTradeFormProvider
 import forms.behaviours.OptionFieldBehaviours
 import models.TransportVehicleTrade
 import play.api.data.FormError

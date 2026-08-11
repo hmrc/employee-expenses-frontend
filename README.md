@@ -15,18 +15,18 @@ This service does not have it's own backend for updating NPS, instead it uses TA
 
 ### Dependencies
 
-|Service        |Link                                   |
-|---------------|---------------------------------------|
-|Tai            |https://github.com/hmrc/tai            |
-|Citizen Details|https://github.com/hmrc/citizen-details|
+| Service         | Link                                    |
+|-----------------|-----------------------------------------|
+| Tai             | https://github.com/hmrc/tai             |
+| Citizen Details | https://github.com/hmrc/citizen-details |
 
 ### Endpoints used
 
-|Service        |HTTP Method |Route                                  |Purpose |
-|---------------|--- |----------------|----------------------------------|
-|Tai            |GET |/tai/${nino}/tax-account/${year} /expenses/flat-rate-expenses| Returns details of a users tax account specifically that of IABD 56 |
-|Tai            |POST|/tai/${nino}/tax-account/${year} /expenses/flat-rate-expenses| Updates a users tax account specifically that of IABD 56  |
-|Citizen Details|GET |/citizen-details/${nino}/etag|retrieves the users etag which is added to their update request to NPS to ensure optimistic locking|
+| Service         | HTTP Method | Route                                                          | Purpose                                                                                             |
+|-----------------|-------------|----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| Tai             | GET         | `/tai/${nino}/tax-account/${year}/expenses/flat-rate-expenses` | Returns details of a users tax account specifically that of IABD 56                                 |
+| Tai             | POST        | `/tai/${nino}/tax-account/${year}/expenses/flat-rate-expenses` | Updates a users tax account specifically that of IABD 56                                            |
+| Citizen Details | GET         | `/citizen-details/${nino}/etag`                                | retrieves the users etag which is added to their update request to NPS to ensure optimistic locking |
 
 ## Running the service
 
