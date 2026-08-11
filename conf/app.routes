@@ -363,9 +363,9 @@ POST        /construction-occupations                            controllers.con
 GET         /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onPageLoad(mode: Mode = CheckMode)
 POST        /change-construction-occupations                     controllers.construction.ConstructionOccupationsController.onSubmit(mode: Mode = CheckMode)
 
-GET         /how-you-will-get-your-expenses                       controllers.authenticated.HowYouWillGetYourExpensesController.onPageLoad()
+GET         /how-you-will-get-your-expenses                      controllers.authenticated.HowYouWillGetYourExpensesController.onPageLoad()
 
-GET        /use-print-and-post-form                      controllers.transport.UsePrintAndPostController.onPageLoad()
+GET         /use-print-and-post-form                             controllers.transport.UsePrintAndPostController.onPageLoad()
 
 
 ######################################

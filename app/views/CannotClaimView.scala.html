@@ -17,14 +17,14 @@
 @import config.FrontendAppConfig
 
 @this(
-        layout: views.LayoutProvider,
+        layout: views.html.Layout,
         frontendAppConfig: FrontendAppConfig,
         heading: playComponents.heading
 )
 
 @()(using request: Request[?], messages: Messages)
 
-@link = {<a id="link" class="govuk-link" href=@frontendAppConfig.jobExpensesLink>@messages("cannotClaim.link")</a>}
+@link = {<a id="link" class="govuk-link" href="@{frontendAppConfig.jobExpensesLink}">@messages("cannotClaim.link")</a>}
 
 @layout(
     pageTitle = messages("cannotClaim.title")

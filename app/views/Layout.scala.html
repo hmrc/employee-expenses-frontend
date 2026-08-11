@@ -14,77 +14,54 @@
  * limitations under the License.
  *@
 
-@import config.FrontendAppConfig
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accountmenu.YourProfile
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.*
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.ServiceURLs
+@import uk.gov.hmrc.sca.services.WrapperService
+@import views.html.playComponents.{AdditionalScript, HeadBlock}
 
 @this(
-    hmrcAccountMenu: HmrcAccountMenu,
-    hmrcScripts: HmrcScripts,
-    hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
-    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
-    hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-    govukBackLink: GovukBackLink,
-    appConfig: FrontendAppConfig,
-    hmrcStandardPage: HmrcStandardPage
+    wrapperService: WrapperService,
+    additionalScript: AdditionalScript,
+    headBlock: HeadBlock
 )
 
-@(pageTitle: String,
-timeoutEnabled: Boolean = true,
-backLinkEnabled: Boolean = true,
-        serviceNameKeyOverride: Option[String] = None,
-        serviceUrlOverride: Option[String] = None)(contentBlock: Html)(using request: RequestHeader, messages: Messages)
+@(
+    pageTitle: String,
+    showBackLink: Boolean = true,
+    timeout: Boolean = true,
+    showSignOut: Boolean = false,
+    scripts: Option[Html] = None,
+    stylesheets: Option[Html] = None,
+    serviceNameKeyOverride: Option[String] = None,
+    serviceUrlOverride: Option[String] = None
+)(
+    contentBlock: Html
+)(
+    using request: RequestHeader,
+    messages: Messages
+)
 
-@accountMenu = {
-    @if(request.session.get("authToken")){
-        @hmrcAccountMenu(AccountMenu(
-            accountHome = AccountHome(
-                href = appConfig.ptaHomeUrl
-            ),
-            messages = AccountMessages(
-                href = appConfig.messagesUrl,
-                messageCount = None
-            ),
-            yourProfile = YourProfile(
-                href = appConfig.yourProfileUrl
-            ),
-            checkProgress = CheckProgress(
-                href = appConfig.trackingHomeUrl
-            ),
-            signOut = SignOut(appConfig.signOutUrl),
-            language = if (messages.lang.code == "cy") Cy else En
-        ))
-    }
-
-    @hmrcLanguageSelectHelper()
-    @if(backLinkEnabled) {
-        @govukBackLink(BackLink.mimicsBrowserBackButtonViaJavaScript)
-    }
+@hideAccountMenu = @{
+    request.session.get("authToken").isEmpty
 }
 
-@head = {
-@if(timeoutEnabled) {
-    @hmrcTimeoutDialogHelper(signOutUrl = appConfig.signOutUrl, keepAliveUrl = Some(appConfig.keepAliveUrl))
-}
-}
-
-
-@mainContent = {
-    @contentBlock
-    @hmrcReportTechnicalIssueHelper()
-}
-
-@hmrcStandardPage(
-    HmrcStandardPageParams(
+@{
+    wrapperService.standardScaLayout(
+        disableSessionExpired = !timeout,
+        content = contentBlock,
+        pageTitle = Some(s"$pageTitle - ${messages(serviceNameKeyOverride.getOrElse("service.name"))} - GOV.UK"),
+        serviceNameKey = Some(serviceNameKeyOverride.getOrElse("service.name")),
         serviceURLs = ServiceURLs(
+            signOutUrl = Option.unless(hideAccountMenu) {
+                controllers.authenticated.routes.SignOutController.signOut.url
+            },
             serviceUrl = Some(serviceUrlOverride.getOrElse(controllers.routes.IndexController.start.url))
         ),
-        templateOverrides = TemplateOverrides(
-            additionalHeadBlock = Some(head),
-            beforeContentBlock = Some(accountMenu),
-            additionalScriptsBlock = Some(hmrcScripts())
-        ),
-        serviceName = Some(messages(serviceNameKeyOverride.getOrElse("service.name"))),
-        pageTitle = Some(s"""$pageTitle - ${messages(serviceNameKeyOverride.getOrElse("service.name"))} - GOV.UK""")
-    )
-)(mainContent)
+        timeOutUrl = Some(controllers.authenticated.routes.SignOutController.signOut.url),
+        keepAliveUrl = controllers.routes.KeepAliveController.keepAlive.url,
+        showBackLinkJS = showBackLink,
+        scripts = scripts.toSeq :+ additionalScript(),
+        styleSheets = stylesheets.toSeq :+ headBlock(),
+        fullWidth = false,
+        hideMenuBar = hideAccountMenu
+    )(messages, request.withBody((): Unit))
+}
