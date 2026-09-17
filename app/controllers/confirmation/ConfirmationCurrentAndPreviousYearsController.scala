@@ -64,7 +64,7 @@ class ConfirmationCurrentAndPreviousYearsController @Inject() (
       case (Some(freResponse), Some(employer), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
         val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYears.head))
         taiService
-          .taxCodeRecords(request.nino.get, taxYear)
+          .taxCodeRecords(request.nino, taxYear)
           .map { result =>
             val freHasIncreased                  = npsFreAmount < claimAmountAndAnyDeductions
             val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)

@@ -46,7 +46,7 @@ class NoCodeChangeController @Inject() (
     given DataRequest[AnyContent] = request
     auditConnector.sendExplicitAudit(
       NoCodeChange.toString,
-      AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
+      AuditData(nino = request.nino, userAnswers = request.userAnswers.data)
     )
 
     Ok(view(request.userAnswers.isMergedJourney))

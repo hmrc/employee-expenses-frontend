@@ -66,7 +66,7 @@ class YourEmployerController @Inject() (
     request.userAnswers.get(TaxYearSelectionPage) match {
       case Some(taxYears) =>
         taiService
-          .employments(request.nino.get, taxYears.head)
+          .employments(request.nino, taxYears.head)
           .flatMap { employments =>
             if (employments.nonEmpty) {
               val employerNames: Seq[String] = employments.map(_.name)

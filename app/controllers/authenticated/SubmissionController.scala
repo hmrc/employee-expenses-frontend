@@ -54,7 +54,7 @@ class SubmissionController @Inject() (
   def onSubmit: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { request =>
     given DataRequest[AnyContent] = request
     val dataToAudit: AuditData =
-      AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
+      AuditData(nino = request.nino, userAnswers = request.userAnswers.data)
 
     (
       request.userAnswers.get(TaxYearSelectionPage),
@@ -64,7 +64,7 @@ class SubmissionController @Inject() (
     ) match {
       case (Some(taxYears), Some(_), Some(removeYear), None) =>
         submissionService
-          .removeFRE(request.nino.get, taxYears, removeYear)
+          .removeFRE(request.nino, taxYears, removeYear)
           .map(result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier))
       case (Some(taxYearsSelection), Some(claimAmountAndAnyDeductions), None, changeYears) =>
         val taxYears = changeYears match {
@@ -72,7 +72,7 @@ class SubmissionController @Inject() (
           case _                 => taxYearsSelection
         }
         submissionService
-          .submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions)
+          .submitFRE(request.nino, taxYears, claimAmountAndAnyDeductions)
           .map(result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier))
       case _ =>
         Future.successful(Redirect(baseRoutes.SessionExpiredController.onPageLoad))

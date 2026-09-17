@@ -49,7 +49,12 @@ class DataRequiredActionImpl @Inject() (navigator: AuthenticatedNavigator)(
       case Some(data) if data.get(SubmittedClaim).isDefined && !currentlyOnTheConfirmationPage =>
         Future.successful(Left(Redirect(navigator.nextPage(Submission, NormalMode)(data))))
       case Some(data) =>
-        Future.successful(Right(DataRequest(request.request, request.identifier, request.nino, data)))
+        request.nino match {
+          case Some(nino) =>
+            Future.successful(Right(DataRequest(request.request, request.identifier, nino, data)))
+          case None =>
+            Future.successful(Left(Redirect(routes.SessionExpiredController.onPageLoad)))
+        }
     }
   }
 

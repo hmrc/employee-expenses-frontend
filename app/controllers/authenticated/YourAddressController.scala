@@ -54,7 +54,7 @@ class YourAddressController @Inject() (
     identify.andThen(getData).andThen(requireData).async { request =>
       given DataRequest[AnyContent] = request
       citizenDetailsConnector
-        .getAddress(request.nino.get)
+        .getAddress(request.nino)
         .flatMap { response =>
           response.status match {
             case OK =>
