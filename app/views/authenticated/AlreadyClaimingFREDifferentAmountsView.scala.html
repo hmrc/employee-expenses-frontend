@@ -52,7 +52,7 @@
                 <p class="govuk-body">
                     @messages(
                         "alreadyClaimingFREDifferentAmounts.bodyText1.singleYearOnly",
-                        freAmounts.head.freAmount.get.grossAmount,
+                        freAmounts.headOption .flatMap(_.freAmount) .map(_.grossAmount) .getOrElse(0),
                         messages(
                             s"taxYearSelection.${TaxYearSelection.getTaxYearPeriod(freAmounts.head.taxYear.year)}",
                             freAmounts.head.taxYear.year.toString,
@@ -78,7 +78,8 @@
                                 value = Value(
                                     content = HtmlContent(messages(
                                         "alreadyClaimingFREDifferentAmounts.tableAmountHeading",
-                                        {if(freAmounts.freAmount.isDefined) "£" + freAmounts.freAmount.get.grossAmount else "£" + 0})
+                                         freAmounts.freAmount.map(amount => s"£${amount.grossAmount}").getOrElse("£0")
+                                      )
                                     ),
                                     classes = s"fre-amount-${freAmounts.taxYear.year} govuk-!-width-one-third"
                                 )

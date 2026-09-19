@@ -30,7 +30,7 @@
         title       = Text(messages("error.summary.title")),
         errorList   = for(error <- errors) yield {
             ErrorLink(
-                href    = if(error.key.equals("")) Some(s"#${errorKey.get}") else Some(s"#${error.key}"),
+                href =if (error.key.isEmpty) errorKey.map(key => s"#$key") else Some(s"#${error.key}"),
                 content = Text(messages(error.message, error.args*))
             )
         }

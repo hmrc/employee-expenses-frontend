@@ -39,7 +39,7 @@
                     )
                 </th>
                 <td id="fre-amount-@columnValue.taxYear.year" class="numeric">
-                    £@{if(columnValue.freAmount.isDefined) columnValue.freAmount.get.grossAmount else 0}
+                    @{columnValue.freAmount.map(_.grossAmount).getOrElse(0)}
                 </td>
             </tr>
         }

@@ -80,31 +80,28 @@ class TaiService @Inject() (taiConnector: TaiConnector, citizenDetailsConnector:
     })
   }
 
-  def freResponse(taxYears: Seq[TaxYearSelection], nino: String, claimAmount: Int)(
-      using HeaderCarrier,
-      ExecutionContext
-  ): Future[FlatRateExpenseOptions] =
-
+  def freResponse(taxYears: Seq[TaxYearSelection], nino: String, claimAmount: Int)(using HeaderCarrier, ExecutionContext): Future[FlatRateExpenseOptions] =
     getFREAmount(taxYears, nino).map {
       case freSeq if freSeq.forall(_.freAmount.isEmpty) =>
         FRENoYears
+
       case freSeq
-          if freSeq.exists(_.freAmount.isEmpty) && freSeq
-            .filterNot(_.freAmount.isEmpty)
-            .forall(_.freAmount.get.grossAmount == 0) =>
+        if freSeq.exists(_.freAmount.isEmpty) && freSeq.filter(_.freAmount.isDefined).forall(_.freAmount.map(_.grossAmount).contains(0)) =>
         FRENoYears
-      case freSeq if freSeq.forall(_.freAmount.isDefined) && freSeq.forall(_.freAmount.get.grossAmount == 0) =>
-        FRENoYears
+
       case freSeq
-          if freSeq.forall(_.freAmount.isDefined) && freSeq.forall(_.freAmount.get.grossAmount == claimAmount) =>
+        if freSeq.forall(_.freAmount.map(_.grossAmount).contains(0)) =>
+        FRENoYears
+
+      case freSeq
+        if freSeq.forall(_.freAmount.map(_.grossAmount).contains(claimAmount)) =>
         FREAllYearsAllAmountsSameAsClaimAmount
+
       case freSeq
-          if freSeq.exists(_.freAmount.isDefined) && freSeq
-            .filterNot(_.freAmount.isEmpty)
-            .exists(_.freAmount.get.grossAmount > 0) =>
+        if freSeq.exists(_.freAmount.map(_.grossAmount).exists(_ > 0)) =>
         FRESomeYears
+
       case _ =>
         TechnicalDifficulties
     }
-
 }

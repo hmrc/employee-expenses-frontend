@@ -73,8 +73,8 @@ class TaxYearSelectionController @Inject() (
         .fold(
           (formWithErrors: Form[Seq[TaxYearSelection]]) => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
-            (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.nino) match {
-              case (Some(claimAmount), request.nino) =>
+            request.userAnswers.get(ClaimAmountAndAnyDeductions) match {
+              case Some(claimAmount) =>
                 for {
                   ua          <- Future.fromTry(request.userAnswers.set(TaxYearSelectionPage, value))
                   freResponse <- taiService.freResponse(value, request.nino, claimAmount)
