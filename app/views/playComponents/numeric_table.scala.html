@@ -39,7 +39,7 @@
                     )
                 </th>
                 <td id="fre-amount-@columnValue.taxYear.year" class="numeric">
-                    @{columnValue.freAmount.map(_.grossAmount).getOrElse(0)}
+                    @{columnValue.formattedAmount}
                 </td>
             </tr>
         }

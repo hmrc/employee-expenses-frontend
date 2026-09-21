@@ -60,13 +60,12 @@ class ClaimsCompleteController @Inject() (
                 citizenDetailsConnector
                   .getAddress(nino)
                   .map { response =>
-                    Ok(
-                      claimsCompleteView(journeyConfig, Json.parse(response.body).validate[Address].asOpt))}
-                  .recoverWith {
-                    case _ =>
-                      Future.successful(
-                        Ok(claimsCompleteView(journeyConfig, None))
-                      )
+                    Ok(claimsCompleteView(journeyConfig, Json.parse(response.body).validate[Address].asOpt))
+                  }
+                  .recoverWith { case _ =>
+                    Future.successful(
+                      Ok(claimsCompleteView(journeyConfig, None))
+                    )
                   }
               }
             case Some(_) =>

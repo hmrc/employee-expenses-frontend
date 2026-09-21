@@ -19,8 +19,12 @@
 
 @(answerSection: AnswerSection)(using messages: Messages)
 
+@answerSectionKey = @{
+    answerSection.headingKey.map(messages(_)).getOrElse("")
+}
+
 @if(answerSection.headingKey.isDefined){
-    <h2 class="govuk-heading-m">@answerSection.headingKey.map(messages(_)).getOrElse("")</h2>
+    <h2 class="govuk-heading-m">@answerSectionKey</h2>
 }
 
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
