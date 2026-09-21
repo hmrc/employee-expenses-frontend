@@ -29,7 +29,6 @@ class TransportNavigator @Inject() () extends Navigator {
 
   protected val routeMap: PartialFunction[Page, UserAnswers => Call] = {
     case TypeOfTransportPage       => userAnswers => typeOfTransportOptions(NormalMode)(userAnswers)
-    case AirlineJobListPage        => airlineJobList(NormalMode)
     case GarageHandOrCleanerPage   => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case WhichRailwayTradePage     => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
     case TransportCarpenterPage    => _ => controllers.routes.EmployerContributionController.onPageLoad(NormalMode)
@@ -40,7 +39,6 @@ class TransportNavigator @Inject() () extends Navigator {
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
     case TypeOfTransportPage       => userAnswers => typeOfTransportOptions(CheckMode)(userAnswers)
-    case AirlineJobListPage        => airlineJobList(CheckMode)
     case GarageHandOrCleanerPage   => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case WhichRailwayTradePage     => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
     case TransportCarpenterPage    => _ => controllers.routes.EmployerContributionController.onPageLoad(CheckMode)
@@ -58,13 +56,6 @@ class TransportNavigator @Inject() () extends Navigator {
       case Some(Vehicles)        => routes.TransportVehicleTradeController.onPageLoad(mode)
       case Some(NoneOfTheAbove)  => controllers.routes.EmployerContributionController.onPageLoad(mode)
       case _                     => controllers.routes.SessionExpiredController.onPageLoad
-    }
-
-  private def airlineJobList(mode: Mode)(userAnswers: UserAnswers): Call =
-    userAnswers.get(AirlineJobListPage) match {
-      case Some(true)  => controllers.routes.EmployerContributionController.onPageLoad(mode)
-      case Some(false) => routes.CabinCrewController.onPageLoad(mode)
-      case _           => controllers.routes.SessionExpiredController.onPageLoad
     }
 
 }
