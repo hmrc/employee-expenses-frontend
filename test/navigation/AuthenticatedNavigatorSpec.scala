@@ -148,7 +148,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
         val ua = emptyUserAnswers.set(YourEmployerPage, false).success.value
 
         navigator.nextPage(YourEmployerPage, NormalMode)(ua) mustBe
-          UpdateEmployerInformationController.onPageLoad(NormalMode)
+          UpdateEmployerInformationController.onPageLoad()
       }
 
       "go to HowYouWillGetYourExpenses from UpdateEmployerInformation" in {
@@ -168,7 +168,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
 
       "go to YourAddressController from CheckYourAnswers for when remove selected" in {
         navigator.nextPage(CheckYourAnswersPage, NormalMode)(emptyUserAnswers) mustBe
-          YourAddressController.onPageLoad(NormalMode)
+          YourAddressController.onPageLoad()
       }
 
       "go to YourAddressController from CheckYourAnswers for when current year selected" in {
@@ -176,7 +176,7 @@ class AuthenticatedNavigatorSpec extends SpecBase {
           emptyUserAnswers.set(AlreadyClaimingFRESameAmountPage, AlreadyClaimingFRESameAmount.Remove).success.value
 
         navigator.nextPage(CheckYourAnswersPage, NormalMode)(ua) mustBe
-          YourAddressController.onPageLoad(NormalMode)
+          YourAddressController.onPageLoad()
       }
 
       "go to SubmissionController from YourAddressPage for when current year selected" in {

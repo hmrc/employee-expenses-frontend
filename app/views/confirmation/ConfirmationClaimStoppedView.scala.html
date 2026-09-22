@@ -18,7 +18,7 @@
         layout: views.html.Layout
 )
 
-@(nextServiceUrl: Option[String] = None)(using request: Request[?], messages: Messages)
+@()(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("confirmation.titleStopped"),
@@ -28,12 +28,6 @@
     <div class="govuk-panel govuk-panel--confirmation">
         <h1 class="govuk-panel__title">@messages("confirmation.heading.stoppedClaim")</h1>
     </div>
-
     <p class="govuk-body">@messages("confirmation.noLongerGetAmount")</p>
-    @nextServiceUrl match {
-      case Some(url) => {
-        @playComponents.button_link(messages("site.continue"), url, classes = "govuk-button")
-      }
-      case _ => {}
-    }
+
 }

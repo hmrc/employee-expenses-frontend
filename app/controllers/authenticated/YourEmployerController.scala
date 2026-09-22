@@ -75,12 +75,12 @@ class YourEmployerController @Inject() (
                 _              <- sessionRepository.set(request.identifier, updatedAnswers)
               } yield Ok(view(preparedForm, NormalMode, employerNames))
             } else {
-              Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(NormalMode)))
+              Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad()))
             }
           }
           .recoverWith { case e =>
             logger.error(s"[YourEmployerController][taiService.employments] failed $e", e)
-            Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad(NormalMode)))
+            Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad()))
           }
       case _ =>
         Future.successful(Redirect(SessionExpiredController.onPageLoad))

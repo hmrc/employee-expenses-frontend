@@ -19,20 +19,12 @@
     heading: playComponents.heading
 )
 
-@(nextServiceUrl: Option[String] = None)(using request: Request[?], messages: Messages)
+@()(using request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("cannotClaimExpense.title")
     ) {
-
     @heading("cannotClaimExpense.heading")
-
     <p class="govuk-body">@messages("cannotClaimExpense.body")</p>
-    @nextServiceUrl match {
-        case Some(url) => {
-            @playComponents.button_link(messages("site.continue"), url, classes = "govuk-button")
-        }
-        case _ => {}
 
     }
-}

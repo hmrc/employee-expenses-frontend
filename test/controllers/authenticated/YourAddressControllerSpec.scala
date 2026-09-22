@@ -63,7 +63,7 @@ class YourAddressControllerSpec
 
   override def beforeEach(): Unit = reset(mockCitizenDetailsConnector)
 
-  lazy val yourAddressRoute: String = YourAddressController.onPageLoad(NormalMode).url
+  lazy val yourAddressRoute: String = YourAddressController.onPageLoad().url
 
   "YourAddress Controller" must {
 
