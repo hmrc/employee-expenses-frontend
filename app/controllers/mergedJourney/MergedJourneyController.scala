@@ -84,6 +84,7 @@ class MergedJourneyController @Inject() (
         Future.successful(NotImplemented)
       }
     }
+
 }
 
 object MergedJourneyController {

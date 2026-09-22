@@ -41,6 +41,7 @@ class ConfirmationClaimStoppedController @Inject() (
 
   def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
     given DataRequest[AnyContent] = request
-      Ok(confirmationClaimStoppedView())
-    }
+    Ok(confirmationClaimStoppedView())
+  }
+
 }

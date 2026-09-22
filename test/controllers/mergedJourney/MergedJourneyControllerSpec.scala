@@ -154,4 +154,5 @@ class MergedJourneyControllerSpec
       application.stop()
     }
   }
+
 }

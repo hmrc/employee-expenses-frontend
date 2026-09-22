@@ -42,7 +42,7 @@ class CannotClaimExpenseController @Inject() (
 
   def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
     given DataRequest[AnyContent] = request
-      Ok(view())
-    }
+    Ok(view())
+  }
 
 }
