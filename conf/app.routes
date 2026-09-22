@@ -367,6 +367,5 @@ GET         /use-print-and-post-form                             controllers.tra
 GET         /claim-your-expenses                                 controllers.mergedJourney.ClaimYourExpensesController.show
 GET         /claims-complete                                     controllers.mergedJourney.ClaimsCompleteController.show
 GET         /merged-journey-set-up                               controllers.mergedJourney.MergedJourneyController.setupMergedJourney(wfh: Boolean, psubs: Boolean, fre: Boolean)
-GET         /merged-journey-continue                             controllers.mergedJourney.MergedJourneyController.mergedJourneyContinue(journey: String, status: ClaimStatus)
 ######################################
 

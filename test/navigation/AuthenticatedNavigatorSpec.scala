@@ -275,27 +275,6 @@ class AuthenticatedNavigatorSpec extends SpecBase {
           .nextPage(Submission, NormalMode)(userAnswers)
           .mustBe(ConfirmationMergeJourneyController.onPageLoad())
       }
-
-      "go to MergedJourneyController mergedJourneyContinue with successful claim for current year from ConfirmationMergeJourneyPage" in {
-        navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(currentYearFullUserAnswers) mustBe
-          MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimCompleteCurrent)
-      }
-
-      "go to MergedJourneyController mergedJourneyContinue with successful claim for previous year from ConfirmationMergeJourneyPage" in {
-        navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(currentYearMinus1UserAnswers) mustBe
-          MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimCompletePrevious)
-      }
-
-      "go to MergedJourneyController mergedJourneyContinue with successful claim for current and previous year from ConfirmationMergeJourneyPage" in {
-        val answers = yearsUserAnswers(Seq(CurrentYear, CurrentYearMinus1))
-        navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(answers) mustBe
-          MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimCompleteCurrentPrevious)
-      }
-
-      "go to SessionExpiredController from ConfirmationMergeJourneyPage when no data is available" in {
-        navigator.nextPage(ConfirmationMergeJourneyPage, NormalMode)(emptyUserAnswers) mustBe
-          SessionExpiredController.onPageLoad
-      }
     }
 
     "in CheckMode" must {

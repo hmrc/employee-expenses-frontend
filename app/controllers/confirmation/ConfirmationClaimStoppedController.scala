@@ -41,15 +41,6 @@ class ConfirmationClaimStoppedController @Inject() (
 
   def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
     given DataRequest[AnyContent] = request
-    if (request.userAnswers.isMergedJourney) {
-      Ok(
-        confirmationClaimStoppedView(
-          Some(MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimStopped).url)
-        )
-      )
-    } else {
       Ok(confirmationClaimStoppedView())
     }
-  }
-
 }

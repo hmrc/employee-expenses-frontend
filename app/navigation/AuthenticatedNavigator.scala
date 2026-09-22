@@ -54,7 +54,6 @@ class AuthenticatedNavigator @Inject() () extends Navigator {
     case YourEmployerPage                       => yourEmployer
     case HowYouWillGetYourExpensesPage          => _ => SubmissionController.onSubmit
     case Submission                             => submission
-    case ConfirmationMergeJourneyPage           => continueMergeJourney
   }
 
   protected val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
@@ -153,16 +152,6 @@ class AuthenticatedNavigator @Inject() () extends Navigator {
       case _ =>
         SessionExpiredController.onPageLoad
     }
-
-  private def continueMergeJourney(userAnswers: UserAnswers): Call = {
-    val changeYears = userAnswers.get(ChangeWhichTaxYearsPage)
-    val taxYears    = if (changeYears.nonEmpty) changeYears else userAnswers.get(TaxYearSelectionPage)
-    taxYears match {
-      case Some(taxYears) =>
-        MergedJourneyController.mergedJourneyContinue(journey = "fre", status = getClaimStatus(taxYears))
-      case _ => SessionExpiredController.onPageLoad
-    }
-  }
 
   private def getClaimStatus(selectedTaxYears: Seq[TaxYearSelection]): ClaimStatus =
     (containsCurrent(selectedTaxYears), containsPrevious(selectedTaxYears)) match {

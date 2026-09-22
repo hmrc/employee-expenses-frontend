@@ -35,10 +35,5 @@
     @heading(headingKey = "noCodeChange.heading")
 
     <p class="govuk-body">@messages("noCodeChange.guidance1")</p>
-
-    @if(isMergeJourney) {
-        @playComponents.button_link(href=MergedJourneyController.mergedJourneyContinue(journey="fre", status=ClaimNotChanged).url, classes="govuk-button")
-    } else {
         <p class="govuk-body">@Html(messages("noCodeChange.guidance2", link))</p>
-    }
 }

@@ -42,11 +42,7 @@ class CannotClaimExpenseController @Inject() (
 
   def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
     given DataRequest[AnyContent] = request
-    if (request.userAnswers.isMergedJourney == true) {
-      Ok(view(Some(MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimUnsuccessful).url)))
-    } else {
       Ok(view())
     }
-  }
 
 }

@@ -84,38 +84,6 @@ class MergedJourneyController @Inject() (
         Future.successful(NotImplemented)
       }
     }
-
-  // This route is used at the end of each individual claim within the merged journey or on kickouts
-  def mergedJourneyContinue(journey: String, state: ClaimStatus): Action[AnyContent] =
-    identify.async { request =>
-      given IdentifierRequest[AnyContent] = request
-      if (appConfig.mergedJourneyEnabled) {
-        request.identifier match {
-          case id: Authed =>
-            sessionRepository.getMergedJourney(id.internalId).flatMap {
-              case Some(journeyConfig) =>
-                val updatedJourney = journey match {
-                  case `wfhJourney` if journeyConfig.wfh != ClaimSkipped     => journeyConfig.copy(wfh = state)
-                  case `psubsJourney` if journeyConfig.psubs != ClaimSkipped => journeyConfig.copy(psubs = state)
-                  case `freJourney` if journeyConfig.fre != ClaimSkipped     => journeyConfig.copy(fre = state)
-                  case _ =>
-                    throw new InternalServerException(
-                      "[MergedJourneyController][mergedJourneyContinue] Unsupported journey continue call"
-                    )
-                }
-                sessionRepository
-                  .setMergedJourney(updatedJourney)
-                  .map(_ => Redirect(controllers.mergedJourney.routes.ClaimYourExpensesController.show))
-              case None =>
-                Future.successful(Redirect(appConfig.eligibilityCheckerUrl))
-            }
-          case _ => // Should never happen
-            Future.successful(Redirect(routes.TechnicalDifficultiesController.onPageLoad))
-        }
-      } else {
-        Future.successful(NotImplemented)
-      }
-    }
 }
 
 object MergedJourneyController {

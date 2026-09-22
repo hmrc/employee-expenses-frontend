@@ -50,14 +50,6 @@ class NoCodeChangeViewSpec extends ViewBehaviours {
     val applyViewMergeJourneyWithAuth =
       view.apply(isMergeJourney = true)(using fakeRequest.withSession(("authToken", "SomeAuthToken")), messages)
 
-    behave.like(
-      pageWithButtonLink(
-        applyViewMergeJourneyWithAuth,
-        MergedJourneyController.mergedJourneyContinue(journey = "fre", status = ClaimNotChanged).url,
-        "continue"
-      )
-    )
-
   }
 
   application.stop()
