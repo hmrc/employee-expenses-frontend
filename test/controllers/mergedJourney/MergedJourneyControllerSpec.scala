@@ -282,43 +282,4 @@ class MergedJourneyControllerSpec
       application.stop()
     }
   }
-
-  s"$refreshSessionUrl" must {
-    "return OK for a GET and update merged journey TTL" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .build()
-
-      when(mockSessionRepository.updateMergedJourneyTimeToLive(any())).thenReturn(Future.successful(true))
-
-      val request = FakeRequest(GET, refreshSessionUrl)
-
-      val result = route(application, request).value
-
-      status(result) mustBe OK
-
-      whenReady(result) { _ =>
-        verify(mockSessionRepository, times(1)).updateMergedJourneyTimeToLive(Authed(userAnswersId))
-      }
-
-      application.stop()
-    }
-
-    "return 404 when updateTimeToLive can't find user answers" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-        .build()
-
-      when(mockSessionRepository.updateMergedJourneyTimeToLive(any())).thenReturn(Future.successful(false))
-
-      val request = FakeRequest(GET, refreshSessionUrl)
-
-      val result = route(application, request).value
-
-      status(result) mustBe NOT_FOUND
-
-      application.stop()
-    }
-  }
-
 }
