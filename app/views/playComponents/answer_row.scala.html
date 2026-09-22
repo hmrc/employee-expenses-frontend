@@ -22,25 +22,27 @@
     row.label + ".hidden"
 }
 
+@rowLabel = @{
+    messages(row.label, row.labelArgs*)
+}
+
 @actionHiddenText = @{
-    row.hiddenText.map(messages(_)).getOrElse {
-        if(row.editText.isDefined){
-            messages(hiddenLabel)
-        } else {
-            messages("site.hidden-edit", messages(row.label, row.labelArgs*).toLowerCase)
-            }
-        }
+    (row.hiddenText, row.editText) match {
+        case (Some(hiddenText), _) => messages(hiddenText)
+        case (_, Some(_))          => messages(hiddenLabel)
+        case _                     => messages("site.hidden-edit", rowLabel.toLowerCase)
+    }
 }
 
 @actionVisibleText = @{
-    row.editText.map(messages(_)).getOrElse(messages("site.edit"))
+    row.editText.getOrElse(messages("site.edit"))
 }
 
 @rowAnswer = @{
     if(row.answerIsMessageKey) {
         messages(row.answer).capitalize
     } else {
-        Html(row.answer)
+        row.answer
     }
 }
 
@@ -48,11 +50,11 @@
     <dt class="govuk-summary-list__key">@Html(messages(row.label, row.labelArgs*))</dt>
     <dd class="govuk-summary-list__value">@rowAnswer</dd>
     <dd class="govuk-summary-list__actions">
-        @if(row.changeUrl) {
-        <a class="govuk-link" href='@row.changeUrl'>
-                <span aria-hidden="true">@actionVisibleText</span>
+        @row.changeUrl.map { changeUrl =>
+            <a class="govuk-link" href='@changeUrl'>
+                    <span aria-hidden="true">@messages(actionVisibleText)</span>
                     <span class="govuk-visually-hidden">@actionHiddenText</span>
-        </a>
+            </a>
         }
     </dd>
 </div>
