@@ -31,8 +31,8 @@
     pageKey.map(key => messages(s"$key.$bullet")).getOrElse(bullet)
 }
 
-@if(listText.isDefined) {
-    <p class="govuk-body">@listText.map(messages(_)).getOrElse("")</p>
+@listText.map { text =>
+    <p class="govuk-body">@messages(text)</p>
 }
 
 @list = {

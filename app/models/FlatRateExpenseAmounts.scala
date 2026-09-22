@@ -19,7 +19,7 @@ package models
 import play.api.libs.json.{Format, Json}
 
 case class FlatRateExpenseAmounts(freAmount: Option[FlatRateExpense], taxYear: TaiTaxYear) {
-  def formattedAmount: String  = freAmount.map(amount => s"£${amount.grossAmount}").getOrElse("£0")
+  def formattedAmount: String  = s"£${grossAmount.getOrElse(0)}"
   def grossAmount: Option[Int] = freAmount.map(_.grossAmount)
 }
 
