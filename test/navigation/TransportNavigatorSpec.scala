@@ -31,7 +31,7 @@ class TransportNavigatorSpec extends SpecBase with MockitoSugar {
 
   "TransportNavigator" when {
 
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
 
         "go to SessionExpired when not a transport page" in {
@@ -128,7 +128,6 @@ class TransportNavigatorSpec extends SpecBase with MockitoSugar {
             }
         }
       }
-    }
   }
 
 }
