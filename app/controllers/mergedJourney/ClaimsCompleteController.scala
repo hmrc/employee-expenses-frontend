@@ -54,20 +54,18 @@ class ClaimsCompleteController @Inject() (
           sessionRepository.getMergedJourney(id.internalId).flatMap {
             case Some(journeyConfig) if !journeyConfig.claimList.contains(ClaimPending) =>
               // We only want to generate the page if there are no pending claims
-              request.nino.fold {
-                Future.successful(Redirect(routes.SessionExpiredController.onPageLoad))
-              } { nino =>
-                citizenDetailsConnector
-                  .getAddress(nino)
-                  .map { response =>
-                    Ok(claimsCompleteView(journeyConfig, Json.parse(response.body).validate[Address].asOpt))
-                  }
-                  .recoverWith { case _ =>
-                    Future.successful(
-                      Ok(claimsCompleteView(journeyConfig, None))
-                    )
-                  }
-              }
+              request.nino
+                .map { nino =>
+                  citizenDetailsConnector
+                    .getAddress(nino)
+                    .map { response =>
+                      Ok(claimsCompleteView(journeyConfig, Json.parse(response.body).validate[Address].asOpt))
+                    }
+                    .recoverWith { case _ =>
+                      Future.successful(Ok(claimsCompleteView(journeyConfig, None)))
+                    }
+                }
+                .getOrElse(Future.successful(Redirect(routes.SessionExpiredController.onPageLoad)))
             case Some(_) =>
               logger.warn(
                 s"[ClaimsCompleteController][claimsComplete] Some claims are still pending," +

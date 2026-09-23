@@ -85,16 +85,8 @@ class TaiService @Inject() (taiConnector: TaiConnector, citizenDetailsConnector:
       ExecutionContext
   ): Future[FlatRateExpenseOptions] =
     getFREAmount(taxYears, nino).map {
-      case freSeq if freSeq.forall(_.freAmount.isEmpty) =>
-        FRENoYears
 
-      case freSeq
-          if freSeq.exists(_.freAmount.isEmpty) && freSeq
-            .filter(_.freAmount.isDefined)
-            .forall(_.grossAmount.contains(0)) =>
-        FRENoYears
-
-      case freSeq if freSeq.forall(_.grossAmount.contains(0)) =>
+      case freSeq if freSeq.forall(_.grossAmount.forall(_ == 0)) =>
         FRENoYears
 
       case freSeq if freSeq.forall(_.grossAmount.contains(claimAmount)) =>

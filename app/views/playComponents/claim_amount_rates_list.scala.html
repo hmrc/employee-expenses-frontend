@@ -17,32 +17,28 @@
 @(
         claimAmountsAndRates: Seq[Rates],
         claimAmount: Int,
-        keyPrefix: Option[String] = Some("confirmation")
+        keyPrefix: String = "confirmation"
 )(using messages: Messages)
-
-@prefix = @{
- keyPrefix.getOrElse("confirmation")
-}
 
 @for(rate <- claimAmountsAndRates) {
   @rate match {
     case standardRate: StandardRate => {
       @if(claimAmountsAndRates.length > 1) {
-        <h3 class="govuk-heading-m">@messages(s"$prefix.englandHeading")</h3>
+        <h3 class="govuk-heading-m">@messages(s"$keyPrefix.englandHeading")</h3>
       }
-      <p class="govuk-body">@messages(s"$prefix.basicRate", standardRate.basicRate, claimAmount, standardRate.calculatedBasicRate)</p>
-      <p class="govuk-body">@messages(s"$prefix.higherRate",standardRate.higherRate, claimAmount, standardRate.calculatedHigherRate)</p>
+      <p class="govuk-body">@messages(s"$keyPrefix.basicRate", standardRate.basicRate, claimAmount, standardRate.calculatedBasicRate)</p>
+      <p class="govuk-body">@messages(s"$keyPrefix.higherRate",standardRate.higherRate, claimAmount, standardRate.calculatedHigherRate)</p>
     }
     case scottishRate: ScottishRate => {
       @if(claimAmountsAndRates.length > 1) {
-        <h3 class="govuk-heading-m">@messages(s"$prefix.scotlandHeading")</h3>
+        <h3 class="govuk-heading-m">@messages(s"$keyPrefix.scotlandHeading")</h3>
       }
-        <p class="govuk-body">@messages(s"$prefix.starterRate", scottishRate.starterRate, claimAmount, scottishRate.calculatedStarterRate)</p>
-        <p class="govuk-body">@messages(s"$prefix.basicRate", scottishRate.basicRate, claimAmount, scottishRate.calculatedBasicRate)</p>
-        <p class="govuk-body">@messages(s"$prefix.intermediateRate", scottishRate.intermediateRate, claimAmount, scottishRate.calculatedIntermediateRate)</p>
-        <p class="govuk-body">@messages(s"$prefix.higherRate", scottishRate.higherRate, claimAmount, scottishRate.calculatedHigherRate)</p>
-        <p class="govuk-body">@messages(s"$prefix.advancedRate", scottishRate.advancedRate, claimAmount, scottishRate.calculatedAdvancedRate)</p>
-        <p class="govuk-body">@messages(s"$prefix.topRate", scottishRate.topRate, claimAmount, scottishRate.calculatedTopRate)</p>
+        <p class="govuk-body">@messages(s"$keyPrefix.starterRate", scottishRate.starterRate, claimAmount, scottishRate.calculatedStarterRate)</p>
+        <p class="govuk-body">@messages(s"$keyPrefix.basicRate", scottishRate.basicRate, claimAmount, scottishRate.calculatedBasicRate)</p>
+        <p class="govuk-body">@messages(s"$keyPrefix.intermediateRate", scottishRate.intermediateRate, claimAmount, scottishRate.calculatedIntermediateRate)</p>
+        <p class="govuk-body">@messages(s"$keyPrefix.higherRate", scottishRate.higherRate, claimAmount, scottishRate.calculatedHigherRate)</p>
+        <p class="govuk-body">@messages(s"$keyPrefix.advancedRate", scottishRate.advancedRate, claimAmount, scottishRate.calculatedAdvancedRate)</p>
+        <p class="govuk-body">@messages(s"$keyPrefix.topRate", scottishRate.topRate, claimAmount, scottishRate.calculatedTopRate)</p>
     }
   }
 }
