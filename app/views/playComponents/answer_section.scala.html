@@ -20,7 +20,7 @@
 @(answerSection: AnswerSection)(using messages: Messages)
 
 @answerSection.headingKey.map { key =>
-    <h2 class="govuk-heading-m">@key</h2>
+    <h2 class="govuk-heading-m">@messages(key)</h2>
 }
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
     @for(row <- answerSection.rows){
