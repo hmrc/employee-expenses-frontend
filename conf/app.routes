@@ -368,6 +368,5 @@ GET         /claim-your-expenses                                 controllers.mer
 GET         /claims-complete                                     controllers.mergedJourney.ClaimsCompleteController.show
 GET         /merged-journey-set-up                               controllers.mergedJourney.MergedJourneyController.setupMergedJourney(wfh: Boolean, psubs: Boolean, fre: Boolean)
 GET         /merged-journey-continue                             controllers.mergedJourney.MergedJourneyController.mergedJourneyContinue(journey: String, status: ClaimStatus)
-GET         /merged-journey-refresh-session                      controllers.mergedJourney.MergedJourneyController.mergedJourneyRefreshSession
 ######################################
 
