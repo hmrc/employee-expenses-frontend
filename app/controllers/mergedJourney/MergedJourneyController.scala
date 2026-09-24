@@ -117,6 +117,18 @@ class MergedJourneyController @Inject() (
       }
     }
 
+  def mergedJourneyRefreshSession: Action[AnyContent] = identify.async { request =>
+    given IdentifierRequest[AnyContent] = request
+    request.identifier match {
+      case id: Authed =>
+        sessionRepository.updateMergedJourneyTimeToLive(id).map {
+          case true => Ok("OK")
+          case _    => NotFound
+        }
+      case _ => Future.successful(InternalServerError)
+    }
+  }
+
 }
 
 object MergedJourneyController {
