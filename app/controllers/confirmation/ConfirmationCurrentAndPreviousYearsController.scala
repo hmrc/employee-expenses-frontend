@@ -16,10 +16,10 @@
 
 package controllers.confirmation
 
-import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
+import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction, RequireNinoAction}
 import controllers.routes.*
 import models.TaxYearSelection.CurrentYear
-import models.requests.DataRequest
+import models.requests.{AuthenticatedDataRequest, DataRequest}
 import models.{Address, FlatRateExpenseAmounts, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}
@@ -38,6 +38,7 @@ class ConfirmationCurrentAndPreviousYearsController @Inject() (
     identify: AuthenticatedIdentifierAction,
     getData: DataRetrievalAction,
     requireData: DataRequiredAction,
+    requireNino: RequireNinoAction,
     val controllerComponents: MessagesControllerComponents,
     claimAmountService: ClaimAmountService,
     taiService: TaiService,
@@ -47,8 +48,8 @@ class ConfirmationCurrentAndPreviousYearsController @Inject() (
     with I18nSupport
     with Logging {
 
-  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { request =>
-    given DataRequest[AnyContent] = request
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
+    given AuthenticatedDataRequest[AnyContent] = request
     val npsFreAmount = request.userAnswers
       .get(FREAmounts)
       .flatMap(_.find(_.taxYear.year == TaxYearSelection.getTaxYear(CurrentYear))) match {

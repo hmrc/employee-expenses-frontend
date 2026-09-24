@@ -30,6 +30,16 @@ case class OptionalDataRequest[A](
 case class DataRequest[A](
     request: Request[A],
     identifier: IdentifierType,
-    nino: String,
+    nino: Option[String],
     userAnswers: UserAnswers
 ) extends WrappedRequest[A](request)
+
+case class AuthenticatedDataRequest[A](
+                                        request: Request[A],
+                           identifier: IdentifierType,
+                           nino: String,
+                           userAnswers: UserAnswers
+                         ) extends WrappedRequest[A](request)
+
+
+

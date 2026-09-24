@@ -21,7 +21,7 @@ import controllers.actions.*
 import controllers.authenticated.routes.*
 import controllers.routes.*
 import forms.authenticated.YourEmployerFormProvider
-import models.requests.DataRequest
+import models.requests.{AuthenticatedDataRequest, DataRequest}
 
 import javax.inject.{Inject, Named}
 import models.{Mode, NormalMode}
@@ -45,6 +45,7 @@ class YourEmployerController @Inject() (
     identify: AuthenticatedIdentifierAction,
     getData: DataRetrievalAction,
     requireData: DataRequiredAction,
+    requireNino: RequireNinoAction,
     formProvider: YourEmployerFormProvider,
     val controllerComponents: MessagesControllerComponents,
     taiService: TaiService,
@@ -56,8 +57,8 @@ class YourEmployerController @Inject() (
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { request =>
-    given DataRequest[AnyContent] = request
+  def onPageLoad(): Action[AnyContent] = identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
+    given AuthenticatedDataRequest[AnyContent] = request
     val preparedForm = request.userAnswers.get(YourEmployerPage) match {
       case None        => form
       case Some(value) => form.fill(value)

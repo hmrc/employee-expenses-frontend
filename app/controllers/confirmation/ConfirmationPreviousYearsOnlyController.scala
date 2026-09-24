@@ -16,9 +16,9 @@
 
 package controllers.confirmation
 
-import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction}
+import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction, RequireNinoAction}
 import controllers.routes.*
-import models.requests.DataRequest
+import models.requests.{AuthenticatedDataRequest, DataRequest}
 import models.{Address, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.TaxYearSelectionPage
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREResponse}
@@ -36,6 +36,7 @@ class ConfirmationPreviousYearsOnlyController @Inject() (
     override val messagesApi: MessagesApi,
     identify: AuthenticatedIdentifierAction,
     getData: DataRetrievalAction,
+    requireNino: RequireNinoAction,
     requireData: DataRequiredAction,
     val controllerComponents: MessagesControllerComponents,
     claimAmountService: ClaimAmountService,
@@ -46,8 +47,8 @@ class ConfirmationPreviousYearsOnlyController @Inject() (
     with I18nSupport
     with Logging {
 
-  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { request =>
-    given DataRequest[AnyContent] = request
+  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
+    given AuthenticatedDataRequest[AnyContent] = request
     (
       request.userAnswers.get(FREResponse),
       request.userAnswers.get(ClaimAmountAndAnyDeductions),

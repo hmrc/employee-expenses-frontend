@@ -20,7 +20,7 @@ import config.NavConstant
 import connectors.CitizenDetailsConnector
 import controllers.actions.*
 import controllers.routes.*
-import models.requests.DataRequest
+import models.requests.{AuthenticatedDataRequest, DataRequest}
 
 import javax.inject.{Inject, Named}
 import models.{Address, Mode}
@@ -43,6 +43,7 @@ class YourAddressController @Inject() (
     @Named(NavConstant.authenticated) navigator: Navigator,
     identify: AuthenticatedIdentifierAction,
     getData: DataRetrievalAction,
+    requireNino: RequireNinoAction,
     requireData: DataRequiredAction,
     val controllerComponents: MessagesControllerComponents
 )(using ExecutionContext)
@@ -51,8 +52,8 @@ class YourAddressController @Inject() (
     with Logging {
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { request =>
-      given DataRequest[AnyContent] = request
+    identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
+      given AuthenticatedDataRequest[AnyContent] = request
       citizenDetailsConnector
         .getAddress(request.nino)
         .flatMap { response =>

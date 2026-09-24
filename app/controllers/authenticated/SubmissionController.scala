@@ -21,7 +21,7 @@ import controllers.actions.*
 import controllers.routes as baseRoutes
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
-import models.requests.DataRequest
+import models.requests.{AuthenticatedDataRequest, DataRequest}
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage, Submission, TaxYearSelectionPage}
@@ -42,6 +42,7 @@ class SubmissionController @Inject() (
     identify: AuthenticatedIdentifierAction,
     getData: DataRetrievalAction,
     requireData: DataRequiredAction,
+    requireNino: RequireNinoAction,
     submissionService: SubmissionService,
     auditConnector: AuditConnector,
     val controllerComponents: MessagesControllerComponents,
@@ -51,8 +52,8 @@ class SubmissionController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onSubmit: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { request =>
-    given DataRequest[AnyContent] = request
+  def onSubmit: Action[AnyContent] = identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
+    given AuthenticatedDataRequest[AnyContent] = request
     val dataToAudit: AuditData =
       AuditData(nino = request.nino, userAnswers = request.userAnswers.data)
 
