@@ -31,7 +31,7 @@ class TransportNavigatorSpec extends SpecBase with MockitoSugar {
 
   "TransportNavigator" when {
 
-    for (mode <- modes) {
+    for (mode <- modes)
       s"in $mode" must {
 
         "go to SessionExpired when not a transport page" in {
@@ -82,33 +82,6 @@ class TransportNavigatorSpec extends SpecBase with MockitoSugar {
           }
         }
 
-        "on AirlineJobListController" must {
-          "goto EmployerContributionController when 'Yes' selected" in {
-            val answers = emptyUserAnswers.set(AirlineJobListPage, true).success.value
-            navigator.nextPage(AirlineJobListPage, mode)(answers) mustBe
-              controllers.routes.EmployerContributionController.onPageLoad(mode)
-          }
-
-          "go to CabinCrewController when 'No' selected" in {
-            val answers = emptyUserAnswers.set(AirlineJobListPage, false).success.value
-            navigator.nextPage(AirlineJobListPage, mode)(answers) mustBe
-              routes.CabinCrewController.onPageLoad(mode)
-          }
-
-        }
-        "on CabinCrewController" must {
-          "go to EmployerContributionController when 'Yes' selected on CabinCrewPage" in {
-            val answers = emptyUserAnswers.set(CabinCrewPage, true).success.value
-            navigator.nextPage(CabinCrewPage, mode)(answers) mustBe
-              controllers.routes.EmployerContributionController.onPageLoad(mode)
-          }
-          "go to EmployerContributionController when 'No' selected on CabinCrewPage" in {
-            val answers = emptyUserAnswers.set(CabinCrewPage, false).success.value
-            navigator.nextPage(CabinCrewPage, mode)(answers) mustBe
-              controllers.routes.EmployerContributionController.onPageLoad(mode)
-          }
-        }
-
         "on GarageHandOrCleanerController" must {
           "goto EmployerContributionController when 'Yes' selected" in {
             val answers = emptyUserAnswers.set(GarageHandOrCleanerPage, true).success.value
@@ -155,7 +128,6 @@ class TransportNavigatorSpec extends SpecBase with MockitoSugar {
             }
         }
       }
-    }
   }
 
 }

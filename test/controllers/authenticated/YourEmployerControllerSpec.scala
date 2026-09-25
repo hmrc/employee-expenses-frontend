@@ -202,7 +202,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual UpdateEmployerInformationController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustEqual UpdateEmployerInformationController.onPageLoad().url
 
       application.stop()
     }
@@ -270,7 +270,7 @@ class YourEmployerControllerSpec extends SpecBase with MockitoSugar with ScalaFu
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual UpdateEmployerInformationController.onPageLoad(NormalMode).url
+      redirectLocation(result).value mustEqual UpdateEmployerInformationController.onPageLoad().url
 
       application.stop()
     }
