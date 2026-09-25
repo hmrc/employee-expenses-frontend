@@ -46,7 +46,7 @@ class AuthRedirectController @Inject() (
               _ <- sessionRepository.set(request.identifier, UserAnswers(unAuthUA.data))
               _ <- sessionRepository.remove(UnAuthed(key))
             } yield Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
-          case (_, Some(authUA)) =>
+          case (_, Some(_)) =>
             Future.successful(Redirect(TaxYearSelectionController.onPageLoad(NormalMode)))
           case _ =>
             Future.successful(Redirect(SessionExpiredController.onPageLoad))

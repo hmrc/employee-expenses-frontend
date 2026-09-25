@@ -24,7 +24,7 @@ import forms.authenticated.YourEmployerFormProvider
 import models.requests.{DataRequest, NinoDataRequest}
 
 import javax.inject.{Inject, Named}
-import models.{Mode, NormalMode}
+import models.Mode
 import navigation.Navigator
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerNames, YourEmployerPage}
 import play.api.Logging
@@ -74,7 +74,7 @@ class YourEmployerController @Inject() (
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerNames, employerNames))
                   _              <- sessionRepository.set(request.identifier, updatedAnswers)
-                } yield Ok(view(preparedForm, NormalMode, employerNames))
+                } yield Ok(view(preparedForm, employerNames))
               } else {
                 Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad()))
               }
@@ -97,7 +97,7 @@ class YourEmployerController @Inject() (
           form
             .bindFromRequest()
             .fold(
-              (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, mode, employerNames))),
+              (formWithErrors: Form[?]) => Future.successful(BadRequest(view(formWithErrors, employerNames))),
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerPage, value))

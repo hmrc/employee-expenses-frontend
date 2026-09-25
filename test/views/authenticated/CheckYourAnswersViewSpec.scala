@@ -16,7 +16,6 @@
 
 package views.authenticated
 
-import models.FlatRateExpenseOptions
 import play.api.Application
 import play.twirl.api.HtmlFormat
 import utils.CheckYourAnswersHelper
@@ -43,12 +42,12 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       )
     )
 
-    def applyView(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
+    def applyView(): HtmlFormat.Appendable =
       application.injector
         .instanceOf[CheckYourAnswersView]
         .apply(sections, checkYourAnswersTextStopFre)(using fakeRequest, messages)
 
-    def applyViewWithAuth(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
+    def applyViewWithAuth(): HtmlFormat.Appendable =
       application.injector
         .instanceOf[CheckYourAnswersView]
         .apply(sections, checkYourAnswersTextStopFre)(
@@ -56,23 +55,23 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
           messages
         )
 
-    def applyViewNewClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
+    def applyViewNewClaim(): HtmlFormat.Appendable =
       application.injector
         .instanceOf[CheckYourAnswersView]
         .apply(sections, checkYourAnswersTextNoFre)(using fakeRequest, messages)
 
-    def applyViewChangeClaim(freOption: FlatRateExpenseOptions, removeFRE: Boolean): HtmlFormat.Appendable =
+    def applyViewChangeClaim(): HtmlFormat.Appendable =
       application.injector
         .instanceOf[CheckYourAnswersView]
         .apply(sections, checkYourAnswersTextChangeFre)(using fakeRequest, messages)
 
-    behave.like(normalPage(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true), "checkYourAnswers"))
+    behave.like(normalPage(applyView(), "checkYourAnswers"))
 
-    behave.like(pageWithAccountMenu(applyViewWithAuth(FlatRateExpenseOptions.FRENoYears, removeFRE = true)))
+    behave.like(pageWithAccountMenu(applyViewWithAuth()))
 
     "display correct content" when {
       "new claim has been made" in {
-        val doc = asDocument(applyViewNewClaim(FlatRateExpenseOptions.FRENoYears, removeFRE = false))
+        val doc = asDocument(applyViewNewClaim())
 
         assertContainsMessages(
           doc,
@@ -85,7 +84,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       }
 
       "claim has been changed" in {
-        val doc = asDocument(applyViewChangeClaim(FlatRateExpenseOptions.FRESomeYears, removeFRE = false))
+        val doc = asDocument(applyViewChangeClaim())
 
         assertContainsMessages(
           doc,
@@ -98,7 +97,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
       }
 
       "claim has been stopped" in {
-        val doc = asDocument(applyView(FlatRateExpenseOptions.FRENoYears, removeFRE = true))
+        val doc = asDocument(applyView())
 
         assertContainsMessages(
           doc,

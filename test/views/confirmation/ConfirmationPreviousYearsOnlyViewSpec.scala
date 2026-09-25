@@ -67,7 +67,6 @@ class ConfirmationPreviousYearsOnlyViewSpec extends ViewBehaviours {
     def applyView(
         claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
         claimAmount: Int = claimAmount,
-        updateAddress: Boolean = false,
         currentYearMinus1: Boolean = true,
         address: Option[Address] = None,
         freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears
