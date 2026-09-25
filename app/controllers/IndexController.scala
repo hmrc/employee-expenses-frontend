@@ -18,7 +18,6 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.*
-import models.requests.OptionalDataRequest
 import models.{NormalMode, UserAnswers}
 import pages.mergedJourney.MergedJourneyFlag
 import play.api.i18n.I18nSupport
@@ -42,12 +41,11 @@ class IndexController @Inject() (
 
   def onPageLoad(isMergedJourney: Boolean = false): Action[AnyContent] =
     identify.andThen(getData).async { request =>
-      given OptionalDataRequest[AnyContent] = request
       request.identifier match {
         case id: Authed =>
           sessionRepository
             .set(
-              request.identifier,
+              id,
               UserAnswers(
                 Json.obj(
                   MergedJourneyFlag.toString -> (isMergedJourney && appConfig.mergedJourneyEnabled)
@@ -57,7 +55,7 @@ class IndexController @Inject() (
             .map(_ => Redirect(firstPageInJourney))
         case id: UnAuthed =>
           sessionRepository
-            .set(request.identifier, UserAnswers())
+            .set(id, UserAnswers())
             .map(_ => Redirect(firstPageInJourney))
       }
     }
@@ -65,9 +63,8 @@ class IndexController @Inject() (
   // This is a simple redirect that can be used when we want to send the user to the start
   // without having to check if they're on a merged journey manually
   def start: Action[AnyContent] = identify.andThen(getData).async { request =>
-    given OptionalDataRequest[AnyContent] = request
     (request.identifier, request.userAnswers) match {
-      case (id: Authed, Some(answers)) if answers.isMergedJourney =>
+      case (_: Authed, Some(answers)) if answers.isMergedJourney =>
         Future.successful(Redirect(routes.IndexController.onPageLoad(true)))
       case _ =>
         Future.successful(Redirect(routes.IndexController.onPageLoad()))

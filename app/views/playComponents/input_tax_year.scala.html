@@ -38,7 +38,7 @@
         ))
     )),
 
-    hint = hint.map(hintString => Hint(content = HtmlContent(hintString), classes = hintClass.get)),
+    hint = hint.map { hintString =>Hint(content = HtmlContent(hintString),classes = hintClass.getOrElse(""))},
     idPrefix = Some(field.id),
     items = inputs
 ).withFormField(field))

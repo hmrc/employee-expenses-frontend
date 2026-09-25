@@ -39,7 +39,7 @@ class EmployeeWfhExpensesConnector @Inject() (appConfig: FrontendAppConfig, http
       .get(url"$url")
       .execute[HttpResponse]
       .map(response => (response.json \ "claimedAllYearsStatus").as[Boolean])
-      .recoverWith { case ex: Exception => Future.successful(false) }
+      .recoverWith { case _: Exception => Future.successful(false) }
   }
 
 }

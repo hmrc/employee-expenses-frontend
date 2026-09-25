@@ -22,7 +22,7 @@ import controllers.routes.*
 import forms.authenticated.TaxYearSelectionFormProvider
 
 import javax.inject.{Inject, Named}
-import models.requests.DataRequest
+import models.requests.NinoDataRequest
 import models.{Enumerable, Mode, TaxYearSelection}
 import navigation.Navigator
 import pages.authenticated.TaxYearSelectionPage
@@ -44,6 +44,7 @@ class TaxYearSelectionController @Inject() (
     identify: AuthenticatedIdentifierAction,
     getData: DataRetrievalAction,
     requireData: DataRequiredAction,
+    requireNino: RequireNinoAction,
     formProvider: TaxYearSelectionFormProvider,
     val controllerComponents: MessagesControllerComponents,
     view: TaxYearSelectionView,
@@ -55,31 +56,32 @@ class TaxYearSelectionController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData) { request =>
-    given DataRequest[AnyContent] = request
-    val preparedForm: Form[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).andThen(requireNino) { request =>
+      given NinoDataRequest[AnyContent] = request
+      val preparedForm: Form[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm, mode))
     }
 
-    Ok(view(preparedForm, mode))
-  }
-
   def onSubmit(mode: Mode): Action[AnyContent] =
-    identify.andThen(getData).andThen(requireData).async { request =>
-      given DataRequest[AnyContent] = request
+    identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
+      given NinoDataRequest[AnyContent] = request
       form
         .bindFromRequest()
         .fold(
           (formWithErrors: Form[Seq[TaxYearSelection]]) => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
-            (request.userAnswers.get(ClaimAmountAndAnyDeductions), request.nino) match {
-              case (Some(claimAmount), Some(nino)) =>
+            request.userAnswers.get(ClaimAmountAndAnyDeductions) match {
+              case Some(claimAmount) =>
                 for {
                   ua          <- Future.fromTry(request.userAnswers.set(TaxYearSelectionPage, value))
-                  freResponse <- taiService.freResponse(value, nino, claimAmount)
+                  freResponse <- taiService.freResponse(value, request.nino, claimAmount)
                   ua2         <- Future.fromTry(ua.set(FREResponse, freResponse))
-                  freAmounts  <- taiService.getFREAmount(value, nino)
+                  freAmounts  <- taiService.getFREAmount(value, request.nino)
                   ua3         <- Future.fromTry(ua2.set(FREAmounts, freAmounts))
                   _           <- sessionRepository.set(request.identifier, ua3)
                 } yield Redirect(navigator.nextPage(TaxYearSelectionPage, mode)(ua3))

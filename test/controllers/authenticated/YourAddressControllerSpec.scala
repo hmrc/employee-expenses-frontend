@@ -21,7 +21,6 @@ import connectors.CitizenDetailsConnector
 import controllers.actions.Authed
 import controllers.authenticated.routes.*
 import controllers.routes.*
-import models.NormalMode
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach

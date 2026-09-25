@@ -21,7 +21,7 @@ import controllers.actions.*
 import controllers.authenticated.routes.*
 import controllers.routes.*
 import forms.authenticated.YourEmployerFormProvider
-import models.requests.DataRequest
+import models.requests.{DataRequest, NinoDataRequest}
 
 import javax.inject.{Inject, Named}
 import models.{Mode, NormalMode}
@@ -45,6 +45,7 @@ class YourEmployerController @Inject() (
     identify: AuthenticatedIdentifierAction,
     getData: DataRetrievalAction,
     requireData: DataRequiredAction,
+    requireNino: RequireNinoAction,
     formProvider: YourEmployerFormProvider,
     val controllerComponents: MessagesControllerComponents,
     taiService: TaiService,
@@ -56,36 +57,36 @@ class YourEmployerController @Inject() (
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(): Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { request =>
-    given DataRequest[AnyContent] = request
-    val preparedForm = request.userAnswers.get(YourEmployerPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
-
-    request.userAnswers.get(TaxYearSelectionPage) match {
-      case Some(taxYears) =>
-        taiService
-          .employments(request.nino.get, taxYears.head)
-          .flatMap { employments =>
-            if (employments.nonEmpty) {
-              val employerNames: Seq[String] = employments.map(_.name)
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerNames, employerNames))
-                _              <- sessionRepository.set(request.identifier, updatedAnswers)
-              } yield Ok(view(preparedForm, NormalMode, employerNames))
-            } else {
+  def onPageLoad(): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
+      given NinoDataRequest[AnyContent] = request
+      val preparedForm = request.userAnswers.get(YourEmployerPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
+      request.userAnswers.get(TaxYearSelectionPage) match {
+        case Some(taxYears) =>
+          taiService
+            .employments(request.nino, taxYears.head)
+            .flatMap { employments =>
+              if (employments.nonEmpty) {
+                val employerNames: Seq[String] = employments.map(_.name)
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(YourEmployerNames, employerNames))
+                  _              <- sessionRepository.set(request.identifier, updatedAnswers)
+                } yield Ok(view(preparedForm, NormalMode, employerNames))
+              } else {
+                Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad()))
+              }
+            }
+            .recoverWith { case e =>
+              logger.error(s"[YourEmployerController][taiService.employments] failed $e", e)
               Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad()))
             }
-          }
-          .recoverWith { case e =>
-            logger.error(s"[YourEmployerController][taiService.employments] failed $e", e)
-            Future.successful(Redirect(UpdateEmployerInformationController.onPageLoad()))
-          }
-      case _ =>
-        Future.successful(Redirect(SessionExpiredController.onPageLoad))
+        case _ =>
+          Future.successful(Redirect(SessionExpiredController.onPageLoad))
+      }
     }
-  }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     identify.andThen(getData).andThen(requireData).async { request =>

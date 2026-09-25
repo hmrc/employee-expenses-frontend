@@ -28,6 +28,8 @@ class Module extends AbstractModule {
     bind(classOf[DataRetrievalAction]).to(classOf[DataRetrievalActionImpl]).asEagerSingleton()
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl]).asEagerSingleton()
 
+    bind(classOf[RequireNinoAction]).to(classOf[RequireNinoActionImpl]).asEagerSingleton()
+
     bind(classOf[AuthenticatedIdentifierAction]).to(classOf[AuthenticatedIdentifierActionImpl]).asEagerSingleton()
     bind(classOf[MergedJourneyIdentifierAction]).to(classOf[MergedJourneyIdentifierActionImpl]).asEagerSingleton()
     bind(classOf[UnauthenticatedIdentifierAction]).to(classOf[UnauthenticatedIdentifierActionImpl]).asEagerSingleton()

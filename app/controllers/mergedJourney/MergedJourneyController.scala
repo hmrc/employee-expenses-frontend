@@ -88,7 +88,6 @@ class MergedJourneyController @Inject() (
   // This route is used at the end of each individual claim within the merged journey or on kickouts
   def mergedJourneyContinue(journey: String, state: ClaimStatus): Action[AnyContent] =
     identify.async { request =>
-      given IdentifierRequest[AnyContent] = request
       if (appConfig.mergedJourneyEnabled) {
         request.identifier match {
           case id: Authed =>
@@ -118,7 +117,6 @@ class MergedJourneyController @Inject() (
     }
 
   def mergedJourneyRefreshSession: Action[AnyContent] = identify.async { request =>
-    given IdentifierRequest[AnyContent] = request
     request.identifier match {
       case id: Authed =>
         sessionRepository.updateMergedJourneyTimeToLive(id).map {

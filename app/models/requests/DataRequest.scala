@@ -33,3 +33,10 @@ case class DataRequest[A](
     nino: Option[String] = None,
     userAnswers: UserAnswers
 ) extends WrappedRequest[A](request)
+
+case class NinoDataRequest[A](
+    request: Request[A],
+    identifier: IdentifierType,
+    nino: String,
+    userAnswers: UserAnswers
+) extends WrappedRequest[A](request)

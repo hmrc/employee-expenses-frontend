@@ -21,7 +21,7 @@ import config.NavConstant
 import controllers.actions.Authed
 import controllers.authenticated.routes.*
 import controllers.routes.*
-import models.{NormalMode, TaxYearSelection, UserAnswers}
+import models.{TaxYearSelection, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
