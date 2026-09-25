@@ -50,8 +50,9 @@ class DataRequiredActionImpl @Inject() (navigator: AuthenticatedNavigator)(
         Future.successful(Left(Redirect(navigator.nextPage(Submission, NormalMode)(data))))
       case Some(data) =>
         Future.successful(Right(DataRequest(request.request, request.identifier, request.nino, data)))
-        }
     }
   }
+
+}
 
 trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

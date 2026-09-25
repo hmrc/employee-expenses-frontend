@@ -19,7 +19,7 @@ package controllers.actions
 import controllers.confirmation.routes as confRoutes
 import controllers.routes
 import models.NormalMode
-import models.requests.{AuthenticatedDataRequest, DataRequest, OptionalDataRequest}
+import models.requests.{DataRequest, NinoDataRequest, OptionalDataRequest}
 import navigation.AuthenticatedNavigator
 import pages.SubmittedClaim
 import pages.authenticated.Submission
@@ -29,20 +29,21 @@ import play.api.mvc.{ActionRefiner, Result}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RequireNinoActionImpl @Inject() (navigator: AuthenticatedNavigator)(
+class RequireNinoActionImpl @Inject() ()(
     using override val executionContext: ExecutionContext
 ) extends RequireNinoAction {
 
-  override protected def refine[A](request: DataRequest[A]): Future[Either[Result, AuthenticatedDataRequest[A]]] = {
+  override protected def refine[A](request: DataRequest[A]): Future[Either[Result, NinoDataRequest[A]]] =
 
     request.nino match {
       case Some(nino) =>
-        Future.successful(Right(AuthenticatedDataRequest(request.request, request.identifier, nino, request.userAnswers)))
+        Future.successful(
+          Right(NinoDataRequest(request.request, request.identifier, nino, request.userAnswers))
+        )
       case _ =>
         Future.successful(Left(Redirect(routes.SessionExpiredController.onPageLoad)))
-        }
     }
-  }
 
+}
 
-trait RequireNinoAction extends ActionRefiner[DataRequest, AuthenticatedDataRequest]
+trait RequireNinoAction extends ActionRefiner[DataRequest, NinoDataRequest]

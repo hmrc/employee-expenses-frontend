@@ -22,7 +22,7 @@ import controllers.routes.*
 import forms.authenticated.TaxYearSelectionFormProvider
 
 import javax.inject.{Inject, Named}
-import models.requests.{AuthenticatedDataRequest, DataRequest}
+import models.requests.{DataRequest, NinoDataRequest}
 import models.{Enumerable, Mode, TaxYearSelection}
 import navigation.Navigator
 import pages.authenticated.TaxYearSelectionPage
@@ -56,19 +56,20 @@ class TaxYearSelectionController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = identify.andThen(getData).andThen(requireData).andThen(requireNino) { request =>
-    given AuthenticatedDataRequest[AnyContent] = request
-    val preparedForm: Form[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).andThen(requireNino) { request =>
+      given NinoDataRequest[AnyContent] = request
+      val preparedForm: Form[Seq[TaxYearSelection]] = request.userAnswers.get(TaxYearSelectionPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-    Ok(view(preparedForm, mode))
-  }
+      Ok(view(preparedForm, mode))
+    }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
-      given AuthenticatedDataRequest[AnyContent] = request
+      given NinoDataRequest[AnyContent] = request
       form
         .bindFromRequest()
         .fold(

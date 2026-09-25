@@ -18,7 +18,7 @@ package controllers.confirmation
 
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction, RequireNinoAction}
 import controllers.routes.*
-import models.requests.{AuthenticatedDataRequest, DataRequest}
+import models.requests.{DataRequest, NinoDataRequest}
 import models.{Address, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.TaxYearSelectionPage
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREResponse}
@@ -47,39 +47,43 @@ class ConfirmationPreviousYearsOnlyController @Inject() (
     with I18nSupport
     with Logging {
 
-  def onPageLoad: Action[AnyContent] = identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
-    given AuthenticatedDataRequest[AnyContent] = request
-    (
-      request.userAnswers.get(FREResponse),
-      request.userAnswers.get(ClaimAmountAndAnyDeductions),
-      request.userAnswers.get(TaxYearSelectionPage)
-    ) match {
-      case (Some(freResponse), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
-        val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYears.head))
-        taiService
-          .taxCodeRecords(request.nino, taxYear)
-          .map { result =>
-            val currentYearMinus1: Boolean       = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
-            val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
-            val addressOption: Option[Address]   = request.userAnswers.get(CitizenDetailsAddress)
+  def onPageLoad: Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
+      given NinoDataRequest[AnyContent] = request
+      (
+        request.userAnswers.get(FREResponse),
+        request.userAnswers.get(ClaimAmountAndAnyDeductions),
+        request.userAnswers.get(TaxYearSelectionPage)
+      ) match {
+        case (Some(freResponse), Some(claimAmountAndAnyDeductions), Some(taxYears)) =>
+          val taxYear = TaiTaxYear(TaxYearSelection.getTaxYear(taxYears.head))
+          taiService
+            .taxCodeRecords(request.nino, taxYear)
+            .map { result =>
+              val currentYearMinus1: Boolean       = taxYears.contains(TaxYearSelection.CurrentYearMinus1)
+              val claimAmountsAndRates: Seq[Rates] = claimAmountService.getRates(result, claimAmountAndAnyDeductions)
+              val addressOption: Option[Address]   = request.userAnswers.get(CitizenDetailsAddress)
 
-            Ok(
-              confirmationPreviousYearsOnlyView(
-                claimAmountsAndRates,
-                claimAmountAndAnyDeductions,
-                addressOption,
-                currentYearMinus1,
-                freResponse
+              Ok(
+                confirmationPreviousYearsOnlyView(
+                  claimAmountsAndRates,
+                  claimAmountAndAnyDeductions,
+                  addressOption,
+                  currentYearMinus1,
+                  freResponse
+                )
               )
-            )
-          }
-          .recoverWith { case e =>
-            logger.error(s"[ConfirmationPreviousYearsOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e", e)
-            Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad))
-          }
-      case _ =>
-        Future.successful(Redirect(SessionExpiredController.onPageLoad))
+            }
+            .recoverWith { case e =>
+              logger.error(
+                s"[ConfirmationPreviousYearsOnlyController][taiConnector.taiTaxCodeRecord] Call failed $e",
+                e
+              )
+              Future.successful(Redirect(TechnicalDifficultiesController.onPageLoad))
+            }
+        case _ =>
+          Future.successful(Redirect(SessionExpiredController.onPageLoad))
+      }
     }
-  }
 
 }

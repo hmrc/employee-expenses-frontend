@@ -20,7 +20,7 @@ import config.NavConstant
 import connectors.CitizenDetailsConnector
 import controllers.actions.*
 import controllers.routes.*
-import models.requests.{AuthenticatedDataRequest, DataRequest}
+import models.requests.{DataRequest, NinoDataRequest}
 
 import javax.inject.{Inject, Named}
 import models.{Address, Mode}
@@ -53,7 +53,7 @@ class YourAddressController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
-      given AuthenticatedDataRequest[AnyContent] = request
+      given NinoDataRequest[AnyContent] = request
       citizenDetailsConnector
         .getAddress(request.nino)
         .flatMap { response =>
