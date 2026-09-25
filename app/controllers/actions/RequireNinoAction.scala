@@ -16,13 +16,8 @@
 
 package controllers.actions
 
-import controllers.confirmation.routes as confRoutes
 import controllers.routes
-import models.NormalMode
-import models.requests.{DataRequest, NinoDataRequest, OptionalDataRequest}
-import navigation.AuthenticatedNavigator
-import pages.SubmittedClaim
-import pages.authenticated.Submission
+import models.requests.{DataRequest, NinoDataRequest}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 

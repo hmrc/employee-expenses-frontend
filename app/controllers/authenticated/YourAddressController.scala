@@ -20,7 +20,7 @@ import config.NavConstant
 import connectors.CitizenDetailsConnector
 import controllers.actions.*
 import controllers.routes.*
-import models.requests.{DataRequest, NinoDataRequest}
+import models.requests.NinoDataRequest
 
 import javax.inject.{Inject, Named}
 import models.{Address, Mode}

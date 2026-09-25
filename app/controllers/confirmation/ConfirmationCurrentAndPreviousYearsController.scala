@@ -19,7 +19,7 @@ package controllers.confirmation
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction, RequireNinoAction}
 import controllers.routes.*
 import models.TaxYearSelection.CurrentYear
-import models.requests.{DataRequest, NinoDataRequest}
+import models.requests.NinoDataRequest
 import models.{Address, FlatRateExpenseAmounts, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.{TaxYearSelectionPage, YourEmployerPage}
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREAmounts, FREResponse}

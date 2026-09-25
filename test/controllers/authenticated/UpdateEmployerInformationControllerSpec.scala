@@ -17,7 +17,6 @@
 package controllers.authenticated
 
 import base.SpecBase
-import models.NormalMode
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 

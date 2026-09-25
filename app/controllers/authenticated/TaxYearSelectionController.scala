@@ -22,7 +22,7 @@ import controllers.routes.*
 import forms.authenticated.TaxYearSelectionFormProvider
 
 import javax.inject.{Inject, Named}
-import models.requests.{DataRequest, NinoDataRequest}
+import models.requests.NinoDataRequest
 import models.{Enumerable, Mode, TaxYearSelection}
 import navigation.Navigator
 import pages.authenticated.TaxYearSelectionPage

@@ -21,7 +21,7 @@ import controllers.actions.*
 import javax.inject.Inject
 import models.auditing.AuditData
 import models.auditing.AuditEventType.NoCodeChange
-import models.requests.{DataRequest, NinoDataRequest}
+import models.requests.NinoDataRequest
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector

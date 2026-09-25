@@ -18,7 +18,7 @@ package controllers.confirmation
 
 import controllers.actions.{AuthenticatedIdentifierAction, DataRequiredAction, DataRetrievalAction, RequireNinoAction}
 import controllers.routes.*
-import models.requests.{DataRequest, NinoDataRequest}
+import models.requests.NinoDataRequest
 import models.{Address, Rates, TaiTaxYear, TaxYearSelection}
 import pages.authenticated.TaxYearSelectionPage
 import pages.{CitizenDetailsAddress, ClaimAmountAndAnyDeductions, FREResponse}

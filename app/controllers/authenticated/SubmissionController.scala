@@ -21,7 +21,7 @@ import controllers.actions.*
 import controllers.routes as baseRoutes
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
-import models.requests.{DataRequest, NinoDataRequest}
+import models.requests.NinoDataRequest
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage, Submission, TaxYearSelectionPage}
