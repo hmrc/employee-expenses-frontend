@@ -64,7 +64,6 @@ class YourEmployerController @Inject() (
         case None        => form
         case Some(value) => form.fill(value)
       }
-
       request.userAnswers.get(TaxYearSelectionPage) match {
         case Some(taxYears) =>
           taiService

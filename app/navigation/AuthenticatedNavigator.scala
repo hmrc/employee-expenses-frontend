@@ -49,7 +49,7 @@ class AuthenticatedNavigator @Inject() () extends Navigator {
     case UpdateYourEmployerInformationPage      => _ => HowYouWillGetYourExpensesController.onPageLoad()
     case RemoveFRECodePage                      => _ => CheckYourAnswersController.onPageLoad()
     case ChangeWhichTaxYearsPage                => _ => CheckYourAnswersController.onPageLoad()
-    case CheckYourAnswersPage                   => _ => YourAddressController.onPageLoad(NormalMode)
+    case CheckYourAnswersPage                   => _ => YourAddressController.onPageLoad()
     case YourAddressPage                        => yourAddress
     case YourEmployerPage                       => yourEmployer
     case HowYouWillGetYourExpensesPage          => _ => SubmissionController.onSubmit
@@ -122,7 +122,7 @@ class AuthenticatedNavigator @Inject() () extends Navigator {
   private def yourEmployer(userAnswers: UserAnswers): Call =
     userAnswers.get(YourEmployerPage) match {
       case Some(true)  => HowYouWillGetYourExpensesController.onPageLoad()
-      case Some(false) => UpdateEmployerInformationController.onPageLoad(NormalMode)
+      case Some(false) => UpdateEmployerInformationController.onPageLoad()
       case _           => SessionExpiredController.onPageLoad
     }
 
