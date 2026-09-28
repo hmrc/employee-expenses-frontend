@@ -19,16 +19,6 @@
 @(
         headingKey: String,
         headingSize: String = "govuk-heading-xl",
-        secondaryHeaderKey: Option[String] = None
 )(using messages: Messages)
 
-@if(secondaryHeaderKey.isDefined) {
-<header class="page-header">
-  <h1 class=@headingSize>@messages(headingKey)</h1>
-  <p class="heading-secondary">
-    <span class="visually-hidden">This section is: </span> @messages(secondaryHeaderKey.get)
-  </p>
-</header>
-}else{
-  <h1 class=@headingSize>@messages(headingKey)</h1>
-}
+<h1 class="@headingSize">@messages(headingKey)</h1>

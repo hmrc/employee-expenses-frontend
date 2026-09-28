@@ -68,7 +68,6 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
         claimAmountsAndRates: Seq[Rates] = Seq(claimAmountsRates, scottishClaimAmountsRates),
         claimAmount: Int = claimAmount,
         updateEmployer: Boolean = false,
-        updateAddress: Boolean = false,
         hasClaimIncreased: Boolean = true,
         freResponse: FlatRateExpenseOptions = FlatRateExpenseOptions.FRENoYears,
         npsFreAmount: Int = 0
@@ -215,7 +214,7 @@ class ConfirmationCurrentYearOnlyViewSpec extends ViewBehaviours {
 
       "not display update address button and content when 'true'" in {
 
-        val doc = asDocument(applyView(updateAddress = true)(fakeRequest, messages))
+        val doc = asDocument(applyView()(fakeRequest, messages))
 
         assertNotRenderedById(doc, "updateAddressInfoBtn")
       }

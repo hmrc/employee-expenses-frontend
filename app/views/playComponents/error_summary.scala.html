@@ -20,7 +20,6 @@
 
 @(
     errors: Seq[FormError],
-    errorKey: Option[String] = None
 )(
     using messages: Messages
 )
@@ -30,7 +29,7 @@
         title       = Text(messages("error.summary.title")),
         errorList   = for(error <- errors) yield {
             ErrorLink(
-                href    = if(error.key.equals("")) Some(s"#${errorKey.get}") else Some(s"#${error.key}"),
+                href = Some(error.key).filter(_.nonEmpty).map(key => s"#$key"),
                 content = Text(messages(error.message, error.args*))
             )
         }

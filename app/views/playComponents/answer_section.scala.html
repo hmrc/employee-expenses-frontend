@@ -19,10 +19,9 @@
 
 @(answerSection: AnswerSection)(using messages: Messages)
 
-@if(answerSection.headingKey.isDefined){
-    <h2 class="govuk-heading-m">@messages(answerSection.headingKey.get)</h2>
+@answerSection.headingKey.map { key =>
+    <h2 class="govuk-heading-m">@messages(key)</h2>
 }
-
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
     @for(row <- answerSection.rows){
         @playComponents.answer_row(row)
