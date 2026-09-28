@@ -16,7 +16,6 @@
 
 package views
 
-import controllers.routes
 import forms.ExpensesEmployerPaidFormProvider
 import models.NormalMode
 import play.api.data.Form
@@ -49,7 +48,7 @@ class ExpensesEmployerPaidViewSpec extends IntViewBehaviours {
     behave.like(pageWithBackLink(applyView(form)))
 
     behave.like(
-      intPage(form, applyView, messageKeyPrefix, routes.ExpensesEmployerPaidController.onSubmit(NormalMode).url)
+      intPage(form, applyView, messageKeyPrefix)
     )
 
     "contain the '£' symbol" in {

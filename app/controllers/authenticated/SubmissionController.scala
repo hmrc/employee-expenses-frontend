@@ -21,7 +21,7 @@ import controllers.actions.*
 import controllers.routes as baseRoutes
 import models.auditing.AuditData
 import models.auditing.AuditEventType.{UpdateFlatRateExpenseFailure, UpdateFlatRateExpenseSuccess}
-import models.requests.DataRequest
+import models.requests.NinoDataRequest
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.authenticated.{ChangeWhichTaxYearsPage, RemoveFRECodePage, Submission, TaxYearSelectionPage}
@@ -42,6 +42,7 @@ class SubmissionController @Inject() (
     identify: AuthenticatedIdentifierAction,
     getData: DataRetrievalAction,
     requireData: DataRequiredAction,
+    requireNino: RequireNinoAction,
     submissionService: SubmissionService,
     auditConnector: AuditConnector,
     val controllerComponents: MessagesControllerComponents,
@@ -51,34 +52,35 @@ class SubmissionController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onSubmit: Action[AnyContent] = identify.andThen(getData).andThen(requireData).async { request =>
-    given DataRequest[AnyContent] = request
-    val dataToAudit: AuditData =
-      AuditData(nino = request.nino.get, userAnswers = request.userAnswers.data)
+  def onSubmit: Action[AnyContent] =
+    identify.andThen(getData).andThen(requireData).andThen(requireNino).async { request =>
+      given NinoDataRequest[AnyContent] = request
+      val dataToAudit: AuditData =
+        AuditData(nino = request.nino, userAnswers = request.userAnswers.data)
 
-    (
-      request.userAnswers.get(TaxYearSelectionPage),
-      request.userAnswers.get(ClaimAmountAndAnyDeductions),
-      request.userAnswers.get(RemoveFRECodePage),
-      request.userAnswers.get(ChangeWhichTaxYearsPage)
-    ) match {
-      case (Some(taxYears), Some(_), Some(removeYear), None) =>
-        submissionService
-          .removeFRE(request.nino.get, taxYears, removeYear)
-          .map(result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier))
-      case (Some(taxYearsSelection), Some(claimAmountAndAnyDeductions), None, changeYears) =>
-        val taxYears = changeYears match {
-          case Some(changeYears) => changeYears
-          case _                 => taxYearsSelection
-        }
-        submissionService
-          .submitFRE(request.nino.get, taxYears, claimAmountAndAnyDeductions)
-          .map(result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier))
-      case _ =>
-        Future.successful(Redirect(baseRoutes.SessionExpiredController.onPageLoad))
+      (
+        request.userAnswers.get(TaxYearSelectionPage),
+        request.userAnswers.get(ClaimAmountAndAnyDeductions),
+        request.userAnswers.get(RemoveFRECodePage),
+        request.userAnswers.get(ChangeWhichTaxYearsPage)
+      ) match {
+        case (Some(taxYears), Some(_), Some(removeYear), None) =>
+          submissionService
+            .removeFRE(request.nino, taxYears, removeYear)
+            .map(result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier))
+        case (Some(taxYearsSelection), Some(claimAmountAndAnyDeductions), None, changeYears) =>
+          val taxYears = changeYears match {
+            case Some(changeYears) => changeYears
+            case _                 => taxYearsSelection
+          }
+          submissionService
+            .submitFRE(request.nino, taxYears, claimAmountAndAnyDeductions)
+            .map(result => auditAndRedirect(result, dataToAudit, request.userAnswers, request.identifier))
+        case _ =>
+          Future.successful(Redirect(baseRoutes.SessionExpiredController.onPageLoad))
+      }
+
     }
-
-  }
 
   private def auditAndRedirect(
       result: Seq[HttpResponse],

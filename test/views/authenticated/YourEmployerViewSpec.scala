@@ -18,7 +18,6 @@ package views.authenticated
 
 import controllers.authenticated.routes
 import forms.authenticated.YourEmployerFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.newBehaviours.YesNoViewBehaviours
@@ -38,10 +37,10 @@ class YourEmployerViewSpec extends YesNoViewBehaviours {
     val view = application.injector.instanceOf[YourEmployerView]
 
     def applyView(form: Form[?]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, employerName)(using fakeRequest, messages)
+      view.apply(form, employerName)(using fakeRequest, messages)
 
     def applyViewWithAuth(form: Form[?]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, employerName)(
+      view.apply(form, employerName)(
         using fakeRequest.withSession(("authToken", "SomeAuthToken")),
         messages
       )

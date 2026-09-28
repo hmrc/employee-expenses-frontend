@@ -24,15 +24,15 @@
 )(using messages: Messages)
 
 @cssClass = @{
-    if(addCssClass.isDefined) s"form-group ${addCssClass.get}" else "form-group"
+    addCssClass.map(cssClass => s"form-group $cssClass").getOrElse("form-group")
 }
 
 @text(bullet: String) = @{
-    if(pageKey.isDefined) messages(s"${pageKey.get}.$bullet") else bullet
+    pageKey.map(key => messages(s"$key.$bullet")).getOrElse(bullet)
 }
 
-@if(listText.isDefined) {
-    <p class="govuk-body">@messages(listText.get)</p>
+@listText.map { text =>
+    <p class="govuk-body">@messages(text)</p>
 }
 
 @list = {

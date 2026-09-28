@@ -20,7 +20,6 @@ import com.google.inject.{Inject, Singleton}
 import controllers.actions.*
 import controllers.authenticated.routes.*
 import controllers.routes.*
-import models.requests.IdentifierRequest
 import models.{NormalMode, UserAnswers}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -37,8 +36,7 @@ class AuthRedirectController @Inject() (
     extends FrontendBaseController {
 
   def onPageLoad(key: String): Action[AnyContent] = identify.async { request =>
-    given IdentifierRequest[AnyContent] = request
-    val id: Authed                      = request.identifier.asInstanceOf[Authed]
+    val id: Authed = request.identifier.asInstanceOf[Authed]
 
     sessionRepository.get(UnAuthed(key)).flatMap { unAuthUA =>
       sessionRepository.get(id).flatMap { authUA =>
@@ -48,7 +46,7 @@ class AuthRedirectController @Inject() (
               _ <- sessionRepository.set(request.identifier, UserAnswers(unAuthUA.data))
               _ <- sessionRepository.remove(UnAuthed(key))
             } yield Redirect(TaxYearSelectionController.onPageLoad(NormalMode))
-          case (_, Some(authUA)) =>
+          case (_, Some(_)) =>
             Future.successful(Redirect(TaxYearSelectionController.onPageLoad(NormalMode)))
           case _ =>
             Future.successful(Redirect(SessionExpiredController.onPageLoad))
