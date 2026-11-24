@@ -3,7 +3,7 @@ import sbt.*
 object AppDependencies {
 
   private val mongoVersion          = "2.14.0"
-  private val scaWrapperPlayVersion = "6.4.0"
+  private val scaWrapperPlayVersion = "6.6.0"
 
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
