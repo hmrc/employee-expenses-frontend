@@ -25,7 +25,7 @@ lazy val root = (project in file("."))
   )
   .settings(
     name         := appName,
-    scalaVersion := "3.3.7",
+    scalaVersion := "3.3.9",
     RoutesKeys.routesImport += "models.*, models.mergedJourney.ClaimStatus, models.mergedJourney.ClaimStatus.urlBinder",
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",

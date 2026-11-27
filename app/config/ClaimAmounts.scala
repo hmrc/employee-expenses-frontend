@@ -71,11 +71,6 @@ object ClaimAmounts {
 
   object Transport {
 
-    object Airlines {
-      lazy val pilotsFlightDeck: Int = 1022
-      lazy val cabinCrew: Int        = 720
-    }
-
     object PublicTransport {
       lazy val garageHands: Int       = 80
       lazy val conductorsDrivers: Int = 60
@@ -116,8 +111,6 @@ object ClaimAmounts {
   object Construction {
     lazy val joinersCarpenters: Int = 140
     lazy val stoneMasons: Int       = 120
-    lazy val list1: Int             = 80
-    lazy val list2: Int             = 60
     lazy val asphaltCement: Int     = 80
     lazy val roofingFelt: Int       = 80
     lazy val labourerNavvy: Int     = 60
